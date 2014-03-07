@@ -9,11 +9,29 @@ namespace GameMaker
 	public struct Angle
 	{
 		private double _radians;
-		public static readonly Angle Zero = new Angle(0);
+		public static readonly Angle Zero = new Angle();
 
-		public Angle(double radians)
+		public static Angle FromRadians(double radians)
 		{
-			this._radians = radians;
+			return new Angle { Radians = radians };
+		}
+
+		public static Angle FromDegrees(double degrees)
+		{
+			return new Angle { Degrees = degrees };
+		}
+
+		/// <summary>
+		/// Returns the angle of the direction from the origin to (x, y)
+		/// </summary>
+		public static Angle Direction(double x, double y)
+		{
+			return Angle.FromRadians(Math.Atan2(y, x));
+		}
+
+		public static Angle Direction(double x1, double y1, double x2, double y2)
+		{
+			return Angle.FromRadians(Math.Atan2(y2 - y1, x2 - x1));
 		}
 
 		public double Radians
@@ -35,12 +53,28 @@ namespace GameMaker
 
 		public static explicit operator Angle(double d)
 		{
-			return new Angle(d);
+			return Angle.FromRadians(d);
 		}
 
 		public static Angle operator +(Angle a, Angle b)
 		{
-			return new Angle(a._radians + b._radians);
+			return Angle.FromRadians(a._radians + b._radians);
 		}
+
+		public static Angle operator +(Angle a, double d)
+		{
+			return Angle.FromRadians(a._radians + d);
+		}
+
+		public static Angle operator -(Angle a, double d)
+		{
+			return Angle.FromRadians(a._radians - d);
+		}
+
+		public static Angle operator *(Angle a, double d)
+		{
+			return Angle.FromRadians(a._radians * d);
+		}
+
 	}
 }

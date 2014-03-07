@@ -29,5 +29,6 @@ namespace GameMaker
 		public static Color LightGray { get; private set; }
 
 		public static Color Yellow { get; private set; }
+
 	}
 }

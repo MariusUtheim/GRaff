@@ -9,17 +9,17 @@ namespace Sandbox
 {
 	public class Ball : MovingObject, IGlobalMousePressListener, ICollisionListener<Paddle>, ICollisionListener<Block>, ICollisionListener<NormalBlock>
 	{
-		private bool _isHeld;
+		private bool _isHeld = false;
 		private List<Point> _trail = new List<Point>();
 
 		public Ball()
 		{
+			Sprite = Sprites.Ball;
 			X = Room.Width / 2;
 			Y = Room.Height / 2;
 			Velocity = new Vector(12, GRandom.Angle(5.0 / 8 * GMath.Tau, 7.0 / 8 * GMath.Tau));
 			for (int i = 0; i < 20; i++)
 				_trail.Add(Location);
-			Image.Blend = new Color(128, Image.Blend.R, Image.Blend.G, Image.Blend.B);
 		}
 
 		public override void Step()
@@ -46,6 +46,12 @@ namespace Sandbox
 
 			_trail.Add(Location);
 			_trail.RemoveAt(0);
+
+			if (Y > Room.Width)
+			{
+				new Ball();
+				this.Destroy();
+			}
 		}
 
 		public void OnGlobalMousePress(MouseButton button)
@@ -56,17 +62,13 @@ namespace Sandbox
 		public void OnCollision(Paddle other)
 		{
 			VSpeed = -Math.Abs(VSpeed);
+			HSpeed += (other.X - other.XPrevious);
 		}
 
 		public void OnCollision(Block other)
 		{
 			other.Hit(this);
 			VSpeed = Math.Abs(VSpeed);
-		}
-
-		public override Sprite Sprite
-		{
-			get { return Sprites.Ball; }
 		}
 
 		public void OnCollision(NormalBlock other)
@@ -76,13 +78,14 @@ namespace Sandbox
 
 		public override void OnDraw()
 		{
-/*			Color c = Color.Yellow;
+			Color col = Color.Yellow;
+			col.A = 0;
 			for (int i = 0; i < _trail.Count - 1; i++)
 			{
-				c.A = i * 255 / 20;
-				Draw.Line(c, _trail[i], _trail[i + 1]);
+				Draw.Line(col, _trail[i], _trail[i + 1]);
+				col.A += 255 / _trail.Count;
 			}
-			*/
+
 			base.OnDraw();
 		}
 	}

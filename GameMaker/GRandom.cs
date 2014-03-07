@@ -32,16 +32,16 @@ namespace GameMaker
 
 		public static Vector Vector(double magnitude)
 		{
-			return new Vector(magnitude, new Angle(_rnd.NextDouble() * GMath.Tau));
+			return new Vector(magnitude, GameMaker.Angle.FromRadians(_rnd.NextDouble() * GMath.Tau));
 		}
 
 		public static Vector Vector() { return GRandom.Vector(1); }
 
-		public static Angle Angle() { return new Angle(_rnd.NextDouble() * GMath.Tau); }
+		public static Angle Angle() { return GameMaker.Angle.FromRadians(_rnd.NextDouble() * GMath.Tau); }
 
 		public static Angle Angle(double lowerBound, double upperBound)
 		{
-			return new Angle(lowerBound + _rnd.NextDouble() * (upperBound - lowerBound));
+			return GameMaker.Angle.FromRadians(lowerBound + _rnd.NextDouble() * (upperBound - lowerBound));
 		}
 	}
 }

@@ -3,15 +3,20 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using GameMaker;
+using GameMaker.Motions;
 
 namespace Sandbox
 {
-	public class NormalBlock : Block
+	public class NormalBlock : Block, IMousePressListener
 	{
 		public NormalBlock(int x, int y)
 		{
+			Sprite = Sprites.Block;
 			this.X = x;
 			this.Y = y;
+			this.Image.XScale = 2;
+			this.Image.YScale = 2;
 		}
 
 		public override void Hit(Ball other)
@@ -19,9 +24,9 @@ namespace Sandbox
 			this.Destroy();
 		}
 
-		public override GameMaker.Sprite Sprite
+		public void OnMousePress(MouseButton button)
 		{
-			get { return Sprites.Block; }
+			this.Destroy();
 		}
 	}
 }

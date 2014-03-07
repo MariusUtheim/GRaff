@@ -74,6 +74,10 @@ namespace GameMaker
 				return;
 			_isLoaded = true;
 			_texture = Draw.LoadTexture(_path);
+
+			if (_texture == null)
+				return;
+
 			if (OriginMode == GameMaker.OriginMode.UpperLeft)
 				_origin = new IntVector(0, 0);
 			else if (OriginMode == GameMaker.OriginMode.Center)

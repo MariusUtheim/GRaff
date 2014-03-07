@@ -30,9 +30,5 @@ namespace GameMaker
 			return radians * 360.0 / GMath.Tau;
 		}
 
-		public static Angle Atan2(double y, double x)
-		{
-			return new Angle(Math.Atan2(y, x));
-		}
 	}
 }

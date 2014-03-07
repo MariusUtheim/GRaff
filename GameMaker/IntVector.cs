@@ -19,5 +19,11 @@ namespace GameMaker
 
 		public int Y { get; set; }
 
+		public static implicit operator Vector(IntVector i) { return new Vector(i.X, i.Y); }
+
+		public override string ToString()
+		{
+			return String.Format("[{0}, {1}]", X, Y);
+		}
 	}
 }

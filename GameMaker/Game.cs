@@ -15,7 +15,7 @@ namespace GameMaker
 		{
 			var engine = new TGraphicsEngine();
 			GraphicsEngine.Current = engine;
-			engine.Run();
+			engine.Run(() => { });
 		}
 
 		public static void Run<TGraphicsEngine>(Action gameStart)
@@ -23,8 +23,7 @@ namespace GameMaker
 		{
 			var engine = new TGraphicsEngine();
 			GraphicsEngine.Current = engine;
-			gameStart();
-			engine.Run();
+			engine.Run(gameStart);
 		}
 
 		public static void Quit()
@@ -57,7 +56,6 @@ namespace GameMaker
 			foreach (var instance in Instance._objects)
 				instance.EndStep();
 
-			Redraw();
 
 			timeLeft -= Environment.TickCount;
 			if (timeLeft > 0)
@@ -102,7 +100,13 @@ namespace GameMaker
 				GlobalEvent.OnKeyReleased(key);
 
 
-			foreach (var button in Mouse.Down)
+
+
+			foreach (var button in Mouse.Pressed)
+				foreach (var instance in Instance.Where(obj => obj is IMousePressListener && obj.Mask.ContainsPoint(Mouse.Location)))
+					(instance as IMousePressListener).OnMousePress(button);
+
+			foreach (var button in Mouse.Pressed)
 				foreach (var instance in Instance.Where(obj => obj is IGlobalMousePressListener))
 					(instance as IGlobalMousePressListener).OnGlobalMousePress(button);
 
@@ -113,8 +117,11 @@ namespace GameMaker
 		public static void Redraw()
 		{
 			Draw.Clear(Background.Color);
+			GlobalEvent.OnDrawForeground();
 			foreach (var instance in Instance._objects)
 				instance.OnDraw();
+			GlobalEvent.OnDrawBackground();
+			GraphicsEngine.Current.Refresh();
 		}
 
 		public static void Sleep(int milliseconds)

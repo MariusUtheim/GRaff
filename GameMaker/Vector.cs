@@ -29,6 +29,11 @@ namespace GameMaker
 			return new Vector { Magnitude = magnitude, Direction = direction };
 		}
 
+		public static Vector FromCartesian(double x, double y)
+		{
+			return new Vector { X = x, Y = y };
+		}
+
 		public double Magnitude { get; set; }
 		public Angle Direction { get; set; }
 		public double X
@@ -41,17 +46,21 @@ namespace GameMaker
 			get { return Magnitude * Math.Sin(Direction); }
 			set { _setCartesian(X, value); }
 		}
-
 		private void _setCartesian(double x, double y)
 		{
 			Magnitude = Math.Sqrt(x * x + y * y);
 			if (x != 0 || y != 0)
-				Direction = GMath.Atan2(y, x);
+				Direction = Angle.Direction(x, y);
 		}
 
 		public Vector Normal
 		{
 			get { return Vector.FromPolar(1, this.Direction); }
+		}
+
+		public double DotProduct(Vector other)
+		{
+			return Magnitude * other.Magnitude * Math.Cos((Direction - other.Direction).Radians);
 		}
 
 		public override string ToString()
@@ -62,9 +71,9 @@ namespace GameMaker
 		public static implicit operator Point(Vector v) { return new Point(v.X, v.Y); }
 
 		public static Vector operator +(Vector v1, Vector v2) { return new Vector(v1.X + v2.X, v1.Y + v2.Y); }
-		// And so on...
-		/// TEMPORARY /// Implement binary-, unary-, scalar*, dot product, +/- Angle
-		/// 
+		public static Vector operator -(Vector v1, Vector v2) { return new Vector(v1.X - v2.X, v1.Y - v2.Y); }
+		public static Vector operator *(Vector v, double d) { return Vector.FromPolar(v.Magnitude * d, v.Direction); }
+		public static Vector operator *(double d, Vector v) { return Vector.FromPolar(d * v.Magnitude, v.Direction); }
 
 		public static Vector operator +(Vector v, Angle a) { return new Vector(v.Magnitude, v.Direction + a); }
 

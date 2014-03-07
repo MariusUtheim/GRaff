@@ -25,6 +25,11 @@ namespace GameMaker
 		public Color Blend { get; set; }
 		public Sprite Sprite { get; set; }
 
+		public Transform Transform
+		{
+			get { return new Transform(XScale, YScale, Rotation, Sprite.Origin); }
+		}
+
 		private double _index;
 		public int Index
 		{ 
@@ -61,5 +66,6 @@ namespace GameMaker
 			get { return Sprite.YOrigin; }
 			set { Sprite.YOrigin = value; }
 		}
+
 	}
 }

@@ -37,11 +37,35 @@ namespace GameMaker
 			get { return new Rectangle(Location - Sprite.Origin, Sprite.Size); }
 		}
 
-		public abstract Sprite Sprite { get; }
-
-		public virtual bool Intersects(Rectangle rect)
+		public bool Intersects(GameObject other)
 		{
-			return BoundingBox.Intersects(rect);
+			return Mask.Intersects(other.Mask);
+		}
+
+		private Sprite _sprite;
+		public Sprite Sprite
+		{
+			get { return _sprite; }
+			set { Image.Sprite = _sprite = value; }
+		}
+
+		public Transform Transform
+		{
+			get
+			{
+				return new Transform(Image.XScale, Image.YScale, Image.Rotation, Location);
+			}
+		}
+
+		private Mask _mask;
+		public Mask Mask
+		{
+			get
+			{
+				return new Mask(Transform.Rectangle(BoundingBox));
+			}
+
+			set { _mask = value; }
 		}
 
 		public virtual void BeginStep() { }
@@ -60,18 +84,14 @@ namespace GameMaker
 
 		public double Width
 		{
+#warning Temporary
 			get { return Sprite.Width; } ///TEMPORARY///
 		}
 
 		public double Height
 		{
+#warning Temporary
 			get { return Sprite.Height; } ///TEMPORARY///
-		}
-
-
-		internal bool Intersects(GameObject other)
-		{
-			return Intersects(other.BoundingBox);
 		}
 	}
 }

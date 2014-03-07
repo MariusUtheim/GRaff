@@ -12,20 +12,22 @@ namespace Sandbox
 	{
 		static void Main()
 		{
-			GameMaker.Forms.Runner.Run(GameStart);
+			Game.Run<GameMaker.Forms.FormsGraphicsEngine>(GameStart);
 		}
 
 		static void GameStart()
 		{
-			new Ball();
-			new Ball();
 			new Paddle();
-			for (int i = 40; i < Room.Width - 40; i+= 32)
+			new Ball();
+			//new Ball();
+	
+			for (int i = 40; i < Room.Width - 40; i += 64)
 				new NormalBlock(i, 40);
 
 			Window.IsBorderVisible = false;
 
-			GlobalEvent.Key += delegate(Key key) {
+			GlobalEvent.Key += delegate(Key key)
+			{
 				if (key == Key.Escape)
 					Game.Quit();
 			};

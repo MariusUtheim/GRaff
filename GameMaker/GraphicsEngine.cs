@@ -36,19 +36,27 @@ namespace GameMaker
 			Keyboard.Release(key);
 		}
 
-		public abstract void Run();
+		public abstract void Run(Action gameStart);
 
 		public abstract Texture LoadTexture(string file);
 
 		public abstract void DrawImage(double x, double y, Image image);
 
+		public abstract void DrawTexture(double x, double y, Texture texture);
+
+		public abstract void DrawCircle(Color color, Point location, double radius);
+
 		public abstract void DrawRectangle(Color color, double x, double y, double width, double height);
+
+		public abstract void DrawRectangle(Color col1, Color col2, Color col3, Color col4, double x, double y, double width, double height);
 
 		public abstract void DrawLine(Color color, double x1, double y1, double x2, double y2);
 
 		public abstract void DrawLine(Color col1, Color col2, double x1, double y1, double x2, double y2);
 
 		public abstract void Clear(Color color);
+
+		public abstract void Refresh();
 
 		public abstract bool IsVisible { get; set; }
 
@@ -67,6 +75,7 @@ namespace GameMaker
 		public abstract int Height { get; set; }
 
 		public abstract void Quit();
+
 	}
 
 }

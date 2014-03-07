@@ -8,7 +8,7 @@ namespace GameMaker
 {
     public static class Instance
     {
-		internal static List<GameObject> _objects = new List<GameObject>();
+		internal static InstanceList _objects = new InstanceList();
 
 		internal static void Add(GameObject instance)
 		{
@@ -32,7 +32,7 @@ namespace GameMaker
 
 		public static IEnumerable<GameObject> In(Rectangle rectangle)
 		{
-			return All.Where(i => i.Intersects(rectangle));
+			return All.Where(i => i.BoundingBox.Intersects(rectangle));
 		}
 
 		public static IEnumerable<GameObject> Where(Func<GameObject, bool> predicate)
@@ -50,12 +50,17 @@ namespace GameMaker
 
 		public static IEnumerable<T> In(Rectangle rectangle)
 		{
-			return All.Where(i => i.Intersects(rectangle));
+			return All.Where(i => i.BoundingBox.Intersects(rectangle));
 		}
 
 		public static T First
 		{
 			get { return All.First(); }
+		}
+
+		public static IEnumerable<T> Where(Func<T, bool> predicate)
+		{
+			return All.Where(predicate);
 		}
 	}
 }

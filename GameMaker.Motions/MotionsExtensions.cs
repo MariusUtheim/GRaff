@@ -8,6 +8,20 @@ namespace GameMaker.Motions
 {
     public static class MotionsExtensions
     {
+		public static bool PlaceMeeting(this GameObject instance, Point location, GameObject other)
+		{
+			Point previousLocation = instance.Location;
+			try
+			{
+				instance.Location = location;
+				return instance.Intersects(other);
+			}
+			finally
+			{
+				instance.Location = previousLocation;
+			}
+		}
+
 		public static bool PlaceFree(this GameObject instance, Point location)
 		{
 			throw new NotImplementedException();
