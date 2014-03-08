@@ -6,15 +6,34 @@ using System.Threading.Tasks;
 
 namespace GameMaker
 {
+	internal class GameObjectDepthComparer : IComparer<GameObject>
+	{
+		public static readonly GameObjectDepthComparer Instance = new GameObjectDepthComparer();
+
+		private GameObjectDepthComparer() { }
+
+		public int Compare(GameObject x, GameObject y)
+		{
+			return -(x.Depth - y.Depth);
+		}
+	}
+
+
 	internal class InstanceList : IList<GameObject>
 	{
 		private List<GameObject> _list;
 		private List<InstanceEnumerator> _enumerators;
 
+
 		public InstanceList()
 		{
 			_list = new List<GameObject>();
 			_enumerators = new List<InstanceEnumerator>();
+		}
+
+		public void Sort()
+		{
+			_list.Sort(GameObjectDepthComparer.Instance);
 		}
 
 		public void RemoveEnumerator(InstanceEnumerator enumerator)
@@ -29,7 +48,7 @@ namespace GameMaker
 
 		public void Insert(int index, GameObject item)
 		{
-			_list.Insert(index, item);
+			throw new InvalidOperationException("Cannot insert at a specified position, as elements should be sorted.");
 		}
 
 		public void RemoveAt(int index)
@@ -52,6 +71,7 @@ namespace GameMaker
 		public void Add(GameObject item)
 		{
 			_list.Add(item);
+			_list.Sort(GameObjectDepthComparer.Instance);
 		}
 
 		public void Clear()

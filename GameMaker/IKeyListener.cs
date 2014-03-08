@@ -10,4 +10,14 @@ namespace GameMaker
 	{
 		void OnKey(Key key);
 	}
+
+	public interface IKeyPressListener
+	{
+		void OnKeyPress(Key key);
+	}
+
+	public interface IKeyReleaseListener
+	{
+		void OnKeyRelease(Key key);
+	}
 }

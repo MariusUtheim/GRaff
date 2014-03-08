@@ -34,9 +34,6 @@ namespace GameMaker
 		public static void Loop()
 		{
 			int timeLeft = 1000 / 30 + Environment.TickCount;
-			foreach (var instance in Instance._objects)
-				instance.BeginStep();
-
 			// Begin step
 			// Alarm events
 			// Keyboard, key press, key release
@@ -46,11 +43,16 @@ namespace GameMaker
 			// Collision events
 			// End step
 			// Draw events
+			foreach (var instance in Instance._objects)
+				instance.BeginStep();
+
+			Alarm.TickAll();
 
 			_handleInput();
 
 			foreach (var instance in Instance._objects)
 				instance.Step();
+			GlobalEvent.OnStep();
 
 			_detectCollisions();
 

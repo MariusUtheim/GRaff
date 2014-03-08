@@ -21,7 +21,7 @@ namespace Sandbox
 			base.Step();
 			X = Mouse.X;
 
-			Image.Rotation = Angle.FromRadians(0.2 * Math.Sin(Environment.TickCount / 800.0));
+			Image.XScale = Angle.FromRadians(1.5 + 0.5 * Math.Sin(Environment.TickCount / 800.0));
 		}
 
 		public void OnKey(Key key)

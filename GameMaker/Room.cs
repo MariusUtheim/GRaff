@@ -10,8 +10,8 @@ namespace GameMaker
 	{
 		static Room()
 		{
-			Width = 1024;
-			Height = 768;
+			Width = 1280;
+			Height = 800;
 		}
 
 		public Room(int width, int height)
@@ -26,7 +26,7 @@ namespace GameMaker
 		}
 
 #warning GameMaker.Room.Speed is not implemented, but does not throw an exception if called.
-		public static int Speed { get { return 30; } }
+		public static int Speed { get { return 60; } }
 
 		public static Point Center { get { return new Point(Width / 2, Height / 2); } }
 

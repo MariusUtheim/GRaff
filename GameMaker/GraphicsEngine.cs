@@ -74,6 +74,12 @@ namespace GameMaker
 
 		public abstract int Height { get; set; }
 
+		public IntVector Size
+		{
+			get { return new IntVector(Width, Height); }
+			set { Width = value.X; Height = value.Y; }
+		}
+
 		public abstract void Quit();
 
 	}

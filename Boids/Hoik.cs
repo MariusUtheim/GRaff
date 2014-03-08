@@ -11,7 +11,7 @@ namespace Boids
 	public class Hoik : MovingObject
 	{
 		private const double MinSpeed = 2;
-		private const double MaxSpeed = 8;
+		private const double MaxSpeed = 10;
 		private const double NeighbourhoodRadius = 250;
 
 		public Hoik(Point location)
@@ -32,14 +32,16 @@ namespace Boids
 		public override void EndStep()
 		{
 			var neighbourhood = GetNeighbourhood();
-
-			this.AccelerateTowards(this.NearestInstance<Boid>().Location, 0.4);
+			var nearest = this.NearestInstance<Boid>();
+			this.AccelerateTowards(nearest.Location, 0.4);
 
 
 			Velocity += 0.001 * (Room.Center - Location);
 			Location += 0.001 * (Room.Center - Location);
 			Speed = GMath.Median(MinSpeed, Speed, MaxSpeed);
 
+			if ((nearest.Location - this.Location).Magnitude < 5)
+				nearest.Destroy();
 		//	Location = Mouse.Location;
 		}
 

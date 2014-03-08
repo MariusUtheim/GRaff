@@ -19,9 +19,9 @@ namespace Boids
 			Point origin = new Point(400, 300);
 
 			for (var offset = new Vector(30, Angle.Zero); offset.Direction < GMath.Tau; offset.Direction += GMath.Tau / 100)
-				new Boid(origin + offset);
+				Instance<Boid>.Create(origin + offset);
 			
-			new Hoik(origin + new Vector(50, 0));
+			Instance<Hoik>.Create(origin + new Vector(50, 0));
 
 			GlobalEvent.MousePressed += button => { new Boid(Mouse.Location); };
 

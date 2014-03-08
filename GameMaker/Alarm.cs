@@ -13,7 +13,7 @@ namespace GameMaker
 
 	public sealed class Alarm
 	{
-		private static List<Alarm> _alarms;
+		private static List<Alarm> _alarms = new List<Alarm>();
 
 		public Alarm()
 			:this(null) { }
@@ -34,6 +34,20 @@ namespace GameMaker
 
 			alarm.Restart(count);
 			return alarm;
+		}
+
+		public static Alarm Start(int count, Action<Alarm> callback)
+		{
+			var alarm = new Alarm();
+			alarm.Callback = (a, obj) => { callback(a); };
+			alarm.Restart(count);
+			return alarm;
+		}
+
+		internal static void TickAll()
+		{
+			foreach (var a in _alarms)
+				a.Tick();
 		}
 
 		public GameObject Target { get; set; }

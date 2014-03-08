@@ -77,10 +77,7 @@ namespace GameMaker
 		public void DrawOutline(Color color)
 		{
 			foreach (Line line in Path)
-			{
-				Draw.Line(color, line.Origin, line.Origin + line.Direction - 2 * line.Direction.Normal);
-				Draw.Line(Color.Red, line.Origin + 5 * line.Direction.Normal, line.Origin + 5 * line.Direction.Normal + line.RightNormal * 10);
-			}
+				Draw.Line(color, line.Origin, line.Origin + line.Direction);
 		}
 	}
 }

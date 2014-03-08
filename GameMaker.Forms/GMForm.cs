@@ -16,7 +16,8 @@ namespace GameMaker.Forms
 		internal GMForm()
 		{
 			InitializeComponent();
-			SetStyle(ControlStyles.AllPaintingInWmPaint | ControlStyles.OptimizedDoubleBuffer, true);
+			SetStyle(ControlStyles.AllPaintingInWmPaint	| ControlStyles.OptimizedDoubleBuffer
+				, true);
 		}
 	}
 }

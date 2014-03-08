@@ -8,6 +8,9 @@ namespace GameMaker
 {
 	public static class GlobalEvent
 	{
+		public static event Action Step;
+//		public static event Action BeginStep;
+//		public static event Action EndStep;
 		public static event Action DrawBackground;
 		public static event Action DrawForeground;
 		public static event Action<Key> Key;
@@ -16,6 +19,12 @@ namespace GameMaker
 		public static event Action<MouseButton> Mouse;
 		public static event Action<MouseButton> MousePressed;
 		public static event Action<MouseButton> MouseReleased;
+
+		internal static void OnStep()
+		{
+			if (Step != null)
+				Step.Invoke();
+		}
 
 		internal static void OnKey(Key key)
 		{

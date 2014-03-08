@@ -77,5 +77,13 @@ namespace GameMaker
 		{
 			GraphicsEngine.Current.DrawTexture(location.X - sprite.XOrigin, location.Y - sprite.YOrigin, sprite.GetTexture(imageIndex));
 		}
+
+		public static Rectangle GetVisibleRegion()
+		{
+			if (View.IsEnabled)
+				return View.ActualRoomView;
+			else
+				return new Rectangle(0, 0, Room.Width, Room.Height);
+		}
 	}
 }

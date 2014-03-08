@@ -13,6 +13,13 @@ namespace GameMaker
 			Image = new Image(this.Sprite);
 		}
 
+		public GameObject(double x, double y)
+			: this()
+		{
+			X = x;
+			Y = y;
+		}
+
 		public double X { get; set; }
 		public double Y { get; set; }
 
@@ -24,7 +31,12 @@ namespace GameMaker
 
 		public Image Image { get; set; }
 
-		public int Depth { get; set; } // TEMPORARY
+		private int _depth;
+		public int Depth 
+		{
+			get { return _depth; }
+			set { _depth = value; Instance.Sort(); }
+		}
 
 		public void Destroy()
 		{

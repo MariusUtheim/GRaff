@@ -8,7 +8,7 @@ using GameMaker.Motions;
 
 namespace Sandbox
 {
-	public class NormalBlock : Block, IMousePressListener
+	public class NormalBlock : Block
 	{
 		public NormalBlock(int x, int y)
 		{
@@ -24,9 +24,20 @@ namespace Sandbox
 			this.Destroy();
 		}
 
-		public void OnMousePress(MouseButton button)
+		public override void Step()
 		{
-			this.Destroy();
+			base.Step();
+
+			if (Mask.ContainsPoint(Mouse.Location))
+				Image.Blend = Color.Green;
+			else
+				Image.Blend = Color.White;
+		}
+
+		public override void OnDraw()
+		{
+			base.OnDraw();
+			Mask.DrawOutline();
 		}
 	}
 }

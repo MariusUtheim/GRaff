@@ -50,8 +50,6 @@
     <Compile Include="GMath.cs" />
     <Compile Include="GRandom.cs" />
     <Compile Include="GraphicsEngine.cs" />
-    <Compile Include="IKeyPressListener.cs" />
-    <Compile Include="IKeyReleaseListener.cs" />
     <Compile Include="Image.cs" />
     <Compile Include="IMouseListener.cs" />
     <Compile Include="Instance.cs" />
@@ -81,6 +79,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Room.cs" />
     <Compile Include="Sprite.cs" />
+    <Compile Include="View.cs" />
     <Compile Include="Window.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

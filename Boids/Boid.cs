@@ -45,9 +45,9 @@ namespace Boids
 
 				Vector acceleration =
 					-0.03 * offset
-					+ 0.05 * heading
-					+ 0.005 * avoidCollision
-					+ 0.1 * avoidHoik;
+					+ 0.15 * heading
+					+ 0.05 * avoidCollision
+					+ 0.10 * avoidHoik;
 				//if (acceleration.Magnitude > MaxAcceleration)
 				//	acceleration.Magnitude = MaxAcceleration;
 
@@ -58,6 +58,8 @@ namespace Boids
 			Velocity += 0.001 * (Room.Center - Location);
 			Location += 0.001 * (Room.Center - Location);
 			Speed = GMath.Median(MinSpeed, Speed, MaxSpeed);
+
+			Window.Title = String.Format("Number of remaining boids: {0}", Instance<Boid>.All.Count());
 		}
 
 		public override void OnDraw()

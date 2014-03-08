@@ -13,6 +13,10 @@ namespace GameMaker
 			base.Step();
 
 			Location += Velocity;
+			if (Speed <= Friction)
+				Speed = 0;
+			else
+				Speed -= Friction;
 		}
 
 
@@ -45,6 +49,8 @@ namespace GameMaker
 			get { return Velocity.Direction; }
 			set { Velocity = new Vector(Speed, value); ; }
 		}
+
+		public double Friction { get; set; }
 
 		public override void BeginStep()
 		{

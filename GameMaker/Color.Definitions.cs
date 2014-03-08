@@ -20,10 +20,15 @@ namespace GameMaker
 		}
 
 		public static Color Red { get; private set; }
+		
 		public static Color Green { get; private set; }
+		
 		public static Color Blue { get; private set; }
+		
 		public static Color Black { get; private set; }
+		
 		public static Color White { get; private set; }
+		
 		public static Color Gray { get; private set; }
 
 		public static Color LightGray { get; private set; }

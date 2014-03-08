@@ -25,6 +25,7 @@ namespace Sandbox
 				new NormalBlock(i, 40);
 
 			Window.IsBorderVisible = false;
+			Background.Color = Color.White;
 
 			GlobalEvent.Key += delegate(Key key)
 			{

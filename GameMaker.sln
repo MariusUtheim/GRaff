@@ -5,7 +5,7 @@ VisualStudioVersion = 12.0.21005.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameMaker", "GameMaker\GameMaker.csproj", "{9B4B4358-F24B-41B4-BF94-9013E205780B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sandbox", "Sandbox\Sandbox.csproj", "{2D419382-EB93-4C9D-A149-0565EC61FD2A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Breakout", "Sandbox\Breakout.csproj", "{2D419382-EB93-4C9D-A149-0565EC61FD2A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameMaker.Forms", "GameMaker.Forms\GameMaker.Forms.csproj", "{CA3C77B9-DB5A-4F45-84AF-7141CB70DB9B}"
 EndProject
@@ -14,6 +14,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameMaker.OpenGL", "GameMaker.OpenGL\GameMaker.OpenGL.csproj", "{F1947A4F-1E40-4869-A899-5D2707338137}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Boids", "Boids\Boids.csproj", "{4801EC9A-281B-4CCC-B684-85A319F7B570}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoOp", "CoOp\CoOp.csproj", "{69D56C5F-6486-45AA-A71D-D8E3634876CF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +47,10 @@ Global
 		{4801EC9A-281B-4CCC-B684-85A319F7B570}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4801EC9A-281B-4CCC-B684-85A319F7B570}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4801EC9A-281B-4CCC-B684-85A319F7B570}.Release|Any CPU.Build.0 = Release|Any CPU
+		{69D56C5F-6486-45AA-A71D-D8E3634876CF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{69D56C5F-6486-45AA-A71D-D8E3634876CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{69D56C5F-6486-45AA-A71D-D8E3634876CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{69D56C5F-6486-45AA-A71D-D8E3634876CF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
