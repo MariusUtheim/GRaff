@@ -51,5 +51,29 @@ namespace GameMaker.Motions
 		{
 			throw new NotImplementedException();
 		}
+
+		public static void MoveTowards(this MovingObject instance, Point point, double speed)
+		{
+			instance.Velocity = Vector.FromPolar(speed, (point - instance.Location).Direction);
+		}
+
+		public static T NearestInstance<T>(this GameObject instance) where T : GameObject
+		{
+			T min = null;
+			double offset = Double.PositiveInfinity;
+			foreach (var obj in Instance<T>.All)
+				if ((obj.Location - instance.Location).Magnitude < offset)
+				{
+					offset = (obj.Location - instance.Location).Magnitude;
+					min = obj;
+				}
+
+			return min;
+		}
+
+		public static void AccelerateTowards(this MovingObject instance, Point point, double speed)
+		{
+			instance.Velocity += Vector.FromPolar(speed, (point - instance.Location).Direction);
+		}
     }
 }

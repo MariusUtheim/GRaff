@@ -28,6 +28,8 @@ namespace GameMaker
 #warning GameMaker.Room.Speed is not implemented, but does not throw an exception if called.
 		public static int Speed { get { return 30; } }
 
+		public static Point Center { get { return new Point(Width / 2, Height / 2); } }
+
 		public static int Width { get; private set; }
 
 		public static int Height { get; private set; }

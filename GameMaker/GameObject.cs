@@ -24,7 +24,7 @@ namespace GameMaker
 
 		public Image Image { get; set; }
 
-		public int Depth { get; set; } ///TEMPORARY///
+		public int Depth { get; set; } // TEMPORARY
 
 		public void Destroy()
 		{
@@ -78,7 +78,7 @@ namespace GameMaker
 
 		public virtual void OnDraw()
 		{
-			if (Image != null)
+			if (Sprite != null)
 				Draw.Image(X, Y, Image);
 		}
 

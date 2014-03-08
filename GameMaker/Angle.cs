@@ -37,13 +37,13 @@ namespace GameMaker
 		public double Radians
 		{
 			get { return _radians; }
-			set { _radians = value % GMath.Tau; }
+			set { _radians = value; }
 		}
 
 		public double Degrees
 		{
 			get { return _radians * 360 / GMath.Tau; }
-			set { _radians = (value % 360.0) * GMath.Tau / 360; }
+			set { _radians = value * GMath.Tau / 360; }
 		}
 
 		public static implicit operator double(Angle a)

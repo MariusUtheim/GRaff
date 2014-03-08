@@ -8,7 +8,7 @@ namespace GameMaker
 {
 	public static class Keyboard
 	{
-		private static readonly int _keyCount = Enum.GetNames(typeof(Key)).Length;
+		private static readonly int _keyCount = 255;//Enum.GetNames(typeof(Key)).Length;
 		private static bool[] _pressed = new bool[_keyCount];
 		private static bool[] _down = new bool[_keyCount];
 		private static bool[] _released = new bool[_keyCount];

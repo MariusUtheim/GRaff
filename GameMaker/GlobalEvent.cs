@@ -13,6 +13,9 @@ namespace GameMaker
 		public static event Action<Key> Key;
 		public static event Action<Key> KeyPressed;
 		public static event Action<Key> KeyReleased;
+		public static event Action<MouseButton> Mouse;
+		public static event Action<MouseButton> MousePressed;
+		public static event Action<MouseButton> MouseReleased;
 
 		internal static void OnKey(Key key)
 		{
@@ -42,6 +45,24 @@ namespace GameMaker
 		{
 			if (DrawForeground != null)
 				DrawForeground();
+		}
+
+		internal static void OnMouse(MouseButton button)
+		{
+			if (Mouse != null)
+				Mouse(button);
+		}
+
+		internal static void OnMousePressed(MouseButton button)
+		{
+			if (MousePressed != null)
+				MousePressed(button);
+		}
+
+		internal static void OnMouseReleased(MouseButton button)
+		{
+			if (MouseReleased != null)
+				MouseReleased(button);
 		}
 	}
 }

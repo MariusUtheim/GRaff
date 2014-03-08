@@ -10,6 +10,7 @@ namespace GameMaker
 	/// </summary>
 	public struct Vector
 	{
+		public static readonly Vector Zero = new Vector(0, 0);
 
 		public Vector(double x, double y)
 			: this()
@@ -74,6 +75,7 @@ namespace GameMaker
 		public static Vector operator -(Vector v1, Vector v2) { return new Vector(v1.X - v2.X, v1.Y - v2.Y); }
 		public static Vector operator *(Vector v, double d) { return Vector.FromPolar(v.Magnitude * d, v.Direction); }
 		public static Vector operator *(double d, Vector v) { return Vector.FromPolar(d * v.Magnitude, v.Direction); }
+		public static Vector operator /(Vector v, double d) { return Vector.FromPolar(v.Magnitude / d, v.Direction); }
 
 		public static Vector operator +(Vector v, Angle a) { return new Vector(v.Magnitude, v.Direction + a); }
 

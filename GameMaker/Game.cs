@@ -41,7 +41,8 @@ namespace GameMaker
 			// Alarm events
 			// Keyboard, key press, key release
 			// Mouse
-			// Normal step (MovingObjects will update their positions)
+			// Normal step 
+			//  (MovingObjects will update their positions)
 			// Collision events
 			// End step
 			// Draw events
@@ -100,15 +101,36 @@ namespace GameMaker
 				GlobalEvent.OnKeyReleased(key);
 
 
-
+			foreach (var button in Mouse.Down)
+				foreach (var instance in Instance.Where(obj => obj is IMouseListener && obj.Mask.ContainsPoint(Mouse.Location)))
+					(instance as IMouseListener).OnMouse(button);
 
 			foreach (var button in Mouse.Pressed)
 				foreach (var instance in Instance.Where(obj => obj is IMousePressListener && obj.Mask.ContainsPoint(Mouse.Location)))
 					(instance as IMousePressListener).OnMousePress(button);
 
+			foreach (var button in Mouse.Released)
+				foreach (var instance in Instance.Where(obj => obj is IMouseReleaseListener && obj.Mask.ContainsPoint(Mouse.Location)))
+					(instance as IMouseReleaseListener).OnMouseRelease(button);
+
+
+			foreach (var button in Mouse.Down)
+				foreach (var instance in Instance.Where(obj => obj is IMouseListener && obj.Mask.ContainsPoint(Mouse.Location)))
+					(instance as IGlobalMouseListener).OnGlobalMouse(button);
+			foreach (var button in Mouse.Down)
+				GlobalEvent.OnMouse(button);
+
 			foreach (var button in Mouse.Pressed)
-				foreach (var instance in Instance.Where(obj => obj is IGlobalMousePressListener))
+				foreach (var instance in Instance.Where(obj => obj is IMousePressListener && obj.Mask.ContainsPoint(Mouse.Location)))
 					(instance as IGlobalMousePressListener).OnGlobalMousePress(button);
+			foreach (var button in Mouse.Pressed)
+				GlobalEvent.OnMousePressed(button);
+
+			foreach (var button in Mouse.Released)
+				foreach (var instance in Instance.Where(obj => obj is IMouseReleaseListener && obj.Mask.ContainsPoint(Mouse.Location)))
+					(instance as IGlobalMouseReleaseListener).OnGlobalMouseRelease(button);
+			foreach (var button in Mouse.Released)
+				GlobalEvent.OnMouseReleased(button);
 
 			Keyboard.Update();
 			Mouse.Update();
