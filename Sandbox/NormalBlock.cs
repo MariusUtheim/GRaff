@@ -17,6 +17,7 @@ namespace Sandbox
 			this.Y = y;
 			this.Image.XScale = 2;
 			this.Image.YScale = 2;
+			Image.Blend = Color.PeachPuff;
 		}
 
 		public override void Hit(Ball other)
@@ -27,11 +28,6 @@ namespace Sandbox
 		public override void Step()
 		{
 			base.Step();
-
-			if (Mask.ContainsPoint(Mouse.Location))
-				Image.Blend = Color.Green;
-			else
-				Image.Blend = Color.White;
 		}
 
 		public override void OnDraw()

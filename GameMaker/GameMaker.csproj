@@ -58,6 +58,7 @@
     <Compile Include="IKeyListener.cs" />
     <Compile Include="InstanceList.cs" />
     <Compile Include="Integer.cs" />
+    <Compile Include="IntRectangle.cs" />
     <Compile Include="IntVector.cs" />
     <Compile Include="Key.cs" />
     <Compile Include="Keyboard.cs" />

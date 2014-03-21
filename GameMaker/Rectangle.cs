@@ -40,7 +40,6 @@ namespace GameMaker
 			set	{ Left = value - Width; }
 		}
 
-
 		public double Bottom
 		{
 			get { return Top + Height;  }

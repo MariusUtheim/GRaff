@@ -27,7 +27,7 @@ namespace GameMaker
 			this.InitialCount = -1;
 		}
 
-		public static Alarm Start(int count, Action<Alarm, GameObject> callback)
+		public static Alarm Start(int count, Action<Alarm, GameObject> callback, GameObject target)
 		{
 			var alarm = new Alarm();
 			alarm.Callback = callback;

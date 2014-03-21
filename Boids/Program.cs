@@ -21,7 +21,13 @@ namespace Boids
 			for (var offset = new Vector(30, Angle.Zero); offset.Direction < GMath.Tau; offset.Direction += GMath.Tau / 100)
 				Instance<Boid>.Create(origin + offset);
 			
-			Instance<Hoik>.Create(origin + new Vector(50, 0));
+			//Instance<Hoik>.Create(origin + new Vector(50, 0));
+
+			new Obstacle(Room.Center, 10);
+			new Obstacle(300, 300, 20);
+			new Obstacle(400, 600, 15);
+			new Obstacle(700, 200, 15);
+			new Obstacle(8000, 400, 10);
 
 			GlobalEvent.MousePressed += button => { new Boid(Mouse.Location); };
 

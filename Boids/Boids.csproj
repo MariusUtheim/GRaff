@@ -46,6 +46,8 @@
   <ItemGroup>
     <Compile Include="Boid.cs" />
     <Compile Include="Hoik.cs" />
+    <Compile Include="Neighbourhood.cs" />
+    <Compile Include="Obstacle.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">

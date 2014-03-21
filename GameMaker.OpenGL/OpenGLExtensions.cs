@@ -23,7 +23,7 @@ namespace GameMaker.OpenGL
 
 		public static Key ToGMKey(this GLKey key)
 		{
-			return (Key)key;
+			throw new NotImplementedException();
 		}
 	}
 }

@@ -31,7 +31,11 @@ namespace GameMaker
 		public static Point Center { get { return new Point(Width / 2, Height / 2); } }
 
 		public static int Width { get; private set; }
-
 		public static int Height { get; private set; }
+		public static IntVector Size
+		{
+			get { return new IntVector(Width, Height); }
+			set { Width = value.X; Height = value.Y; }
+		}
 	}
 }

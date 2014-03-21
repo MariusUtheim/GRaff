@@ -30,5 +30,9 @@ namespace GameMaker
 			return radians * 360.0 / GMath.Tau;
 		}
 
+		public static double Sqr(double x)
+		{
+			return x * x;
+		}
 	}
 }
