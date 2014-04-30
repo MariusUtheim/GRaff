@@ -83,10 +83,6 @@
       <Project>{d0e2dd98-20c6-4a04-9a7b-9c2c8cbc4d33}</Project>
       <Name>GameMaker.Motions</Name>
     </ProjectReference>
-    <ProjectReference Include="..\GameMaker.OpenGL\GameMaker.OpenGL.csproj">
-      <Project>{f1947a4f-1e40-4869-a899-5d2707338137}</Project>
-      <Name>GameMaker.OpenGL</Name>
-    </ProjectReference>
     <ProjectReference Include="..\GameMaker\GameMaker.csproj">
       <Project>{9b4b4358-f24b-41b4-bf94-9013e205780b}</Project>
       <Name>GameMaker</Name>

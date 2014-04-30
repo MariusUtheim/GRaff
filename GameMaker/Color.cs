@@ -27,6 +27,9 @@ namespace GameMaker
 			this.G = (argb >> 8) & 0xFF;
 			this.B = argb & 0xFF;
 		}
+
+		public Color(int alpha, Color baseColor)
+			: this(alpha, baseColor.R, baseColor.G, baseColor.B) { }
 		
 		public static Color Merge(params Color[] colors)
 		{
@@ -43,10 +46,10 @@ namespace GameMaker
 			return new Color(a / colors.Length, r / colors.Length, g / colors.Length, b / colors.Length);
 		}
 
-		public int A { get; set; }
-		public int R { get; set; }
-		public int G { get; set; }
-		public int B { get; set; }
+		public int A { get; private set; }
+		public int R { get; private set; }
+		public int G { get; private set; }
+		public int B { get; private set; }
 
 		public int Argb
 		{

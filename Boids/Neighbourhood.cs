@@ -72,7 +72,7 @@ namespace Boids
 			Vector avoid = Vector.Zero;
 
 			foreach (Boid b in Boids)
-				avoid += Vector.FromPolar(NeighbourhoodRadius - (Focus.Location - b.Location).Magnitude, (Focus.Location - b.Location).Direction);
+				avoid += Vector.Polar(NeighbourhoodRadius - (Focus.Location - b.Location).Magnitude, (Focus.Location - b.Location).Direction);
 
 			return avoid;
 		}
@@ -82,7 +82,7 @@ namespace Boids
 			Vector avoid = Vector.Zero;
 
 			foreach (Obstacle o in Obstacles)
-				avoid += Vector.FromPolar(NeighbourhoodRadius + o.Radius - (Focus.Location - o.Location).Magnitude, (Focus.Location - o.Location).Direction);
+				avoid += Vector.Polar(NeighbourhoodRadius + o.Radius - (Focus.Location - o.Location).Magnitude, (Focus.Location - o.Location).Direction);
 
 			return avoid;
 		}
@@ -92,7 +92,7 @@ namespace Boids
 			Vector avoid = Vector.Zero;
 
 			foreach (Hoik h in Hoiks)
-				avoid += Vector.FromPolar(NeighbourhoodRadius - (Focus.Location - h.Location).Magnitude, (Focus.Location - h.Location).Direction);
+				avoid += Vector.Polar(NeighbourhoodRadius - (Focus.Location - h.Location).Magnitude, (Focus.Location - h.Location).Direction);
 
 			return avoid;
 		}

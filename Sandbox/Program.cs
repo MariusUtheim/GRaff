@@ -12,19 +12,18 @@ namespace Sandbox
 	{
 		static void Main()
 		{
-			Game.Run<GameMaker.Forms.FormsGraphicsEngine>(GameStart);
+			var initialRoom = new Room(1024, 768, GameStart);
+			Game.Run<GameMaker.Forms.FormsGraphicsEngine>(initialRoom, null);
 		}
 
 		static void GameStart()
 		{
 			new Paddle();
 			new Ball();
-			//new Ball();
 
-			for (int i = 40; i < Room.Width - 40; i += 64)
+			for (int i = 40; i < Room.Current.Width - 40; i += 64)
 				new NormalBlock(i, 40);
 
-			Window.IsBorderVisible = false;
 			Background.Color = Color.DeepPink;
 
 			GlobalEvent.Key += delegate(Key key)

@@ -16,9 +16,9 @@ namespace GameMaker.OpenGL
 		}
 		
 		[STAThread]
-		public override void Run(Action gameStart)
+		public override void Run(Room initialRoom, Action gameStart)
 		{
-			using (game = new GameWindow(Room.Width, Room.Height))
+			using (game = new GameWindow(Room.Current.Width, Room.Current.Height))
 			{
 				game.Load += (sender, e) =>
 				{

@@ -25,9 +25,9 @@ namespace Sandbox
 			this.Destroy();
 		}
 
-		public override void Step()
+		public override void OnStep()
 		{
-			base.Step();
+			base.OnStep();
 		}
 
 		public override void OnDraw()

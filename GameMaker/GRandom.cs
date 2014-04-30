@@ -43,5 +43,23 @@ namespace GameMaker
 		{
 			return GameMaker.Angle.FromRadians(lowerBound + _rnd.NextDouble() * (upperBound - lowerBound));
 		}
+
+		public static T Choose<T>(params T[] items)
+		{
+			return items[_rnd.Next(items.Length)];
+		}
+
+		/// <summary>
+		/// Returns true with probability p; otherwise, returns false.
+		/// </summary>
+		/// <param name="p">The probability of returning true</param>
+		/// <returns>true with probability p or if p > 1; otherwise, false</returns>
+		public static bool Probability(double p)
+		{
+			if (_rnd.NextDouble() < p)
+				return true;
+			else
+				return false;
+		}
 	}
 }

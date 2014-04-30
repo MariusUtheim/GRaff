@@ -58,6 +58,10 @@ namespace GameMaker
 			set { Width = value.X; Height = value.Y; }
 		}
 
+		public Point Center
+		{
+			get { return Location + Size / 2; }
+		}
 
 		public bool Intersects(Rectangle other)
 		{

@@ -29,15 +29,15 @@ namespace Boids
 			return Instance<Boid>.Where(b => (this.Location - b.Location).Magnitude < NeighbourhoodRadius).ToArray();
 		}
 
-		public override void EndStep()
+		public override void OnEndStep()
 		{
 			var neighbourhood = GetNeighbourhood();
 			var nearest = this.NearestInstance<Boid>();
 			this.AccelerateTowards(nearest.Location, 0.4);
 
 
-			Velocity += 0.001 * (Room.Center - Location);
-			Location += 0.001 * (Room.Center - Location);
+			Velocity += 0.001 * (Room.Current.Center - Location);
+			Location += 0.001 * (Room.Current.Center - Location);
 			Speed = GMath.Median(MinSpeed, Speed, MaxSpeed);
 
 			if ((nearest.Location - this.Location).Magnitude < 5)

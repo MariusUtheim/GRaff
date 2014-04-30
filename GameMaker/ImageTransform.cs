@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace GameMaker
 {
-	public class Transform
+	public class ImageTransform
 	{
 
-		public Transform(double xScale, double yScale, Angle rotation, Vector origin)
+		public ImageTransform(double xScale, double yScale, Angle rotation, Vector origin)
 		{
 			// TODO: Complete member initialization
 			this.XScale = xScale;

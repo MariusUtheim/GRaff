@@ -43,6 +43,7 @@
   <ItemGroup>
     <Compile Include="FormsGraphicsEngine.cs" />
     <Compile Include="FormsSoundEngine.cs" />
+    <Compile Include="FormsSurface.cs" />
     <Compile Include="FormsTexture.cs" />
     <Compile Include="GMForm.cs">
       <SubType>Form</SubType>
@@ -52,7 +53,6 @@
     </Compile>
     <Compile Include="GMFormsExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Runner.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\GameMaker\GameMaker.csproj">

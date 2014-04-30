@@ -54,7 +54,7 @@ namespace GameMaker.Motions
 
 		public static void MoveTowards(this MovingObject instance, Point point, double speed)
 		{
-			instance.Velocity = Vector.FromPolar(speed, (point - instance.Location).Direction);
+			instance.Velocity = Vector.Polar(speed, (point - instance.Location).Direction);
 		}
 
 		public static T NearestInstance<T>(this GameObject instance) where T : GameObject
@@ -73,7 +73,7 @@ namespace GameMaker.Motions
 
 		public static void AccelerateTowards(this MovingObject instance, Point point, double speed)
 		{
-			instance.Velocity += Vector.FromPolar(speed, (point - instance.Location).Direction);
+			instance.Velocity += Vector.Polar(speed, (point - instance.Location).Direction);
 		}
     }
 }

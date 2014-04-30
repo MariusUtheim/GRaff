@@ -11,7 +11,7 @@ namespace Boids
 	{
 		static void Main()
 		{
-			GameMaker.Forms.Runner.Run(gameStart);
+			Game.Run<GameMaker.Forms.FormsGraphicsEngine>(gameStart);
 		}
 
 		static void gameStart()
@@ -23,7 +23,7 @@ namespace Boids
 			
 			//Instance<Hoik>.Create(origin + new Vector(50, 0));
 
-			new Obstacle(Room.Center, 10);
+			new Obstacle(Room.Current.Center, 10);
 			new Obstacle(300, 300, 20);
 			new Obstacle(400, 600, 15);
 			new Obstacle(700, 200, 15);

@@ -23,15 +23,14 @@ namespace Boids
 			this.Y = y;
 		}
 
-		public override void EndStep()
+		public override void OnEndStep()
 		{
 			Velocity += new Neighbourhood(this).GetAcceleration();
 
-			Velocity += 0.001 * (Room.Center - Location);
-			Location += 0.001 * (Room.Center - Location);
+			Velocity += 0.001 * (Room.Current.Center - Location);
+			Location += 0.001 * (Room.Current.Center - Location);
 			Speed = GMath.Median(MinSpeed, Speed, MaxSpeed);
 
-			Window.Title = String.Format("Number of remaining boids: {0}", Instance<Boid>.All.Count());
 		}
 
 		public override void OnDraw()

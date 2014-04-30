@@ -13,16 +13,17 @@ namespace Sandbox
 		private List<Point> _trail = new List<Point>();
 
 		public Ball()
+			: base(0, 0)
 		{
 			Sprite = Sprites.Ball;
-			X = Room.Width / 2;
-			Y = Room.Height / 2;
+			X = Room.Current.Width / 2;
+			Y = Room.Current.Height / 2;
 			Velocity = new Vector(12, GRandom.Angle(5.0 / 8 * GMath.Tau, 7.0 / 8 * GMath.Tau));
 			for (int i = 0; i < 20; i++)
 				_trail.Add(Location);
 		}
 
-		public override void Step()
+		public override void OnStep()
 		{
 			if (_isHeld)
 			{
@@ -30,8 +31,8 @@ namespace Sandbox
 			}
 			else
 			{
-				base.Step();
-				if (X < 0 || X > Room.Width)
+				base.OnStep();
+				if (X < 0 || X > Room.Current.Width)
 				{
 					X = XPrevious;
 					HSpeed = -HSpeed;
@@ -47,7 +48,9 @@ namespace Sandbox
 			_trail.Add(Location);
 			_trail.RemoveAt(0);
 
-			if (Y > Room.Width)
+			Room.Current.Views[0].Center = (IntVector)this.Location;
+
+			if (Y > Room.Current.Width)
 			{
 				new Ball();
 				this.Destroy();
@@ -79,11 +82,10 @@ namespace Sandbox
 		public override void OnDraw()
 		{
 			Color col = Color.Yellow;
-			col.A = 0;
+			
 			for (int i = 0; i < _trail.Count - 1; i++)
 			{
-				Draw.Line(col, _trail[i], _trail[i + 1]);
-				col.A += 255 / _trail.Count;
+				Draw.Line(new Color(255 * i / _trail.Count, col), _trail[i], _trail[i + 1]);
 			}
 
 			base.OnDraw();

@@ -11,8 +11,11 @@ namespace GameMaker
 		static Background()
 		{
 			Color = Color.LightGray;
+			Image = null;
 		}
 
 		public static Color Color { get; set; }
+
+		public static Sprite Image { get; set; }
 	}
 }

@@ -25,7 +25,7 @@ namespace GameMaker
 			this._path = path;
 			this._isLoaded = false;
 		}
-		   
+
 		public Sprite(string path, bool preload)
 		{
 			this._path = path;
@@ -88,6 +88,11 @@ namespace GameMaker
 		{
 			Load();
 			return _texture; ///TEMPORARY///
+		}
+
+		public static int ImageCount 
+		{
+			get { return 1; }
 		}
 	}
 }

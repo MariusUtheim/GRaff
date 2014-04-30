@@ -61,5 +61,10 @@ namespace GameMaker
 		}
 
 		public static implicit operator Rectangle(IntRectangle r) { return new Rectangle(r.Left, r.Top, r.Width, r.Height); }
+
+		public override string ToString()
+		{
+			return String.Format("IntRectangle: [({0},{1}), ({2},{3})]", Left, Top, Width, Height);
+		}
 	}
 }

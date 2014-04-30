@@ -18,35 +18,43 @@ namespace GameMaker
 		}
 	}
 
-
-	internal class InstanceList : IList<GameObject>
+	internal class InstanceList : MutableList<GameObject>
 	{
-		private List<GameObject> _list;
-		private List<InstanceEnumerator> _enumerators;
-
-
-		public InstanceList()
-		{
-			_list = new List<GameObject>();
-			_enumerators = new List<InstanceEnumerator>();
-		}
-
 		public void Sort()
 		{
 			_list.Sort(GameObjectDepthComparer.Instance);
 		}
 
-		public void RemoveEnumerator(InstanceEnumerator enumerator)
+		public override void Add(GameObject item)
+		{
+			_list.Add(item);
+			_list.Sort(GameObjectDepthComparer.Instance);
+		}
+	}
+
+	internal class MutableList<T> : IList<T>
+	{
+		protected List<T> _list;
+		protected List<MutableEnumerator<T>> _enumerators;
+
+		public MutableList()
+		{
+			_list = new List<T>();
+			_enumerators = new List<MutableEnumerator<T>>();
+		}
+
+
+		public void RemoveEnumerator(MutableEnumerator<T> enumerator)
 		{
 			_enumerators.Remove(enumerator);
 		}
 
-		public int IndexOf(GameObject item)
+		public int IndexOf(T item)
 		{
 			return _list.IndexOf(item);
 		}
 
-		public void Insert(int index, GameObject item)
+		public void Insert(int index, T item)
 		{
 			throw new InvalidOperationException("Cannot insert at a specified position, as elements should be sorted.");
 		}
@@ -56,7 +64,7 @@ namespace GameMaker
 			_list.RemoveAt(index);
 		}
 
-		public GameObject this[int index]
+		public T this[int index]
 		{
 			get
 			{
@@ -68,10 +76,9 @@ namespace GameMaker
 			}
 		}
 
-		public void Add(GameObject item)
+		public virtual void Add(T item)
 		{
 			_list.Add(item);
-			_list.Sort(GameObjectDepthComparer.Instance);
 		}
 
 		public void Clear()
@@ -79,12 +86,12 @@ namespace GameMaker
 			_list.Clear();
 		}
 
-		public bool Contains(GameObject item)
+		public bool Contains(T item)
 		{
 			return _list.Contains(item);
 		}
 
-		public void CopyTo(GameObject[] array, int arrayIndex)
+		public void CopyTo(T[] array, int arrayIndex)
 		{
 			_list.CopyTo(array, arrayIndex);
 		}
@@ -99,7 +106,7 @@ namespace GameMaker
 			get { return false; }
 		}
 
-		public bool Remove(GameObject item)
+		public bool Remove(T item)
 		{
 			int pos = IndexOf(item);
 			foreach (var enumerator in _enumerators.Where(e => e.Index > pos))
@@ -107,9 +114,9 @@ namespace GameMaker
 			return _list.Remove(item);
 		}
 
-		public IEnumerator<GameObject> GetEnumerator()
+		public IEnumerator<T> GetEnumerator()
 		{
-			var enumerator = new InstanceEnumerator(this);
+			var enumerator = new MutableEnumerator<T>(this);
 			_enumerators.Add(enumerator);
 			return enumerator;
 		}
@@ -120,11 +127,11 @@ namespace GameMaker
 		}
 	}
 
-	internal class InstanceEnumerator : IEnumerator<GameObject>
+	internal class MutableEnumerator<T> : IEnumerator<T>
 	{
-		private InstanceList _list;
+		private MutableList<T> _list;
 
-		public InstanceEnumerator(InstanceList list)
+		public MutableEnumerator(MutableList<T> list)
 		{
 			this._list = list;
 			Reset();
@@ -132,7 +139,7 @@ namespace GameMaker
 
 		public int Index { get; private set; }
 
-		public GameObject Current
+		public T Current
 		{
 			get { return _list[Index]; }
 		}

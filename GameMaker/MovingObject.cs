@@ -8,9 +8,12 @@ namespace GameMaker
 {
 	public abstract class MovingObject : GameObject
 	{
-		public override void Step()
+		public MovingObject(double x, double y)
+			: base(x, y) { }
+
+		public override void OnStep()
 		{
-			base.Step();
+			base.OnStep();
 
 			Location += Velocity;
 			if (Speed <= Friction)
@@ -52,9 +55,9 @@ namespace GameMaker
 
 		public double Friction { get; set; }
 
-		public override void BeginStep()
+		public override void OnBeginStep()
 		{
-			base.BeginStep();
+			base.OnBeginStep();
 			XPrevious = X;
 			YPrevious = Y;
 		}

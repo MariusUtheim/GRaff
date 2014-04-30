@@ -20,6 +20,18 @@ namespace GameMaker
 				return x1;
 		}
 
+		public static int Median(int x1, int x2, int x3)
+		{
+			if ((x1 <= x2 && x2 <= x3) || (x3 <= x2 && x2 <= x1))
+				return x2;
+			else if ((x2 <= x3 && x3 <= x1) || (x1 <= x3 && x3 <= x2))
+				return x3;
+			else
+				return x1;
+		}
+
+		// TEMPORARY /// Also add Median for lots of different types
+
 		public static double DegToRad(double degrees)
 		{
 			return degrees * GMath.Tau / 360.0;
@@ -34,5 +46,6 @@ namespace GameMaker
 		{
 			return x * x;
 		}
+
 	}
 }

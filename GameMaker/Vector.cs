@@ -25,12 +25,12 @@ namespace GameMaker
 			this.Direction = direction;
 		}
 
-		public static Vector FromPolar(double magnitude, Angle direction)
+		public static Vector Polar(double magnitude, Angle direction)
 		{
 			return new Vector { Magnitude = magnitude, Direction = direction };
 		}
 
-		public static Vector FromCartesian(double x, double y)
+		public static Vector Cartesian(double x, double y)
 		{
 			return new Vector { X = x, Y = y };
 		}
@@ -56,7 +56,7 @@ namespace GameMaker
 
 		public Vector Normal
 		{
-			get { return Vector.FromPolar(1, this.Direction); }
+			get { return Vector.Polar(1, this.Direction); }
 		}
 
 		public double DotProduct(Vector other)
@@ -73,9 +73,9 @@ namespace GameMaker
 
 		public static Vector operator +(Vector v1, Vector v2) { return new Vector(v1.X + v2.X, v1.Y + v2.Y); }
 		public static Vector operator -(Vector v1, Vector v2) { return new Vector(v1.X - v2.X, v1.Y - v2.Y); }
-		public static Vector operator *(Vector v, double d) { return Vector.FromPolar(v.Magnitude * d, v.Direction); }
-		public static Vector operator *(double d, Vector v) { return Vector.FromPolar(d * v.Magnitude, v.Direction); }
-		public static Vector operator /(Vector v, double d) { return Vector.FromPolar(v.Magnitude / d, v.Direction); }
+		public static Vector operator *(Vector v, double d) { return Vector.Polar(v.Magnitude * d, v.Direction); }
+		public static Vector operator *(double d, Vector v) { return Vector.Polar(d * v.Magnitude, v.Direction); }
+		public static Vector operator /(Vector v, double d) { return Vector.Polar(v.Magnitude / d, v.Direction); }
 
 		public static Vector operator +(Vector v, Angle a) { return new Vector(v.Magnitude, v.Direction + a); }
 

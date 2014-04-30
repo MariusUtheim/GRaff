@@ -11,15 +11,12 @@ using System.Windows.Forms;
 
 namespace GameMaker.Forms
 {
-	public class FormsGraphicsEngine : GraphicsEngine
+	public class FormsGraphicsEngine : GraphicsEngine, IDisposable
     {
 		private GMForm _form;
-		private Graphics _graphics;
-		private System.Drawing.Image _buffer;
 
 		public FormsGraphicsEngine()
 		{
-			
 		}
 
 		[STAThread]
@@ -29,19 +26,17 @@ namespace GameMaker.Forms
 			Application.SetCompatibleTextRenderingDefault(false);
 
 			this._form = new GMForm();
-			this._buffer = new Bitmap(Room.Width, Room.Height);
-			this._graphics = Graphics.FromImage(_buffer);
-
-			this._form.Width = Room.Width;
-			this._form.Height = Room.Height;
 			this._form.Paint += this.OnPaint;
 			this._form.MouseMove += this.OnMouseMove;
 			this._form.MouseDown += this.OnMouseDown;
 			this._form.MouseUp += this.OnMouseUp;
 			this._form.KeyDown += this.OnKeyDown;
 			this._form.KeyUp += this.OnKeyUp;
+			this._form.Width = Room.Current.Width;
+			this._form.Height = Room.Current.Height;
 
-			gameStart();
+
+			IsBorderVisible = false;
 
 			Application.Run(_form);
 		}
@@ -53,12 +48,14 @@ namespace GameMaker.Forms
 
 		private void OnPaint(object sender, PaintEventArgs e)
 		{
-			_graphics = e.Graphics;
-
+			(Draw.DefaultSurface as FormsSurface).Graphics = e.Graphics;
+			
 			try
 			{
 				Game.Loop();
-				Game.Redraw();
+				//var s = new FormsSurface(Width, Height);
+				//s.Graphics = _graphics;
+				Game.Redraw(Draw.DefaultSurface); //new FormsSurface(_form.Width, _form.Height, _graphics));
 				//RectangleF sourceRect;
 				//Rectangle visibleRegion = Draw.GetVisibleRegion();
 				//sourceRect = new RectangleF((float)visibleRegion.Left, (float)visibleRegion.Top, (float)visibleRegion.Width, (float)visibleRegion.Height);
@@ -102,75 +99,9 @@ namespace GameMaker.Forms
 			return new FormsTexture(file);
 		}
 
-		public override void DrawImage(double x, double y, Image image)
+		public override Surface CreateSurface(int width, int height)
 		{
-			float tx = (float)x, ty = (float)y;
-			_graphics.TranslateTransform(tx, ty);
-
-			_graphics.RotateTransform((float)image.Rotation.Degrees);
-			_graphics.ScaleTransform((float)image.XScale, (float)image.YScale);
-
-			_graphics.TranslateTransform(-image.XOrigin, -image.YOrigin);
-			
-			ColorMatrix cm = new ColorMatrix();
-			cm.Matrix00 = (float)image.Blend.R / 255.0f;
-			cm.Matrix11 = (float)image.Blend.G / 255.0f;
-			cm.Matrix22 = (float)image.Blend.B / 255.0f;
-			cm.Matrix33 = (float)image.Blend.A / 255.0f;
-			ImageAttributes attributes = new ImageAttributes();
-			attributes.SetColorMatrix(cm);
-
-			var formsTexture = image.CurrentTexture as FormsTexture;
-			_graphics.DrawImage(formsTexture.UnderlyingImage, new System.Drawing.Rectangle(0, 0, image.Sprite.Width, image.Sprite.Height), 0.0f, 0.0f, (float)image.Sprite.Width, (float)image.Sprite.Height, GraphicsUnit.Pixel, attributes);
-
-			_graphics.ResetTransform();
-		}
-
-		public override void DrawTexture(double x, double y, Texture texture)
-		{
-			var formsTexture = texture as FormsTexture;
-			_graphics.DrawImage(formsTexture.UnderlyingImage, new RectangleF((float)x, (float)y, (float)texture.Width, (float)texture.Height));
-		}
-
-		public override void DrawCircle(Color color, Point location, double radius)
-		{
-			Pen pen = new Pen(color.ToFormsColor());
-			_graphics.DrawEllipse(pen, (float)(location.X - radius), (float)(location.Y - radius), (float)(2 * radius), (float)(2 * radius));
-		}
-
-		public override void DrawRectangle(Color color, double x, double y, double width, double height)
-		{
-			Pen pen = new Pen(color.ToFormsColor());
-			_graphics.DrawRectangle(pen, (float)x, (float)y, (float)width, (float)height);
-		}
-
-		public override void DrawRectangle(Color col1, Color col2, Color col3, Color col4, double x, double y, double width, double height)
-		{
-			float left = (float)x, top = (float)y, right = (float)(x + width), bottom = (float)(y + height);
-			var brush = new PathGradientBrush(new[] { new PointF(left, top), new PointF(right, top), new PointF(right, bottom), new PointF(left, bottom) });
-			brush.SurroundColors = new[] { col1.ToFormsColor(), col2.ToFormsColor(), col3.ToFormsColor(), col4.ToFormsColor() };
-			brush.CenterColor = Color.Merge(col1, col2, col3, col4).ToFormsColor();
-			brush.SetSigmaBellShape(1, 1);
-			_graphics.FillRectangle(brush, left, top, (float)width, (float)height);
-		}
-
-		public override void DrawLine(Color color, double x1, double y1, double x2, double y2)
-		{
-			_graphics.DrawLine(new Pen(color.ToFormsColor()), (float)x1, (float)y1, (float)x2, (float)y2);
-		}
-
-		public override void DrawLine(Color col1, Color col2, double x1, double y1, double x2, double y2)
-		{
-			PointF p1 = new PointF((float)x1, (float)y1), p2 = new PointF((float)x2, (float)y2);
-			var brush = new LinearGradientBrush(p1, p2, col1.ToFormsColor(), col2.ToFormsColor());
-			var pen = new Pen(brush);
-
-			_graphics.DrawLine(pen, p1, p2);
-		}
-
-		public override void Clear(Color color)
-		{
-			_graphics.Clear(System.Drawing.Color.FromArgb(color.Argb));
+			return new FormsSurface(width, height);
 		}
 
 		public override string Title
@@ -182,18 +113,6 @@ namespace GameMaker.Forms
 		public override void Refresh()
 		{
 			//_form.Update();
-		}
-
-		public override bool IsVisible
-		{
-			get
-			{
-				return _form.Visible;
-			}
-			set
-			{
-				_form.Visible = value;
-			}
 		}
 
 		public override bool IsFullscren
@@ -268,6 +187,9 @@ namespace GameMaker.Forms
 			}
 		}
 
-
+		public void Dispose()
+		{
+			_form.Dispose();
+		}
 	}
 }

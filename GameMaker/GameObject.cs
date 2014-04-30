@@ -10,7 +10,7 @@ namespace GameMaker
 		public GameObject()
 		{
 			Instance.Add(this);
-			Image = new Image(this.Sprite);
+			Image = new Image(this);
 		}
 
 		public GameObject(double x, double y)
@@ -31,6 +31,12 @@ namespace GameMaker
 
 		public Image Image { get; set; }
 
+		public virtual Sprite Sprite
+		{
+			get;
+			set;
+		}
+
 		private int _depth;
 		public int Depth 
 		{
@@ -46,19 +52,17 @@ namespace GameMaker
 
 		public virtual Rectangle BoundingBox
 		{
-			get { return new Rectangle(Location - Sprite.Origin, Sprite.Size); }
+			get 
+			{
+				if (Sprite == null)
+					return new Rectangle(Location, Vector.Cartesian(1, 1));
+				else
+					return new Rectangle(Location - Sprite.Origin, Sprite.Size); }
 		}
 
 		public bool Intersects(GameObject other)
 		{
 			return Mask.Intersects(other.Mask);
-		}
-
-		private Sprite _sprite;
-		public Sprite Sprite
-		{
-			get { return _sprite; }
-			set { Image.Sprite = _sprite = value; }
 		}
 
 		public Transform Transform
@@ -80,11 +84,11 @@ namespace GameMaker
 			set { _mask = value; }
 		}
 
-		public virtual void BeginStep() { }
+		public virtual void OnBeginStep() { }
 
-		public virtual void Step() { }
+		public virtual void OnStep() { }
 
-		public virtual void EndStep() { }
+		public virtual void OnEndStep() { }
 
 		public virtual void OnDestroy() { }
 
