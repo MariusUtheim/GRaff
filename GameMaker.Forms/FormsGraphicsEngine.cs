@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using FormsImage = System.Drawing.Image;
 
 namespace GameMaker.Forms
 {
@@ -35,8 +36,8 @@ namespace GameMaker.Forms
 			this._form.Width = Room.Current.Width;
 			this._form.Height = Room.Current.Height;
 
-
-			IsBorderVisible = false;
+			if (gameStart != null)
+				gameStart();
 
 			Application.Run(_form);
 		}
@@ -94,9 +95,27 @@ namespace GameMaker.Forms
 			this.KeyUp(e.KeyCode.ToGMKey());
 		}
 
-		public override Texture LoadTexture(string file)
+		public override Texture[] LoadTexture(string file, int subimages)
 		{
-			return new FormsTexture(file);
+			if (subimages <= 0)
+				throw new ArgumentException("Must be positive", "subimages");
+			if (subimages == 1)
+				return new Texture[] { new FormsTexture(file) };
+			else
+			{
+				Bitmap rawImage = new Bitmap(file);
+				
+				//if (rawImage.Width % subimages != 0)
+				//	throw new ArgumentException("The width of the image does not divide the number of subimages");
+				int w = rawImage.Width / subimages;
+
+				var result = new Texture[subimages];
+
+				for (int i = 0; i < subimages; i++)
+					result[i] = new FormsTexture(rawImage.Clone(new RectangleF(w * i, 0, w, rawImage.Height), PixelFormat.Format32bppArgb)); 
+
+				return result;
+			}
 		}
 
 		public override Surface CreateSurface(int width, int height)

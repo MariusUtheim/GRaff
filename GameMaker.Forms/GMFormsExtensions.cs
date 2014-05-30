@@ -16,6 +16,11 @@ namespace GameMaker.Forms
 			return WinColor.FromArgb(GMath.Median(0, color.A, 255), GMath.Median(0, color.R, 255), GMath.Median(0, color.G, 255), GMath.Median(0, color.B, 255));
 		}
 
+		public static Color ToGMColor(this WinColor color)
+		{
+			return new Color(color.R, color.G, color.B);
+		}
+
 		public static MouseButton ToGMMouseButton(this WinMouseButton button)
 		{
 			return (MouseButton)((int)button / 0x100000);

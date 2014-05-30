@@ -7,6 +7,8 @@ namespace GameMaker
 {
 	public abstract class SoundSample
 	{
-
+		public abstract byte[] Buffer { get; }
+		public int Frequency { get; set; }
+		public int Bitrate { get; set; }
 	}
 }

@@ -61,5 +61,10 @@ namespace GameMaker
 					 | B;
 			}
 		}
+
+		public override string ToString()
+		{
+			return String.Format("Color RGB=[{0}, {1}, {2}]", R, G, B);
+		}
 	}
 }

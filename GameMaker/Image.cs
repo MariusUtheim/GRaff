@@ -19,8 +19,8 @@ namespace GameMaker
 			this.Blend = Color.White;
 			this.Count = 1;
 			this.Index = 0;
-
-			this._animationEndListener = instance as IAnimationEndListener; // It won't cause any problems if this is set to null
+			this.Speed = 1;
+			this._animationEndListener = instance as IAnimationEndListener; // Set to null if instance is not an IAnimationEndListener
 		}
 
 		public double XScale { get; set; }
@@ -28,6 +28,18 @@ namespace GameMaker
 		public Angle Rotation { get; set; }
 		public Color Blend { get; set; }
 		public GameObject Instance { get; set; }
+
+		public int XOrigin
+		{
+			get { return Sprite.XOrigin; }
+			set { Sprite.XOrigin = value; }
+		}
+
+		public int YOrigin
+		{
+			get { return Sprite.YOrigin; }
+			set { Sprite.YOrigin = value; }
+		}
 
 		public double Alpha
 		{
@@ -76,21 +88,10 @@ namespace GameMaker
 				{
 					if (_animationEndListener != null)
 						_animationEndListener.AnimationEnd();
-					_index -= Sprite.ImageCount;
+					_index %= Sprite.ImageCount;
 				}
 			}
 		}
 
-		public int XOrigin 
-		{
-			get { return Sprite.XOrigin; }
-			set { Sprite.XOrigin = value; }
-		}
-
-		public int YOrigin 
-		{
-			get { return Sprite.YOrigin; }
-			set { Sprite.YOrigin = value; }
-		}
 	}
 }

@@ -42,7 +42,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="FormsGraphicsEngine.cs" />
-    <Compile Include="FormsSoundEngine.cs" />
     <Compile Include="FormsSurface.cs" />
     <Compile Include="FormsTexture.cs" />
     <Compile Include="GMForm.cs">

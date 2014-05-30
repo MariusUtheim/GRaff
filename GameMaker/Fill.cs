@@ -11,7 +11,9 @@ namespace GameMaker
 
 		public static void Circle(Color color, Point location, double radius)
 		{
-			throw new NotImplementedException();
+#warning Temporary code
+			if (GRandom.Probability(0.1)) Draw.CurrentSurface.DrawCircle(Color.Black, location, radius);
+			Draw.CurrentSurface.FillCircle(color, location, radius);
 		}
 
 		public static void Rectangle(Color color, double x, double y, double width, double height)

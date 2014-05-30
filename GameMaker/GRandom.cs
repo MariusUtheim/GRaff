@@ -15,6 +15,16 @@ namespace GameMaker
 			_rnd = new Random();
 		}
 
+		public static int Int(int maxValue)
+		{
+			return _rnd.Next(maxValue);
+		}
+
+		public static int Int(int minValue, int maxValue)
+		{
+			return _rnd.Next(minValue, maxValue);
+		}
+
 		public static double Double()
 		{
 			return _rnd.NextDouble();
@@ -35,11 +45,14 @@ namespace GameMaker
 			return new Vector(magnitude, GameMaker.Angle.FromRadians(_rnd.NextDouble() * GMath.Tau));
 		}
 
-		public static Vector Vector() { return GRandom.Vector(1); }
+		public static Vector Vector()
+		{ 
+			return GRandom.Vector(1);
+		}
 
 		public static Angle Angle() { return GameMaker.Angle.FromRadians(_rnd.NextDouble() * GMath.Tau); }
 
-		public static Angle Angle(double lowerBound, double upperBound)
+		public static Angle Angle(Angle lowerBound, Angle upperBound)
 		{
 			return GameMaker.Angle.FromRadians(lowerBound + _rnd.NextDouble() * (upperBound - lowerBound));
 		}
@@ -60,6 +73,14 @@ namespace GameMaker
 				return true;
 			else
 				return false;
+		}
+
+		public static int Roll(int nDice, int nSides)
+		{
+			int sum = nDice;
+			for (int i = 0; i < nDice; i++)
+				sum += GRandom.Int(nSides);
+			return sum;
 		}
 	}
 }

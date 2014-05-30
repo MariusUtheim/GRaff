@@ -20,6 +20,9 @@ namespace GameMaker
 			Y = y;
 		}
 
+		public GameObject(Point location)
+			: this(location.X, location.Y) { }
+
 		public double X { get; set; }
 		public double Y { get; set; }
 
@@ -95,7 +98,10 @@ namespace GameMaker
 		public virtual void OnDraw()
 		{
 			if (Sprite != null)
+			{
 				Draw.Image(X, Y, Image);
+				Image.Animate();
+			}
 		}
 
 		public double Width

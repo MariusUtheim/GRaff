@@ -8,10 +8,28 @@ namespace GameMaker
 {
 	public class Sound
 	{
-		public static void Play(SoundSample sample)
+		private string _path;
+		private bool _isLoaded;
+
+		public Sound(string path)
 		{
-			throw new NotImplementedException();
+			this._path = path;
+			this._isLoaded = false;
 		}
 
+		public SoundSample Sample { get; private set; }
+
+		public void Load()
+		{
+			if (_isLoaded)
+				return;
+
+			Sample = SoundEngine.Current.LoadSample(_path);
+		}
+
+		public void Play()
+		{
+
+		}
 	}
 }

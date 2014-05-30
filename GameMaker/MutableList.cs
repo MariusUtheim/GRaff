@@ -109,7 +109,7 @@ namespace GameMaker
 		public bool Remove(T item)
 		{
 			int pos = IndexOf(item);
-			foreach (var enumerator in _enumerators.Where(e => e.Index > pos))
+			foreach (var enumerator in _enumerators.Where(e => e.Index >= pos))
 				enumerator.MovePrevious();
 			return _list.Remove(item);
 		}

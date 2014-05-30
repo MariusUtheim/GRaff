@@ -8,6 +8,10 @@ namespace GameMaker
 {
 	public abstract class Surface
 	{
+		public abstract Color GetPixel(int x, int y);
+
+		public abstract void SetPixel(int x, int y, Color color);
+
 		public abstract void DrawImage(double x, double y, Image image);
 
 		public abstract void DrawTexture(double x, double y, Texture texture);
@@ -33,5 +37,14 @@ namespace GameMaker
 		public abstract void Clear(Color color);
 
 		public abstract void Blit(Surface dest, IntRectangle srcRect, IntRectangle destRect);
+
+		public abstract int Width { get; }
+
+		public abstract int Height { get; }
+
+		public IntVector Size
+		{
+			get { return new IntVector(Width, Height); }
+		}
 	}
 }

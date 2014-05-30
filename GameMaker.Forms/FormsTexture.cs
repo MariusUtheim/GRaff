@@ -8,6 +8,13 @@ namespace GameMaker.Forms
 {
 	public class FormsTexture : Texture
 	{
+
+		public FormsTexture(System.Drawing.Image image)
+		{
+			UnderlyingImage = image;
+		}
+
+
 		public FormsTexture(string file)
 		{
 			UnderlyingImage = System.Drawing.Image.FromFile(file);

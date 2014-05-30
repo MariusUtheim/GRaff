@@ -38,6 +38,13 @@ namespace GameMaker
 			engine.Run(gameStart);
 		}
 
+		public static int LoopCount { get; private set; }
+		private static int _startTime;
+		public static int GameTime
+		{
+			get { return Environment.TickCount - _startTime; }
+		}
+
 		public static void Quit()
 		{
 			GraphicsEngine.Current.Quit();
@@ -77,6 +84,7 @@ namespace GameMaker
 
 
 			timeLeft -= Environment.TickCount;
+			LoopCount++;
 			if (timeLeft > 0)
 				Thread.Sleep(timeLeft);
 		}
@@ -154,11 +162,14 @@ namespace GameMaker
 			Mouse.Update();
 		}
 
+		public static void Redraw()
+		{
+			Redraw(Draw.CurrentSurface);
+		}
+
 		public static void Redraw(Surface surface)
 		{
-			Draw.Clear(Background.Color);
-			if (Background.Image != null)
-				Draw.Sprite(0, 0, Background.Image, 0);
+			Background.Redraw(surface);
 
 			GlobalEvent.OnDrawBackground();
 

@@ -8,6 +8,9 @@ namespace GameMaker
 {
 	public abstract class MovingObject : GameObject
 	{
+		public MovingObject()
+			: this(0, 0) { }
+
 		public MovingObject(double x, double y)
 			: base(x, y) { }
 

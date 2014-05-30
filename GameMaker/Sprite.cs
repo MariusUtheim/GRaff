@@ -7,45 +7,36 @@ namespace GameMaker
 {
 	public class Sprite
 	{
+		private int _subimages;
 		private string _path;
 		private bool _isLoaded;
-		private Texture _texture; ///TEMPORARY/// Support multiple textures
+		private Texture[] _textures; ///TEMPORARY/// Support multiple textures
 		private IntVector _origin;
 
-		public Sprite(string path, OriginMode originMode, bool preload)
+		public Sprite(string path, int subimages = 1, OriginMode originMode = GameMaker.OriginMode.Manual, bool preload = true)
 		{
+			this._subimages = subimages;
 			this._path = path;
 			this.OriginMode = originMode;
 			if (preload)
 				Load();
 		}
-
-		public Sprite(string path)
-		{
-			this._path = path;
-			this._isLoaded = false;
-		}
-
-		public Sprite(string path, bool preload)
-		{
-			this._path = path;
-			if (preload)
-				Load();
-		}
-
+		
 		public Vector Size
 		{
-			get { Load(); return new Vector(_texture.Width, _texture.Height); }
+			get { Load(); return new Vector(_width, _height); }
 		}
 
+		private int _width;
 		public int Width
 		{
-			get { Load(); return _texture.Width; }
+			get { Load(); return _width; }
 		}
 
+		private int _height;
 		public int Height
 		{
-			get { Load(); return _texture.Height; }
+			get { Load(); return _height; }
 		}
 
 		public IntVector Origin
@@ -73,26 +64,28 @@ namespace GameMaker
 			if (_isLoaded)
 				return;
 			_isLoaded = true;
-			_texture = Draw.LoadTexture(_path);
+			_textures = Draw.LoadTexture(_path, _subimages);
+			_width = _textures[0].Width;
+			_height = _textures[0].Height;
 
-			if (_texture == null)
+			if (_textures == null)
 				return;
 
 			if (OriginMode == GameMaker.OriginMode.UpperLeft)
 				_origin = new IntVector(0, 0);
 			else if (OriginMode == GameMaker.OriginMode.Center)
-				_origin = new IntVector(_texture.Width / 2, _texture.Height / 2);
+				_origin = new IntVector(_width / 2, _height / 2);
 		}
 
-		public Texture GetTexture(int ImageIndex)
+		public Texture GetTexture(int imageIndex)
 		{
 			Load();
-			return _texture; ///TEMPORARY///
+			return _textures[imageIndex % _subimages];
 		}
 
-		public static int ImageCount 
+		public int ImageCount 
 		{
-			get { return 1; }
+			get { return _subimages; }
 		}
 	}
 }

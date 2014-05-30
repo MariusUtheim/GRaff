@@ -8,6 +8,10 @@ namespace GameMaker
 {
 	public abstract class SoundEngine
 	{
-		public abstract SoundSample LoadSoundSample(string file);
+		public static SoundEngine Current { get; internal set; }
+
+		public abstract SoundSample LoadSample(string file);
+
+		public abstract void Play(Sound sound);
 	}
 }

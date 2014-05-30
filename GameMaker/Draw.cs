@@ -26,9 +26,9 @@ namespace GameMaker
 			set { DefaultSurface = value; }
 		}
 
-		internal static Texture LoadTexture(string _path)
+		internal static Texture[] LoadTexture(string _path, int subimages)
 		{
-			return GraphicsEngine.Current.LoadTexture(_path);
+			return GraphicsEngine.Current.LoadTexture(_path, subimages);
 		}
 
 		public static void Clear(Color color)

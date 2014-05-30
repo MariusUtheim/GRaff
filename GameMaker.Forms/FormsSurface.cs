@@ -8,7 +8,7 @@ using System.Text;
 
 namespace GameMaker.Forms
 {
-	internal class FormsSurface : Surface, IDisposable
+	public class FormsSurface : Surface, IDisposable
 	{
 		private Bitmap _bmp;
 
@@ -26,6 +26,15 @@ namespace GameMaker.Forms
 
 		public Graphics Graphics { get; internal set; }
 
+		public override Color GetPixel(int x, int y)
+		{
+			return _bmp.GetPixel(x, y).ToGMColor();
+		}
+
+		public override void SetPixel(int x, int y, Color color)
+		{
+			_bmp.SetPixel(x, y, color.ToFormsColor());
+		}
 
 		public override void DrawImage(double x, double y, Image image)
 		{
@@ -66,7 +75,7 @@ namespace GameMaker.Forms
 		public override void FillCircle(Color color, Point location, double radius)
 		{
 			Brush brush = new SolidBrush(color.ToFormsColor());
-			Graphics.FillEllipse(brush, (float)(location.X - radius), (float)(location.Y - radius), (float)(2 * radius), (float)(2 * radius));
+			Graphics.FillEllipse(brush, (float)(location.X - radius), (float)(location.Y - radius), (float)(2 * radius + 1), (float)(2 * radius + 1));
 		}
 
 		public override void DrawRectangle(Color color, double x, double y, double width, double height)
@@ -81,7 +90,7 @@ namespace GameMaker.Forms
 			var brush = new PathGradientBrush(new[] { new PointF(left, top), new PointF(right, top), new PointF(right, bottom), new PointF(left, bottom) });
 			brush.SurroundColors = new[] { col1.ToFormsColor(), col2.ToFormsColor(), col3.ToFormsColor(), col4.ToFormsColor() };
 			brush.CenterColor = Color.Merge(col1, col2, col3, col4).ToFormsColor();
-			brush.SetSigmaBellShape(1, 1);
+			brush.SetSigmaBellShape(1);
 			Graphics.DrawRectangle(new Pen(brush), left, top, (float)width, (float)height);
 		}
 
@@ -93,7 +102,7 @@ namespace GameMaker.Forms
 
 		public override void FillRectangle(Color col1, Color col2, Color col3, Color col4, double x, double y, double width, double height)
 		{
-			float left = (float)x, top = (float)y, right = (float)(x + width), bottom = (float)(y + height);
+			float left = (float)x, top = (float)y, right = (float)(x + width - 1), bottom = (float)(y + height - 1);
 			var brush = new PathGradientBrush(new[] { new PointF(left, top), new PointF(right, top), new PointF(right, bottom), new PointF(left, bottom) });
 			brush.SurroundColors = new[] { col1.ToFormsColor(), col2.ToFormsColor(), col3.ToFormsColor(), col4.ToFormsColor() };
 			brush.CenterColor = Color.Merge(col1, col2, col3, col4).ToFormsColor();
@@ -133,6 +142,16 @@ namespace GameMaker.Forms
 				throw new InvalidOperationException("The destination surface must be a FormsSurface.");
 
 			surface.Graphics.DrawImage(_bmp, new RectangleF(destRect.Left, destRect.Top, destRect.Width, destRect.Height), new RectangleF(srcRect.Left, srcRect.Top, srcRect.Width, srcRect.Height), GraphicsUnit.Pixel);
+		}
+
+		public override int Height
+		{
+			get { return _bmp.Height; }
+		}
+
+		public override int Width
+		{
+			get { return _bmp.Width; }
 		}
 
 		public void Dispose()

@@ -38,7 +38,7 @@ namespace GameMaker
 
 		public abstract void Run(Action gameStart);
 
-		public abstract Texture LoadTexture(string file);
+		public abstract Texture[] LoadTexture(string file, int subimages);
 
 		public abstract Surface CreateSurface(int width, int height);
 
