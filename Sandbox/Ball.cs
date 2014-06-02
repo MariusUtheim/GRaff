@@ -18,7 +18,7 @@ namespace Sandbox
 			Sprite = Sprites.Ball;
 			X = Room.Current.Width / 2;
 			Y = Room.Current.Height / 2;
-			Velocity = new Vector(12, GRandom.Angle(5.0 / 8 * GMath.Tau, 7.0 / 8 * GMath.Tau));
+		//	Velocity = new Vector(12, GRandom.Angle(5.0 / 8 * GMath.Tau, 7.0 / 8 * GMath.Tau));
 			for (int i = 0; i < 20; i++)
 				_trail.Add(Location);
 		}
@@ -62,11 +62,13 @@ namespace Sandbox
 			_isHeld = false;
 		}
 
+
 		public void OnCollision(Paddle other)
 		{
 			VSpeed = -Math.Abs(VSpeed);
 			HSpeed += (other.X - other.XPrevious);
 		}
+
 
 		public void OnCollision(Block other)
 		{
@@ -88,7 +90,8 @@ namespace Sandbox
 				Draw.Line(new Color(255 * i / _trail.Count, col), _trail[i], _trail[i + 1]);
 			}
 
-			base.OnDraw();
+			//base.OnDraw();
+			Fill.Circle(Color.BlueViolet, Location, 3);
 		}
 	}
 }

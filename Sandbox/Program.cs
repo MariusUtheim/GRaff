@@ -24,7 +24,7 @@ namespace Sandbox
 			for (int i = 40; i < Room.Current.Width - 40; i += 64)
 				new NormalBlock(i, 40);
 
-			Background.Color = Color.DeepPink;
+			Background.Color = Color.White;
 
 			GlobalEvent.Key += delegate(Key key)
 			{

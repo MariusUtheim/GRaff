@@ -17,6 +17,7 @@ namespace Boids
 		{
 			this.Location = location;
 		}
+
 		public Boid(double x, double y)
 		{
 			this.X = x;
@@ -30,13 +31,14 @@ namespace Boids
 			Velocity += 0.001 * (Room.Current.Center - Location);
 			Location += 0.001 * (Room.Current.Center - Location);
 			Speed = GMath.Median(MinSpeed, Speed, MaxSpeed);
-
 		}
 
 		public override void OnDraw()
 		{
 			Draw.Line(Color.Black, Location, Location + (Velocity + Angle.FromDegrees(150)).Normal * 5);
 			Draw.Line(Color.Black, Location, Location + (Velocity - Angle.FromDegrees(150)).Normal * 5);
+
+			Fill.Rectangle(Color.White, 1, 1, 2, 2);
 		}
 	}
 }

@@ -29,11 +29,5 @@ namespace Sandbox
 		{
 			base.OnStep();
 		}
-
-		public override void OnDraw()
-		{
-			base.OnDraw();
-			Mask.DrawOutline();
-		}
 	}
 }

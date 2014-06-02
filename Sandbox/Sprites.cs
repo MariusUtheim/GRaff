@@ -11,9 +11,9 @@ namespace Sandbox
 	{
 		static Sprites()
 		{
-			Ball = new Sprite("Assets/ball.png", OriginMode.Center, true);
-			Paddle = new Sprite("Assets/paddle.png", OriginMode.Center, true);
-			Block = new Sprite("Assets/block.png");
+			Ball = new Sprite("Assets/ball.png", 1, OriginMode.Center);
+			Paddle = new Sprite("Assets/paddle.png", 1, OriginMode.Center);
+			Block = new Sprite("Assets/block.png", 2, OriginMode.Center);
 		}
 
 		public static Sprite Ball { get; private set; }
