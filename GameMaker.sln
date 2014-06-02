@@ -17,9 +17,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Boids", "Boids\Boids.csproj
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameMaker.Math", "GameMaker.Math\GameMaker.Math.csproj", "{3F715269-9AC1-4847-84AE-A160A89ECF3D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameMaker.UnitTesting", "GraphicsTesting\GameMaker.UnitTesting.csproj", "{6EC500EE-F34A-48A5-96E5-C013EC53705A}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameMaker.OpenAL", "GameMaker.OpenAL\GameMaker.OpenAL.csproj", "{5E9DA69C-FE1E-477F-B789-6E6759C90CBA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameMaker.UnitTesting", "GameMaker.UnitTesting\GameMaker.UnitTesting.csproj", "{6EC500EE-F34A-48A5-96E5-C013EC53705A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -90,16 +90,6 @@ Global
 		{3F715269-9AC1-4847-84AE-A160A89ECF3D}.Release|Any CPU.Build.0 = Release|Any CPU
 		{3F715269-9AC1-4847-84AE-A160A89ECF3D}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{3F715269-9AC1-4847-84AE-A160A89ECF3D}.Release|Win32.ActiveCfg = Release|Any CPU
-		{6EC500EE-F34A-48A5-96E5-C013EC53705A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6EC500EE-F34A-48A5-96E5-C013EC53705A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6EC500EE-F34A-48A5-96E5-C013EC53705A}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{6EC500EE-F34A-48A5-96E5-C013EC53705A}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{6EC500EE-F34A-48A5-96E5-C013EC53705A}.Debug|Win32.ActiveCfg = Debug|Any CPU
-		{6EC500EE-F34A-48A5-96E5-C013EC53705A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6EC500EE-F34A-48A5-96E5-C013EC53705A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{6EC500EE-F34A-48A5-96E5-C013EC53705A}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{6EC500EE-F34A-48A5-96E5-C013EC53705A}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{6EC500EE-F34A-48A5-96E5-C013EC53705A}.Release|Win32.ActiveCfg = Release|Any CPU
 		{5E9DA69C-FE1E-477F-B789-6E6759C90CBA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{5E9DA69C-FE1E-477F-B789-6E6759C90CBA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5E9DA69C-FE1E-477F-B789-6E6759C90CBA}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
@@ -110,6 +100,16 @@ Global
 		{5E9DA69C-FE1E-477F-B789-6E6759C90CBA}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{5E9DA69C-FE1E-477F-B789-6E6759C90CBA}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{5E9DA69C-FE1E-477F-B789-6E6759C90CBA}.Release|Win32.ActiveCfg = Release|Any CPU
+		{6EC500EE-F34A-48A5-96E5-C013EC53705A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6EC500EE-F34A-48A5-96E5-C013EC53705A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6EC500EE-F34A-48A5-96E5-C013EC53705A}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{6EC500EE-F34A-48A5-96E5-C013EC53705A}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{6EC500EE-F34A-48A5-96E5-C013EC53705A}.Debug|Win32.ActiveCfg = Debug|Any CPU
+		{6EC500EE-F34A-48A5-96E5-C013EC53705A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6EC500EE-F34A-48A5-96E5-C013EC53705A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6EC500EE-F34A-48A5-96E5-C013EC53705A}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{6EC500EE-F34A-48A5-96E5-C013EC53705A}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{6EC500EE-F34A-48A5-96E5-C013EC53705A}.Release|Win32.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
