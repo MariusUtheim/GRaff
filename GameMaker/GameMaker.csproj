@@ -30,6 +30,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="OggVorbisDecoder">
+      <HintPath>..\..\..\..\OggVorbisDecoder-Source\OggVorbisDecoder\bin\Release\OggVorbisDecoder.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -59,6 +62,11 @@
     <Compile Include="GameObject.cs" />
     <Compile Include="ICollisionListener.cs" />
     <Compile Include="IKeyListener.cs" />
+    <Compile Include="IO\BinaryReaderExtensions.cs" />
+    <Compile Include="IO\BitmapFile.cs" />
+    <Compile Include="IO\OggFile.cs" />
+    <Compile Include="IO\SoundFile.cs" />
+    <Compile Include="IO\WaveFile.cs" />
     <Compile Include="MutableList.cs" />
     <Compile Include="IntRectangle.cs" />
     <Compile Include="IntVector.cs" />
@@ -75,7 +83,9 @@
     <Compile Include="Rectangle.cs" />
     <Compile Include="Sound.cs" />
     <Compile Include="SoundEngine.cs" />
+    <Compile Include="SoundInstance.cs" />
     <Compile Include="SoundSample.cs" />
+    <Compile Include="SoundState.cs" />
     <Compile Include="Surface.cs" />
     <Compile Include="Texture.cs" />
     <Compile Include="ImageTransform.cs" />
@@ -88,6 +98,17 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Game Flow.docx" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="External\libogg.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="External\vorbis.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="External\vorbisfile.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

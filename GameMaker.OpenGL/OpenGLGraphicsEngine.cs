@@ -16,7 +16,7 @@ namespace GameMaker.OpenGL
 		}
 		
 		[STAThread]
-		public override void Run(Room initialRoom, Action gameStart)
+		public override void Run(Action gameStart)
 		{
 			using (game = new GameWindow(Room.Current.Width, Room.Current.Height))
 			{
@@ -53,7 +53,7 @@ namespace GameMaker.OpenGL
 					Game.Redraw();
 				};
 
-				game.Run(Room.Speed);
+				game.Run(Room.Current.Speed);
 			}
 		}
 
@@ -153,7 +153,8 @@ namespace GameMaker.OpenGL
 			GL.ClearColor(color.ToGLColor());
 		}
 
-		public override bool IsVisible
+#warning Should override something?
+		public /*override*/ bool IsVisible
 		{
 			get
 			{
