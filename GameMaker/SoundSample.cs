@@ -8,7 +8,20 @@ namespace GameMaker
 	public abstract class SoundSample
 	{
 		public abstract byte[] Buffer { get; }
-		public int Frequency { get; set; }
-		public int Bitrate { get; set; }
+
+		public abstract SoundInstance Play();
+
+		public abstract int Frequency { get; }
+
+		public abstract int Bitrate { get; }
+
+		public abstract int Channels { get; }
+
+		/// <summary>
+		/// Gets the duration of this sample, in seconds
+		/// </summary>
+		public abstract double Duration { get; }
+
+
 	}
 }

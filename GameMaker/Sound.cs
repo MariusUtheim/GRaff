@@ -10,26 +10,36 @@ namespace GameMaker
 	{
 		private string _path;
 		private bool _isLoaded;
+		private List<SoundInstance> _instances;
+		private SoundSample _sample;
 
 		public Sound(string path)
 		{
 			this._path = path;
 			this._isLoaded = false;
+			this._instances = new List<SoundInstance>();
 		}
 
-		public SoundSample Sample { get; private set; }
+		public byte[] Buffer { get { Load(); return _sample.Buffer; } }
+
+		public int Frequency { get { Load(); return _sample.Frequency; } }
+
+		public int Bitrate { get { Load(); return _sample.Bitrate; } }
+
+		public int Channels { get { Load(); return _sample.Channels; } }
+
+		public double Duration { get { Load(); return _sample.Duration; } }
 
 		public void Load()
 		{
 			if (_isLoaded)
 				return;
-
-			Sample = SoundEngine.Current.LoadSample(_path);
+			_sample = SoundEngine.Current.LoadSample(_path);
 		}
 
-		public void Play()
+		public SoundInstance Play(bool loop = false, double volume = 1.0, double pitch = 1.0)
 		{
-
+			return SoundEngine.Current.Play(_sample, loop, volume, pitch);
 		}
 	}
 }

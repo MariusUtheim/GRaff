@@ -10,6 +10,7 @@ namespace GameMaker
 	/// </summary>
 	public struct Point
 	{
+		public static readonly Point Zero = new Point(0, 0);
 		public double X { get; private set; }
 		public double Y { get; private set; }
 
