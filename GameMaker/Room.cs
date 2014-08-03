@@ -35,7 +35,7 @@ namespace GameMaker
 			foreach (var instance in Instance.All)
 				instance.Destroy();
 			Current = this;
-			Draw.DefaultSurface = GraphicsEngine.Current.CreateSurface(Width, Height);
+			Draw.CurrentSurface = GraphicsEngine.Current.CreateSurface(Width, Height);
 			if (RoomStart != null)
 				this.RoomStart();
 		}

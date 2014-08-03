@@ -8,23 +8,10 @@ namespace GameMaker
 {
 	public static class Draw
 	{
-
-		public static Surface DefaultSurface
+		public static Surface CurrentSurface
 		{
 			get;
 			set;
-		}
-
-		public static Surface RoomSurface
-		{
-			get;
-			internal set;
-		}
-
-		public static Surface CurrentSurface
-		{
-			get { return DefaultSurface; }
-			set { DefaultSurface = value; }
 		}
 
 		internal static Texture[] LoadTexture(string _path, int subimages)
