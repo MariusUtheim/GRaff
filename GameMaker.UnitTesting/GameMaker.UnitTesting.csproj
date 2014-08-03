@@ -34,6 +34,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Test|AnyCPU'">
+    <OutputPath>bin\Test\</OutputPath>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
   </ItemGroup>
@@ -54,6 +57,7 @@
     <Compile Include="MovingObjectTest.cs" />
     <Compile Include="SurfaceTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="CollisionTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\GameMaker.Forms\GameMaker.Forms.csproj">
@@ -63,6 +67,10 @@
     <ProjectReference Include="..\GameMaker.OpenAL\GameMaker.OpenAL.csproj">
       <Project>{5e9da69c-fe1e-477f-b789-6e6759c90cba}</Project>
       <Name>GameMaker.OpenAL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\GameMaker.OpenGL\GameMaker.OpenGL.csproj">
+      <Project>{f1947a4f-1e40-4869-a899-5d2707338137}</Project>
+      <Name>GameMaker.OpenGL</Name>
     </ProjectReference>
     <ProjectReference Include="..\GameMaker\GameMaker.csproj">
       <Project>{9b4b4358-f24b-41b4-bf94-9013e205780b}</Project>

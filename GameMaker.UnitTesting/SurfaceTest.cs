@@ -1,6 +1,7 @@
 ﻿using System;
 using GameMaker;
 using GameMaker.Forms;
+using GameMaker.OpenGL;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace GameMaker.UnitTesting
@@ -8,9 +9,16 @@ namespace GameMaker.UnitTesting
 	[TestClass]
 	public class SurfaceTest
 	{
-		private Surface _CreateSurface(int width, int height)
+		private static Surface _CreateSurface(int width, int height)
 		{
-			return new FormsSurface(width, height);
+			return new GameMaker.Forms.FormsGraphicsEngine().CreateSurface(width, height);
+		}
+
+		private static void Compare(int[,] expectedMask, Surface target)
+		{
+			for (int x = 0; x < target.Width; x++)
+				for (int y = 0; y < target.Height; y++)
+					Assert.AreEqual<Color>(expectedMask[y, x] == 1 ? Color.White : Color.Black, target.GetPixel(x, y), String.Format("Discrepancy occurred at [{0}, {1}].", x, y));
 		}
 
 		[TestMethod]
@@ -24,6 +32,22 @@ namespace GameMaker.UnitTesting
 				for (int y = 0; y < target.Height; y++)
 					Assert.AreEqual<Color>(Color.Black, target.GetPixel(x, y));
 		}
+		
+		[TestMethod]
+		public void SetPoint()
+		{
+			var target = _CreateSurface(3, 3);
+			target.SetPixel(1, 1, Color.White);
+			int[,] expectedMask = new[,] {
+				{ 0, 0, 0 },
+				{ 0, 1, 0 },
+				{ 0, 0, 0 }
+			};
+
+			for (int x = 0; x < target.Width; x++)
+				for (int y = 0; y < target.Height; y++)
+					Assert.IsTrue((expectedMask[x, y] == 1 ? Color.White : Color.Black) == target.GetPixel(x, y));
+		}
 
 		[TestMethod]
 		public void DrawRectangle()
@@ -32,11 +56,11 @@ namespace GameMaker.UnitTesting
 			target.DrawRectangle(Color.White, 1, 1, 2, 2);
 
 			int[,] expectedMask = new[,] {
-				{ 0, 0, 0, 0, 0},
-				{ 0, 1, 1, 1, 0},
-				{ 0, 1, 0, 1, 0},
-				{ 0, 1, 1, 1, 0},
-				{ 0, 0, 0, 0, 0}
+				{ 0, 0, 0, 0, 0 },
+				{ 0, 1, 1, 1, 0 },
+				{ 0, 1, 0, 1, 0 },
+				{ 0, 1, 1, 1, 0 },
+				{ 0, 0, 0, 0, 0 }
 			};
 
 			for (int x = 0; x < target.Width; x++)
@@ -47,54 +71,41 @@ namespace GameMaker.UnitTesting
 		[TestMethod]
 		public void FillRectangle()
 		{
-			var target = _CreateSurface(5, 5);
+			var target = _CreateSurface(6, 6);
 			target.FillRectangle(Color.White, 1, 1, 3, 3);
 
 			int[,] expectedMask = new[,] {
-				{ 0, 0, 0, 0, 0},
-				{ 0, 1, 1, 1, 0},
-				{ 0, 1, 1, 1, 0},
-				{ 0, 1, 1, 1, 0},
-				{ 0, 0, 0, 0, 0}
+				{ 0, 0, 0, 0, 0, 0},
+				{ 0, 1, 1, 1, 0, 0},
+				{ 0, 1, 1, 1, 0, 0},
+				{ 0, 1, 1, 1, 0, 0},
+				{ 0, 0, 0, 0, 0, 0},
+				{ 0, 0, 0, 0, 0, 0}
 			};
 
 			for (int x = 0; x < target.Width; x++)
 				for (int y = 0; y < target.Height; y++)
 					Assert.AreEqual<Color>(expectedMask[x, y] == 1 ? Color.White : Color.Black, target.GetPixel(x, y));
-		}
-
-		[TestMethod]
-		public void DrawRectangleColor()
-		{
-			var target = _CreateSurface(3, 3);
-			target.DrawRectangle(Color.Black, Color.Red, Color.Blue, Color.Purple, 0, 0, 3, 3);
-
-			Assert.AreEqual<Color>(Color.Black, target.GetPixel(0, 0), "Error occurred at target[0, 0]");
-			Assert.AreEqual<Color>(Color.Red, target.GetPixel(target.Width - 1, 0), "error occurred at target[1, 0]");
-			Assert.AreEqual<Color>(Color.Blue, target.GetPixel(0, target.Height - 1));
-			Assert.AreEqual<Color>(Color.Purple, target.GetPixel(target.Width - 1, target.Height - 1));
 		}
 
 		[TestMethod]
 		public void DrawCircle()
 		{
 
-			var target = _CreateSurface(7, 7);
+			var target = _CreateSurface(8, 8);
 			target.DrawCircle(Color.White, new Point(3, 3), 3);
-
 			int[,] expectedMask = new[,] {
-				{ 0, 0, 1, 1, 1, 0, 0},
-				{ 0, 1, 0, 0, 0, 1, 0},
-				{ 1, 0, 0, 0, 0, 0, 1},
-				{ 1, 0, 0, 0, 0, 0, 1},
-				{ 1, 0, 0, 0, 0, 0, 1},
-				{ 0, 1, 0, 0, 0, 1, 0},
-				{ 0, 0, 1, 1, 1, 0, 0},
+				{ 0, 0, 1, 1, 1, 0, 0, 0},
+				{ 0, 1, 0, 0, 0, 1, 0, 0},
+				{ 1, 0, 0, 0, 0, 0, 1, 0},
+				{ 1, 0, 0, 0, 0, 0, 1, 0},
+				{ 1, 0, 0, 0, 0, 0, 1, 0},
+				{ 0, 1, 0, 0, 0, 1, 0, 0},
+				{ 0, 0, 1, 1, 1, 0, 0, 0},
+				{ 0, 0, 0, 0, 0, 0, 0, 0}
 			};
 
-			for (int x = 0; x < target.Width; x++)
-				for (int y = 0; y < target.Height; y++)
-					Assert.AreEqual<Color>(expectedMask[x, y] == 1 ? Color.White : Color.Black, target.GetPixel(x, y));
+			Compare(expectedMask, target);
 		}
 
 		[TestMethod]
@@ -113,9 +124,26 @@ namespace GameMaker.UnitTesting
 				{ 0, 0, 0, 0, 0, 0, 0},
 			};
 
-			for (int x = 0; x < target.Width; x++)
-				for (int y = 0; y < target.Height; y++)
-					Assert.AreEqual<Color>(expectedMask[y, x] == 1 ? Color.White : Color.Black, target.GetPixel(x, y), String.Format("Error occurred at (x,y) = ({0}, {1})", x, y));
+			Compare(expectedMask, target);
+		}
+
+		[TestMethod]
+		public void DrawLine()
+		{
+			var target = _CreateSurface(5, 5);
+			target.DrawLine(Color.White, 0, 0, 3, 0);
+			target.DrawLine(Color.White, 0, 3, 3, 0);
+			target.DrawLine(Color.White, 2, 4, 4, 1);
+
+			int[,] expectedMask = new[,] {
+				{ 1, 1, 1, 1, 0 },
+				{ 0, 0, 1, 0, 1 },
+				{ 0, 1, 0, 1, 0 },
+				{ 1, 0, 0, 1, 0 },
+				{ 0, 0, 1, 0, 0 }
+			};
+
+			Compare(expectedMask, target);
 		}
 	}
 }
