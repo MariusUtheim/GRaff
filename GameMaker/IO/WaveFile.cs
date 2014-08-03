@@ -60,7 +60,7 @@ namespace GameMaker.IO
 					}
 				}
 			}
-			catch (EndOfStreamException err)
+			catch (EndOfStreamException)
 			{
 				throw;
 			}
