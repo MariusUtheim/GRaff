@@ -6,35 +6,31 @@ using System.Threading.Tasks;
 
 namespace GameMaker
 {
-	public class Mask
+	public sealed class Mask
 	{
 		private Point[] _pts;
+		private Image _target;
+		private bool _targetBased;
 
-		public Mask(Point[] polygon)
+		internal Mask(GameObject owner)
 		{
-			this._pts = polygon.Clone() as Point[];
+			_target = owner.Image;
+			_targetBased = true;
+			Transform = owner.Transform;
 		}
 
-		public IEnumerable<Line> Path
+		public Transform Transform
 		{
-			get
-			{
-				for (int i = 0; i < _pts.Length - 1; i++)
-					yield return new Line(_pts[i], _pts[i + 1] - _pts[i]);
-				yield return new Line(_pts.Last(), _pts.First() - _pts.Last());
-			}
+			get;
+			private set;
 		}
 
+		public MaskShape Shape
+		{
+			set { this._pts = value._pts; }
+		}
 
 		public bool ContainsPoint(Point pt)
-		{
-			foreach (Line L in Path)
-				if (L.LeftNormal.DotProduct(pt - L.Origin) > 0)
-					return false;
-				
-			return true;
-		}
-		public bool ContainsPoint(double x, double y)
 		{
 			/**
 			 * If the polygon is convex then one can consider the polygon as a "path" from the first vertex. 
@@ -45,9 +41,38 @@ namespace GameMaker
 			 * if it is less than 0 then P is to the right of the line segment, 
 			 * if greater than 0 it is to the left, if equal to 0 then it lies on the line segment.
 			 * */
-			return ContainsPoint(new Point(x, y));
-		
+			foreach (Line L in Path)
+				if (L.LeftNormal.DotProduct(pt - L.Origin) > 0)
+					return false;
+
 			return true;
+		}
+
+		public bool ContainsPoint(double x, double y)
+		{
+			return ContainsPoint(new Point(x, y));
+		}
+
+		public bool Intersects(Mask other)
+		{
+			return _Intersects(other) || other._Intersects(this);
+		}
+
+
+		private IEnumerable<Line> Path
+		{
+			get
+			{
+				if (_pts.Length == 0)
+					yield break;
+
+				for (int i = 0; i < _pts.Length - 1; i++)
+				{
+					Line theLine = Transform.Line(new Line(_pts[i], _pts[i + 1]));
+					yield return theLine;
+				}
+				yield return Transform.Line(new Line(_pts.Last(), _pts.First() - _pts.Last()));
+			}
 		}
 
 		private bool _Intersects(Mask other)
@@ -60,24 +85,29 @@ namespace GameMaker
 			foreach (var L in Path)
 			{
 				var n = L.LeftNormal;
-				if (other._pts.All(pt => n.DotProduct(pt - L.Origin) > 0))
+				if (other._pts.Select(pt => other.Transform.Point(pt)).All(pt => n.DotProduct(pt - L.Origin) > 0))
 					return false;
 			}
 
 			return true;
 		}
 
-		public bool Intersects(Mask other)
-		{
-			return _Intersects(other) || other._Intersects(this);
+		public void DrawOutline()
+		{ 
+			DrawOutline(Color.Black);
 		}
 
-
-		public void DrawOutline() { DrawOutline(Color.Black); }
 		public void DrawOutline(Color color)
 		{
 			foreach (Line line in Path)
-				Draw.Line(color, line.Origin, line.Origin + line.Direction);
+			{
+				Draw.Line(Color.Red, line.Origin + 2 * line.Direction.Normal, line.Origin + 2 * (line.LeftNormal + line.Direction.Normal));
+				Draw.Line(color, line.Origin, line.Destination);
+			}
 		}
 	}
+
+
+
+
 }

@@ -29,6 +29,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Test|AnyCPU'">
+    <OutputPath>bin\Test\</OutputPath>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="OggVorbisDecoder">
       <HintPath>..\..\..\..\OggVorbisDecoder-Source\OggVorbisDecoder\bin\Release\OggVorbisDecoder.dll</HintPath>
@@ -47,11 +50,14 @@
     <Compile Include="Background.cs" />
     <Compile Include="Color.Definitions.cs" />
     <Compile Include="Color.cs" />
+    <Compile Include="Complex.cs" />
     <Compile Include="Controller.cs" />
+    <Compile Include="DraggableObject.cs" />
     <Compile Include="Draw.cs" />
     <Compile Include="Fill.cs" />
     <Compile Include="Game.cs" />
     <Compile Include="GlobalEvent.cs" />
+    <Compile Include="GMath.FromSystemMath.cs" />
     <Compile Include="GMath.cs" />
     <Compile Include="GRandom.cs" />
     <Compile Include="GraphicsEngine.cs" />
@@ -67,6 +73,7 @@
     <Compile Include="IO\OggFile.cs" />
     <Compile Include="IO\SoundFile.cs" />
     <Compile Include="IO\WaveFile.cs" />
+    <Compile Include="MaskShape.cs" />
     <Compile Include="MutableList.cs" />
     <Compile Include="IntRectangle.cs" />
     <Compile Include="IntVector.cs" />
@@ -95,11 +102,13 @@
     <Compile Include="Room.cs" />
     <Compile Include="Sprite.cs" />
     <Compile Include="View.cs" />
+    <Compile Include="Window.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Game Flow.docx" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Examples\Game.xml" />
     <Content Include="External\libogg.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -109,6 +118,7 @@
     <Content Include="External\vorbisfile.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="TextFile1.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

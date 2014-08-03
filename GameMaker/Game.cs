@@ -169,6 +169,7 @@ namespace GameMaker
 
 		public static void Redraw(Surface surface)
 		{
+			Draw.DefaultSurface = surface;
 			Background.Redraw(surface);
 
 			GlobalEvent.OnDrawBackground();

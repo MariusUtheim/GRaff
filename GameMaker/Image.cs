@@ -6,55 +6,30 @@ using System.Threading.Tasks;
 
 namespace GameMaker
 {
-	public class Image
+	public sealed class Image
 	{
-		private IAnimationEndListener _animationEndListener;
+		private GameObject _parent;
 
-		public Image(GameObject instance)
+		internal Image(GameObject parent)
 		{
-			this.Instance = instance;
-			this.XScale = 1;
-			this.YScale = 1;
-			this.Rotation = Angle.Zero;
+			this._parent = parent;
 			this.Blend = Color.White;
 			this.Count = 1;
 			this.Index = 0;
 			this.Speed = 1;
-			this._animationEndListener = instance as IAnimationEndListener; // Set to null if instance is not an IAnimationEndListener
-		}
-
-		public double XScale { get; set; }
-		public double YScale { get; set; }
-		public Angle Rotation { get; set; }
-		public Color Blend { get; set; }
-		public GameObject Instance { get; set; }
-
-		public int XOrigin
-		{
-			get { return Sprite.XOrigin; }
-			set { Sprite.XOrigin = value; }
-		}
-
-		public int YOrigin
-		{
-			get { return Sprite.YOrigin; }
-			set { Sprite.YOrigin = value; }
-		}
-
-		public double Alpha
-		{
-			get { return Blend.A / 255.0; }
-			set { Blend = new Color((int)(value * 255), Blend); }
 		}
 
 		public Sprite Sprite
 		{
-			get { return Instance.Sprite; }
+			get { return _parent.Sprite; }
 		}
 
-		public Transform Transform
+		public Color Blend { get; set; }
+		
+		public double Alpha
 		{
-			get { return new Transform(XScale, YScale, Rotation, Sprite.Origin); }
+			get { return Blend.A / 255.0; }
+			set { Blend = new Color((int)(value * 255), Blend); }
 		}
 
 		private double _index;
@@ -72,26 +47,34 @@ namespace GameMaker
 
 		public int Count { get; private set; }
 
+		public int Width
+		{
+			get { return CurrentTexture.Width; }
+		}
+
+		public int Height
+		{
+			get { return CurrentTexture.Height; }
+		}
+
 		public Texture CurrentTexture
 		{
 			get { return Sprite.GetTexture(Index); }
 		}
 
-		public void Animate()
+		public bool Animate()
 		{
-			if (Sprite == null)
-				_index = 0;
-			else
+			if (Sprite != null)
 			{
 				_index += Speed;
-				if (_index >= Sprite.ImageCount)
+				if (_index >= Count)
 				{
-					if (_animationEndListener != null)
-						_animationEndListener.AnimationEnd();
-					_index %= Sprite.ImageCount;
+					_index %= Count;
+					return true;
 				}
 			}
-		}
 
+			return false;
+		}
 	}
 }

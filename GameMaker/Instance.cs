@@ -123,7 +123,7 @@ namespace GameMaker
 				action(obj);
 		}
 
-		public static IEnumerable<T> In(Rectangle rectangle)
+		public static IEnumerable<T> Inside(Rectangle rectangle)
 		{
 			return All.Where(i => i.BoundingBox.Intersects(rectangle));
 		}

@@ -14,9 +14,9 @@ namespace GameMaker
 		public MovingObject(double x, double y)
 			: base(x, y) { }
 
-		public override void OnStep()
+		public override void OnEndStep()
 		{
-			base.OnStep();
+			base.OnEndStep();
 
 			Location += Velocity;
 			if (Speed <= Friction)

@@ -87,5 +87,13 @@ namespace GameMaker
 		{
 			get { return _subimages; }
 		}
+
+		/// <summary>
+		/// Gets the bouding box of this sprite, when its origin is centered at (0, 0)
+		/// </summary>
+		public Rectangle BoundingBox
+		{
+			get { return new Rectangle((Point)(-Origin), Size); }
+		}
 	}
 }

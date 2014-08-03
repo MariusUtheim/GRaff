@@ -8,6 +8,7 @@ namespace GameMaker
 {
 	public static class Draw
 	{
+
 		public static Surface DefaultSurface
 		{
 			get;
@@ -36,9 +37,24 @@ namespace GameMaker
 			CurrentSurface.Clear(color);
 		}
 
+		public static void Point(Color color, int x, int y)
+		{
+			CurrentSurface.SetPixel(x, y, color);
+		}
+
+		public static void Point(Color color, Point p)
+		{
+			Draw.Point(color, (int)p.X, (int)p.Y);
+		}
+
 		public static void Circle(Color color, Point location, double radius)
 		{
 			CurrentSurface.DrawCircle(color, location, radius);
+		}
+
+		public static void Circle(Color color, double x, double y, double radius)
+		{
+			CurrentSurface.DrawCircle(color, new Point(x, y), radius);
 		}
 
 		public static void Rectangle(Color color, double x, double y, double width, double height)
@@ -86,9 +102,9 @@ namespace GameMaker
 			CurrentSurface.DrawLine(col1, col2, p1.X, p1.Y, p2.X, p2.Y);
 		}
 
-		public static void Image(double x, double y, Image image)
+		public static void Image(double x, double y, Transform transform, Image image)
 		{
-			CurrentSurface.DrawImage(x, y, image);
+			CurrentSurface.DrawImage(x, y, transform, image);
 		}
 
 		public static void Sprite(Point location, Sprite sprite, int imageIndex)

@@ -10,7 +10,13 @@ namespace GameMaker
 		public GameObject()
 		{
 			Instance.Add(this);
+			Transform = new Transform();
 			Image = new Image(this);
+			Mask = new Mask(this);
+			if (Sprite == null)
+				Mask.Shape = MaskShape.None();
+			else
+				Mask.Shape = MaskShape.Rectangle(Sprite.BoundingBox);
 		}
 
 		public GameObject(double x, double y)
@@ -23,29 +29,32 @@ namespace GameMaker
 		public GameObject(Point location)
 			: this(location.X, location.Y) { }
 
-		public double X { get; set; }
-		public double Y { get; set; }
+		public double X
+		{
+			get { return Transform.X; }
+			set { Transform.X = value; }
+		}
+
+		public double Y
+		{
+			get { return Transform.Y; }
+			set { Transform.Y = value; }
+		}
 
 		public Point Location
 		{
-			get { return new Point(X, Y); }
-			set { X = value.X; Y = value.Y; }
-		}
-
-		public Image Image { get; set; }
-
-		public virtual Sprite Sprite
-		{
-			get;
-			set;
+			get { return new Point(Transform.X, Transform.Y); }
+			set { Transform.X = value.X; Transform.Y = value.Y; }
 		}
 
 		private int _depth;
-		public int Depth 
+		public int Depth
 		{
 			get { return _depth; }
 			set { _depth = value; Instance.Sort(); }
 		}
+
+		public Image Image { get; private set; }
 
 		public void Destroy()
 		{
@@ -53,38 +62,27 @@ namespace GameMaker
 			Instance.Remove(this);
 		}
 
-		public virtual Rectangle BoundingBox
+		public virtual Sprite Sprite
 		{
-			get 
-			{
-				if (Sprite == null)
-					return new Rectangle(Location, Vector.Cartesian(1, 1));
-				else
-					return new Rectangle(Location - Sprite.Origin, Sprite.Size); }
+			get { return null; }
 		}
+
+		public Transform Transform { get; private set; }
 
 		public bool Intersects(GameObject other)
 		{
 			return Mask.Intersects(other.Mask);
 		}
 
-		public Transform Transform
-		{
-			get
-			{
-				return new Transform(Image.XScale, Image.YScale, Image.Rotation, Location);
-			}
-		}
-
-		private Mask _mask;
 		public Mask Mask
 		{
-			get
-			{
-				return new Mask(Transform.Rectangle(BoundingBox));
-			}
+			get;
+			private set;
+		}
 
-			set { _mask = value; }
+		public Rectangle BoundingBox
+		{
+			get { throw new NotImplementedException(); }
 		}
 
 		public virtual void OnBeginStep() { }
@@ -97,23 +95,14 @@ namespace GameMaker
 
 		public virtual void OnDraw()
 		{
-			if (Sprite != null)
+			if (Image.Sprite != null)
 			{
-				Draw.Image(X, Y, Image);
-				Image.Animate();
+				Draw.Image(X, Y, Transform, Image);
+				if (Image.Animate() && this is IAnimationEndListener)
+					(this as IAnimationEndListener).AnimationEnd();
+
+				Mask.DrawOutline(Color.Red);
 			}
-		}
-
-		public double Width
-		{
-#warning Temporary
-			get { return Sprite.Width; } ///TEMPORARY///
-		}
-
-		public double Height
-		{
-#warning Temporary
-			get { return Sprite.Height; } ///TEMPORARY///
 		}
 	}
 }

@@ -8,19 +8,25 @@ namespace GameMaker
 {
 	public class Transform
 	{
-
-		public Transform(double xScale, double yScale, Angle rotation, Vector origin)
+		public Transform()
+			: base()
 		{
-			// TODO: Complete member initialization
+			XScale = 1;
+			YScale = 1;
+			Rotation = Angle.Zero;
+		}
+
+		public Transform(double xScale, double yScale, Angle rotation)
+		{
 			this.XScale = xScale;
 			this.YScale = yScale;
 			this.Rotation = rotation;
-			this.Origin = origin;
 		}
+		public double X { get; set; }
+		public double Y { get; set; }
 		public double XScale { get; set; }
 		public double YScale { get; set; }
 		public Angle Rotation { get; set; }
-		public Vector Origin { get; set; }
 
 		public Point Point(Point pt)
 		{
@@ -30,12 +36,16 @@ namespace GameMaker
 		public Point Point(double x, double y)
 		{
 			Vector result = Vector.Cartesian(x, y);
-			result -= Origin;
 			result.X *= XScale;
 			result.Y *= YScale;
 			result.Direction += Rotation;
-			result += Origin;
+			result += new Vector(X, Y);
 			return (Point)result;
+		}
+
+		public Line Line(Line line)
+		{
+			return new Line(Point(line.Origin), Point(line.Destination));
 		}
 
 		public Point[] Rectangle(Rectangle rect)
@@ -48,5 +58,6 @@ namespace GameMaker
 			};
 
 		}
+
 	}
 }

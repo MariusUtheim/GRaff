@@ -12,7 +12,7 @@ namespace GameMaker
 
 		public abstract void SetPixel(int x, int y, Color color);
 
-		public abstract void DrawImage(double x, double y, Image image);
+		public abstract void DrawImage(double x, double y, Transform transform, Image image);
 
 		public abstract void DrawTexture(double x, double y, Texture texture);
 
