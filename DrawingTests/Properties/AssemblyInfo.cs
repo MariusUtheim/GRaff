@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("GameMaker.Math")]
+[assembly: AssemblyTitle("DrawingTests")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("GameMaker.Math")]
+[assembly: AssemblyProduct("DrawingTests")]
 [assembly: AssemblyCopyright("Copyright ©  2014")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("f875029f-77fc-4c66-90b2-9ea4283ae337")]
+[assembly: Guid("e9aa3ae4-d179-4a69-b201-995066ff70fd")]
 
 // Version information for an assembly consists of the following four values:
 //

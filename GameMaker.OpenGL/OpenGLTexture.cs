@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using OpenTK.Graphics;
+using OpenTK.Graphics.OpenGL;
 using System.Drawing;
 using System.Drawing.Imaging;
 
@@ -30,7 +30,7 @@ namespace GameMaker.OpenGL
 				GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (float)TextureMinFilter.LinearMipmapLinear);
 				GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (float)TextureMagFilter.Linear);
 
-				Glu.Build2DMipmap(TextureTarget.Texture2D, (int)PixelInternalFormat.Three, _bmp.Width, _bmp.Height, OpenTK.Graphics.PixelFormat.Bgra, PixelType.UnsignedByte, textureData.Scan0);
+				OpenTK.Graphics.Glu.Build2DMipmap(OpenTK.Graphics.TextureTarget.Texture2D, (int)PixelInternalFormat.Three, _bmp.Width, _bmp.Height, OpenTK.Graphics.PixelFormat.Bgra, OpenTK.Graphics.PixelType.UnsignedByte, textureData.Scan0);
 
 				GL.GetTexLevelParameter(TextureTarget.Texture2D, 0, GetTextureParameter.TextureWidth, out _w);
 				GL.GetTexLevelParameter(TextureTarget.Texture2D, 0, GetTextureParameter.TextureHeight, out _h);

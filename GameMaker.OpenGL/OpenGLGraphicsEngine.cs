@@ -57,100 +57,17 @@ namespace GameMaker.OpenGL
 			}
 		}
 
-		public override Texture LoadTexture(string file)
+		public override Texture[] LoadTexture(string file, int subimages)
 		{
-			return new OpenGLTexture(file);
+			if (subimages == 1)
+				return new[] { new OpenGLTexture(file) };
+			else
+				throw new NotImplementedException("The OpenGL engine does not yet support opening textures with multiple subimages.");
 		}
 
-		public override void DrawImage(double x, double y, Image image)
+		public override Surface CreateSurface(int width, int height)
 		{
-			double w = image.Sprite.Width, h = image.Sprite.Height;
-			x -= image.XOrigin;
-			y -= image.YOrigin;
-			float fx = (float)x, fy = (float)y;
-			GL.Color3(image.Blend.ToGLColor());
-			GL.BindTexture(TextureTarget.Texture2D, (image.CurrentTexture as OpenGLTexture).Id);
-			GL.Enable(EnableCap.Texture2D);
-
-			GL.Begin(PrimitiveType.Quads);
-			GL.TexCoord2(0, 0); GL.Vertex2(x, y);
-			GL.TexCoord2(0, 1); GL.Vertex2(x, y + h);
-			GL.TexCoord2(1, 1); GL.Vertex2(x + w, y + h);
-			GL.TexCoord2(1, 0); GL.Vertex2(x + w, y);
-			GL.End();
-
-			GL.Disable(EnableCap.Texture2D);
-		}
-
-		public override void DrawTexture(double x, double y, Texture texture)
-		{
-			GL.BindTexture(TextureTarget.Texture2D, (texture as OpenGLTexture).Id);
-			GL.Enable(EnableCap.Texture2D);
-
-			GL.Begin(PrimitiveType.Quads);
-			GL.TexCoord2(0, 0); GL.Vertex2(x, y);
-			GL.TexCoord2(0, 1); GL.Vertex2(x, y + texture.Height);
-			GL.TexCoord2(1, 1); GL.Vertex2(x + texture.Width, y + texture.Height);
-			GL.TexCoord2(1, 0); GL.Vertex2(x + texture.Width, y);
-			GL.End();
-
-			GL.Disable(EnableCap.Texture2D);
-		}
-
-		public override void DrawCircle(Color color, Point location, double radius)
-		{
-			throw new NotImplementedException();
-		}
-
-		public override void DrawRectangle(Color color, double x, double y, double width, double height)
-		{
-			//GL.Ortho(x, y, x + width, y + height, 0, 1);
-			GL.Begin(PrimitiveType.Quads);
-			GL.Color3(color.ToGLColor());
-			GL.Vertex2(x, y);
-			GL.Vertex2(x, y + height);
-			GL.Vertex2(x + width, y + height);
-			GL.Vertex2(x + width, y);
-			GL.End();
-		}
-
-		public override void DrawRectangle(Color col1, Color col2, Color col3, Color col4, double x, double y, double width, double height)
-		{
-			//GL.Ortho(x, y, x + width, y + height, 0, 1);
-			GL.Begin(PrimitiveType.Quads);
-			GL.Color3(col1.ToGLColor());
-			GL.Vertex2(x, y);
-			GL.Color3(col2.ToGLColor());
-			GL.Vertex2(x, y + height);
-			GL.Color3(col3.ToGLColor());
-			GL.Vertex2(x + width, y + height);
-			GL.Color3(col4.ToGLColor());
-			GL.Vertex2(x + width, y);
-			GL.End();
-		}
-
-		public override void DrawLine(Color color, double x1, double y1, double x2, double y2)
-		{
-			GL.Begin(PrimitiveType.Lines);
-			GL.Color3(color.ToGLColor());
-			GL.Vertex2(x1, y1);
-			GL.Vertex2(x2, y2);
-			GL.End();
-		}
-
-		public override void DrawLine(Color col1, Color col2, double x1, double y1, double x2, double y2)
-		{
-			GL.Begin(PrimitiveType.Lines);
-			GL.Color3(col1.ToGLColor());
-			GL.Vertex2(x1, y1);
-			GL.Color3(col2.ToGLColor());
-			GL.Vertex2(x2, y2);
-			GL.End();
-		}
-
-		public override void Clear(Color color)
-		{
-			GL.ClearColor(color.ToGLColor());
+			return new OpenGLSurface(width, height);
 		}
 
 #warning Should override something?

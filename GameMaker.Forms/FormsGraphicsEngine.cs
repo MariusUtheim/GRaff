@@ -49,14 +49,13 @@ namespace GameMaker.Forms
 
 		private void OnPaint(object sender, PaintEventArgs e)
 		{
-			(Draw.DefaultSurface as FormsSurface).Graphics = e.Graphics;
+			//(Draw.DefaultSurface as FormsSurface).Graphics = e.Graphics;
 			
 			try
 			{
 				Game.Loop();
-				//var s = new FormsSurface(Width, Height);
-				//s.Graphics = _graphics;
-				Game.Redraw(Draw.DefaultSurface); //new FormsSurface(_form.Width, _form.Height, _graphics));
+				var s = new FormsSurface(Width, Height, e.Graphics);
+				Game.Redraw(s);
 				//RectangleF sourceRect;
 				//Rectangle visibleRegion = Draw.GetVisibleRegion();
 				//sourceRect = new RectangleF((float)visibleRegion.Left, (float)visibleRegion.Top, (float)visibleRegion.Width, (float)visibleRegion.Height);
@@ -131,7 +130,7 @@ namespace GameMaker.Forms
 
 		public override void Refresh()
 		{
-			//_form.Update();
+			_form.Update();
 		}
 
 		public override bool IsFullscren

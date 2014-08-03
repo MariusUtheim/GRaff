@@ -33,18 +33,18 @@ namespace GameMaker.Forms
 
 		public override void SetPixel(int x, int y, Color color)
 		{
-			_bmp.SetPixel(x, y, color.ToFormsColor());
+			Graphics.FillRectangle(new SolidBrush(color.ToFormsColor()), x, y, 1, 1);
 		}
 
-		public override void DrawImage(double x, double y, Image image)
+		public override void DrawImage(double x, double y, Transform transform, Image image)
 		{
 			float tx = (float)x, ty = (float)y;
 			
 			Graphics.TranslateTransform(tx, ty);
-			Graphics.RotateTransform((float)image.Rotation.Degrees);
-			Graphics.ScaleTransform((float)image.XScale, (float)image.YScale);
+			Graphics.RotateTransform((float)transform.Rotation.Degrees);
+			Graphics.ScaleTransform((float)transform.XScale, (float)transform.YScale);
 
-			Graphics.TranslateTransform(-image.XOrigin, -image.YOrigin);
+			Graphics.TranslateTransform(-(float)image.Sprite.XOrigin, -(float)image.Sprite.YOrigin);
 
 			ColorMatrix cm = new ColorMatrix();
 			cm.Matrix00 = (float)image.Blend.R / 255.0f;
