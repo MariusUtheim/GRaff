@@ -5,31 +5,35 @@ using System.Text;
 
 namespace GameMaker
 {
+	[System.Runtime.InteropServices.StructLayout(System.Runtime.InteropServices.LayoutKind.Sequential)]
 	public partial struct Color
 	{
-		public Color(int a, int r, int g, int b)
+		byte _r;
+		byte _g;
+		byte _b;
+		byte _a;
+
+		public Color(byte r, byte g, byte b, byte a)
 			: this()
 		{
-			this.A = a;
-			this.R = r;
-			this.G = g;
-			this.B = b;
+			this._a = a;
+			this._r = r;
+			this._g = g;
+			this._b = b;
 		}
+
+		public Color(int r, int g, int b, int a)
+			: this((byte)r, (byte)g, (byte)b, (byte)a) { }
 
 		public Color(byte r, byte g, byte b)
-			: this(255, r, g, b) { }
+			: this(r, g, b, (byte)255) { }
 
-		public Color(int argb)
-			: this()
-		{
-			this.A = (argb >> 24) & 0xFF;
-			this.R = (argb >> 16) & 0xFF;
-			this.G = (argb >> 8) & 0xFF;
-			this.B = argb & 0xFF;
-		}
+		public Color(int rgba)
+			: this(rgba >> 24, (rgba >> 16) & 0xFF,(rgba >> 8) & 0xFF, rgba & 0xFF
+			) { }
 
 		public Color(int alpha, Color baseColor)
-			: this(alpha, baseColor.R, baseColor.G, baseColor.B) { }
+			: this(baseColor.R, baseColor.G, baseColor.B, alpha) { }
 		
 		public static Color Merge(params Color[] colors)
 		{
@@ -46,10 +50,10 @@ namespace GameMaker
 			return new Color(a / colors.Length, r / colors.Length, g / colors.Length, b / colors.Length);
 		}
 
-		public int A { get; private set; }
-		public int R { get; private set; }
-		public int G { get; private set; }
-		public int B { get; private set; }
+		public int A { get { return _a; } }
+		public int R { get { return _r; } }
+		public int G { get { return _g; } }
+		public int B { get { return _b; } }
 
 		public int Argb
 		{
@@ -60,6 +64,33 @@ namespace GameMaker
 					 | G << 8
 					 | B;
 			}
+		}
+
+		public bool Equals(Color color)
+		{
+			return _r == color._r && _g == color._g && _b == color._b && _a == color._a;
+		}
+
+		public override bool Equals(object obj)
+		{
+			if (obj is Color)
+				return Equals((Color)obj);
+			return base.Equals(obj);
+		}
+
+		public override int GetHashCode()
+		{
+			return Argb;
+		}
+
+		public static bool operator ==(Color c1, Color c2)
+		{
+			return c1.Equals(c2);
+		}
+
+		public static bool operator !=(Color c1, Color c2)
+		{
+			return !c1.Equals(c2);
 		}
 
 		public override string ToString()
