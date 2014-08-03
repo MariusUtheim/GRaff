@@ -15,9 +15,22 @@ namespace GameMaker
 			this.Direction = direction;
 		}
 
+		public Line(Point from, Point to)
+			: this()
+		{
+			this.Origin = from;
+			this.Destination = to;
+		}
+
 		public Point Origin { get; set; }
 
 		public Vector Direction { get; set; }
+
+		public Point Destination
+		{
+			get { return Origin + Direction; }
+			set { Direction = value - Origin; }
+		}
 
 		public Vector LeftNormal
 		{
@@ -35,5 +48,9 @@ namespace GameMaker
 			}
 		}
 
+		public override string ToString()
+		{
+			return String.Format("Line from {0} to {1}", Origin, Destination);
+		}
 	}
 }

@@ -11,12 +11,12 @@ namespace GameMaker
 		private double _radians;
 		public static readonly Angle Zero = new Angle();
 
-		public static Angle FromRadians(double radians)
+		public static Angle Rad(double radians)
 		{
 			return new Angle { Radians = radians };
 		}
 
-		public static Angle FromDegrees(double degrees)
+		public static Angle Deg(double degrees)
 		{
 			return new Angle { Degrees = degrees };
 		}
@@ -26,12 +26,12 @@ namespace GameMaker
 		/// </summary>
 		public static Angle Direction(double x, double y)
 		{
-			return Angle.FromRadians(Math.Atan2(y, x));
+			return Angle.Rad(Math.Atan2(y, x));
 		}
 
 		public static Angle Direction(double x1, double y1, double x2, double y2)
 		{
-			return Angle.FromRadians(Math.Atan2(y2 - y1, x2 - x1));
+			return Angle.Rad(Math.Atan2(y2 - y1, x2 - x1));
 		}
 
 		public double Radians
@@ -42,8 +42,13 @@ namespace GameMaker
 
 		public double Degrees
 		{
-			get { return _radians * 360 / GMath.Tau; }
-			set { _radians = value * GMath.Tau / 360; }
+			get { return _radians * 360.0 / GMath.Tau; }
+			set { _radians = value * GMath.Tau / 360.0; }
+		}
+
+		public override string ToString()
+		{
+			return base.ToString();
 		}
 
 		public static implicit operator double(Angle a)
@@ -53,27 +58,27 @@ namespace GameMaker
 
 		public static explicit operator Angle(double d)
 		{
-			return Angle.FromRadians(d);
+			return Angle.Rad(d);
 		}
 
 		public static Angle operator +(Angle a, Angle b)
 		{
-			return Angle.FromRadians(a._radians + b._radians);
+			return Angle.Rad(a._radians + b._radians);
 		}
 
 		public static Angle operator +(Angle a, double d)
 		{
-			return Angle.FromRadians(a._radians + d);
+			return Angle.Rad(a._radians + d);
 		}
 
 		public static Angle operator -(Angle a, double d)
 		{
-			return Angle.FromRadians(a._radians - d);
+			return Angle.Rad(a._radians - d);
 		}
 
 		public static Angle operator *(Angle a, double d)
 		{
-			return Angle.FromRadians(a._radians * d);
+			return Angle.Rad(a._radians * d);
 		}
 
 	}

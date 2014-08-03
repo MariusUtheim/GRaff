@@ -40,9 +40,19 @@ namespace GameMaker
 			return minValue + _rnd.NextDouble() * (maxValue - minValue);
 		}
 
+		public static double Gaussian()
+		{
+			return GMath.Sqrt(-2 * GMath.Log(Double()));
+		}
+
+		public static double Gaussian(double mean, double std)
+		{
+			return std * (Gaussian() + mean);
+		}
+
 		public static Vector Vector(double magnitude)
 		{
-			return new Vector(magnitude, GameMaker.Angle.FromRadians(_rnd.NextDouble() * GMath.Tau));
+			return new Vector(magnitude, GameMaker.Angle.Rad(_rnd.NextDouble() * GMath.Tau));
 		}
 
 		public static Vector Vector()
@@ -50,11 +60,11 @@ namespace GameMaker
 			return GRandom.Vector(1);
 		}
 
-		public static Angle Angle() { return GameMaker.Angle.FromRadians(_rnd.NextDouble() * GMath.Tau); }
+		public static Angle Angle() { return GameMaker.Angle.Rad(_rnd.NextDouble() * GMath.Tau); }
 
 		public static Angle Angle(Angle lowerBound, Angle upperBound)
 		{
-			return GameMaker.Angle.FromRadians(lowerBound + _rnd.NextDouble() * (upperBound - lowerBound));
+			return GameMaker.Angle.Rad(lowerBound + _rnd.NextDouble() * (upperBound - lowerBound));
 		}
 
 		public static T Choose<T>(params T[] items)

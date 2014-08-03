@@ -67,5 +67,15 @@ namespace GameMaker
 		{
 			return !(Left > other.Right || Top > other.Bottom || Right < other.Left || Bottom < other.Top);
 		}
+
+		public static Rectangle operator +(Rectangle r, Vector v)
+		{
+			return new Rectangle(r.Location + v, r.Size);
+		}
+
+		public static Rectangle operator -(Rectangle r, Vector v)
+		{
+			return new Rectangle(r.Location - v, r.Size);
+		}
 	}
 }

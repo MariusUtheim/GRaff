@@ -51,6 +51,16 @@ namespace GameMaker
 			return new Vector(p1.X - p2.X, p1.Y - p2.Y);
 		}
 
+		public static bool operator ==(Point p1, Point p2)
+		{
+			return p1.X == p2.X && p1.Y == p2.Y;
+		}
+
+		public static bool operator !=(Point p1, Point p2)
+		{
+			return p1.X != p2.X || p1.Y != p2.Y;
+		}
+
 		public static implicit operator Vector(Point p) { return new Vector(p.X, p.Y); }
 	}
 }
