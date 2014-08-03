@@ -30,6 +30,29 @@ namespace GameMaker
 			set { this._pts = value._pts; }
 		}
 
+		public Rectangle BoundingBox
+		{
+			get
+			{
+				if (this._pts.Length == 0)
+					return new Rectangle(0, 0, 0, 0);
+
+				double left, right, top, bottom;
+				left = right = Transform.Point(_pts[0]).X;
+				top = bottom = Transform.Point(_pts[0]).Y;
+
+				for (int i = 1; i < _pts.Length; i++)
+				{
+					Point pt = Transform.Point(_pts[i]);
+					if (pt.X < left) left = pt.X;
+					if (pt.X > right) right = pt.X;
+					if (pt.Y < top) top = pt.Y;
+					if (pt.Y > bottom) bottom = pt.Y;
+				}
+
+				return new Rectangle(left, top, right - left, bottom - top);
+			}
+		}
 		public bool ContainsPoint(Point pt)
 		{
 			/**
@@ -55,7 +78,7 @@ namespace GameMaker
 
 		public bool Intersects(Mask other)
 		{
-			return _Intersects(other) || other._Intersects(this);
+			return _Intersects(other) && other._Intersects(this);
 		}
 
 
@@ -99,9 +122,10 @@ namespace GameMaker
 
 		public void DrawOutline(Color color)
 		{
+			Draw.Rectangle(Color.Black, BoundingBox);
+
 			foreach (Line line in Path)
 			{
-				Draw.Line(Color.Red, line.Origin + 2 * line.Direction.Normal, line.Origin + 2 * (line.LeftNormal + line.Direction.Normal));
 				Draw.Line(color, line.Origin, line.Destination);
 			}
 		}

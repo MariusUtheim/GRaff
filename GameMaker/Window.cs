@@ -10,8 +10,8 @@ namespace GameMaker
 	{
 		public static bool IsBorderVisible
 		{
-			get { return GraphicsEngine.Current.IsBorderVisible; }
-			set { GraphicsEngine.Current.IsBorderVisible = value; }
+			get { throw new NotImplementedException(); }
+			set { throw new NotImplementedException(); }
 		}
 	}
 }

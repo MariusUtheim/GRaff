@@ -1,7 +1,5 @@
 ﻿using System;
 using GameMaker;
-using GameMaker.Forms;
-using GameMaker.OpenGL;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace GameMaker.UnitTesting
@@ -11,7 +9,7 @@ namespace GameMaker.UnitTesting
 	{
 		private static Surface _CreateSurface(int width, int height)
 		{
-			return new GameMaker.Forms.FormsGraphicsEngine().CreateSurface(width, height);
+			return new Surface(width, height);
 		}
 
 		private static void Compare(int[,] expectedMask, Surface target)
@@ -93,7 +91,7 @@ namespace GameMaker.UnitTesting
 		{
 
 			var target = _CreateSurface(8, 8);
-			target.DrawCircle(Color.White, new Point(3, 3), 3);
+			target.DrawCircle(Color.White, 3, 3, 3);
 			int[,] expectedMask = new[,] {
 				{ 0, 0, 1, 1, 1, 0, 0, 0},
 				{ 0, 1, 0, 0, 0, 1, 0, 0},

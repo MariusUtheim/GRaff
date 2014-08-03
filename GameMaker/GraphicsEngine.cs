@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using OpenTK;
+using OpenTK.Graphics.OpenGL;
 
 namespace GameMaker
 {
 
-	public abstract class GraphicsEngine
+	public class GraphicsEngine
 	{
 		internal static GraphicsEngine Current { get; set; }
 
@@ -36,36 +38,94 @@ namespace GameMaker
 			Keyboard.Release(key);
 		}
 
-		public abstract void Run(Action gameStart);
+		GameWindow game;
+		public GraphicsEngine()
+		{
 
-		public abstract Texture[] LoadTexture(string file, int subimages);
 
-		public abstract Surface CreateSurface(int width, int height);
+		}
+		
+		[STAThread]
+		public void Run(Action gameStart)
+		{
+			using (game = new GameWindow(Room.Current.Width, Room.Current.Height))
+			{
+				game.Load += (sender, e) =>
+				{
+					gameStart();
+					game.VSync = VSyncMode.On;
+				};
 
-		public abstract void Refresh();
+				game.Resize += (sender, e) => { GL.Viewport(0, 0, game.Width, game.Height); };
 
-		public abstract bool IsFullscren { get; set; }
+				game.UpdateFrame += (sender, e) => { };
 
-		public abstract bool IsBorderVisible { get; set; }
+				game.KeyDown += (sender, e) => {
+					//KeyDown(e.Key.ToGMKey());
+				};
+				//game.KeyUp += (sender, e) => { KeyUp(e.Key.ToGMKey()); };
+				game.Mouse.Move += (sender, e) => { SetMouseLocation(e.X, e.Y); };
+				//game.Mouse.ButtonDown += (sender, e) => { MouseDown(e.Button.ToGMMouseButton()); };
+				//game.Mouse.ButtonUp += (sender, e) => { MouseUp(e.Button.ToGMMouseButton()); };
+				
 
-		public abstract bool IsOnTop { get; set; }
+				game.RenderFrame += (sender, e) =>
+				{
+					Game.Loop();
 
-		public abstract bool IsResizable { get; set; }
+					// render graphics
+					GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
-		public abstract string Title { get; set; }
+					GL.MatrixMode(MatrixMode.Projection);
+					GL.LoadIdentity();
+					GL.Ortho(0, game.Width, game.Height, 0, 0.0, 1.0);
 
-		public abstract int Width { get; set; }
+					Game.Redraw();
+				};
 
-		public abstract int Height { get; set; }
+				game.Run(Room.Current.Speed);
+			}
+		}
+
+		public void Refresh()
+		{
+			game.SwapBuffers();
+		}
+
+		public int Width
+		{
+			get
+			{
+				return game.Width;
+			}
+			set
+			{
+				game.Width = value;
+			}
+		}
+
+		public int Height
+		{
+			get
+			{
+				return game.Height;
+			}
+			set
+			{
+				game.Height = value;
+			}
+		}
+
+		public void Quit()
+		{
+			game.Exit();
+		}
 
 		public IntVector Size
 		{
 			get { return new IntVector(Width, Height); }
 			set { Width = value.X; Height = value.Y; }
 		}
-
-		public abstract void Quit();
-
 	}
 
 }

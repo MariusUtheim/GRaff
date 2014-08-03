@@ -35,6 +35,18 @@ namespace GameMaker
 			return MaskShape.Rectangle(rectangle.Left, rectangle.Top, rectangle.Width, rectangle.Height);
 		}
 
+		public static MaskShape Diamond(double x, double y, double width, double height)
+		{
+			return new MaskShape {
+				_pts = new Point[] {
+					new Point(x + width / 2, y),
+					new Point(x + width, y + height / 2),
+					new Point(x + width / 2, y + height),
+					new Point(x, y + height / 2)
+				}
+			};
+		}
+
 		public static MaskShape Circle(double radius)
 		{
 			return Circle(radius, (int)(1 + 2 * GMath.Sqrt(radius)));

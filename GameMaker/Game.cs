@@ -11,22 +11,19 @@ namespace GameMaker
 	public static class Game
 	{
 #warning Remove this one - should specify initial room (or do something really clever)
-		public static void Run<TGraphicsEngine>(Action gameStart = null)
-			where TGraphicsEngine : GraphicsEngine, new()
+		public static void Run(Action gameStart = null)
 		{
-			Run<TGraphicsEngine>(new Room(1024, 768, null), gameStart);
+			Run(new Room(1024, 768, null), gameStart);
 		}
 
-		public static void Run<TGraphicsEngine>(Room initialRoom)
-			where TGraphicsEngine : GraphicsEngine, new()
+		public static void Run(Room initialRoom)
 		{
-			Run<TGraphicsEngine>(initialRoom, null);
+			Run(initialRoom, null);
 		}
 
-		public static void Run<TGraphicsEngine>(Room initialRoom, Action gameStart)
-			where TGraphicsEngine : GraphicsEngine, new()
+		public static void Run(Room initialRoom, Action gameStart)
 		{
-			GraphicsEngine.Current = new TGraphicsEngine();
+			GraphicsEngine.Current = new GraphicsEngine();
 			initialRoom.Enter();
 			GraphicsEngine.Current.Run(gameStart);
 		}

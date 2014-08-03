@@ -60,17 +60,9 @@
     <Compile Include="CollisionTest.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\GameMaker.Forms\GameMaker.Forms.csproj">
-      <Project>{ca3c77b9-db5a-4f45-84af-7141cb70db9b}</Project>
-      <Name>GameMaker.Forms</Name>
-    </ProjectReference>
     <ProjectReference Include="..\GameMaker.OpenAL\GameMaker.OpenAL.csproj">
       <Project>{5e9da69c-fe1e-477f-b789-6e6759c90cba}</Project>
       <Name>GameMaker.OpenAL</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\GameMaker.OpenGL\GameMaker.OpenGL.csproj">
-      <Project>{f1947a4f-1e40-4869-a899-5d2707338137}</Project>
-      <Name>GameMaker.OpenGL</Name>
     </ProjectReference>
     <ProjectReference Include="..\GameMaker\GameMaker.csproj">
       <Project>{9b4b4358-f24b-41b4-bf94-9013e205780b}</Project>

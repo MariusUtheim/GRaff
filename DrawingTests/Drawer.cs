@@ -6,20 +6,21 @@ using GameMaker;
 
 namespace DrawingTests
 {
-	public class Drawer : DraggableObject, IKeyListener
+	public class Drawer : GameObject, IKeyListener
 	{
 		public Drawer()
 		{
-			Mask.Shape = MaskShape.Rectangle(50, 50);
+			Mask.Shape = MaskShape.Diamond(-25, -25, 50, 50);
 			X = Y = 300;
 			Depth = -1;
+
+//			for (int x = -24; x <= 24; x += 2)
+//				for (int y = -24; y <= 24; y += 2)
+//					Instance<TestPoint>.Create(X + x, Y + y);
 		}
 
 		public override void OnDraw()
 		{
-			for (int x = -24; x <= 24; x += 4)
-				for (int y = -24; y <= 24; y += 4)
-					Draw.Point(Color.Black, Transform.Point(x, y));
 
 			Mask.DrawOutline(Color.Blue);
 		}

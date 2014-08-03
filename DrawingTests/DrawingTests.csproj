@@ -51,6 +51,7 @@
     <Compile Include="Drawer.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TestPoint.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -76,10 +77,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\GameMaker.Forms\GameMaker.Forms.csproj">
-      <Project>{ca3c77b9-db5a-4f45-84af-7141cb70db9b}</Project>
-      <Name>GameMaker.Forms</Name>
-    </ProjectReference>
     <ProjectReference Include="..\GameMaker\GameMaker.csproj">
       <Project>{9b4b4358-f24b-41b4-bf94-9013e205780b}</Project>
       <Name>GameMaker</Name>

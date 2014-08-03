@@ -11,7 +11,7 @@ namespace DrawingTests
 	{
 		static void Main()
 		{
-			Game.Run<GameMaker.Forms.FormsGraphicsEngine>(gameStart);
+			Game.Run(gameStart);
 		}
 
 		static void gameStart()

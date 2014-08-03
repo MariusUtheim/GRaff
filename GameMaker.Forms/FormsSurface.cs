@@ -31,9 +31,9 @@ namespace GameMaker.Forms
 			return _bmp.GetPixel(x, y).ToGMColor();
 		}
 
-		public override void SetPixel(int x, int y, Color color)
+		public override void SetPixel(double x, double y, Color color)
 		{
-			Graphics.FillRectangle(new SolidBrush(color.ToFormsColor()), x, y, 1, 1);
+			Graphics.FillRectangle(new SolidBrush(color.ToFormsColor()), (float)x, (float)y, 1, 1);
 		}
 
 		public override void DrawImage(double x, double y, Transform transform, Image image)

@@ -16,7 +16,7 @@ namespace GameMaker
 
 		internal static Texture[] LoadTexture(string _path, int subimages)
 		{
-			return GraphicsEngine.Current.LoadTexture(_path, subimages);
+			return Texture.LoadTexture(_path, subimages);
 		}
 
 		public static void Clear(Color color)
@@ -24,7 +24,7 @@ namespace GameMaker
 			CurrentSurface.Clear(color);
 		}
 
-		public static void Point(Color color, int x, int y)
+		public static void Point(Color color, double x, double y)
 		{
 			CurrentSurface.SetPixel(x, y, color);
 		}
@@ -36,12 +36,12 @@ namespace GameMaker
 
 		public static void Circle(Color color, Point location, double radius)
 		{
-			CurrentSurface.DrawCircle(color, location, radius);
+			CurrentSurface.DrawCircle(color, location.X, location.Y, radius);
 		}
 
 		public static void Circle(Color color, double x, double y, double radius)
 		{
-			CurrentSurface.DrawCircle(color, new Point(x, y), radius);
+			CurrentSurface.DrawCircle(color, x, y, radius);
 		}
 
 		public static void Rectangle(Color color, double x, double y, double width, double height)
