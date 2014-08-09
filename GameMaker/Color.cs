@@ -97,5 +97,10 @@ namespace GameMaker
 		{
 			return String.Format("Color RGB=[{0}, {1}, {2}]", R, G, B);
 		}
+
+		internal OpenTK.Graphics.Color4 ToOpenGLColor()
+		{
+			return new OpenTK.Graphics.Color4(_r, _g, _b, _a);
+		}
 	}
 }

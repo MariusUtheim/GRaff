@@ -8,23 +8,23 @@ namespace GameMaker
 	public class Sprite
 	{
 		private int _subimages;
-		private string _path;
+		private string _filename;
 		private bool _isLoaded;
-		private Texture[] _textures; ///TEMPORARY/// Support multiple textures
+		private Texture _texture;
 		private IntVector _origin;
 
-		public Sprite(string path, int subimages = 1, OriginMode originMode = GameMaker.OriginMode.Manual, bool preload = true)
+		public Sprite(string filename, int subimages = 1, OriginMode originMode = GameMaker.OriginMode.Manual, bool preload = true)
 		{
 			this._subimages = subimages;
-			this._path = path;
+			this._filename = filename;
 			this.OriginMode = originMode;
 			if (preload)
 				Load();
 		}
 		
-		public Vector Size
+		public IntVector Size
 		{
-			get { Load(); return new Vector(_width, _height); }
+			get { Load(); return new IntVector(_width, _height); }
 		}
 
 		private int _width;
@@ -64,11 +64,11 @@ namespace GameMaker
 			if (_isLoaded)
 				return;
 			_isLoaded = true;
-			_textures = Draw.LoadTexture(_path, _subimages);
-			_width = _textures[0].Width;
-			_height = _textures[0].Height;
+			_texture = new Texture(_filename);
+			_width = _texture.Width;
+			_height = _texture.Height;
 
-			if (_textures == null)
+			if (_texture == null)
 				return;
 
 			if (OriginMode == GameMaker.OriginMode.UpperLeft)
@@ -80,20 +80,13 @@ namespace GameMaker
 		public Texture GetTexture(int imageIndex)
 		{
 			Load();
-			return _textures[imageIndex % _subimages];
+#warning TODO: Return texture based on imageIndex
+			return _texture;//[imageIndex % _subimages];
 		}
 
 		public int ImageCount 
 		{
 			get { return _subimages; }
-		}
-
-		/// <summary>
-		/// Gets the bouding box of this sprite, when its origin is centered at (0, 0)
-		/// </summary>
-		public Rectangle BoundingBox
-		{
-			get { return new Rectangle((Point)(-Origin), Size); }
 		}
 	}
 }

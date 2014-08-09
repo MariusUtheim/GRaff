@@ -35,12 +35,10 @@ namespace GameMaker
 
 		public Point Point(double x, double y)
 		{
-			Vector result = Vector.Cartesian(x, y);
-			result.X *= XScale;
-			result.Y *= YScale;
-			result.Direction += Rotation;
-			result += new Vector(X, Y);
-			return (Point)result;
+			double tx, ty;
+			tx = x * XScale * GMath.Cos(Rotation.Radians) + X;
+			ty = y * YScale * GMath.Sin(Rotation.Radians) + Y;
+			return new Point(tx, ty);
 		}
 
 		public Line Line(Line line)

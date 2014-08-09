@@ -12,9 +12,9 @@ namespace GameMaker.IO
 		private byte[] _buffer;
 		private VorbisInfo _info;
 
-		public OggFile(string path)
+		public OggFile(string filename)
 		{
-			using (var stream = new OggVorbisFileStream(path))
+			using (var stream = new OggVorbisFileStream(filename))
 			{
 				this._info = stream.Info;
 				this._buffer = new byte[stream.Length];

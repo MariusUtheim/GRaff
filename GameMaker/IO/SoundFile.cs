@@ -12,14 +12,14 @@ namespace GameMaker.IO
 		public abstract byte[] Buffer { get; }
 		public abstract int Bitrate { get; }
 
-		public static SoundFile OpenFile(string path)
+		public static SoundFile OpenFile(string filename)
 		{
-			if (path.EndsWith(".wav"))
-				return new WaveFile(path);
-			if (path.EndsWith(".ogg"))
-				return new OggFile(path);
+			if (filename.EndsWith(".wav"))
+				return new WaveFile(filename);
+			if (filename.EndsWith(".ogg"))
+				return new OggFile(filename);
 
-			throw new FormatException("Unrecognized format: " + path.Substring(path.LastIndexOf('.')));
+			throw new FormatException("Unrecognized format: " + filename.Substring(filename.LastIndexOf('.')));
 		}
 	}
 }

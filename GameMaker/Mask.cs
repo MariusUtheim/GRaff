@@ -124,10 +124,6 @@ namespace GameMaker
 		{
 			Draw.Rectangle(Color.Black, BoundingBox);
 
-			foreach (Line line in Path)
-			{
-				Draw.Line(color, line.Origin, line.Destination);
-			}
 		}
 	}
 

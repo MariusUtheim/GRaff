@@ -14,11 +14,6 @@ namespace GameMaker
 			set;
 		}
 
-		internal static Texture[] LoadTexture(string _path, int subimages)
-		{
-			return Texture.LoadTexture(_path, subimages);
-		}
-
 		public static void Clear(Color color)
 		{
 			CurrentSurface.Clear(color);

@@ -19,10 +19,15 @@ namespace DrawingTests
 //					Instance<TestPoint>.Create(X + x, Y + y);
 		}
 
+		public override void OnStep()
+		{
+			Transform.Rotation += Angle.Deg(1);
+			Window.Title = Game.FPS.ToString();
+		}
+
 		public override void OnDraw()
 		{
-
-			Mask.DrawOutline(Color.Blue);
+			Draw.Sprite(Location, Sprites.Xujia, 0);
 		}
 
 		public void OnKey(Key key)

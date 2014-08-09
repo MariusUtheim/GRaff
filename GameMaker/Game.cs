@@ -84,6 +84,8 @@ namespace GameMaker
 			LoopCount++;
 			if (timeLeft > 0)
 				Thread.Sleep(timeLeft);
+
+			_updateFps();
 		}
 
 		private static void _detectCollisions()
@@ -179,13 +181,44 @@ namespace GameMaker
 				controller.OnEndDraw();
 
 			GlobalEvent.OnDrawForeground();
-
-			GraphicsEngine.Current.Refresh();
 		}
 
 		public static void Sleep(int milliseconds)
 		{
 			Thread.Sleep(milliseconds);
+		}
+
+
+		private static int _fps = 0;
+		private static double _fpsSeconds = 0;
+		private static int _previousTick;
+		private static void _updateFps()
+		{
+			int tick = Environment.TickCount;
+			if (tick - _previousTick > 1000)
+			{
+				FPS = 0;
+				_fpsSeconds = 0;
+			}
+			else
+			{
+				_fps++;
+				_fpsSeconds += (tick - _previousTick) / 1000.0;
+				if (_fpsSeconds > 1)
+				{
+					FPS = _fps;
+					_fps = 0;
+					_fpsSeconds %= 1;
+				}
+			}
+
+			_previousTick = tick;
+		}
+
+		public static int FPS
+		{
+			get;
+			private set;
 		}
 	}
 }

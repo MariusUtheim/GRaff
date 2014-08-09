@@ -16,7 +16,7 @@ namespace GameMaker
 			if (Sprite == null)
 				Mask.Shape = MaskShape.None();
 			else
-				Mask.Shape = MaskShape.Rectangle(Sprite.BoundingBox);
+				throw new NotImplementedException(); //Mask.Shape = MaskShape.Rectangle(Sprite.);
 		}
 
 		public GameObject(double x, double y)

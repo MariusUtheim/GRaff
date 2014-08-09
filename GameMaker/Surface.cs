@@ -13,7 +13,7 @@ namespace GameMaker
 
 		public Surface(int width, int height)
 		{
-			_id = GL.GenBuffer();
+			//_id = GL.GenBuffer();
 		}
 
 		public Color GetPixel(double x, double y)
@@ -54,19 +54,24 @@ namespace GameMaker
 			GL.Enable(EnableCap.Texture2D);
 
 			GL.Begin(PrimitiveType.Quads);
-#warning I want to reverse clockwiseness  
-			GL.TexCoord2(0, 0); GL.Vertex2(x, y);
-			GL.TexCoord2(0, 1); GL.Vertex2(x, y + texture.Height);
-			GL.TexCoord2(1, 1); GL.Vertex2(x + texture.Width, y + texture.Height);
-			GL.TexCoord2(1, 0); GL.Vertex2(x + texture.Width, y);
+			GL.Color4(Color.White.ToOpenGLColor());
+			{
+				GL.TexCoord2(0, 0);
+				GL.Vertex2(x, y);
+				GL.TexCoord2(1, 0);
+				GL.Vertex2(x + texture.Width, y);
+				GL.TexCoord2(1, 1);
+				GL.Vertex2(x + texture.Width, y + texture.Height);
+				GL.TexCoord2(0, 1);
+				GL.Vertex2(x, y + texture.Height);
+			}
 			GL.End();
-
 			GL.Disable(EnableCap.Texture2D);
 		}
 
 		public void DrawCircle(Color color, double x, double y, double radius)
 		{
-			throw new NotImplementedException();
+			GL.Begin(PrimitiveType.LineLoop);
 		}
 
 		public void FillCircle(Color color, Point location, double radius)
@@ -76,12 +81,12 @@ namespace GameMaker
 
 		public void DrawRectangle(Color color, double x, double y, double width, double height)
 		{
-			GL.Begin(PrimitiveType.Quads);
-			GL.Color4(color.R, color.G, color.B, color.A);
-			GL.Vertex2(x, y);
-			GL.Vertex2(x + width, y);
-			GL.Vertex2(x + width, y + height);
-			GL.Vertex2(x, y + height);
+			GL.Begin(PrimitiveType.LineLoop);
+			GL.Color4(color.ToOpenGLColor());
+			GL.Vertex2((int)x, (int)y);
+			GL.Vertex2((int)(x + width), (int)y);
+			GL.Vertex2((int)(x + width), (int)(y + height));
+			GL.Vertex2((int)x, (int)(y + height));
 			GL.End();
 		}
 
@@ -89,16 +94,16 @@ namespace GameMaker
 		{
 			GL.Begin(PrimitiveType.Quads);
 
-			GL.Color4(col1.R, col1.G, col1.B, col1.A);
+			GL.Color4(col1.ToOpenGLColor());
 			GL.Vertex2(x, y);
 
-			GL.Color4(col2.R, col2.G, col2.B, col2.A);
+			GL.Color4(col2.ToOpenGLColor());
 			GL.Vertex2(x + width, y);
 
-			GL.Color4(col3.R, col3.G, col3.B, col3.A);
+			GL.Color4(col3.ToOpenGLColor());
 			GL.Vertex2(x + width, y + height);
 
-			GL.Color4(col4.R, col4.G, col4.B, col4.A);
+			GL.Color4(col4.ToOpenGLColor());
 			GL.Vertex2(x, y + height);
 
 			GL.End();
@@ -106,19 +111,41 @@ namespace GameMaker
 
 		public void FillRectangle(Color color, double x, double y, double width, double height)
 		{
-			throw new NotImplementedException();
+			GL.Color4(color.ToOpenGLColor());
+			GL.Begin(PrimitiveType.Quads);
+
+			GL.Vertex2(x, y);
+			GL.Vertex2(x + width, y);
+			GL.Vertex2(x + width, y + height);
+			GL.Vertex2(x, y + height);
+
+			GL.End();
 		}
 
 		public void FillRectangle(Color col1, Color col2, Color col3, Color col4, double x, double y, double width, double height)
 		{
-			throw new NotImplementedException();
+			GL.Begin(PrimitiveType.Quads);
+
+			GL.Color4(col1.ToOpenGLColor());
+			GL.Vertex2(x, y);
+
+			GL.Color4(col2.ToOpenGLColor());
+			GL.Vertex2(x + width, y);
+
+			GL.Color4(col3.ToOpenGLColor());
+			GL.Vertex2(x + width, y + height);
+
+			GL.Color4(col4.ToOpenGLColor());
+			GL.Vertex2(x, y + height);
+
+			GL.End();
 		}
 
 		public void DrawLine(Color color, double x1, double y1, double x2, double y2)
 		{
 			GL.Begin(PrimitiveType.Lines);
 
-			GL.Color4(color.R, color.G, color.B, color.A);
+			GL.Color4(color.ToOpenGLColor());
 			GL.Vertex2(x1, y1);
 			GL.Vertex2(x2, y2);
 			GL.End();
@@ -127,9 +154,9 @@ namespace GameMaker
 		public void DrawLine(Color col1, Color col2, double x1, double y1, double x2, double y2)
 		{
 			GL.Begin(PrimitiveType.Lines);
-			GL.Color4(col1.R, col1.G, col1.B, col1.A);
+			GL.Color4(col1.ToOpenGLColor());
 			GL.Vertex2(x1, y1);
-			GL.Color4(col2.R, col2.G, col2.B, col2.A);
+			GL.Color4(col2.ToOpenGLColor());
 			GL.Vertex2(x2, y2);
 			GL.End();
 		}
@@ -139,10 +166,9 @@ namespace GameMaker
 			throw new NotImplementedException();
 		}
 
-
 		public void Clear(Color color)
 		{
-			GL.ClearColor(new OpenTK.Graphics.Color4(color.R, color.G, color.B, color.A));
+			GL.ClearColor(color.ToOpenGLColor());
 		}
 
 		public void Blit(Surface dest, IntRectangle srcRect, IntRectangle destRect)

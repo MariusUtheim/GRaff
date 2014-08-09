@@ -8,14 +8,14 @@ namespace GameMaker
 {
 	public class Sound
 	{
-		private string _path;
+		private string _filename;
 		private bool _isLoaded;
 		private List<SoundInstance> _instances;
 		private SoundSample _sample;
 
-		public Sound(string path)
+		public Sound(string filename)
 		{
-			this._path = path;
+			this._filename = filename;
 			this._isLoaded = false;
 			this._instances = new List<SoundInstance>();
 		}
@@ -34,7 +34,7 @@ namespace GameMaker
 		{
 			if (_isLoaded)
 				return;
-			_sample = SoundEngine.Current.LoadSample(_path);
+			_sample = SoundEngine.Current.LoadSample(_filename);
 		}
 
 		public SoundInstance Play(bool loop = false, double volume = 1.0, double pitch = 1.0)

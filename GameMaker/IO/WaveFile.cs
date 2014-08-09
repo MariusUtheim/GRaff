@@ -14,20 +14,20 @@ namespace GameMaker.IO
 		private int _channels;
 		private int _bitrate;
 
-		public WaveFile(string path)
+		public WaveFile(string filename)
 		{
 			try
 			{
-				using (var stream = File.OpenRead(path))
+				using (var stream = File.OpenRead(filename))
 				using (var reader = new BinaryReader(stream))
 				{
 					var RIFF = reader.ReadString(4); // Reads RIFF
 					if (RIFF != "RIFF")
-						throw new FormatException(String.Format("WAVE file format must begin with \"RIFF\" ({0})", path));
+						throw new FormatException(String.Format("WAVE file format must begin with \"RIFF\" ({0})", filename));
 					DataSize = reader.ReadUInt32();
 					RIFFType = reader.ReadString(4);
 					if (RIFFType != "WAVE")
-						throw new FormatException(String.Format("RIFF type must be \"WAVE\" ({0})", path));
+						throw new FormatException(String.Format("RIFF type must be \"WAVE\" ({0})", filename));
 
 					while (reader.PeekChar() != (int)'\0' && reader.PeekChar() != 3)
 					{

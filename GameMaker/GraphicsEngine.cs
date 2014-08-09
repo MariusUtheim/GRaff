@@ -7,42 +7,13 @@ using OpenTK.Graphics.OpenGL;
 
 namespace GameMaker
 {
-
 	public class GraphicsEngine
 	{
 		internal static GraphicsEngine Current { get; set; }
 
-		protected void SetMouseLocation(double x, double y)
-		{
-			Mouse.X = x;
-			Mouse.Y = y;
-		}
-
-		protected void MouseDown(MouseButton button)
-		{
-			Mouse.Press(button);
-		}
-
-		protected void MouseUp(MouseButton button)
-		{
-			Mouse.Release(button);
-		}
-
-		protected void KeyDown(Key key)
-		{
-			Keyboard.Press(key);
-		}
-
-		protected void KeyUp(Key key)
-		{
-			Keyboard.Release(key);
-		}
-
 		GameWindow game;
 		public GraphicsEngine()
 		{
-
-
 		}
 		
 		[STAThread]
@@ -52,38 +23,38 @@ namespace GameMaker
 			{
 				game.Load += (sender, e) =>
 				{
-					gameStart();
-					game.VSync = VSyncMode.On;
+					if (gameStart != null)
+						gameStart();
+//					game.VSync = VSyncMode.On;
 				};
 
 				game.Resize += (sender, e) => { GL.Viewport(0, 0, game.Width, game.Height); };
 
-				game.UpdateFrame += (sender, e) => { };
-
-				game.KeyDown += (sender, e) => {
-					//KeyDown(e.Key.ToGMKey());
+				game.UpdateFrame += (sender, e) => {
+					Game.Loop();
 				};
-				//game.KeyUp += (sender, e) => { KeyUp(e.Key.ToGMKey()); };
-				game.Mouse.Move += (sender, e) => { SetMouseLocation(e.X, e.Y); };
-				//game.Mouse.ButtonDown += (sender, e) => { MouseDown(e.Button.ToGMMouseButton()); };
-				//game.Mouse.ButtonUp += (sender, e) => { MouseUp(e.Button.ToGMMouseButton()); };
-				
+
+				game.KeyDown += (sender, e) => { Keyboard.Press((Key)e.Key); };
+				game.KeyUp += (sender, e) => { Keyboard.Release((Key)e.Key); };
+				game.Mouse.Move += (sender, e) => { Mouse.X = e.X; Mouse.Y = e.Y; };
+				game.Mouse.ButtonDown += (sender, e) => { Mouse.Press((MouseButton)e.Button); };
+				game.Mouse.ButtonUp += (sender, e) => { Mouse.Release((MouseButton)e.Button); };
 
 				game.RenderFrame += (sender, e) =>
 				{
-					Game.Loop();
 
 					// render graphics
-					GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
+					GL.Clear(ClearBufferMask.ColorBufferBit);
 
-					GL.MatrixMode(MatrixMode.Projection);
+				//	GL.MatrixMode(MatrixMode.Projection);
 					GL.LoadIdentity();
 					GL.Ortho(0, game.Width, game.Height, 0, 0.0, 1.0);
 
 					Game.Redraw();
+					Refresh();
 				};
 
-				game.Run(Room.Current.Speed);
+				game.Run(30);
 			}
 		}
 
@@ -125,6 +96,19 @@ namespace GameMaker
 		{
 			get { return new IntVector(Width, Height); }
 			set { Width = value.X; Height = value.Y; }
+		}
+
+		public bool IsBorderVisible
+		{
+			get { return game.WindowBorder == WindowBorder.Fixed; }
+
+			set { game.WindowBorder = value ? WindowBorder.Fixed : WindowBorder.Hidden; }
+		}
+
+		public string Title
+		{
+			get { return game.Title; }
+			set { game.Title = value; }
 		}
 	}
 

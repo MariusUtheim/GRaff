@@ -7,11 +7,18 @@ namespace GameMaker
 {
 	public enum MouseButton
 	{
-		None = 0,
-		Left = 1,
+		Left = 0,
+		Middle = 1,
 		Right = 2,
-		Middle = 3,
-		XButton1 = 4,
-		XButton2 = 5,
+		Button1 = 3,
+		Button2 = 4,
+		Button3 = 5,
+		Button4 = 6,
+		Button5 = 7,
+		Button6 = 8,
+		Button7 = 9,
+		Button8 = 10,
+		Button9 = 11,
+		LastButton = 12,
 	}
 }
