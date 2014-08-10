@@ -3,7 +3,6 @@ using System.Diagnostics;
 using System.Threading;
 using GameMaker;
 using GameMaker.IO;
-using GameMaker.OpenAL;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace GameMaker.UnitTesting
@@ -11,7 +10,6 @@ namespace GameMaker.UnitTesting
 	[TestClass]
 	public class SoundTest
 	{
-		private readonly SoundEngine engine;
 		private readonly Sound theSound;
 		private const string testWav = @"C:/test/testwav.wav";
 		private const string testOgg = @"C:/test/testogg.ogg";
@@ -19,7 +17,6 @@ namespace GameMaker.UnitTesting
 
 		public SoundTest()
 		{
-			engine = new OpenALEngine();
 			theSound = new Sound(testWav);
 			theSound.Load();
 		}

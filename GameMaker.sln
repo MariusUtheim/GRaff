@@ -5,8 +5,6 @@ VisualStudioVersion = 12.0.21005.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameMaker", "GameMaker\GameMaker.csproj", "{9B4B4358-F24B-41B4-BF94-9013E205780B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameMaker.OpenAL", "GameMaker.OpenAL\GameMaker.OpenAL.csproj", "{5E9DA69C-FE1E-477F-B789-6E6759C90CBA}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameMaker.UnitTesting", "GameMaker.UnitTesting\GameMaker.UnitTesting.csproj", "{6EC500EE-F34A-48A5-96E5-C013EC53705A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DrawingTests", "DrawingTests\DrawingTests.csproj", "{9E45D2AB-F431-4A1B-A7B4-D8BFA680470F}"
@@ -39,19 +37,6 @@ Global
 		{9B4B4358-F24B-41B4-BF94-9013E205780B}.Test|Mixed Platforms.ActiveCfg = Test|Any CPU
 		{9B4B4358-F24B-41B4-BF94-9013E205780B}.Test|Mixed Platforms.Build.0 = Test|Any CPU
 		{9B4B4358-F24B-41B4-BF94-9013E205780B}.Test|Win32.ActiveCfg = Test|Any CPU
-		{5E9DA69C-FE1E-477F-B789-6E6759C90CBA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{5E9DA69C-FE1E-477F-B789-6E6759C90CBA}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{5E9DA69C-FE1E-477F-B789-6E6759C90CBA}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{5E9DA69C-FE1E-477F-B789-6E6759C90CBA}.Debug|Win32.ActiveCfg = Debug|Any CPU
-		{5E9DA69C-FE1E-477F-B789-6E6759C90CBA}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{5E9DA69C-FE1E-477F-B789-6E6759C90CBA}.Release|Any CPU.Build.0 = Release|Any CPU
-		{5E9DA69C-FE1E-477F-B789-6E6759C90CBA}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{5E9DA69C-FE1E-477F-B789-6E6759C90CBA}.Release|Win32.ActiveCfg = Release|Any CPU
-		{5E9DA69C-FE1E-477F-B789-6E6759C90CBA}.Test|Any CPU.ActiveCfg = Test|Any CPU
-		{5E9DA69C-FE1E-477F-B789-6E6759C90CBA}.Test|Any CPU.Build.0 = Test|Any CPU
-		{5E9DA69C-FE1E-477F-B789-6E6759C90CBA}.Test|Mixed Platforms.ActiveCfg = Test|Any CPU
-		{5E9DA69C-FE1E-477F-B789-6E6759C90CBA}.Test|Mixed Platforms.Build.0 = Test|Any CPU
-		{5E9DA69C-FE1E-477F-B789-6E6759C90CBA}.Test|Win32.ActiveCfg = Test|Any CPU
 		{6EC500EE-F34A-48A5-96E5-C013EC53705A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{6EC500EE-F34A-48A5-96E5-C013EC53705A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6EC500EE-F34A-48A5-96E5-C013EC53705A}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU

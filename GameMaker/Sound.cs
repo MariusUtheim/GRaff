@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using GameMaker.IO;
+using OpenTK.Audio.OpenAL;
 
 namespace GameMaker
 {
@@ -11,35 +13,74 @@ namespace GameMaker
 		private string _filename;
 		private bool _isLoaded;
 		private List<SoundInstance> _instances;
-		private SoundSample _sample;
+		private int _bufferId;
+
+		private static IntPtr device;
+		private static OpenTK.ContextHandle context;
+
+		static Sound()
+		{
+			device = Alc.OpenDevice("");
+			context = Alc.CreateContext(device, new int[0]);
+			Alc.MakeContextCurrent(context);
+		}
 
 		public Sound(string filename)
 		{
 			this._filename = filename;
 			this._isLoaded = false;
 			this._instances = new List<SoundInstance>();
+			this._bufferId = AL.GenBuffer();
 		}
 
-		public byte[] Buffer { get { Load(); return _sample.Buffer; } }
+		public int Bitrate
+		{
+			get;
+			private set;
+		}
 
-		public int Frequency { get { Load(); return _sample.Frequency; } }
+		public byte[] Buffer
+		{
+			get;
+			private set;
+		}
 
-		public int Bitrate { get { Load(); return _sample.Bitrate; } }
+		public int Channels
+		{
+			get;
+			private set;
+		}
 
-		public int Channels { get { Load(); return _sample.Channels; } }
+		public double Duration
+		{
+			get;
+			private set;
+		}
 
-		public double Duration { get { Load(); return _sample.Duration; } }
+		public int Frequency
+		{
+			get;
+			private set;
+		}
 
 		public void Load()
 		{
 			if (_isLoaded)
 				return;
-			_sample = SoundEngine.Current.LoadSample(_filename);
+
+			var file = new WaveFile(_filename);
+			this.Buffer = file.Buffer;
+			this.Bitrate = file.Bitrate;
+			this.Channels = file.Channels;
+#warning TODO: Set Duration
+			this.Frequency = file.Frequency;
+
+			AL.BufferData(_bufferId, ALFormat.Mono16, Buffer, Buffer.Length, Frequency);
 		}
 
 		public SoundInstance Play(bool loop = false, double volume = 1.0, double pitch = 1.0)
 		{
-			return SoundEngine.Current.Play(_sample, loop, volume, pitch);
+			return new SoundInstance(_bufferId, loop, volume, pitch);
 		}
 	}
 }
