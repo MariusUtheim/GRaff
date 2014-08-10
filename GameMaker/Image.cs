@@ -62,6 +62,11 @@ namespace GameMaker
 			get { return Sprite.GetTexture(Index); }
 		}
 
+		public Transform Transform
+		{
+			get { return _parent.Transform; }
+		}
+
 		public bool Animate()
 		{
 			if (Sprite != null)

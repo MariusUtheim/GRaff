@@ -13,10 +13,6 @@ namespace GameMaker
 			Transform = new Transform();
 			Image = new Image(this);
 			Mask = new Mask(this);
-			if (Sprite == null)
-				Mask.Shape = MaskShape.None();
-			else
-				throw new NotImplementedException(); //Mask.Shape = MaskShape.Rectangle(Sprite.);
 		}
 
 		public GameObject(double x, double y)
@@ -62,9 +58,10 @@ namespace GameMaker
 			Instance.Remove(this);
 		}
 
-		public virtual Sprite Sprite
+		public Sprite Sprite
 		{
-			get { return null; }
+			get;
+			set;
 		}
 
 		public Transform Transform { get; private set; }
@@ -97,7 +94,7 @@ namespace GameMaker
 		{
 			if (Image.Sprite != null)
 			{
-				Draw.Image(X, Y, Transform, Image);
+				Draw.Image(X, Y, Image);
 				if (Image.Animate() && this is IAnimationEndListener)
 					(this as IAnimationEndListener).AnimationEnd();
 

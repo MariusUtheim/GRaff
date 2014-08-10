@@ -65,7 +65,7 @@ namespace GameMaker
 				return;
 			_isLoaded = true;
 			_texture = new Texture(_filename);
-			_width = _texture.Width;
+			_width = _texture.Width / ImageCount;
 			_height = _texture.Height;
 
 			if (_texture == null)

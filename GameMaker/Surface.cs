@@ -28,45 +28,63 @@ namespace GameMaker
 			throw new NotImplementedException();
 		}
 
-		public void DrawImage(double x, double y, Transform transform, Image image)
+		public void DrawSprite(double x, double y, Sprite sprite, int subimage)
 		{
-			double w = image.Sprite.Width, h = image.Sprite.Height;
-			x -= image.Sprite.XOrigin;
-			y -= image.Sprite.YOrigin;
-			float fx = (float)x, fy = (float)y;
-			GL.BindTexture(TextureTarget.Texture2D, image.CurrentTexture.Id);
+			double w = sprite.Width, h = sprite.Height;
+			x -= sprite.XOrigin;
+			y -= sprite.YOrigin;
+			subimage %= sprite.ImageCount;
+			double u1 = subimage / (double)sprite.ImageCount, u2 = (subimage + 1) / (double)sprite.ImageCount;
 			GL.Enable(EnableCap.Texture2D);
+			GL.BindTexture(TextureTarget.Texture2D, sprite.GetTexture(subimage).Id);
 
-#warning I want to reverse the clockwiseness
 			GL.Begin(PrimitiveType.Quads);
-			GL.TexCoord2(0, 0); GL.Vertex2(x, y);
-			GL.TexCoord2(0, 1); GL.Vertex2(x + w, y);
-			GL.TexCoord2(1, 1); GL.Vertex2(x + w, y + h);
-			GL.TexCoord2(1, 0); GL.Vertex2(x, y + h);
+			GL.Color4(Color.White.ToOpenGLColor());
+			{
+				GL.TexCoord2(u1, 0);
+				GL.Vertex2(x, y);
+				GL.TexCoord2(u2, 0);
+				GL.Vertex2(x + w, y);
+				GL.TexCoord2(u2, 1);
+				GL.Vertex2(x + w, y + h);
+				GL.TexCoord2(u1, 1);
+				GL.Vertex2(x, y + h);
+			}
 			GL.End();
 
 			GL.Disable(EnableCap.Texture2D);
 		}
 
-		public void DrawTexture(double x, double y, Texture texture)
+		public void DrawImage(double x, double y, Image image)
 		{
-			GL.BindTexture(TextureTarget.Texture2D, texture.Id);
-			GL.Enable(EnableCap.Texture2D);
+			double w = image.Sprite.Width, h = image.Sprite.Height;
+			double u1 = image.Index / (double)image.Count, u2 = (image.Index + 1) / (double)image.Count;
 
+			GL.Enable(EnableCap.Texture2D);
+			GL.BindTexture(TextureTarget.Texture2D, image.CurrentTexture.Id);
+
+			GL.Translate(x, y, 0);
+			GL.Rotate(image.Transform.Rotation.Degrees, 0, 0, 1);
+			GL.Scale(image.Transform.XScale, image.Transform.YScale, 1.0);
+			GL.Translate(-image.Sprite.XOrigin, -image.Sprite.YOrigin, 0);
+		
 			GL.Begin(PrimitiveType.Quads);
 			GL.Color4(Color.White.ToOpenGLColor());
 			{
-				GL.TexCoord2(0, 0);
-				GL.Vertex2(x, y);
-				GL.TexCoord2(1, 0);
-				GL.Vertex2(x + texture.Width, y);
-				GL.TexCoord2(1, 1);
-				GL.Vertex2(x + texture.Width, y + texture.Height);
-				GL.TexCoord2(0, 1);
-				GL.Vertex2(x, y + texture.Height);
+				GL.TexCoord2(u1, 0);
+				GL.Vertex2(0, 0);
+				GL.TexCoord2(u2, 0);
+				GL.Vertex2(w, 0);
+				GL.TexCoord2(u2, 1);
+				GL.Vertex2(w, h);
+				GL.TexCoord2(u1, 1);
+				GL.Vertex2(0, h);
 			}
 			GL.End();
+
 			GL.Disable(EnableCap.Texture2D);
+			//GL.Translate(x, y, 0);
+			GL.LoadIdentity();
 		}
 
 		public void DrawCircle(Color color, double x, double y, double radius)

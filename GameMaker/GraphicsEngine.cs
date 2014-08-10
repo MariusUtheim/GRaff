@@ -25,7 +25,7 @@ namespace GameMaker
 				{
 					if (gameStart != null)
 						gameStart();
-//					game.VSync = VSyncMode.On;
+					game.VSync = VSyncMode.On;
 				};
 
 				game.Resize += (sender, e) => { GL.Viewport(0, 0, game.Width, game.Height); };
@@ -54,7 +54,7 @@ namespace GameMaker
 					Refresh();
 				};
 
-				game.Run(30);
+				game.Run(30, 30);
 			}
 		}
 

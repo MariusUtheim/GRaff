@@ -84,19 +84,19 @@ namespace GameMaker
 			CurrentSurface.DrawLine(col1, col2, p1.X, p1.Y, p2.X, p2.Y);
 		}
 
-		public static void Image(double x, double y, Transform transform, Image image)
+		public static void Image(double x, double y, Image image)
 		{
-			CurrentSurface.DrawImage(x, y, transform, image);
+			CurrentSurface.DrawImage(x, y, image);
 		}
 
 		public static void Sprite(Point location, Sprite sprite, int imageIndex)
 		{
-			CurrentSurface.DrawTexture(location.X - sprite.XOrigin, location.Y - sprite.YOrigin, sprite.GetTexture(imageIndex));
+			CurrentSurface.DrawSprite(location.X, location.Y, sprite, imageIndex);
 		}
 
 		public static void Sprite(double x, double y, Sprite sprite, int imageIndex)
 		{
-			CurrentSurface.DrawTexture(x - sprite.XOrigin, y - sprite.YOrigin, sprite.GetTexture(imageIndex));
+			CurrentSurface.DrawSprite(x, y , sprite, imageIndex);
 		}
 	}
 }

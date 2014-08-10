@@ -82,8 +82,8 @@ namespace GameMaker
 
 			timeLeft -= Environment.TickCount;
 			LoopCount++;
-			if (timeLeft > 0)
-				Thread.Sleep(timeLeft);
+//			if (timeLeft > 0)
+//				Thread.Sleep(timeLeft);
 
 			_updateFps();
 		}

@@ -11,7 +11,7 @@ namespace DrawingTests
 	{
 		static Sprites()
 		{
-			Xujia = new Sprite("Assets/xujia.jpg");
+			Xujia = new Sprite("Assets/xujia.jpg", 1, OriginMode.Center, true);
 		}
 
 		public static Sprite Xujia { get; private set; }
