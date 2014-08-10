@@ -89,7 +89,14 @@ namespace GameMaker
 
 		public void DrawCircle(Color color, double x, double y, double radius)
 		{
+			double c = GMath.Tau * radius;
+			double dt = 2 / c;
+
+#warning TODO: Optimize
 			GL.Begin(PrimitiveType.LineLoop);
+			for (double t = 0; t < GMath.Tau; t += dt)
+				GL.Vertex2(x + radius * GMath.Cos(t), y + radius * GMath.Sin(t));
+			GL.End();
 		}
 
 		public void FillCircle(Color color, Point location, double radius)
