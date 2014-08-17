@@ -13,19 +13,15 @@ namespace GameMaker
 		{
 			Width = width;
 			Height = height;
-			Views = new[] { new View(new IntRectangle(0, 0, width, height), new IntRectangle(0, 0, width, height)) };
 			this.RoomStart = roomStart;
-			this.Speed = 60;
+			this._speed = 30;
 		}
 
 		private static Room _current;
 		public static Room Current
 		{
 			get { return _current; }
-			private set
-			{
-				_current = value;
-			}
+			private set { _current = value; }
 		}
 
 		public Action RoomStart { get; private set; }
@@ -36,19 +32,23 @@ namespace GameMaker
 				instance.Destroy();
 			Current = this;
 			Draw.CurrentSurface = new Surface(Width, Height);
+			View.RoomView = new IntRectangle(0, 0, Width, Height);
 			if (RoomStart != null)
 				this.RoomStart();
+			this.Speed = this._speed;
 		}
 
-		public void Redraw(Surface surface)
+		private int _speed;
+		public int Speed
 		{
-//			this._surface = GraphicsEngine.Current.CreateSurface(Width, Height);
-//			Draw.CurrentSurface = Draw.RoomSurface = this._surface;
-//			Draw.DefaultSurface = surface;
-			throw new NotImplementedException();
+			get { return _speed; }
+			set
+			{
+				_speed = value;
+				Game.Window.TargetRenderFrequency = _speed;
+				Game.Window.TargetUpdateFrequency = _speed;
+			}
 		}
-
-		public int Speed { get; set; }
 
 		public Point Center { get { return new Point(Width / 2, Height / 2); } }
 
@@ -59,7 +59,5 @@ namespace GameMaker
 			get { return new IntVector(Width, Height); }
 			set { Width = value.X; Height = value.Y; }
 		}
-
-		public View[] Views { get; private set; }
 	}
 }

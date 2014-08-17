@@ -19,7 +19,6 @@ namespace DrawingTests
 			GlobalEvent.ExitOnEscape();
 
 			Instance<Drawer>.Create();
-			Instance<Block>.Create(400, 400);
 
 			Window.Title = "Hello, world!";
 		}

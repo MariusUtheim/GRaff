@@ -59,7 +59,6 @@
     <Compile Include="Color.Definitions.cs" />
     <Compile Include="Color.cs" />
     <Compile Include="Complex.cs" />
-    <Compile Include="Controller.cs" />
     <Compile Include="DraggableObject.cs" />
     <Compile Include="Draw.cs" />
     <Compile Include="Fill.cs" />
@@ -68,7 +67,6 @@
     <Compile Include="GMath.FromSystemMath.cs" />
     <Compile Include="GMath.cs" />
     <Compile Include="GRandom.cs" />
-    <Compile Include="GraphicsEngine.cs" />
     <Compile Include="IAnimationEndListener.cs" />
     <Compile Include="Image.cs" />
     <Compile Include="IMouseListener.cs" />
@@ -104,6 +102,7 @@
     <Compile Include="Surface.cs" />
     <Compile Include="Texture.cs" />
     <Compile Include="ImageTransform.cs" />
+    <Compile Include="Time.cs" />
     <Compile Include="Transform.cs" />
     <Compile Include="Vector.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

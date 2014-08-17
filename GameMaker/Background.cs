@@ -36,11 +36,12 @@ namespace GameMaker
 			set { HSpeed = value.X; VSpeed = value.Y; }
 		}
 
-		public static void Redraw(Surface surface)
+		public static void Redraw()
 		{
-			surface.Clear(Color);
+			Draw.Clear(Color);
 			if (Image != null)
 			{
+				throw new NotImplementedException();
 				if (Tiled)
 				{
 					int x0 = (int)(XOffset % Image.Width) - Image.Width,

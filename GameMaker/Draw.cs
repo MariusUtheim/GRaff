@@ -21,7 +21,7 @@ namespace GameMaker
 
 		public static void Point(Color color, double x, double y)
 		{
-			CurrentSurface.SetPixel(x, y, color);
+			CurrentSurface.SetPixel(color, x, y);
 		}
 		public static void Point(Color color, Point p)
 		{
@@ -36,7 +36,6 @@ namespace GameMaker
 		{
 			CurrentSurface.DrawCircle(color, location.X, location.Y, radius);
 		}
-
 
 		public static void Rectangle(Color color, double x, double y, double width, double height)
 		{
@@ -93,5 +92,6 @@ namespace GameMaker
 		{
 			CurrentSurface.DrawSprite(x, y , sprite, imageIndex);
 		}
+
 	}
 }

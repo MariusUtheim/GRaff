@@ -50,10 +50,10 @@ namespace GameMaker
 			return new Color(a / colors.Length, r / colors.Length, g / colors.Length, b / colors.Length);
 		}
 
-		public int A { get { return _a; } }
-		public int R { get { return _r; } }
-		public int G { get { return _g; } }
-		public int B { get { return _b; } }
+		public byte A { get { return _a; } }
+		public byte R { get { return _r; } }
+		public byte G { get { return _g; } }
+		public byte B { get { return _b; } }
 
 		public int Argb
 		{

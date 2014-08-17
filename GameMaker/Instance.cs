@@ -9,7 +9,6 @@ namespace GameMaker
     public static class Instance
     {
 		internal static InstanceList _objects = new InstanceList();
-		internal static MutableList<Controller> _controllers = new MutableList<Controller>();
 
 		internal static void Sort()
 		{
@@ -21,19 +20,9 @@ namespace GameMaker
 			_objects.Add(instance);
 		}
 
-		internal static void Add(Controller controller)
-		{
-			_controllers.Add(controller);
-		}
-
 		internal static void Remove(GameObject instance)
 		{
 			_objects.Remove(instance);
-		}
-
-		internal static void Remove(Controller controller)
-		{
-			_controllers.Remove(controller);
 		}
 
 		public static IEnumerable<GameObject> Noone { get { yield break; } }

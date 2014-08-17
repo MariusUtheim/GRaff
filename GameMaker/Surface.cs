@@ -10,6 +10,7 @@ namespace GameMaker
 	public class Surface
 	{
 		private int _id;
+		private readonly OpenTK.Graphics.Color4 GLWhite = Color.White.ToOpenGLColor();
 
 		public Surface(int width, int height)
 		{
@@ -23,9 +24,12 @@ namespace GameMaker
 			return c;
 		}
 
-		public void SetPixel(double x, double y, Color color)
+		public void SetPixel(Color color, double x, double y)
 		{
-			throw new NotImplementedException();
+			GL.Begin(PrimitiveType.Points);
+			GL.Color4(color.ToOpenGLColor());
+			GL.Vertex2(x, y);
+			GL.End();
 		}
 
 		public void DrawSprite(double x, double y, Sprite sprite, int subimage)
@@ -39,7 +43,7 @@ namespace GameMaker
 			GL.BindTexture(TextureTarget.Texture2D, sprite.GetTexture(subimage).Id);
 
 			GL.Begin(PrimitiveType.Quads);
-			GL.Color4(Color.White.ToOpenGLColor());
+			GL.Color4(GLWhite);
 			{
 				GL.TexCoord2(u1, 0);
 				GL.Vertex2(x, y);
@@ -69,7 +73,7 @@ namespace GameMaker
 			GL.Translate(-image.Sprite.XOrigin, -image.Sprite.YOrigin, 0);
 		
 			GL.Begin(PrimitiveType.Quads);
-			GL.Color4(Color.White.ToOpenGLColor());
+			GL.Color4(GLWhite);
 			{
 				GL.TexCoord2(u1, 0);
 				GL.Vertex2(0, 0);
@@ -85,33 +89,73 @@ namespace GameMaker
 			GL.Disable(EnableCap.Texture2D);
 			//GL.Translate(x, y, 0);
 			GL.LoadIdentity();
+			// Is this really necessary?
+			GL.Ortho(View.RoomView.Left, View.RoomView.Right, View.RoomView.Bottom, View.RoomView.Top, 0, 1.0);
 		}
 
 		public void DrawCircle(Color color, double x, double y, double radius)
 		{
-			double c = GMath.Tau * radius;
-			double dt = 2 / c;
+			double dt = 2 * GMath.Tau / radius;
 
 #warning TODO: Optimize
 			GL.Begin(PrimitiveType.LineLoop);
+			GL.Color4(color.ToOpenGLColor());
 			for (double t = 0; t < GMath.Tau; t += dt)
 				GL.Vertex2(x + radius * GMath.Cos(t), y + radius * GMath.Sin(t));
 			GL.End();
 		}
 
-		public void FillCircle(Color color, Point location, double radius)
+		public void FillCircle(Color color, double x, double y, double radius)
 		{
-			throw new NotImplementedException();
+			double c = GMath.Tau * radius;
+			double dt = 1 / GMath.Tau;
+
+#warning TODO: Optimize
+			GL.Begin(PrimitiveType.TriangleFan);
+			GL.Color4(color.ToOpenGLColor());
+			for (double t = 0; t < GMath.Tau; t += dt)
+				GL.Vertex2(x + radius * GMath.Cos(t), y + radius * GMath.Sin(t));
+
+			GL.End();
+		}
+
+		public void FillCircle(Color col1, Color col2, double x, double y, double radius)
+		{
+			double dt = 2 * GMath.Tau / radius;
+
+#warning TODO: Optimize
+			GL.Begin(PrimitiveType.TriangleFan);
+			GL.Color4(col1.ToOpenGLColor());
+			GL.Vertex2(x, y);
+			GL.Color4(col2.ToOpenGLColor());
+			for (double t = 0; t <= GMath.Tau; t += dt)
+				GL.Vertex2(x + radius * GMath.Cos(t), y - radius * GMath.Sin(t));
+			GL.End();
+		}
+
+		public void FillCircle(Color col1, Color col2, double x, double y, double radius, double cx, double cy)
+		{
+			double dt = 2 * GMath.Tau / radius;
+
+#warning TODO: Optimize
+			GL.Begin(PrimitiveType.TriangleFan);
+			GL.Color4(col1.ToOpenGLColor());
+			GL.Vertex2(cx, cy);
+			GL.Color4(col2.ToOpenGLColor());
+			for (double t = 0; t <= GMath.Tau; t += dt)
+				GL.Vertex2(x + radius * GMath.Cos(t), y - radius * GMath.Sin(t));
+			GL.End();
+			
 		}
 
 		public void DrawRectangle(Color color, double x, double y, double width, double height)
 		{
 			GL.Begin(PrimitiveType.LineLoop);
 			GL.Color4(color.ToOpenGLColor());
-			GL.Vertex2((int)x, (int)y);
-			GL.Vertex2((int)(x + width), (int)y);
-			GL.Vertex2((int)(x + width), (int)(y + height));
-			GL.Vertex2((int)x, (int)(y + height));
+			GL.Vertex2(x, y);
+			GL.Vertex2(x + width, y);
+			GL.Vertex2(x + width, y + height);
+			GL.Vertex2(x, y + height);
 			GL.End();
 		}
 

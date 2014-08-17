@@ -6,50 +6,26 @@ using System.Threading.Tasks;
 
 namespace GameMaker
 {
-	public class View
+	public static class View
 	{
-		public View(int width, int height)
+		public static IntRectangle RoomView
 		{
-			_roomView = new IntRectangle(0, 0, width, height);
-			_port = new IntRectangle(0, 0, width, height);
+			get;
+			set;
 		}
 
-		public View(IntRectangle roomView, IntRectangle port)
+		public static IntRectangle ViewPort
 		{
-			this._roomView = roomView;
-			this._port = port;
+			get;
+			set;
 		}
 
-		private IntRectangle _roomView;
-		public IntRectangle RoomView
-		{
-			get { return _roomView; }
-			set { _roomView = value; }
-		}
 
-		public IntVector Location
-		{
-			get { return _roomView.Location; }
-			set { _roomView.Location = value; }
-		}
-
-		public IntVector Size
-		{
-			get { return _roomView.Size; }
-			set { _roomView.Size = value; }
-		}
-
-		public IntVector Center
-		{
-			get { return _roomView.Location + _roomView.Size / 2; }
-			set { _roomView.Location = value - _roomView.Size / 2; }
-		}
-
-		public IntRectangle ActualRoomView
+		public static IntRectangle ActualView
 		{
 			get
 			{
-				IntRectangle actualRoomView = _roomView;
+				IntRectangle actualRoomView = RoomView;
 
 				if (actualRoomView.Width > Room.Current.Width)
 				{
@@ -71,16 +47,5 @@ namespace GameMaker
 			}
 		}
 
-		private IntRectangle _port;
-		public IntRectangle Port
-		{
-			get { return _port; }
-			set { _port = value; }
-		}
-
-		internal void Redraw()
-		{
-			throw new NotImplementedException();//Draw.CurrentSurface.Blit(Draw.DefaultSurface, this.ActualRoomView, this.Port);
-		}
 	}
 }

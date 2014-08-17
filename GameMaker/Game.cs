@@ -5,11 +5,15 @@ using System.Reflection;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using OpenTK;
+using OpenTK.Graphics.OpenGL;
 
 namespace GameMaker
 {
 	public static class Game
 	{
+		internal static GameWindow Window { get; set; }
+
 #warning Remove this one - should specify initial room (or do something really clever)
 		public static void Run(Action gameStart = null)
 		{
@@ -21,35 +25,51 @@ namespace GameMaker
 			Run(initialRoom, null);
 		}
 
+		[STAThread]
 		public static void Run(Room initialRoom, Action gameStart)
 		{
-			GraphicsEngine.Current = new GraphicsEngine();
-			initialRoom.Enter();
-			GraphicsEngine.Current.Run(gameStart);
-		}
+			Window = new GameWindow(initialRoom.Width, initialRoom.Height);
 
-		public static void Run(GraphicsEngine engine, Room initialRoom, Action gameStart)
-		{
-			GraphicsEngine.Current = engine;
-			initialRoom.Enter();
-			engine.Run(gameStart);
-		}
+			Window.CursorVisible = false;
+			Window.UpdateFrame += (sender, e) => {
+				Game.Loop();
+			};
 
-		public static int LoopCount { get; private set; }
-		private static int _startTime;
-		public static int GameTime
-		{
-			get { return Environment.TickCount - _startTime; }
+			Window.KeyDown += (sender, e) => { Keyboard.Press((Key)e.Key); };
+			Window.KeyUp += (sender, e) => { Keyboard.Release((Key)e.Key); };
+			Window.Mouse.Move += (sender, e) => { Mouse.X = e.X; Mouse.Y = e.Y; };
+			Window.Mouse.ButtonDown += (sender, e) => { Mouse.Press((MouseButton)e.Button); };
+			Window.Mouse.ButtonUp += (sender, e) => { Mouse.Release((MouseButton)e.Button); };
+
+			Window.RenderFrame += (sender, e) => {
+
+				GL.Clear(ClearBufferMask.ColorBufferBit);
+				GL.LoadIdentity();
+
+				IntRectangle rect = View.ActualView;
+				GL.Ortho(rect.Left, rect.Right, rect.Bottom, rect.Top, 0.0, 1.0);
+
+				Game.Redraw();
+				Window.SwapBuffers();
+			};
+
+			Window.Load += (sender, e) => {
+				initialRoom.Enter();
+				if (gameStart != null)
+					gameStart();
+				//	Window.VSync = VSyncMode.On;
+			};
+
+			Window.Run(60, 60);
 		}
 
 		public static void Quit()
 		{
-			GraphicsEngine.Current.Quit();
+			Window.Exit();
 		}
 
 		public static void Loop()
 		{
-			int timeLeft = 1000 / Room.Current.Speed + Environment.TickCount;
 			// Begin step
 			// Alarm events
 			// Keyboard, key press, key release
@@ -59,8 +79,7 @@ namespace GameMaker
 			// Collision events
 			// End step
 			// Draw events
-			foreach (var controller in Instance._controllers)
-				controller.OnBeginStep();
+
 			foreach (var instance in Instance._objects)
 				instance.OnBeginStep();
 
@@ -76,16 +95,6 @@ namespace GameMaker
 
 			foreach (var instance in Instance._objects)
 				instance.OnEndStep();
-			foreach (var controller in Instance._controllers)
-				controller.OnEndStep();
-
-
-			timeLeft -= Environment.TickCount;
-			LoopCount++;
-//			if (timeLeft > 0)
-//				Thread.Sleep(timeLeft);
-
-			_updateFps();
 		}
 
 		private static void _detectCollisions()
@@ -163,24 +172,16 @@ namespace GameMaker
 
 		public static void Redraw()
 		{
-			Redraw(Draw.CurrentSurface);
-		}
-
-		public static void Redraw(Surface surface)
-		{
-			Draw.CurrentSurface = surface;
-			Background.Redraw(surface);
+			Background.Redraw();
 
 			GlobalEvent.OnDrawBackground();
 
-			foreach (var controller in Instance._controllers)
-				controller.OnBeginDraw();
 			foreach (var instance in Instance._objects)
 				instance.OnDraw();
-			foreach (var controller in Instance._controllers)
-				controller.OnEndDraw();
 
 			GlobalEvent.OnDrawForeground();
+			Time.Frame();
+
 		}
 
 		public static void Sleep(int milliseconds)
@@ -188,37 +189,5 @@ namespace GameMaker
 			Thread.Sleep(milliseconds);
 		}
 
-
-		private static int _fps = 0;
-		private static double _fpsSeconds = 0;
-		private static int _previousTick;
-		private static void _updateFps()
-		{
-			int tick = Environment.TickCount;
-			if (tick - _previousTick > 1000)
-			{
-				FPS = 0;
-				_fpsSeconds = 0;
-			}
-			else
-			{
-				_fps++;
-				_fpsSeconds += (tick - _previousTick) / 1000.0;
-				if (_fpsSeconds > 1)
-				{
-					FPS = _fps;
-					_fps = 0;
-					_fpsSeconds %= 1;
-				}
-			}
-
-			_previousTick = tick;
-		}
-
-		public static int FPS
-		{
-			get;
-			private set;
-		}
 	}
 }
