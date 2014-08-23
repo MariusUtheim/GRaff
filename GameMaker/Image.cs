@@ -29,7 +29,7 @@ namespace GameMaker
 		public double Alpha
 		{
 			get { return Blend.A / 255.0; }
-			set { Blend = new Color((int)(value * 255), Blend); }
+			set { Blend = Blend.Transparent(value); }
 		}
 
 		private double _index;

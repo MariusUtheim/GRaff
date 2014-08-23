@@ -32,9 +32,6 @@ namespace GameMaker
 			: this(rgba >> 24, (rgba >> 16) & 0xFF,(rgba >> 8) & 0xFF, rgba & 0xFF
 			) { }
 
-		public Color(int alpha, Color baseColor)
-			: this(baseColor.R, baseColor.G, baseColor.B, alpha) { }
-		
 		public static Color Merge(params Color[] colors)
 		{
 			int a = 0, r = 0, g = 0, b = 0;
@@ -64,6 +61,16 @@ namespace GameMaker
 					 | G << 8
 					 | B;
 			}
+		}
+
+		public Color Transparent(int alphaChannel)
+		{
+			return new Color(_r, _g, _b, (byte)alphaChannel);
+		}
+
+		public Color Transparent(double opacity)
+		{
+			return new Color(_r, _g, _b, (byte)(255 * GMath.Median(0.0, opacity, 1.0)));
 		}
 
 		public bool Equals(Color color)

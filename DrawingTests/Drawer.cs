@@ -24,8 +24,8 @@ namespace DrawingTests
 
 		public override void OnStep()
 		{
+			
 			Transform.Rotation += Angle.Deg(1);
-			Window.Title = Time.LoopCount.ToString();// (15.0 * GMath.Sin(Time.LoopCount / 15)).ToString();
 		}
 
 		public override void OnDraw()

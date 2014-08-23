@@ -60,7 +60,7 @@ namespace GameMaker
 				//	Window.VSync = VSyncMode.On;
 			};
 
-			Window.Run(60, 60);
+			Window.Run(initialRoom.Speed, initialRoom.Speed);
 		}
 
 		public static void Quit()
