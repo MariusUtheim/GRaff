@@ -46,8 +46,8 @@ namespace GameMaker
 				{
 					int x0 = (int)(XOffset % Image.Width) - Image.Width,
 						y0 = (int)(YOffset % Image.Height) - Image.Height;
-					for (int x = x0; x < Room.Current.Width; x += Image.Width)
-						for (int y = y0; y < Room.Current.Height; y += Image.Height)
+					for (int x = x0; x < Room.Width; x += Image.Width)
+						for (int y = y0; y < Room.Height; y += Image.Height)
 							Draw.Sprite(x, y, Image, 0);
 					Offset += Velocity;
 				}

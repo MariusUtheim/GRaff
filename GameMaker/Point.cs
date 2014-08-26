@@ -26,6 +26,12 @@ namespace GameMaker
 			return String.Format("({0}, {1})", X, Y);
 		}
 
+
+		public static Point operator +(Point p1, Point p2)
+		{
+			return new Point(p1.X + p2.X, p1.Y + p2.Y);
+		}
+
 		public static Point operator +(Point p, Vector v)
 		{
 			return new Point(p.X + v.X, p.Y + v.Y);
@@ -49,6 +55,16 @@ namespace GameMaker
 		public static Vector operator -(Point p1, Point p2)
 		{
 			return new Vector(p1.X - p2.X, p1.Y - p2.Y);
+		}
+
+		public static Point operator *(Point p, double scalar)
+		{
+			return new Point(p.X * scalar, p.Y * scalar);
+		}
+
+		public static Point operator /(Point p, double scalar)
+		{
+			return new Point(p.X / scalar, p.Y / scalar);
 		}
 
 		public static bool operator ==(Point p1, Point p2)

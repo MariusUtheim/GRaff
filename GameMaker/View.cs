@@ -8,11 +8,25 @@ namespace GameMaker
 {
 	public static class View
 	{
-		public static IntRectangle RoomView
+
+		public static double X { get; set; }
+		public static double Y { get; set; }
+		public static double Width { get; set; }
+		public static double Height { get; set; }
+
+		public static Rectangle RoomView
 		{
-			get;
-			set;
+			get { return new Rectangle(X, Y, Width, Height); }
+			set
+			{
+				X = value.Left;
+				Y = value.Top;
+				Width = value.Width;
+				Height = value.Height;
+			}
 		}
+
+
 
 		public static IntRectangle ViewPort
 		{
@@ -21,27 +35,27 @@ namespace GameMaker
 		}
 
 
-		public static IntRectangle ActualView
+		public static Rectangle ActualView
 		{
 			get
 			{
-				IntRectangle actualRoomView = RoomView;
+				Rectangle actualRoomView = RoomView;
 
-				if (actualRoomView.Width > Room.Current.Width)
+				if (actualRoomView.Width > Room.Width)
 				{
 					actualRoomView.Left = 0;
-					actualRoomView.Width = Room.Current.Width;
+					actualRoomView.Width = Room.Width;
 				}
 				else
-					actualRoomView.Left = GMath.Median(0, actualRoomView.Left, Room.Current.Width - actualRoomView.Width);
+					actualRoomView.Left = GMath.Median(0, actualRoomView.Left, Room.Width - actualRoomView.Width);
 
-				if (actualRoomView.Height > Room.Current.Height)
+				if (actualRoomView.Height > Room.Height)
 				{
 					actualRoomView.Top = 0;
-					actualRoomView.Height = Room.Current.Height;
+					actualRoomView.Height = Room.Height;
 				}
 				else
-					actualRoomView.Top = GMath.Median(0, actualRoomView.Top, Room.Current.Height - actualRoomView.Height);
+					actualRoomView.Top = GMath.Median(0, actualRoomView.Top, Room.Height - actualRoomView.Height);
 
 				return actualRoomView;
 			}

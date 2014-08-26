@@ -13,7 +13,7 @@ namespace DrawingTests
 
 		public Drawer()
 		{
-			Mask.Shape = MaskShape.Diamond(-25, -25, 50, 50);
+			Mask.Diamond(-25, -25, 50, 50);
 			X = 300;
 			Y = 400;
 			Depth = -1;

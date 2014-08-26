@@ -19,10 +19,10 @@ namespace GameMaker.UnitTesting
 			Rectangle rect = new Rectangle(new Point(0, 0), sz);
 
 			TestObject obj1 = new TestObject();
-			obj1.Mask.Shape = MaskShape.Rectangle(10, 10, 20, 20);
-
+			obj1.Mask.Rectangle(10, 10, 20, 20);
+			
 			TestObject obj2 = new TestObject();
-			obj2.Mask.Shape = MaskShape.Rectangle(20, 20, 20, 20);
+			obj2.Mask.Rectangle(20, 20, 20, 20);
 
 			Assert.IsTrue(obj1.Intersects(obj2));
 		}
@@ -32,8 +32,8 @@ namespace GameMaker.UnitTesting
 		{
 			TestObject obj1 = new TestObject(), obj2 = new TestObject();
 
-			obj1.Mask.Shape = MaskShape.Rectangle(0, 0, 10, 10);
-			obj2.Mask.Shape = MaskShape.Rectangle(0, 0, 32, 16);
+			obj1.Mask.Rectangle(0, 0, 10, 10);
+			obj2.Mask.Rectangle(0, 0, 32, 16);
 
 			obj1.Location = new Point(0, 0);
 			obj2.Location = new Point(8, 8);
@@ -46,8 +46,8 @@ namespace GameMaker.UnitTesting
 		{
 			TestObject obj1 = new TestObject(), obj2 = new TestObject();
 
-			obj1.Mask.Shape = MaskShape.Rectangle(30, 30);
-			obj2.Mask.Shape = MaskShape.Rectangle(30, 20);
+			obj1.Mask.Rectangle(30, 30);
+			obj2.Mask.Rectangle(30, 20);
 
 			obj1.Location = new Point(1000, 1000);
 			obj2.Location = new Point(10, 10);

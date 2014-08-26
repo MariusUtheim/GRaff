@@ -40,9 +40,6 @@
     <Reference Include="OpenTK">
       <HintPath>..\..\..\..\OpenTK\1.1\Binaries\OpenTK\Release\OpenTK.dll</HintPath>
     </Reference>
-    <Reference Include="OpenTK.Compatibility">
-      <HintPath>..\..\..\..\OpenTK\1.1\Binaries\OpenTK\Release\OpenTK.Compatibility.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
@@ -79,7 +76,6 @@
     <Compile Include="IO\OggFile.cs" />
     <Compile Include="IO\SoundFile.cs" />
     <Compile Include="IO\WaveFile.cs" />
-    <Compile Include="MaskShape.cs" />
     <Compile Include="MutableList.cs" />
     <Compile Include="IntRectangle.cs" />
     <Compile Include="IntVector.cs" />

@@ -68,6 +68,11 @@ namespace GameMaker
 			return !(Left > other.Right || Top > other.Bottom || Right < other.Left || Bottom < other.Top);
 		}
 
+		public override string ToString()
+		{
+			return String.Format("{{Rectangle at {0} by {1}}}", Location, Size);
+		}
+
 		public static Rectangle operator +(Rectangle r, Vector v)
 		{
 			return new Rectangle(r.Location + v, r.Size);

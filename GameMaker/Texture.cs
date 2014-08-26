@@ -25,11 +25,10 @@ namespace GameMaker
 					System.Drawing.Imaging.PixelFormat.Format32bppArgb);
 
 				GL.BindTexture(TextureTarget.Texture2D, Id);
-				GL.TexEnv(TextureEnvTarget.TextureEnv, TextureEnvParameter.TextureEnvMode, (float)TextureEnvMode.Modulate);
-				GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (float)TextureMinFilter.LinearMipmapLinear);
-				GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (float)TextureMagFilter.Linear);
 
-				OpenTK.Graphics.Glu.Build2DMipmap(OpenTK.Graphics.TextureTarget.Texture2D, (int)PixelInternalFormat.Three, Width, Height, OpenTK.Graphics.PixelFormat.Bgra, OpenTK.Graphics.PixelType.UnsignedByte, textureData.Scan0);
+				GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, Width, Height, 0, OpenTK.Graphics.OpenGL.PixelFormat.Bgra, PixelType.UnsignedByte, textureData.Scan0);
+				GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Linear);
+				GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
 
 				bmp.UnlockBits(textureData);
 			}
@@ -37,6 +36,7 @@ namespace GameMaker
 			var err = GL.GetError();
 			if (err != ErrorCode.NoError)
 			{
+				throw new NotImplementedException();
 			}
 
 		}

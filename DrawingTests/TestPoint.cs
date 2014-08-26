@@ -14,7 +14,7 @@ namespace DrawingTests
 			: base(x, y)
 		{
 			Depth = -1;
-			Mask.Shape = MaskShape.Rectangle(1, 1);
+			Mask.Rectangle(1, 1);
 		}
 
 		public override void OnDraw()

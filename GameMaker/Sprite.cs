@@ -13,7 +13,7 @@ namespace GameMaker
 		private Texture _texture;
 		private IntVector _origin;
 
-		public Sprite(string filename, int subimages = 1, OriginMode originMode = GameMaker.OriginMode.Manual, bool preload = true)
+		public Sprite(string filename, int subimages = 1, OriginMode originMode = GameMaker.OriginMode.Center, bool preload = true)
 		{
 			this._subimages = subimages;
 			this._filename = filename;

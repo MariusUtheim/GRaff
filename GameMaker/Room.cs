@@ -8,20 +8,23 @@ namespace GameMaker
 {
 	public class Room
 	{
-		private Surface _surface;
+		private int _width, _height;
+
 		public Room(int width, int height, Action roomStart)
 		{
-			Width = width;
-			Height = height;
+			this._width = width;
+			this._height = height;
 			this.RoomStart = roomStart;
 			this._speed = 30;
 		}
 
 		private static Room _current;
-		public static Room Current
+
+		public static int Width { get { return _current._width; } }
+		public static int Height { get { return _current._height; } }
+		public static IntVector Size
 		{
-			get { return _current; }
-			private set { _current = value; }
+			get { return new IntVector(Width, Height); }
 		}
 
 		public Action RoomStart { get; private set; }
@@ -30,7 +33,7 @@ namespace GameMaker
 		{
 			foreach (var instance in Instance.All)
 				instance.Destroy();
-			Current = this;
+			_current = this;
 			Draw.CurrentSurface = new Surface(Width, Height);
 			View.RoomView = new IntRectangle(0, 0, Width, Height);
 			if (RoomStart != null)
@@ -52,12 +55,14 @@ namespace GameMaker
 
 		public Point Center { get { return new Point(Width / 2, Height / 2); } }
 
-		public int Width { get; private set; }
-		public int Height { get; private set; }
-		public IntVector Size
+		public int GetWidth()
 		{
-			get { return new IntVector(Width, Height); }
-			set { Width = value.X; Height = value.Y; }
+			return _width;
+		}
+
+		public int GetHeight()
+		{
+			return _height;
 		}
 	}
 }

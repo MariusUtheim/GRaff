@@ -28,11 +28,17 @@ namespace GameMaker
 		[STAThread]
 		public static void Run(Room initialRoom, Action gameStart)
 		{
-			Window = new GameWindow(initialRoom.Width, initialRoom.Height);
+			Window = new GameWindow(initialRoom.GetWidth(), initialRoom.GetHeight());
 
-			Window.CursorVisible = false;
 			Window.UpdateFrame += (sender, e) => {
-				Game.Loop();
+				try
+				{
+					Game.Loop();
+				}
+				catch (Exception err)
+				{
+					throw;
+				}
 			};
 
 			Window.KeyDown += (sender, e) => { Keyboard.Press((Key)e.Key); };
@@ -43,13 +49,20 @@ namespace GameMaker
 
 			Window.RenderFrame += (sender, e) => {
 
-				GL.Clear(ClearBufferMask.ColorBufferBit);
+				GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 				GL.LoadIdentity();
 
-				IntRectangle rect = View.ActualView;
+				Rectangle rect = View.ActualView;
 				GL.Ortho(rect.Left, rect.Right, rect.Bottom, rect.Top, 0.0, 1.0);
 
-				Game.Redraw();
+				try
+				{
+					Game.Redraw();
+				}
+				catch (Exception err)
+				{
+					throw;
+				}
 				Window.SwapBuffers();
 			};
 
@@ -60,6 +73,8 @@ namespace GameMaker
 				//	Window.VSync = VSyncMode.On;
 			};
 
+			GL.Enable(EnableCap.Blend);
+			GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
 			Window.Run(initialRoom.Speed, initialRoom.Speed);
 		}
 
