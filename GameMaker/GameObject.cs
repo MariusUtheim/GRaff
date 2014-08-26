@@ -58,10 +58,11 @@ namespace GameMaker
 			Instance.Remove(this);
 		}
 
+		private Sprite _sprite;
 		public Sprite Sprite
 		{
-			get;
-			set;
+			get { return _sprite; }
+			set { _sprite = value; Mask.Update(); }
 		}
 
 		public Transform Transform { get; private set; }
@@ -79,7 +80,9 @@ namespace GameMaker
 
 		public Rectangle BoundingBox
 		{
-			get { throw new NotImplementedException(); }
+			get { 
+#warning TODO: Check implementation
+				return Mask.BoundingBox; }
 		}
 
 		public virtual void OnBeginStep() { }

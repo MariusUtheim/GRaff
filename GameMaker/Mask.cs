@@ -9,13 +9,21 @@ namespace GameMaker
 	public sealed class Mask
 	{
 		private Point[] _pts;
-		private Image _target;
-		private bool _targetBased;
+		private GameObject _owner;
+		private Shape _shape;
+
+		private enum Shape
+		{
+			Custom, Rectangle, Diamond, Ellipse
+		}
+
+#warning TODO: Generate mask from sprite by default
 
 		internal Mask(GameObject owner)
 		{
-			_target = owner.Image;
-			_targetBased = true;
+			this._owner = owner;
+			this._pts = new Point[0];
+			this._shape = Shape.Rectangle;
 			Transform = owner.Transform;
 		}
 
@@ -25,9 +33,87 @@ namespace GameMaker
 			private set;
 		}
 
-		public MaskShape Shape
+		internal void Update()
 		{
-			set { this._pts = value._pts; }
+			if (_shape != Shape.Custom)
+			{
+				if (_owner.Image.Sprite == null)
+					_pts = new Point[0];
+				else
+				{
+#warning TODO: Make each sprite define its own mask?
+					Rectangle region = new Rectangle((Point)(-_owner.Image.Sprite.Origin), _owner.Image.Sprite.Size);
+					switch (_shape)
+					{
+						case Shape.Diamond: Diamond(region.Left, region.Top, region.Width, region.Height); break;
+						case Shape.Ellipse: Ellipse(region.Left, region.Top, region.Width, region.Height); break;
+						case Shape.Rectangle: Rectangle(region.Left, region.Top, region.Width, region.Height); break;
+					}
+				}
+			}
+		}
+
+		public void Rectangle(double x, double y, double width, double height)
+		{
+			_pts = new Point[] {
+				new Point(x, y),
+				new Point(x + width, y),
+				new Point(x + width, y + height),
+				new Point(x, y + height)
+			};
+		}
+
+		public void Rectangle(double width, double height)
+		{
+			Rectangle(-width / 2, -height / 2, width, height);
+		}
+
+		public void Rectangle(Rectangle rectangle)
+		{
+			Rectangle(rectangle.Left, rectangle.Top, rectangle.Width, rectangle.Height);
+		}
+
+		public void Diamond(double x, double y, double width, double height)
+		{
+			_pts = new Point[] {
+				new Point(x + width / 2, y),
+				new Point(x + width, y + height / 2),
+				new Point(x + width / 2, y + height),
+				new Point(x, y + height / 2)
+			};
+		}
+
+		public void Circle(double radius)
+		{
+			Circle(radius, (int)(1 + 2 * GMath.Sqrt(radius)));
+		}
+
+		public void Circle(double radius, int precision)
+		{
+			_pts = new Point[precision];
+			double dt = GMath.Tau / precision;
+			for (int i = 0; i < precision; i++)
+				_pts[i] = (Point)Vector.Polar(radius, Angle.Rad(dt * i));
+		}
+
+		public void Ellipse(double width, double height)
+		{
+			throw new NotImplementedException();
+		}
+
+		public void Ellipse(double x, double y, double width, double height)
+		{
+			throw new NotImplementedException();
+		}
+
+		public void Polygon(Point[] pts)
+		{
+			_pts = pts.Clone() as Point[];
+		}
+
+		public void None()
+		{
+			_pts = new Point[0];
 		}
 
 		public Rectangle BoundingBox
@@ -53,6 +139,7 @@ namespace GameMaker
 				return new Rectangle(left, top, right - left, bottom - top);
 			}
 		}
+
 		public bool ContainsPoint(Point pt)
 		{
 			/**

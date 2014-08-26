@@ -36,8 +36,14 @@ namespace GameMaker
 		public Point Point(double x, double y)
 		{
 			double tx, ty;
-			tx = x * XScale * GMath.Cos(Rotation.Radians) + X;
-			ty = y * YScale * GMath.Sin(Rotation.Radians) + Y;
+			double c = GMath.Cos(Rotation), s = GMath.Sin(Rotation);
+
+			x *= XScale;
+			y *= YScale;
+			tx = x * c - y * s + X;
+			ty = y * c + x * s + Y;
+		//	tx = x * XScale * c + y *  + X;
+		//	ty = y * YScale * GMath.Sin(Rotation.Radians) + Y;
 			return new Point(tx, ty);
 		}
 
