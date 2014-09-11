@@ -21,11 +21,7 @@ namespace GameMaker
 
 		public static implicit operator Vector(IntVector i) { return new Vector(i.X, i.Y); }
 
-		public static explicit operator IntVector(Vector v) { return new IntVector((int)v.X, (int)v.Y); }
-
-		public static explicit operator IntVector(Point p) { return new IntVector((int)p.X, (int)p.Y); }
-
-		public static explicit operator Point(IntVector v) { return new Point(v.X, v.Y); }
+		public static implicit operator Point(IntVector v) { return new Point(v.X, v.Y); }
 
 		public override string ToString()
 		{

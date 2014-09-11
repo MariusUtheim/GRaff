@@ -76,11 +76,14 @@ namespace GameMaker
 		{
 			CurrentSurface.DrawLine(col1, col2, p1.X, p1.Y, p2.X, p2.Y);
 		}
-#warning TODO: public static void Line(Color col1, Color col2, Line line)
-
-		public static void Image(double x, double y, Image image)
+		public static void Line(Color col1, Color col2, Line line)
 		{
-			CurrentSurface.DrawImage(x, y, image);
+			CurrentSurface.DrawLine(col1, col2, line.Origin.X, line.Origin.Y, line.Destination.X, line.Destination.Y);
+		}
+
+		public static void Image(Image image)
+		{
+			CurrentSurface.DrawImage(image);
 		}
 
 		public static void Sprite(Point location, Sprite sprite, int imageIndex)

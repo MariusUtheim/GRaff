@@ -53,17 +53,13 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="SoundTest.cs" />
     <Compile Include="MovingObjectTest.cs" />
     <Compile Include="SurfaceTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="CollisionTest.cs" />
+    <Compile Include="TransformTest.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\GameMaker.OpenAL\GameMaker.OpenAL.csproj">
-      <Project>{5e9da69c-fe1e-477f-b789-6e6759c90cba}</Project>
-      <Name>GameMaker.OpenAL</Name>
-    </ProjectReference>
     <ProjectReference Include="..\GameMaker\GameMaker.csproj">
       <Project>{9b4b4358-f24b-41b4-bf94-9013e205780b}</Project>
       <Name>GameMaker</Name>

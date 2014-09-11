@@ -10,12 +10,12 @@ namespace GameMaker
 	{
 		private int _width, _height;
 
-		public Room(int width, int height, Action roomStart)
+#warning TODO: Make a Room creation class or something
+		public Room(int width, int height, Action roomStart = null)
 		{
 			this._width = width;
 			this._height = height;
 			this.RoomStart = roomStart;
-			this._speed = 30;
 		}
 
 		private static Room _current;
@@ -38,19 +38,6 @@ namespace GameMaker
 			View.RoomView = new IntRectangle(0, 0, Width, Height);
 			if (RoomStart != null)
 				this.RoomStart();
-			this.Speed = this._speed;
-		}
-
-		private int _speed;
-		public int Speed
-		{
-			get { return _speed; }
-			set
-			{
-				_speed = value;
-				Game.Window.TargetRenderFrequency = _speed;
-				Game.Window.TargetUpdateFrequency = _speed;
-			}
 		}
 
 		public Point Center { get { return new Point(Width / 2, Height / 2); } }

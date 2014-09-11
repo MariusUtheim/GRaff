@@ -7,19 +7,14 @@ namespace GameMaker
 {
 	public abstract class GameObject
 	{
-		public GameObject()
+		public GameObject(double x, double y)
 		{
 			Instance.Add(this);
 			Transform = new Transform();
-			Image = new Image(this);
-			Mask = new Mask(this);
-		}
-
-		public GameObject(double x, double y)
-			: this()
-		{
 			X = x;
 			Y = y;
+			Image = new Image(this);
+			Mask = new Mask(this);
 		}
 
 		public GameObject(Point location)
@@ -97,12 +92,16 @@ namespace GameMaker
 		{
 			if (Image.Sprite != null)
 			{
-				Draw.Image(X, Y, Image);
+				Draw.Image(Image);
 				if (Image.Animate() && this is IAnimationEndListener)
 					(this as IAnimationEndListener).AnimationEnd();
-
-				Mask.DrawOutline(Color.Red);
 			}
+		}
+
+
+		public override string ToString()
+		{
+			return String.Format("{0} at {1}", GetType().Name, Location);
 		}
 	}
 }

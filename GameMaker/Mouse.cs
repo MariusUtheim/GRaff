@@ -37,14 +37,29 @@ namespace GameMaker
 			}
 		}
 	
-		public static double X { get; internal set; }
+		public static double X
+		{
+			get { return View.X + WindowX / View.HZoom; }
+		}
 
-		public static double Y { get; internal set; }
+		public static double Y
+		{
+			get { return View.Y + WindowY / View.VZoom; }
+		}
 
 		public static Point Location
 		{
 			get { return new Point(X, Y); }
-			set { X = value.X; Y = value.Y; }
+		}
+
+		public static int WindowX { get; internal set; }
+
+		public static int WindowY { get; internal set; }
+
+		public static IntVector WindowLocation
+		{
+			get { return new IntVector(WindowX, WindowY); }
+			set { WindowX = value.X; WindowY = value.Y; }
 		}
 
 		public static IEnumerable<MouseButton> Down

@@ -21,10 +21,11 @@ namespace GameMaker
 			get { return Environment.TickCount; }
 		}
 
-		internal static int startTime;
+		public static int StartTime { get; internal set; }
+
 		public static int GameTime
 		{
-			get { return MachineTime - startTime; }
+			get { return MachineTime - StartTime; }
 		}
 
 

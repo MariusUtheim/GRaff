@@ -26,14 +26,17 @@ namespace GameMaker
 			}
 		}
 
-
+		public static Point Center
+		{
+			get { return new Point(X + Width / 2, Y + Height / 2); }
+			set { X = value.X - Width / 2; Y = value.Y - Height / 2; }
+		}
 
 		public static IntRectangle ViewPort
 		{
 			get;
 			set;
 		}
-
 
 		public static Rectangle ActualView
 		{
@@ -61,5 +64,14 @@ namespace GameMaker
 			}
 		}
 
+		public static double HZoom
+		{
+			get { return ActualView.Width / (double)Room.Width; }
+		}
+
+		public static double VZoom
+		{
+			get { return ActualView.Height / (double)Room.Height; }
+		}
 	}
 }

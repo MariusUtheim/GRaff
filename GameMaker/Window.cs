@@ -12,19 +12,29 @@ namespace GameMaker
 		public static int Width
 		{
 			get { return Game.Window.Width; }
-			set { Game.Window.Width = value; }
+			set
+			{
+				if (value <= 0)
+					throw new ArgumentOutOfRangeException("Value must be greater than 0");
+				Game.Window.Width = value; 
+			}
 		}
 
 		public static int Height
 		{
 			get { return Game.Window.Height; }
-			set { Game.Window.Height = value; }
+			set
+			{
+				if (value <= 0)
+					throw new ArgumentOutOfRangeException("Value must be greater than 0");
+				Game.Window.Height = value;
+			}
 		}
 
 		public static IntVector Size
 		{
 			get { return new IntVector(Width, Height); }
-			set { Game.Window.Width = value.X; Game.Window.Height = value.Y; }
+			set { Width = value.X; Height = value.Y; }
 		}
 
 		public static bool IsBorderVisible

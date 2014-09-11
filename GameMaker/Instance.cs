@@ -48,59 +48,6 @@ namespace GameMaker
 
 	public static class Instance<T> where T : GameObject
 	{
-		public static T Create()
-		{
-			return Activator.CreateInstance<T>();
-		}
-
-		public static T Create(double x, double y)
-		{
-			var constructors = typeof(T).GetConstructors();
-			foreach (var constructor in constructors)
-			{
-				if (constructor.GetParameters().Length == 2
-				 && constructor.GetParameters()[0].ParameterType == typeof(Double)
-				 && constructor.GetParameters()[1].ParameterType == typeof(Double))
-					return constructor.Invoke(new object[] { x, y }) as T;
-			}
-
-			foreach (var constructor in constructors)
-			{
-				if (constructor.GetParameters().Length == 1
-				 && constructor.GetParameters()[0].ParameterType == typeof(Point))
-					return constructor.Invoke(new object[] { new Point(x, y) }) as T;
-			}
-
-			var newInstance = Activator.CreateInstance<T>();
-			newInstance.X = x;
-			newInstance.Y = y;
-			return newInstance;
-		}
-
-		public static T Create(Point location)
-		{
-			var constructors = typeof(T).GetConstructors();
-
-			foreach (var constructor in constructors)
-			{
-				if (constructor.GetParameters().Length == 1
-				 && constructor.GetParameters()[0].ParameterType == typeof(Point))
-					return constructor.Invoke(new object[] { location }) as T;
-			}
-
-			foreach (var constructor in constructors)
-			{
-				if (constructor.GetParameters().Length == 2
-				 && constructor.GetParameters()[0].ParameterType == typeof(Double)
-				 && constructor.GetParameters()[1].ParameterType == typeof(Double))
-					return constructor.Invoke(new object[] { location.X, location.Y }) as T;
-			}
-
-			var newInstance = Activator.CreateInstance<T>();
-			newInstance.Location = location;
-			return newInstance;
-		}
-
 		public static IEnumerable<T> All
 		{
 			get { return Instance._objects.OfType<T>(); }
@@ -112,14 +59,14 @@ namespace GameMaker
 				action(obj);
 		}
 
-		public static IEnumerable<T> Inside(Rectangle rectangle)
-		{
-			return All.Where(i => i.BoundingBox.Intersects(rectangle));
-		}
-
 		public static T First
 		{
 			get { return All.First(); }
+		}
+
+		public static T Single
+		{
+			get { return All.Single(); }
 		}
 
 		public static IEnumerable<T> Where(Func<T, bool> predicate)

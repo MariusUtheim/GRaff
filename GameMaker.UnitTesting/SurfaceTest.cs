@@ -35,7 +35,7 @@ namespace GameMaker.UnitTesting
 		public void SetPoint()
 		{
 			var target = _CreateSurface(3, 3);
-			target.SetPixel(1, 1, Color.White);
+			target.SetPixel(Color.White, 1, 1);
 			int[,] expectedMask = new[,] {
 				{ 0, 0, 0 },
 				{ 0, 1, 0 },
@@ -110,8 +110,8 @@ namespace GameMaker.UnitTesting
 		public void FillCircle()
 		{
 			var target = _CreateSurface(7, 7);
-			target.FillCircle(Color.White, new Point(3, 3), 3);
-
+			target.FillCircle(Color.White, 3, 3, 3);
+			
 			int[,] expectedMask = new[,] {
 				{ 0, 0, 0, 1, 0, 0, 0},
 				{ 0, 1, 1, 1, 1, 1, 0},

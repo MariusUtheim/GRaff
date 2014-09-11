@@ -12,9 +12,6 @@ namespace GameMaker
 		private static Vector _draggedOffset;
 		private static MouseButton _dragButton = MouseButton.Left;
 
-		public DraggableObject()
-			: base() { }
-
 		public DraggableObject(double x, double y)
 			: base(x, y) { }
 

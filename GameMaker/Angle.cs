@@ -8,7 +8,8 @@ namespace GameMaker
 {
 	public struct Angle
 	{
-		private double _radians;
+		//private double _radians;
+		private double _degrees;
 		public static readonly Angle Zero = new Angle();
 
 		public static Angle Rad(double radians)
@@ -36,14 +37,14 @@ namespace GameMaker
 
 		public double Radians
 		{
-			get { return _radians; }
-			set { _radians = value; }
+			get { return _degrees * GMath.Tau / 360.0; }
+			set { _degrees = value * 360.0 / GMath.Tau; }
 		}
 
 		public double Degrees
 		{
-			get { return _radians * 360.0 / GMath.Tau; }
-			set { _radians = value * GMath.Tau / 360.0; }
+			get { return _degrees; }
+			set { _degrees = value; }
 		}
 
 		public override string ToString()
@@ -53,32 +54,32 @@ namespace GameMaker
 
 		public static implicit operator double(Angle a)
 		{
-			return a._radians;
+			return a._degrees;
 		}
 
 		public static explicit operator Angle(double d)
 		{
-			return Angle.Rad(d);
+			return Angle.Deg(d);
 		}
 
 		public static Angle operator +(Angle a, Angle b)
 		{
-			return Angle.Rad(a._radians + b._radians);
+			return Angle.Deg(a._degrees + b._degrees);
 		}
 
 		public static Angle operator +(Angle a, double d)
 		{
-			return Angle.Rad(a._radians + d);
+			return Angle.Deg(a._degrees + d);
 		}
 
 		public static Angle operator -(Angle a, double d)
 		{
-			return Angle.Rad(a._radians - d);
+			return Angle.Deg(a._degrees - d);
 		}
 
 		public static Angle operator *(Angle a, double d)
 		{
-			return Angle.Rad(a._radians * d);
+			return Angle.Deg(a._degrees * d);
 		}
 
 	}

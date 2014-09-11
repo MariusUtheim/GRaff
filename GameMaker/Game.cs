@@ -14,20 +14,16 @@ namespace GameMaker
 	{
 		internal static GameWindow Window { get; set; }
 
-#warning Remove this one - should specify initial room (or do something really clever)
-		public static void Run(Action gameStart = null)
+		public static void Run(int windowWidth, int windowHeight, Action gameStart = null)
 		{
-			Run(new Room(1024, 768, null), gameStart);
+			throw new NotImplementedException();
 		}
 
-		public static void Run(Room initialRoom)
-		{
-			Run(initialRoom, null);
-		}
 
 		[STAThread]
-		public static void Run(Room initialRoom, Action gameStart)
+		public static void Run(Room initialRoom, double fps = 60, Action gameStart = null)
 		{
+			Time.StartTime = Time.MachineTime;
 			Window = new GameWindow(initialRoom.GetWidth(), initialRoom.GetHeight());
 
 			Window.UpdateFrame += (sender, e) => {
@@ -43,7 +39,7 @@ namespace GameMaker
 
 			Window.KeyDown += (sender, e) => { Keyboard.Press((Key)e.Key); };
 			Window.KeyUp += (sender, e) => { Keyboard.Release((Key)e.Key); };
-			Window.Mouse.Move += (sender, e) => { Mouse.X = e.X; Mouse.Y = e.Y; };
+			Window.Mouse.Move += (sender, e) => { Mouse.WindowX = e.X; Mouse.WindowY = e.Y; };
 			Window.Mouse.ButtonDown += (sender, e) => { Mouse.Press((MouseButton)e.Button); };
 			Window.Mouse.ButtonUp += (sender, e) => { Mouse.Release((MouseButton)e.Button); };
 
@@ -70,12 +66,12 @@ namespace GameMaker
 				initialRoom.Enter();
 				if (gameStart != null)
 					gameStart();
-				//	Window.VSync = VSyncMode.On;
+				//	Window.VSync = VSyncMode.On;5
 			};
 
 			GL.Enable(EnableCap.Blend);
 			GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
-			Window.Run(initialRoom.Speed, initialRoom.Speed);
+			Window.Run(fps, fps);
 		}
 
 		public static void Quit()

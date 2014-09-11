@@ -21,6 +21,16 @@ namespace GameMaker
 			this.Y = y;
 		}
 
+		public override bool Equals(object obj)
+		{
+			return base.Equals(obj);
+		}
+
+		public override int GetHashCode()
+		{
+			return X.GetHashCode() ^ Y.GetHashCode();
+		}
+
 		public override string ToString()
 		{
 			return String.Format("({0}, {1})", X, Y);

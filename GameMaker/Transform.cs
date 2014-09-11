@@ -40,10 +40,11 @@ namespace GameMaker
 
 			x *= XScale;
 			y *= YScale;
-			tx = x * c - y * s + X;
-			ty = y * c + x * s + Y;
-		//	tx = x * XScale * c + y *  + X;
-		//	ty = y * YScale * GMath.Sin(Rotation.Radians) + Y;
+			tx = x * c - y * s;
+			ty = y * c + x * s;
+			tx += X;
+			ty += Y;
+
 			return new Point(tx, ty);
 		}
 

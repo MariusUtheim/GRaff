@@ -111,7 +111,6 @@
     <None Include="Game Flow.docx" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Examples\Game.xml" />
     <Content Include="External\libogg.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

@@ -5,7 +5,7 @@ namespace GameMaker.UnitTesting
 {
 	class TestObject : GameObject
 	{
-		public TestObject() : base() { }
+		public TestObject() : base(0, 0) { }
 		public TestObject(double x, double y) : base(x, y) { }
 	}
 

@@ -59,38 +59,33 @@ namespace GameMaker
 			GL.Disable(EnableCap.Texture2D);
 		}
 
-		public void DrawImage(double x, double y, Image image)
+		public void DrawImage(Image image)
 		{
-			double w = image.Sprite.Width, h = image.Sprite.Height;
-			double u1 = image.Index / (double)image.Count, u2 = (image.Index + 1) / (double)image.Count;
+			Point p1 = image.Transform.Point(-image.Sprite.XOrigin, -image.Sprite.YOrigin),
+				  p2 = image.Transform.Point(image.Sprite.Width - image.Sprite.XOrigin, -image.Sprite.YOrigin),
+				  p3 = image.Transform.Point(image.Sprite.Width - image.Sprite.XOrigin, image.Sprite.Height - image.Sprite.YOrigin),
+				  p4 = image.Transform.Point(-image.Sprite.XOrigin, image.Sprite.Height - image.Sprite.YOrigin);
 
 			GL.Enable(EnableCap.Texture2D);
 			GL.BindTexture(TextureTarget.Texture2D, image.CurrentTexture.Id);
 
-			GL.Translate(x, y, 0);
-			GL.Rotate(image.Transform.Rotation.Degrees, 0, 0, 1);
-			GL.Scale(image.Transform.XScale, image.Transform.YScale, 1.0);
-			GL.Translate(-image.Sprite.XOrigin, -image.Sprite.YOrigin, 0);
-		
+			double u1 = image.Index / (double)image.Count, u2 = (image.Index + 1) / (double)image.Count;
+
 			GL.Begin(PrimitiveType.Quads);
 			GL.Color4(GLWhite);
 			{
 				GL.TexCoord2(u1, 0);
-				GL.Vertex2(0, 0);
+				GL.Vertex2(p1.X, p1.Y);
 				GL.TexCoord2(u2, 0);
-				GL.Vertex2(w, 0);
+				GL.Vertex2(p2.X, p2.Y);
 				GL.TexCoord2(u2, 1);
-				GL.Vertex2(w, h);
+				GL.Vertex2(p3.X, p3.Y);
 				GL.TexCoord2(u1, 1);
-				GL.Vertex2(0, h);
+				GL.Vertex2(p4.X, p4.Y);
 			}
 			GL.End();
 
 			GL.Disable(EnableCap.Texture2D);
-			//GL.Translate(x, y, 0);
-			GL.LoadIdentity();
-			// Is this really necessary?
-			GL.Ortho(View.RoomView.Left, View.RoomView.Right, View.RoomView.Bottom, View.RoomView.Top, 0, 1.0);
 		}
 
 		public void DrawCircle(Color color, double x, double y, double radius)
@@ -213,7 +208,6 @@ namespace GameMaker
 		public void DrawLine(Color color, double x1, double y1, double x2, double y2)
 		{
 			GL.Begin(PrimitiveType.Lines);
-
 			GL.Color4(color.ToOpenGLColor());
 			GL.Vertex2(x1, y1);
 			GL.Vertex2(x2, y2);
