@@ -93,7 +93,7 @@ namespace GameMaker
 			_pts = new Point[precision];
 			double dt = GMath.Tau / precision;
 			for (int i = 0; i < precision; i++)
-				_pts[i] = (Point)Vector.Polar(radius, Angle.Rad(dt * i));
+				_pts[i] = (Point)new Vector(radius, Angle.Rad(dt * i));
 		}
 
 		public void Ellipse(double width, double height)

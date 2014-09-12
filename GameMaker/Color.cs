@@ -6,15 +6,15 @@ using System.Text;
 namespace GameMaker
 {
 	/// <summary>
-	/// Represents an ARGB color.
+	/// Represents an ARGB color. This struct is immutable.
 	/// </summary>
 	[System.Runtime.InteropServices.StructLayout(System.Runtime.InteropServices.LayoutKind.Sequential)]
 	public partial struct Color
 	{
-		byte _a;
-		byte _r;
-		byte _g;
-		byte _b;
+		private byte _a;
+		private byte _r;
+		private byte _g;
+		private byte _b;
 
 		/// <summary>
 		/// Initializes a new instance of the GameMaker.Color class, using the specified RGBA values.
@@ -39,7 +39,7 @@ namespace GameMaker
 		/// <param name="g">The green channel.</param>
 		/// <param name="b">The blue channel.</param>
 		/// <param name="a">The alpha channel.</param>
-		public Color(int r, int g, int b, int a)
+		public Color(int a, int r, int g, int b)
 			: this((byte)a, (byte)r, (byte)g, (byte)b) { }
 
 		/// <summary>
@@ -56,8 +56,8 @@ namespace GameMaker
 		/// Colors can also be implicitly converted from ints.
 		/// </summary>
 		/// <param name="argb">The ARGB value of the created color.</param>
-		public Color(int rgba)
-			: this(rgba >> 24, (rgba >> 16) & 0xFF, (rgba >> 8) & 0xFF, rgba & 0xFF) { }
+		public Color(uint argb)
+			: this((byte)(argb >> 24), (byte)(argb >> 16), (byte)(argb >> 8), (byte)argb) { }
 
 		/// <summary>
 		/// Averages the specified colors, calculating the average of each channel separately.
@@ -130,15 +130,24 @@ namespace GameMaker
 			return new Color(_r, _g, _b, (byte)(255 * GMath.Median(0.0, opacity, 1.0)));
 		}
 
-		public static implicit operator Color(int argb)
+		/// <summary>
+		/// Converts this GameMaker.Color to an OpenTK.Graphics.Color4 object.
+		/// </summary>
+		/// <returns>The OpenTK.Graphics.Color4 that results from the conversion.</returns>
+		internal OpenTK.Graphics.Color4 ToOpenGLColor()
 		{
-			return new Color(argb);
+			return new OpenTK.Graphics.Color4(_r, _g, _b, _a);
 		}
 
-		public bool Equals(Color color)
+		/// <summary>
+		/// Converts this GameMaker.Color to a human-readable string, showing the value of each channel.
+		/// </summary>
+		/// <returns>A string that represents this GameMaker.Color</returns>
+		public override string ToString()
 		{
-			return _r == color._r && _g == color._g && _b == color._b && _a == color._a;
+			return String.Format("Color ARGB=[{0}, {1}, {2}, {3}]", A, R, G, B);
 		}
+
 
 		/// <summary>
 		/// Specifies whether this GameMaker.Color contains the same ARGB value as the specified System.Object.
@@ -148,7 +157,7 @@ namespace GameMaker
 		public override bool Equals(object obj)
 		{
 			if (obj is Color)
-				return Equals((Color)obj);
+				return this == (Color)obj;
 			return base.Equals(obj);
 		}
 
@@ -161,28 +170,36 @@ namespace GameMaker
 			return Argb;
 		}
 
-		public static bool operator ==(Color c1, Color c2)
+		/// <summary>
+		/// Compares two GameMaker.Color objects. The results specifies whether their ARGB values are equal.
+		/// </summary>
+		/// <param name="left">The first GameMaker.Color to compare.</param>
+		/// <param name="right">The second GameMaker.Color to compare.</param>
+		/// <returns>True if the ARGB values of the two GameMaker.Color structures are equal.</returns>
+		public static bool operator ==(Color left, Color right)
 		{
-			return c1.Equals(c2);
-		}
-
-		public static bool operator !=(Color c1, Color c2)
-		{
-			return !c1.Equals(c2);
+			return left.Equals(right);
 		}
 
 		/// <summary>
-		/// Converts this GameMaker.Color to a human-readable string, showing the value of each channel.
+		/// Compares two GameMaker.Color objects. The results specifies whether their ARGB values are unequal.
 		/// </summary>
-		/// <returns>A string that represents this GameMaker.Color</returns>
-		public override string ToString()
+		/// <param name="left">The first GameMaker.Color to compare.</param>
+		/// <param name="right">The second GameMaker.Color to compare.</param>
+		/// <returns>True if the ARGB values of the two colors are unequal.</returns>
+		public static bool operator !=(Color left, Color right)
 		{
-			return String.Format("Color ARGB=[{0}, {1}, {2}, {3}]", A, R, G, B);
+			return !left.Equals(right);
 		}
 
-		internal OpenTK.Graphics.Color4 ToOpenGLColor()
+		/// <summary>
+		/// Converts the specified integer in an ARGB format to a GameMaker.Color
+		/// </summary>
+		/// <param name="argb">The System.Uint32 to be converted.</param>
+		/// <returns>The GameMaker.Color resulting from the conversion.</returns>
+		public static implicit operator Color(uint argb)
 		{
-			return new OpenTK.Graphics.Color4(_r, _g, _b, _a);
+			return new Color(argb);
 		}
 	}
 }

@@ -46,29 +46,43 @@ namespace GameMaker
 		}
     }
 
+	/// <summary>
+	/// Provides static methods to interact with the instances of a specific type.
+	/// </summary>
+	/// <typeparam name="T">The type of GameObject.</typeparam>
 	public static class Instance<T> where T : GameObject
 	{
+		/// <summary>
+		/// Returns all instances of the specified type.
+		/// </summary>
 		public static IEnumerable<T> All
 		{
 			get { return Instance._objects.OfType<T>(); }
 		}
 
+		/// <summary>
+		/// Performs the action to each instance of the specified type.
+		/// </summary>
+		/// <param name="action">The action to perform</param>
 		public static void Do(Action<T> action)
 		{
 			foreach (var obj in All)
 				action(obj);
 		}
 
-		public static T First
+		/// <summary>
+		/// Returns one instance of the specified type.
+		/// </summary>
+		public static T First()
 		{
-			get { return All.First(); }
+			return All.First();
 		}
 
-		public static T Single
-		{
-			get { return All.Single(); }
-		}
-
+		/// <summary>
+		/// Filters all instances of the specified type based on a predicate.
+		/// </summary>
+		/// <param name="predicate"></param>
+		/// <returns></returns>
 		public static IEnumerable<T> Where(Func<T, bool> predicate)
 		{
 			return All.Where(predicate);

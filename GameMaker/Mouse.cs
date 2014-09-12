@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace GameMaker
 {
 	/// <summary>
-	/// Provides methods for interacting with the mouse.
+	/// Provides static methods for interacting with the mouse.
 	/// </summary>
 	public static class Mouse
 	{

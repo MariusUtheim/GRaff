@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace GameMaker
 {
 	/// <summary>
-	/// Provides methods for interacting with the keyboard.
+	/// Provides static methods for interacting with the keyboard.
 	/// </summary>
 	public static class Keyboard
 	{

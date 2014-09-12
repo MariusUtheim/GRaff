@@ -1,6 +1,6 @@
 ﻿The following files have been documented:
 - Angle, except operators
-- Color, except operators and internal members
++ Color
 + Complex
 - Game, except private members.
 + GRandom
@@ -13,9 +13,12 @@
 + Keyboard
 + Mouse
 + MouseButton
++ MovingObject
++ Point
 + Rectangle
 + Sprite
 + Time
++ Vector
 + View
 + Window
 
@@ -34,5 +37,3 @@ In particular, the following files are considered undocumented:
 - Instance
 - Line
 - Mask
-- OriginMode
-- Point

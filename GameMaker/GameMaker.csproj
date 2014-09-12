@@ -86,7 +86,6 @@
     <Compile Include="Mouse.cs" />
     <Compile Include="MouseButton.cs" />
     <Compile Include="MovingObject.cs" />
-    <Compile Include="OriginMode.cs" />
     <Compile Include="Point.cs" />
     <Compile Include="Rectangle.cs" />
     <Compile Include="Sound.cs" />

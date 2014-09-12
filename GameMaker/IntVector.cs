@@ -56,6 +56,9 @@ namespace GameMaker
 		/// <returns>The GameMaker.Point that results from the conversion.</returns>
 		public static implicit operator Point(IntVector v) { return new Point(v.X, v.Y); }
 
+#warning TODO: Equality
+
+
 		/// <summary>
 		/// Computes the sum of the two vectors.
 		/// </summary>
@@ -69,7 +72,7 @@ namespace GameMaker
 		/// </summary>
 		/// <param name="left">The first GameMaker.IntVector.</param>
 		/// <param name="right">The second GameMaker.IntVector.</param>
-		/// <returns>The sum of the two vectors.</returns>
+		/// <returns>The difference of the two vectors.</returns>
 		public static IntVector operator -(IntVector left, IntVector right) { return new IntVector(left.X - right.X, left.Y - right.Y); }
 
 		/// <summary>

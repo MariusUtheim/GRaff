@@ -11,7 +11,7 @@ namespace GameMaker
 	public abstract class GameObject
 	{
 		/// <summary>
-		/// Initializes a new instance of the GameMaker.GameObject class, at the specified (x, y) coordinates.
+		/// Initializes a new instance of the GameMaker.GameObject class with the specified x- and y-coordinates.
 		/// </summary>
 		/// <param name="x">The x-coordinate.</param>
 		/// <param name="y">The y-coordinate.</param>
@@ -26,7 +26,7 @@ namespace GameMaker
 		}
 
 		/// <summary>
-		/// Initializes a new instance of the GameMaker.GameObject class, at the specified location.
+		/// Initializes a new instance of the GameMaker.GameObject class at the specified location.
 		/// </summary>
 		/// <param name="location">The location.</param>
 		public GameObject(Point location)

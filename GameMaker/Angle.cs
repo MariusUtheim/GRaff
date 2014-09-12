@@ -122,9 +122,9 @@ namespace GameMaker
 		/// <summary>
 		/// Computes the clockwise difference of the two angles. 
 		/// </summary>
-		/// <param name="left"></param>
-		/// <param name="right"></param>
-		/// <returns></returns>
+		/// <param name="left">The first GameMaker.Angle.</param>
+		/// <param name="right">The second GameMaker.Angle.</param>
+		/// <returns>The difference of the two angles.</returns>
 		public static Angle operator -(Angle left, Angle right)
 		{
 			return Angle.Deg(left._degrees - right._degrees);
