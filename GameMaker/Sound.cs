@@ -31,6 +31,7 @@ namespace GameMaker
 			this._isLoaded = false;
 			this._instances = new List<SoundInstance>();
 			this._bufferId = AL.GenBuffer();
+			Load();
 		}
 
 		public int Bitrate
@@ -68,7 +69,7 @@ namespace GameMaker
 			if (_isLoaded)
 				return;
 
-			var file = new WaveFile(_filename);
+			var file = new OggFile(_filename);
 			this.Buffer = file.Buffer;
 			this.Bitrate = file.Bitrate;
 			this.Channels = file.Channels;

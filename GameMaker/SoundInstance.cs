@@ -16,6 +16,10 @@ namespace GameMaker
 			this._bid = _bid;
 			this._sid = AL.GenSource();
 			AL.Source(_sid, ALSourcei.Buffer, _bid);
+			this.Looping = true;
+			this.Volume = volume;
+			this.Pitch = pitch;
+			this.Play();
 		}
 
 #warning TODO: Argument asserts
