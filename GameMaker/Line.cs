@@ -36,7 +36,7 @@ namespace GameMaker
 		{
 			get
 			{
-				return Vector.Polar(1, Direction.Direction - GMath.Tau / 4);
+				return Vector.Polar(1, Direction.Direction - Angle.Rad(GMath.Tau / 4));
 			}
 		}
 
@@ -44,7 +44,7 @@ namespace GameMaker
 		{
 			get
 			{
-				return Vector.Polar(1, Direction.Direction + GMath.Tau / 4);
+				return Vector.Polar(1, Direction.Direction + Angle.Rad(GMath.Tau / 4));
 			}
 		}
 

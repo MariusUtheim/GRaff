@@ -6,19 +6,29 @@ using System.Threading.Tasks;
 
 namespace GameMaker
 {
+	/// <summary>
+	/// Provides methods for interacting with the mouse.
+	/// </summary>
 	public static class Mouse
 	{
 		private static readonly int _buttonCount = Enum.GetNames(typeof(MouseButton)).Length;
 		public static bool[] _pressed = new bool[_buttonCount];
 		public static bool[] _down = new bool[_buttonCount];
 		public static bool[] _released = new bool[_buttonCount];
-
+		
+		/// <summary>
+		/// Signals that a step has occurred, and the button states (held/pressed/released) should be updated.
+		/// </summary>
 		internal static void Update()
 		{
 			for (int i = 0; i < _buttonCount; i++)
 				_pressed[i] = _released[i] = false;
 		}
 
+		/// <summary>
+		/// Signals that the specified button was pressed.
+		/// </summary>
+		/// <param name="button">The pressed button.</param>
 		internal static void Press(MouseButton button)
 		{
 			if (!IsDown(button))
@@ -28,6 +38,10 @@ namespace GameMaker
 			}
 		}
 
+		/// <summary>
+		/// Signals that the specified button was released.
+		/// </summary>
+		/// <param name="button">The released button.</param>
 		internal static void Release(MouseButton button)
 		{
 			if (IsDown(button))
@@ -37,31 +51,52 @@ namespace GameMaker
 			}
 		}
 	
+		/// <summary>
+		/// Gets the x-coordinate of the cursor in the room. This value might be non-integer if the View is scaled.
+		/// </summary>
 		public static double X
 		{
 			get { return View.X + WindowX / View.HZoom; }
 		}
 
+		/// <summary>
+		/// Gets the y-coordinate of the cursor in the room. This value might be non-integer if the View is scaled.
+		/// </summary>
 		public static double Y
 		{
 			get { return View.Y + WindowY / View.VZoom; }
 		}
 
+		/// <summary>
+		/// Gets the location of the cursor in the room. The coordinates might be non-integer if the View is scaled.
+		/// </summary>
 		public static Point Location
 		{
 			get { return new Point(X, Y); }
 		}
 
+		/// <summary>
+		/// Gets the x-coordinate of the cursor relative to the game window.
+		/// </summary>
 		public static int WindowX { get; internal set; }
 
+		/// <summary>
+		/// Gets the y-coordinate of the cursor relative to the game window.
+		/// </summary>
 		public static int WindowY { get; internal set; }
 
+		/// <summary>
+		/// Gets the location of the cursor relative to the game window.
+		/// </summary>
 		public static IntVector WindowLocation
 		{
 			get { return new IntVector(WindowX, WindowY); }
-			set { WindowX = value.X; WindowY = value.Y; }
+			internal set { WindowX = value.X; WindowY = value.Y; }
 		}
 
+		/// <summary>
+		/// Returns all the keys buttons that are currently held down.
+		/// </summary>
 		public static IEnumerable<MouseButton> Down
 		{
 			get 
@@ -72,6 +107,9 @@ namespace GameMaker
 			}
 		}
 
+		/// <summary>
+		/// Returns the buttons that were pressed since the last step.
+		/// </summary>
 		public static IEnumerable<MouseButton> Pressed
 		{
 			get
@@ -82,6 +120,9 @@ namespace GameMaker
 			}
 		}
 
+		/// <summary>
+		/// Returns the buttons that were released since the last step.
+		/// </summary>
 		public static IEnumerable<MouseButton> Released
 		{
 			get
@@ -92,16 +133,31 @@ namespace GameMaker
 			}
 		}
 
+		/// <summary>
+		/// Returns whether the specified button is currently held down.
+		/// </summary>
+		/// <param name="button">The button to check.</param>
+		/// <returns>True if the button is currently held down.</returns>
 		public static bool IsDown(MouseButton button)
 		{
 			return _down[(int)button];
 		}
 
+		/// <summary>
+		/// Returns whether the specified button was pressed since the previous step.
+		/// </summary>
+		/// <param name="button">The button to check.</param>
+		/// <returns>True if the button was pressed since the previous step.</returns>
 		public static bool IsPressed(MouseButton button)
 		{
 			return _pressed[(int)button];
 		}
 
+		/// <summary>
+		/// Returns whether the specified button was released since the previous step.
+		/// </summary>
+		/// <param name="button">The button to check.</param>
+		/// <returns>True if the button was pressed since the previous step.</returns>
 		public static bool IsReleased(MouseButton button)
 		{
 			return _released[(int)button];

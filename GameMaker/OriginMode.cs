@@ -5,8 +5,6 @@ using System.Text;
 
 namespace GameMaker
 {
-	public enum OriginMode
-	{
-		Manual, UpperLeft, Center
-	}
+#warning Remove this?
+
 }

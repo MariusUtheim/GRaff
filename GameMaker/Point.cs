@@ -6,20 +6,36 @@ using System.Text;
 namespace GameMaker
 {
 	/// <summary>
-	/// Represents a point in space. Points cannot be added together, but they can have vectors added to them and their difference can be found as a vector.
+	/// Represents a point in space. This struct is immutable.
 	/// </summary>
 	public struct Point
 	{
+		/// <summary>
+		/// Represents the point (0, 0).
+		/// </summary>
 		public static readonly Point Zero = new Point(0, 0);
-		public double X { get; private set; }
-		public double Y { get; private set; }
 
+		/// <summary>
+		/// Initializes a new instance of the GameMaker.Point class, using the specified x- and y-coordinates.
+		/// </summary>
+		/// <param name="x">The x-coordinate.</param>
+		/// <param name="y">The y-coordinate.</param>
 		public Point(double x, double y)
 			: this()
 		{
 			this.X = x;
 			this.Y = y;
 		}
+
+		/// <summary>
+		/// Gets the x-coordinate of this GameMaker.Point.
+		/// </summary>
+		public double X { get; private set; }
+
+		/// <summary>
+		/// Gets the y-coordinate of this GameMaker.Point.
+		/// </summary>
+		public double Y { get; private set; }
 
 		public override bool Equals(object obj)
 		{

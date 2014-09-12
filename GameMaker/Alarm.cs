@@ -6,18 +6,31 @@ using System.Threading.Tasks;
 
 namespace GameMaker
 {
+	/// <summary>
+	/// Specifies the state of an alarm
+	/// </summary>
 	public enum AlarmState
 	{
 		Running, Paused, Stopped
 	}
 
+	/// <summary>
+	/// Ticks down every step, and fires an event when the 
+	/// </summary>
 	public sealed class Alarm
 	{
 		private static List<Alarm> _alarms = new List<Alarm>();
 
+		/// <summary>
+		/// Initializes a new instance of the GameMaker.Alarm class.
+		/// </summary>
 		public Alarm()
 			:this(null) { }
 
+		/// <summary>
+		/// Initializes a new instance of the GameMaker.Alarm class, targeting the specified instance.
+		/// </summary>
+		/// <param name="target"></param>
 		public Alarm(GameObject target)
 		{
 			this.Target = target;
@@ -92,6 +105,7 @@ namespace GameMaker
 			State = AlarmState.Stopped;
 		}
 
+
 		public void Pause()
 		{
 			if (Count > 0)
@@ -100,6 +114,9 @@ namespace GameMaker
 			}
 		}
 
+		/// <summary>
+		/// Reduces the alarm by 1 if it is running.
+		/// </summary>
 		public void Tick()
 		{
 			if (State == AlarmState.Running)

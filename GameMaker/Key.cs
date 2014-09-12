@@ -5,6 +5,9 @@ using System.Text;
 
 namespace GameMaker
 {
+	/// <summary>
+	/// Represents a keyboard key.
+	/// </summary>
 	public enum Key
 	{
 		// Summary:

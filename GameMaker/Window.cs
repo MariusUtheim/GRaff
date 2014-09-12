@@ -7,8 +7,14 @@ using OpenTK;
 
 namespace GameMaker
 {
+	/// <summary>
+	/// Provides methods for dealing with the game window.
+	/// </summary>
 	public static class Window
 	{
+		/// <summary>
+		/// Gets or sets the width of the game window.
+		/// </summary>
 		public static int Width
 		{
 			get { return Game.Window.Width; }
@@ -20,6 +26,9 @@ namespace GameMaker
 			}
 		}
 
+		/// <summary>
+		/// Gets or sets the height of the game window.
+		/// </summary>
 		public static int Height
 		{
 			get { return Game.Window.Height; }
@@ -31,18 +40,27 @@ namespace GameMaker
 			}
 		}
 
+		/// <summary>
+		/// Gets or sets the size of the game window.
+		/// </summary>
 		public static IntVector Size
 		{
 			get { return new IntVector(Width, Height); }
 			set { Width = value.X; Height = value.Y; }
 		}
 
+		/// <summary>
+		/// Gets or sets whether the window border should be visible.
+		/// </summary>
 		public static bool IsBorderVisible
 		{
 			get { return Game.Window.WindowBorder == WindowBorder.Fixed; }
 			set { Game.Window.WindowBorder = value ? WindowBorder.Fixed : WindowBorder.Hidden; }
 		}
 
+		/// <summary>
+		/// Gets or sets the window title.
+		/// </summary>
 		public static string Title
 		{
 			get { return Game.Window.Title; }

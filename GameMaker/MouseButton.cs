@@ -5,6 +5,9 @@ using System.Text;
 
 namespace GameMaker
 {
+	/// <summary>
+	/// Represents a mouse button.
+	/// </summary>
 	public enum MouseButton
 	{
 		Left = 0,

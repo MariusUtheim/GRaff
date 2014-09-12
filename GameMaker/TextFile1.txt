@@ -1,0 +1,38 @@
+﻿The following files have been documented:
+- Angle, except operators
+- Color, except operators and internal members
++ Complex
+- Game, except private members.
++ GRandom
++ IAnimationEndListener
++ ICollisionListener
++ IKeyListener
++ IntRectangle
++ IntVector
++ Key
++ Keyboard
++ Mouse
++ MouseButton
++ Rectangle
++ Sprite
++ Time
++ View
++ Window
+
+In particular, the following files are considered undocumented:
+- Alarm
+- Background
+- Color.Definitions
+- DraggableObject
+- Draw
+- Fill
+- GameObject
+- GMath
+- GlobalEvent
+- Image
+- ImageTransform
+- Instance
+- Line
+- Mask
+- OriginMode
+- Point

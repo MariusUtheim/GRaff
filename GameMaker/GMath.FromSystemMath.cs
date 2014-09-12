@@ -111,7 +111,7 @@ namespace GameMaker
 		}
 		public static Complex Exp(Complex z)
 		{
-			return Complex.Polar(Math.Exp(z.Real), z.Imaginary);
+			return new Complex(Math.Exp(z.Real), Angle.Rad(z.Imaginary));
 		}
 
 		public static double Floor(double d)

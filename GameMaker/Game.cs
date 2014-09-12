@@ -10,16 +10,22 @@ using OpenTK.Graphics.OpenGL;
 
 namespace GameMaker
 {
+	/// <summary>
+	/// A static class handling the overhead control of the game.
+	/// </summary>
 	public static class Game
 	{
+		/// <summary>
+		/// The OpenTK.GameWindow instance.
+		/// </summary>
 		internal static GameWindow Window { get; set; }
 
-		public static void Run(int windowWidth, int windowHeight, Action gameStart = null)
-		{
-			throw new NotImplementedException();
-		}
-
-
+		/// <summary>
+		/// Runs the game.
+		/// </summary>
+		/// <param name="initialRoom">The initial room that is entered when the game begins.</param>
+		/// <param name="fps">The framerate at which the game runs. The default value is 60.</param>
+		/// <param name="gameStart">An action that is performed when the game begins. If omitted or set to null, no action is performed.</param>
 		[STAThread]
 		public static void Run(Room initialRoom, double fps = 60, Action gameStart = null)
 		{
@@ -31,7 +37,7 @@ namespace GameMaker
 				{
 					Game.Loop();
 				}
-				catch (Exception err)
+				catch (Exception)
 				{
 					throw;
 				}
@@ -48,7 +54,7 @@ namespace GameMaker
 				GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 				GL.LoadIdentity();
 
-				Rectangle rect = View.ActualView;
+				Rectangle rect = View.ActualView();
 				GL.Ortho(rect.Left, rect.Right, rect.Bottom, rect.Top, 0.0, 1.0);
 
 				try
@@ -74,23 +80,26 @@ namespace GameMaker
 			Window.Run(fps, fps);
 		}
 
+		/// <summary>
+		/// Quits the game.
+		/// </summary>
 		public static void Quit()
 		{
 			Window.Exit();
 		}
 
+		/// <summary>
+		/// Performs a game loop. This includes the following events, in order:
+		/// - Begin step
+		/// - Alarm
+		/// - Keyboard, key press, key release
+		/// - Mouse, mouse press, mouse release
+		/// - Step
+		/// - Collisions
+		/// - End step
+		/// </summary>
 		public static void Loop()
 		{
-			// Begin step
-			// Alarm events
-			// Keyboard, key press, key release
-			// Mouse
-			// Normal step 
-			//  (MovingObjects will update their positions)
-			// Collision events
-			// End step
-			// Draw events
-
 			foreach (var instance in Instance._objects)
 				instance.OnBeginStep();
 
@@ -181,6 +190,10 @@ namespace GameMaker
 			Mouse.Update();
 		}
 
+		/// <summary>
+		/// Repaints the screen.
+		/// </summary>
+#warning TODO: Check that this works if called outside of the GameWindow render event.
 		public static void Redraw()
 		{
 			Background.Redraw();
@@ -195,6 +208,10 @@ namespace GameMaker
 
 		}
 
+		/// <summary>
+		/// Makes the application freeze for the specified number of milliseconds.
+		/// </summary>
+		/// <param name="milliseconds">How long to sleep.</param>
 		public static void Sleep(int milliseconds)
 		{
 			Thread.Sleep(milliseconds);

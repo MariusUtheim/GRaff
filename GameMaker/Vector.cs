@@ -39,12 +39,12 @@ namespace GameMaker
 		public Angle Direction { get; set; }
 		public double X
 		{
-			get { return Magnitude * Math.Cos(Direction); }
+			get { return Magnitude * GMath.Cos(Direction); }
 			set { _setCartesian(value, Y); }
 		}
 		public double Y
 		{
-			get { return Magnitude * Math.Sin(Direction); }
+			get { return Magnitude * GMath.Sin(Direction); }
 			set { _setCartesian(X, value); }
 		}
 		private void _setCartesian(double x, double y)
