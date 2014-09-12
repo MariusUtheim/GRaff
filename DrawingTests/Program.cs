@@ -11,14 +11,14 @@ namespace DrawingTests
 	{
 		static void Main()
 		{
-			Game.Run(gameStart);
+			Game.Run(new Room(1024, 768), 60, gameStart);
 		}
 
 		static void gameStart()
 		{
 			GlobalEvent.ExitOnEscape();
 
-			Instance<Drawer>.Create();
+			new Drawer();
 
 			Window.Title = "Hello, world!";
 		}
