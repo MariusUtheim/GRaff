@@ -7,13 +7,13 @@ using GameMaker;
 
 namespace DrawingTests
 {
-	static class Sprites
+	static class Sounds
 	{
-		static Sprites()
+		static Sounds()
 		{
-			Xujia = new Sprite("Assets/xujia.jpg", 1, null, true);
+			Starlight = new Sound(@"C:\test\testogg.ogg", true);
 		}
 
-		public static Sprite Xujia { get; private set; }
+		public static Sound Starlight { get; private set; }
 	}
 }

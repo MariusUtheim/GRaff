@@ -24,10 +24,10 @@ namespace GameMaker.UnitTesting
 				Assert.AreEqual(0, (end - instance.Location).Magnitude, 1.0e-14 * nsteps, String.Format("Initial velocity: {0}", vel));
 			};
 			
-			testCase(Vector.Cartesian(1, 0), 1000, new Point(1000, 0));
-			testCase(Vector.Polar(Math.Sqrt(2), Angle.Deg(45)), 1000, new Point(1000, 1000));
-			testCase(Vector.Cartesian(4, 4), 1000, new Point(4000, 4000));
-			testCase(Vector.Cartesian(1.1, 0), 1000, new Point(1100, 0));
+			testCase(new Vector(1, 0), 1000, new Point(1000, 0));
+			testCase(new Vector(Math.Sqrt(2), Angle.Deg(45)), 1000, new Point(1000, 1000));
+			testCase(new Vector(4, 4), 1000, new Point(4000, 4000));
+			testCase(new Vector(1.1, 0), 1000, new Point(1100, 0));
 		}
 	}
 }

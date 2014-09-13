@@ -19,7 +19,7 @@ namespace DrawingTests
 
 		public override void OnDraw()
 		{
-			Mask.DrawOutline(Intersects(Instance<Drawer>.First) ? Color.Red : Color.Black);
+			Mask.DrawOutline(Intersects(Instance<Drawer>.First()) ? Color.Red : Color.Black);
 		}
 	}
 }

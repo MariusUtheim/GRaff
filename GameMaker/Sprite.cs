@@ -7,7 +7,8 @@ namespace GameMaker
 {
 	/// <summary>
 	/// Represents a sprite resource. This includes the image file, and metadata such as origin. 
-	/// The texture can then be loaded at a later time, or will be loaded automatically if the sprite is drawn.
+	/// The texture itself does not have to be loaded into memory at the time this class is instantiated.
+	/// <remarks>Supported file formats are BMP, GIF, EXIF, JPG, PNG and TIFF</remarks>
 	/// </summary>
 	public class Sprite
 	{

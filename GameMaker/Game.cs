@@ -37,7 +37,7 @@ namespace GameMaker
 				{
 					Game.Loop();
 				}
-				catch (Exception)
+				catch (Exception ex)
 				{
 					throw;
 				}

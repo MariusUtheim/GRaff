@@ -12,6 +12,11 @@ namespace GameMaker
 	public struct IntVector
 	{
 		/// <summary>
+		/// Represents the vector [0, 0].
+		/// </summary>
+		public static IntVector Zero = new IntVector();
+
+		/// <summary>
 		///  a new instance of the GameMaker.IntVector class, using the specified x and y components.
 		/// </summary>
 		/// <param name="x">The x component.</param>

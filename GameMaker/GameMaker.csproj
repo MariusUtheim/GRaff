@@ -103,9 +103,6 @@
     <Compile Include="Window.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Game Flow.docx" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="External\libogg.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
