@@ -16,9 +16,10 @@ namespace DrawingTests
 
 		static void gameStart()
 		{
-			GlobalEvent.ExitOnEscape();
+			GlobalEvent.ExitOnEscape = true;
 
 			new Drawer();
+			new Block(0, 0);
 
 			Window.Title = "Hello, world!";
 		}

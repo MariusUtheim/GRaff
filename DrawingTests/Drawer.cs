@@ -7,7 +7,7 @@ using OpenTK.Graphics.OpenGL;
 
 namespace DrawingTests
 {
-	public class Drawer : GameObject, IKeyListener, IGlobalMouseListener
+	public class Drawer : GameObject, IKeyPressListener, IGlobalMouseListener
 	{
 		int idx = 0;
 		double zoom = 1;
@@ -15,10 +15,10 @@ namespace DrawingTests
 		public Drawer()
 			: base(300, 400)
 		{
-			Mask.Diamond(-25, -25, 50, 50);
 			Depth = -1;
-			Background.Color = Color.AliceBlue;
+			Background.Color = Color.ForestGreen;
 			Sprite = Sprites.Xujia;
+			Image.Alpha = 0.5;
 		}
 
 		public override void OnStep()
@@ -28,12 +28,13 @@ namespace DrawingTests
 		public override void OnDraw()
 		{
 			base.OnDraw();
+			Mask.DrawOutline();
 		}
 
 
-		public void OnKey(Key key)
+		public void OnKeyPress(Key key)
 		{
-			Transform.Rotation += Angle.Deg(3);
+			Sounds.Starlight.Play(false, 1.0, 1.0);
 		}
 
 		public void OnGlobalMouse(MouseButton button)
