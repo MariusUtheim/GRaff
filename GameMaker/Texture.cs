@@ -10,7 +10,6 @@ namespace GameMaker
 {
 	public class Texture
 	{
-		internal int Id { get; private set; }
 
 		public Texture(string filename)
 		{
@@ -47,6 +46,12 @@ namespace GameMaker
 			private set;
 		}
 		public int Height
+		{
+			get;
+			private set;
+		}
+
+		public int Id
 		{
 			get;
 			private set;

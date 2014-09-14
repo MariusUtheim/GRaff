@@ -59,6 +59,7 @@ namespace GameMaker
 			GL.Disable(EnableCap.Texture2D);
 		}
 
+#warning TODO: Draw blended image
 		public void DrawImage(Image image)
 		{
 			Point p1 = image.Transform.Point(-image.Sprite.XOrigin, -image.Sprite.YOrigin),
@@ -72,7 +73,7 @@ namespace GameMaker
 			double u1 = image.Index / (double)image.Count, u2 = (image.Index + 1) / (double)image.Count;
 
 			GL.Begin(PrimitiveType.Quads);
-			GL.Color4(GLWhite);
+			GL.Color4(image.Blend.R, image.Blend.G, image.Blend.B, image.Blend.A);
 			{
 				GL.TexCoord2(u1, 0);
 				GL.Vertex2(p1.X, p1.Y);
@@ -252,6 +253,35 @@ namespace GameMaker
 		public IntVector Size
 		{
 			get { return new IntVector(Width, Height); }
+		}
+
+		internal void DrawSprite(Transform transform, Color blend, Sprite sprite, int imageIndex)
+		{
+			Point p1 = transform.Point(-sprite.XOrigin, -sprite.YOrigin),
+				  p2 = transform.Point(sprite.Width - sprite.XOrigin, -sprite.YOrigin),
+				  p3 = transform.Point(sprite.Width - sprite.XOrigin, sprite.Height - sprite.YOrigin),
+				  p4 = transform.Point(-sprite.XOrigin, sprite.Height - sprite.YOrigin);
+
+			GL.Enable(EnableCap.Texture2D);
+			GL.BindTexture(TextureTarget.Texture2D, sprite.GetTexture(imageIndex).Id);
+
+			double u1 = imageIndex / (double)sprite.ImageCount, u2 = (imageIndex + 1) / (double)sprite.ImageCount;
+
+			GL.Begin(PrimitiveType.Quads);
+			GL.Color4(blend.R, blend.G, blend.B, blend.A);
+			{
+				GL.TexCoord2(u1, 0);
+				GL.Vertex2(p1.X, p1.Y);
+				GL.TexCoord2(u2, 0);
+				GL.Vertex2(p2.X, p2.Y);
+				GL.TexCoord2(u2, 1);
+				GL.Vertex2(p3.X, p3.Y);
+				GL.TexCoord2(u1, 1);
+				GL.Vertex2(p4.X, p4.Y);
+			}
+			GL.End();
+
+			GL.Disable(EnableCap.Texture2D);
 		}
 	}
 }

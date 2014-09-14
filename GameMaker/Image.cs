@@ -14,7 +14,6 @@ namespace GameMaker
 		{
 			this._parent = parent;
 			this.Blend = Color.White;
-			this.Count = 1;
 			this.Index = 0;
 			this.Speed = 1;
 		}
@@ -45,28 +44,68 @@ namespace GameMaker
 			set;
 		}
 
-		public int Count { get; private set; }
-
-		public int Width
+		public int Count
 		{
-			get { return CurrentTexture.Width; }
+			get
+			{
+				if (_parent.Sprite == null)
+					return 1;
+				else
+					return _parent.Sprite.ImageCount;
+			}
 		}
 
-		public int Height
+		/// <summary>
+		/// Gets the width of this GameMaker.Image, taking scale into consideration.
+		/// </summary>
+		/// <exception cref="System.NullReferenceException">GameMaker.Image.Sprite is set to null.</exception>
+		public double Width
 		{
-			get { return CurrentTexture.Height; }
+			get
+			{
+				if (Sprite == null) throw new NullReferenceException("The GameMaker.Image has no sprite.");
+				return CurrentTexture.Width * Transform.XScale;
+			}
 		}
 
+		/// <summary>
+		/// Gets the height of this GameMaker.Image, taking scale into consideration.
+		/// </summary>
+		/// <exception cref="System.NullReferenceException">GameMaker.Image.Sprite is set to null.</exception>
+		public double Height
+		{
+			get
+			{
+				if (Sprite == null) throw new NullReferenceException("The GameMaker.Image has no sprite.");
+				return CurrentTexture.Height * Transform.YScale;
+			}
+		}
+
+		/// <summary>
+		/// Gets the current texture of this GameMaker.Image.
+		/// </summary>
+		/// <exception cref="System.NullReferenceException">GameMaker.Image.Sprite is set to null.</exception>
 		public Texture CurrentTexture
 		{
-			get { return Sprite.GetTexture(Index); }
+			get
+			{
+				if (Sprite == null) throw new NullReferenceException("The GameMaker.Image has no sprite.");
+				return Sprite.GetTexture(Index);
+			}
 		}
 
+		/// <summary>
+		/// Gets the transformation of this GameMaker.Image.
+		/// </summary>
 		public Transform Transform
 		{
 			get { return _parent.Transform; }
 		}
 
+		/// <summary>
+		/// Animates this GameMaker.Image. Returns whether the animation looped.
+		/// </summary>
+		/// <returns>True if the animation looped.</returns>
 		public bool Animate()
 		{
 			if (Sprite != null)

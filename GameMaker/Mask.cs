@@ -209,7 +209,7 @@ namespace GameMaker
 
 		public void DrawOutline(Color color)
 		{
-			Draw.Rectangle(Color.Black, BoundingBox);
+			Draw.Rectangle(color, BoundingBox);
 
 		}
 	}

@@ -22,10 +22,27 @@ namespace GameMaker
 			this.YScale = yScale;
 			this.Rotation = rotation;
 		}
+
 		public double X { get; set; }
+
 		public double Y { get; set; }
+
+		public Point Location
+		{
+			get { return new Point(X, Y); }
+			set { X = value.X; Y = value.Y; }
+		}
+
 		public double XScale { get; set; }
+
 		public double YScale { get; set; }
+
+		public Vector Scale
+		{
+			get { return new Vector(XScale, YScale); }
+			set { XScale = value.X; YScale = value.Y; }
+		}
+
 		public Angle Rotation { get; set; }
 
 		public Point Point(Point pt)

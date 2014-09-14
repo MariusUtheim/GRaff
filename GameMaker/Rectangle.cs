@@ -108,19 +108,44 @@ namespace GameMaker
 		}
 
 		/// <summary>
-		/// Tests whether two rectangles intersect.
+		/// Tests whether two GameMaker.Rectangle structures intersect.
 		/// </summary>
 		/// <param name="other">The GameMaker.Rectangle to test intersection with.</param>
-		/// <returns>True if the two rectangles intersect.</returns>
+		/// <returns>True if the two GameMaker.Rectangle structures intersect.</returns>
 		public bool Intersects(Rectangle other)
 		{
 			return !(Left > other.Right || Top > other.Bottom || Right < other.Left || Bottom < other.Top);
 		}
 
 		/// <summary>
-		/// Converts this GameMaker.IntRectangle to a human-readable string.
+		/// Finds the intersection of this and the other GameMaker.Rectangle structures. That is, a new GameMaker.Rectangle 
+		/// representing the area they overlap.
 		/// </summary>
-		/// <returns>A string that represents this GameMaker.IntRectangle</returns>
+		/// <param name="other">The other GameMaker.Rectangle to find intersection with.</param>
+		/// <returns>A GameMaker.Rectangle representing the intersection of the two GameMaker.Rectangle structures.</returns>
+		public Rectangle Intersection(Rectangle other)
+		{
+			if (!this.Intersects(other))
+				return new Rectangle(0, 0, 0, 0);
+	
+			return new Rectangle { Left = GMath.Max(this.Left, other.Left), Top = GMath.Max(this.Top, other.Top),
+								   Right = GMath.Min(this.Right, other.Right), Bottom = GMath.Min(this.Bottom, other.Bottom) };
+		}
+
+		/// <summary>
+		/// Tests whether this GameMaker.Rectangle contains the specified GameMaker.Point.
+		/// </summary>
+		/// <param name="pt">The GameMaker.Point to test.</param>
+		/// <returns>True if this GameMaker.Rectangle contains pt.</returns>
+		public bool ContainsPoint(Point pt)
+		{
+			return pt.X >= this.Left && pt.Y >= this.Top && pt.X < this.Right + this.Width && pt.Y < this.Bottom;
+		}
+
+		/// <summary>
+		/// Converts this GameMaker.Rectangle to a human-readable string.
+		/// </summary>
+		/// <returns>A string that represents this GameMaker.Rectangle</returns>
 		public override string ToString()
 		{
 			return String.Format("{{Rectangle {0} by {1}}}", Location, Size);

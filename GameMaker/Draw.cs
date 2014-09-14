@@ -96,5 +96,9 @@ namespace GameMaker
 			CurrentSurface.DrawSprite(x, y , sprite, imageIndex);
 		}
 
+		public static void Sprite(Transform transform, Color blend, Sprite sprite, int imageIndex)
+		{
+			CurrentSurface.DrawSprite(transform, blend, sprite, imageIndex);
+		}
 	}
 }

@@ -53,6 +53,8 @@ namespace GameMaker
 
 				GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 				GL.LoadIdentity();
+				GL.Enable(EnableCap.Blend);
+				GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
 
 				Rectangle rect = View.ActualView();
 				GL.Ortho(rect.Left, rect.Right, rect.Bottom, rect.Top, 0.0, 1.0);
@@ -75,8 +77,6 @@ namespace GameMaker
 				//	Window.VSync = VSyncMode.On;5
 			};
 
-			GL.Enable(EnableCap.Blend);
-			GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
 			Window.Run(fps, fps);
 		}
 
@@ -112,7 +112,7 @@ namespace GameMaker
 			GlobalEvent.OnStep();
 
 			_detectCollisions();
-
+			
 			foreach (var instance in Instance._objects)
 				instance.OnEndStep();
 		}

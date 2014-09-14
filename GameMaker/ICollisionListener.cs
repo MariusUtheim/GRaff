@@ -19,7 +19,7 @@ namespace GameMaker
 	/// </summary>
 	/// <typeparam name="T">The type of object to collide with. This type parameter is covariant.</typeparam>
 #warning TODO: Check that the covariance is okay.
-	public interface ICollisionListener<in T>
+	public interface ICollisionListener<in T> : ICollisionListener
 		where T : GameObject
 	{
 		/// <summary>

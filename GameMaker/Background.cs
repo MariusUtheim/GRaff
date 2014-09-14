@@ -49,7 +49,8 @@ namespace GameMaker
 			{
 				if (IsTiled)
 				{
-					double uw = Room.Width / (double)Sprite.Width, uh = Room.Height / (double)Sprite.Height;
+					double uw = Room.Width / (double)Sprite.Width, vh = Room.Height / (double)Sprite.Height;
+					double u0 = -XOffset / (double)Sprite.Width, v0 = -YOffset / (double)Sprite.Height;
 					
 					GL.Enable(EnableCap.Texture2D);
 					GL.BindTexture(TextureTarget.Texture2D, Sprite.GetTexture(0).Id);
@@ -57,13 +58,13 @@ namespace GameMaker
 					GL.Begin(PrimitiveType.Quads);
 					GL.Color3(1.0f, 1.0f, 1.0f);
 					{
-						GL.TexCoord2(0, 0);
+						GL.TexCoord2(u0, v0);
 						GL.Vertex2(0, 0);
-						GL.TexCoord2(uw, 0);
+						GL.TexCoord2(u0 + uw, v0);
 						GL.Vertex2(Room.Width, 0);
-						GL.TexCoord2(uw, uh);
+						GL.TexCoord2(u0 + uw, v0 + vh);
 						GL.Vertex2(Room.Width, Room.Height);
-						GL.TexCoord2(0, uh);
+						GL.TexCoord2(u0, v0 + vh);
 						GL.Vertex2(0, Room.Height);
 					}
 					GL.End();

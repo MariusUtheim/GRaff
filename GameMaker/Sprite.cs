@@ -168,5 +168,6 @@ namespace GameMaker
 		{
 			get { return _subimages; }
 		}
+
 	}
 }

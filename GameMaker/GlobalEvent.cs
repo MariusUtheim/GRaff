@@ -79,18 +79,24 @@ namespace GameMaker
 			if (key == GameMaker.Key.Escape)
 				Game.Quit();
 		}
+
 		private static bool _willExitOnEscape = false;
-		public static void ExitOnEscape(bool willExit = true)
+		public static bool ExitOnEscape
 		{
-			if (willExit && !_willExitOnEscape)
+			get { return _willExitOnEscape; }
+
+			set
 			{
-				KeyPressed += _ExitOnEscape;
-				_willExitOnEscape = true;
-			}
-			else if (!willExit && _willExitOnEscape)
-			{
-				KeyPressed -= _ExitOnEscape;
-				_willExitOnEscape = false;
+				if (value && !_willExitOnEscape)
+				{
+					KeyPressed += _ExitOnEscape;
+					_willExitOnEscape = true;
+				}
+				else if (!value && _willExitOnEscape)
+				{
+					KeyPressed -= _ExitOnEscape;
+					_willExitOnEscape = false;
+				}
 			}
 		}
 

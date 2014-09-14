@@ -54,12 +54,21 @@ namespace GameMaker
 			return String.Format("[{0}, {1}]", X, Y);
 		}
 
-		/// <summary>
-		/// Converts the specified GameMaker.IntVector to a GameMaker.Point.
-		/// </summary>
-		/// <param name="i">The GameMaker.IntVector to be converted.</param>
-		/// <returns>The GameMaker.Point that results from the conversion.</returns>
-		public static implicit operator Point(IntVector v) { return new Point(v.X, v.Y); }
+		public override bool Equals(object obj)
+		{
+			if (obj is IntVector)
+				return this == (IntVector)obj;
+			return base.Equals(obj);
+		}
+
+		public override int GetHashCode()
+		{
+			return X ^ Y;
+		}
+
+		public static bool operator ==(IntVector left, IntVector right) { return left.X == right.X && left.Y == right.Y; }
+
+		public static bool operator !=(IntVector left, IntVector right) { return left.X != right.X || left.Y != right.Y; }
 
 #warning TODO: Equality
 
@@ -102,5 +111,13 @@ namespace GameMaker
 		/// <param name="v">The GameMaker.IntVector to negate.</param>
 		/// <returns>The negative of this vector.</returns>
 		public static IntVector operator -(IntVector v) { return new IntVector(-v.X, -v.Y); }
+
+		/// <summary>
+		/// Converts the specified GameMaker.IntVector to a GameMaker.Point.
+		/// </summary>
+		/// <param name="i">The GameMaker.IntVector to be converted.</param>
+		/// <returns>The GameMaker.Point that results from the conversion.</returns>
+		public static implicit operator Point(IntVector v) { return new Point(v.X, v.Y); }
+
 	}
 }

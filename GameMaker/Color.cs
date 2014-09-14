@@ -35,10 +35,10 @@ namespace GameMaker
 		/// <summary>
 		/// Initializes a new instance of the GameMaker.Color class, using the specified ARGB values.
 		/// </summary>
+		/// <param name="a">The alpha channel.</param>
 		/// <param name="r">The red channel.</param>
 		/// <param name="g">The green channel.</param>
 		/// <param name="b">The blue channel.</param>
-		/// <param name="a">The alpha channel.</param>
 		public Color(int a, int r, int g, int b)
 			: this((byte)a, (byte)r, (byte)g, (byte)b) { }
 
@@ -49,7 +49,7 @@ namespace GameMaker
 		/// <param name="g">The green channel.</param>
 		/// <param name="b">The blue channel.</param>
 		public Color(byte r, byte g, byte b)
-			: this(r, g, b, (byte)255) { }
+			: this((byte)255, r, g, b) { }
 
 		/// <summary>
 		/// Initializes a new instance of the GameMaker.Color class, using the specified ARGB value in a 32-bit format.
@@ -117,7 +117,7 @@ namespace GameMaker
 		/// <returns>A new GameMaker.Color with the same color as this instance, but with the specified alpha channel.</returns>
 		public Color Transparent(int alphaChannel)
 		{
-			return new Color(_r, _g, _b, (byte)alphaChannel);
+			return new Color((byte)alphaChannel, _r, _g, _b);
 		}
 
 		/// <summary>
@@ -127,7 +127,7 @@ namespace GameMaker
 		/// <returns>A new GameMaker.Color with the same color as this instance, but with an alpha channel corresponding to the specified opacity.</returns>
 		public Color Transparent(double opacity)
 		{
-			return new Color(_r, _g, _b, (byte)(255 * GMath.Median(0.0, opacity, 1.0)));
+			return new Color((byte)(255 * GMath.Median(0.0, opacity, 1.0)), _r, _g, _b);
 		}
 
 		/// <summary>
