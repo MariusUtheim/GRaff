@@ -76,6 +76,7 @@
     <Compile Include="IO\OggFile.cs" />
     <Compile Include="IO\SoundFile.cs" />
     <Compile Include="IO\WaveFile.cs" />
+    <Compile Include="Matrix.cs" />
     <Compile Include="MutableList.cs" />
     <Compile Include="IntRectangle.cs" />
     <Compile Include="IntVector.cs" />

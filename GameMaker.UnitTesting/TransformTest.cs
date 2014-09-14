@@ -67,6 +67,33 @@ namespace GameMaker.UnitTesting
 		}
 
 		[TestMethod]
+		public void Shear()
+		{
+			Transform transform = new Transform();
+
+			Point pt = new Point(5, 10);
+			Point expected, actual;
+
+			transform.XShear = 2;
+			transform.YShear = 0;
+			expected = new Point(25, 10);
+			actual = transform.Point(pt);
+			Assert.AreEqual<Point>(expected, actual);
+
+			transform.XShear = 0;
+			transform.YShear = 1;
+			expected = new Point(5, 15);
+			actual = transform.Point(pt);
+			Assert.AreEqual<Point>(expected, actual);
+
+			transform.XShear = 2;
+			transform.YShear = 1;
+			expected = new Point(25, 15);
+			actual = transform.Point(pt);
+			Assert.AreEqual<Point>(expected, actual);
+		}
+
+		[TestMethod]
 		public void Compund()
 		{
 			Transform transform = new Transform();

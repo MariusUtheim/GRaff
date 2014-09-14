@@ -45,9 +45,25 @@ namespace GameMaker
 
 		public Angle Rotation { get; set; }
 
+		public double XShear { get; set; }
+
+		public double YShear { get; set; }
+
+
+
+		public Matrix GetMatrix()
+		{
+			double c = GMath.Cos(Rotation), s = GMath.Sin(Rotation);
+			return new Matrix(
+				XScale * (c - s * YShear), YScale * (-s + c * XShear), X,
+				XScale * (s + c * YShear), YScale * (c + s * XShear), Y
+				);
+		}
+
 		public Point Point(Point pt)
 		{
-			return Point(pt.X, pt.Y);
+			//return this.Point(pt.X, pt.Y);
+			return GetMatrix() * pt;
 		}
 
 		public Point Point(double x, double y)
@@ -57,6 +73,10 @@ namespace GameMaker
 
 			x *= XScale;
 			y *= YScale;
+			tx = x + XShear * y;
+			ty = y + YShear * x;
+			x = tx; y = ty;
+
 			tx = x * c - y * s;
 			ty = y * c + x * s;
 			tx += X;

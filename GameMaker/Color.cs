@@ -127,7 +127,7 @@ namespace GameMaker
 		/// <returns>A new GameMaker.Color with the same color as this instance, but with an alpha channel corresponding to the specified opacity.</returns>
 		public Color Transparent(double opacity)
 		{
-			return new Color((byte)(255 * GMath.Median(0.0, opacity, 1.0)), _r, _g, _b);
+			return new Color((byte)GMath.Round(255.0 * GMath.Median(0.0, opacity, 1.0)), _r, _g, _b);
 		}
 
 		/// <summary>
@@ -178,7 +178,7 @@ namespace GameMaker
 		/// <returns>True if the ARGB values of the two GameMaker.Color structures are equal.</returns>
 		public static bool operator ==(Color left, Color right)
 		{
-			return left.Equals(right);
+			return left._a == right._a && left._r == right._r && left._g == right._g && left._b == right._b;
 		}
 
 		/// <summary>
@@ -189,7 +189,7 @@ namespace GameMaker
 		/// <returns>True if the ARGB values of the two colors are unequal.</returns>
 		public static bool operator !=(Color left, Color right)
 		{
-			return !left.Equals(right);
+			return left._a != right._a || left._r != right._r || left._g != right._g || left._b != right._b;
 		}
 
 		/// <summary>
