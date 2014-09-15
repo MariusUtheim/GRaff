@@ -50,7 +50,7 @@ namespace GameMaker
 		public double YShear { get; set; }
 
 
-
+#warning TODO: Cache instead of computing again every time
 		public Matrix GetMatrix()
 		{
 			double c = GMath.Cos(Rotation), s = GMath.Sin(Rotation);

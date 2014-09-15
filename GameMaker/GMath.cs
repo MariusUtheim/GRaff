@@ -109,10 +109,6 @@ namespace GameMaker
 			else
 				return x1;
 		}
-		public static Point Median(Point p1, Point p2, Point p3)
-		{
-			return new Point(Median(p1.X, p2.X, p3.X), Median(p1.Y, p2.Y, p3.Y));
-		}
 
 
 		public static double DegToRad(double degrees)

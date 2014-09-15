@@ -37,7 +37,8 @@ namespace GameMaker
 			XPrevious = X;
 			YPrevious = Y;
 
-			Location += Velocity;
+			Location += Velocity + 0.5 * Acceleration;
+			Velocity += Acceleration;
 			if (Speed <= Friction)
 				Speed = 0;
 			else
@@ -64,6 +65,11 @@ namespace GameMaker
 			get { return new Point(XPrevious, YPrevious); }
 			set { XPrevious = value.X; YPrevious = value.Y; }
 		}
+
+		/// <summary>
+		/// Gets or sets the acceleration of this GameMaker.MovingObject.
+		/// </summary>
+		public Vector Acceleration { get; set; }
 
 		/// <summary>
 		/// Gets or sets the velocity of this GameMaker.MovingObject. 
