@@ -133,6 +133,13 @@ namespace GameMaker
 			}
 		}
 
+
+		public MaskShape MaskShape
+		{
+			get { throw new NotImplementedException(); }
+		}
+
+
 		/// <summary>
 		/// Loads the texture.
 		/// </summary>
@@ -169,5 +176,7 @@ namespace GameMaker
 			get { return _subimages; }
 		}
 
+
+		public bool IsLoaded { get; set; }
 	}
 }

@@ -100,5 +100,10 @@ namespace GameMaker
 		{
 			CurrentSurface.DrawSprite(transform, blend, sprite, imageIndex);
 		}
+
+		public static void Polygon(Color col, Polygon polygon)
+		{
+			throw new NotImplementedException();
+		}
 	}
 }
