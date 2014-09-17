@@ -26,10 +26,8 @@ namespace GameMaker
 		/// Returns a nonnegative random number.
 		/// </summary>
 		/// <returns>An integer greater than or equal to zero and less than System.Int32.MaxValue.</returns>
-		public static int Int()
-		{
-			return _rnd.Next();
-		}
+		public static int Int() => _rnd.Next();
+
 
 		/// <summary>
 		/// Returns a nonnegative random number strictly less than the specified maximum.
@@ -37,10 +35,8 @@ namespace GameMaker
 		/// <param name="maxValue">The exclusive upper bound of the random number to be generated. maxValue must be greater than or equal to zero.</param>
 		/// <returns>An integer greater than or equal to zero and less than maxValue. If however maxValue is zero, then 0 is returned.</returns>
 		/// <exception cref="System.ArgumentOutOfRangeException">maxValue is less than zero.</exception>
-		public static int Int(int maxValue)
-		{
-			return _rnd.Next(maxValue);
-		}
+		public static int Int(int maxValue) => _rnd.Next(maxValue);
+	
 
 		/// <summary>
 		/// Returns a random integer in the specified range.
@@ -49,29 +45,23 @@ namespace GameMaker
 		/// <param name="maxValue">The exclusive upper bound of the random number to be generated. maxValue must be greater than or equal to minValue.</param>
 		/// <returns>An integer greater than or equal to minValue and less than maxValue. If however maxValue and minValue are equal, that value is returned.</returns>
 		/// <exception cref="System.ArgumentOutOfRangeException">minValue is greater than maxValue</exception>
-		public static int Int(int minValue, int maxValue)
-		{
-			return _rnd.Next(minValue, maxValue);
-		}
+		public static int Int(int minValue, int maxValue) => _rnd.Next(minValue, maxValue);
+		
 
 		/// <summary>
 		/// Returns a random number between 0.0 and 1.0 exclusive.
 		/// </summary>
 		/// <returns>A number greater than or equal to 0.0 and less than 1.0.</returns>
-		public static double Double()
-		{
-			return _rnd.NextDouble();
-		}
+		public static double Double() => _rnd.NextDouble();
+		
 
 		/// <summary>
 		/// Returns a random number between 0.0 and boundaryValue exclusive.
 		/// </summary>
 		/// <param name="boundaryValue">The exclusive boundary value. The returned value will have the same sign as this number.</param>
 		/// <returns>A number between 0.0 inclusive and boundaryValue exclusive.</returns>
-		public static double Double(double boundaryValue)
-		{
-			return _rnd.NextDouble() * boundaryValue;
-		}
+		public static double Double(double boundaryValue) => _rnd.NextDouble() * boundaryValue;
+		
 
 		/// <summary>
 		/// Returns a random number in the specified range.
@@ -80,20 +70,16 @@ namespace GameMaker
 		/// <param name="firstValue">The first inclusive bound of the random number returned.</param>
 		/// <param name="secondValue">The second exclusive bound of the random number returned.</param>
 		/// <returns>A number in the specified range.</returns>
-		public static double Double(double firstValue, double secondValue)
-		{
-			return firstValue + _rnd.NextDouble() * (secondValue - firstValue);
-		}
+		public static double Double(double firstValue, double secondValue) => firstValue + _rnd.NextDouble() * (secondValue - firstValue);
+		
 
 		/// <summary>
 		/// Returns a random number that is distributed in accordance with standard normal distribution.
 		/// I.e. a normally distributed variable with mean 0 and standard deviation 1.
 		/// </summary>
 		/// <returns>A standard normally distributed number.</returns>
-		public static double Gaussian()
-		{
-			return GMath.Sqrt(-2 * GMath.Log(Double()));
-		}
+		public static double Gaussian() => GMath.Sqrt(-2 * GMath.Log(Double()));
+		
 
 		/// <summary>
 		/// Returns a random number that is distributed in accordance with a normal distribution with the specified mean and standard deviation.
@@ -101,28 +87,22 @@ namespace GameMaker
 		/// <param name="mean">The mean of the distribution.</param>
 		/// <param name="std">The standard deviation of the distribution.</param>
 		/// <returns>A normally distributed number.</returns>
-		public static double Gaussian(double mean, double std)
-		{
-			return std * (Gaussian() + mean);
-		}
+		public static double Gaussian(double mean, double std) => std * (Gaussian() + mean);
+		
 
 		/// <summary>
 		/// Returns a unit vector with random direction.
 		/// </summary>
 		/// <returns>A unit vector with random direction.</returns>
-		public static Vector Vector()
-		{ 
-			return new Vector(1, GRandom.Angle());
-		}
+		public static Vector Vector() => new Vector(1, GRandom.Angle());
+	
 
 		/// <summary>
 		/// Returns a random angle.
 		/// </summary>
 		/// <returns>Returns a random angle.</returns>
-		public static Angle Angle()
-		{
-			return GameMaker.Angle.Deg(_rnd.NextDouble() * 360.0);
-		}
+		public static Angle Angle() => GameMaker.Angle.Deg(_rnd.NextDouble() * 360.0);
+		
 
 		/// <summary>
 		/// Returns a random angle inside the clockwise range between the specified boundaries.
@@ -130,10 +110,8 @@ namespace GameMaker
 		/// <param name="lowerBound">The lower bound.</param>
 		/// <param name="upperBound">The upper bound.</param>
 		/// <returns>A random angle in the specified range.</returns>
-		public static Angle Angle(Angle lowerBound, Angle upperBound)
-		{
-			return GameMaker.Angle.Deg(lowerBound.Degrees + _rnd.NextDouble() * (upperBound - lowerBound).Degrees);
-		}
+		public static Angle Angle(Angle lowerBound, Angle upperBound) => GameMaker.Angle.Deg(lowerBound.Degrees + _rnd.NextDouble() * (upperBound - lowerBound).Degrees);
+		
 
 		/// <summary>
 		/// Takes a list of items and picks one of them randomly.

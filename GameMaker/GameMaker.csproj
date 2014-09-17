@@ -20,6 +20,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <LangVersion>Experimental</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -28,9 +29,11 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <LangVersion>Experimental</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Test|AnyCPU'">
     <OutputPath>bin\Test\</OutputPath>
+    <LangVersion>Experimental</LangVersion>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="OggVorbisDecoder, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
@@ -87,9 +90,6 @@
     <Compile Include="Mouse.cs" />
     <Compile Include="MouseButton.cs" />
     <Compile Include="MovingObject.cs" />
-    <Compile Include="Particle.cs" />
-    <Compile Include="ParticleSystem.cs" />
-    <Compile Include="ParticleType.cs" />
     <Compile Include="Point.cs" />
     <Compile Include="Rectangle.cs" />
     <Compile Include="Sound.cs" />

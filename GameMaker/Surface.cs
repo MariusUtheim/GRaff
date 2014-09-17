@@ -40,7 +40,7 @@ namespace GameMaker
 			subimage %= sprite.ImageCount;
 			double u1 = subimage / (double)sprite.ImageCount, u2 = (subimage + 1) / (double)sprite.ImageCount;
 			GL.Enable(EnableCap.Texture2D);
-			GL.BindTexture(TextureTarget.Texture2D, sprite.GetTexture(subimage).Id);
+			GL.BindTexture(TextureTarget.Texture2D, sprite.Texture.Id);
 
 			GL.Begin(PrimitiveType.Quads);
 			GL.Color4(GLWhite);
@@ -263,7 +263,7 @@ namespace GameMaker
 				  p4 = transform.Point(-sprite.XOrigin, sprite.Height - sprite.YOrigin);
 
 			GL.Enable(EnableCap.Texture2D);
-			GL.BindTexture(TextureTarget.Texture2D, sprite.GetTexture(imageIndex).Id);
+			GL.BindTexture(TextureTarget.Texture2D, sprite.Texture.Id);
 
 			double u1 = imageIndex / (double)sprite.ImageCount, u2 = (imageIndex + 1) / (double)sprite.ImageCount;
 

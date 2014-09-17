@@ -1,14 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿
 
 namespace GameMaker
 {
 	public static partial class GMath
 	{
 		public const double Tau = 6.283185307179586476925286766559;
+		/// <summary>Conversion factor for degrees to radians. Is equal to τ / 360.</summary>
+		public const double DegToRad = 0.01745329251994329576923690768489;
+		/// <summary>Conversion factor for radians to degrees. Is equal to 360 / τ.</summary>
+		public const double RadToDeg = 57.2957795130823208767981548141050;
 
 		public static byte Median(byte x1, byte x2, byte x3)
 		{
@@ -110,61 +110,17 @@ namespace GameMaker
 				return x1;
 		}
 
-
-		public static double DegToRad(double degrees)
-		{
-			return degrees * GMath.Tau / 360.0;
-		}
-
-		public static double RadToDeg(double radians)
-		{
-			return radians * 360.0 / GMath.Tau;
-		}
-
-		public static int Sqr(byte x)
-		{
-			return x * x;
-		}
-		public static int Sqr(sbyte x)
-		{
-			return x * x;
-		}
-		public static int Sqr(short x)
-		{
-			return x * x;
-		}
-		public static int Sqr(ushort x)
-		{
-			return x * x;
-		}
-		public static int Sqr(int x)
-		{
-			return x * x;
-		}
-		public static uint Sqr(uint x)
-		{
-			return x * x;
-		}
-		public static long Sqr(long x)
-		{
-			return x * x;
-		}
-		public static ulong Sqr(ulong x)
-		{
-			return x * x;
-		}
-		public static float Sqr(float x)
-		{
-			return x * x;
-		}
-		public static double Sqr(double x)
-		{
-			return x * x;
-		}
-		public static decimal Sqr(decimal x)
-		{
-			return x * x;
-		}
+		public static int Sqr(byte x) => x * x;
+		public static int Sqr(sbyte x) => x * x;
+		public static int Sqr(short x) => x * x;
+		public static int Sqr(ushort x) => x * x;
+		public static int Sqr(int x) => x * x;
+		public static uint Sqr(uint x) => x * x;
+		public static long Sqr(long x) => x * x;
+		public static ulong Sqr(ulong x) => x * x;
+		public static float Sqr(float x) => x * x;
+		public static double Sqr(double x) => x * x;
+		public static decimal Sqr(decimal x) => x * x;
 
 	}
 }

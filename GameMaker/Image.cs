@@ -90,7 +90,7 @@ namespace GameMaker
 			get
 			{
 				if (Sprite == null) throw new NullReferenceException("The GameMaker.Image has no sprite.");
-				return Sprite.GetTexture(Index);
+				return Sprite.Texture;
 			}
 		}
 

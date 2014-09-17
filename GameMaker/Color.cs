@@ -6,32 +6,10 @@ using System.Text;
 namespace GameMaker
 {
 	/// <summary>
-	/// Represents an ARGB color. This struct is immutable.
+	/// Represents an ARGB color. This struct is immutable. Colors can be cast from uint structures.
 	/// </summary>
-	[System.Runtime.InteropServices.StructLayout(System.Runtime.InteropServices.LayoutKind.Sequential)]
-	public partial struct Color
+	public partial struct Color(byte a, byte r, byte g, byte b)
 	{
-		private byte _a;
-		private byte _r;
-		private byte _g;
-		private byte _b;
-
-		/// <summary>
-		/// Initializes a new instance of the GameMaker.Color class, using the specified RGBA values.
-		/// </summary>
-		/// <param name="r">The red channel.</param>
-		/// <param name="g">The green channel.</param>
-		/// <param name="b">The blue channel.</param>
-		/// <param name="a">The alpha channel.</param>
-		public Color(byte a, byte r, byte g, byte b)
-			: this()
-		{
-			this._a = a;
-			this._r = r;
-			this._g = g;
-			this._b = b;
-		}
-
 		/// <summary>
 		/// Initializes a new instance of the GameMaker.Color class, using the specified ARGB values.
 		/// </summary>
@@ -39,8 +17,7 @@ namespace GameMaker
 		/// <param name="r">The red channel.</param>
 		/// <param name="g">The green channel.</param>
 		/// <param name="b">The blue channel.</param>
-		public Color(int a, int r, int g, int b)
-			: this((byte)a, (byte)r, (byte)g, (byte)b) { }
+		public Color(int a, int r, int g, int b) : this((byte)a, (byte)r, (byte)g, (byte)b) { }
 
 		/// <summary>
 		/// Initializes a new instance of the GameMaker.Color class, using the specified RGB values and an alpha value of 255.
@@ -48,16 +25,33 @@ namespace GameMaker
 		/// <param name="r">The red channel.</param>
 		/// <param name="g">The green channel.</param>
 		/// <param name="b">The blue channel.</param>
-		public Color(byte r, byte g, byte b)
-			: this((byte)255, r, g, b) { }
+		public Color(byte r, byte g, byte b) : this((byte)255, r, g, b) { }
 
 		/// <summary>
 		/// Initializes a new instance of the GameMaker.Color class, using the specified ARGB value in a 32-bit format.
 		/// Colors can also be implicitly converted from ints.
 		/// </summary>
 		/// <param name="argb">The ARGB value of the created color.</param>
-		public Color(uint argb)
-			: this((byte)(argb >> 24), (byte)(argb >> 16), (byte)(argb >> 8), (byte)argb) { }
+		public Color(uint argb) : this((byte)(argb >> 24), (byte)(argb >> 16), (byte)(argb >> 8), (byte)argb) { }
+
+		public byte A { get; } = a;
+
+		public byte R { get; } = r;
+
+		public byte G { get; } = g;
+
+		public byte B { get; } = b;
+
+		/// <summary>
+		/// Returns this color as a 32-bit integer, in ARGB format.
+		/// </summary>
+		public uint Argb
+		{
+			get
+			{
+				return (uint)((A << 24) | (R << 16) | (G << 8) | B);
+			}
+		}
 
 		/// <summary>
 		/// Averages the specified colors, calculating the average of each channel separately.
@@ -70,44 +64,13 @@ namespace GameMaker
 
 			for (int i = 0; i < colors.Length; i++)
 			{
-				a += colors[i]._a;
-				r += colors[i]._r;
-				g += colors[i]._g;
-				b += colors[i]._b;
+				a += colors[i].A;
+				r += colors[i].R;
+				g += colors[i].G;
+				b += colors[i].B;
 			}
 
 			return new Color(a / colors.Length, r / colors.Length, g / colors.Length, b / colors.Length);
-		}
-
-		/// <summary>
-		/// Gets the alpha channel of this GameMaker.Color.
-		/// </summary>
-		public byte A { get { return _a; } }
-		/// <summary>
-		/// Gets the red channel of this GameMaker.Color.
-		/// </summary>
-		public byte R { get { return _r; } }
-		/// <summary>
-		/// Gets the green channel of this GameMaker.Color.
-		/// </summary>
-		public byte G { get { return _g; } }
-		/// <summary>
-		/// Gets the blue channel of this GameMaker.Color.
-		/// </summary>
-		public byte B { get { return _b; } }
-
-		/// <summary>
-		/// Returns this color as a 32-bit integer, in ARGB format.
-		/// </summary>
-		public int Argb
-		{
-			get
-			{
-				return A << 24
-					 | R << 16
-					 | G << 8
-					 | B;
-			}
 		}
 
 		/// <summary>
@@ -117,7 +80,7 @@ namespace GameMaker
 		/// <returns>A new GameMaker.Color with the same color as this instance, but with the specified alpha channel.</returns>
 		public Color Transparent(int alphaChannel)
 		{
-			return new Color((byte)alphaChannel, _r, _g, _b);
+			return new Color((byte)alphaChannel, R, G, B);
 		}
 
 		/// <summary>
@@ -127,7 +90,7 @@ namespace GameMaker
 		/// <returns>A new GameMaker.Color with the same color as this instance, but with an alpha channel corresponding to the specified opacity.</returns>
 		public Color Transparent(double opacity)
 		{
-			return new Color((byte)GMath.Round(255.0 * GMath.Median(0.0, opacity, 1.0)), _r, _g, _b);
+			return new Color((byte)GMath.Round(255.0 * GMath.Median(0.0, opacity, 1.0)), R, G, B);
 		}
 
 		/// <summary>
@@ -136,17 +99,14 @@ namespace GameMaker
 		/// <returns>The OpenTK.Graphics.Color4 that results from the conversion.</returns>
 		internal OpenTK.Graphics.Color4 ToOpenGLColor()
 		{
-			return new OpenTK.Graphics.Color4(_r, _g, _b, _a);
+			return new OpenTK.Graphics.Color4(R, G, B, A);
 		}
 
 		/// <summary>
 		/// Converts this GameMaker.Color to a human-readable string, showing the value of each channel.
 		/// </summary>
 		/// <returns>A string that represents this GameMaker.Color</returns>
-		public override string ToString()
-		{
-			return String.Format("Color ARGB=[{0}, {1}, {2}, {3}]", A, R, G, B);
-		}
+		public override string ToString() => String.Format("{0}=0x{1:X}", nameof(Color), Argb);
 
 
 		/// <summary>
@@ -154,21 +114,13 @@ namespace GameMaker
 		/// </summary>
 		/// <param name="obj">The System.Object to compare to.</param>
 		/// <returns>True if obj is a GameMaker.Color and has the same ARGB value as this GameMaker.Color.</returns>
-		public override bool Equals(object obj)
-		{
-			if (obj is Color)
-				return this == (Color)obj;
-			return base.Equals(obj);
-		}
+		public override bool Equals(object obj) => (obj is Color) ? (this == (Color)obj) : base.Equals(obj);
 
 		/// <summary>
 		/// Returns a hash code of this GameMaker.Color. The hash code is equal to the ARGB value.
 		/// </summary>
 		/// <returns>An integer value that specifies a hash value for this GameMaker.Color.</returns>
-		public override int GetHashCode()
-		{
-			return Argb;
-		}
+		public override int GetHashCode() => (int)Argb;
 
 		/// <summary>
 		/// Compares two GameMaker.Color objects. The results specifies whether their ARGB values are equal.
@@ -176,30 +128,22 @@ namespace GameMaker
 		/// <param name="left">The first GameMaker.Color to compare.</param>
 		/// <param name="right">The second GameMaker.Color to compare.</param>
 		/// <returns>True if the ARGB values of the two GameMaker.Color structures are equal.</returns>
-		public static bool operator ==(Color left, Color right)
-		{
-			return left._a == right._a && left._r == right._r && left._g == right._g && left._b == right._b;
-		}
-
+		public static bool operator ==(Color left, Color right) => (left.A == right.A && left.R == right.R && left.G == right.G && left.B == right.B);
+	
 		/// <summary>
 		/// Compares two GameMaker.Color objects. The results specifies whether their ARGB values are unequal.
 		/// </summary>
 		/// <param name="left">The first GameMaker.Color to compare.</param>
 		/// <param name="right">The second GameMaker.Color to compare.</param>
 		/// <returns>True if the ARGB values of the two colors are unequal.</returns>
-		public static bool operator !=(Color left, Color right)
-		{
-			return left._a != right._a || left._r != right._r || left._g != right._g || left._b != right._b;
-		}
+		public static bool operator !=(Color left, Color right) => (left.A != right.A || left.R != right.R || left.G != right.G || left.B != right.B);
+
 
 		/// <summary>
 		/// Converts the specified integer in an ARGB format to a GameMaker.Color
 		/// </summary>
 		/// <param name="argb">The System.Uint32 to be converted.</param>
 		/// <returns>The GameMaker.Color resulting from the conversion.</returns>
-		public static implicit operator Color(uint argb)
-		{
-			return new Color(argb);
-		}
+		public static implicit operator Color(uint argb) => new Color(argb);
 	}
 }

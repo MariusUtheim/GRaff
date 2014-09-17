@@ -1,30 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+
 
 namespace GameMaker
 {
 	/// <summary>
 	/// Represents a rectangle with integer coordinates.
 	/// </summary>
-	public struct IntRectangle
+	public struct IntRectangle(int x, int y, int width, int height)
 	{
-		/// <summary>
-		/// Initializes a new instance of the GameMaker.IntRectangle class with the specified coordinates, width and height.
-		/// </summary>
-		/// <param name="x">The x-coordinate of the top-left corner.</param>
-		/// <param name="y">The y-coordinate of the top-left corner.</param>
-		/// <param name="width">The width.</param>
-		/// <param name="height">The height.</param>
-		public IntRectangle(int x, int y, int width, int height)
-			: this()
-		{
-			this.Left = x;
-			this.Top = y;
-			this.Width = width;
-			this.Height = height;
-		}
 
 		/// <summary>
 		/// Initializes a new instance of the GameMaker.IntRectangle class at the specified location and with the specified size.
@@ -35,64 +18,47 @@ namespace GameMaker
 			: this(location.X, location.Y, size.X, size.Y) { }
 
 		/// <summary>
-		/// Gets or sets the width of this GameMaker.IntRectangle.
+		/// Gets the width of this GameMaker.IntRectangle.
 		/// </summary>
-		public int Width { get; set; }
+		public int Width { get; } = width;
 
 		/// <summary>
-		/// Gets or sets the height of this GameMaker.IntRectangle.
+		/// Gets the height of this GameMaker.IntRectangle.
 		/// </summary>
-		public int Height { get; set; }
+		public int Height { get; } = height;
 
 		/// <summary>
-		/// Gets or sets the left coordinate of this GameMaker.IntRectangle.
+		/// Gets the left coordinate of this GameMaker.IntRectangle.
 		/// </summary>
-		public int Left { get; set; }
+		public int Left { get; } = x;
 
 		/// <summary>
-		/// Gets or sets the top coordinate of this GameMaker.IntRectangle.
+		/// Gets the top coordinate of this GameMaker.IntRectangle.
 		/// </summary>
-		public int Top
-		{
-			get;
-			set;
-		}
+		public int Top { get; } = y;
 
 		/// <summary>
-		/// Gets or sets the right coordinate of this GameMaker.IntRectangle.
+		/// Gets the right coordinate of this GameMaker.IntRectangle.
 		/// </summary>
-		public int Right
-		{
-			get { return Left + Width; }
-			set { Left = value - Width; }
-		}
+		public int Right => Left + Width;
+
 
 		/// <summary>
-		/// Gets or sets the bottom coordinate of this GameMaker.IntRectangle.
+		/// Gets the bottom coordinate of this GameMaker.IntRectangle.
 		/// </summary>
-		public int Bottom
-		{
-			get { return Top + Height; }
-			set { Top = value - Height; }
-		}
+		public int Bottom => Top + Height;
+
 
 		/// <summary>
 		/// Gets or sets the location of the top-left corner of this GameMaker.IntRectangle.
 		/// </summary>
-		public IntVector Location
-		{
-			get { return new IntVector(Left, Top); }
-			set { Left = value.X; Top = value.Y; }
-		}
+		public IntVector Location => new IntVector(Left, Top);
+
 
 		/// <summary>
 		/// Gets or sets the size of this GameMaker.IntRectangle.
 		/// </summary>
-		public IntVector Size
-		{
-			get { return new IntVector(Width, Height); }
-			set { Width = value.X; Height = value.Y; }
-		}
+		public IntVector Size => new IntVector(Width, Height);
 
 		/// <summary>
 		/// Tests whether two rectangles intersect.
@@ -104,14 +70,13 @@ namespace GameMaker
 			return !(Left > other.Right || Top > other.Bottom || Right < other.Left || Bottom < other.Top);
 		}
 
+
 		/// <summary>
 		/// Converts this GameMaker.IntRectangle to a human-readable string.
 		/// </summary>
 		/// <returns>A string that represents this GameMaker.IntRectangle</returns>
-		public override string ToString()
-		{
-			return String.Format("IntRectangle: [({0},{1}), ({2},{3})]", Left, Top, Width, Height);
-		}
+		public override string ToString() => String.Format("IntRectangle: [({0},{1}), ({2},{3})]", Left, Top, Width, Height);
+
 
 		/// <summary>
 		/// Translates a GameMaker.IntRectangle by a given GameMaker.IntVector.
@@ -119,10 +84,8 @@ namespace GameMaker
 		/// <param name="r">The GameMaker.IntRectangle to translate.</param>
 		/// <param name="v">The GameMaker.IntVector to translate by.</param>
 		/// <returns>The translated GameMaker.IntRectangle.</returns>
-		public static IntRectangle operator +(IntRectangle r, IntVector v)
-		{
-			return new IntRectangle(r.Location + v, r.Size);
-		}
+		public static IntRectangle operator +(IntRectangle r, IntVector v) => new IntRectangle(r.Location + v, r.Size);
+		
 
 		/// <summary>
 		/// Translates a GameMaker.IntRectangle by subtracting a given GameMaker.IntVector.
@@ -130,10 +93,7 @@ namespace GameMaker
 		/// <param name="r">The GameMaker.IntRectangle to translate.</param>
 		/// <param name="v">The negative GameMaker.IntVector to translate by.</param>
 		/// <returns>The translated GameMaker.IntRectangle.</returns>
-		public static IntRectangle operator -(IntRectangle r, IntVector v)
-		{
-			return new IntRectangle(r.Location - v, r.Size);
-		}
+		public static IntRectangle operator -(IntRectangle r, IntVector v) => new IntRectangle(r.Location - v, r.Size);
 
 
 		/// <summary>
@@ -141,6 +101,6 @@ namespace GameMaker
 		/// </summary>
 		/// <param name="r">The GameMaker.IntRectangle to be converted</param>
 		/// <returns>The GameMaker.Rectangle that results from the conversion.</returns>
-		public static implicit operator Rectangle(IntRectangle r) { return new Rectangle(r.Left, r.Top, r.Width, r.Height); }
+		public static implicit operator Rectangle(IntRectangle r) => new Rectangle(r.Left, r.Top, r.Width, r.Height);
 	}
 }

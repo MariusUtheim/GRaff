@@ -8,9 +8,10 @@ namespace GameMaker
 {
 	public static class GlobalEvent
 	{
+#warning TODO: Define classes such as KeyboardEventArgs and MouseEventArgs
 		public static event Action Step;
-//		public static event Action BeginStep;
-//		public static event Action EndStep;
+		public static event Action BeginStep;
+		public static event Action EndStep;
 		public static event Action DrawBackground;
 		public static event Action DrawForeground;
 		public static event Action<Key> Key;
@@ -20,11 +21,24 @@ namespace GameMaker
 		public static event Action<MouseButton> MousePressed;
 		public static event Action<MouseButton> MouseReleased;
 
+		internal static void OnBeginStep()
+		{
+			if (BeginStep != null)
+				BeginStep.Invoke();
+		}
+
 		internal static void OnStep()
 		{
 			if (Step != null)
 				Step.Invoke();
 		}
+
+		internal static void OnEndStep()
+		{
+			if (EndStep != null)
+				EndStep.Invoke();
+		}
+
 
 		internal static void OnKey(Key key)
 		{
@@ -100,5 +114,26 @@ namespace GameMaker
 			}
 		}
 
+
+		private static Exception _asyncException = null;
+
+		internal static void OnAsyncException()
+		{
+			if (_asyncException != null)
+				throw _asyncException;
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="innerException"></param>
+		public static void ThrowAsyncException(Exception innerException)
+		{
+			lock (_asyncException)
+			{
+				if (_asyncException == null)
+					_asyncException = innerException;
+			}
+		}
 	}
 }
