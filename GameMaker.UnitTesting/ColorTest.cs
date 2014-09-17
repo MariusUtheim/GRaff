@@ -15,10 +15,10 @@ namespace GameMaker.UnitTesting
 			Assert.AreEqual(expected.R, 16);
 			Assert.AreEqual(expected.G, 32);
 			Assert.AreEqual(expected.B, 48);
+			Assert.AreEqual(expected.Argb, 0x80102030);
 			
 			Assert.AreEqual<Color>(expected, new Color(128, 16, 32, 48));
 			Assert.AreEqual<Color>(expected, new Color(0x80102030));
-			Assert.AreEqual<Color>(expected, 0x80102030);
 		}
 
 		[TestMethod]
@@ -37,6 +37,29 @@ namespace GameMaker.UnitTesting
 			actual = new Color(0xFF102030).Transparent(0.5);
 			expected = 0x80102030;
 			Assert.AreEqual<Color>(expected, actual);
+		}
+
+		[TestMethod]
+		public void OverridesFromSystemObject()
+		{
+			Color color = new Color(0xFF102030);
+
+			Assert.AreEqual("Color=0xFF102030", color.ToString());
+			Assert.AreEqual(true, color.Equals(new Color(0xFF102030)));
+			unchecked
+			{
+				Assert.AreEqual((int)0xFF102030, color.GetHashCode());
+			}
+		}
+
+		[TestMethod]
+		public void Operators()
+		{
+			Color expected = new Color(0xFF102030);
+
+			Assert.IsTrue(expected == new Color(0xFF102030));
+			Assert.IsTrue(expected != new Color(0x00000000));
+			Assert.IsTrue(expected == (Color)0xFF102030);
 		}
 	}
 }

@@ -59,6 +59,7 @@
     <Compile Include="CollisionTest.cs" />
     <Compile Include="TransformTest.cs" />
     <Compile Include="ColorTest.cs" />
+    <Compile Include="TextureTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\GameMaker\GameMaker.csproj">
