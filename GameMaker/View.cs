@@ -70,25 +70,25 @@ namespace GameMaker
 		/// </summary>
 		public static Rectangle ActualView()
 		{
-			Rectangle actualRoomView = RoomView;
+			double x = RoomView.Left, y = RoomView.Top, w = RoomView.Width, h = RoomView.Height;
 
-			if (actualRoomView.Width > Room.Width)
+			if (w > Room.Width)
 			{
-				actualRoomView.Left = 0;
-				actualRoomView.Width = Room.Width;
+				x = 0;
+				w = Room.Width;
 			}
 			else
-				actualRoomView.Left = GMath.Median(0, actualRoomView.Left, Room.Width - actualRoomView.Width);
+				x = GMath.Median(0, x, Room.Width - w);
 
-			if (actualRoomView.Height > Room.Height)
+			if (h > Room.Height)
 			{
-				actualRoomView.Top = 0;
-				actualRoomView.Height = Room.Height;
+				y = 0;
+				h = Room.Height;
 			}
 			else
-				actualRoomView.Top = GMath.Median(0, actualRoomView.Top, Room.Height - actualRoomView.Height);
+				y = GMath.Median(0, y, Room.Height - h);
 
-			return actualRoomView;
+			return new Rectangle(x, y, w, h) ;
 		}
 
 		/// <summary>

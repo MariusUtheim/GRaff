@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using OpenTK.Graphics.OpenGL;
+﻿using OpenTK.Graphics.OpenGL;
+
 
 namespace GameMaker
 {
@@ -53,7 +49,7 @@ namespace GameMaker
 					double u0 = -XOffset / (double)Sprite.Width, v0 = -YOffset / (double)Sprite.Height;
 					
 					GL.Enable(EnableCap.Texture2D);
-					GL.BindTexture(TextureTarget.Texture2D, Sprite.GetTexture(0).Id);
+					GL.BindTexture(TextureTarget.Texture2D, Sprite.Texture.Id);
 
 					GL.Begin(PrimitiveType.Quads);
 					GL.Color3(1.0f, 1.0f, 1.0f);

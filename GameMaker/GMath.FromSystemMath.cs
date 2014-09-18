@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GameMaker
 {
@@ -111,7 +107,7 @@ namespace GameMaker
 		}
 		public static Complex Exp(Complex z)
 		{
-			return new Complex(Math.Exp(z.Real), Angle.Rad(z.Imaginary));
+			return Math.Exp(z.Real) * new Complex(Math.Cos(z.Imaginary), Math.Sin(z.Imaginary));
 		}
 
 		public static double Floor(double d)

@@ -32,25 +32,13 @@ namespace GameMaker
 			set { Direction = value - Origin; }
 		}
 
-		public Vector LeftNormal
-		{
-			get
-			{
-				return new Vector(1, Direction.Direction - Angle.Deg(90));
-			}
-		}
+		public Vector LeftNormal => new Vector(1, Direction.Direction - Angle.Deg(90));
 
-		public Vector RightNormal
-		{
-			get
-			{
-				return new Vector(1, Direction.Direction + Angle.Deg(90));
-			}
-		}
 
-		public override string ToString()
-		{
-			return String.Format("Line from {0} to {1}", Origin, Destination);
-		}
+		public Vector RightNormal => new Vector(1, Direction.Direction + Angle.Deg(90));
+
+
+		public override string ToString() => String.Format("Line from {0} to {1}", Origin, Destination);
+
 	}
 }

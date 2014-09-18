@@ -31,6 +31,7 @@ namespace GameMaker
 		{
 			Time.StartTime = Time.MachineTime;
 			Window = new GameWindow(initialRoom.GetWidth(), initialRoom.GetHeight());
+			Window.WindowBorder = WindowBorder.Fixed;
 
 			Window.UpdateFrame += (sender, e) => {
 				try
@@ -90,6 +91,7 @@ namespace GameMaker
 
 		/// <summary>
 		/// Performs a game loop. This includes the following events, in order:
+		/// - Handle async exceptions
 		/// - Begin step
 		/// - Alarm
 		/// - Keyboard, key press, key release
@@ -100,6 +102,9 @@ namespace GameMaker
 		/// </summary>
 		public static void Loop()
 		{
+			GlobalEvent.OnAsyncException();
+
+			GlobalEvent.OnBeginStep();
 			foreach (var instance in Instance._objects)
 				instance.OnBeginStep();
 
@@ -115,6 +120,7 @@ namespace GameMaker
 			
 			foreach (var instance in Instance._objects)
 				instance.OnEndStep();
+			GlobalEvent.OnEndStep();
 		}
 
 		private static void _detectCollisions()

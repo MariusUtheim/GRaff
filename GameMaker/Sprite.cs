@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace GameMaker
 {
@@ -13,12 +14,11 @@ namespace GameMaker
 	public class Sprite
 	{
 		private int _subimages;
-		private string _filename;
-		private bool _isLoaded;
 		private Texture _texture;
 		private IntVector? _origin;
 		private int _width;
 		private int _height;
+		private Task _loadingTask = null;
 
 		/// <summary>
 		/// Initializes a new instance of the GameMaker.Sprite class.
@@ -34,12 +34,24 @@ namespace GameMaker
 			if (subimages < 1) throw new ArgumentOutOfRangeException("subimages", "Must be greater than or equal to 1");
 
 			this._subimages = subimages;
-			this._filename = filename;
+			this.FileName = filename;
 			this._origin = origin;
 			if (preload)
 				Load();
 		}
-		
+
+		public String FileName
+		{
+			get;
+			private set;
+		}
+
+		public bool IsLoaded
+		{
+			get;
+			private set;
+		}
+
 		/// <summary>
 		/// Gets the width of this GameMaker.Sprite.
 		/// </summary>
@@ -48,7 +60,7 @@ namespace GameMaker
 		{
 			get 
 			{
-				if (!_isLoaded) throw new InvalidOperationException("The texture is not loaded.");
+				if (!IsLoaded) throw new InvalidOperationException("The texture is not loaded.");
 				return _width;
 			}
 		}
@@ -61,7 +73,7 @@ namespace GameMaker
 		{
 			get
 			{
-				if (!_isLoaded) throw new InvalidOperationException("The texture is not loaded.");
+				if (!IsLoaded) throw new InvalidOperationException("The texture is not loaded.");
 				return _height;
 			}
 		}
@@ -74,7 +86,7 @@ namespace GameMaker
 		{
 			get
 			{
-				if (!_isLoaded) throw new InvalidOperationException("The texture is not loaded.");
+				if (!IsLoaded) throw new InvalidOperationException("The texture is not loaded.");
 				return new IntVector(_width, _height);
 			}
 		}
@@ -90,7 +102,7 @@ namespace GameMaker
 			{
 				if (_origin.HasValue)
 					return _origin.Value;
-				else if (_isLoaded)
+				else if (IsLoaded)
 					return new IntVector(_width / 2, _height / 2);
 				else
 					return null;
@@ -109,7 +121,7 @@ namespace GameMaker
 			{
 				if (_origin.HasValue)
 					return _origin.Value.X;
-				else if (_isLoaded)
+				else if (IsLoaded)
 					return _width / 2;
 				else
 					return 0;
@@ -126,7 +138,7 @@ namespace GameMaker
 			{
 				if (_origin.HasValue)
 					return _origin.Value.Y;
-				else if (_isLoaded)
+				else if (IsLoaded)
 					return _height / 2;
 				else
 					return 0;
@@ -144,28 +156,47 @@ namespace GameMaker
 		/// Loads the texture.
 		/// </summary>
 		/// <exception cref="System.IO.FileNotFoundException">The texture file does not exists.</exception>
+		/// <remarks>If the texture is already loading asynchronously, calling GameMaker.Sprite.Load blocks until loading completes.</remarks>
 		public void Load()
 		{
-			if (_isLoaded)
-				return;
-			_isLoaded = true;
-			_texture = new Texture(_filename);
-			_width = _texture.Width / ImageCount;
-			_height = _texture.Height;
+			if (_loadingTask != null)
+				_loadingTask.Wait();
 
-			if (_texture == null)
-				return;
+			var x = _loadingTask?.AsyncState;
+
+			lock (_texture)
+			{
+				if (IsLoaded)
+					return;
+
+				IsLoaded = true;
+				_texture = Texture.Load(FileName);
+				_width = _texture.Width / ImageCount;
+				_height = _texture.Height;
+			}
 		}
 
-#warning TODO: LoadAsync()
+		public void LoadAsync()
+		{
+			new Task(delegate {
+				lock (_texture)
+				{
+					if (IsLoaded)
+						return;
+
+				}
+			});
+		}
 
 #warning TODO: Unload()
 
-		public Texture GetTexture(int imageIndex)
+		public Texture Texture
 		{
-			Load();
-#warning TODO: Return texture based on imageIndex
-			return _texture;//[imageIndex % _subimages];
+			get
+			{
+				if (!IsLoaded) throw new InvalidOperationException("The texture is not loaded.");
+				return _texture;//[imageIndex % _subimages];
+			}
 		}
 
 		/// <summary>

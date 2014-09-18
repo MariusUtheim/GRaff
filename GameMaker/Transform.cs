@@ -6,14 +6,20 @@ using System.Threading.Tasks;
 
 namespace GameMaker
 {
+	/// <summary>
+	/// Represents a set of affine transformations.
+	/// </summary>
+	/// <remarks>
+	/// Transformation of a point is performed in the following order:
+	/// - Scaling
+	/// - Shearing
+	/// - Rotation (around origin)
+	/// - Translation
+	/// </remarks>
 	public class Transform
 	{
 		public Transform()
-			: base()
 		{
-			XScale = 1;
-			YScale = 1;
-			Rotation = Angle.Zero;
 		}
 
 		public Transform(double xScale, double yScale, Angle rotation)
@@ -23,9 +29,9 @@ namespace GameMaker
 			this.Rotation = rotation;
 		}
 
-		public double X { get; set; }
+		public double X { get; set; } = 1;
 
-		public double Y { get; set; }
+		public double Y { get; set; } = 1;
 
 		public Point Location
 		{
@@ -33,9 +39,9 @@ namespace GameMaker
 			set { X = value.X; Y = value.Y; }
 		}
 
-		public double XScale { get; set; }
+		public double XScale { get; set; } = 1;
 
-		public double YScale { get; set; }
+		public double YScale { get; set; } = 1;
 
 		public Vector Scale
 		{
@@ -43,11 +49,11 @@ namespace GameMaker
 			set { XScale = value.X; YScale = value.Y; }
 		}
 
-		public Angle Rotation { get; set; }
+		public Angle Rotation { get; set; } = Angle.Zero;
 
-		public double XShear { get; set; }
+		public double XShear { get; set; } = 0;
 
-		public double YShear { get; set; }
+		public double YShear { get; set; } = 0;
 
 
 #warning TODO: Cache instead of computing again every time
@@ -60,14 +66,13 @@ namespace GameMaker
 				);
 		}
 
-		public Point Point(Point pt)
-		{
-			//return this.Point(pt.X, pt.Y);
-			return GetMatrix() * pt;
-		}
+
+		public Point Point(Point pt) => GetMatrix() * pt;
+
 
 		public Point Point(double x, double y)
 		{
+#warning We're keeping this code around in case we want to change the GetMatrix() method. It is easier to debug this one and check that each step works individually.
 			double tx, ty;
 			double c = GMath.Cos(Rotation), s = GMath.Sin(Rotation);
 
@@ -85,21 +90,17 @@ namespace GameMaker
 			return new Point(tx, ty);
 		}
 
-		public Line Line(Line line)
-		{
-			return new Line(Point(line.Origin), Point(line.Destination));
-		}
+
+		public Line Line(Line line) => new Line(this.Point(line.Origin), this.Point(line.Destination));
+
 
 		public Point[] Rectangle(Rectangle rect)
-		{
-			return new Point[] {
+			=> new Point[] {
 				this.Point(rect.Left, rect.Top),
 				this.Point(rect.Right, rect.Top),
 				this.Point(rect.Right, rect.Bottom),
 				this.Point(rect.Left, rect.Bottom)
 			};
-
-		}
 
 	}
 }
