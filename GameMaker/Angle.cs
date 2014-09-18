@@ -11,8 +11,11 @@ namespace GameMaker
 	/// </summary>
 #warning TODO: Test
 #warning TODO: Two angles are equal if their value differs by a multiple of tau.
-	public struct Angle
+	public struct Angle(double degrees)
 	{
+		{
+			degrees = (degrees % 360.0 + 360.0) % 360.0;
+        }
 		/// <summary>
 		/// Represents an angle of zero.
 		/// </summary>
@@ -23,37 +26,26 @@ namespace GameMaker
 		/// </summary>
 		/// <param name="radians">The angle, in radians.</param>
 		/// <returns>the created GameMaker.Angle</returns>
-		public static Angle Rad(double radians)
-		{
-			return new Angle { Degrees = radians * GMath.RadToDeg };
-		}
+		public static Angle Rad(double radians) => new Angle(radians * GMath.RadToDeg);
 
 		/// <summary>
 		/// Creates a GameMaker.Angle with a value specified in degrees.
 		/// </summary>
 		/// <param name="degrees">The angle, in degrees</param>
 		/// <returns>the created GameMaker.Angle</returns>
-		public static Angle Deg(double degrees)
-		{
-			return new Angle { Degrees = (degrees % 360.0 + 360.0) % 360.0 };
-		}
+		public static Angle Deg(double degrees) => new Angle(degrees);
 
+		
 		/// <summary>
 		/// Gets the value of this angle, in degrees.
 		/// </summary>
-		public double Degrees
-		{
-			get;
-			private set;
-		}
+		public double Degrees { get; } = degrees;
+
 
 		/// <summary>
 		/// Gets the value of this angle, in radians.
 		/// </summary>
-		public double Radians
-		{
-			get { return Degrees * GMath.DegToRad; }
-		}
+		public double Radians => Degrees * GMath.DegToRad;
 
 
 		/// <summary>
@@ -62,10 +54,8 @@ namespace GameMaker
 		/// <param name="x">The x-coordinate.</param>
 		/// <param name="y">The y-coordinate.</param>
 		/// <returns>The direction of the vector from the origin to the specified point.</returns>
-		public static Angle Direction(double x, double y)
-		{
-			return GMath.Atan2(y, x);
-		}
+		public static Angle Direction(double x, double y) => GMath.Atan2(y, x);
+
 
 		/// <summary>
 		/// Finds the direction of the vector from the point (x1,y1) to the point (x2,y2).
@@ -75,10 +65,7 @@ namespace GameMaker
 		/// <param name="x2">The x-coordinate of the second point.</param>
 		/// <param name="y2">The y-coordinate of the second point.</param>
 		/// <returns>The direction of the vector the first to the second point.</returns>
-		public static Angle Direction(double x1, double y1, double x2, double y2)
-		{
-			return GMath.Atan2(y2 - y1, x2 - x1);
-		}
+		public static Angle Direction(double x1, double y1, double x2, double y2) => GMath.Atan2(y2 - y1, x2 - x1);
 
 
 		/// <summary>
