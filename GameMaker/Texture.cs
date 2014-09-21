@@ -12,11 +12,25 @@ namespace GameMaker
 {
 	public class Texture : IDisposable
 	{
-		private Texture()
+		internal Texture(Bitmap bmp)
 		{
 			Id = GL.GenTexture();
-		}
 
+			Width = bmp.Width;
+			Height = bmp.Height;
+			var textureData = bmp.LockBits(new System.Drawing.Rectangle(0, 0, Width, Height),
+				ImageLockMode.ReadOnly,
+				System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+
+			GL.BindTexture(TextureTarget.Texture2D, Id);
+
+			GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, Width, Height, 0, OpenTK.Graphics.OpenGL.PixelFormat.Bgra, PixelType.UnsignedByte, textureData.Scan0);
+			GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Linear);
+			GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
+
+			bmp.UnlockBits(textureData);
+
+		}
 
 		/// <summary>
 		/// Loads a texture from the specified file. 
@@ -25,29 +39,15 @@ namespace GameMaker
 		/// <returns>A new GameMaker.Texture representing the loaded file.</returns>
 		public static Texture Load(string filename)
 		{
-			Texture result = new Texture();
-	
+			Texture result;
+
 			using (var stream = new FileStream(filename, FileMode.Open))
 			using (var bmp = new Bitmap(stream))
-			{
-				result.Width = bmp.Width;
-				result.Height = bmp.Height;
-				var textureData = bmp.LockBits(new System.Drawing.Rectangle(0, 0, result.Width, result.Height),
-					ImageLockMode.ReadOnly,
-					System.Drawing.Imaging.PixelFormat.Format32bppArgb);
-
-				GL.BindTexture(TextureTarget.Texture2D, result.Id);
-
-				GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, result.Width, result.Height, 0, OpenTK.Graphics.OpenGL.PixelFormat.Bgra, PixelType.UnsignedByte, textureData.Scan0);
-				GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Linear);
-				GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
-
-				bmp.UnlockBits(textureData);
-			}
+				result = new Texture(bmp);
 
 			var err = GL.GetError();
 			if (err != ErrorCode.NoError)
-				throw new NotImplementedException();
+				throw new NotImplementedException("Error handling in GameMaker.Texture.Load(string) is not implemented.");
 
 			return result;
 		}
@@ -56,22 +56,7 @@ namespace GameMaker
 		{
 			Texture result;
 			using (var bmp = await Task.Run(() => new Bitmap(filename)))
-			{
-				result = new Texture();
-				result.Width = bmp.Width;
-				result.Height = bmp.Height;
-				var textureData = bmp.LockBits(new System.Drawing.Rectangle(0, 0, result.Width, result.Height),
-					ImageLockMode.ReadOnly,
-					System.Drawing.Imaging.PixelFormat.Format32bppArgb);
-
-				GL.BindTexture(TextureTarget.Texture2D, result.Id);
-
-				GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, result.Width, result.Height, 0, OpenTK.Graphics.OpenGL.PixelFormat.Bgra, PixelType.UnsignedByte, textureData.Scan0);
-				GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Linear);
-				GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
-
-				bmp.UnlockBits(textureData);
-			}
+				result = new Texture(bmp);
 
 			return result;
 		}

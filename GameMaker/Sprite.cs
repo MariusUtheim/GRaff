@@ -155,10 +155,7 @@ namespace GameMaker
 			if (_loadingTask != null)
 				_loadingTask.Wait();
 
-			var x = _loadingTask?.AsyncState;
-
-			lock (_texture)
-			{
+			
 				if (IsLoaded)
 					return;
 
@@ -166,9 +163,9 @@ namespace GameMaker
 				_texture = Texture.Load(FileName);
 				_width = _texture.Width / ImageCount;
 				_height = _texture.Height;
-			}
 		}
 
+		/*
 		public void LoadAsync()
 		{
 			new Task(delegate {
@@ -180,6 +177,7 @@ namespace GameMaker
 				}
 			});
 		}
+		*/
 
 #warning TODO: Unload()
 
