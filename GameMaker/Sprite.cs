@@ -19,6 +19,8 @@ namespace GameMaker
 		private int _width;
 		private int _height;
 		private Task _loadingTask = null;
+		private bool _hasCustomMask;
+		private MaskShape _maskShape;
 
 		/// <summary>
 		/// Initializes a new instance of the GameMaker.Sprite class.
@@ -36,6 +38,8 @@ namespace GameMaker
 			this._subimages = subimages;
 			this.FileName = filename;
 			this._origin = origin;
+			this._hasCustomMask = false;
+			this._maskShape = null;
 			if (preload)
 				Load();
 		}
@@ -107,8 +111,6 @@ namespace GameMaker
 				else
 					return null;
 			}
-			
-			set { _origin = value; }
 		}
 
 		/// <summary>
@@ -145,6 +147,17 @@ namespace GameMaker
 			}
 		}
 
+
+		public MaskShape MaskShape
+		{
+			get
+			{
+				if (!IsLoaded) throw new InvalidOperationException("The texture is not loaded.");
+				return _maskShape;
+			}
+		}
+
+
 		/// <summary>
 		/// Loads the texture.
 		/// </summary>
@@ -155,7 +168,9 @@ namespace GameMaker
 			if (_loadingTask != null)
 				_loadingTask.Wait();
 
-			
+
+//			lock (_texture)
+//			{
 				if (IsLoaded)
 					return;
 
@@ -163,6 +178,9 @@ namespace GameMaker
 				_texture = Texture.Load(FileName);
 				_width = _texture.Width / ImageCount;
 				_height = _texture.Height;
+			if (!_hasCustomMask)
+				_maskShape = MaskShape.Rectangle(-XOrigin, -YOrigin, _width, _height);
+//			}
 		}
 
 		/*
@@ -197,6 +215,5 @@ namespace GameMaker
 		{
 			get { return _subimages; }
 		}
-
 	}
 }

@@ -142,13 +142,13 @@ namespace GameMaker
 				{
 					case ALSourceState.Initial:
 					case ALSourceState.Stopped:
-						return GameMaker.SoundState.Stopped;
+						return SoundState.Stopped;
 
 					case ALSourceState.Paused:
-						return GameMaker.SoundState.Paused;
+						return SoundState.Paused;
 
 					case ALSourceState.Playing:
-						return GameMaker.SoundState.Playing;
+						return SoundState.Playing;
 
 					default:
 						throw new Exception("Internal error in SoundInstance.cs");

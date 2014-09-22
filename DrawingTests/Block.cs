@@ -14,7 +14,7 @@ namespace DrawingTests
 		public Block(double x, double y)
 			: base(x, y)
 		{
-			Mask.Rectangle(30, 30);
+			Mask.Shape = MaskShape.Rectangle(30, 30);
 		}
 
 		public override void OnStep()

@@ -81,6 +81,12 @@ namespace GameMaker
 			CurrentSurface.DrawLine(col1, col2, line.Origin.X, line.Origin.Y, line.Destination.X, line.Destination.Y);
 		}
 
+		public static void Polygon(Color color, Polygon polygon)
+		{
+			CurrentSurface.DrawPolygon(color, polygon);
+		}
+
+
 		public static void Image(Image image)
 		{
 			CurrentSurface.DrawImage(image);

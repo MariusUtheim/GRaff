@@ -92,6 +92,7 @@ namespace GameMaker
 #warning TODO: Documentation
 		public override bool Equals(object obj) => (obj is Angle) ? (this == (Angle)obj) : base.Equals(obj);
 
+		public override int GetHashCode() => Degrees.GetHashCode();
 
 		public static bool operator ==(Angle left, Angle right) => (left.Degrees == right.Degrees);
 

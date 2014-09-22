@@ -11,7 +11,7 @@ namespace DrawingTests
 	{
 		static Sprites()
 		{
-			Xujia = new Sprite("Assets/xujia.jpg", 2, null, true);
+			Xujia = new Sprite("Assets/xujia.jpg", 1, null, true);
 		}
 
 		public static Sprite Xujia { get; private set; }
