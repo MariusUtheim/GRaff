@@ -7,29 +7,62 @@ namespace GameMaker
 {
 	public class Polygon
 	{
-		public int Length
+		private Point[] pts;
+
+		public Polygon(IEnumerable<Point> pts)
 		{
-			get { throw new NotImplementedException(); }
+			this.pts = pts.ToArray();
 		}
+
+		public Polygon(params Point[] pts)
+		{
+			if (pts == null)
+				throw new ArgumentNullException("pts", "Cannot be null.");
+			this.pts = pts.Clone() as Point[];
+		}
+
+		private void _SanityCheck()
+		{
+			if (Length > 2)
+			{
+				double sum = 0;
+				for (int i = 0; i < Length; i++)
+				{
+					Angle vertex;
+				}
+			}
+		}
+
+		public int Length => pts.Length;
 
 		public Point Vertex(int index)
 		{
-			throw new NotImplementedException();
+			if (Length == 0)
+				throw new InvalidOperationException("The specified polygon has no vertices.");
+			return pts[(index % pts.Length + pts.Length) % pts.Length];
 		}
 
 		public Line Edge(int index)
 		{
-			throw new NotImplementedException();
+			if (Length == 0)
+				throw new InvalidOperationException("The specified polygon has no vertices.");
+			return new Line(Vertex(index), Vertex(index + 1));
 		}
 
 		public IEnumerable<Point> Vertices
 		{
-			get { throw new NotImplementedException(); }
+			get { return pts.AsEnumerable(); }
 		}
 
 		public IEnumerable<Line> Edges
 		{
-			get { throw new NotImplementedException(); }
+			get
+			{
+				for (int i = 1; i < pts.Length; i++)
+					yield return new Line(pts[i], pts[i - 1]);
+				if (pts.Length != 0)
+					yield return new Line(pts[0], pts[Length - 1]);
+			}
 		}
 
 		public bool ContainsPoint(Point pt)
@@ -45,10 +78,15 @@ namespace GameMaker
 			 * */
 
 			foreach (Line L in Edges)
-				if (L.LeftNormal.DotProduct(pt - L.Origin) > 0)
+				if (L.RightNormal.DotProduct(pt - L.Origin) > 0)
 					return false;
 
 			return true;
+		}
+
+		public bool ContainsPoint(double x, double y)
+		{
+			return ContainsPoint(new Point(x, y));
 		}
 
 		public bool Intersects(Polygon other)
@@ -66,7 +104,7 @@ namespace GameMaker
 			IEnumerable<Point> otherVertices = other.Vertices;
 			foreach (Line l in Edges)
 			{
-				Vector n = l.LeftNormal;
+				Vector n = l.RightNormal;
 				if (otherVertices.All(pt => n.DotProduct(pt - l.Origin) > 0))
 					return false;
 			}

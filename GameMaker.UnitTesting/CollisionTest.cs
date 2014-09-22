@@ -5,54 +5,106 @@ namespace GameMaker.UnitTesting
 {
 	class TestObject : GameObject
 	{
-		public TestObject() : base(0, 0) { }
-		public TestObject(double x, double y) : base(x, y) { }
+		public TestObject(MaskShape maskShape) : base(0, 0)
+		{
+			Mask.Shape = maskShape;
+		}
+
 	}
 
 	[TestClass]
 	public class CollisionTest
 	{
-		[TestMethod]
-		public void Positions_Overlap_and_Rects_Intersect()
-		{
-			Vector sz = new Vector(20, 20);
-			Rectangle rect = new Rectangle(new Point(0, 0), sz);
+		private static TestObject testRegion = new TestObject(MaskShape.Rectangle(20, 20));
 
-			TestObject obj1 = new TestObject();
-			obj1.Mask.Rectangle(10, 10, 20, 20);
+		[TestMethod]
+		public void Rectangle()
+		{
+			TestObject targetRegion;
+
+			targetRegion = new TestObject(MaskShape.Rectangle(2, 2));
+			Assert.IsTrue(testRegion.Intersects(targetRegion));
+
+			targetRegion = new TestObject(MaskShape.Rectangle(5, 5, 10, 10));
+			Assert.IsTrue(testRegion.Intersects(targetRegion));
+
+			targetRegion = new TestObject(MaskShape.Rectangle(new Rectangle(5, 5, 10, 10)));
+			Assert.IsTrue(testRegion.Intersects(targetRegion));
+
+
+			targetRegion = new TestObject(MaskShape.Rectangle(12, 2, 15, 15));
+			Assert.IsFalse(testRegion.Intersects(targetRegion));
+		}
+
+		[TestMethod]
+		public void Diamond()
+		{
+			TestObject targetRegion;
+
+			targetRegion = new TestObject(MaskShape.Diamond(2, 2));
+			Assert.IsTrue(testRegion.Intersects(targetRegion));
+
+			targetRegion = new TestObject(MaskShape.Diamond(5, 0, 10, 10));
+			Assert.IsTrue(testRegion.Intersects(targetRegion));
+
+			targetRegion = new TestObject(MaskShape.Diamond(new Rectangle(5, 5, 12, 12)));
+			Assert.IsTrue(testRegion.Intersects(targetRegion));
+
+
+			targetRegion = new TestObject(MaskShape.Diamond(5, 5, 30, 30));
+			Assert.IsFalse(testRegion.Intersects(targetRegion));
 			
-			TestObject obj2 = new TestObject();
-			obj2.Mask.Rectangle(20, 20, 20, 20);
-
-			Assert.IsTrue(obj1.Intersects(obj2));
 		}
 
 		[TestMethod]
-		public void Rects_Overlap()
+		public void Circle()
 		{
-			TestObject obj1 = new TestObject(), obj2 = new TestObject();
+			TestObject targetRegion;
 
-			obj1.Mask.Rectangle(0, 0, 10, 10);
-			obj2.Mask.Rectangle(0, 0, 32, 16);
+			targetRegion = new TestObject(MaskShape.Circle(1));
+			Assert.IsTrue(testRegion.Intersects(targetRegion));
 
-			obj1.Location = new Point(0, 0);
-			obj2.Location = new Point(8, 8);
+			targetRegion = new TestObject(MaskShape.Circle(-1, 3));
+			Assert.IsTrue(testRegion.Intersects(targetRegion));
 
-			Assert.IsTrue(obj1.Intersects(obj2));
+			targetRegion = new TestObject(MaskShape.Circle(new Point(15, 15), 10));
+			Assert.IsTrue(testRegion.Intersects(targetRegion));
+
+			targetRegion = new TestObject(MaskShape.Circle(new Point(15, 15), 5));
+			Assert.IsFalse(testRegion.Intersects(targetRegion));
 		}
 
 		[TestMethod]
-		public void NonIntersection()
+		public void Ellipse()
 		{
-			TestObject obj1 = new TestObject(), obj2 = new TestObject();
+			TestObject targetRegion;
 
-			obj1.Mask.Rectangle(30, 30);
-			obj2.Mask.Rectangle(30, 20);
+			targetRegion = new TestObject(MaskShape.Ellipse(3, 2));
+			Assert.IsTrue(testRegion.Intersects(targetRegion));
 
-			obj1.Location = new Point(1000, 1000);
-			obj2.Location = new Point(10, 10);
+			targetRegion = new TestObject(MaskShape.Ellipse(0, 9, 2, 20));
+			Assert.IsTrue(testRegion.Intersects(targetRegion));
 
-			Assert.IsFalse(obj1.Intersects(obj2));
+			targetRegion = new TestObject(MaskShape.Ellipse(new Rectangle(1, 1, 40, 40)));
+			Assert.IsTrue(testRegion.Intersects(targetRegion));
+
+
+			targetRegion = new TestObject(MaskShape.Ellipse(5, 5, 40, 40));
+			Assert.IsFalse(testRegion.Intersects(targetRegion));
+		}
+
+		[TestMethod]
+		public void Transformed()
+		{
+			TestObject targetRegion = new TestObject(MaskShape.Rectangle(40, 40));
+
+			targetRegion.Location = new Point(60, 5);
+			Assert.IsFalse(testRegion.Intersects(targetRegion));
+
+			targetRegion.Transform.Scale *= 2;
+			targetRegion.Transform.Rotation += Angle.Deg(45);
+			Assert.IsTrue(testRegion.Intersects(targetRegion));
+
 		}
 	}
 }

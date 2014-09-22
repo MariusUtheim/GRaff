@@ -89,7 +89,7 @@ namespace GameMaker
 		public Sprite Sprite
 		{
 			get { return _sprite; }
-			set { _sprite = value; Mask.Update(); }
+			set { _sprite = value; }
 		}
 
 		public Transform Transform { get; private set; }

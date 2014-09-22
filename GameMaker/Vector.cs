@@ -67,7 +67,7 @@ namespace GameMaker
 		/// </summary>
 		/// <param name="other">The other GameMaker.Vector.</param>
 		/// <returns>The dot product of the two vectors.</returns>
-		public double DotProduct(Vector other) => Magnitude * other.Magnitude * Math.Cos((Direction - other.Direction).Radians);
+		public double DotProduct(Vector other) => Magnitude * other.Magnitude * GMath.Cos(Direction - other.Direction);
 
 
 		/// <summary>

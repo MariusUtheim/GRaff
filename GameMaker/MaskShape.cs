@@ -8,52 +8,12 @@ namespace GameMaker
 {
 	public class MaskShape
 	{
-		private Point[] _pts;
-		private MaskShape.Type _type;
-
 		private MaskShape(params Point[] pts)
 		{
-			_pts = pts.Clone() as Point[];
-			_type = Type.Custom;
+			Polygon = new Polygon(pts);
 		}
 
-		private MaskShape(MaskShape.Type type)
-		{
-			this._type = type;
-		}
- 
-
-		private enum Type
-		{
-			Custom, Rectangle, Diamond, Ellipse
-		}
-
-		internal void UpdateSprite(Sprite sprite)
-		{
-			if (!sprite.IsLoaded && _type != Type.Custom)
-				_pts = new Point[0];
-
-			switch (_type)
-			{
-				case Type.Custom:
-					break;
-
-				case Type.Rectangle:
-					_pts = new Point[] {
-						new Point(0, 0),
-						new Point(sprite.Width, 0),
-						new Point(sprite.Width, sprite.Height),
-						new Point(0, sprite.Height)
-					};
-					break;
-			}
-		}
-
-
-		public static MaskShape Rectangle()
-		{
-			throw new NotImplementedException();
-		}
+		public Polygon Polygon { get; private set; }
 
 		public static MaskShape Rectangle(double x, double y, double width, double height)
 		{
@@ -67,7 +27,7 @@ namespace GameMaker
 
 		public static MaskShape Rectangle(double width, double height)
 		{
-			throw new NotImplementedException();
+			return MaskShape.Rectangle(-width / 2, -height / 2, width, height);
 		}
 
 		public static MaskShape Rectangle(Rectangle rectangle)
@@ -85,8 +45,26 @@ namespace GameMaker
 			);
 		}
 
+		public static MaskShape Diamond(double width, double height)
+		{
+			return MaskShape.Diamond(-width / 2, -height / 2, width, height);
+		}
+
+		public static MaskShape Diamond(Rectangle rectangle)
+		{
+			return MaskShape.Rectangle(rectangle.Left, rectangle.Top, rectangle.Width, rectangle.Height);
+ 		}
+
+		public static MaskShape Circle(double radius)
+		{
+			return Circle(radius, (int)(3 * GMath.Abs(radius)));
+		}
+
 		public static MaskShape Circle(double radius, int precision)
 		{
+			if (precision <= 0) throw new ArgumentException("Must be greater than 0", "precision");
+			if (precision == 1) return new MaskShape(new Point(0, 0));
+
 			Point[] pts = new Point[precision];
 			double dt = GMath.Tau / precision;
 			for (int i = 0; i < precision; i++)
@@ -94,24 +72,63 @@ namespace GameMaker
 			return new MaskShape(pts);
 		}
 
-		public static MaskShape Ellipse()
+		public static MaskShape Circle(Point center, double radius)
 		{
-			throw new NotImplementedException();
+			return Circle(center, radius, (int)GMath.Ceiling(3 * GMath.Abs(radius)));
+		}
+
+#warning TODO: Optimize this
+		public static MaskShape Circle(Point center, double radius, int precision)
+		{
+			if (precision <= 0) throw new ArgumentException("Must be greater than 0", "precision");
+			if (precision == 1) return new MaskShape(center);
+
+			Point[] pts = new Point[precision];
+			double dt = GMath.Tau / precision;
+			for (int i = 0; i < precision; i++)
+				pts[i] = center + new Vector(radius, Angle.Rad(dt * i));
+
+			return new MaskShape(pts);
 		}
 
 		public static MaskShape Ellipse(double x, double y, double width, double height)
 		{
-			throw new NotImplementedException();
+			int precision = (int)GMath.Ceiling(1.5 * (width + height));
+
+			width /= 2;
+			height /= 2;
+			x += width;
+			y += height;
+			
+			Point[] pts = new Point[precision];
+			double dt = GMath.Tau / precision;
+			double t = 0;
+			for (int i = 0; i < precision; i++)
+				pts[i] = new Point(x + width * GMath.Cos(i * dt), y + height * GMath.Sin(i * dt));
+
+			return new MaskShape(pts);
 		}
 
-		public static MaskShape None()
+		public static MaskShape Ellipse(double width, double height)
 		{
-			return new MaskShape();
+			return Ellipse(-width / 2, -height / 2, width, height);
 		}
 
-		public static MaskShape Polygon(Point[] pts)
+		public static MaskShape Ellipse(Rectangle rectangle)
 		{
-			return new MaskShape(pts.Clone() as Point[]);
+			return Ellipse(rectangle.Left, rectangle.Top, rectangle.Width, rectangle.Height);
+		}
+
+		public static MaskShape None { get; } = new MaskShape();
+
+#warning GameMaker.MaskShape.SameAsSprite.Polygon causes undefined behavior.
+		private static MaskShape _sameAsSprite = new MaskShape();
+		public static MaskShape SameAsSprite
+		{
+			get
+			{
+				return _sameAsSprite;
+			}
 		}
 	}
 }

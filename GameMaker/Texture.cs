@@ -10,7 +10,7 @@ using OpenTK.Graphics.OpenGL;
 
 namespace GameMaker
 {
-	public class Texture : IDisposable
+	public class Texture
 	{
 		private Texture()
 		{
@@ -91,11 +91,6 @@ namespace GameMaker
 		{
 			get;
 			private set;
-		}
-
-		public void Dispose()
-		{
-			throw new NotImplementedException();
 		}
 	}
 }

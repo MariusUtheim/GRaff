@@ -40,5 +40,18 @@ namespace GameMaker
 
 		public override string ToString() => String.Format("Line from {0} to {1}", Origin, Destination);
 
+		public override bool Equals(object obj) => (obj is Line) ? (this == (Line)obj) : base.Equals(obj);
+
+		public override int GetHashCode() => Origin.GetHashCode() ^ Direction.GetHashCode();
+
+		public static bool operator ==(Line left, Line right) => left.Origin == right.Origin && left.Direction == right.Direction;
+
+		public static bool operator !=(Line left, Line right) => left.Origin != right.Origin || left.Direction != right.Direction;
+
+		public static Line operator +(Line l, Vector v) => new Line(l.Origin + v, l.Direction);
+
+		public static Line operator -(Line l, Vector v) => new Line(l.Origin - v, l.Direction);
+
+
 	}
 }

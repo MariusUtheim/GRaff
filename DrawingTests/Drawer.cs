@@ -19,10 +19,12 @@ namespace DrawingTests
 			Background.Color = Color.ForestGreen;
 			Sprite = Sprites.Xujia;
 			Image.Alpha = 0.5;
+			Mask.Shape = MaskShape.Ellipse(60, 40);
 		}
 
 		public override void OnStep()
 		{
+			Transform.Rotation += Angle.Deg(1);
 		}
 
 		public override void OnDraw()

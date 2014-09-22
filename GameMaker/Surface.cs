@@ -101,6 +101,15 @@ namespace GameMaker
 			GL.End();
 		}
 
+		public void DrawPolygon(Color color, Polygon polygon)
+		{
+			GL.Begin(PrimitiveType.LineLoop);
+			GL.Color4(color.ToOpenGLColor());
+			foreach (Point p in polygon.Vertices)
+				GL.Vertex2(p.X, p.Y);
+			GL.End();
+		}
+
 		public void FillCircle(Color color, double x, double y, double radius)
 		{
 			double c = GMath.Tau * radius;

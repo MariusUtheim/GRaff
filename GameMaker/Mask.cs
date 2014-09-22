@@ -14,11 +14,12 @@ namespace GameMaker
 		internal Mask(GameObject owner)
 		{
 			this._owner = owner;
+			this.Shape = MaskShape.SameAsSprite;
 		}
 
 		public Polygon GetPolygon()
 		{
-			throw new NotImplementedException();
+			return Transform.Polygon(Shape.Polygon);
 		}
 
 
@@ -27,9 +28,29 @@ namespace GameMaker
 			get { return _owner.Transform; }
 		}
 
-		private MaskShape MaskShape
+		private MaskShape _maskShape;
+		/// <summary>
+		/// Gets or sets the shape of this GameMaker.Mask.
+		/// If the shape is set to GameMaker.MaskShape.SameAsSprite, it instead gets the maskshape of the underlying sprite, or GameMaker.MaskShape.None if that sprite is null.
+		/// This value cannot be set to null.
+		/// </summary>
+		public MaskShape Shape
 		{
-			get { return _owner.Sprite.MaskShape; }
+			get
+			{
+				if (_maskShape == MaskShape.SameAsSprite)
+					return _owner?.Sprite.MaskShape ?? MaskShape.None;
+				else
+					return _maskShape;	
+			}
+
+			set
+			{
+#warning DESIGN: Should setting the value to null instead set it to MaskShape.None?
+				if (value == null)
+					throw new ArgumentNullException("The value of GameMaker.Mask.Shape cannot be null. Consider using GameMaker.MaskShape.None or GameMaker.MaskShape.SameAsSprite.");
+				_maskShape = value;
+			}
 		}
 
 		public Rectangle BoundingBox
@@ -82,8 +103,7 @@ namespace GameMaker
 
 		public void DrawOutline(Color color)
 		{
-			Draw.Rectangle(color, BoundingBox);
-
+			Draw.Polygon(color, GetPolygon());
 		}
 	}
 

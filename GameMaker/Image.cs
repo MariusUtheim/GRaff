@@ -58,12 +58,13 @@ namespace GameMaker
 		/// <summary>
 		/// Gets the width of this GameMaker.Image, taking scale into consideration.
 		/// </summary>
-		/// <exception cref="System.NullReferenceException">GameMaker.Image.Sprite is set to null.</exception>
+		/// <exception cref="System.InvalidOperationException">GameMaker.Image.Sprite is set to null.</exception>
 		public double Width
 		{
 			get
 			{
-				if (Sprite == null) throw new NullReferenceException("The GameMaker.Image has no sprite.");
+				if (Sprite == null)
+					throw new InvalidOperationException("The GameMaker.Image has no sprite.");
 				return CurrentTexture.Width * Transform.XScale;
 			}
 		}
@@ -71,12 +72,13 @@ namespace GameMaker
 		/// <summary>
 		/// Gets the height of this GameMaker.Image, taking scale into consideration.
 		/// </summary>
-		/// <exception cref="System.NullReferenceException">GameMaker.Image.Sprite is set to null.</exception>
+		/// <exception cref="System.InvalidOperationException">GameMaker.Image.Sprite is set to null.</exception>
 		public double Height
 		{
 			get
 			{
-				if (Sprite == null) throw new NullReferenceException("The GameMaker.Image has no sprite.");
+				if (Sprite == null)
+					throw new InvalidOperationException("The GameMaker.Image has no sprite.");
 				return CurrentTexture.Height * Transform.YScale;
 			}
 		}
@@ -84,12 +86,12 @@ namespace GameMaker
 		/// <summary>
 		/// Gets the current texture of this GameMaker.Image.
 		/// </summary>
-		/// <exception cref="System.NullReferenceException">GameMaker.Image.Sprite is set to null.</exception>
+		/// <exception cref="System.InvalidOperationException">GameMaker.Image.Sprite is set to null.</exception>
 		public Texture CurrentTexture
 		{
 			get
 			{
-				if (Sprite == null) throw new NullReferenceException("The GameMaker.Image has no sprite.");
+				if (Sprite == null) throw new InvalidOperationException("The GameMaker.Image has no sprite.");
 				return Sprite.Texture;
 			}
 		}

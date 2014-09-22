@@ -95,12 +95,20 @@ namespace GameMaker
 
 
 		public Point[] Rectangle(Rectangle rect)
-			=> new Point[] {
-				this.Point(rect.Left, rect.Top),
-				this.Point(rect.Right, rect.Top),
-				this.Point(rect.Right, rect.Bottom),
-				this.Point(rect.Left, rect.Bottom)
+		{
+			Matrix T = GetMatrix();
+			return new Point[] {
+				T * this.Point(rect.Left, rect.Top),
+				T * this.Point(rect.Right, rect.Top),
+				T * this.Point(rect.Right, rect.Bottom),
+				T * this.Point(rect.Left, rect.Bottom)
 			};
+		}
 
+		public Polygon Polygon(Polygon polygon)
+		{
+			Matrix T = GetMatrix();
+			return new GameMaker.Polygon(polygon.Vertices.Select(v => T * v));
+		}
 	}
 }
