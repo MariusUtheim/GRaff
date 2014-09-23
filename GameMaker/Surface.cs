@@ -123,6 +123,7 @@ namespace GameMaker
 			GL.Color4(col2.ToOpenGLColor());
 			foreach (Point pt in Polygon.EnumerateCircle(new Point(x, y), radius))
 				GL.Vertex2(pt.X, pt.Y);
+			GL.Vertex2(x + radius, y);
 			GL.End();
 		}
 

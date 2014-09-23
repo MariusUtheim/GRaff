@@ -212,7 +212,7 @@ namespace GameMaker
 		}
 
 		/// <summary>
-		/// Makes the application freeze for the specified number of milliseconds.
+		/// Freezes the game for the specified number of milliseconds.
 		/// </summary>
 		/// <param name="milliseconds">How long to sleep.</param>
 		public static void Sleep(int milliseconds)

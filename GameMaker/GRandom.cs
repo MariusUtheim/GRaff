@@ -11,7 +11,6 @@ namespace GameMaker
 	/// These methods encapsulate an instance of the System.Random class, initialized with a seed value that is
 	/// dependant on when the game started. 
 	/// </summary>
-#warning TODO: Test
 	public static class GRandom
 	{
 		private static Random _rnd;

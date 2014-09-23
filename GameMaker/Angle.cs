@@ -12,9 +12,6 @@ namespace GameMaker
 #warning TODO: Test
 	public struct Angle(double degrees)
 	{
-		{
-			degrees = (degrees % 360.0 + 360.0) % 360.0;
-        }
 		/// <summary>
 		/// Represents an angle of zero.
 		/// </summary>
@@ -38,7 +35,7 @@ namespace GameMaker
 		/// <summary>
 		/// Gets the value of this angle, in degrees.
 		/// </summary>
-		public double Degrees { get; } = degrees;
+		public double Degrees { get; } = (degrees % 360.0 + 360.0) % 360.0;
 
 
 		/// <summary>

@@ -32,13 +32,33 @@ namespace GameMaker
 		/// <returns>A string that represents this GameMaker.IntVector</returns>
 		public override string ToString() => String.Format("[{0}, {1}]", X, Y);
 
-#warning TODO: Documentation
+		/// <summary>
+		/// Specifies whether this GameMaker.IntVector contains the same coordinates as the specified System.Object.
+		/// </summary>
+		/// <param name="obj">The System.Object to compare to.</param>
+		/// <returns>true if obj is a GameMaker.IntVector and has the same coordinates as this GameMaker.IntVector.</returns>
 		public override bool Equals(object obj) => ((obj is IntVector) ? (this == (IntVector)obj) : base.Equals(obj));
 
+		/// <summary>
+		/// Returns a hash code for this GameMaker.IntVector.
+		/// </summary>
+		/// <returns>An integer value that specifies a hash value for this GameMaker.IntVector.</returns>
 		public override int GetHashCode() => X ^ Y;
 
+		/// <summary>
+		/// Compares two GameMaker.IntVector objects. The result specifies whether their x- and y-coordinates are equal.
+		/// </summary>
+		/// <param name="left">The first GameMaker.IntVector to compare.</param>
+		/// <param name="right">The second GameMaker.IntVector to compare.</param>
+		/// <returns>true if the x- and y-coordinates of the two GameMaker.IntVector structures are equal.</returns>
 		public static bool operator ==(IntVector left, IntVector right) => (left.X == right.X && left.Y == right.Y);
 
+		/// <summary>
+		/// Compares two GameMaker.IntVector objects. The result specifies whether their x- and y-coordinates are unequal.
+		/// </summary>
+		/// <param name="left">The first GameMaker.IntVector to compare.</param>
+		/// <param name="right">The second GameMaker.IntVector to compare.</param>
+		/// <returns>true if the x- and y-coordinates of the two GameMaker.IntVector structures are unequal.</returns>
 		public static bool operator !=(IntVector left, IntVector right) => (left.X != right.X || left.Y != right.Y);
 
 

@@ -105,13 +105,33 @@ namespace GameMaker
 		/// <returns>A string that represents this GameMaker.Rectangle</returns>
 		public override string ToString() => String.Format("{{Rectangle {0} by {1}}}", Location, Size);
 
-
+		/// <summary>
+		/// Specifies whether this GameMaker.Rectangle contains the same location and size as the specified System.Object.
+		/// </summary>
+		/// <param name="obj">The System.Object to compare to.</param>
+		/// <returns>true if obj is a GameMaker.Rectangle and has the same location and size as this GameMaker.Rectangle.</returns>
 		public override bool Equals(object obj) => (obj is Rectangle) ? (this == (Rectangle)obj) : base.Equals(obj);
 
+		/// <summary>
+		/// Returns a hash code for this GameMaker.Rectangle.
+		/// </summary>
+		/// <returns>An integer value that specifies a hash value for this GameMaker.Rectangle.</returns>
 		public override int GetHashCode() => Left.GetHashCode() ^ Top.GetHashCode() ^ Width.GetHashCode() ^ Height.GetHashCode();
 
+		/// <summary>
+		/// Compares two GameMaker.Rectangle objects. The result specifies whether their locations and sizes are equal.
+		/// </summary>
+		/// <param name="left">The first GameMaker.Rectangle to compare.</param>
+		/// <param name="right">The second GameMaker.Rectangle to compare.</param>
+		/// <returns>true if the locations and sizes of the two GameMaker.Rectangle structures are equal.</returns>
 		public static bool operator ==(Rectangle left, Rectangle right) => (left.Left == right.Left && left.Top == right.Top && left.Width == right.Width && left.Height == right.Height);
 
+		/// <summary>
+		/// Compares two GameMaker.Rectangle objects. The result specifies whether their locations and sizes are unequal.
+		/// </summary>
+		/// <param name="left">The first GameMaker.Rectangle to compare.</param>
+		/// <param name="right">The second GameMaker.Rectangle to compare.</param>
+		/// <returns>true if the locations and sizes of the two GameMaker.Rectangle structures are unequal.</returns>
 		public static bool operator !=(Rectangle left, Rectangle right) => (left.Left != right.Left || left.Top != right.Top || left.Width == right.Width || left.Height == right.Height);
 
 

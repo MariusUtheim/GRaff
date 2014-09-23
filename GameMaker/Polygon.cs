@@ -5,7 +5,14 @@ using System.Text;
 
 namespace GameMaker
 {
-#warning TODO: Require that polynomials are positively-oriented and convex
+	/// <summary>
+	/// Specifies a positively-oriented convex polygon.
+	/// </summary>
+	/// <remarks>
+	/// If the constructor vertices specify a negatively-oriented polygon, the direction is reversed.
+	/// The condition that the polygon must be convex is a strong condition that is unlikely to occur with arbitraty vertices.
+	/// In most cases, developers should not have to create their own polygons directly.
+	/// </remarks>
 	public class Polygon
 	{
 		private Point[] pts;
@@ -13,6 +20,7 @@ namespace GameMaker
 		public Polygon(IEnumerable<Point> pts)
 		{
 			this.pts = pts.ToArray();
+			_SanityCheck();
 		}
 
 		public Polygon(params Point[] pts)
@@ -20,8 +28,39 @@ namespace GameMaker
 			if (pts == null)
 				throw new ArgumentNullException("pts", "Cannot be null.");
 			this.pts = pts.Clone() as Point[];
+			_SanityCheck();
 		}
 
+		private void _SanityCheck()
+		{
+			if (pts.Length <= 2)
+				return;
+
+			double sum = 0;
+			Angle a;
+			Vector previous, next;
+			previous = Edge(-1).Direction;
+			next = Edge(0).Direction;
+
+			a = next.Direction - previous.Direction;
+			if (a.Degrees > 180)
+				pts = pts.Reverse().ToArray();
+
+			for (int i = 1; i < pts.Length; i++)
+			{
+				previous = next;
+				next = Edge(i).Direction;
+				a = next.Direction - previous.Direction;
+				if (a.Degrees > 180)
+					throw new ArgumentException("The points must specify a convex polygon.", "pts");
+				sum += a.Degrees;
+			}
+
+			if (GMath.Abs(sum - 360.0) > 1e-12)
+				throw new ArgumentException("The points must specify a convex polygon with winding number equal to 1.", "pts");
+		}
+
+#warning TODO: Put the Enumerate- methods someplace else. Shape class?
 		public static IEnumerable<Point> EnumerateCircle(Point center, double radius)
 		{
 			return EnumerateCircle(center, radius, (int)(GMath.Tau * radius));

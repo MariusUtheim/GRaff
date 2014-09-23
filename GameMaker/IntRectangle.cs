@@ -77,13 +77,33 @@ namespace GameMaker
 		/// <returns>A string that represents this GameMaker.IntRectangle</returns>
 		public override string ToString() => String.Format("IntRectangle: [({0},{1}), ({2},{3})]", Left, Top, Width, Height);
 
-#warning TODO: Documentation
+		/// <summary>
+		/// Specifies whether this GameMaker.IntRectangle contains the same location and size as the specified System.Object.
+		/// </summary>
+		/// <param name="obj">The System.Object to compare to.</param>
+		/// <returns>true if obj is a GameMaker.IntRectangle and has the same location and size as this GameMaker.IntRectangle.</returns>
 		public override bool Equals(object obj) => (obj is IntRectangle) ? (this == (IntRectangle)obj) : base.Equals(obj);
 
+		/// <summary>
+		/// Returns a hash code for this GameMaker.IntRectangle.
+		/// </summary>
+		/// <returns>An integer value that specifies a hash value for this GameMaker.IntRectangle.</returns>
 		public override int GetHashCode() => Left ^ Top ^ Width ^ Height;
 
+		/// <summary>
+		/// Compares two GameMaker.IntRectangle objects. The result specifies whether their locations and sizes are equal.
+		/// </summary>
+		/// <param name="left">The first GameMaker.IntRectangle to compare.</param>
+		/// <param name="right">The second GameMaker.IntRectangle to compare.</param>
+		/// <returns>true if the locations and sizes of the two GameMaker.IntRectangle structures are equal.</returns>
 		public static bool operator ==(IntRectangle left, IntRectangle right) => (left.Left == right.Left && left.Top == right.Top && left.Width == right.Width && left.Height == right.Height);
-									   
+
+		/// <summary>
+		/// Compares two GameMaker.IntRectangle objects. The result specifies whether their locations and sizes are unequal.
+		/// </summary>
+		/// <param name="left">The first GameMaker.IntRectangle to compare.</param>
+		/// <param name="right">The second GameMaker.IntRectangle to compare.</param>
+		/// <returns>true if the locations and sizes of the two GameMaker.IntRectangle structures are unequal.</returns>
 		public static bool operator !=(IntRectangle left, IntRectangle right) => (left.Left != right.Left || left.Top != right.Top || left.Width == right.Width || left.Height == right.Height);
 
 

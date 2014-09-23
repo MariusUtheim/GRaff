@@ -22,7 +22,7 @@ namespace GameMaker
 				direction *= -1;
 			}
 		}
-
+		
 		/// <summary>
 		/// Represents the vector [0, 0].
 		/// </summary>
@@ -76,13 +76,33 @@ namespace GameMaker
 		/// <returns>A string that represents this GameMaker.Vector.</returns>
 		public override string ToString() => String.Format("[{0}, {1}]", X, Y);
 
-#warning TODO: Documentation
+		/// <summary>
+		/// Specifies whether this GameMaker.Vector contains the same coordinates as the specified System.Object.
+		/// </summary>
+		/// <param name="obj">The System.Object to compare to.</param>
+		/// <returns>true if obj is a GameMaker.Vector and has the same coordinates as this GameMaker.Vector.</returns>
 		public override bool Equals(object obj) => (obj is Vector) ? (this == (Vector)obj) : base.Equals(obj);
 
+		/// <summary>
+		/// Returns a hash code for this GameMaker.Vector.
+		/// </summary>
+		/// <returns>An integer value that specifies a hash value for this GameMaker.Vector.</returns>
 		public override int GetHashCode() => Magnitude.GetHashCode() ^ Direction.GetHashCode();
 
+		/// <summary>
+		/// Compares two GameMaker.Vector objects. The result specifies whether their magnitude and direction are equal.
+		/// </summary>
+		/// <param name="left">The first GameMaker.Vector to compare.</param>
+		/// <param name="right">The second GameMaker.Vector to compare.</param>
+		/// <returns>true if the magnitudes and the directions of the two GameMaker.Vector structures are equal.</returns>
 		public static bool operator ==(Vector left, Vector right) => (left.Magnitude == right.Magnitude && left.Direction == right.Direction);
 
+		/// <summary>
+		/// Compares two GameMaker.Vector objects. The result specifies whether their magnitude and direction are unequal.
+		/// </summary>
+		/// <param name="left">The first GameMaker.Vector to compare.</param>
+		/// <param name="right">The second GameMaker.Vector to compare.</param>
+		/// <returns>true if the magnitudes and the directions of the two GameMaker.Vector structures are unequal.</returns>
 		public static bool operator !=(Vector left, Vector right) => (left.Magnitude != right.Magnitude || left.Direction != right.Direction);
 
 
@@ -96,13 +116,19 @@ namespace GameMaker
 
 
 		/// <summary>
-		/// Comptues the difference of the two GameMaker.Vector structures.
+		/// Computes the difference of the two GameMaker.Vector structures.
 		/// </summary>
 		/// <param name="left">The first GameMaker.Vector.</param>
 		/// <param name="right">The second GameMaker.Vector.</param>
 		/// <returns>The difference of the two GameMaker.Vector structures.</returns>
 		public static Vector operator -(Vector left, Vector right) => new Vector(left.X - right.X, left.Y - right.Y);
 
+		/// <summary>
+		/// Reverses the direction of the specified GameMaker.Vector structure.
+		/// </summary>
+		/// <param name="v">The GameMaker.Vector</param>
+		/// <returns>A GameMaker.Vector structure with the same magnitude and opposite direction of the specified GameMaker.Vector.</returns>
+		public static Vector operator -(Vector v) => new Vector(-v.Magnitude, v.Direction + Angle.Deg(180));
 
 		/// <summary>
 		/// Scales the GameMaker.Vector by a specified scalar.
