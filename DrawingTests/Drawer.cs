@@ -9,7 +9,6 @@ namespace DrawingTests
 {
 	public class Drawer : GameObject, IKeyPressListener, IGlobalMouseListener
 	{
-		int idx = 0;
 		double zoom = 1;
 
 		public Drawer()
@@ -31,6 +30,9 @@ namespace DrawingTests
 		{
 			base.OnDraw();
 			Mask.DrawOutline();
+			Fill.Circle(Color.Red, Color.Green, Location, 50);
+			Draw.Circle(Color.Black, Location, 50);
+
 		}
 
 

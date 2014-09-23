@@ -21,20 +21,49 @@ namespace GameMaker
 		/// </summary>
 		public double Imaginary = imaginary;
 
-#warning TODO: Documentation
+		/// <summary>
+		/// Converts this GameMaker.Complex to a human-readable string, showing the value in Cartesian form x + yi.
+		/// </summary>
+		/// <returns>A string that represents this GameMaker.Complex</returns>
+		public override string ToString()
+		{
+			if (Imaginary == 0)
+				return Real.ToString();
+			else if (Real == 0)
+				return Imaginary.ToString() + "i";
+			else if (Imaginary > 0)
+				return String.Format("{0} + {1}i", Real, Imaginary);
+			else
+				return String.Format("{0} - {1}i", Real, -Imaginary);
+		}
 
-		public override string ToString() => String.Format("{0} + {1}i", Real, Imaginary);
-
-
+		/// <summary>
+		/// Specifies whether this GameMaker.Complex is equal to the specified System.Object.
+		/// </summary>
+		/// <param name="obj">The System.Object to compare to.</param>
+		/// <returns>true if obj is a GameMaker.Complex and the two complex numbers are equal.</returns>
 		public override bool Equals(object obj) => (obj is Complex) ? (this == (Complex)obj) : base.Equals(obj);
 
-
+		/// <summary>
+		/// Returns a hash code for this GameMaker.Complex.
+		/// </summary>
+		/// <returns>An integer value that specified a hash value for this GameMaker.Complex.</returns>
 		public override int GetHashCode() => Real.GetHashCode() ^ Imaginary.GetHashCode();
 
-
+		/// <summary>
+		/// Compares two GameMaker.Complex objects. The results specifies whether the two complex numbers are equal.
+		/// </summary>
+		/// <param name="left">The first GameMaker.Complex to compare.</param>
+		/// <param name="right">The second GameMaker.Complex to compare.</param>
+		/// <returns>true if the two complex numbers are equal.</returns>
 		public static bool operator ==(Complex left, Complex right) => (left.Real == right.Real && left.Imaginary == right.Imaginary);
 
-
+		/// <summary>
+		/// Compares two GameMaker.Complex objects. The result specifies whether the two complex numbers are unequal. 
+		/// </summary>
+		/// <param name="left">The first GameMaker.Complex to compare.</param>
+		/// <param name="right">The second GameMaker.Complex to compare.</param>
+		/// <returns>true if the two complex numbers are unequal.</returns>
 		public static bool operator !=(Complex left, Complex right) => (left.Real != right.Real || left.Imaginary != right.Imaginary);
 
 

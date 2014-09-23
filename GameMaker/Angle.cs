@@ -10,7 +10,6 @@ namespace GameMaker
 	/// Represents an angle, that can be specified in angles or degrees.
 	/// </summary>
 #warning TODO: Test
-#warning TODO: Two angles are equal if their value differs by a multiple of tau.
 	public struct Angle(double degrees)
 	{
 		{
@@ -89,14 +88,33 @@ namespace GameMaker
 		/// <returns>A string that represents this GameMaker.Angle</returns>
 		public override string ToString() => String.Format("Angle {0}", Degrees);
 
-#warning TODO: Documentation
+		/// <summary>
+		/// Specifies whether this GameMaker.Angle is equal to the specified System.Object.
+		/// </summary>
+		/// <param name="obj">The System.Object to compare to.</param>
+		/// <returns>true if obj is a GameMaker.Angle and has the same value as this GameMaker.Angle.</returns>
 		public override bool Equals(object obj) => (obj is Angle) ? (this == (Angle)obj) : base.Equals(obj);
 
+		/// <summary>
+		/// Returns a hash code for this GameMaker.Angle.
+		/// </summary>
+		/// <returns>An integer value that specifies a hash value for this GameMaker.Angle.</returns>
 		public override int GetHashCode() => Degrees.GetHashCode();
 
+		/// <summary>
+		/// Compares two GameMaker.Angle objects. The result specifies whether they are equal.
+		/// </summary>
+		/// <param name="left">The first GameMaker.Angle to compare.</param>
+		/// <param name="right">The second GameMaker.Angle to compare.</param>
+		/// <returns>true if the values of the two GameMaker.Angle structures are equal.</returns>
 		public static bool operator ==(Angle left, Angle right) => (left.Degrees == right.Degrees);
 
-
+		/// <summary>
+		/// Compares two GameMaker.Angle objects. The result specifies whether they are unequal.
+		/// </summary>
+		/// <param name="left">The first GameMaker.Angle to compare.</param>
+		/// <param name="right">The second GameMaker.Angle to compare.</param>
+		/// <returns>true if the values of the two GameMaker.Angle structures are unequal.</returns>
 		public static bool operator !=(Angle left, Angle right) => (left.Degrees != right.Degrees);
 
 

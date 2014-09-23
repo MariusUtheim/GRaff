@@ -94,7 +94,7 @@ namespace GameMaker
 		/// Returns whether the specified key is currently held down.
 		/// </summary>
 		/// <param name="key">The key to check.</param>
-		/// <returns>True if the key is currently held down.</returns>
+		/// <returns>true if the key is currently held down.</returns>
 		public static bool IsDown(Key key)
 		{
 			return _down[(int)key];
@@ -104,7 +104,7 @@ namespace GameMaker
 		/// Returns whether the specified key was pressed since the previous step.
 		/// </summary>
 		/// <param name="key">The key to check.</param>
-		/// <returns>True if the key was pressed since the previous step.</returns>
+		/// <returns>true if the key was pressed since the previous step.</returns>
 		public static bool IsPressed(Key key)
 		{
 			return _pressed[(int)key];
@@ -114,7 +114,7 @@ namespace GameMaker
 		/// Returns whether the specified key was released since the previous step.
 		/// </summary>
 		/// <param name="key">The key to check.</param>
-		/// <returns>True if the key was released since the previous step.</returns>
+		/// <returns>true if the key was released since the previous step.</returns>
 		public static bool IsReleased(Key key)
 		{
 			return _released[(int)key];

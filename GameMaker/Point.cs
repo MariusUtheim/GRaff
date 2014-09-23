@@ -39,7 +39,7 @@ namespace GameMaker
 		/// Specifies whether this GameMaker.Point contains the same coordinates as the specified System.Object.
 		/// </summary>
 		/// <param name="obj">The System.Object to compare to.</param>
-		/// <returns>True if obj is a GameMaker.Point and has the same coordinates as this GameMaker.Point.</returns>
+		/// <returns>true if obj is a GameMaker.Point and has the same coordinates as this GameMaker.Point.</returns>
 		public override bool Equals(object obj) => ((obj is Point) ? (this == (Point)obj) : base.Equals(obj));
 
 
@@ -53,19 +53,19 @@ namespace GameMaker
 		/// <summary>
 		/// Compares two GameMaker.Point objects. The result specifies whether their x- and y-coordinates are equal.
 		/// </summary>
-		/// <param name="p1">The first GameMaker.Point to compare.</param>
-		/// <param name="p2">The second GameMaker.Point to compare.</param>
-		/// <returns>True if the x- and y-coordinates of the two GameMaker.Point structures are equal.</returns>
-		public static bool operator ==(Point p1, Point p2) => (p1.X == p2.X && p1.Y == p2.Y);
+		/// <param name="left">The first GameMaker.Point to compare.</param>
+		/// <param name="right">The second GameMaker.Point to compare.</param>
+		/// <returns>true if the x- and y-coordinates of the two GameMaker.Point structures are equal.</returns>
+		public static bool operator ==(Point left, Point right) => (left.X == right.X && left.Y == right.Y);
 
 
 		/// <summary>
 		/// Compares two GameMaker.Point objects. The result specifies whether their x- and y-coordinates are unequal.
 		/// </summary>
-		/// <param name="p1">The first GameMaker.Point to compare.</param>
-		/// <param name="p2">The second GameMaker.Point to compare.</param>
-		/// <returns>True if the x- and y-coordinates of the two GameMaker.Point structures are unequal.</returns>
-		public static bool operator !=(Point p1, Point p2) => (p1.X != p2.X || p1.Y != p2.Y);
+		/// <param name="left">The first GameMaker.Point to compare.</param>
+		/// <param name="right">The second GameMaker.Point to compare.</param>
+		/// <returns>true if the x- and y-coordinates of the two GameMaker.Point structures are unequal.</returns>
+		public static bool operator !=(Point left, Point right) => (left.X != right.X || left.Y != right.Y);
 		
 
 		/// <summary>

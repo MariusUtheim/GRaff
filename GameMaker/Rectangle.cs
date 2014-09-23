@@ -67,7 +67,7 @@ namespace GameMaker
 		/// Tests whether two GameMaker.Rectangle structures intersect.
 		/// </summary>
 		/// <param name="other">The GameMaker.Rectangle to test intersection with.</param>
-		/// <returns>True if the two GameMaker.Rectangle structures intersect.</returns>
+		/// <returns>true if the two GameMaker.Rectangle structures intersect.</returns>
 		public bool Intersects(Rectangle other)
 		{
 			return !(Left > other.Right || Top > other.Bottom || Right < other.Left || Bottom < other.Top);
@@ -93,7 +93,7 @@ namespace GameMaker
 		/// Tests whether this GameMaker.Rectangle contains the specified GameMaker.Point.
 		/// </summary>
 		/// <param name="pt">The GameMaker.Point to test.</param>
-		/// <returns>True if this GameMaker.Rectangle contains pt.</returns>
+		/// <returns>true if this GameMaker.Rectangle contains pt.</returns>
 		public bool ContainsPoint(Point pt)
 		{
 			return pt.X >= this.Left && pt.Y >= this.Top && pt.X < this.Right + this.Width && pt.Y < this.Bottom;
@@ -105,7 +105,7 @@ namespace GameMaker
 		/// <returns>A string that represents this GameMaker.Rectangle</returns>
 		public override string ToString() => String.Format("{{Rectangle {0} by {1}}}", Location, Size);
 
-#warning TODO: Documentation
+
 		public override bool Equals(object obj) => (obj is Rectangle) ? (this == (Rectangle)obj) : base.Equals(obj);
 
 		public override int GetHashCode() => Left.GetHashCode() ^ Top.GetHashCode() ^ Width.GetHashCode() ^ Height.GetHashCode();

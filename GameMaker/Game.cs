@@ -40,7 +40,7 @@ namespace GameMaker
 				}
 				catch (Exception ex)
 				{
-					throw;
+					throw ex;
 				}
 			};
 
@@ -60,14 +60,8 @@ namespace GameMaker
 				Rectangle rect = View.ActualView();
 				GL.Ortho(rect.Left, rect.Right, rect.Bottom, rect.Top, 0.0, 1.0);
 
-				try
-				{
-					Game.Redraw();
-				}
-				catch (Exception err)
-				{
-					throw;
-				}
+				Game.Redraw();
+
 				Window.SwapBuffers();
 			};
 
@@ -121,6 +115,9 @@ namespace GameMaker
 			foreach (var instance in Instance._objects)
 				instance.OnEndStep();
 			GlobalEvent.OnEndStep();
+
+			if (Instance.NeedsSort)
+				Instance.Sort();
 		}
 
 		private static void _detectCollisions()

@@ -27,12 +27,12 @@ namespace GameMaker
 
 		public static MaskShape Rectangle(double width, double height)
 		{
-			return MaskShape.Rectangle(-width / 2, -height / 2, width, height);
+			return Rectangle(-width / 2, -height / 2, width, height);
 		}
 
 		public static MaskShape Rectangle(Rectangle rectangle)
 		{
-			return MaskShape.Rectangle(rectangle.Left, rectangle.Top, rectangle.Width, rectangle.Height);
+			return Rectangle(rectangle.Left, rectangle.Top, rectangle.Width, rectangle.Height);
 		}
 
 		public static MaskShape Diamond(double x, double y, double width, double height)
@@ -57,19 +57,12 @@ namespace GameMaker
 
 		public static MaskShape Circle(double radius)
 		{
-			return Circle(radius, (int)(3 * GMath.Abs(radius)));
+			return Circle(new Point(0, 0), radius, (int)(3 * GMath.Abs(radius)));
 		}
 
 		public static MaskShape Circle(double radius, int precision)
 		{
-			if (precision <= 0) throw new ArgumentException("Must be greater than 0", "precision");
-			if (precision == 1) return new MaskShape(new Point(0, 0));
-
-			Point[] pts = new Point[precision];
-			double dt = GMath.Tau / precision;
-			for (int i = 0; i < precision; i++)
-				pts[i] = (Point)new Vector(radius, Angle.Rad(dt * i));
-			return new MaskShape(pts);
+			return Circle(new Point(0, 0), radius, precision);
 		}
 
 		public static MaskShape Circle(Point center, double radius)
@@ -77,36 +70,15 @@ namespace GameMaker
 			return Circle(center, radius, (int)GMath.Ceiling(3 * GMath.Abs(radius)));
 		}
 
-#warning TODO: Optimize this
 		public static MaskShape Circle(Point center, double radius, int precision)
 		{
-			if (precision <= 0) throw new ArgumentException("Must be greater than 0", "precision");
-			if (precision == 1) return new MaskShape(center);
-
-			Point[] pts = new Point[precision];
-			double dt = GMath.Tau / precision;
-			for (int i = 0; i < precision; i++)
-				pts[i] = center + new Vector(radius, Angle.Rad(dt * i));
-
-			return new MaskShape(pts);
+			return new MaskShape(Polygon.EnumerateCircle(center, radius, precision).ToArray());
 		}
 
 		public static MaskShape Ellipse(double x, double y, double width, double height)
 		{
-			int precision = (int)GMath.Ceiling(1.5 * (width + height));
-
-			width /= 2;
-			height /= 2;
-			x += width;
-			y += height;
-			
-			Point[] pts = new Point[precision];
-			double dt = GMath.Tau / precision;
-			double t = 0;
-			for (int i = 0; i < precision; i++)
-				pts[i] = new Point(x + width * GMath.Cos(i * dt), y + height * GMath.Sin(i * dt));
-
-			return new MaskShape(pts);
+			double w = width / 2, h = height / 2;
+			return new MaskShape(Polygon.EnumerateEllipse(new Point(x + w, y + h), w, h).ToArray());
 		}
 
 		public static MaskShape Ellipse(double width, double height)
@@ -119,16 +91,17 @@ namespace GameMaker
 			return Ellipse(rectangle.Left, rectangle.Top, rectangle.Width, rectangle.Height);
 		}
 
+		/// <summary>
+		/// Gets the special GameMaker.MaskShape that indicates no mask.
+		/// GameMaker.Mask objects using this GameMaker.MaskShape will never intersect another GameMaker.Mask.
+		/// </summary>
 		public static MaskShape None { get; } = new MaskShape();
 
-#warning GameMaker.MaskShape.SameAsSprite.Polygon causes undefined behavior.
-		private static MaskShape _sameAsSprite = new MaskShape();
-		public static MaskShape SameAsSprite
-		{
-			get
-			{
-				return _sameAsSprite;
-			}
-		}
+		/// <summary>
+		/// Gets the special GameMaker.MaskShape that indicates a mask should use the MaskShape from the sprite of its referred object.
+		/// This will always return the exact same instance; they can for example be compared with == operator, or Object.ReferenceEquals.
+		/// Calling GameMaker.MaskShape.SameAsSprite.Polygon leads to undefined behavior.
+		/// </summary>
+		public static MaskShape SameAsSprite { get; } = new MaskShape();
 	}
 }

@@ -34,12 +34,6 @@ namespace GameMaker
 			this.Play();
 		}
 
-#warning TODO: Make sure this doesn't happen while the sound is playing...
-		~SoundInstance()
-		{
-			AL.DeleteSource(_sid);
-		}
-
 		/// <summary>
 		/// Gets the GameMaker.Sound that this GameMaker.SoundInstance is an instance of.
 		/// </summary>
@@ -151,7 +145,7 @@ namespace GameMaker
 						return SoundState.Playing;
 
 					default:
-						throw new Exception("Internal error in SoundInstance.cs");
+						return 0; // This will never hit
 				}
 			}
 		}

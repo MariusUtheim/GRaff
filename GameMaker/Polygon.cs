@@ -5,6 +5,7 @@ using System.Text;
 
 namespace GameMaker
 {
+#warning TODO: Require that polynomials are positively-oriented and convex
 	public class Polygon
 	{
 		private Point[] pts;
@@ -21,15 +22,54 @@ namespace GameMaker
 			this.pts = pts.Clone() as Point[];
 		}
 
-		private void _SanityCheck()
+		public static IEnumerable<Point> EnumerateCircle(Point center, double radius)
 		{
-			if (Length > 2)
+			return EnumerateCircle(center, radius, (int)(GMath.Tau * radius));
+		}
+
+		public static IEnumerable<Point> EnumerateCircle(Point center, double radius, int precision)
+		{
+			if (radius == 0 || precision == 1)
 			{
-				double sum = 0;
-				for (int i = 0; i < Length; i++)
-				{
-					Angle vertex;
-				}
+				yield return center;
+				yield break;
+			}
+			if (precision <= 0) throw new ArgumentOutOfRangeException("Must be greater than 0", "precision");
+			
+
+			double dt = GMath.Tau / precision;
+			double c = GMath.Cos(dt), s = GMath.Sin(dt);
+
+			double x = radius, y = 0, tmp;
+
+			Point[] pts = new Point[precision];
+			for (int i = 0; i < precision; i++)
+			{
+				yield return new Point(center.X + x, center.Y + y);
+
+				tmp = x;
+				x = c * x - s * y;
+				y = s * tmp + c * y;
+			}
+
+		}
+
+		public static IEnumerable<Point> EnumerateEllipse(Point center, double xradius, double yradius)
+		{
+			int precision = (int)GMath.Ceiling(GMath.Pi * (xradius + yradius));
+			double dt = GMath.Tau / precision;
+			double c = GMath.Cos(dt), s = GMath.Sin(dt);
+
+			double x = 1, y = 0, tmp;
+
+			Point[] pts = new Point[precision];
+			for (int i = 0; i < precision; i++)
+			{
+				yield return new Point(center.X + x * xradius, center.Y + y * yradius);
+
+				tmp = x;
+				x = c * x - s * y;
+				y = s * tmp + c * y;
 			}
 		}
 

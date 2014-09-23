@@ -10,9 +10,13 @@ namespace GameMaker
     {
 		internal static InstanceList _objects = new InstanceList();
 
+
+		internal static bool NeedsSort { get; set; }
+
 		internal static void Sort()
 		{
 			_objects.Sort();
+			NeedsSort = false;
 		}
 
 		internal static void Add(GameObject instance)

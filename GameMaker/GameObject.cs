@@ -65,11 +65,10 @@ namespace GameMaker
 		/// Instances with higher depth take actions before and are drawn behind instances with lower depth.
 		/// Changes to depth value are not reflected in the game before a new frame is drawn.
 		/// </summary>
-#warning TODO: Make sure the sorting happens only once per loop.
 		public int Depth
 		{
 			get { return _depth; }
-			set { _depth = value; Instance.Sort(); }
+			set { _depth = value; Instance.NeedsSort = true; }
 		}
 
 		public Image Image { get; private set; }
@@ -107,9 +106,7 @@ namespace GameMaker
 
 		public Rectangle BoundingBox
 		{
-			get { 
-#warning TODO: Check implementation
-				return Mask.BoundingBox; }
+			get { return Mask.BoundingBox; }
 		}
 
 		/// <summary>

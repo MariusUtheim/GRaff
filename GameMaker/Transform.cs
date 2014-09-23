@@ -56,7 +56,6 @@ namespace GameMaker
 		public double YShear { get; set; } = 0;
 
 
-#warning TODO: Cache instead of computing again every time
 		public Matrix GetMatrix()
 		{
 			double c = GMath.Cos(Rotation), s = GMath.Sin(Rotation);
@@ -72,7 +71,7 @@ namespace GameMaker
 
 		public Point Point(double x, double y)
 		{
-#warning We're keeping this code around in case we want to change the GetMatrix() method. It is easier to debug this one and check that each step works individually.
+			// We're keeping this code around in case we want to change the GetMatrix() method. It is easier to debug this one and check that each step works individually.
 			double tx, ty;
 			double c = GMath.Cos(Rotation), s = GMath.Sin(Rotation);
 

@@ -9,7 +9,6 @@ namespace GameMaker
 {
 	public class Surface
 	{
-		private int _id;
 		private readonly OpenTK.Graphics.Color4 GLWhite = Color.White.ToOpenGLColor();
 
 		public Surface(int width, int height)
@@ -59,7 +58,6 @@ namespace GameMaker
 			GL.Disable(EnableCap.Texture2D);
 		}
 
-#warning TODO: Draw blended image
 		public void DrawImage(Image image)
 		{
 			Point p1 = image.Transform.Point(-image.Sprite.XOrigin, -image.Sprite.YOrigin),
@@ -91,13 +89,11 @@ namespace GameMaker
 
 		public void DrawCircle(Color color, double x, double y, double radius)
 		{
-			double dt = 2 * GMath.Tau / radius;
-
-#warning TODO: Optimize
-			GL.Begin(PrimitiveType.LineLoop);
+			GL.Begin(PrimitiveType.Points);
 			GL.Color4(color.ToOpenGLColor());
-			for (double t = 0; t < GMath.Tau; t += dt)
-				GL.Vertex2(x + radius * GMath.Cos(t), y + radius * GMath.Sin(t));
+
+			foreach (Point pt in Polygon.EnumerateCircle(new Point(x, y), radius))
+				GL.Vertex2(pt.X, pt.Y);
 			GL.End();
 		}
 
@@ -112,45 +108,22 @@ namespace GameMaker
 
 		public void FillCircle(Color color, double x, double y, double radius)
 		{
-			double c = GMath.Tau * radius;
-			double dt = 1 / GMath.Tau;
-
-#warning TODO: Optimize
 			GL.Begin(PrimitiveType.TriangleFan);
 			GL.Color4(color.ToOpenGLColor());
-			for (double t = 0; t < GMath.Tau; t += dt)
-				GL.Vertex2(x + radius * GMath.Cos(t), y + radius * GMath.Sin(t));
-
+			foreach (Point pt in Polygon.EnumerateCircle(new Point(x, y), radius))
+				GL.Vertex2(pt.X, pt.Y);
 			GL.End();
 		}
 
 		public void FillCircle(Color col1, Color col2, double x, double y, double radius)
 		{
-			double dt = 2 * GMath.Tau / radius;
-
-#warning TODO: Optimize
 			GL.Begin(PrimitiveType.TriangleFan);
 			GL.Color4(col1.ToOpenGLColor());
 			GL.Vertex2(x, y);
 			GL.Color4(col2.ToOpenGLColor());
-			for (double t = 0; t <= GMath.Tau; t += dt)
-				GL.Vertex2(x + radius * GMath.Cos(t), y - radius * GMath.Sin(t));
+			foreach (Point pt in Polygon.EnumerateCircle(new Point(x, y), radius))
+				GL.Vertex2(pt.X, pt.Y);
 			GL.End();
-		}
-
-		public void FillCircle(Color col1, Color col2, double x, double y, double radius, double cx, double cy)
-		{
-			double dt = 2 * GMath.Tau / radius;
-
-#warning TODO: Optimize
-			GL.Begin(PrimitiveType.TriangleFan);
-			GL.Color4(col1.ToOpenGLColor());
-			GL.Vertex2(cx, cy);
-			GL.Color4(col2.ToOpenGLColor());
-			for (double t = 0; t <= GMath.Tau; t += dt)
-				GL.Vertex2(x + radius * GMath.Cos(t), y - radius * GMath.Sin(t));
-			GL.End();
-			
 		}
 
 		public void DrawRectangle(Color color, double x, double y, double width, double height)

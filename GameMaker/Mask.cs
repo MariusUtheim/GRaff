@@ -22,7 +22,6 @@ namespace GameMaker
 			return Transform.Polygon(Shape.Polygon);
 		}
 
-
 		private Transform Transform
 		{
 			get { return _owner.Transform; }
@@ -53,6 +52,7 @@ namespace GameMaker
 			}
 		}
 
+#warning TODO: Check implementation
 		public Rectangle BoundingBox
 		{
 			get

@@ -113,7 +113,7 @@ namespace GameMaker
 		/// Specifies whether this GameMaker.Color contains the same ARGB value as the specified System.Object.
 		/// </summary>
 		/// <param name="obj">The System.Object to compare to.</param>
-		/// <returns>True if obj is a GameMaker.Color and has the same ARGB value as this GameMaker.Color.</returns>
+		/// <returns>true if obj is a GameMaker.Color and has the same ARGB value as this GameMaker.Color.</returns>
 		public override bool Equals(object obj) => (obj is Color) ? (this == (Color)obj) : base.Equals(obj);
 
 		/// <summary>
@@ -127,7 +127,7 @@ namespace GameMaker
 		/// </summary>
 		/// <param name="left">The first GameMaker.Color to compare.</param>
 		/// <param name="right">The second GameMaker.Color to compare.</param>
-		/// <returns>True if the ARGB values of the two GameMaker.Color structures are equal.</returns>
+		/// <returns>true if the ARGB values of the two GameMaker.Color structures are equal.</returns>
 		public static bool operator ==(Color left, Color right) => (left.A == right.A && left.R == right.R && left.G == right.G && left.B == right.B);
 	
 		/// <summary>
@@ -135,7 +135,7 @@ namespace GameMaker
 		/// </summary>
 		/// <param name="left">The first GameMaker.Color to compare.</param>
 		/// <param name="right">The second GameMaker.Color to compare.</param>
-		/// <returns>True if the ARGB values of the two colors are unequal.</returns>
+		/// <returns>true if the ARGB values of the two colors are unequal.</returns>
 		public static bool operator !=(Color left, Color right) => (left.A != right.A || left.R != right.R || left.G != right.G || left.B != right.B);
 
 

@@ -137,7 +137,7 @@ namespace GameMaker
 		/// Returns whether the specified button is currently held down.
 		/// </summary>
 		/// <param name="button">The button to check.</param>
-		/// <returns>True if the button is currently held down.</returns>
+		/// <returns>true if the button is currently held down.</returns>
 		public static bool IsDown(MouseButton button)
 		{
 			return _down[(int)button];
@@ -147,7 +147,7 @@ namespace GameMaker
 		/// Returns whether the specified button was pressed since the previous step.
 		/// </summary>
 		/// <param name="button">The button to check.</param>
-		/// <returns>True if the button was pressed since the previous step.</returns>
+		/// <returns>true if the button was pressed since the previous step.</returns>
 		public static bool IsPressed(MouseButton button)
 		{
 			return _pressed[(int)button];
@@ -157,7 +157,7 @@ namespace GameMaker
 		/// Returns whether the specified button was released since the previous step.
 		/// </summary>
 		/// <param name="button">The button to check.</param>
-		/// <returns>True if the button was pressed since the previous step.</returns>
+		/// <returns>true if the button was pressed since the previous step.</returns>
 		public static bool IsReleased(MouseButton button)
 		{
 			return _released[(int)button];

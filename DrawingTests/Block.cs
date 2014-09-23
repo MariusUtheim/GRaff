@@ -15,6 +15,7 @@ namespace DrawingTests
 			: base(x, y)
 		{
 			Mask.Shape = MaskShape.Rectangle(30, 30);
+			Depth = -5;
 		}
 
 		public override void OnStep()

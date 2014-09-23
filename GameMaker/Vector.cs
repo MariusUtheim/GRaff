@@ -81,7 +81,6 @@ namespace GameMaker
 
 		public override int GetHashCode() => Magnitude.GetHashCode() ^ Direction.GetHashCode();
 
-#warning TODO: Negative magnitudes!
 		public static bool operator ==(Vector left, Vector right) => (left.Magnitude == right.Magnitude && left.Direction == right.Direction);
 
 		public static bool operator !=(Vector left, Vector right) => (left.Magnitude != right.Magnitude || left.Direction != right.Direction);

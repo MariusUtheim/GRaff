@@ -64,7 +64,7 @@ namespace GameMaker
 		/// Tests whether two rectangles intersect.
 		/// </summary>
 		/// <param name="other">The GameMaker.IntRectangle to test intersection with.</param>
-		/// <returns>True if the two rectangles intersect.</returns>
+		/// <returns>true if the two rectangles intersect.</returns>
 		public bool Intersects(IntRectangle other)
 		{
 			return !(Left > other.Right || Top > other.Bottom || Right < other.Left || Bottom < other.Top);
@@ -76,6 +76,15 @@ namespace GameMaker
 		/// </summary>
 		/// <returns>A string that represents this GameMaker.IntRectangle</returns>
 		public override string ToString() => String.Format("IntRectangle: [({0},{1}), ({2},{3})]", Left, Top, Width, Height);
+
+#warning TODO: Documentation
+		public override bool Equals(object obj) => (obj is IntRectangle) ? (this == (IntRectangle)obj) : base.Equals(obj);
+
+		public override int GetHashCode() => Left ^ Top ^ Width ^ Height;
+
+		public static bool operator ==(IntRectangle left, IntRectangle right) => (left.Left == right.Left && left.Top == right.Top && left.Width == right.Width && left.Height == right.Height);
+									   
+		public static bool operator !=(IntRectangle left, IntRectangle right) => (left.Left != right.Left || left.Top != right.Top || left.Width == right.Width || left.Height == right.Height);
 
 
 		/// <summary>

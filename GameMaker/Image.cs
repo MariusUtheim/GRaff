@@ -107,7 +107,7 @@ namespace GameMaker
 		/// <summary>
 		/// Animates this GameMaker.Image. Returns whether the animation looped.
 		/// </summary>
-		/// <returns>True if the animation looped.</returns>
+		/// <returns>true if the animation looped.</returns>
 		public bool Animate()
 		{
 			if (Sprite != null)
