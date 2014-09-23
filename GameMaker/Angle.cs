@@ -8,8 +8,8 @@ namespace GameMaker
 {
 	/// <summary>
 	/// Represents an angle, that can be specified in angles or degrees.
+	/// The value of the angle will always be in the range [0, τ).
 	/// </summary>
-#warning TODO: Test
 	public struct Angle(double degrees)
 	{
 		/// <summary>
@@ -52,6 +52,13 @@ namespace GameMaker
 		/// <returns>The direction of the vector from the origin to the specified point.</returns>
 		public static Angle Direction(double x, double y) => GMath.Atan2(y, x);
 
+		/// <summary>
+		/// Finds the direction of the vector from the origin to the specified point.
+		/// </summary>
+		/// <param name="p">The point.</param>
+		/// <returns>The direction of the vector from the origin to the specified point.</returns>
+		public static Angle Direction(Point p) => GMath.Atan2(p.Y, p.X);
+
 
 		/// <summary>
 		/// Finds the direction of the vector from the point (x1,y1) to the point (x2,y2).
@@ -60,18 +67,35 @@ namespace GameMaker
 		/// <param name="y1">The y-coordinate of the first point.</param>
 		/// <param name="x2">The x-coordinate of the second point.</param>
 		/// <param name="y2">The y-coordinate of the second point.</param>
-		/// <returns>The direction of the vector the first to the second point.</returns>
+		/// <returns>The direction of the vector from the first to the second point.</returns>
 		public static Angle Direction(double x1, double y1, double x2, double y2) => GMath.Atan2(y2 - y1, x2 - x1);
 
+		/// <summary>
+		/// Finds the direction of the vector between the two points.
+		/// </summary>
+		/// <param name="p1">The first point.</param>
+		/// <param name="p2">The second point.</param>
+		/// <returns>The direction of the vector from the first to the second point.</returns>
+		public static Angle Direction(Point p1, Point p2) => GMath.Atan2(p2.Y - p1.Y, p2.X - p1.X);
+
+		/// <summary>
+		/// Computes the acute angle between the two angles. This value is always in the interval [0° and 180°).
+		/// </summary>
+		/// <param name="deg1">The first angle, in degrees.</param>
+		/// <param name="deg1">The second angle, in degrees.</param>
+		/// <returns>The acute angle between the two angles.</returns>
+		public static Angle Acute(double deg1, double deg2) => _acute(deg2 - deg1);
 
 		/// <summary>
 		/// Computes the acute angle between the two angles. This value is always between 0° and 180°.
 		/// </summary>
-		/// <param name="other">The GameMaker.Angle to compute the acute angle with.</param>
+		/// <param name="a1">The first GameMaker.Angle to compute the acute angle with.</param>
+		/// <param name="a2">The second GameMaker.Angle to compute the acute angle with.</param>
 		/// <returns>The acute angle between the two angles.</returns>
-		public Angle Acute(Angle other)
+		public static Angle Acute(Angle a1, Angle a2) => _acute(a1.Degrees - a2.Degrees);
+
+		private static Angle _acute(double d)
 		{
-			double d = this.Degrees - other.Degrees;
 			d = (d % 360 + 360) % 360;
 			if (d > 180)
 				d = 360 - d;
@@ -83,7 +107,7 @@ namespace GameMaker
 		/// Converts this GameMaker.Angle to a human-readable string, showing the value in degrees.
 		/// </summary>
 		/// <returns>A string that represents this GameMaker.Angle</returns>
-		public override string ToString() => String.Format("Angle {0}", Degrees);
+		public override string ToString() => String.Format("{0}\u00B0", Degrees);
 
 		/// <summary>
 		/// Specifies whether this GameMaker.Angle is equal to the specified System.Object.
@@ -131,7 +155,14 @@ namespace GameMaker
 		/// <param name="right">The second GameMaker.Angle.</param>
 		/// <returns>The difference of the two angles.</returns>
 		public static Angle operator -(Angle left, Angle right) => Angle.Deg(left.Degrees - right.Degrees);
-		
+
+		/// <summary>
+		/// Computes the conjugate of this GameMaker.Angle structure.
+		/// The two angles will sum to 360°. This is equivalent to mirroring the angle over the x-axis.
+		/// </summary>
+		/// <param name="a">The angle to invert.</param>
+		/// <returns>The inverted GameMaker.Angle.</returns>
+		public static Angle operator -(Angle a) => Angle.Deg(-a.Degrees);
 
 		/// <summary>
 		/// Scales the angle by a specified scalar.
