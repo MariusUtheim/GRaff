@@ -16,11 +16,13 @@ namespace GameMaker.IO
 
 		public WaveFile(string filename)
 		{
+			FileStream stream = null;
 			try
 			{
-				using (var stream = File.OpenRead(filename))
+				stream = File.OpenRead(filename);
 				using (var reader = new BinaryReader(stream))
 				{
+					stream = null;
 					var RIFF = reader.ReadString(4); // Reads RIFF
 					if (RIFF != "RIFF")
 						throw new FormatException(String.Format("WAVE file format must begin with \"RIFF\" ({0})", filename));
@@ -63,6 +65,11 @@ namespace GameMaker.IO
 			catch (EndOfStreamException)
 			{
 				throw;
+			}
+			finally
+			{
+				if (stream != null)
+					stream.Dispose();
 			}
 		}
 

@@ -1,20 +1,20 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using OpenTK.Graphics.OpenGL;
 
 namespace GameMaker
 {
-	public class Texture
+	public sealed class Texture : IDisposable
 	{
+		private bool _disposed = false;
+		private int _id;
+
 		internal Texture(Bitmap bmp)
 		{
-			Id = GL.GenTexture();
+			_id = GL.GenTexture();
 
 			Width = bmp.Width;
 			Height = bmp.Height;
@@ -22,7 +22,7 @@ namespace GameMaker
 				ImageLockMode.ReadOnly,
 				System.Drawing.Imaging.PixelFormat.Format32bppArgb);
 
-			GL.BindTexture(TextureTarget.Texture2D, Id);
+			GL.BindTexture(TextureTarget.Texture2D, _id);
 
 			GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, Width, Height, 0, OpenTK.Graphics.OpenGL.PixelFormat.Bgra, PixelType.UnsignedByte, textureData.Scan0);
 			GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Linear);
@@ -41,9 +41,21 @@ namespace GameMaker
 		{
 			Texture result;
 
-			using (var stream = new FileStream(filename, FileMode.Open))
-			using (var bmp = new Bitmap(stream))
-				result = new Texture(bmp);
+			FileStream stream = null;
+			try
+			{
+				stream = new FileStream(filename, FileMode.Open);
+				using (var bmp = new Bitmap(stream))
+				{
+					stream = null;
+					result = new Texture(bmp);
+				}
+			}
+			finally
+			{
+				if (stream != null)
+					stream.Dispose();
+			}
 
 			var err = GL.GetError();
 			if (err != ErrorCode.NoError)
@@ -66,6 +78,7 @@ namespace GameMaker
 			get;
 			private set;
 		}
+
 		public int Height
 		{
 			get;
@@ -74,8 +87,29 @@ namespace GameMaker
 
 		public int Id
 		{
-			get;
-			private set;
+			get
+			{
+				if (_disposed)
+					throw new ObjectDisposedException(nameof(Texture));
+				return _id;
+			}
 		}
+
+		~Texture()
+		{
+		   Dispose();
+		}
+
+		public void Dispose()
+		{
+			if (!_disposed)
+			{
+				GL.DeleteTexture(_id);
+				_disposed = true;
+				GC.SuppressFinalize(this);
+			}
+		}
+
+
 	}
 }
