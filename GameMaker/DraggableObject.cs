@@ -20,7 +20,7 @@ namespace GameMaker
 
 		static DraggableObject()
 		{
-			GlobalEvent.MouseReleased += btn => { if (btn == _dragButton) _draggedObject = null; };
+			GlobalEvent.MouseReleased += (sender, e) => { if (e.Button == _dragButton) _draggedObject = null; };
 			GlobalEvent.Step += delegate {
 				if (_draggedObject != null)
 					_draggedObject.Location = Mouse.Location + _draggedOffset;

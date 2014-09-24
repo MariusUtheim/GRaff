@@ -9,88 +9,88 @@ namespace GameMaker
 	public static class GlobalEvent
 	{
 #warning TODO: Define classes such as KeyboardEventArgs and MouseEventArgs
-		public static event Action Step;
-		public static event Action BeginStep;
-		public static event Action EndStep;
-		public static event Action DrawBackground;
-		public static event Action DrawForeground;
-		public static event Action<Key> Key;
-		public static event Action<Key> KeyPressed;
-		public static event Action<Key> KeyReleased;
-		public static event Action<MouseButton> Mouse;
-		public static event Action<MouseButton> MousePressed;
-		public static event Action<MouseButton> MouseReleased;
+		public static event EventHandler Step;
+		public static event EventHandler BeginStep;
+		public static event EventHandler EndStep;
+		public static event EventHandler DrawBackground;
+		public static event EventHandler DrawForeground;
+		public static event EventHandler<KeyEventArgs> Key;
+		public static event EventHandler<KeyEventArgs> KeyPressed;
+		public static event EventHandler<KeyEventArgs> KeyReleased;
+		public static event EventHandler<MouseEventArgs> Mouse;
+		public static event EventHandler<MouseEventArgs> MousePressed;
+		public static event EventHandler<MouseEventArgs> MouseReleased;
 
 		internal static void OnBeginStep()
 		{
 			if (BeginStep != null)
-				BeginStep.Invoke();
+				BeginStep.Invoke(null, new EventArgs());
 		}
 
 		internal static void OnStep()
 		{
 			if (Step != null)
-				Step.Invoke();
+				Step.Invoke(null, new EventArgs());
 		}
 
 		internal static void OnEndStep()
 		{
 			if (EndStep != null)
-				EndStep.Invoke();
+				EndStep.Invoke(null, new EventArgs());
 		}
 
 
 		internal static void OnKey(Key key)
 		{
 			if (Key != null)
-				Key.Invoke(key);
+				Key.Invoke(null, new KeyEventArgs(key));
 		}
 
 		internal static void OnKeyPressed(Key key)
 		{
 			if (KeyPressed != null)
-				KeyPressed.Invoke(key);
+				KeyPressed.Invoke(null, new KeyEventArgs(key));
 		}
 
 		internal static void OnKeyReleased(Key key)
 		{
 			if (KeyReleased != null)
-				KeyReleased.Invoke(key);
+				KeyReleased.Invoke(null, new KeyEventArgs(key));
 		}
 
 		internal static void OnDrawBackground()
 		{
 			if (DrawBackground != null)
-				DrawBackground();
+				DrawBackground(null, new EventArgs());
 		}
 
 		internal static void OnDrawForeground()
 		{
 			if (DrawForeground != null)
-				DrawForeground();
+				DrawForeground(null, new EventArgs());
 		}
 
 		internal static void OnMouse(MouseButton button)
 		{
 			if (Mouse != null)
-				Mouse(button);
+				Mouse(null, new MouseEventArgs(button));
 		}
 
 		internal static void OnMousePressed(MouseButton button)
 		{
 			if (MousePressed != null)
-				MousePressed(button);
+				MousePressed(null, new MouseEventArgs(button));
 		}
 
 		internal static void OnMouseReleased(MouseButton button)
 		{
 			if (MouseReleased != null)
-				MouseReleased(button);
+				MouseReleased(null, new MouseEventArgs(button));
 		}
 
-		private static void _ExitOnEscape(Key key)
+		private static void _ExitOnEscape(object sender, KeyEventArgs e)
 		{
-			if (key == GameMaker.Key.Escape)
+			if (e.Key == GameMaker.Key.Escape)
 				Game.Quit();
 		}
 
