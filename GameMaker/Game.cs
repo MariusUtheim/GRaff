@@ -27,6 +27,7 @@ namespace GameMaker
 		/// <param name="fps">The framerate at which the game runs. The default value is 60.</param>
 		/// <param name="gameStart">An action that is performed when the game begins. If omitted or set to null, no action is performed.</param>
 		[STAThread]
+#warning CA1026
 		public static void Run(Room initialRoom, double fps = 60, Action gameStart = null)
 		{
 			Time.StartTime = Time.MachineTime;
@@ -54,12 +55,8 @@ namespace GameMaker
 			Window.RenderFrame += (sender, e) => {
 
 				GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
-				GL.LoadIdentity();
-				GL.Enable(EnableCap.Blend);
-				GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
 
-				Rectangle rect = View.ActualView();
-				GL.Ortho(rect.Left, rect.Right, rect.Bottom, rect.Top, 0.0, 1.0);
+				View.LoadMatrix();
 
 				Game.Redraw();
 
@@ -70,7 +67,9 @@ namespace GameMaker
 				initialRoom.Enter();
 				if (gameStart != null)
 					gameStart();
-				//	Window.VSync = VSyncMode.On;5
+				Window.VSync = VSyncMode.On;
+				GL.Enable(EnableCap.Blend);
+				GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
 			};
 
 			Window.Run(fps, fps);
@@ -138,6 +137,7 @@ namespace GameMaker
 			}
 		}
 
+#warning CA1502
 		private static void _handleInput()
 		{
 			foreach (var key in Keyboard.Down)
@@ -197,7 +197,6 @@ namespace GameMaker
 		/// <summary>
 		/// Repaints the screen.
 		/// </summary>
-#warning TODO: Check that this works if called outside of the GameWindow render event.
 		public static void Redraw()
 		{
 			Background.Redraw();
@@ -209,7 +208,6 @@ namespace GameMaker
 
 			GlobalEvent.OnDrawForeground();
 			Time.Frame();
-
 		}
 
 		/// <summary>

@@ -18,7 +18,6 @@ namespace GameMaker
 		private IntVector? _origin;
 		private int _width;
 		private int _height;
-		private Task _loadingTask = null;
 		private bool _hasCustomMask;
 		private MaskShape _maskShape;
 
@@ -44,12 +43,18 @@ namespace GameMaker
 				Load();
 		}
 
-		public String FileName
+		/// <summary>
+		/// Gets a string indicating the filename from which the texture of this GameMaker.Sprite is loaded.
+		/// </summary>
+		public string FileName
 		{
 			get;
 			private set;
 		}
 
+		/// <summary>
+		/// Gets whether the texture of this GameMaker.Sprite is loaded.
+		/// </summary>
 		public bool IsLoaded
 		{
 			get;
@@ -165,39 +170,28 @@ namespace GameMaker
 		/// <remarks>If the texture is already loading asynchronously, calling GameMaker.Sprite.Load blocks until loading completes.</remarks>
 		public void Load()
 		{
-			if (_loadingTask != null)
-				_loadingTask.Wait();
+			if (IsLoaded)
+				return;
 
-
-//			lock (_texture)
-//			{
-				if (IsLoaded)
-					return;
-
-				IsLoaded = true;
-				_texture = Texture.Load(FileName);
-				_width = _texture.Width / ImageCount;
-				_height = _texture.Height;
+			IsLoaded = true;
+			_texture = Texture.Load(FileName);
+			_width = _texture.Width / ImageCount;
+			_height = _texture.Height;
 			if (!_hasCustomMask)
 				_maskShape = MaskShape.Rectangle(-XOrigin, -YOrigin, _width, _height);
-//			}
 		}
 
-		/*
-		public void LoadAsync()
+
+		public void Unload()
 		{
-			new Task(delegate {
-				lock (_texture)
-				{
-					if (IsLoaded)
-						return;
+			if (!IsLoaded)
+				return;
 
-				}
-			});
+			IsLoaded = false;
+			_texture.Dispose();
+			_texture = null;
 		}
-		*/
 
-#warning TODO: Unload()
 
 		public Texture Texture
 		{

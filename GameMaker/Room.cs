@@ -40,7 +40,7 @@ namespace GameMaker
 				this.RoomStart();
 		}
 
-		public Point Center { get { return new Point(Width / 2, Height / 2); } }
+		public static Point Center { get { return new Point(Width / 2, Height / 2); } }
 
 		public int GetWidth()
 		{

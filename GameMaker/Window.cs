@@ -21,7 +21,7 @@ namespace GameMaker
 			set
 			{
 				if (value <= 0)
-					throw new ArgumentOutOfRangeException("Value must be greater than 0");
+					throw new ArgumentOutOfRangeException(nameof(value), "Value must be greater than 0");
 				Game.Window.Width = value; 
 			}
 		}

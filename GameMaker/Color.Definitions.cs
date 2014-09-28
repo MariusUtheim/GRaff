@@ -45,7 +45,7 @@ namespace GameMaker
 
 		public static Color Brown { get; } = new Color(165, 42, 42);
 
-		public static Color FireBrick { get; } = new Color(178, 34, 34);
+		public static Color Firebrick { get; } = new Color(178, 34, 34);
 
 		public static Color Crimson { get; } = new Color(220, 20, 60);
 
@@ -71,15 +71,15 @@ namespace GameMaker
 
 		public static Color Gold { get; } = new Color(255, 215, 0);
 
-		public static Color DarkGoldenRod { get; } = new Color(184, 134, 11);
+		public static Color DarkGoldenrod { get; } = new Color(184, 134, 11);
 
-		public static Color GoldenRod { get; } = new Color(218, 165, 32);
+		public static Color Goldenrod { get; } = new Color(218, 165, 32);
 
-		public static Color PaleGoldenRod { get; } = new Color(238, 232, 170);
+		public static Color PaleGoldenrod { get; } = new Color(238, 232, 170);
 
-		public static Color DarkKakhi { get; } = new Color(189, 183, 107);
+		public static Color DarkKhaki { get; } = new Color(189, 183, 107);
 
-		public static Color Kahki { get; } = new Color(240, 230, 140);
+		public static Color Khaki { get; } = new Color(240, 230, 140);
 
 		public static Color YellowGreen { get; } = new Color(154, 205, 50);
 
@@ -89,7 +89,7 @@ namespace GameMaker
 
 		public static Color LawnGreen { get; } = new Color(124, 252, 0);
 
-		public static Color ChartReuse { get; } = new Color(127, 255, 0);
+		public static Color Chartreuse { get; } = new Color(127, 255, 0);
 
 		public static Color GreenYellow { get; } = new Color(173, 255, 47);
 
@@ -111,13 +111,13 @@ namespace GameMaker
 
 		public static Color SeaGreen { get; } = new Color(46, 139, 87);
 
-		public static Color MediumAquaMarine { get; } = new Color(102, 205, 170);
+		public static Color MediumAquamarine { get; } = new Color(102, 205, 170);
 
 		public static Color MediumSeaGreen { get; } = new Color(60, 179, 113);
 
 		public static Color LightSeaGreen { get; } = new Color(32, 178, 170);
 
-		public static Color DarkSiateGray { get; } = new Color(47, 79, 79);
+		public static Color DarkSlateGray { get; } = new Color(47, 79, 79);
 
 		public static Color DarkCyan { get; } = new Color(0, 139, 139);
 
@@ -131,7 +131,7 @@ namespace GameMaker
 
 		public static Color PaleTurquoise { get; } = new Color(175, 238, 238);
 
-		public static Color AquaMarine { get; } = new Color(127, 255, 212);
+		public static Color Aquamarine { get; } = new Color(127, 255, 212);
 
 		public static Color PowderBlue { get; } = new Color(176, 224, 230);
 
@@ -139,7 +139,7 @@ namespace GameMaker
 
 		public static Color SteelBlue { get; } = new Color(70, 130, 180);
 
-		public static Color CornFlowerBlue { get; } = new Color(100, 149, 237);
+		public static Color CornflowerBlue { get; } = new Color(100, 149, 237);
 
 		public static Color DeepSkyeBlue { get; } = new Color(0, 191, 255);
 
@@ -211,7 +211,7 @@ namespace GameMaker
 
 		public static Color LemonChiffon { get; } = new Color(255, 250, 205);
 
-		public static Color LightGoldenRodYellow { get; } = new Color(250, 250, 210);
+		public static Color LightGoldenrodYellow { get; } = new Color(250, 250, 210);
 
 		public static Color LightYellow { get; } = new Color(255, 255, 224);
 
@@ -247,7 +247,7 @@ namespace GameMaker
 
 		public static Color PapayaWhip { get; } = new Color(255, 239, 213);
 
-		public static Color SeaShell { get; } = new Color(255, 245, 238);
+		public static Color Seashell { get; } = new Color(255, 245, 238);
 
 		public static Color MintCream { get; } = new Color(245, 255, 250);
 
@@ -265,7 +265,7 @@ namespace GameMaker
 
 		public static Color GhostWhite { get; } = new Color(248, 248, 255);
 
-		public static Color HoneyDew { get; } = new Color(240, 255, 240);
+		public static Color Honeydew { get; } = new Color(240, 255, 240);
 
 		public static Color Ivory { get; } = new Color(255, 255, 240);
 

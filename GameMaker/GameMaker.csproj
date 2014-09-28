@@ -21,6 +21,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <LangVersion>Experimental</LangVersion>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -54,6 +55,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Alarm.cs" />
+    <Compile Include="AlarmEventArgs.cs" />
     <Compile Include="Angle.cs" />
     <Compile Include="Background.cs" />
     <Compile Include="Color.Definitions.cs" />
@@ -64,6 +66,7 @@
     <Compile Include="Fill.cs" />
     <Compile Include="Game.cs" />
     <Compile Include="GlobalEvent.cs" />
+    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="GMath.FromSystemMath.cs" />
     <Compile Include="GMath.cs" />
     <Compile Include="GRandom.cs" />
@@ -75,7 +78,6 @@
     <Compile Include="ICollisionListener.cs" />
     <Compile Include="IKeyListener.cs" />
     <Compile Include="IO\BinaryReaderExtensions.cs" />
-    <Compile Include="IO\BitmapFile.cs" />
     <Compile Include="IO\OggFile.cs" />
     <Compile Include="IO\SoundFile.cs" />
     <Compile Include="IO\WaveFile.cs" />

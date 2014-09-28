@@ -17,14 +17,14 @@ namespace GameMaker
 		/// </summary>
 		/// <param name="x">The x-coordinate.</param>
 		/// <param name="y">The y-coordinate.</param>
-		public MovingObject(double x, double y)
+		protected MovingObject(double x, double y)
 			: base(x, y) { }
 
 		/// <summary>
 		/// Initializes a new instance of the GameMaker.MovingObject class at the specified location.
 		/// </summary>
 		/// <param name="location">The location.</param>
-		public MovingObject(Point location)
+		protected MovingObject(Point location)
 			: base(location) { }
 
 		/// <summary>

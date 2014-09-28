@@ -64,7 +64,7 @@ namespace GameMaker
 			get
 			{
 				if (Sprite == null)
-					throw new InvalidOperationException("The GameMaker.Image has no sprite.");
+					throw new InvalidOperationException(String.Format("The {0}.{1} has no sprite.", nameof(GameMaker), nameof(Image)));
 				return CurrentTexture.Width * Transform.XScale;
 			}
 		}
@@ -78,7 +78,7 @@ namespace GameMaker
 			get
 			{
 				if (Sprite == null)
-					throw new InvalidOperationException("The GameMaker.Image has no sprite.");
+					throw new InvalidOperationException(String.Format("The {0}.{1} has no sprite.", nameof(GameMaker), nameof(Image)));
 				return CurrentTexture.Height * Transform.YScale;
 			}
 		}
@@ -91,7 +91,7 @@ namespace GameMaker
 		{
 			get
 			{
-				if (Sprite == null) throw new InvalidOperationException("The GameMaker.Image has no sprite.");
+				if (Sprite == null) throw new InvalidOperationException(String.Format("The {0}.{1} has no sprite.", nameof(GameMaker), nameof(Image)));
 				return Sprite.Texture;
 			}
 		}

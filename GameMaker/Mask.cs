@@ -31,6 +31,7 @@ namespace GameMaker
 		/// This value cannot be set to null.
 		/// </summary>
 		/// <exception cref="ArgumentNullException">the value is null.</exception>
+#warning DESIGN: What happens if this value is set to null?
 		public MaskShape Shape
 		{
 			get
@@ -44,7 +45,7 @@ namespace GameMaker
 			set
 			{
 				if (value == null)
-					throw new ArgumentNullException("The value of GameMaker.Mask.Shape cannot be null. Consider using GameMaker.MaskShape.None or GameMaker.MaskShape.SameAsSprite.");
+					throw new ArgumentNullException(String.Format("The value of {0}.{1}.{2} cannot be null. Consider using {0}.{3}.{4} or {0}.{3}.{5}.", nameof(GameMaker), nameof(Mask), nameof(Shape), nameof(MaskShape), nameof(MaskShape.None), nameof(MaskShape.SameAsSprite)));
 				_maskShape = value;
 			}
 		}
@@ -88,6 +89,7 @@ namespace GameMaker
 
 		public bool Intersects(Mask other)
 		{
+			if (other == null) throw new ArgumentNullException("other");
 			return GetPolygon().Intersects(other.GetPolygon());
 		}
 

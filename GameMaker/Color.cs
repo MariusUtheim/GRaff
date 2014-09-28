@@ -60,6 +60,8 @@ namespace GameMaker
 		/// <returns>The average of the specified colors.</returns>
 		public static Color Merge(params Color[] colors)
 		{
+			if (colors == null) throw new ArgumentNullException("colors", "Cannot be null");
+			if (colors.Length == 0) throw new ArgumentException("Must have at least one element", "colors");
 			int a = 0, r = 0, g = 0, b = 0;
 
 			for (int i = 0; i < colors.Length; i++)

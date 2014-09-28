@@ -40,17 +40,31 @@ namespace GameMaker
 		public double M11 { get; set; }
 		public double M12 { get; set; }
 
-		public override bool Equals(object obj) => (obj is Matrix) ? (this == (Matrix)obj) : base.Equals(obj);
+		public override bool Equals(object obj) => (obj as Matrix)?.Equals(this) ?? false;
 
 
 		public override int GetHashCode() => M00.GetHashCode() ^ M01.GetHashCode() ^ M02.GetHashCode() ^ M10.GetHashCode() ^ M11.GetHashCode() ^ M12.GetHashCode();
-		
 
-		public static bool operator ==(Matrix left, Matrix right) => (left.M00 == right.M00 && left.M01 == right.M01 && left.M02 == right.M02 && left.M10 == right.M10 && left.M11 == right.M11 && left.M12 == right.M12);
-		
 
-		public static bool operator !=(Matrix left, Matrix right) => (left.M00 != right.M00 || left.M01 != right.M01 || left.M02 != right.M02 || left.M10 != right.M10 || left.M11 != right.M11 || left.M12 != right.M12);
+		public static bool operator ==(Matrix left, Matrix right)
+		{
+			if (left == null && right == null)
+				return true;
+			else if (left == null || right == null)
+				return false;
+			else
+				return (left.M00 == right.M00 && left.M01 == right.M01 && left.M02 == right.M02 && left.M10 == right.M10 && left.M11 == right.M11 && left.M12 == right.M12);
+		}
 
+
+		public static bool operator !=(Matrix left, Matrix right)
+		{
+			if (left == null && right == null)
+				return false;
+			else if (left == null || right == null)
+				return true;
+			else return (left.M00 != right.M00 || left.M01 != right.M01 || left.M02 != right.M02 || left.M10 != right.M10 || left.M11 != right.M11 || left.M12 != right.M12);
+		}
 
 		public static Matrix operator +(Matrix left, Matrix right) => new Matrix(left.M00 + right.M00, left.M01 + right.M01, left.M02 + right.M02, left.M10 + right.M10, left.M11 + right.M11, left.M12 + right.M12);
 		

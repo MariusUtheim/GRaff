@@ -39,13 +39,14 @@ namespace GameMaker
 		/// <returns>A new GameMaker.Texture representing the loaded file.</returns>
 		public static Texture Load(string filename)
 		{
-			Texture result;
+			Texture result = null;
 
 			FileStream stream = null;
+			Bitmap bmp = null;
 			try
 			{
 				stream = new FileStream(filename, FileMode.Open);
-				using (var bmp = new Bitmap(stream))
+				using (bmp = new Bitmap(stream))
 				{
 					stream = null;
 					result = new Texture(bmp);
@@ -55,6 +56,8 @@ namespace GameMaker
 			{
 				if (stream != null)
 					stream.Dispose();
+				if (result != null)
+					result.Dispose();
 			}
 
 			var err = GL.GetError();
@@ -97,7 +100,7 @@ namespace GameMaker
 
 		~Texture()
 		{
-		   Dispose();
+		   //Dispose();
 		}
 
 		public void Dispose()

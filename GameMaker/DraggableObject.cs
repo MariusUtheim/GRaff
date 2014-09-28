@@ -12,20 +12,21 @@ namespace GameMaker
 		private static Vector _draggedOffset;
 		private static MouseButton _dragButton = MouseButton.Left;
 
-		public DraggableObject(double x, double y)
-			: base(x, y) { }
-
-		public DraggableObject(Point location)
-			: base(location) { }
-
 		static DraggableObject()
 		{
 			GlobalEvent.MouseReleased += (sender, e) => { if (e.Button == _dragButton) _draggedObject = null; };
-			GlobalEvent.Step += delegate {
+			GlobalEvent.Step += delegate
+			{
 				if (_draggedObject != null)
 					_draggedObject.Location = Mouse.Location + _draggedOffset;
 			};
 		}
+
+		protected DraggableObject(double x, double y)
+			: base(x, y) { }
+
+		protected DraggableObject(Point location)
+			: base(location) { }
 
 		public void OnMousePress(MouseButton button)
 		{

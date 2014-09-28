@@ -3,7 +3,7 @@
 
 namespace GameMaker
 {
-	public class Background
+	public static class Background
 	{
 		static Background()
 		{

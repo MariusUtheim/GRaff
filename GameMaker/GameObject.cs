@@ -15,7 +15,7 @@ namespace GameMaker
 		/// </summary>
 		/// <param name="x">The x-coordinate.</param>
 		/// <param name="y">The y-coordinate.</param>
-		public GameObject(double x, double y)
+		protected GameObject(double x, double y)
 		{
 			Instance.Add(this);
 			Transform = new Transform();
@@ -29,7 +29,7 @@ namespace GameMaker
 		/// Initializes a new instance of the GameMaker.GameObject class at the specified location.
 		/// </summary>
 		/// <param name="location">The location.</param>
-		public GameObject(Point location)
+		protected GameObject(Point location)
 			: this(location.X, location.Y) { }
 
 		/// <summary>
@@ -95,6 +95,7 @@ namespace GameMaker
 
 		public bool Intersects(GameObject other)
 		{
+			if (other == null) return false;
 			return Mask.Intersects(other.Mask);
 		}
 
@@ -138,8 +139,8 @@ namespace GameMaker
 			if (Image.Sprite != null)
 			{
 				Draw.Image(Image);
-				if (Image.Animate() && this is IAnimationEndListener)
-					(this as IAnimationEndListener).AnimationEnd();
+				if (Image.Animate())
+					(this as IAnimationEndListener)?.AnimationEnd();
 			}
 		}
 	}

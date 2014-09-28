@@ -8,7 +8,6 @@ namespace GameMaker
 {
 	public static class GlobalEvent
 	{
-#warning TODO: Define classes such as KeyboardEventArgs and MouseEventArgs
 		public static event EventHandler Step;
 		public static event EventHandler BeginStep;
 		public static event EventHandler EndStep;

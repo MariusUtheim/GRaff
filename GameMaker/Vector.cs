@@ -26,7 +26,7 @@ namespace GameMaker
 		/// <summary>
 		/// Represents the vector [0, 0].
 		/// </summary>
-		public static Vector Zero = new Vector();
+		public static readonly Vector Zero = new Vector();
 
 		/// <summary>
 		/// Initializes a new instance of the GameMaker.Vector class using the components specified as cartesian coordinates.

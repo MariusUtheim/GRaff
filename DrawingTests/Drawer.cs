@@ -9,7 +9,6 @@ namespace DrawingTests
 {
 	public class Drawer : GameObject, IKeyPressListener, IGlobalMouseListener
 	{
-		double zoom = 1;
 
 		public Drawer()
 			: base(300, 400)
@@ -24,6 +23,7 @@ namespace DrawingTests
 		public override void OnStep()
 		{
 			Transform.Rotation += Angle.Deg(1);
+			View.Rotation += Angle.Deg(0.1);
 		}
 
 		public override void OnDraw()
@@ -43,26 +43,16 @@ namespace DrawingTests
 
 		public void OnGlobalMouse(MouseButton button)
 		{
-			switch (button)
+			if (button == MouseButton.Left && Sprite == null)
 			{
-				case MouseButton.Left:
-					if (zoom < 4.0)
-						zoom += 0.02;
-					break;
-
-				case MouseButton.Right:
-					if (zoom > 1.0)
-						zoom -= 0.02;
-					break;
-
-				default:
-					return;
+				Sprite = Sprites.Xujia;
+				Sprite.Load();
 			}
-
-			View.Width = Room.Width / zoom;
-			View.Height = Room.Height / zoom;
-	//		View.Center = Mouse.Location;
-			
+			else if (button == MouseButton.Right && Sprite != null)
+			{
+				Sprite.Unload();
+				Sprite = null;
+			}
 		}
 	}
 }

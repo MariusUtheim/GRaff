@@ -29,13 +29,13 @@ namespace GameMaker
 			_objects.Remove(instance);
 		}
 
-		public static IEnumerable<GameObject> Noone { get { yield break; } }
+		public static IEnumerable<GameObject> NoOne { get { yield break; } }
 
-		public static GameObject[] All
+		public static IEnumerable<GameObject> All
 		{
 			get
 			{
-				return _objects.ToArray();
+				return _objects;
 			}
 		}
 
@@ -71,7 +71,7 @@ namespace GameMaker
 		public static void Do(Action<T> action)
 		{
 			foreach (var obj in All)
-				action(obj);
+				action?.Invoke(obj);
 		}
 
 		/// <summary>

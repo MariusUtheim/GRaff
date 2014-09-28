@@ -21,41 +21,21 @@ namespace GameMaker
 	{
 		private static List<Alarm> _alarms = new List<Alarm>();
 
-		/// <summary>
-		/// Initializes a new instance of the GameMaker.Alarm class.
-		/// </summary>
+		public event EventHandler<AlarmEventArgs> Callback;
+
 		public Alarm()
-			:this(null) { }
-
-		/// <summary>
-		/// Initializes a new instance of the GameMaker.Alarm class, targeting the specified instance.
-		/// </summary>
-		/// <param name="target"></param>
-		public Alarm(GameObject target)
 		{
-			this.Target = target;
-			this.Count = -1;
-			this.State = AlarmState.Stopped;
-			this.IsLooping = false;
-			this.InitialCount = -1;
 		}
 
-		public static Alarm Start(int count, Action<Alarm, GameObject> callback, GameObject target)
+		public static Alarm Start(int count, EventHandler<AlarmEventArgs> action)
 		{
 			var alarm = new Alarm();
-			alarm.Callback = callback;
+			alarm.Callback += action;
 
 			alarm.Restart(count);
 			return alarm;
 		}
 
-		public static Alarm Start(int count, Action<Alarm> callback)
-		{
-			var alarm = new Alarm();
-			alarm.Callback = (a, obj) => { callback(a); };
-			alarm.Restart(count);
-			return alarm;
-		}
 
 		internal static void TickAll()
 		{
@@ -63,13 +43,10 @@ namespace GameMaker
 				a.Tick();
 		}
 
-		public GameObject Target { get; set; }
-
 		public int InitialCount { get; set; }
 
 		public int Count { get; set; }
 
-		public Action<Alarm, GameObject> Callback { get; set; }
 
 		public AlarmState State { get; private set; }
 
@@ -132,7 +109,7 @@ namespace GameMaker
 		/// </summary>
 		public void Trigger()
 		{
-			Callback.Invoke(this, this.Target);
+			Callback.Invoke(this, new AlarmEventArgs(this));
 		}
 
 		/// <summary>
@@ -140,7 +117,7 @@ namespace GameMaker
 		/// </summary>
 		public void Complete()
 		{
-			Callback.Invoke(this, this.Target);
+			Callback.Invoke(this, new AlarmEventArgs(this));
 			if (IsLooping)
 				Count = InitialCount;
 		}

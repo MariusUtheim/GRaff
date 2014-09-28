@@ -54,14 +54,12 @@ namespace GameMaker
 			private set;
 		}
 
+		private byte[] buffer;
+
 		/// <summary>
 		/// Gets the data buffer of this GameMaker.Sound.
 		/// </summary>
-		public byte[] Buffer
-		{
-			get;
-			private set;
-		}
+		public IEnumerable<byte> Buffer => buffer;
 
 		/// <summary>
 		/// Gets the number of channels of this GameMaker.Sound (e.g. 1=Mono, 2=Stereo, etc.).
@@ -100,13 +98,13 @@ namespace GameMaker
 				return;
 
 			var file = new OggFile(_filename);
-			this.Buffer = file.Buffer;
+			this.buffer = file.Buffer;
 			this.Bitrate = file.Bitrate;
 			this.Channels = file.Channels;
 #warning TODO: Set Duration
 			this.Frequency = file.Frequency;
 
-			AL.BufferData(_bufferId, ALFormat.Mono16, Buffer, Buffer.Length, Frequency);
+			AL.BufferData(_bufferId, ALFormat.Mono16, buffer, buffer.Length, Frequency);
 			_isLoaded = true;
 		}
 

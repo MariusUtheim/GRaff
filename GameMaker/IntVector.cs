@@ -14,7 +14,7 @@ namespace GameMaker
 		/// <summary>
 		/// Represents the vector [0, 0].
 		/// </summary>
-		public static IntVector Zero = new IntVector();
+		public static readonly IntVector Zero = new IntVector();
 
 		/// <summary>
 		/// Gets the x component of this GameMaker.IntVector.

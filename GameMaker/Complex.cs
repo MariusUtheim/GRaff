@@ -14,12 +14,12 @@ namespace GameMaker
 		/// <summary>
 		/// Gets or sets the real part of this GameMaker.Complex instance.
 		/// </summary>
-		public double Real = real;
+		public double Real { get; set; } = real;
 
 		/// <summary>
 		/// Gets or sets the imaginary part of this GameMaker.Complex instance.
 		/// </summary>
-		public double Imaginary = imaginary;
+		public double Imaginary { get; set; } = imaginary;
 
 		/// <summary>
 		/// Converts this GameMaker.Complex to a human-readable string, showing the value in Cartesian form x + yi.

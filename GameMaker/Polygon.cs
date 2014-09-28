@@ -45,6 +45,7 @@ namespace GameMaker
 			a = next.Direction - previous.Direction;
 			if (a.Degrees > 180)
 				pts = pts.Reverse().ToArray();
+			sum += a.Degrees;
 
 			for (int i = 1; i < pts.Length; i++)
 			{
@@ -52,12 +53,12 @@ namespace GameMaker
 				next = Edge(i).Direction;
 				a = next.Direction - previous.Direction;
 				if (a.Degrees > 180)
-					throw new ArgumentException("The points must specify a convex polygon.", "pts");
+					throw new ArgumentException("The points must specify a convex polygon.");
 				sum += a.Degrees;
 			}
 
 			if (GMath.Abs(sum - 360.0) > 1e-12)
-				throw new ArgumentException("The points must specify a convex polygon with winding number equal to 1.", "pts");
+				throw new ArgumentException("The points must specify a convex polygon with winding number equal to 1. Winding is " + sum.ToString());
 		}
 
 #warning TODO: Put the Enumerate- methods someplace else. Shape class?
@@ -93,9 +94,9 @@ namespace GameMaker
 
 		}
 
-		public static IEnumerable<Point> EnumerateEllipse(Point center, double xradius, double yradius)
+		public static IEnumerable<Point> EnumerateEllipse(Point center, double xRadius, double yRadius)
 		{
-			int precision = (int)GMath.Ceiling(GMath.Pi * (xradius + yradius));
+			int precision = (int)GMath.Ceiling(GMath.Pi * (xRadius + yRadius));
 			double dt = GMath.Tau / precision;
 			double c = GMath.Cos(dt), s = GMath.Sin(dt);
 
@@ -104,7 +105,7 @@ namespace GameMaker
 			Point[] pts = new Point[precision];
 			for (int i = 0; i < precision; i++)
 			{
-				yield return new Point(center.X + x * xradius, center.Y + y * yradius);
+				yield return new Point(center.X + x * xRadius, center.Y + y * yRadius);
 
 				tmp = x;
 				x = c * x - s * y;
@@ -112,7 +113,11 @@ namespace GameMaker
 			}
 		}
 
+		/// <summary>
+		/// Gets the number of vertices in this GameMaker.Polynomial.
+		/// </summary>
 		public int Length => pts.Length;
+
 
 		public Point Vertex(int index)
 		{
@@ -144,6 +149,7 @@ namespace GameMaker
 			}
 		}
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "pt")]
 		public bool ContainsPoint(Point pt)
 		{
 			/**
@@ -170,6 +176,7 @@ namespace GameMaker
 
 		public bool Intersects(Polygon other)
 		{
+			if (other == null) return false;
 			return this._Intersects(other) && other._Intersects(this);
 		}
 

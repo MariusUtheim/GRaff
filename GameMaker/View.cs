@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using OpenTK.Graphics.OpenGL;
+
 
 namespace GameMaker
 {
 	/// <summary>
 	/// Defines which part of the room is being drawn to the screen.
 	/// </summary>
-#warning TODO: Check what happens if the actual view is outside of the room...
 	public static class View
 	{
 		/// <summary>
@@ -32,6 +28,11 @@ namespace GameMaker
 		/// </summary>
 		public static double Height { get; set; }
 	
+		/// <summary>
+		/// Gets or sets the rotation of the view. The view is rotated around the center of the view.
+		/// </summary>
+		public static Angle Rotation { get; set; }
+
 		/// <summary>
 		/// Gets or sets a GameMaker.Rectangle representing the view in the room.
 		/// </summary>
@@ -56,11 +57,19 @@ namespace GameMaker
 			set { X = value.X - Width / 2; Y = value.Y - Height / 2; }
 		}
 
-		public static IntRectangle ViewPort
+
+		internal static void LoadMatrix()
 		{
-			get;
-			set;
+			Rectangle rect = ActualView();
+			double w = rect.Width / 2, h = rect.Height / 2;
+
+			GL.LoadIdentity();
+			GL.Ortho(-w, w, h, -h, 0.0, 1.0);
+			GL.Rotate(View.Rotation.Degrees, 0, 0, 1);
+			GL.Translate(rect.Left - w, rect.Top - h, 0);
+
 		}
+
 
 		/// <summary>
 		/// Gets a GameMaker.Rectangle representing which part of the room is actually being drawn.
@@ -70,7 +79,9 @@ namespace GameMaker
 		/// </summary>
 		public static Rectangle ActualView()
 		{
-			double x = RoomView.Left, y = RoomView.Top, w = RoomView.Width, h = RoomView.Height;
+#warning DESIGN Ensure that ActualView is always inside the room?
+			return RoomView;
+		/*	double x = RoomView.Left, y = RoomView.Top, w = RoomView.Width, h = RoomView.Height;
 
 			if (w > Room.Width)
 			{
@@ -89,6 +100,7 @@ namespace GameMaker
 				y = GMath.Median(0, y, Room.Height - h);
 
 			return new Rectangle(x, y, w, h) ;
+			*/
 		}
 
 		/// <summary>

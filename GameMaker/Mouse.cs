@@ -12,9 +12,9 @@ namespace GameMaker
 	public static class Mouse
 	{
 		private static readonly int _buttonCount = Enum.GetNames(typeof(MouseButton)).Length;
-		public static bool[] _pressed = new bool[_buttonCount];
-		public static bool[] _down = new bool[_buttonCount];
-		public static bool[] _released = new bool[_buttonCount];
+		private static bool[] _pressed = new bool[_buttonCount];
+		private static bool[] _down = new bool[_buttonCount];
+		private static bool[] _released = new bool[_buttonCount];
 		
 		/// <summary>
 		/// Signals that a step has occurred, and the button states (held/pressed/released) should be updated.

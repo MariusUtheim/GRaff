@@ -260,7 +260,7 @@ namespace GameMaker
 		//
 		// Summary:
 		//     The backspace key.
-		BackSpace = 53,
+		Backspace = 53,
 		//
 		// Summary:
 		//     The insert key.
@@ -588,11 +588,11 @@ namespace GameMaker
 		//
 		// Summary:
 		//     The backslash key.
-		BackSlash = 129,
+		Backslash = 129,
 		//
 		// Summary:
 		//     The secondary backslash key.
-		NonUSBackSlash = 130,
+		NonUSBackslash = 130,
 		//
 		// Summary:
 		//     Indicates the last available keyboard key.

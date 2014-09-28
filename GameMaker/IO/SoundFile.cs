@@ -9,11 +9,13 @@ namespace GameMaker.IO
 	{
 		public abstract int Frequency { get; }
 		public abstract int Channels { get; }
+#warning CA1819
 		public abstract byte[] Buffer { get; }
 		public abstract int Bitrate { get; }
 
 		public static SoundFile OpenFile(string filename)
 		{
+			if (filename == null) throw new ArgumentNullException(nameof(filename));
 			if (filename.EndsWith(".wav"))
 				return new WaveFile(filename);
 			if (filename.EndsWith(".ogg"))
