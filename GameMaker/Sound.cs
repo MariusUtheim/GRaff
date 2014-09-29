@@ -20,13 +20,11 @@ namespace GameMaker
 		private List<SoundInstance> _instances;
 		private int _bufferId;
 
-		private static IntPtr device;
-		private static OpenTK.ContextHandle context;
+		private static IntPtr _device = Alc.OpenDevice("");
+		private static OpenTK.ContextHandle context = Alc.CreateContext(_device, new int[0]);
 
 		static Sound()
 		{
-			device = Alc.OpenDevice("");
-			context = Alc.CreateContext(device, new int[0]);
 			Alc.MakeContextCurrent(context);
 		}
 
@@ -76,7 +74,7 @@ namespace GameMaker
 		public double Duration
 		{
 			get { throw new NotImplementedException(); }
-			private set { }
+			private set { throw new NotImplementedException(); }
 		}
 
 		/// <summary>

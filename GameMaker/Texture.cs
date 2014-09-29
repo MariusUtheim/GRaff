@@ -49,22 +49,20 @@ namespace GameMaker
 				using (bmp = new Bitmap(stream))
 				{
 					stream = null;
-					result = new Texture(bmp);
+					return new Texture(bmp);
 				}
+			}
+			catch
+			{
+				if (result != null)
+					result.Dispose();
+				throw;
 			}
 			finally
 			{
 				if (stream != null)
 					stream.Dispose();
-				if (result != null)
-					result.Dispose();
 			}
-
-			var err = GL.GetError();
-			if (err != ErrorCode.NoError)
-				throw new NotImplementedException("Error handling in GameMaker.Texture.Load(string) is not implemented.");
-
-			return result;
 		}
 
 		public static async Task<Texture> LoadAsync(string filename)
@@ -100,7 +98,8 @@ namespace GameMaker
 
 		~Texture()
 		{
-		   //Dispose();
+		   if (Game.Window.Exists)
+				Dispose();
 		}
 
 		public void Dispose()

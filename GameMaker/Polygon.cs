@@ -130,7 +130,10 @@ namespace GameMaker
 		{
 			if (Length == 0)
 				throw new InvalidOperationException("The specified polygon has no vertices.");
-			return new Line(Vertex(index), Vertex(index + 1));
+			checked
+			{
+				return new Line(Vertex(index), Vertex(index + 1));
+			}
 		}
 
 		public IEnumerable<Point> Vertices

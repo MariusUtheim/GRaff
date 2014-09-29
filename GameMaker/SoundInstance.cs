@@ -24,6 +24,7 @@ namespace GameMaker
 #warning CA1801
 		internal SoundInstance(Sound sound, int bid, bool looping, double volume, double pitch)
 		{
+			this.Sound = sound;
 			this._sid = AL.GenSource();
 			AL.Source(_sid, ALSourcei.Buffer, bid);
 

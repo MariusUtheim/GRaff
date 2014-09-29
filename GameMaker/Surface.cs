@@ -33,11 +33,13 @@ namespace GameMaker
 
 		public void DrawSprite(double x, double y, Sprite sprite, int subimage)
 		{
+			if (sprite == null) return;
+
 			double w = sprite.Width, h = sprite.Height;
 			x -= sprite.XOrigin;
 			y -= sprite.YOrigin;
 			subimage %= sprite.ImageCount;
-			double u1 = subimage / (double)sprite.ImageCount, u2 = (subimage + 1) / (double)sprite.ImageCount;
+			double u1 = subimage / (double)sprite.ImageCount, u2 = (subimage + 1.0) / (double)sprite.ImageCount;
 			GL.Enable(EnableCap.Texture2D);
 			GL.BindTexture(TextureTarget.Texture2D, sprite.Texture.Id);
 
@@ -60,6 +62,8 @@ namespace GameMaker
 
 		public void DrawImage(Image image)
 		{
+			if (image == null) return;
+
 			Point p1 = image.Transform.Point(-image.Sprite.XOrigin, -image.Sprite.YOrigin),
 				  p2 = image.Transform.Point(image.Sprite.Width - image.Sprite.XOrigin, -image.Sprite.YOrigin),
 				  p3 = image.Transform.Point(image.Sprite.Width - image.Sprite.XOrigin, image.Sprite.Height - image.Sprite.YOrigin),
@@ -99,6 +103,7 @@ namespace GameMaker
 
 		public void DrawPolygon(Color color, Polygon polygon)
 		{
+			if (polygon == null) return;
 			GL.Begin(PrimitiveType.LineLoop);
 			GL.Color4(color.ToOpenGLColor());
 			foreach (Point p in polygon.Vertices)

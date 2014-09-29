@@ -16,9 +16,9 @@ namespace GameMaker.IO
 		public static SoundFile OpenFile(string filename)
 		{
 			if (filename == null) throw new ArgumentNullException(nameof(filename));
-			if (filename.EndsWith(".wav"))
+			if (filename.EndsWith(".wav", StringComparison.OrdinalIgnoreCase))
 				return new WaveFile(filename);
-			if (filename.EndsWith(".ogg"))
+			if (filename.EndsWith(".ogg", StringComparison.OrdinalIgnoreCase))
 				return new OggFile(filename);
 
 			throw new FormatException("Unrecognized format: " + filename.Substring(filename.LastIndexOf('.')));
