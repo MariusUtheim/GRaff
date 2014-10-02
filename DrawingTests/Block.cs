@@ -26,7 +26,7 @@ namespace DrawingTests
 
 		public override void OnDraw()
 		{
-			Mask.DrawOutline(_col);
+			//Mask.DrawOutline(_col);
 		}
 
 		public void OnCollision(Drawer other)

@@ -10,12 +10,12 @@ namespace GameMaker
 	{
 		public static void Circle(Color color, Point location, double radius)
 		{
-			Draw.CurrentSurface.FillCircle(color, location.X, location.Y, radius);
+			Draw.CurrentSurface.FillCircle(color, color, location.X, location.Y, radius);
 		}
 
 		public static void Circle(Color color, double x, double y, double radius)
 		{
-			Draw.CurrentSurface.FillCircle(color, x, y, radius);
+			Draw.CurrentSurface.FillCircle(color, color, x, y, radius);
 		}
 
 		public static void Circle(Color col1, Color col2, Point location, double radius)
@@ -23,14 +23,19 @@ namespace GameMaker
 			Draw.CurrentSurface.FillCircle(col1, col2, location.X, location.Y, radius);
 		}
 
+		public static void Circle(Color col1, Color col2, double x, double y, double radius)
+		{
+			Draw.CurrentSurface.FillCircle(col1, col2, x, y, radius);
+		}
+
 		public static void Rectangle(Color color, double x, double y, double width, double height)
 		{
-			Draw.CurrentSurface.FillRectangle(color, x, y, width, height);
+			Draw.CurrentSurface.FillRectangle(color, color, color, color, x, y, width, height);
 		}
 
 		public static void Rectangle(Color color, Rectangle rectangle)
 		{
-			Draw.CurrentSurface.FillRectangle(color, rectangle.Left, rectangle.Top, rectangle.Width, rectangle.Height);
+			Draw.CurrentSurface.FillRectangle(color, color, color, color, rectangle.Left, rectangle.Top, rectangle.Width, rectangle.Height);
 		}
 
 		public static void Rectangle(Color col1, Color col2, Color col3, Color col4, double x, double y, double width, double height)

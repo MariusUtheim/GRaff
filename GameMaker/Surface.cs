@@ -1,21 +1,51 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
-using OpenTK.Graphics.OpenGL;
+using OpenTK.Graphics.OpenGL4;
 
 namespace GameMaker
 {
 	public class Surface
 	{
-		private readonly OpenTK.Graphics.Color4 GLWhite = Color.White.ToOpenGLColor();
+		private List<float> _vertices = new List<float>();
+		private List<float> _colors = new List<float>();
+		private int _array;
+		private int _vertexBuffer, _colorBuffer;
 
 		public Surface(int width, int height)
 		{
-			//_id = GL.GenBuffer();
+			_array = GL.GenVertexArray();
+			_vertexBuffer = GL.GenBuffer();
+			_colorBuffer = GL.GenBuffer();
 		}
 
+		public void Clear()
+		{
+			_vertices.Clear();
+			_colors.Clear();
+		}
+
+		public void Refresh()
+		{
+			GL.BindVertexArray(_array);
+
+			GL.BindBuffer(BufferTarget.ArrayBuffer, _vertexBuffer);
+			GL.BufferData(BufferTarget.ArrayBuffer, new IntPtr(_vertices.Count * sizeof(float)), _vertices.ToArray(), BufferUsageHint.DynamicDraw);
+			GL.EnableVertexAttribArray(0);
+			GL.VertexAttribPointer(0, 2, VertexAttribPointerType.Float, false, 0, 0);
+
+			GL.BindBuffer(BufferTarget.ArrayBuffer, _colorBuffer);
+			GL.BufferData(BufferTarget.ArrayBuffer, new IntPtr(_colors.Count * sizeof(float)), _colors.ToArray(), BufferUsageHint.DynamicDraw);
+			GL.EnableVertexAttribArray(1);
+			GL.VertexAttribPointer(1, 4, VertexAttribPointerType.Float, false, 0, 0);
+
+			GL.DrawArrays(PrimitiveType.Triangles, 0, _vertices.Count / 2);
+		}
+
+#region 
 		public Color GetPixel(double x, double y)
 		{
 			Color c = Color.Black;
@@ -25,10 +55,7 @@ namespace GameMaker
 
 		public void SetPixel(Color color, double x, double y)
 		{
-			GL.Begin(PrimitiveType.Points);
-			GL.Color4(color.ToOpenGLColor());
-			GL.Vertex2(x, y);
-			GL.End();
+			throw new NotImplementedException("GameMaker.Surface.SetPixel(Color, double, double) is not implemented");
 		}
 
 		public void DrawSprite(double x, double y, Sprite sprite, int subimage)
@@ -43,19 +70,7 @@ namespace GameMaker
 			GL.Enable(EnableCap.Texture2D);
 			GL.BindTexture(TextureTarget.Texture2D, sprite.Texture.Id);
 
-			GL.Begin(PrimitiveType.Quads);
-			GL.Color4(GLWhite);
-			{
-				GL.TexCoord2(u1, 0);
-				GL.Vertex2(x, y);
-				GL.TexCoord2(u2, 0);
-				GL.Vertex2(x + w, y);
-				GL.TexCoord2(u2, 1);
-				GL.Vertex2(x + w, y + h);
-				GL.TexCoord2(u1, 1);
-				GL.Vertex2(x, y + h);
-			}
-			GL.End();
+			throw new NotImplementedException(MethodInfo.GetCurrentMethod().Name + " is not implemented");
 
 			GL.Disable(EnableCap.Texture2D);
 		}
@@ -74,54 +89,64 @@ namespace GameMaker
 
 			double u1 = image.Index / (double)image.Count, u2 = (image.Index + 1) / (double)image.Count;
 
-			GL.Begin(PrimitiveType.Quads);
-			GL.Color4(image.Blend.R, image.Blend.G, image.Blend.B, image.Blend.A);
-			{
-				GL.TexCoord2(u1, 0);
-				GL.Vertex2(p1.X, p1.Y);
-				GL.TexCoord2(u2, 0);
-				GL.Vertex2(p2.X, p2.Y);
-				GL.TexCoord2(u2, 1);
-				GL.Vertex2(p3.X, p3.Y);
-				GL.TexCoord2(u1, 1);
-				GL.Vertex2(p4.X, p4.Y);
-			}
-			GL.End();
+			throw new NotImplementedException(MethodInfo.GetCurrentMethod().Name + " is not implemented");
 
 			GL.Disable(EnableCap.Texture2D);
 		}
 
 		public void DrawCircle(Color color, double x, double y, double radius)
 		{
-			GL.Begin(PrimitiveType.Points);
-			GL.Color4(color.ToOpenGLColor());
-
-			foreach (Point pt in Polygon.EnumerateCircle(new Point(x, y), radius))
-				GL.Vertex2(pt.X, pt.Y);
-			GL.End();
+			throw new NotImplementedException(MethodInfo.GetCurrentMethod().Name + " is not implemented");
 		}
 
 		public void DrawPolygon(Color color, Polygon polygon)
 		{
-			if (polygon == null) return;
+			throw new NotImplementedException(MethodInfo.GetCurrentMethod().Name + " is not implemented");
+
+/*			if (polygon == null) return;
 			GL.Begin(PrimitiveType.LineLoop);
 			GL.Color4(color.ToOpenGLColor());
 			foreach (Point p in polygon.Vertices)
 				GL.Vertex2(p.X, p.Y);
+	
 			GL.End();
-		}
-
-		public void FillCircle(Color color, double x, double y, double radius)
-		{
-			GL.Begin(PrimitiveType.TriangleFan);
-			GL.Color4(color.ToOpenGLColor());
-			foreach (Point pt in Polygon.EnumerateCircle(new Point(x, y), radius))
-				GL.Vertex2(pt.X, pt.Y);
-			GL.End();
+			*/
 		}
 
 		public void FillCircle(Color col1, Color col2, double x, double y, double radius)
 		{
+			float fx = (float)x, fy = (float)y;
+			float r1 = col1.R / 255.0f, g1 = col1.G / 255.0f, b1 = col1.B / 255.0f, a1 = col1.A / 255.0f;
+			float r2 = col2.R / 255.0f, g2 = col2.G / 255.0f, b2 = col2.B / 255.0f, a2 = col2.A / 255.0f;
+
+			Point[] pts = Polygon.EnumerateCircle(new Point(x, y), radius).ToArray();
+			for (int i = 0; i < pts.Length - 1; i++)
+			{
+				_vertices.AddRange(new[] {
+						fx, fy,
+						(float)pts[i].X, (float)pts[i].Y,
+						(float)pts[i + 1].X, (float)pts[i + 1].Y
+				});
+				_colors.AddRange(new[] {
+						r1, g1, b1, a1,
+						r2, g2, b2, a2,
+						r2, g2, b2, a2
+				});
+			}
+
+			_vertices.AddRange(new[] {
+						fx, fy,
+						(float)pts[pts.Length - 1].X, (float)pts[pts.Length - 1].Y,
+						(float)pts[0].X, (float)pts[0].Y
+				});
+			_colors.AddRange(new[] {
+						r1, g1, b1, a1,
+						r2, g2, b2, a2,
+						r2, g2, b2, a2
+				});
+
+
+			/*
 			GL.Begin(PrimitiveType.TriangleFan);
 			GL.Color4(col1.ToOpenGLColor());
 			GL.Vertex2(x, y);
@@ -130,10 +155,15 @@ namespace GameMaker
 				GL.Vertex2(pt.X, pt.Y);
 			GL.Vertex2(x + radius, y);
 			GL.End();
+			*/
+
 		}
 
 		public void DrawRectangle(Color color, double x, double y, double width, double height)
 		{
+			throw new NotImplementedException(MethodInfo.GetCurrentMethod().Name + " is not implemented");
+
+			/*
 			GL.Begin(PrimitiveType.LineLoop);
 			GL.Color4(color.ToOpenGLColor());
 			GL.Vertex2(x, y);
@@ -141,10 +171,12 @@ namespace GameMaker
 			GL.Vertex2(x + width, y + height);
 			GL.Vertex2(x, y + height);
 			GL.End();
+			*/
 		}
 
 		public void DrawRectangle(Color col1, Color col2, Color col3, Color col4, double x, double y, double width, double height)
 		{
+			/*
 			GL.Begin(PrimitiveType.Quads);
 
 			GL.Color4(col1.ToOpenGLColor());
@@ -160,57 +192,62 @@ namespace GameMaker
 			GL.Vertex2(x, y + height);
 
 			GL.End();
+			*/
+			throw new NotImplementedException(MethodInfo.GetCurrentMethod().Name + " is not implemented");
+
 		}
+#endregion
 
-		public void FillRectangle(Color color, double x, double y, double width, double height)
-		{
-			GL.Color4(color.ToOpenGLColor());
-			GL.Begin(PrimitiveType.Quads);
 
-			GL.Vertex2(x, y);
-			GL.Vertex2(x + width, y);
-			GL.Vertex2(x + width, y + height);
-			GL.Vertex2(x, y + height);
-
-			GL.End();
-		}
 
 		public void FillRectangle(Color col1, Color col2, Color col3, Color col4, double x, double y, double width, double height)
 		{
-			GL.Begin(PrimitiveType.Quads);
+			float left = (float)x, top = (float)y, right = (float)(x + width), bottom = (float)(y + height);
 
-			GL.Color4(col1.ToOpenGLColor());
-			GL.Vertex2(x, y);
+			_vertices.AddRange(new[] {
+					left, top,
+					right, top,
+					left, bottom,
+					left, bottom,
+					right, top,
+					right, bottom,
+			});
 
-			GL.Color4(col2.ToOpenGLColor());
-			GL.Vertex2(x + width, y);
-
-			GL.Color4(col3.ToOpenGLColor());
-			GL.Vertex2(x + width, y + height);
-
-			GL.Color4(col4.ToOpenGLColor());
-			GL.Vertex2(x, y + height);
-
-			GL.End();
+			_colors.AddRange(new[] {
+					col1.R / 255.0f, col1.G / 255.0f, col1.B / 255.0f, col1.A / 255.0f,
+					col2.R / 255.0f, col2.G / 255.0f, col2.B / 255.0f, col2.A / 255.0f,
+					col4.R / 255.0f, col4.G / 255.0f, col4.B / 255.0f, col4.A / 255.0f,
+					col4.R / 255.0f, col4.G / 255.0f, col4.B / 255.0f, col4.A / 255.0f,
+					col2.R / 255.0f, col2.G / 255.0f, col2.B / 255.0f, col2.A / 255.0f,
+					col3.R / 255.0f, col3.G / 255.0f, col3.B / 255.0f, col3.A / 255.0f,
+			});
 		}
 
 		public void DrawLine(Color color, double x1, double y1, double x2, double y2)
 		{
+			throw new NotImplementedException(MethodInfo.GetCurrentMethod().Name + " is not implemented");
+
+			/*
 			GL.Begin(PrimitiveType.Lines);
 			GL.Color4(color.ToOpenGLColor());
 			GL.Vertex2(x1, y1);
 			GL.Vertex2(x2, y2);
 			GL.End();
+			*/
 		}
 
 		public void DrawLine(Color col1, Color col2, double x1, double y1, double x2, double y2)
 		{
+			/*
 			GL.Begin(PrimitiveType.Lines);
 			GL.Color4(col1.ToOpenGLColor());
 			GL.Vertex2(x1, y1);
 			GL.Color4(col2.ToOpenGLColor());
 			GL.Vertex2(x2, y2);
 			GL.End();
+			*/
+			throw new NotImplementedException(MethodInfo.GetCurrentMethod().Name + " is not implemented");
+
 		}
 
 		public void DrawText(Color color, Object text, double x, double y)
@@ -220,6 +257,7 @@ namespace GameMaker
 
 		public void Clear(Color color)
 		{
+			Clear();
 			GL.ClearColor(color.ToOpenGLColor());
 		}
 
@@ -241,35 +279,6 @@ namespace GameMaker
 		public IntVector Size
 		{
 			get { return new IntVector(Width, Height); }
-		}
-
-		internal void DrawSprite(Transform transform, Color blend, Sprite sprite, int imageIndex)
-		{
-			Point p1 = transform.Point(-sprite.XOrigin, -sprite.YOrigin),
-				  p2 = transform.Point(sprite.Width - sprite.XOrigin, -sprite.YOrigin),
-				  p3 = transform.Point(sprite.Width - sprite.XOrigin, sprite.Height - sprite.YOrigin),
-				  p4 = transform.Point(-sprite.XOrigin, sprite.Height - sprite.YOrigin);
-
-			GL.Enable(EnableCap.Texture2D);
-			GL.BindTexture(TextureTarget.Texture2D, sprite.Texture.Id);
-
-			double u1 = imageIndex / (double)sprite.ImageCount, u2 = (imageIndex + 1) / (double)sprite.ImageCount;
-
-			GL.Begin(PrimitiveType.Quads);
-			GL.Color4(blend.R, blend.G, blend.B, blend.A);
-			{
-				GL.TexCoord2(u1, 0);
-				GL.Vertex2(p1.X, p1.Y);
-				GL.TexCoord2(u2, 0);
-				GL.Vertex2(p2.X, p2.Y);
-				GL.TexCoord2(u2, 1);
-				GL.Vertex2(p3.X, p3.Y);
-				GL.TexCoord2(u1, 1);
-				GL.Vertex2(p4.X, p4.Y);
-			}
-			GL.End();
-
-			GL.Disable(EnableCap.Texture2D);
 		}
 	}
 }

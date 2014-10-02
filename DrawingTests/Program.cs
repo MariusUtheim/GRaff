@@ -9,9 +9,9 @@ namespace DrawingTests
 {
 	static class Program
 	{
-		static void Main()
+		static void Main(string[] args)
 		{
-			Game.Run(new Room(1024, 768), 60, gameStart);
+			Game.Run(args, new Room(1024, 768), 60, gameStart);
 		}
 
 		static void gameStart()

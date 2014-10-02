@@ -1,4 +1,6 @@
-﻿using OpenTK.Graphics.OpenGL;
+﻿using System;
+using System.Reflection;
+using OpenTK.Graphics.OpenGL4;
 
 
 namespace GameMaker
@@ -50,7 +52,8 @@ namespace GameMaker
 					
 					GL.Enable(EnableCap.Texture2D);
 					GL.BindTexture(TextureTarget.Texture2D, Sprite.Texture.Id);
-
+					throw new NotImplementedException(MethodInfo.GetCurrentMethod().Name + " is not implemented");
+/*
 					GL.Begin(PrimitiveType.Quads);
 					GL.Color3(1.0f, 1.0f, 1.0f);
 					{
@@ -64,7 +67,7 @@ namespace GameMaker
 						GL.Vertex2(0, Room.Height);
 					}
 					GL.End();
-
+					*/
 					GL.Disable(EnableCap.Texture2D);
 				}
 				else

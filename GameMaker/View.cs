@@ -1,4 +1,5 @@
-﻿using OpenTK.Graphics.OpenGL;
+﻿using OpenTK;
+using OpenTK.Graphics.OpenGL4;
 
 
 namespace GameMaker
@@ -8,6 +9,44 @@ namespace GameMaker
 	/// </summary>
 	public static class View
 	{
+		private static int _shaderProgram;
+		private static int _vertexShader, _fragmentShader;
+
+		static View()
+		{
+			_vertexShader = GL.CreateShader(ShaderType.VertexShader);
+			GL.ShaderSource(_vertexShader,
+				"#version 150 core\n" +
+				"uniform mat4 projectionMatrix;" +
+				"in vec3 in_Position;" +
+				"in vec4 in_Color;" +
+				"out vec4 pass_Color;" +
+				"void main(void) {" +
+				"	gl_Position = projectionMatrix * vec4(in_Position, 1.0);" +
+				"   pass_Color = in_Color;" +
+				"}");
+			GL.CompileShader(_vertexShader);
+
+			_fragmentShader = GL.CreateShader(ShaderType.FragmentShader);
+			GL.ShaderSource(_fragmentShader,
+				"#version 150 core\n" +
+				"in vec4 pass_Color;" +
+				"out vec4 out_Color;" +
+				"void main () {" +
+				"	gl_FragColor = pass_Color;" +
+				"}");
+			GL.CompileShader(_fragmentShader);
+
+			_shaderProgram = GL.CreateProgram();
+			GL.AttachShader(_shaderProgram, _vertexShader);
+			GL.AttachShader(_shaderProgram, _fragmentShader);
+			GL.LinkProgram(_shaderProgram);
+			GL.BindAttribLocation(_shaderProgram, 0, "in_Position");
+			GL.BindAttribLocation(_shaderProgram, 1, "in_Color");
+			GL.UseProgram(_shaderProgram);
+		}
+
+
 		/// <summary>
 		/// Gets or sets the x-coordinate of the top-left corner of the view in the room.
 		/// </summary>
@@ -61,13 +100,18 @@ namespace GameMaker
 		internal static void LoadMatrix()
 		{
 			Rectangle rect = ActualView();
-			double w = rect.Width / 2, h = rect.Height / 2;
 
+			Matrix4 projectionMatrix = Matrix4.CreateOrthographicOffCenter((float)rect.Left, (float)rect.Right, (float)rect.Bottom, (float)rect.Top, 1, 0);
+			//Matrix4 projectionMatrix = Matrix4.Identity;
+			int matrixLocation = GL.GetUniformLocation(_shaderProgram, "projectionMatrix");
+			GL.UniformMatrix4(matrixLocation, false, ref projectionMatrix);
+			//GL.UseProgram(0);
+			/*
 			GL.LoadIdentity();
 			GL.Ortho(-w, w, h, -h, 0.0, 1.0);
 			GL.Rotate(View.Rotation.Degrees, 0, 0, 1);
 			GL.Translate(rect.Left - w, rect.Top - h, 0);
-
+			*/
 		}
 
 

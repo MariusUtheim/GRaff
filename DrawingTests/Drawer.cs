@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using GameMaker;
-using OpenTK.Graphics.OpenGL;
+using OpenTK.Graphics.OpenGL4;
 
 namespace DrawingTests
 {
@@ -14,8 +14,6 @@ namespace DrawingTests
 			: base(300, 400)
 		{
 			Depth = -1;
-			Background.Color = Color.ForestGreen;
-			Sprite = Sprites.Xujia;
 			Image.Alpha = 0.5;
 			Mask.Shape = MaskShape.Ellipse(60, 40);
 		}
@@ -24,21 +22,22 @@ namespace DrawingTests
 		{
 			Transform.Rotation += Angle.Deg(1);
 			View.Rotation += Angle.Deg(0.1);
+
+			byte v = (byte)(127.5 * (1 + GMath.Sin(Time.LoopCount / 60.0)));
+			Background.Color = new Color(v, v, v);
 		}
 
 		public override void OnDraw()
 		{
-			base.OnDraw();
-			Mask.DrawOutline();
-			Fill.Circle(Color.Red, Color.Green, Location, 50);
-			Draw.Circle(Color.Black, Location, 50);
-
+			Fill.Rectangle(Color.Green, -0.5, -0.5, 0.5, 0.5);
+			Fill.Rectangle(Color.Red.Transparent(0), Color.Red, Color.Blue, Color.Blue.Transparent(0), 10, 10, 100, 100);
+			Fill.Circle(Color.Aqua, Color.Aquamarine, 150, 150, 200);
 		}
 
 
 		public void OnKeyPress(Key key)
 		{
-			Sounds.Starlight.Play(false, 1.0, 1.0);
+		//	Sounds.Starlight.Play(false, 1.0, 1.0);
 		}
 
 		public void OnGlobalMouse(MouseButton button)

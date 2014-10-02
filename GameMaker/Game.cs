@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using OpenTK;
-using OpenTK.Graphics.OpenGL;
+using OpenTK.Graphics.OpenGL4;
 
 namespace GameMaker
 {
@@ -59,6 +59,7 @@ namespace GameMaker
 				View.LoadMatrix();
 
 				Game.Redraw();
+				Draw.Refresh();
 
 				Window.SwapBuffers();
 			};
@@ -199,6 +200,7 @@ namespace GameMaker
 		/// </summary>
 		public static void Redraw()
 		{
+			Draw.Clean();
 			Background.Redraw();
 
 			GlobalEvent.OnDrawBackground();

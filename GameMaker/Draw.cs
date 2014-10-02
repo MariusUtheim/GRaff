@@ -14,6 +14,16 @@ namespace GameMaker
 			set;
 		}
 
+		public static void Clean()
+		{
+			CurrentSurface.Clear();
+		}
+
+		public static void Refresh()
+		{
+			CurrentSurface.Refresh();
+		}
+
 		public static void Clear(Color color)
 		{
 			CurrentSurface.Clear(color);
@@ -100,11 +110,6 @@ namespace GameMaker
 		public static void Sprite(double x, double y, Sprite sprite, int imageIndex)
 		{
 			CurrentSurface.DrawSprite(x, y , sprite, imageIndex);
-		}
-
-		public static void Sprite(Transform transform, Color blend, Sprite sprite, int imageIndex)
-		{
-			CurrentSurface.DrawSprite(transform, blend, sprite, imageIndex);
 		}
 	}
 }
