@@ -28,7 +28,7 @@ namespace GameMaker
 		/// <param name="gameStart">An action that is performed when the game begins. If omitted or set to null, no action is performed.</param>
 		[STAThread]
 #warning CA1026
-		public static void Run(Room initialRoom, double fps = 60, Action gameStart = null)
+		public static void Run(string[] args, Room initialRoom, double fps = 60, Action gameStart = null)
 		{
 			Time.StartTime = Time.MachineTime;
 			Window = new GameWindow(initialRoom.GetWidth(), initialRoom.GetHeight());
