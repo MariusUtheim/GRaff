@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 
 namespace GameMaker
@@ -8,24 +9,24 @@ namespace GameMaker
 	/// <summary>
 	/// Represents a point in space.
 	/// </summary>
+	[StructLayout(LayoutKind.Sequential, Size = 2 * sizeof(double))]
 	public struct Point(double x, double y)
 	{
-		/// <summary>
-		/// Represents the point (0, 0).
-		/// </summary>
-		public static readonly Point Zero = new Point(0, 0);
-
-
 		/// <summary>
 		/// Gets the x-coordinate of this GameMaker.Point.
 		/// </summary>
 		public double X { get; } = x;
 
-
 		/// <summary>
 		/// Gets the y-coordinate of this GameMaker.Point.
 		/// </summary>
 		public double Y { get; } = y;
+
+
+		/// <summary>
+		/// Represents the point (0, 0).
+		/// </summary>
+		public static readonly Point Zero = new Point(0, 0);
 
 
 		/// <summary>

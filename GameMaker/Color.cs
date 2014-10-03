@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 
 namespace GameMaker
@@ -8,8 +9,17 @@ namespace GameMaker
 	/// <summary>
 	/// Represents an ARGB color. This struct is immutable. Colors can be cast from uint structures.
 	/// </summary>
+	[StructLayout(LayoutKind.Sequential, Size = 4)]
 	public partial struct Color(byte a, byte r, byte g, byte b)
 	{
+
+		public byte R { get; } = r;
+
+		public byte G { get; } = g;
+
+		public byte B { get; } = b;
+
+		public byte A { get; } = a;
 		/// <summary>
 		/// Initializes a new instance of the GameMaker.Color class, using the specified ARGB values.
 		/// </summary>
@@ -34,13 +44,6 @@ namespace GameMaker
 		/// <param name="argb">The ARGB value of the created color.</param>
 		public Color(uint argb) : this((byte)(argb >> 24), (byte)(argb >> 16), (byte)(argb >> 8), (byte)argb) { }
 
-		public byte A { get; } = a;
-
-		public byte R { get; } = r;
-
-		public byte G { get; } = g;
-
-		public byte B { get; } = b;
 
 		/// <summary>
 		/// Returns this color as a 32-bit integer, in ARGB format.

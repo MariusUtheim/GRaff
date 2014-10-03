@@ -74,7 +74,7 @@ namespace GameMaker
 				yield return center;
 				yield break;
 			}
-			if (precision <= 0) throw new ArgumentOutOfRangeException("Must be greater than 0", "precision");
+			if (precision <= 0) throw new ArgumentOutOfRangeException(nameof(precision), "Must be greater than zero.");
 			
 
 			double dt = GMath.Tau / precision;
@@ -82,7 +82,6 @@ namespace GameMaker
 
 			double x = radius, y = 0, tmp;
 
-			Point[] pts = new Point[precision];
 			for (int i = 0; i < precision; i++)
 			{
 				yield return new Point(center.X + x, center.Y + y);
@@ -91,7 +90,6 @@ namespace GameMaker
 				x = c * x - s * y;
 				y = s * tmp + c * y;
 			}
-
 		}
 
 		public static IEnumerable<Point> EnumerateEllipse(Point center, double xRadius, double yRadius)

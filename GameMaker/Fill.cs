@@ -10,22 +10,22 @@ namespace GameMaker
 	{
 		public static void Circle(Color color, Point location, double radius)
 		{
-			Draw.CurrentSurface.FillCircle(color, color, location.X, location.Y, radius);
+			Draw.CurrentSurface.FillCircle(color, color, location, radius);
 		}
 
 		public static void Circle(Color color, double x, double y, double radius)
 		{
-			Draw.CurrentSurface.FillCircle(color, color, x, y, radius);
+			Draw.CurrentSurface.FillCircle(color, color, new Point(x, y), radius);
 		}
 
 		public static void Circle(Color col1, Color col2, Point location, double radius)
 		{
-			Draw.CurrentSurface.FillCircle(col1, col2, location.X, location.Y, radius);
+			Draw.CurrentSurface.FillCircle(col1, col2, location, radius);
 		}
 
 		public static void Circle(Color col1, Color col2, double x, double y, double radius)
 		{
-			Draw.CurrentSurface.FillCircle(col1, col2, x, y, radius);
+			Draw.CurrentSurface.FillCircle(col1, col2, new Point(x, y), radius);
 		}
 
 		public static void Rectangle(Color color, double x, double y, double width, double height)

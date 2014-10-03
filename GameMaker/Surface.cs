@@ -12,16 +12,26 @@ namespace GameMaker
 	{
 		private Queue<PrimitiveType> _primitives = new Queue<PrimitiveType>();
 		private Queue<int> _counts = new Queue<int>();
-		private List<double> _vertices = new List<double>();
-		private List<byte> _colors = new List<byte>();
+		private List<Point> _vertices = new List<Point>();
+		private List<Color> _colors = new List<Color>();
 		private int _array;
 		private int _vertexBuffer, _colorBuffer;
 
 		public Surface(int width, int height)
 		{
 			_array = GL.GenVertexArray();
+			GL.BindVertexArray(_array);
+
 			_vertexBuffer = GL.GenBuffer();
+			GL.BindBuffer(BufferTarget.ArrayBuffer, _vertexBuffer);
+			GL.EnableVertexAttribArray(0);
+			GL.VertexAttribPointer(0, 2, VertexAttribPointerType.Double, false, 0, 0);
+
 			_colorBuffer = GL.GenBuffer();
+			GL.BindBuffer(BufferTarget.ArrayBuffer, _colorBuffer);
+			GL.EnableVertexAttribArray(1);
+			GL.VertexAttribPointer(1, 4, VertexAttribPointerType.UnsignedByte, false, 0, 0);
+
 		}
 
 		public void Clear()
@@ -34,22 +44,16 @@ namespace GameMaker
 
 		public void Refresh()
 		{
-			
 			GL.BindVertexArray(_array);
-#warning OPTIMIZE: Move stuff to initialization
-#warning OPTIMIZE: Use sequential layout on points and colors to reduce conversions
+
 			GL.BindBuffer(BufferTarget.ArrayBuffer, _vertexBuffer);
-			GL.BufferData(BufferTarget.ArrayBuffer, new IntPtr(_vertices.Count * sizeof(double)), _vertices.ToArray(), BufferUsageHint.DynamicDraw);
-			GL.EnableVertexAttribArray(0);
-			GL.VertexAttribPointer(0, 2, VertexAttribPointerType.Double, false, 0, 0);
-			
+			GL.BufferData(BufferTarget.ArrayBuffer, new IntPtr(_vertices.Count * 2 * sizeof(double)), _vertices.ToArray(), BufferUsageHint.DynamicDraw);
+
 			GL.BindBuffer(BufferTarget.ArrayBuffer, _colorBuffer);
-			GL.BufferData(BufferTarget.ArrayBuffer, new IntPtr(_colors.Count * sizeof(byte)), _colors.ToArray(), BufferUsageHint.DynamicDraw);
-			GL.EnableVertexAttribArray(1);
-			GL.VertexAttribPointer(1, 4, VertexAttribPointerType.UnsignedByte, false, 0, 0);
+			GL.BufferData(BufferTarget.ArrayBuffer, new IntPtr(_colors.Count * 4 * sizeof(byte)), _colors.ToArray(), BufferUsageHint.DynamicDraw);
 
 			int offset = 0, count = 0;
-			while (offset < _vertices.Count / 2)
+			while (offset < _vertices.Count)
 			{
 				count = _counts.Dequeue();
 				GL.DrawArrays(_primitives.Dequeue(), offset, count);
@@ -106,114 +110,83 @@ namespace GameMaker
 			GL.Disable(EnableCap.Texture2D);
 		}
 
-		public void DrawCircle(Color color, double x, double y, double radius)
-		{
-			throw new NotImplementedException(MethodInfo.GetCurrentMethod().Name + " is not implemented");
-		}
-
-		public void DrawPolygon(Color color, Polygon polygon)
-		{
-			_counts.Enqueue(polygon.Length);
-			_primitives.Enqueue(PrimitiveType.LineLoop);
-			throw new NotImplementedException();
-
-/*			if (polygon == null) return;
-			GL.Begin(PrimitiveType.LineLoop);
-			GL.Color4(color.ToOpenGLColor());
-			foreach (Point p in polygon.Vertices)
-				GL.Vertex2(p.X, p.Y);
-	
-			GL.End();
-			*/
-		}
 
 		#endregion
 
-		public void DrawLine(Color col1, Color col2, double x1, double y1, double x2, double y2)
+		public void DrawLine(Color col1, Color col2, Point p1, Point p2)
 		{
 			_counts.Enqueue(2);
 			_primitives.Enqueue(PrimitiveType.Lines);
-			_vertices.AddRange(new[] {
-					x1, y1,
-					x2, y2
-			});
-			_colors.AddRange(new[] {
-					col1.R, col1.G, col1.B, col1.A,
-					col2.R, col2.G, col2.B, col2.A,
-			});
+			_vertices.AddRange(new[] { p1, p2 });
+			_colors.AddRange(new[] { col1, col2 });
 		}
 
 		public void DrawRectangle(Color col1, Color col2, Color col3, Color col4, double x, double y, double width, double height)
 		{
-
 			_counts.Enqueue(4);
 			_primitives.Enqueue(PrimitiveType.LineLoop);
 
 			_vertices.AddRange(new[] {
-					x, y,
-					x + width, y,
-					x + width, y + height,
-					x, y + height
+					new Point(x, y),
+					new Point(x + width, y),
+					new Point(x + width, y + height),
+					new Point(x, y + height)
 			});
 
 			_colors.AddRange(new[] {
-					col1.R, col1.G, col1.B, col1.A,
-					col2.R, col2.G, col2.B, col2.A,
-					col3.R, col3.G, col3.B, col3.A,
-					col4.R, col4.G, col4.B, col4.A,
+					col1, col2, col3, col4
 			});
 
 		}
-
-
 
 		public void FillRectangle(Color col1, Color col2, Color col3, Color col4, double x, double y, double width, double height)
 		{
 			double left = x, top = y, right = x + width, bottom = y + height;
 
 			_vertices.AddRange(new[] {
-					left, top,
-					right, top,
-					right, bottom,
-					left, bottom
+					new Point(left, top),
+					new Point(right, top),
+					new Point(right, bottom),
+					new Point(left, bottom)
 			});
 
 			_colors.AddRange(new[] {
-					col1.R, col1.G, col1.B, col1.A,
-					col2.R, col2.G, col2.B, col2.A,
-					col3.R, col3.G, col3.B, col3.A,
-					col4.R, col4.G, col4.B, col4.A,
+					col1, col2, col3, col4
 			});
 
 			_counts.Enqueue(4);
 			_primitives.Enqueue(PrimitiveType.Quads);
 		}
 
-		public void FillCircle(Color col1, Color col2, double x, double y, double radius)
+		public void DrawCircle(Color color, Point center, double radius)
 		{
-			byte r1 = col1.R, g1 = col1.G, b1 = col1.B, a1 = col1.A;
-			byte r2 = col2.R, g2 = col2.G, b2 = col2.B, a2 = col2.A;
-
-
-			Point[] pts = Polygon.EnumerateCircle(new Point(x, y), radius).ToArray();
-			_primitives.Enqueue(PrimitiveType.TriangleFan);
-			_counts.Enqueue(pts.Length + 2);
-
-			_vertices.AddRange(new[] { x, y });
-			_colors.AddRange(new[] { col1.R, col1.G, col1.B, col1.A });
-
-			for (int i = 0; i < pts.Length; i++)
-			{
-				_vertices.AddRange(new[] { pts[i].X, pts[i].Y });
-				_colors.AddRange(new[] {
-						r2, g2, b2, a2
-				});
-			}
-
-			_vertices.AddRange(new[] { x + radius, y });
-			_colors.AddRange(new[] { r2, g2, b2, a2 });
+			int precision = (int)radius;
+			_primitives.Enqueue(PrimitiveType.LineLoop);
+			_counts.Enqueue(precision);
+			_vertices.AddRange(Polygon.EnumerateCircle(center, radius, precision));
+			_colors.AddRange(Enumerable.Repeat(color, precision));
 		}
 
+		public void FillCircle(Color col1, Color col2, Point center, double radius)
+		{
+			int precision = (int)radius;
+			_primitives.Enqueue(PrimitiveType.TriangleFan);
+			_counts.Enqueue(precision + 2);
+
+			_vertices.Add(center);
+			_colors.Add(col1);
+			_vertices.AddRange(Polygon.EnumerateCircle(center, radius));
+			_vertices.Add(new Point(center.X + radius, center.Y));
+			_colors.AddRange(Enumerable.Repeat(col2, precision + 1));
+		}
+
+		public void DrawPolygon(Color color, Polygon polygon)
+		{
+			_counts.Enqueue(polygon.Length);
+			_primitives.Enqueue(PrimitiveType.LineLoop);
+			_vertices.AddRange(polygon.Vertices);
+			_colors.AddRange(Enumerable.Repeat(color, polygon.Length));
+		}
 
 
 		public void DrawText(Color color, Object text, double x, double y)

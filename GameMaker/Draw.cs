@@ -40,11 +40,11 @@ namespace GameMaker
 
 		public static void Circle(Color color, double x, double y, double radius)
 		{
-			CurrentSurface.DrawCircle(color, x, y, radius);
+			CurrentSurface.DrawCircle(color, new Point(x, y), radius);
 		}
 		public static void Circle(Color color, Point location, double radius)
 		{
-			CurrentSurface.DrawCircle(color, location.X, location.Y, radius);
+			CurrentSurface.DrawCircle(color, location, radius);
 		}
 
 		public static void Rectangle(Color color, double x, double y, double width, double height)
@@ -67,28 +67,28 @@ namespace GameMaker
 
 		public static void Line(Color color, double x1, double y1, double x2, double y2)
 		{
-			CurrentSurface.DrawLine(color, color, x1, y1, x2, y2);
+			CurrentSurface.DrawLine(color, color, new Point(x1, y1), new Point(x2, y2));
 		}
 		public static void Line(Color color, Point p1, Point p2)
 		{
-			CurrentSurface.DrawLine(color, color, p1.X, p1.Y, p2.X, p2.Y);
+			CurrentSurface.DrawLine(color, color, p1, p2);
 		}
 		public static void Line(Color color, Line line)
 		{
-			CurrentSurface.DrawLine(color, color, line.Origin.X, line.Origin.Y, line.Origin.X + line.Direction.X, line.Origin.Y + line.Direction.Y);
+			CurrentSurface.DrawLine(color, color, line.Origin, line.Destination);
 		}
 
 		public static void Line(Color col1, Color col2, double x1, double y1, double x2, double y2)
 		{
-			CurrentSurface.DrawLine(col1, col2, x1, y1, x2, y2);
+			CurrentSurface.DrawLine(col1, col2, new Point(x1, y1), new Point(x2, y2));
 		}
 		public static void Line(Color col1, Color col2, Point p1, Point p2)
 		{
-			CurrentSurface.DrawLine(col1, col2, p1.X, p1.Y, p2.X, p2.Y);
+			CurrentSurface.DrawLine(col1, col2, p1, p2);
 		}
 		public static void Line(Color col1, Color col2, Line line)
 		{
-			CurrentSurface.DrawLine(col1, col2, line.Origin.X, line.Origin.Y, line.Destination.X, line.Destination.Y);
+			CurrentSurface.DrawLine(col1, col2, line.Origin, line.Destination);
 		}
 
 		public static void Polygon(Color color, Polygon polygon)

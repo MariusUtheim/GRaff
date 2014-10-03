@@ -27,9 +27,11 @@ namespace DrawingTests
 
 		public override void OnDraw()
 		{
-			Fill.Circle(Color.Red, Color.Red, 150, 150, 100);
+			Fill.Circle(Color.Green, Color.Red, 150, 150, 100);
 			Draw.Rectangle(Color.Black, Color.Red, Color.Blue, Color.Blue.Transparent(0), 10, 10, 100, 100);
 			Draw.Line(Color.Red, Color.Blue, 20, 250, 120, 270);
+			Draw.Circle(Color.Red, 500, 500, 100);
+			//Draw.Polygon(Color.Red, new Polygon(new Point(500, 300), new Point(600, 400), new Point(600, 500), new Point(500, 600), new Point(400, 600), new Point(300, 500), new Point(300, 400), new Point(400, 300)));
 		}
 
 
