@@ -10,8 +10,10 @@ namespace GameMaker
 {
 	public class Surface
 	{
-		private List<float> _vertices = new List<float>();
-		private List<float> _colors = new List<float>();
+		private Queue<PrimitiveType> _primitives = new Queue<PrimitiveType>();
+		private Queue<int> _counts = new Queue<int>();
+		private List<double> _vertices = new List<double>();
+		private List<byte> _colors = new List<byte>();
 		private int _array;
 		private int _vertexBuffer, _colorBuffer;
 
@@ -24,25 +26,35 @@ namespace GameMaker
 
 		public void Clear()
 		{
+			_primitives.Clear();
+			_counts.Clear();
 			_vertices.Clear();
 			_colors.Clear();
 		}
 
 		public void Refresh()
 		{
+			
 			GL.BindVertexArray(_array);
-
+#warning OPTIMIZE: Move stuff to initialization
+#warning OPTIMIZE: Use sequential layout on points and colors to reduce conversions
 			GL.BindBuffer(BufferTarget.ArrayBuffer, _vertexBuffer);
-			GL.BufferData(BufferTarget.ArrayBuffer, new IntPtr(_vertices.Count * sizeof(float)), _vertices.ToArray(), BufferUsageHint.DynamicDraw);
+			GL.BufferData(BufferTarget.ArrayBuffer, new IntPtr(_vertices.Count * sizeof(double)), _vertices.ToArray(), BufferUsageHint.DynamicDraw);
 			GL.EnableVertexAttribArray(0);
-			GL.VertexAttribPointer(0, 2, VertexAttribPointerType.Float, false, 0, 0);
-
+			GL.VertexAttribPointer(0, 2, VertexAttribPointerType.Double, false, 0, 0);
+			
 			GL.BindBuffer(BufferTarget.ArrayBuffer, _colorBuffer);
-			GL.BufferData(BufferTarget.ArrayBuffer, new IntPtr(_colors.Count * sizeof(float)), _colors.ToArray(), BufferUsageHint.DynamicDraw);
+			GL.BufferData(BufferTarget.ArrayBuffer, new IntPtr(_colors.Count * sizeof(byte)), _colors.ToArray(), BufferUsageHint.DynamicDraw);
 			GL.EnableVertexAttribArray(1);
-			GL.VertexAttribPointer(1, 4, VertexAttribPointerType.Float, false, 0, 0);
+			GL.VertexAttribPointer(1, 4, VertexAttribPointerType.UnsignedByte, false, 0, 0);
 
-			GL.DrawArrays(PrimitiveType.Triangles, 0, _vertices.Count / 2);
+			int offset = 0, count = 0;
+			while (offset < _vertices.Count / 2)
+			{
+				count = _counts.Dequeue();
+				GL.DrawArrays(_primitives.Dequeue(), offset, count);
+				offset += count;
+			}
 		}
 
 #region 
@@ -101,7 +113,9 @@ namespace GameMaker
 
 		public void DrawPolygon(Color color, Polygon polygon)
 		{
-			throw new NotImplementedException(MethodInfo.GetCurrentMethod().Name + " is not implemented");
+			_counts.Enqueue(polygon.Length);
+			_primitives.Enqueue(PrimitiveType.LineLoop);
+			throw new NotImplementedException();
 
 /*			if (polygon == null) return;
 			GL.Begin(PrimitiveType.LineLoop);
@@ -113,142 +127,94 @@ namespace GameMaker
 			*/
 		}
 
-		public void FillCircle(Color col1, Color col2, double x, double y, double radius)
+		#endregion
+
+		public void DrawLine(Color col1, Color col2, double x1, double y1, double x2, double y2)
 		{
-			float fx = (float)x, fy = (float)y;
-			float r1 = col1.R / 255.0f, g1 = col1.G / 255.0f, b1 = col1.B / 255.0f, a1 = col1.A / 255.0f;
-			float r2 = col2.R / 255.0f, g2 = col2.G / 255.0f, b2 = col2.B / 255.0f, a2 = col2.A / 255.0f;
-
-			Point[] pts = Polygon.EnumerateCircle(new Point(x, y), radius).ToArray();
-			for (int i = 0; i < pts.Length - 1; i++)
-			{
-				_vertices.AddRange(new[] {
-						fx, fy,
-						(float)pts[i].X, (float)pts[i].Y,
-						(float)pts[i + 1].X, (float)pts[i + 1].Y
-				});
-				_colors.AddRange(new[] {
-						r1, g1, b1, a1,
-						r2, g2, b2, a2,
-						r2, g2, b2, a2
-				});
-			}
-
+			_counts.Enqueue(2);
+			_primitives.Enqueue(PrimitiveType.Lines);
 			_vertices.AddRange(new[] {
-						fx, fy,
-						(float)pts[pts.Length - 1].X, (float)pts[pts.Length - 1].Y,
-						(float)pts[0].X, (float)pts[0].Y
-				});
+					x1, y1,
+					x2, y2
+			});
 			_colors.AddRange(new[] {
-						r1, g1, b1, a1,
-						r2, g2, b2, a2,
-						r2, g2, b2, a2
-				});
-
-
-			/*
-			GL.Begin(PrimitiveType.TriangleFan);
-			GL.Color4(col1.ToOpenGLColor());
-			GL.Vertex2(x, y);
-			GL.Color4(col2.ToOpenGLColor());
-			foreach (Point pt in Polygon.EnumerateCircle(new Point(x, y), radius))
-				GL.Vertex2(pt.X, pt.Y);
-			GL.Vertex2(x + radius, y);
-			GL.End();
-			*/
-
-		}
-
-		public void DrawRectangle(Color color, double x, double y, double width, double height)
-		{
-			throw new NotImplementedException(MethodInfo.GetCurrentMethod().Name + " is not implemented");
-
-			/*
-			GL.Begin(PrimitiveType.LineLoop);
-			GL.Color4(color.ToOpenGLColor());
-			GL.Vertex2(x, y);
-			GL.Vertex2(x + width, y);
-			GL.Vertex2(x + width, y + height);
-			GL.Vertex2(x, y + height);
-			GL.End();
-			*/
+					col1.R, col1.G, col1.B, col1.A,
+					col2.R, col2.G, col2.B, col2.A,
+			});
 		}
 
 		public void DrawRectangle(Color col1, Color col2, Color col3, Color col4, double x, double y, double width, double height)
 		{
-			/*
-			GL.Begin(PrimitiveType.Quads);
 
-			GL.Color4(col1.ToOpenGLColor());
-			GL.Vertex2(x, y);
+			_counts.Enqueue(4);
+			_primitives.Enqueue(PrimitiveType.LineLoop);
 
-			GL.Color4(col2.ToOpenGLColor());
-			GL.Vertex2(x + width, y);
+			_vertices.AddRange(new[] {
+					x, y,
+					x + width, y,
+					x + width, y + height,
+					x, y + height
+			});
 
-			GL.Color4(col3.ToOpenGLColor());
-			GL.Vertex2(x + width, y + height);
-
-			GL.Color4(col4.ToOpenGLColor());
-			GL.Vertex2(x, y + height);
-
-			GL.End();
-			*/
-			throw new NotImplementedException(MethodInfo.GetCurrentMethod().Name + " is not implemented");
+			_colors.AddRange(new[] {
+					col1.R, col1.G, col1.B, col1.A,
+					col2.R, col2.G, col2.B, col2.A,
+					col3.R, col3.G, col3.B, col3.A,
+					col4.R, col4.G, col4.B, col4.A,
+			});
 
 		}
-#endregion
 
 
 
 		public void FillRectangle(Color col1, Color col2, Color col3, Color col4, double x, double y, double width, double height)
 		{
-			float left = (float)x, top = (float)y, right = (float)(x + width), bottom = (float)(y + height);
+			double left = x, top = y, right = x + width, bottom = y + height;
 
 			_vertices.AddRange(new[] {
 					left, top,
 					right, top,
-					left, bottom,
-					left, bottom,
-					right, top,
 					right, bottom,
+					left, bottom
 			});
 
 			_colors.AddRange(new[] {
-					col1.R / 255.0f, col1.G / 255.0f, col1.B / 255.0f, col1.A / 255.0f,
-					col2.R / 255.0f, col2.G / 255.0f, col2.B / 255.0f, col2.A / 255.0f,
-					col4.R / 255.0f, col4.G / 255.0f, col4.B / 255.0f, col4.A / 255.0f,
-					col4.R / 255.0f, col4.G / 255.0f, col4.B / 255.0f, col4.A / 255.0f,
-					col2.R / 255.0f, col2.G / 255.0f, col2.B / 255.0f, col2.A / 255.0f,
-					col3.R / 255.0f, col3.G / 255.0f, col3.B / 255.0f, col3.A / 255.0f,
+					col1.R, col1.G, col1.B, col1.A,
+					col2.R, col2.G, col2.B, col2.A,
+					col3.R, col3.G, col3.B, col3.A,
+					col4.R, col4.G, col4.B, col4.A,
 			});
+
+			_counts.Enqueue(4);
+			_primitives.Enqueue(PrimitiveType.Quads);
 		}
 
-		public void DrawLine(Color color, double x1, double y1, double x2, double y2)
+		public void FillCircle(Color col1, Color col2, double x, double y, double radius)
 		{
-			throw new NotImplementedException(MethodInfo.GetCurrentMethod().Name + " is not implemented");
+			byte r1 = col1.R, g1 = col1.G, b1 = col1.B, a1 = col1.A;
+			byte r2 = col2.R, g2 = col2.G, b2 = col2.B, a2 = col2.A;
 
-			/*
-			GL.Begin(PrimitiveType.Lines);
-			GL.Color4(color.ToOpenGLColor());
-			GL.Vertex2(x1, y1);
-			GL.Vertex2(x2, y2);
-			GL.End();
-			*/
+
+			Point[] pts = Polygon.EnumerateCircle(new Point(x, y), radius).ToArray();
+			_primitives.Enqueue(PrimitiveType.TriangleFan);
+			_counts.Enqueue(pts.Length + 2);
+
+			_vertices.AddRange(new[] { x, y });
+			_colors.AddRange(new[] { col1.R, col1.G, col1.B, col1.A });
+
+			for (int i = 0; i < pts.Length; i++)
+			{
+				_vertices.AddRange(new[] { pts[i].X, pts[i].Y });
+				_colors.AddRange(new[] {
+						r2, g2, b2, a2
+				});
+			}
+
+			_vertices.AddRange(new[] { x + radius, y });
+			_colors.AddRange(new[] { r2, g2, b2, a2 });
 		}
 
-		public void DrawLine(Color col1, Color col2, double x1, double y1, double x2, double y2)
-		{
-			/*
-			GL.Begin(PrimitiveType.Lines);
-			GL.Color4(col1.ToOpenGLColor());
-			GL.Vertex2(x1, y1);
-			GL.Color4(col2.ToOpenGLColor());
-			GL.Vertex2(x2, y2);
-			GL.End();
-			*/
-			throw new NotImplementedException(MethodInfo.GetCurrentMethod().Name + " is not implemented");
 
-		}
 
 		public void DrawText(Color color, Object text, double x, double y)
 		{

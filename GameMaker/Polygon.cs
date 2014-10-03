@@ -64,7 +64,7 @@ namespace GameMaker
 #warning TODO: Put the Enumerate- methods someplace else. Shape class?
 		public static IEnumerable<Point> EnumerateCircle(Point center, double radius)
 		{
-			return EnumerateCircle(center, radius, (int)(GMath.Tau * radius));
+			return EnumerateCircle(center, radius, (int)(radius));
 		}
 
 		public static IEnumerable<Point> EnumerateCircle(Point center, double radius, int precision)

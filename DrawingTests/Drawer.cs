@@ -16,22 +16,20 @@ namespace DrawingTests
 			Depth = -1;
 			Image.Alpha = 0.5;
 			Mask.Shape = MaskShape.Ellipse(60, 40);
+			Background.Color = Color.LightGray;
 		}
 
 		public override void OnStep()
 		{
 			Transform.Rotation += Angle.Deg(1);
 			View.Rotation += Angle.Deg(0.1);
-
-			byte v = (byte)(127.5 * (1 + GMath.Sin(Time.LoopCount / 60.0)));
-			Background.Color = new Color(v, v, v);
 		}
 
 		public override void OnDraw()
 		{
-			Fill.Rectangle(Color.Green, -0.5, -0.5, 0.5, 0.5);
-			Fill.Rectangle(Color.Red.Transparent(0), Color.Red, Color.Blue, Color.Blue.Transparent(0), 10, 10, 100, 100);
-			Fill.Circle(Color.Aqua, Color.Aquamarine, 150, 150, 200);
+			Fill.Circle(Color.Red, Color.Red, 150, 150, 100);
+			Draw.Rectangle(Color.Black, Color.Red, Color.Blue, Color.Blue.Transparent(0), 10, 10, 100, 100);
+			Draw.Line(Color.Red, Color.Blue, 20, 250, 120, 270);
 		}
 
 

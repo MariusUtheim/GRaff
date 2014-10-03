@@ -7,7 +7,7 @@ using GameMaker;
 
 namespace DrawingTests
 {
-	class Block : DraggableObject, ICollisionListener<Drawer>
+	class Block : DraggableObject
 	{
 		private Color _col = Color.Black;
 
@@ -18,20 +18,10 @@ namespace DrawingTests
 			Depth = -5;
 		}
 
-		public override void OnStep()
-		{
-			base.OnStep();
-			Location = Mouse.Location;
-		}
-
 		public override void OnDraw()
 		{
-			//Mask.DrawOutline(_col);
-		}
-
-		public void OnCollision(Drawer other)
-		{
-			_col = Color.Red;
+			Fill.Rectangle(Color.Black, -15, -15, 30, 30);
+			Mask.DrawOutline(Color.Red);
 		}
 	}
 }

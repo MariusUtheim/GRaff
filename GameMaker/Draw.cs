@@ -49,11 +49,11 @@ namespace GameMaker
 
 		public static void Rectangle(Color color, double x, double y, double width, double height)
 		{
-			CurrentSurface.DrawRectangle(color, x, y, width, height);
+			CurrentSurface.DrawRectangle(color, color, color, color, x, y, width, height);
 		}
 		public static void Rectangle(Color color, Rectangle rectangle)
 		{
-			CurrentSurface.DrawRectangle(color, rectangle.Left, rectangle.Top, rectangle.Width, rectangle.Height);
+			CurrentSurface.DrawRectangle(color, color, color, color, rectangle.Left, rectangle.Top, rectangle.Width, rectangle.Height);
 		}
 
 		public static void Rectangle(Color col1, Color col2, Color col3, Color col4, double x, double y, double width, double height)
@@ -67,15 +67,15 @@ namespace GameMaker
 
 		public static void Line(Color color, double x1, double y1, double x2, double y2)
 		{
-			CurrentSurface.DrawLine(color, x1, y1, x2, y2);
+			CurrentSurface.DrawLine(color, color, x1, y1, x2, y2);
 		}
 		public static void Line(Color color, Point p1, Point p2)
 		{
-			CurrentSurface.DrawLine(color, p1.X, p1.Y, p2.X, p2.Y);
+			CurrentSurface.DrawLine(color, color, p1.X, p1.Y, p2.X, p2.Y);
 		}
 		public static void Line(Color color, Line line)
 		{
-			CurrentSurface.DrawLine(color, line.Origin.X, line.Origin.Y, line.Origin.X + line.Direction.X, line.Origin.Y + line.Direction.Y);
+			CurrentSurface.DrawLine(color, color, line.Origin.X, line.Origin.Y, line.Origin.X + line.Direction.X, line.Origin.Y + line.Direction.Y);
 		}
 
 		public static void Line(Color col1, Color col2, double x1, double y1, double x2, double y2)

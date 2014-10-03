@@ -19,7 +19,7 @@ namespace DrawingTests
 			GlobalEvent.ExitOnEscape = true;
 
 			new Drawer();
-			new Block(0, 0);
+	//		new Block(20, 20);
 
 			Window.Title = "Hello, world!";
 		}

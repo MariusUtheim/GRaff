@@ -22,7 +22,7 @@ namespace GameMaker
 				"in vec4 in_Color;" +
 				"out vec4 pass_Color;" +
 				"void main(void) {" +
-				"	gl_Position = projectionMatrix * vec4(in_Position, 1.0);" +
+				"	gl_Position = projectionMatrix * vec4(in_Position.x, in_Position.y, in_Position.z, 1.0);" +
 				"   pass_Color = in_Color;" +
 				"}");
 			GL.CompileShader(_vertexShader);
@@ -33,7 +33,7 @@ namespace GameMaker
 				"in vec4 pass_Color;" +
 				"out vec4 out_Color;" +
 				"void main () {" +
-				"	gl_FragColor = pass_Color;" +
+				"	gl_FragColor = vec4(pass_Color.x / 255.0, pass_Color.y / 255.0, pass_Color.z / 255.0, pass_Color.w / 255.0);" +
 				"}");
 			GL.CompileShader(_fragmentShader);
 
