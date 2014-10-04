@@ -54,7 +54,6 @@
   </Choose>
   <ItemGroup>
     <Compile Include="MovingObjectTest.cs" />
-    <Compile Include="SurfaceTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="CollisionTest.cs" />
     <Compile Include="TransformTest.cs" />

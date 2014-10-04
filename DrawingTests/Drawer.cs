@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using GameMaker;
-using OpenTK.Graphics.OpenGL4;
+﻿using GameMaker;
+
 
 namespace DrawingTests
 {
@@ -17,8 +13,6 @@ namespace DrawingTests
 			Image.Alpha = 1;
 			Mask.Shape = MaskShape.Ellipse(60, 40);
 			Background.Color = Color.LightGray;
-			Background.Sprite = Sprites.Xujia;
-			Background.IsTiled = true;
 		}
 
 		public override void OnStep()
@@ -28,16 +22,11 @@ namespace DrawingTests
 
 		public override void OnDraw()
 		{
-			base.OnDraw();
-			Vector offset = new Vector(50, Angle.Deg(45));
-			Fill.Circle(Color.PeachPuff, Color.HotPink, View.Center + offset, 20);
-			//Fill.Rectangle(Draw.GetPixel(Mouse.Location), 0, 0, 10, 10);
-			for (int x = 0; x < 25; x++)
-				for (int y = 0; y < 25; y++)
-				{
-					Point p = new Point(Mouse.X + x, Mouse.Y - 10 + y);
-					Draw.Pixel(Draw.GetPixel(p), x, y);
-				}
+			Fill.Rectangle(0xFFFFFFFF, 0xFFFF00FF, 0xFFFFFF00, 0xFF00FFFF, 10, 10, 200, 120);
+			Fill.Circle(0x80FFFF00, 0xFF00FFFF, 105, 250, 100);
+
+			Draw.Line(Color.Black, Color.Red, 10, 400, 210, 410);
+			Draw.Sprite(300, 20, Sprites.Xujia, 0);
 		}
 
 

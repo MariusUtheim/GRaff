@@ -3,7 +3,7 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Threading.Tasks;
-using OpenTK.Graphics.OpenGL4;
+using OpenTK.Graphics.ES30;
 
 namespace GameMaker
 {
@@ -24,8 +24,10 @@ namespace GameMaker
 
 			GL.BindTexture(TextureTarget.Texture2D, _id);
 
-			GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, Width, Height, 0, OpenTK.Graphics.OpenGL4.PixelFormat.Bgra, PixelType.UnsignedByte, textureData.Scan0);
-			GL.GenerateMipmap(GenerateMipmapTarget.Texture2D);
+			//GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, Width, Height, 0, OpenTK.Graphics.OpenGL4.PixelFormat.Bgra, PixelType.UnsignedByte, textureData.Scan0);
+			//GL.GenerateMipmap(GenerateMipmapTarget.Texture2D);
+			GL.TexImage2D(TextureTarget2d.Texture2D, 0, TextureComponentCount.Rgba, Width, Height, 0, OpenTK.Graphics.ES30.PixelFormat.Rgba, PixelType.UnsignedByte, textureData.Scan0);
+			GL.GenerateMipmap(TextureTarget.Texture2D);
 
 			bmp.UnlockBits(textureData);
 

@@ -1,31 +1,28 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
 using OpenTK.Graphics.OpenGL4;
 
 namespace GameMaker
 {
 	public class Surface
 	{
-		private static readonly IntPtr _1p = new IntPtr(2 * Marshal.SizeOf(typeof(Point))), _2p = new IntPtr(2 * Marshal.SizeOf(typeof(Point))), _4p = new IntPtr(4 * Marshal.SizeOf(typeof(Point)));
-		private static readonly IntPtr _1c = new IntPtr(2 * Marshal.SizeOf(typeof(Color))), _2c = new IntPtr(2 * Marshal.SizeOf(typeof(Color))), _4c = new IntPtr(4 * Marshal.SizeOf(typeof(Color)));
+		private static readonly IntPtr _1p = new IntPtr(Marshal.SizeOf(typeof(Point))), _2p = new IntPtr(2 * Marshal.SizeOf(typeof(Point))), _4p = new IntPtr(4 * Marshal.SizeOf(typeof(Point)));
+		private static readonly IntPtr _1c = new IntPtr(Marshal.SizeOf(typeof(Color))), _2c = new IntPtr(2 * Marshal.SizeOf(typeof(Color))), _4c = new IntPtr(4 * Marshal.SizeOf(typeof(Color)));
 		private static readonly IntPtr _4 = new IntPtr(4);
 		private int _vertexArray;
 		private int _vertexBuffer, _colorBuffer, _textureBuffer;
 
 		public Surface(int width, int height)
 		{
+			var f = sizeof(float);
 			_vertexArray = GL.GenVertexArray();
 			GL.BindVertexArray(_vertexArray);
 
 			_vertexBuffer = GL.GenBuffer();
 			GL.BindBuffer(BufferTarget.ArrayBuffer, _vertexBuffer);
 			GL.EnableVertexAttribArray(0);
-			GL.VertexAttribPointer(0, 2, VertexAttribPointerType.Double, false, 0, 0);
+			GL.VertexAttribPointer(0, 2, VertexAttribPointerType.Float, false, 0, 0);
 
 			_colorBuffer = GL.GenBuffer();
 			GL.BindBuffer(BufferTarget.ArrayBuffer, _colorBuffer);
@@ -34,9 +31,9 @@ namespace GameMaker
 
 			_textureBuffer = GL.GenBuffer();
 			GL.BindBuffer(BufferTarget.ArrayBuffer, _textureBuffer);
-			GL.BufferData(BufferTarget.ArrayBuffer, _4p, new double[] { 0, 0, 1, 0, 1, 1, 0, 1 }, BufferUsageHint.StaticDraw);
+			GL.BufferData(BufferTarget.ArrayBuffer, _4p, new float[] { 0, 0, 1, 0, 1, 1, 0, 1 }, BufferUsageHint.StaticDraw);
 			GL.EnableVertexAttribArray(2);
-			GL.VertexAttribPointer(2, 2, VertexAttribPointerType.Double, false, 0, 0);
+			GL.VertexAttribPointer(2, 2, VertexAttribPointerType.Float, false, 0, 0);
 		}
 
 
@@ -127,7 +124,7 @@ namespace GameMaker
 			GL.BindVertexArray(_vertexArray);
 			GL.BindBuffer(BufferTarget.ArrayBuffer, _vertexBuffer);
 			int precision = (int)(GMath.Tau * radius);
-			GL.BufferData(BufferTarget.ArrayBuffer, new IntPtr(precision * 2 * sizeof(double)), Polygon.EnumerateCircle(center, radius, precision).ToArray(), BufferUsageHint.StreamDraw);
+			GL.BufferData(BufferTarget.ArrayBuffer, new IntPtr(precision * 2 * sizeof(float)), Polygon.EnumerateCircle(center, radius, precision).ToArray(), BufferUsageHint.StreamDraw);
 
 			GL.BindBuffer(BufferTarget.ArrayBuffer, _colorBuffer);
 			GL.BufferData(BufferTarget.ArrayBuffer, new IntPtr(precision * 4), Enumerable.Repeat(color, precision).ToArray(), BufferUsageHint.StreamDraw);
@@ -147,7 +144,7 @@ namespace GameMaker
 				vertices[i++] = p;
 			vertices[i] = new Point(center.X + radius, center.Y);
 			GL.BindBuffer(BufferTarget.ArrayBuffer, _vertexBuffer);
-			GL.BufferData(BufferTarget.ArrayBuffer, new IntPtr(vertices.Length * 2 * sizeof(double)), vertices, BufferUsageHint.StreamDraw);
+			GL.BufferData(BufferTarget.ArrayBuffer, new IntPtr(vertices.Length * 2 * sizeof(float)), vertices, BufferUsageHint.StreamDraw);
 
 			GL.BindBuffer(BufferTarget.ArrayBuffer, _colorBuffer);
 			Color[] colors = new Color[precision + 2];

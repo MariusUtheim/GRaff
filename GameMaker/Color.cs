@@ -10,7 +10,7 @@ namespace GameMaker
 	/// Represents an RGBA color. This struct is immutable. Colors can be cast from uint structures.
 	/// </summary>
 #warning TODO: Make the format consistent with RGBA
-	[StructLayout(LayoutKind.Sequential, Size = 4)]
+	[StructLayout(LayoutKind.Sequential)]
 	public partial struct Color(byte a, byte r, byte g, byte b)
 	{
 #warning TODO: Documentation

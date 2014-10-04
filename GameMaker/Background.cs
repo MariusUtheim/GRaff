@@ -1,7 +1,6 @@
 ﻿using System;
-using System.Reflection;
 using System.Runtime.InteropServices;
-using OpenTK.Graphics.OpenGL4;
+using OpenTK.Graphics.ES30;
 
 
 namespace GameMaker
@@ -20,7 +19,7 @@ namespace GameMaker
 			_vertexBuffer = GL.GenBuffer();
 			GL.BindBuffer(BufferTarget.ArrayBuffer, _vertexBuffer);
 			GL.EnableVertexAttribArray(0);
-			GL.VertexAttribPointer(0, 2, VertexAttribPointerType.Double, false, 0, 0);
+			GL.VertexAttribPointer(0, 2, VertexAttribPointerType.Float, false, 0, 0);
 
 			_colorBuffer = GL.GenBuffer();
 			GL.BindBuffer(BufferTarget.ArrayBuffer, _colorBuffer);
@@ -31,7 +30,7 @@ namespace GameMaker
 			_textureBuffer = GL.GenBuffer();
 			GL.BindBuffer(BufferTarget.ArrayBuffer, _textureBuffer);
 			GL.EnableVertexAttribArray(2);
-			GL.VertexAttribPointer(2, 2, VertexAttribPointerType.Double, false, 0, 0);
+			GL.VertexAttribPointer(2, 2, VertexAttribPointerType.Float, false, 0, 0);
 		}
 
 		public static Color Color { get; set; } = Color.LightGray;
@@ -67,8 +66,8 @@ namespace GameMaker
 			{
 				if (IsTiled)
 				{
-					double u0 = -XOffset / (double)Sprite.Width, v0 = -YOffset / (double)Sprite.Height;
-					double u1 = u0 + Room.Width / (double)Sprite.Width, v1 = v0 + Room.Height / (double)Sprite.Height;
+					float u0 = -(float)(XOffset / Sprite.Width), v0 = -(float)(YOffset / Sprite.Height);
+					float u1 = u0 + Room.Width / (float)Sprite.Width, v1 = v0 + Room.Height / (float)Sprite.Height;
 
 					GL.BindVertexArray(_vertexArray);
 					GL.BindTexture(TextureTarget.Texture2D, Sprite.Texture.Id);

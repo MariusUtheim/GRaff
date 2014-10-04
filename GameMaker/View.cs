@@ -16,7 +16,7 @@ namespace GameMaker
 		{
 			_vertexShader = GL.CreateShader(ShaderType.VertexShader);
 			GL.ShaderSource(_vertexShader,
-				"#version 150 core\n" +
+				"#version 300 es\n" +
 				"uniform mat4 projectionMatrix;" +
 				"in vec2 in_Position;" +
 				"in vec4 in_Color;" +
@@ -32,7 +32,7 @@ namespace GameMaker
 
 			_fragmentShader = GL.CreateShader(ShaderType.FragmentShader);
 			GL.ShaderSource(_fragmentShader,
-				"#version 150 core\n" +
+				"#version 300 es\n" +
 				"in vec4 pass_Color;" +
 				"in vec2 pass_TexCoord;" +
 				"out vec4 out_Color;" +
@@ -40,7 +40,7 @@ namespace GameMaker
 				"uniform bool drawTexture;" +
 				"void main () {" +
 				"   vec4 c = vec4(pass_Color.x / 255.0, pass_Color.y / 255.0, pass_Color.z / 255.0, pass_Color.w / 255.0);" +
-				"	if (drawTexture) gl_FragColor = texture(tex, pass_TexCoord) * c;" +
+				"	if (drawTexture) gl_FragColor = texture(tex, pass_TexCoord).zyxw * c;" +
 				"	else gl_FragColor = c;" +
 				"}");
 			GL.CompileShader(_fragmentShader);
@@ -66,11 +66,11 @@ namespace GameMaker
 
 		internal static void EnableTexture()
 		{
-			GL.ProgramUniform1(_shaderProgram, GL.GetUniformLocation(_shaderProgram, "drawTexture"), 1);
+			GL.Uniform1(GL.GetUniformLocation(_shaderProgram, "drawTexture"), 1);
 		}
 		internal static void DisableTexture()
 		{
-			GL.ProgramUniform1(_shaderProgram, GL.GetUniformLocation(_shaderProgram, "drawTexture"), 0);
+			GL.Uniform1(GL.GetUniformLocation(_shaderProgram, "drawTexture"), 0);
 		}
 
 		/// <summary>

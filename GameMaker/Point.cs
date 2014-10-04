@@ -9,18 +9,20 @@ namespace GameMaker
 	/// <summary>
 	/// Represents a point in space.
 	/// </summary>
-	[StructLayout(LayoutKind.Sequential, Size = 2 * sizeof(double))]
+	[StructLayout(LayoutKind.Sequential)]
 	public struct Point(double x, double y)
 	{
+		private float _x = (float)x, _y = (float)y;
+
 		/// <summary>
 		/// Gets the x-coordinate of this GameMaker.Point.
 		/// </summary>
-		public double X { get; } = x;
+		public double X => _x;
 
 		/// <summary>
 		/// Gets the y-coordinate of this GameMaker.Point.
 		/// </summary>
-		public double Y { get; } = y;
+		public double Y => _y;
 
 
 		/// <summary>
