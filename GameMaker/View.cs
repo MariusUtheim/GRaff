@@ -18,12 +18,15 @@ namespace GameMaker
 			GL.ShaderSource(_vertexShader,
 				"#version 150 core\n" +
 				"uniform mat4 projectionMatrix;" +
-				"in vec3 in_Position;" +
+				"in vec2 in_Position;" +
 				"in vec4 in_Color;" +
+				"in vec2 in_TexCoord;" +
 				"out vec4 pass_Color;" +
+				"out vec2 pass_TexCoord;" +
 				"void main(void) {" +
-				"	gl_Position = projectionMatrix * vec4(in_Position.x, in_Position.y, in_Position.z, 1.0);" +
+				"	gl_Position = projectionMatrix * vec4(in_Position.x, in_Position.y, 0, 1.0);" +
 				"   pass_Color = in_Color;" +
+				"	pass_TexCoord = in_TexCoord;" +
 				"}");
 			GL.CompileShader(_vertexShader);
 
@@ -31,9 +34,14 @@ namespace GameMaker
 			GL.ShaderSource(_fragmentShader,
 				"#version 150 core\n" +
 				"in vec4 pass_Color;" +
+				"in vec2 pass_TexCoord;" +
 				"out vec4 out_Color;" +
+				"uniform sampler2D tex;" +
+				"uniform bool drawTexture;" +
 				"void main () {" +
-				"	gl_FragColor = vec4(pass_Color.x / 255.0, pass_Color.y / 255.0, pass_Color.z / 255.0, pass_Color.w / 255.0);" +
+				"   vec4 c = vec4(pass_Color.x / 255.0, pass_Color.y / 255.0, pass_Color.z / 255.0, pass_Color.w / 255.0);" +
+				"	if (drawTexture) gl_FragColor = texture(tex, pass_TexCoord) * c;" +
+				"	else gl_FragColor = c;" +
 				"}");
 			GL.CompileShader(_fragmentShader);
 
@@ -43,9 +51,23 @@ namespace GameMaker
 			GL.LinkProgram(_shaderProgram);
 			GL.BindAttribLocation(_shaderProgram, 0, "in_Position");
 			GL.BindAttribLocation(_shaderProgram, 1, "in_Color");
+			GL.BindAttribLocation(_shaderProgram, 2, "in_TexCoord");
 			GL.UseProgram(_shaderProgram);
+
+			GL.ValidateProgram(_shaderProgram);
+			var msg = GL.GetProgramInfoLog(_shaderProgram);
+			int res;
+			GL.GetProgram(_shaderProgram, GetProgramParameterName.ValidateStatus, out res);
+			if (msg != "" || res != 1)
+			{
+			}
+
 		}
 
+		internal static void EnableTexture(int isEnabled)
+		{
+			GL.ProgramUniform1(_shaderProgram, GL.GetUniformLocation(_shaderProgram, "drawTexture"), isEnabled);
+		}
 
 		/// <summary>
 		/// Gets or sets the x-coordinate of the top-left corner of the view in the room.
@@ -101,7 +123,20 @@ namespace GameMaker
 		{
 			Rectangle rect = ActualView();
 
-			Matrix4 projectionMatrix = Matrix4.CreateOrthographicOffCenter((float)rect.Left, (float)rect.Right, (float)rect.Bottom, (float)rect.Top, 1, 0);
+			Matrix4 project = Matrix4.CreateOrthographicOffCenter((float)rect.Left, (float)rect.Right, (float)rect.Bottom, (float)rect.Top, 1, 0);
+            Matrix4 translateFromOrigin = Matrix4.CreateTranslation((float)Center.X, (float)Center.Y, 0);
+			Matrix4 rotate = Matrix4.CreateRotationZ((float)Rotation.Radians);
+			Matrix4 translateToOrigin = Matrix4.CreateTranslation(-(float)Center.X, -(float)Center.Y, 0);
+
+			Matrix4 projectionMatrix = translateToOrigin * rotate * translateFromOrigin * project;
+
+			Vector4 testVector = new Vector4((float)Center.X + 40, (float)Center.Y + 40, 0, 1);
+			Vector4 res = testVector;
+			res = Vector4.Transform(res, translateToOrigin);
+			res = Vector4.Transform(res, rotate);
+			res = Vector4.Transform(res, translateFromOrigin);
+
+
 			//Matrix4 projectionMatrix = Matrix4.Identity;
 			int matrixLocation = GL.GetUniformLocation(_shaderProgram, "projectionMatrix");
 			GL.UniformMatrix4(matrixLocation, false, ref projectionMatrix);

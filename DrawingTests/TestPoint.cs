@@ -20,7 +20,7 @@ namespace DrawingTests
 		public override void OnDraw()
 		{
 			if (Intersects(Instance<Drawer>.First()))
-				Draw.Point(Color.Red, X, Y);
+				Draw.Pixel(Color.Red, X, Y);
 			//Mask.DrawOutline(Intersects(Instance<Drawer>.First) ? Color.Red : Color.Black);
 		}
 	}

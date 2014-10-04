@@ -14,28 +14,28 @@ namespace GameMaker
 			set;
 		}
 
-		public static void Clean()
-		{
-			CurrentSurface.Clear();
-		}
-
-		public static void Refresh()
-		{
-			CurrentSurface.Refresh();
-		}
 
 		public static void Clear(Color color)
 		{
 			CurrentSurface.Clear(color);
 		}
 
-		public static void Point(Color color, double x, double y)
+		public static Color GetPixel(double x, double y)
 		{
-			CurrentSurface.SetPixel(color, x, y);
+			return CurrentSurface.GetPixel(x, y);
 		}
-		public static void Point(Color color, Point p)
+		public static Color GetPixel(Point p)
 		{
-			Draw.Point(color, (int)p.X, (int)p.Y);
+			return CurrentSurface.GetPixel(p.X, p.Y);
+		}
+		
+		public static void Pixel(Color color, double x, double y)
+		{
+			CurrentSurface.SetPixel(color, new Point(x, y));
+		}
+		public static void Pixel(Color color, Point p)
+		{
+			CurrentSurface.SetPixel(color, p);
 		}
 
 		public static void Circle(Color color, double x, double y, double radius)

@@ -7,12 +7,13 @@ using System.Text;
 namespace GameMaker
 {
 	/// <summary>
-	/// Represents an ARGB color. This struct is immutable. Colors can be cast from uint structures.
+	/// Represents an RGBA color. This struct is immutable. Colors can be cast from uint structures.
 	/// </summary>
+#warning TODO: Make the format consistent with RGBA
 	[StructLayout(LayoutKind.Sequential, Size = 4)]
 	public partial struct Color(byte a, byte r, byte g, byte b)
 	{
-
+#warning TODO: Documentation
 		public byte R { get; } = r;
 
 		public byte G { get; } = g;
@@ -20,6 +21,7 @@ namespace GameMaker
 		public byte B { get; } = b;
 
 		public byte A { get; } = a;
+
 		/// <summary>
 		/// Initializes a new instance of the GameMaker.Color class, using the specified ARGB values.
 		/// </summary>

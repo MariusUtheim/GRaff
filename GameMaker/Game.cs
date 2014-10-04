@@ -59,7 +59,6 @@ namespace GameMaker
 				View.LoadMatrix();
 
 				Game.Redraw();
-				Draw.Refresh();
 
 				Window.SwapBuffers();
 			};
@@ -200,7 +199,7 @@ namespace GameMaker
 		/// </summary>
 		public static void Redraw()
 		{
-			Draw.Clean();
+		//	Draw.Clean();
 			Background.Redraw();
 
 			GlobalEvent.OnDrawBackground();

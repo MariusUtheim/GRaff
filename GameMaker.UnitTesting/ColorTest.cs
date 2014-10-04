@@ -17,8 +17,8 @@ namespace GameMaker.UnitTesting
 			Assert.AreEqual(expected.B, 48);
 			Assert.AreEqual(expected.Argb, 0x80102030);
 			
-			Assert.AreEqual<Color>(expected, new Color(128, 16, 32, 48));
-			Assert.AreEqual<Color>(expected, new Color(0x80102030));
+			Assert.AreEqual(expected, new Color(128, 16, 32, 48));
+			Assert.AreEqual(expected, new Color(0x80102030));
 		}
 
 		[TestMethod]

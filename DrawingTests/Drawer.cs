@@ -14,24 +14,29 @@ namespace DrawingTests
 			: base(300, 400)
 		{
 			Depth = -1;
-			Image.Alpha = 0.5;
+			Image.Alpha = 1;
 			Mask.Shape = MaskShape.Ellipse(60, 40);
 			Background.Color = Color.LightGray;
+			Sprite = Sprites.Xujia;
 		}
 
 		public override void OnStep()
 		{
-			Transform.Rotation += Angle.Deg(1);
-			View.Rotation += Angle.Deg(0.1);
+			//Transform.Rotation += Angle.Deg(1);
 		}
 
 		public override void OnDraw()
 		{
-			Fill.Circle(Color.Green, Color.Red, 150, 150, 100);
-			Draw.Rectangle(Color.Black, Color.Red, Color.Blue, Color.Blue.Transparent(0), 10, 10, 100, 100);
-			Draw.Line(Color.Red, Color.Blue, 20, 250, 120, 270);
-			Draw.Circle(Color.Red, 500, 500, 100);
-			//Draw.Polygon(Color.Red, new Polygon(new Point(500, 300), new Point(600, 400), new Point(600, 500), new Point(500, 600), new Point(400, 600), new Point(300, 500), new Point(300, 400), new Point(400, 300)));
+			base.OnDraw();
+			Vector offset = new Vector(50, Angle.Deg(45));
+			Fill.Circle(Color.PeachPuff, Color.HotPink, View.Center + offset, 20);
+			//Fill.Rectangle(Draw.GetPixel(Mouse.Location), 0, 0, 10, 10);
+			for (int x = 0; x < 25; x++)
+				for (int y = 0; y < 25; y++)
+				{
+					Point p = new Point(Mouse.X + x, Mouse.Y - 10 + y);
+					Draw.Pixel(Draw.GetPixel(p), x, y);
+				}
 		}
 
 
