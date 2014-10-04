@@ -17,7 +17,8 @@ namespace DrawingTests
 			Image.Alpha = 1;
 			Mask.Shape = MaskShape.Ellipse(60, 40);
 			Background.Color = Color.LightGray;
-			Sprite = Sprites.Xujia;
+			Background.Sprite = Sprites.Xujia;
+			Background.IsTiled = true;
 		}
 
 		public override void OnStep()

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using OpenTK.Graphics.OpenGL4;
 
 
@@ -7,20 +8,39 @@ namespace GameMaker
 {
 	public static class Background
 	{
+		private static int _vertexArray;
+		private static int _vertexBuffer, _colorBuffer, _textureBuffer;
+		private static readonly IntPtr _4 = new IntPtr(4 * Marshal.SizeOf(typeof(Point)));
+
 		static Background()
 		{
-			Color = Color.LightGray;
-			Sprite = null;
-			DrawColor = true;
+			_vertexArray = GL.GenVertexArray();
+			GL.BindVertexArray(_vertexArray);
+
+			_vertexBuffer = GL.GenBuffer();
+			GL.BindBuffer(BufferTarget.ArrayBuffer, _vertexBuffer);
+			GL.EnableVertexAttribArray(0);
+			GL.VertexAttribPointer(0, 2, VertexAttribPointerType.Double, false, 0, 0);
+
+			_colorBuffer = GL.GenBuffer();
+			GL.BindBuffer(BufferTarget.ArrayBuffer, _colorBuffer);
+			GL.BufferData(BufferTarget.ArrayBuffer, new IntPtr(16), new[] { Color.White, Color.White, Color.White, Color.White }, BufferUsageHint.StaticDraw);
+			GL.EnableVertexAttribArray(1);
+			GL.VertexAttribPointer(1, 4, VertexAttribPointerType.UnsignedByte, false, 0, 0);
+
+			_textureBuffer = GL.GenBuffer();
+			GL.BindBuffer(BufferTarget.ArrayBuffer, _textureBuffer);
+			GL.EnableVertexAttribArray(2);
+			GL.VertexAttribPointer(2, 2, VertexAttribPointerType.Double, false, 0, 0);
 		}
 
-		public static Color Color { get; set; }
+		public static Color Color { get; set; } = Color.LightGray;
 
-		public static Sprite Sprite { get; set; }
+		public static Sprite Sprite { get; set; } = null;
 
-		public static bool IsTiled { get; set; }
+		public static bool IsTiled { get; set; } = false;
 
-		public static bool DrawColor { get; set; }
+		public static bool DrawColor { get; set; } = true;
 
 		public static double XOffset { get; set; }
 		public static double YOffset { get; set; }
@@ -41,34 +61,28 @@ namespace GameMaker
 		public static void Redraw()
 		{
 			if (DrawColor)
-				Draw.Clear(Color);
+				GL.ClearColor(new OpenTK.Graphics.Color4(Color.R, Color.G, Color.B, Color.A));
 
 			if (Sprite != null)
 			{
 				if (IsTiled)
 				{
-					double uw = Room.Width / (double)Sprite.Width, vh = Room.Height / (double)Sprite.Height;
 					double u0 = -XOffset / (double)Sprite.Width, v0 = -YOffset / (double)Sprite.Height;
-					
-					GL.Enable(EnableCap.Texture2D);
+					double u1 = u0 + Room.Width / (double)Sprite.Width, v1 = v0 + Room.Height / (double)Sprite.Height;
+
+					GL.BindVertexArray(_vertexArray);
 					GL.BindTexture(TextureTarget.Texture2D, Sprite.Texture.Id);
-					throw new NotImplementedException(MethodInfo.GetCurrentMethod().Name + " is not implemented");
-/*
-					GL.Begin(PrimitiveType.Quads);
-					GL.Color3(1.0f, 1.0f, 1.0f);
-					{
-						GL.TexCoord2(u0, v0);
-						GL.Vertex2(0, 0);
-						GL.TexCoord2(u0 + uw, v0);
-						GL.Vertex2(Room.Width, 0);
-						GL.TexCoord2(u0 + uw, v0 + vh);
-						GL.Vertex2(Room.Width, Room.Height);
-						GL.TexCoord2(u0, v0 + vh);
-						GL.Vertex2(0, Room.Height);
-					}
-					GL.End();
-					*/
-					GL.Disable(EnableCap.Texture2D);
+					View.EnableTexture();
+
+					GL.BindBuffer(BufferTarget.ArrayBuffer, _vertexBuffer);
+					GL.BufferData(BufferTarget.ArrayBuffer, _4, new double[] { 0, 0, Room.Width, 0, Room.Width, Room.Height, 0, Room.Height }, BufferUsageHint.StreamDraw);
+
+					GL.BindBuffer(BufferTarget.ArrayBuffer, _textureBuffer);
+					GL.BufferData(BufferTarget.ArrayBuffer, _4, new double[] { u0, v0, u1, v0, u1, v1, u0, v1 }, BufferUsageHint.StreamDraw);
+
+					GL.DrawArrays(PrimitiveType.Quads, 0, 4);
+
+					View.DisableTexture();
 				}
 				else
 					Draw.Sprite(0, 0, Sprite, 0);

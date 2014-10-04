@@ -96,7 +96,6 @@ namespace GameMaker
 			CurrentSurface.DrawPolygon(color, polygon);
 		}
 
-
 		public static void Image(Image image)
 		{
 			CurrentSurface.DrawImage(image);

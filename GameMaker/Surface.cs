@@ -14,14 +14,13 @@ namespace GameMaker
 		private static readonly IntPtr _1p = new IntPtr(2 * Marshal.SizeOf(typeof(Point))), _2p = new IntPtr(2 * Marshal.SizeOf(typeof(Point))), _4p = new IntPtr(4 * Marshal.SizeOf(typeof(Point)));
 		private static readonly IntPtr _1c = new IntPtr(2 * Marshal.SizeOf(typeof(Color))), _2c = new IntPtr(2 * Marshal.SizeOf(typeof(Color))), _4c = new IntPtr(4 * Marshal.SizeOf(typeof(Color)));
 		private static readonly IntPtr _4 = new IntPtr(4);
-		private int _array;
+		private int _vertexArray;
 		private int _vertexBuffer, _colorBuffer, _textureBuffer;
-		private bool _isTextureEnabled = false;
 
 		public Surface(int width, int height)
 		{
-			_array = GL.GenVertexArray();
-			GL.BindVertexArray(_array);
+			_vertexArray = GL.GenVertexArray();
+			GL.BindVertexArray(_vertexArray);
 
 			_vertexBuffer = GL.GenBuffer();
 			GL.BindBuffer(BufferTarget.ArrayBuffer, _vertexBuffer);
@@ -85,7 +84,7 @@ namespace GameMaker
 
 		public void SetPixel(Color color, Point location)
 		{
-			GL.BindVertexArray(_array);
+			GL.BindVertexArray(_vertexArray);
 			GL.BindBuffer(BufferTarget.ArrayBuffer, _vertexBuffer);
 			GL.BufferData(BufferTarget.ArrayBuffer, _1p, new[] { location }, BufferUsageHint.StreamDraw);
 			GL.BindBuffer(BufferTarget.ArrayBuffer, _colorBuffer);
@@ -95,7 +94,7 @@ namespace GameMaker
 
 		public void DrawLine(Color col1, Color col2, Point p1, Point p2)
 		{
-			GL.BindVertexArray(_array);
+			GL.BindVertexArray(_vertexArray);
 			GL.BindBuffer(BufferTarget.ArrayBuffer, _vertexBuffer);
 			GL.BufferData(BufferTarget.ArrayBuffer, _2p, new[] { p1, p2 }, BufferUsageHint.StreamDraw);
 			GL.BindBuffer(BufferTarget.ArrayBuffer, _colorBuffer);
@@ -105,7 +104,7 @@ namespace GameMaker
 
 		public void DrawRectangle(Color col1, Color col2, Color col3, Color col4, double x, double y, double w, double h)
 		{
-			GL.BindVertexArray(_array);
+			GL.BindVertexArray(_vertexArray);
 			GL.BindBuffer(BufferTarget.ArrayBuffer, _vertexBuffer);
 			GL.BufferData(BufferTarget.ArrayBuffer, _4p, new[] { new Point(x, y), new Point(x + w, y), new Point(x + w, y + h), new Point(x, y + h) }, BufferUsageHint.StreamDraw);
 			GL.BindBuffer(BufferTarget.ArrayBuffer, _colorBuffer);
@@ -115,7 +114,7 @@ namespace GameMaker
 
 		public void FillRectangle(Color col1, Color col2, Color col3, Color col4, double x, double y, double w, double h)
 		{
-			GL.BindVertexArray(_array);
+			GL.BindVertexArray(_vertexArray);
 			GL.BindBuffer(BufferTarget.ArrayBuffer, _vertexBuffer);
 			GL.BufferData(BufferTarget.ArrayBuffer, _4p, new[] { new Point(x, y), new Point(x + w, y), new Point(x + w, y + h), new Point(x, y + h) }, BufferUsageHint.StreamDraw);
 			GL.BindBuffer(BufferTarget.ArrayBuffer, _colorBuffer);
@@ -125,7 +124,7 @@ namespace GameMaker
 
 		public void DrawCircle(Color color, Point center, double radius)
 		{
-			GL.BindVertexArray(_array);
+			GL.BindVertexArray(_vertexArray);
 			GL.BindBuffer(BufferTarget.ArrayBuffer, _vertexBuffer);
 			int precision = (int)(GMath.Tau * radius);
 			GL.BufferData(BufferTarget.ArrayBuffer, new IntPtr(precision * 2 * sizeof(double)), Polygon.EnumerateCircle(center, radius, precision).ToArray(), BufferUsageHint.StreamDraw);
@@ -138,7 +137,7 @@ namespace GameMaker
 
 		public void FillCircle(Color col1, Color col2, Point center, double radius)
 		{
-			GL.BindVertexArray(_array);
+			GL.BindVertexArray(_vertexArray);
 
 			int precision = (int)GMath.Ceiling(radius);
 			Point[] vertices = new Point[precision + 2];
@@ -162,7 +161,7 @@ namespace GameMaker
 
 		public void DrawPolygon(Color color, Polygon polygon)
 		{
-			GL.BindVertexArray(_array);
+			GL.BindVertexArray(_vertexArray);
 
 			GL.BindBuffer(BufferTarget.ArrayBuffer, _vertexBuffer);
 			GL.BufferData(BufferTarget.ArrayBuffer, new IntPtr(polygon.Length * 2 * sizeof(double)), polygon.Vertices.ToArray(), BufferUsageHint.StreamDraw);
@@ -175,18 +174,18 @@ namespace GameMaker
 
 		public void DrawSprite(double x, double y, Sprite sprite, int subimage)
 		{
-			GL.BindVertexArray(_array);
+			GL.BindVertexArray(_vertexArray);
 			GL.BindTexture(TextureTarget.Texture2D, sprite.Texture.Id);
-			View.EnableTexture(1);
+			View.EnableTexture();
 			FillRectangle(Color.White, Color.White, Color.White, Color.White, x, y, sprite.Width, sprite.Height);
-			View.EnableTexture(0);
+			View.DisableTexture();
 		}
 
 		public void DrawImage(Image image)
 		{
-			GL.BindVertexArray(_array);
+			GL.BindVertexArray(_vertexArray);
 			GL.BindTexture(TextureTarget.Texture2D, image.CurrentTexture.Id);
-			View.EnableTexture(1);
+			View.EnableTexture();
 
 			Matrix t = image.Transform.GetMatrix();
 			GL.BindBuffer(BufferTarget.ArrayBuffer, _vertexBuffer);
@@ -201,7 +200,7 @@ namespace GameMaker
 			GL.BufferData(BufferTarget.ArrayBuffer, _4c, new[] { image.Blend, image.Blend, image.Blend, image.Blend }, BufferUsageHint.StreamDraw);
 
 			GL.DrawArrays(PrimitiveType.Quads, 0, 4);
-			View.EnableTexture(0);
+			View.DisableTexture();
 		}
 	}
 }

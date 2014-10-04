@@ -64,9 +64,13 @@ namespace GameMaker
 
 		}
 
-		internal static void EnableTexture(int isEnabled)
+		internal static void EnableTexture()
 		{
-			GL.ProgramUniform1(_shaderProgram, GL.GetUniformLocation(_shaderProgram, "drawTexture"), isEnabled);
+			GL.ProgramUniform1(_shaderProgram, GL.GetUniformLocation(_shaderProgram, "drawTexture"), 1);
+		}
+		internal static void DisableTexture()
+		{
+			GL.ProgramUniform1(_shaderProgram, GL.GetUniformLocation(_shaderProgram, "drawTexture"), 0);
 		}
 
 		/// <summary>
