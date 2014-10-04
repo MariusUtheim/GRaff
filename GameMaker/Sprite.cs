@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GameMaker
+namespace GRaff
 {
 	/// <summary>
 	/// Represents a sprite resource. This includes the image file, and metadata such as origin. 
@@ -22,11 +22,11 @@ namespace GameMaker
 		private MaskShape _maskShape;
 
 		/// <summary>
-		/// Initializes a new instance of the GameMaker.Sprite class.
+		/// Initializes a new instance of the GRaff.Sprite class.
 		/// </summary>
 		/// <param name="filename">The texture file that is loaded from disk.</param>
 		/// <param name="subimages">The number of subimages if the texture is an animation strip. The default value is 1.</param>
-		/// <param name="origin">A GameMaker.IntVector? representing the origin of the image. If null, the origin will be automatically set to the center of the loaded texture. The default value is null.</param>
+		/// <param name="origin">A GRaff.IntVector? representing the origin of the image. If null, the origin will be automatically set to the center of the loaded texture. The default value is null.</param>
 		/// <param name="preload">If true, the texture is automatically loaded when the instance is initialized. The default value is true.</param>
 		/// <exception cref="System.ArgumentOutOfRangeException">subimages is less than or equal to 0.</exception>
 		/// <exception cref="System.IO.FileNotFoundException">preload is true and the file is not found.</exception>
@@ -44,7 +44,7 @@ namespace GameMaker
 		}
 
 		/// <summary>
-		/// Gets a string indicating the filename from which the texture of this GameMaker.Sprite is loaded.
+		/// Gets a string indicating the filename from which the texture of this GRaff.Sprite is loaded.
 		/// </summary>
 		public string FileName
 		{
@@ -53,7 +53,7 @@ namespace GameMaker
 		}
 
 		/// <summary>
-		/// Gets whether the texture of this GameMaker.Sprite is loaded.
+		/// Gets whether the texture of this GRaff.Sprite is loaded.
 		/// </summary>
 		public bool IsLoaded
 		{
@@ -62,7 +62,7 @@ namespace GameMaker
 		}
 
 		/// <summary>
-		/// Gets the width of this GameMaker.Sprite.
+		/// Gets the width of this GRaff.Sprite.
 		/// </summary>
 		/// <exception cref="System.InvalidOperationException">The texture is not loaded.</exception>
 		public int Width
@@ -75,7 +75,7 @@ namespace GameMaker
 		}
 
 		/// <summary>
-		/// Gets the height of this GameMaker.Sprite.
+		/// Gets the height of this GRaff.Sprite.
 		/// </summary>
 		/// <exception cref="System.InvalidOperationException">The texture is not loaded.</exception>
 		public int Height
@@ -88,7 +88,7 @@ namespace GameMaker
 		}
 
 		/// <summary>
-		/// Gets the size of this GameMaker.Sprite. 
+		/// Gets the size of this GRaff.Sprite. 
 		/// </summary>
 		/// <exception cref="System.InvalidOperationException">The texture is not loaded.</exception>
 		public IntVector Size
@@ -167,7 +167,7 @@ namespace GameMaker
 		/// Loads the texture.
 		/// </summary>
 		/// <exception cref="System.IO.FileNotFoundException">The texture file does not exists.</exception>
-		/// <remarks>If the texture is already loading asynchronously, calling GameMaker.Sprite.Load blocks until loading completes.</remarks>
+		/// <remarks>If the texture is already loading asynchronously, calling GRaff.Sprite.Load blocks until loading completes.</remarks>
 		public void Load()
 		{
 			if (IsLoaded)

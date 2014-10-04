@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GameMaker.IO
+namespace GRaff.IO
 {
     public class WaveFile : SoundFile
     {

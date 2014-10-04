@@ -6,11 +6,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("GameMaker")]
+[assembly: AssemblyTitle("GRaff")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Univ. of Tromsø")]
-[assembly: AssemblyProduct("GameMaker")]
+[assembly: AssemblyProduct("GRaff")]
 [assembly: AssemblyCopyright("Copyright © Univ. of Tromsø 2014")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]

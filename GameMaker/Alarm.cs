@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GameMaker
+namespace GRaff
 {
 	/// <summary>
 	/// Specifies the state of an alarm
@@ -50,29 +50,29 @@ namespace GameMaker
 		}
 
 		/// <summary>
-		/// Gets or sets the initial count of this GameMaker.Alarm. This will contain the value passed to GameMaker.Alarm.Restart(int)
+		/// Gets or sets the initial count of this GRaff.Alarm. This will contain the value passed to GRaff.Alarm.Restart(int)
 		/// </summary>
 		public int InitialCount { get; set; }
 
 		/// <summary>
-		/// Gets or sets the number of ticks remaining until this GameMaker.Alarm fires the alarm event.
+		/// Gets or sets the number of ticks remaining until this GRaff.Alarm fires the alarm event.
 		/// </summary>
 		public int Count { get; set; }
 
 		/// <summary>
-		/// Gets the state of this GameMaker.Alarm.
+		/// Gets the state of this GRaff.Alarm.
 		/// </summary>
 		public AlarmState State { get; private set; }
 
 		/// <summary>
-		/// Gets or sets whether this GameMaker.Alarm should be automatically loop.
-		/// Whenever the countdown for this GameMaker.Alarm reaches zero, if IsLooping is set to true, the countdown is reset to the value of InitialCount.
+		/// Gets or sets whether this GRaff.Alarm should be automatically loop.
+		/// Whenever the countdown for this GRaff.Alarm reaches zero, if IsLooping is set to true, the countdown is reset to the value of InitialCount.
 		/// </summary>
 		public bool IsLooping { get; set; }
 
 		/// <summary>
-		/// Resets the countdown of this GameMaker.Alarm to the value of InitialCount.
-		/// If InitialCount is less than or equal to zero, this GameMaker.Alarm is stopped instead.
+		/// Resets the countdown of this GRaff.Alarm to the value of InitialCount.
+		/// If InitialCount is less than or equal to zero, this GRaff.Alarm is stopped instead.
 		/// </summary>
 		public void Restart()
 		{
@@ -81,8 +81,8 @@ namespace GameMaker
 		}
 
 		/// <summary>
-		/// Resets the countdown of this GameMaker.Alarm to the specified initial count.
-		/// If count is less than or equal to zero, this GameMaker.Alarm is stopped instead.
+		/// Resets the countdown of this GRaff.Alarm to the specified initial count.
+		/// If count is less than or equal to zero, this GRaff.Alarm is stopped instead.
 		/// </summary>
 		/// <param name="count">The initial countdown.</param>
 		public void Restart(int count)
@@ -120,7 +120,7 @@ namespace GameMaker
 		}
 
 		/// <summary>
-		/// Reduces the countdown of this GameMaker.Alarm if it is running, and fires the alarm event if countdown reaches zero.
+		/// Reduces the countdown of this GRaff.Alarm if it is running, and fires the alarm event if countdown reaches zero.
 		/// </summary>
 		public void Tick()
 		{
@@ -133,7 +133,7 @@ namespace GameMaker
 		}
 
 		/// <summary>
-		/// Fires the alarm event of this GameMaker.Alarm without changing the countdown.
+		/// Fires the alarm event of this GRaff.Alarm without changing the countdown.
 		/// </summary>
 		public void Trigger()
 		{
@@ -141,7 +141,7 @@ namespace GameMaker
 		}
 
 		/// <summary>
-		/// Fires the alarm event of this GameMaker.Alarm. If IsLooping is set to true, the countdown is reset to InitialValue; otherwise the countdown will be set to zero and it is stopped.
+		/// Fires the alarm event of this GRaff.Alarm. If IsLooping is set to true, the countdown is reset to InitialValue; otherwise the countdown will be set to zero and it is stopped.
 		/// </summary>
 		public void Complete()
 		{

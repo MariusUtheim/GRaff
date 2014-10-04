@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GameMaker
+namespace GRaff
 {
 	/// <summary>
 	/// Represents a set of affine transformations.
@@ -108,7 +108,7 @@ namespace GameMaker
 		{
 			if (polygon == null) return null;
 			Matrix T = GetMatrix();
-			return new GameMaker.Polygon(polygon.Vertices.Select(v => T * v));
+			return new GRaff.Polygon(polygon.Vertices.Select(v => T * v));
 		}
 	}
 }

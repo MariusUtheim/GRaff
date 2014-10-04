@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GameMaker
+namespace GRaff
 {
 	internal class GameObjectDepthComparer : IComparer<GameObject>
 	{

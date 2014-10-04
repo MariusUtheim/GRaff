@@ -4,16 +4,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GameMaker
+namespace GRaff
 {
 	/// <summary>
-	/// Represents a GameMaker.GameObject that moves around automatically and keeps track of its previous location.
+	/// Represents a GRaff.GameObject that moves around automatically and keeps track of its previous location.
 	/// The motion happens in the begin step, and this method cannot be overridden.
 	/// </summary>
 	public abstract class MovingObject : GameObject
 	{
 		/// <summary>
-		/// Initializes a new instance of the GameMaker.MovingObject class with the specified x- and y-coordinates.
+		/// Initializes a new instance of the GRaff.MovingObject class with the specified x- and y-coordinates.
 		/// </summary>
 		/// <param name="x">The x-coordinate.</param>
 		/// <param name="y">The y-coordinate.</param>
@@ -21,14 +21,14 @@ namespace GameMaker
 			: base(x, y) { }
 
 		/// <summary>
-		/// Initializes a new instance of the GameMaker.MovingObject class at the specified location.
+		/// Initializes a new instance of the GRaff.MovingObject class at the specified location.
 		/// </summary>
 		/// <param name="location">The location.</param>
 		protected MovingObject(Point location)
 			: base(location) { }
 
 		/// <summary>
-		/// Handles the motion of this GameMaker.MovingObject. This method should not be called directly.
+		/// Handles the motion of this GRaff.MovingObject. This method should not be called directly.
 		/// The method cannot be overridden by subclasses.
 		/// </summary>
 		public sealed override void OnBeginStep()
@@ -46,19 +46,19 @@ namespace GameMaker
 		}
 
 		/// <summary>
-		/// Gets or sets the x-coordinate of the point representing the location of this GameMaker.MovingObject
+		/// Gets or sets the x-coordinate of the point representing the location of this GRaff.MovingObject
 		/// at the beginning of this step.
 		/// </summary>
 		public double XPrevious { get; set; }
 
 		/// <summary>
-		/// Gets or sets the y-coordinate of the point representing the location of this GameMaker.MovingObject
+		/// Gets or sets the y-coordinate of the point representing the location of this GRaff.MovingObject
 		/// at the beginning of this step.
 		/// </summary>
 		public double YPrevious { get; set; }
 
 		/// <summary>
-		/// Gets or sets the location of this GameMaker.MovingObject at the beginning of the step.
+		/// Gets or sets the location of this GRaff.MovingObject at the beginning of the step.
 		/// </summary>
 		public Point PreviousLocation
 		{
@@ -67,17 +67,17 @@ namespace GameMaker
 		}
 
 		/// <summary>
-		/// Gets or sets the acceleration of this GameMaker.MovingObject.
+		/// Gets or sets the acceleration of this GRaff.MovingObject.
 		/// </summary>
 		public Vector Acceleration { get; set; }
 
 		/// <summary>
-		/// Gets or sets the velocity of this GameMaker.MovingObject. 
+		/// Gets or sets the velocity of this GRaff.MovingObject. 
 		/// </summary>
 		public Vector Velocity { get; set; }
 
 		/// <summary>
-		/// Gets or sets the horizontal component of the velocity of this GameMaker.MovingObject.
+		/// Gets or sets the horizontal component of the velocity of this GRaff.MovingObject.
 		/// </summary>
 		public double HSpeed
 		{
@@ -86,7 +86,7 @@ namespace GameMaker
 		}
 
 		/// <summary>
-		/// Gets or sets the vertical component of the velocity of this GameMaker.MovingObject.
+		/// Gets or sets the vertical component of the velocity of this GRaff.MovingObject.
 		/// </summary>
 		public double VSpeed
 		{
@@ -95,7 +95,7 @@ namespace GameMaker
 		}
 
 		/// <summary>
-		/// Gets or sets the speed of this GameMaker.MovingObject. That is, the magnitude of its velocity.
+		/// Gets or sets the speed of this GRaff.MovingObject. That is, the magnitude of its velocity.
 		/// </summary>
 		public double Speed
 		{
@@ -104,7 +104,7 @@ namespace GameMaker
 		}
 
 		/// <summary>
-		/// Gets or sets the direction in which this GameMaker.MovingObject is moving.
+		/// Gets or sets the direction in which this GRaff.MovingObject is moving.
 		/// </summary>
 		public Angle Direction
 		{
@@ -113,8 +113,8 @@ namespace GameMaker
 		}
 
 		/// <summary>
-		/// Gets or sets the friction of this GameMaker.MovingObject.
-		/// Each step, the speed of this GameMaker.MovingObject is reduced by the friction value.
+		/// Gets or sets the friction of this GRaff.MovingObject.
+		/// Each step, the speed of this GRaff.MovingObject is reduced by the friction value.
 		/// </summary>
 		public double Friction { get; set; }
 

@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using GameMaker.IO;
+using GRaff.IO;
 using OpenTK.Audio.OpenAL;
 
-namespace GameMaker
+namespace GRaff
 {
 	/// <summary>
 	/// Represents a sound resource. This includes the image file, and metadata such as bitrate and number of channels.
@@ -29,7 +29,7 @@ namespace GameMaker
 		}
 
 		/// <summary>
-		/// Initializes a new instance of the GameMaker.Sound class.
+		/// Initializes a new instance of the GRaff.Sound class.
 		/// </summary>
 		/// <param name="filename">The sound file that is loaded from disk.</param>
 		/// <param name="preload">If true, the sound is automatically loaded when the instance is initialized. The default value is true.</param>
@@ -44,7 +44,7 @@ namespace GameMaker
 		}
 
 		/// <summary>
-		/// Gets the bitrate of this GameMaker.Sound class. That is, the number of bits of data in one second of this sample.
+		/// Gets the bitrate of this GRaff.Sound class. That is, the number of bits of data in one second of this sample.
 		/// </summary>
 		public int Bitrate
 		{
@@ -55,12 +55,12 @@ namespace GameMaker
 		private byte[] buffer;
 
 		/// <summary>
-		/// Gets the data buffer of this GameMaker.Sound.
+		/// Gets the data buffer of this GRaff.Sound.
 		/// </summary>
 		public IEnumerable<byte> Buffer => buffer;
 
 		/// <summary>
-		/// Gets the number of channels of this GameMaker.Sound (e.g. 1=Mono, 2=Stereo, etc.).
+		/// Gets the number of channels of this GRaff.Sound (e.g. 1=Mono, 2=Stereo, etc.).
 		/// </summary>
 		public int Channels
 		{
@@ -69,7 +69,7 @@ namespace GameMaker
 		}
 
 		/// <summary>
-		/// Gets the duration of this GameMaker.Sound in milliseconds.
+		/// Gets the duration of this GRaff.Sound in milliseconds.
 		/// </summary>
 		public double Duration
 		{
@@ -78,7 +78,7 @@ namespace GameMaker
 		}
 
 		/// <summary>
-		/// Gets the sampling frequency of this GameMaker.Sound.
+		/// Gets the sampling frequency of this GRaff.Sound.
 		/// </summary>
 		public int Frequency
 		{
@@ -112,7 +112,7 @@ namespace GameMaker
 		/// <param name="loop">Specifies whether the instance should loop. The default value is false.</param>
 		/// <param name="volume">The volume of the instance. The default value is 1.0; doubling this corresponds to increasing the volume by 20 dB. The value should be greater than or equal to zero.</param>
 		/// <param name="pitch">The pitch shift of the instance. The default value is 1.0; the playback speed is proportional to this value. The value should be greater than 0.</param>
-		/// <returns>A GameMaker.SoundInstance representing the sound being played.</returns>
+		/// <returns>A GRaff.SoundInstance representing the sound being played.</returns>
 		/// <exception cref="System.ArgumentOutOfRangeException">volume is less than zero, or pitch is less than or equal to zero.</exception>
 		/// <exception cref="System.InvalidOperationException">The sound is not loaded.</exception>
 		public SoundInstance Play(bool loop = false, double volume = 1.0, double pitch = 1.0)

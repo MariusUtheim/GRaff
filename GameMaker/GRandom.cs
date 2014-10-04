@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GameMaker
+namespace GRaff
 {
 	/// <summary>
 	/// Provides static methods for generating pseudo-random numbers.
@@ -95,7 +95,7 @@ namespace GameMaker
 		/// Returns a random angle.
 		/// </summary>
 		/// <returns>Returns a random angle.</returns>
-		public static Angle Angle() => GameMaker.Angle.Deg(_rnd.NextDouble() * 360.0);
+		public static Angle Angle() => GRaff.Angle.Deg(_rnd.NextDouble() * 360.0);
 		
 
 		/// <summary>
@@ -104,7 +104,7 @@ namespace GameMaker
 		/// <param name="lowerBound">The lower bound.</param>
 		/// <param name="upperBound">The upper bound.</param>
 		/// <returns>A random angle in the specified range.</returns>
-		public static Angle Angle(Angle lowerBound, Angle upperBound) => GameMaker.Angle.Deg(lowerBound.Degrees + _rnd.NextDouble() * (upperBound - lowerBound).Degrees);
+		public static Angle Angle(Angle lowerBound, Angle upperBound) => GRaff.Angle.Deg(lowerBound.Degrees + _rnd.NextDouble() * (upperBound - lowerBound).Degrees);
 		
 
 		/// <summary>

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace GameMaker
+namespace GRaff
 {
 	/// <summary>
 	/// Defines an action that is performed each step while a mouse button is held down and the mouse is hovering over the instance.

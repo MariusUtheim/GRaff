@@ -2,7 +2,7 @@
 using OpenTK.Graphics.OpenGL4;
 
 
-namespace GameMaker
+namespace GRaff
 {
 	/// <summary>
 	/// Defines which part of the room is being drawn to the screen.
@@ -99,7 +99,7 @@ namespace GameMaker
 		public static Angle Rotation { get; set; }
 
 		/// <summary>
-		/// Gets or sets a GameMaker.Rectangle representing the view in the room.
+		/// Gets or sets a GRaff.Rectangle representing the view in the room.
 		/// </summary>
 		public static Rectangle RoomView
 		{
@@ -155,8 +155,8 @@ namespace GameMaker
 
 
 		/// <summary>
-		/// Gets a GameMaker.Rectangle representing which part of the room is actually being drawn.
-		/// This is equal to GameMaker.View.RoomView, unless part of that view is outside of the room.
+		/// Gets a GRaff.Rectangle representing which part of the room is actually being drawn.
+		/// This is equal to GRaff.View.RoomView, unless part of that view is outside of the room.
 		/// The actual view is translated to fit inside the room; if the dimensions of the view are larger
 		/// than the dimensions of the room, the actual view will also be scaled down.
 		/// </summary>

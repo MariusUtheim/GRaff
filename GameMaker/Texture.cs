@@ -5,7 +5,7 @@ using System.IO;
 using System.Threading.Tasks;
 using OpenTK.Graphics.ES30;
 
-namespace GameMaker
+namespace GRaff
 {
 	public sealed class Texture : IDisposable
 	{
@@ -37,7 +37,7 @@ namespace GameMaker
 		/// Loads a texture from the specified file. 
 		/// </summary>
 		/// <param name="filename">The texture filename and path.</param>
-		/// <returns>A new GameMaker.Texture representing the loaded file.</returns>
+		/// <returns>A new GRaff.Texture representing the loaded file.</returns>
 		public static Texture Load(string filename)
 		{
 			Texture result = null;

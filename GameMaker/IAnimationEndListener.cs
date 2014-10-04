@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GameMaker
+namespace GRaff
 {
 	/// <summary>
-	///  Defines an action that is performed whenever the animation of the sprite of the GameMaker.Object is finished.
+	///  Defines an action that is performed whenever the animation of the sprite of the GRaff.Object is finished.
 	/// </summary>
 	public interface IAnimationEndListener
 	{

@@ -1,7 +1,7 @@
 ﻿
 
 
-namespace GameMaker
+namespace GRaff
 {
 	/// <summary>
 	/// Represents an affine transformation matrix. This class is immutable.

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace GameMaker
+namespace GRaff
 {
 	/// <summary>
 	/// Specifies a positively-oriented convex polygon.
@@ -112,7 +112,7 @@ namespace GameMaker
 		}
 
 		/// <summary>
-		/// Gets the number of vertices in this GameMaker.Polynomial.
+		/// Gets the number of vertices in this GRaff.Polynomial.
 		/// </summary>
 		public int Length => pts.Length;
 

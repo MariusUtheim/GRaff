@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using OpenTK.Audio.OpenAL;
 
-namespace GameMaker
+namespace GRaff
 {
 	/// <summary>
 	/// Represents an instance of a sound that is currently playing.
@@ -14,9 +14,9 @@ namespace GameMaker
 		private int _sid;
 
 		/// <summary>
-		/// Initializes a new instance of the GameMaker.SoundInstance class with the specified sound reference, buffer id, looping, volume and pitch.
+		/// Initializes a new instance of the GRaff.SoundInstance class with the specified sound reference, buffer id, looping, volume and pitch.
 		/// </summary>
-		/// <param name="sound">The GameMaker.Sound that this GameMaker.SoundInstance is an instance of.</param>
+		/// <param name="sound">The GRaff.Sound that this GRaff.SoundInstance is an instance of.</param>
 		/// <param name="bid">The buffer id of the data.</param>
 		/// <param name="looping">Specifies whether the instance should loop.</param>
 		/// <param name="volume">Specifies the volume of the sound instance.</param>
@@ -35,7 +35,7 @@ namespace GameMaker
 		}
 
 		/// <summary>
-		/// Gets the GameMaker.Sound that this GameMaker.SoundInstance is an instance of.
+		/// Gets the GRaff.Sound that this GRaff.SoundInstance is an instance of.
 		/// </summary>
 		public Sound Sound
 		{
@@ -44,7 +44,7 @@ namespace GameMaker
 		}
 
 		/// <summary>
-		/// Gets or sets whether this GameMaker.SoundInstance is looping.
+		/// Gets or sets whether this GRaff.SoundInstance is looping.
 		/// </summary>
 		public bool Looping
 		{
@@ -61,7 +61,7 @@ namespace GameMaker
 		}
 
 		/// <summary>
-		/// Gets or sets the pitch of this GameMaker.SoundInstance. The value should be greater than 0.
+		/// Gets or sets the pitch of this GRaff.SoundInstance. The value should be greater than 0.
 		/// </summary>
 		public double Pitch
 		{
@@ -81,7 +81,7 @@ namespace GameMaker
 		}
 
 		/// <summary>
-		/// Gets or sets the volume of this GameMaker.SoundInstance. The value should be greater than or equal to 0.
+		/// Gets or sets the volume of this GRaff.SoundInstance. The value should be greater than or equal to 0.
 		/// </summary>
 		public double Volume
 		{
@@ -100,8 +100,8 @@ namespace GameMaker
 		}
 
 		/// <summary>
-		/// Plays this GameMaker.SoundInstance. This is called automatically when the instance is created; in other circumstances,
-		/// it should only be called after the instance is paused with GameMaker.SoundInstance.Pause().
+		/// Plays this GRaff.SoundInstance. This is called automatically when the instance is created; in other circumstances,
+		/// it should only be called after the instance is paused with GRaff.SoundInstance.Pause().
 		/// </summary>
 		public void Play()
 		{
@@ -109,7 +109,7 @@ namespace GameMaker
 		}
 
 		/// <summary>
-		/// Stops this GameMaker.SoundInstance. It can be restarted by calling GameMaker.SoundInstance.Play().
+		/// Stops this GRaff.SoundInstance. It can be restarted by calling GRaff.SoundInstance.Play().
 		/// </summary>
 #warning TODO: Check what happens if calling Play() after Stop(). Also, figure the difference between Stop and Pause.
 		public void Stop()
@@ -118,7 +118,7 @@ namespace GameMaker
 		}
 
 		/// <summary>
-		/// Pauses this GameMaker.SoundInstance. It can later be resumed by calling GameMaker.SoundInstance.Pause().
+		/// Pauses this GRaff.SoundInstance. It can later be resumed by calling GRaff.SoundInstance.Pause().
 		/// </summary>
 		public void Pause()
 		{
@@ -126,7 +126,7 @@ namespace GameMaker
 		}
 
 		/// <summary>
-		/// Gets the state of this GameMaker.SoundInstance.
+		/// Gets the state of this GRaff.SoundInstance.
 		/// </summary>
 		public SoundState State
 		{

@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GameMaker.IO
+namespace GRaff.IO
 {
 	internal static class BinaryReaderExtensions
 	{

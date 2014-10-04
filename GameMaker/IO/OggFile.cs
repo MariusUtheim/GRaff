@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using OggVorbisDecoder;
 
-namespace GameMaker.IO
+namespace GRaff.IO
 {
 	public class OggFile : SoundFile
 	{

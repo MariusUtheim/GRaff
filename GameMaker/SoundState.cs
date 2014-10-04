@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace GameMaker
+namespace GRaff
 {
 	/// <summary>
-	/// Represents the state of a GameMaker.SoundInstance.
+	/// Represents the state of a GRaff.SoundInstance.
 	/// </summary>
 	public enum SoundState
 	{

@@ -3,7 +3,7 @@ using System.Runtime.InteropServices;
 using OpenTK.Graphics.ES30;
 
 
-namespace GameMaker
+namespace GRaff
 {
 	public static class Background
 	{

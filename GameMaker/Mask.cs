@@ -2,7 +2,7 @@
 
 
 
-namespace GameMaker
+namespace GRaff
 {
 	public sealed class Mask
 	{
@@ -26,8 +26,8 @@ namespace GameMaker
 
 		private MaskShape _maskShape;
 		/// <summary>
-		/// Gets or sets the shape of this GameMaker.Mask.
-		/// If the shape is set to GameMaker.MaskShape.SameAsSprite, it instead gets the maskshape of the underlying sprite, or GameMaker.MaskShape.None if that sprite is null.
+		/// Gets or sets the shape of this GRaff.Mask.
+		/// If the shape is set to GRaff.MaskShape.SameAsSprite, it instead gets the maskshape of the underlying sprite, or GRaff.MaskShape.None if that sprite is null.
 		/// This value cannot be set to null.
 		/// </summary>
 		/// <exception cref="ArgumentNullException">the value is null.</exception>
@@ -45,7 +45,7 @@ namespace GameMaker
 			set
 			{
 				if (value == null)
-					throw new ArgumentNullException(String.Format("The value of {0}.{1}.{2} cannot be null. Consider using {0}.{3}.{4} or {0}.{3}.{5}.", nameof(GameMaker), nameof(Mask), nameof(Shape), nameof(MaskShape), nameof(MaskShape.None), nameof(MaskShape.SameAsSprite)));
+					throw new ArgumentNullException(String.Format("The value of {0}.{1}.{2} cannot be null. Consider using {0}.{3}.{4} or {0}.{3}.{5}.", nameof(GRaff), nameof(Mask), nameof(Shape), nameof(MaskShape), nameof(MaskShape.None), nameof(MaskShape.SameAsSprite)));
 				_maskShape = value;
 			}
 		}

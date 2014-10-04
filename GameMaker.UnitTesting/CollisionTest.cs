@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace GameMaker.UnitTesting
+namespace GRaff.UnitTesting
 {
 	class TestObject : GameObject
 	{

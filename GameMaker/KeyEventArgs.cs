@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace GameMaker
+namespace GRaff
 {
 	/// <summary>
 	/// Defines the event data for a keyboard event.
@@ -8,16 +8,16 @@ namespace GameMaker
 	public class KeyEventArgs : EventArgs
 	{
 		/// <summary>
-		/// Initializes a new instance of the GameMaker.KeyEventArgs class using the specified GameMaker.Key.
+		/// Initializes a new instance of the GRaff.KeyEventArgs class using the specified GRaff.Key.
 		/// </summary>
-		/// <param name="button">The GameMaker.Key associated with the event.</param>
+		/// <param name="button">The GRaff.Key associated with the event.</param>
 		public KeyEventArgs(Key key)
 		{
 			this.Key = key;
 		}
 
 		/// <summary>
-		/// Gets the GameMaker.Key associated with the event.
+		/// Gets the GRaff.Key associated with the event.
 		/// </summary>
 		public Key Key { get; private set; }
 	}

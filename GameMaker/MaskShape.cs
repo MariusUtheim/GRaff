@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GameMaker
+namespace GRaff
 {
 	public class MaskShape
 	{
@@ -92,15 +92,15 @@ namespace GameMaker
 		}
 
 		/// <summary>
-		/// Gets the special GameMaker.MaskShape that indicates no mask.
-		/// GameMaker.Mask objects using this GameMaker.MaskShape will never intersect another GameMaker.Mask.
+		/// Gets the special GRaff.MaskShape that indicates no mask.
+		/// GRaff.Mask objects using this GRaff.MaskShape will never intersect another GRaff.Mask.
 		/// </summary>
 		public static MaskShape None { get; } = new MaskShape();
 
 		/// <summary>
-		/// Gets the special GameMaker.MaskShape that indicates a mask should use the MaskShape from the sprite of its referred object.
+		/// Gets the special GRaff.MaskShape that indicates a mask should use the MaskShape from the sprite of its referred object.
 		/// This will always return the exact same instance; they can for example be compared with == operator, or Object.ReferenceEquals.
-		/// Calling GameMaker.MaskShape.SameAsSprite.Polygon leads to undefined behavior.
+		/// Calling GRaff.MaskShape.SameAsSprite.Polygon leads to undefined behavior.
 		/// </summary>
 		public static MaskShape SameAsSprite { get; } = new MaskShape();
 	}

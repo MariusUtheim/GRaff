@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GameMaker
+namespace GRaff
 {
 	/// <summary>
 	/// Represents an angle, that can be specified in angles or degrees.
@@ -19,17 +19,17 @@ namespace GameMaker
 		public static readonly Angle Zero = new Angle();
 
 		/// <summary>
-		/// Creates a GameMaker.Angle with a value specified in radians.
+		/// Creates a GRaff.Angle with a value specified in radians.
 		/// </summary>
 		/// <param name="radians">The angle, in radians.</param>
-		/// <returns>the created GameMaker.Angle</returns>
+		/// <returns>the created GRaff.Angle</returns>
 		public static Angle Rad(double radians) => new Angle(radians * GMath.RadToDeg);
 
 		/// <summary>
-		/// Creates a GameMaker.Angle with a value specified in degrees.
+		/// Creates a GRaff.Angle with a value specified in degrees.
 		/// </summary>
 		/// <param name="degrees">The angle, in degrees</param>
-		/// <returns>the created GameMaker.Angle</returns>
+		/// <returns>the created GRaff.Angle</returns>
 		public static Angle Deg(double degrees) => new Angle(degrees);
 
 		
@@ -90,8 +90,8 @@ namespace GameMaker
 		/// <summary>
 		/// Computes the acute angle between the two angles. This value is always between 0° and 180°.
 		/// </summary>
-		/// <param name="a1">The first GameMaker.Angle to compute the acute angle with.</param>
-		/// <param name="a2">The second GameMaker.Angle to compute the acute angle with.</param>
+		/// <param name="a1">The first GRaff.Angle to compute the acute angle with.</param>
+		/// <param name="a2">The second GRaff.Angle to compute the acute angle with.</param>
 		/// <returns>The acute angle between the two angles.</returns>
 		public static Angle Acute(Angle a1, Angle a2) => _acute(a1.Degrees - a2.Degrees);
 
@@ -105,46 +105,46 @@ namespace GameMaker
 
 
 		/// <summary>
-		/// Converts this GameMaker.Angle to a human-readable string, showing the value in degrees.
+		/// Converts this GRaff.Angle to a human-readable string, showing the value in degrees.
 		/// </summary>
-		/// <returns>A string that represents this GameMaker.Angle</returns>
+		/// <returns>A string that represents this GRaff.Angle</returns>
 		public override string ToString() => String.Format("{0}\u00B0", Degrees);
 
 		/// <summary>
-		/// Specifies whether this GameMaker.Angle is equal to the specified System.Object.
+		/// Specifies whether this GRaff.Angle is equal to the specified System.Object.
 		/// </summary>
 		/// <param name="obj">The System.Object to compare to.</param>
-		/// <returns>true if obj is a GameMaker.Angle and has the same value as this GameMaker.Angle.</returns>
+		/// <returns>true if obj is a GRaff.Angle and has the same value as this GRaff.Angle.</returns>
 		public override bool Equals(object obj) => (obj is Angle) ? (this == (Angle)obj) : base.Equals(obj);
 
 		/// <summary>
-		/// Returns a hash code for this GameMaker.Angle.
+		/// Returns a hash code for this GRaff.Angle.
 		/// </summary>
-		/// <returns>An integer value that specifies a hash value for this GameMaker.Angle.</returns>
+		/// <returns>An integer value that specifies a hash value for this GRaff.Angle.</returns>
 		public override int GetHashCode() => Degrees.GetHashCode();
 
 		/// <summary>
-		/// Compares two GameMaker.Angle objects. The result specifies whether they are equal.
+		/// Compares two GRaff.Angle objects. The result specifies whether they are equal.
 		/// </summary>
-		/// <param name="left">The first GameMaker.Angle to compare.</param>
-		/// <param name="right">The second GameMaker.Angle to compare.</param>
-		/// <returns>true if the values of the two GameMaker.Angle structures are equal.</returns>
+		/// <param name="left">The first GRaff.Angle to compare.</param>
+		/// <param name="right">The second GRaff.Angle to compare.</param>
+		/// <returns>true if the values of the two GRaff.Angle structures are equal.</returns>
 		public static bool operator ==(Angle left, Angle right) => (left.Degrees == right.Degrees);
 
 		/// <summary>
-		/// Compares two GameMaker.Angle objects. The result specifies whether they are unequal.
+		/// Compares two GRaff.Angle objects. The result specifies whether they are unequal.
 		/// </summary>
-		/// <param name="left">The first GameMaker.Angle to compare.</param>
-		/// <param name="right">The second GameMaker.Angle to compare.</param>
-		/// <returns>true if the values of the two GameMaker.Angle structures are unequal.</returns>
+		/// <param name="left">The first GRaff.Angle to compare.</param>
+		/// <param name="right">The second GRaff.Angle to compare.</param>
+		/// <returns>true if the values of the two GRaff.Angle structures are unequal.</returns>
 		public static bool operator !=(Angle left, Angle right) => (left.Degrees != right.Degrees);
 
 
 		/// <summary>
 		/// Computes the sum of the two angles.
 		/// </summary>
-		/// <param name="left">The first GameMaker.Angle.</param>
-		/// <param name="right">The second GameMaker.Angle.</param>
+		/// <param name="left">The first GRaff.Angle.</param>
+		/// <param name="right">The second GRaff.Angle.</param>
 		/// <returns>The sum of the two angles.</returns>
 		public static Angle operator +(Angle left, Angle right) => Angle.Deg(left.Degrees + right.Degrees);
 
@@ -152,23 +152,23 @@ namespace GameMaker
 		/// <summary>
 		/// Computes the clockwise difference of the two angles. 
 		/// </summary>
-		/// <param name="left">The first GameMaker.Angle.</param>
-		/// <param name="right">The second GameMaker.Angle.</param>
+		/// <param name="left">The first GRaff.Angle.</param>
+		/// <param name="right">The second GRaff.Angle.</param>
 		/// <returns>The difference of the two angles.</returns>
 		public static Angle operator -(Angle left, Angle right) => Angle.Deg(left.Degrees - right.Degrees);
 
 		/// <summary>
-		/// Computes the conjugate of this GameMaker.Angle structure.
+		/// Computes the conjugate of this GRaff.Angle structure.
 		/// The two angles will sum to 360°. This is equivalent to mirroring the angle over the x-axis.
 		/// </summary>
 		/// <param name="a">The angle to invert.</param>
-		/// <returns>The inverted GameMaker.Angle.</returns>
+		/// <returns>The inverted GRaff.Angle.</returns>
 		public static Angle operator -(Angle a) => Angle.Deg(-a.Degrees);
 
 		/// <summary>
 		/// Scales the angle by a specified scalar.
 		/// </summary>
-		/// <param name="a">The GameMaker.Angle to be scaled.</param>
+		/// <param name="a">The GRaff.Angle to be scaled.</param>
 		/// <param name="d">The double to scale by.</param>
 		/// <returns>The scaled angle.</returns>
 		public static Angle operator *(Angle a, double d) => Angle.Deg(a.Degrees * d);
@@ -178,7 +178,7 @@ namespace GameMaker
 		/// Scales the angle by a specified scalar.
 		/// </summary>
 		/// <param name="d">The double to scale by.</param>
-		/// <param name="a">The GameMaker.Angle to be scaled.</param>
+		/// <param name="a">The GRaff.Angle to be scaled.</param>
 		/// <returns>The scaled angle.</returns>
 		public static Angle operator *(double d, Angle a) => Angle.Deg(d * a.Degrees);
 	}

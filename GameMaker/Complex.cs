@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GameMaker
+namespace GRaff
 {
 	/// <summary>
 	/// Represents a complex number.
@@ -12,19 +12,19 @@ namespace GameMaker
 	public struct Complex(double real, double imaginary)
 	{
 		/// <summary>
-		/// Gets or sets the real part of this GameMaker.Complex instance.
+		/// Gets or sets the real part of this GRaff.Complex instance.
 		/// </summary>
 		public double Real { get; set; } = real;
 
 		/// <summary>
-		/// Gets or sets the imaginary part of this GameMaker.Complex instance.
+		/// Gets or sets the imaginary part of this GRaff.Complex instance.
 		/// </summary>
 		public double Imaginary { get; set; } = imaginary;
 
 		/// <summary>
-		/// Converts this GameMaker.Complex to a human-readable string, showing the value in Cartesian form x + yi.
+		/// Converts this GRaff.Complex to a human-readable string, showing the value in Cartesian form x + yi.
 		/// </summary>
-		/// <returns>A string that represents this GameMaker.Complex</returns>
+		/// <returns>A string that represents this GRaff.Complex</returns>
 		public override string ToString()
 		{
 			if (Imaginary == 0)
@@ -38,31 +38,31 @@ namespace GameMaker
 		}
 
 		/// <summary>
-		/// Specifies whether this GameMaker.Complex is equal to the specified System.Object.
+		/// Specifies whether this GRaff.Complex is equal to the specified System.Object.
 		/// </summary>
 		/// <param name="obj">The System.Object to compare to.</param>
-		/// <returns>true if obj is a GameMaker.Complex and the two complex numbers are equal.</returns>
+		/// <returns>true if obj is a GRaff.Complex and the two complex numbers are equal.</returns>
 		public override bool Equals(object obj) => (obj is Complex) ? (this == (Complex)obj) : base.Equals(obj);
 
 		/// <summary>
-		/// Returns a hash code for this GameMaker.Complex.
+		/// Returns a hash code for this GRaff.Complex.
 		/// </summary>
-		/// <returns>An integer value that specified a hash value for this GameMaker.Complex.</returns>
+		/// <returns>An integer value that specified a hash value for this GRaff.Complex.</returns>
 		public override int GetHashCode() => Real.GetHashCode() ^ Imaginary.GetHashCode();
 
 		/// <summary>
-		/// Compares two GameMaker.Complex objects. The results specifies whether the two complex numbers are equal.
+		/// Compares two GRaff.Complex objects. The results specifies whether the two complex numbers are equal.
 		/// </summary>
-		/// <param name="left">The first GameMaker.Complex to compare.</param>
-		/// <param name="right">The second GameMaker.Complex to compare.</param>
+		/// <param name="left">The first GRaff.Complex to compare.</param>
+		/// <param name="right">The second GRaff.Complex to compare.</param>
 		/// <returns>true if the two complex numbers are equal.</returns>
 		public static bool operator ==(Complex left, Complex right) => (left.Real == right.Real && left.Imaginary == right.Imaginary);
 
 		/// <summary>
-		/// Compares two GameMaker.Complex objects. The result specifies whether the two complex numbers are unequal. 
+		/// Compares two GRaff.Complex objects. The result specifies whether the two complex numbers are unequal. 
 		/// </summary>
-		/// <param name="left">The first GameMaker.Complex to compare.</param>
-		/// <param name="right">The second GameMaker.Complex to compare.</param>
+		/// <param name="left">The first GRaff.Complex to compare.</param>
+		/// <param name="right">The second GRaff.Complex to compare.</param>
 		/// <returns>true if the two complex numbers are unequal.</returns>
 		public static bool operator !=(Complex left, Complex right) => (left.Real != right.Real || left.Imaginary != right.Imaginary);
 
@@ -111,7 +111,7 @@ namespace GameMaker
 		/// Converts the specified double to a purely real complex number.
 		/// </summary>
 		/// <param name="d">A real number.</param>
-		/// <returns>The GameMaker.Complex that results from the conversion.</returns>
+		/// <returns>The GRaff.Complex that results from the conversion.</returns>
 		public static implicit operator Complex(double d) => new Complex(d, 0);
 	}
 }

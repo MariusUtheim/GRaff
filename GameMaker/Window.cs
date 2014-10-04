@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using OpenTK;
 
-namespace GameMaker
+namespace GRaff
 {
 	/// <summary>
 	/// Provides methods for dealing with the game window.

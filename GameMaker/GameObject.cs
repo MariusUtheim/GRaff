@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace GameMaker
+namespace GRaff
 {
 	/// <summary>
 	/// Represents the most general game object that is handled in the game. Most instances would inherit from this class.
@@ -11,7 +11,7 @@ namespace GameMaker
 	public abstract class GameObject
 	{
 		/// <summary>
-		/// Initializes a new instance of the GameMaker.GameObject class with the specified x- and y-coordinates.
+		/// Initializes a new instance of the GRaff.GameObject class with the specified x- and y-coordinates.
 		/// </summary>
 		/// <param name="x">The x-coordinate.</param>
 		/// <param name="y">The y-coordinate.</param>
@@ -26,14 +26,14 @@ namespace GameMaker
 		}
 
 		/// <summary>
-		/// Initializes a new instance of the GameMaker.GameObject class at the specified location.
+		/// Initializes a new instance of the GRaff.GameObject class at the specified location.
 		/// </summary>
 		/// <param name="location">The location.</param>
 		protected GameObject(Point location)
 			: this(location.X, location.Y) { }
 
 		/// <summary>
-		/// Gets or sets the x-coordinate of this GameMaker.GameObject.
+		/// Gets or sets the x-coordinate of this GRaff.GameObject.
 		/// </summary>
 		public double X
 		{
@@ -42,7 +42,7 @@ namespace GameMaker
 		}
 
 		/// <summary>
-		/// Gets or sets the y-coordinate of this GameMaker.GameObject.
+		/// Gets or sets the y-coordinate of this GRaff.GameObject.
 		/// </summary>
 		public double Y
 		{
@@ -51,7 +51,7 @@ namespace GameMaker
 		}
 
 		/// <summary>
-		/// Gets or sets the location of this GameMaker.GameObject.
+		/// Gets or sets the location of this GRaff.GameObject.
 		/// </summary>
 		public Point Location
 		{
@@ -61,7 +61,7 @@ namespace GameMaker
 
 		private int _depth;
 		/// <summary>
-		/// Gets or sets the depth of this GameMaker.GameObject.
+		/// Gets or sets the depth of this GRaff.GameObject.
 		/// Instances with higher depth take actions before and are drawn behind instances with lower depth.
 		/// Changes to depth value are not reflected in the game before a new frame is drawn.
 		/// </summary>
@@ -74,7 +74,7 @@ namespace GameMaker
 		public Image Image { get; private set; }
 
 		/// <summary>
-		/// Destroys the instance of this GameMaker.GameObject, removing it from the game.
+		/// Destroys the instance of this GRaff.GameObject, removing it from the game.
 		/// The instance will stop performing automatic actions such as Step and Draw,
 		/// but the C# object is not garbage collected while it is still being referenced.
 		/// </summary>
@@ -131,8 +131,8 @@ namespace GameMaker
 		public virtual void OnDestroy() { }
 
 		/// <summary>
-		/// An action that is performed when the instance is drawn. Calls to methods in the static classes GameMaker.Draw and
-		/// GameMaker.Fill will generally not have any effect unless called inside the draw event.
+		/// An action that is performed when the instance is drawn. Calls to methods in the static classes GRaff.Draw and
+		/// GRaff.Fill will generally not have any effect unless called inside the draw event.
 		/// </summary>
 		public virtual void OnDraw()
 		{

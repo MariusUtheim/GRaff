@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace GameMaker
+namespace GRaff
 {
 	public static partial class GMath
 	{

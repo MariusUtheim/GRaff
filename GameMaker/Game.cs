@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using OpenTK;
 using OpenTK.Graphics.OpenGL4;
 
-namespace GameMaker
+namespace GRaff
 {
 	/// <summary>
 	/// A static class handling the overhead control of the game.

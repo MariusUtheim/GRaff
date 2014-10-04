@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GameMaker
+namespace GRaff
 {
 	public static class GlobalEvent
 	{
@@ -89,7 +89,7 @@ namespace GameMaker
 
 		private static void _ExitOnEscape(object sender, KeyEventArgs e)
 		{
-			if (e.Key == GameMaker.Key.Escape)
+			if (e.Key == GRaff.Key.Escape)
 				Game.Quit();
 		}
 

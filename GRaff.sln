@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.22013.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameMaker", "GameMaker\GameMaker.csproj", "{9B4B4358-F24B-41B4-BF94-9013E205780B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GRaff", "GameMaker\GRaff.csproj", "{9B4B4358-F24B-41B4-BF94-9013E205780B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameMaker.UnitTesting", "GameMaker.UnitTesting\GameMaker.UnitTesting.csproj", "{6EC500EE-F34A-48A5-96E5-C013EC53705A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GRaff.UnitTesting", "GameMaker.UnitTesting\GRaff.UnitTesting.csproj", "{6EC500EE-F34A-48A5-96E5-C013EC53705A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DrawingTests", "DrawingTests\DrawingTests.csproj", "{9E45D2AB-F431-4A1B-A7B4-D8BFA680470F}"
 EndProject

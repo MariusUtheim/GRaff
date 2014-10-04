@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GameMaker
+namespace GRaff
 {
 	public sealed class Image
 	{
@@ -56,48 +56,48 @@ namespace GameMaker
 		}
 
 		/// <summary>
-		/// Gets the width of this GameMaker.Image, taking scale into consideration.
+		/// Gets the width of this GRaff.Image, taking scale into consideration.
 		/// </summary>
-		/// <exception cref="System.InvalidOperationException">GameMaker.Image.Sprite is set to null.</exception>
+		/// <exception cref="System.InvalidOperationException">GRaff.Image.Sprite is set to null.</exception>
 		public double Width
 		{
 			get
 			{
 				if (Sprite == null)
-					throw new InvalidOperationException(String.Format("The {0}.{1} has no sprite.", nameof(GameMaker), nameof(Image)));
+					throw new InvalidOperationException(String.Format("The {0}.{1} has no sprite.", nameof(GRaff), nameof(Image)));
 				return CurrentTexture.Width * Transform.XScale;
 			}
 		}
 
 		/// <summary>
-		/// Gets the height of this GameMaker.Image, taking scale into consideration.
+		/// Gets the height of this GRaff.Image, taking scale into consideration.
 		/// </summary>
-		/// <exception cref="System.InvalidOperationException">GameMaker.Image.Sprite is set to null.</exception>
+		/// <exception cref="System.InvalidOperationException">GRaff.Image.Sprite is set to null.</exception>
 		public double Height
 		{
 			get
 			{
 				if (Sprite == null)
-					throw new InvalidOperationException(String.Format("The {0}.{1} has no sprite.", nameof(GameMaker), nameof(Image)));
+					throw new InvalidOperationException(String.Format("The {0}.{1} has no sprite.", nameof(GRaff), nameof(Image)));
 				return CurrentTexture.Height * Transform.YScale;
 			}
 		}
 
 		/// <summary>
-		/// Gets the current texture of this GameMaker.Image.
+		/// Gets the current texture of this GRaff.Image.
 		/// </summary>
-		/// <exception cref="System.InvalidOperationException">GameMaker.Image.Sprite is set to null.</exception>
+		/// <exception cref="System.InvalidOperationException">GRaff.Image.Sprite is set to null.</exception>
 		public Texture CurrentTexture
 		{
 			get
 			{
-				if (Sprite == null) throw new InvalidOperationException(String.Format("The {0}.{1} has no sprite.", nameof(GameMaker), nameof(Image)));
+				if (Sprite == null) throw new InvalidOperationException(String.Format("The {0}.{1} has no sprite.", nameof(GRaff), nameof(Image)));
 				return Sprite.Texture;
 			}
 		}
 
 		/// <summary>
-		/// Gets the transformation of this GameMaker.Image.
+		/// Gets the transformation of this GRaff.Image.
 		/// </summary>
 		public Transform Transform
 		{
@@ -105,7 +105,7 @@ namespace GameMaker
 		}
 
 		/// <summary>
-		/// Animates this GameMaker.Image. Returns whether the animation looped.
+		/// Animates this GRaff.Image. Returns whether the animation looped.
 		/// </summary>
 		/// <returns>true if the animation looped.</returns>
 		public bool Animate()
