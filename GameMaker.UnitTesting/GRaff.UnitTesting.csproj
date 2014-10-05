@@ -62,6 +62,12 @@
     <Compile Include="PolygonTest.cs" />
     <Compile Include="AngleTest.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\GameMaker\GRaff.csproj">
+      <Project>{9b4b4358-f24b-41b4-bf94-9013e205780b}</Project>
+      <Name>GRaff</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
       <ItemGroup>

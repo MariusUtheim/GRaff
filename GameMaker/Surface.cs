@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Runtime.InteropServices;
-using OpenTK.Graphics.OpenGL4;
+using OpenTK.Graphics.ES30;
 
 namespace GRaff
 {
