@@ -9,9 +9,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("GRaff")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Univ. of Tromsø")]
+[assembly: AssemblyCompany("Giraffe Studios")]
 [assembly: AssemblyProduct("GRaff")]
-[assembly: AssemblyCopyright("Copyright © Univ. of Tromsø 2014")]
+[assembly: AssemblyCopyright("Copyright © Giraffe Studios 2014")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

@@ -5,6 +5,7 @@ using OpenTK.Graphics.ES30;
 
 namespace GRaff
 {
+#warning TODO: Base the background on a GameElement instance
 	public static class Background
 	{
 		private static int _vertexArray;

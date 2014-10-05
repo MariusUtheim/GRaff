@@ -31,7 +31,7 @@ namespace GRaff
 
 		public void Enter()
 		{
-			foreach (var instance in Instance.All)
+			foreach (var instance in Instance.Elements)
 				instance.Destroy();
 			_current = this;
 			Draw.CurrentSurface = new Surface(Width, Height);

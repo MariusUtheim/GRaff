@@ -15,9 +15,29 @@ namespace GRaff
 	}
 
 	/// <summary>
+	/// Defines event data for an alarm event.
+	/// </summary>
+	public class AlarmEventArgs : EventArgs
+	{
+		/// <summary>
+		/// Initializes a new instance of the GRaff.AlarmEventArgs class using the specified GRaff.Alarm.
+		/// </summary>
+		/// <param name="alarm">The alarm associated with the event.</param>
+		public AlarmEventArgs(Alarm alarm)
+		{
+			this.Alarm = alarm;
+		}
+
+		/// <summary>
+		/// Gets the GRaff.Alarm associated with the event.
+		/// </summary>
+		public Alarm Alarm { get; private set; }
+	}
+
+	/// <summary>
 	/// Ticks down every step, and fires an event when the tick reaches zero.
 	/// </summary>
-	public sealed class Alarm
+	public sealed class Alarm : GameElement
 	{
 		private static List<Alarm> _alarms = new List<Alarm>();
 
@@ -42,12 +62,6 @@ namespace GRaff
 			return alarm;
 		}
 
-
-		internal static void TickAll()
-		{
-			foreach (var a in _alarms)
-				a.Tick();
-		}
 
 		/// <summary>
 		/// Gets or sets the initial count of this GRaff.Alarm. This will contain the value passed to GRaff.Alarm.Restart(int)
@@ -122,7 +136,7 @@ namespace GRaff
 		/// <summary>
 		/// Reduces the countdown of this GRaff.Alarm if it is running, and fires the alarm event if countdown reaches zero.
 		/// </summary>
-		public void Tick()
+		public override void OnStep()
 		{
 			if (State == AlarmState.Running)
 			{

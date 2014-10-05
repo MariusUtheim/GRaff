@@ -87,7 +87,6 @@ namespace GRaff
 		/// Performs a game loop. This includes the following events, in order:
 		/// - Handle async exceptions
 		/// - Begin step
-		/// - Alarm
 		/// - Keyboard, key press, key release
 		/// - Mouse, mouse press, mouse release
 		/// - Step
@@ -99,20 +98,18 @@ namespace GRaff
 			GlobalEvent.OnAsyncException();
 
 			GlobalEvent.OnBeginStep();
-			foreach (var instance in Instance._objects)
+			foreach (var instance in Instance.Objects)
 				instance.OnBeginStep();
-
-			Alarm.TickAll();
 
 			_handleInput();
 
-			foreach (var instance in Instance._objects)
+			foreach (var instance in Instance.Elements)
 				instance.OnStep();
 			GlobalEvent.OnStep();
 
 			_detectCollisions();
 			
-			foreach (var instance in Instance._objects)
+			foreach (var instance in Instance.Objects)
 				instance.OnEndStep();
 			GlobalEvent.OnEndStep();
 
@@ -122,13 +119,13 @@ namespace GRaff
 
 		private static void _detectCollisions()
 		{
-			foreach (var gen in Instance.Where(obj => obj is ICollisionListener))
+			foreach (var gen in Instance.Objects.Where(obj => obj is ICollisionListener))
 			{
 				var interfaces = gen.GetType().GetInterfaces().Where(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(ICollisionListener<>));
 				foreach (var collisionInterface in interfaces)
 				{
 					var arg = collisionInterface.GetGenericArguments().First();
-					foreach (var other in Instance.Where(i => i.GetType() == arg || arg.IsSubclassOf(i.GetType())))
+					foreach (var other in Instance.Objects.Where(i => i.GetType() == arg || arg.IsSubclassOf(i.GetType())))
 					{
 						if ((gen as GameObject).Intersects(other))
 							collisionInterface.GetMethods().First().Invoke(gen, new object[] { other });
@@ -141,51 +138,51 @@ namespace GRaff
 		private static void _handleInput()
 		{
 			foreach (var key in Keyboard.Down)
-				foreach (var instance in Instance.Where(obj => obj is IKeyListener))
+				foreach (var instance in Instance.Elements.Where(obj => obj is IKeyListener))
 					(instance as IKeyListener).OnKey(key);
 			foreach (var key in Keyboard.Down)
 				GlobalEvent.OnKey(key);
 
 			foreach (var key in Keyboard.Pressed)
-				foreach (var instance in Instance.Where(obj => obj is IKeyPressListener))
+				foreach (var instance in Instance.Elements.Where(obj => obj is IKeyPressListener))
 					(instance as IKeyPressListener).OnKeyPress(key);
 			foreach (var key in Keyboard.Down)
 				GlobalEvent.OnKeyPressed(key);
 
 			foreach (var key in Keyboard.Released)
-				foreach (var instance in Instance.Where(obj => obj is IKeyReleaseListener))
+				foreach (var instance in Instance.Elements.Where(obj => obj is IKeyReleaseListener))
 					(instance as IKeyReleaseListener).OnKeyRelease(key);
 			foreach (var key in Keyboard.Released)
 				GlobalEvent.OnKeyReleased(key);
 
 
 			foreach (var button in Mouse.Down)
-				foreach (var instance in Instance.Where(obj => obj is IMouseListener && obj.Mask.ContainsPoint(Mouse.Location)))
+				foreach (var instance in Instance.Objects.Where(obj => obj is IMouseListener && obj.Mask.ContainsPoint(Mouse.Location)))
 					(instance as IMouseListener).OnMouse(button);
 
 			foreach (var button in Mouse.Pressed)
-				foreach (var instance in Instance.Where(obj => obj is IMousePressListener && obj.Mask.ContainsPoint(Mouse.Location)))
+				foreach (var instance in Instance.Objects.Where(obj => obj is IMousePressListener && obj.Mask.ContainsPoint(Mouse.Location)))
 					(instance as IMousePressListener).OnMousePress(button);
 
 			foreach (var button in Mouse.Released)
-				foreach (var instance in Instance.Where(obj => obj is IMouseReleaseListener && obj.Mask.ContainsPoint(Mouse.Location)))
+				foreach (var instance in Instance.Objects.Where(obj => obj is IMouseReleaseListener && obj.Mask.ContainsPoint(Mouse.Location)))
 					(instance as IMouseReleaseListener).OnMouseRelease(button);
 
 
 			foreach (var button in Mouse.Down)
-				foreach (var instance in Instance.Where(obj => obj is IGlobalMouseListener))
+				foreach (var instance in Instance.Elements.Where(obj => obj is IGlobalMouseListener))
 					(instance as IGlobalMouseListener).OnGlobalMouse(button);
 			foreach (var button in Mouse.Down)
 				GlobalEvent.OnMouse(button);
 
 			foreach (var button in Mouse.Pressed)
-				foreach (var instance in Instance.Where(obj => obj is IGlobalMousePressListener))
+				foreach (var instance in Instance.Elements.Where(obj => obj is IGlobalMousePressListener))
 					(instance as IGlobalMousePressListener).OnGlobalMousePress(button);
 			foreach (var button in Mouse.Pressed)
 				GlobalEvent.OnMousePressed(button);
 
 			foreach (var button in Mouse.Released)
-				foreach (var instance in Instance.Where(obj => obj is IGlobalMouseReleaseListener))
+				foreach (var instance in Instance.Elements.Where(obj => obj is IGlobalMouseReleaseListener))
 					(instance as IGlobalMouseReleaseListener).OnGlobalMouseRelease(button);
 			foreach (var button in Mouse.Released)
 				GlobalEvent.OnMouseReleased(button);
@@ -204,7 +201,7 @@ namespace GRaff
 
 			GlobalEvent.OnDrawBackground();
 
-			foreach (var instance in Instance._objects)
+			foreach (var instance in Instance.Elements)
 				instance.OnDraw();
 
 			GlobalEvent.OnDrawForeground();

@@ -7,6 +7,7 @@ namespace GRaff
 {
 	/// <summary>
 	/// Defines an action that is performed each step while a mouse button is held down and the mouse is hovering over the instance.
+	/// Only subclasses of the GRaff.GameObject class can listen to this event, as GRaff.GameElement does not define a collision mask.
 	/// </summary>
 	public interface IMouseListener
 	{
@@ -19,6 +20,7 @@ namespace GRaff
 
 	/// <summary>
 	/// Defines an action that is performed whenever a mouse button becomes pressed while hovering over the instance.
+	/// Only subclasses of the GRaff.GameObject class can listen to this event, as GRaff.GameElement does not define a collision mask.
 	/// </summary>
 	public interface IMousePressListener
 	{
@@ -31,6 +33,7 @@ namespace GRaff
 
 	/// <summary>
 	/// Defines an action that is performed whenever a mouse button becomes released while hovering over the instance.
+	/// Only subclasses of the GRaff.GameObject class can listen to this event, as GRaff.GameElement does not define a collision mask.
 	/// </summary>
 	public interface IMouseReleaseListener
 	{

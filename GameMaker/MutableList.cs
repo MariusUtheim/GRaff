@@ -6,29 +6,29 @@ using System.Threading.Tasks;
 
 namespace GRaff
 {
-	internal class GameObjectDepthComparer : IComparer<GameObject>
+	internal class GameElementDepthComparer : IComparer<GameElement>
 	{
-		public static readonly GameObjectDepthComparer Instance = new GameObjectDepthComparer();
+		public static readonly GameElementDepthComparer Instance = new GameElementDepthComparer();
 
-		private GameObjectDepthComparer() { }
+		private GameElementDepthComparer() { }
 
-		public int Compare(GameObject x, GameObject y)
+		public int Compare(GameElement x, GameElement y)
 		{
 			return -(x.Depth - y.Depth);
 		}
 	}
 
-	internal class InstanceList : MutableList<GameObject>
+	internal class InstanceList : MutableList<GameElement>
 	{
 		public void Sort()
 		{
-			_list.Sort(GameObjectDepthComparer.Instance);
+			_list.Sort(GameElementDepthComparer.Instance);
 		}
 
-		public override void Add(GameObject item)
+		public override void Add(GameElement item)
 		{
 			_list.Add(item);
-			_list.Sort(GameObjectDepthComparer.Instance);
+			_list.Sort(GameElementDepthComparer.Instance);
 		}
 	}
 

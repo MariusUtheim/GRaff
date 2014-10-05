@@ -8,7 +8,7 @@ namespace GRaff
 	/// <summary>
 	/// Represents the most general game object that is handled in the game. Most instances would inherit from this class.
 	/// </summary>
-	public abstract class GameObject
+	public abstract class GameObject : GameElement
 	{
 		/// <summary>
 		/// Initializes a new instance of the GRaff.GameObject class with the specified x- and y-coordinates.
@@ -17,7 +17,6 @@ namespace GRaff
 		/// <param name="y">The y-coordinate.</param>
 		protected GameObject(double x, double y)
 		{
-			Instance.Add(this);
 			Transform = new Transform();
 			X = x;
 			Y = y;
@@ -59,30 +58,9 @@ namespace GRaff
 			set { Transform.X = value.X; Transform.Y = value.Y; }
 		}
 
-		private int _depth;
-		/// <summary>
-		/// Gets or sets the depth of this GRaff.GameObject.
-		/// Instances with higher depth take actions before and are drawn behind instances with lower depth.
-		/// Changes to depth value are not reflected in the game before a new frame is drawn.
-		/// </summary>
-		public int Depth
-		{
-			get { return _depth; }
-			set { _depth = value; Instance.NeedsSort = true; }
-		}
 
 		public Image Image { get; private set; }
 
-		/// <summary>
-		/// Destroys the instance of this GRaff.GameObject, removing it from the game.
-		/// The instance will stop performing automatic actions such as Step and Draw,
-		/// but the C# object is not garbage collected while it is still being referenced.
-		/// </summary>
-		public void Destroy()
-		{
-			OnDestroy();
-			Instance.Remove(this);
-		}
 
 		private Sprite _sprite;
 		public Sprite Sprite
@@ -116,25 +94,15 @@ namespace GRaff
 		public virtual void OnBeginStep() { }
 
 		/// <summary>
-		/// An action that is performed each step.
-		/// </summary>
-		public virtual void OnStep() { }
-
-		/// <summary>
 		/// An action that is performed at the end of each step.
 		/// </summary>
 		public virtual void OnEndStep() { }
 
 		/// <summary>
-		/// An action that is performed just before the instance is destroyed.
-		/// </summary>
-		public virtual void OnDestroy() { }
-
-		/// <summary>
 		/// An action that is performed when the instance is drawn. Calls to methods in the static classes GRaff.Draw and
 		/// GRaff.Fill will generally not have any effect unless called inside the draw event.
 		/// </summary>
-		public virtual void OnDraw()
+		public override void OnDraw()
 		{
 			if (Image.Sprite != null)
 			{

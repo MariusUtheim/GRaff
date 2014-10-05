@@ -8,45 +8,40 @@ namespace GRaff
 {
     public static class Instance
     {
-		internal static InstanceList _objects = new InstanceList();
-
+		private static InstanceList _elements = new InstanceList();
 
 		internal static bool NeedsSort { get; set; }
 
 		internal static void Sort()
 		{
-			_objects.Sort();
+			_elements.Sort();
 			NeedsSort = false;
 		}
 
-		internal static void Add(GameObject instance)
+		internal static void Add(GameElement instance)
 		{
-			_objects.Add(instance);
+			_elements.Add(instance);
 		}
 
-		internal static void Remove(GameObject instance)
+		internal static void Remove(GameElement instance)
 		{
-			_objects.Remove(instance);
+			_elements.Remove(instance);
 		}
 
-		public static IEnumerable<GameObject> NoOne { get { yield break; } }
-
-		public static IEnumerable<GameObject> All
+		public static IEnumerable<GameElement> Elements
 		{
-			get
+            get
 			{
-				return _objects;
+				return _elements;
 			}
 		}
 
-		public static IEnumerable<GameObject> In(Rectangle rectangle)
+		public static IEnumerable<GameObject> Objects
 		{
-			return All.Where(i => i.BoundingBox.Intersects(rectangle));
-		}
-
-		public static IEnumerable<GameObject> Where(Func<GameObject, bool> predicate)
-		{
-			return All.Where(predicate);
+			get
+			{
+				return _elements.Select(obj => obj as GameObject).Where(obj => obj != null);
+			}
 		}
     }
 
@@ -61,7 +56,7 @@ namespace GRaff
 		/// </summary>
 		public static IEnumerable<T> All
 		{
-			get { return Instance._objects.OfType<T>(); }
+			get { return Instance.Elements.OfType<T>(); }
 		}
 
 		/// <summary>

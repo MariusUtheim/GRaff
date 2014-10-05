@@ -11,6 +11,7 @@ namespace GRaff
 	/// Represents an angle, that can be specified in angles or degrees.
 	/// The value of the angle will always be in the range [0, τ).
 	/// </summary>
+#warning TODO: Test this properly
 	public struct Angle(double degrees)
 	{
 		/// <summary>
