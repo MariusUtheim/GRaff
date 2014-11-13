@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace EditorTest.Properties
+namespace TestGame.Properties
 {
 
 

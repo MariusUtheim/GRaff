@@ -1,0 +1,118 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+	<xs:element name="assets">
+		<xs:complexType>
+			<xs:all>
+				<xs:element name="sprites" minOccurs="0" maxOccurs="1">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element minOccurs="0" maxOccurs="unbounded" name="sprite">
+								<xs:complexType mixed="true">
+									<xs:all>
+										<xs:element name="origin" minOccurs="0" maxOccurs="1">
+											<xs:complexType>
+												<xs:attribute name="x" type="xs:double" use="required" />
+												<xs:attribute name="y" type="xs:double" use="required" />
+											</xs:complexType>
+										</xs:element>
+										<xs:element name="mask" minOccurs="0" maxOccurs="1">
+											<xs:complexType>
+												<xs:attribute name="shape" use="required" >
+													<xs:simpleType>
+														<xs:restriction base="xs:string">
+															<xs:enumeration value="Rectangle" />
+															<xs:enumeration value="Ellipse" />
+															<xs:enumeration value="Diamond" />
+														</xs:restriction>
+													</xs:simpleType>
+												</xs:attribute>
+												<xs:attribute name="x" type="xs:double" use="required" />
+												<xs:attribute name="y" type="xs:double" use="required" />
+												<xs:attribute name="width" type="xs:double" use="required" />
+												<xs:attribute name="height" type="xs:double" use="required" />
+											</xs:complexType>
+										</xs:element>
+										<xs:element name="animationStrip" minOccurs="0" maxOccurs="1">
+											<xs:complexType>
+												<xs:sequence>
+													<xs:element minOccurs="1" maxOccurs="unbounded" name="animationFrame">
+														<xs:complexType>
+															<xs:attribute name="index" type="xs:integer" use="required"/> <!-- Restriction = [0, subimageCount) -->
+															<xs:attribute name="duration" use="optional" default="1.0">
+																<xs:simpleType>
+																	<xs:restriction base="xs:double">
+																		<xs:minExclusive value="0" />
+																	</xs:restriction>
+																</xs:simpleType>
+															</xs:attribute>
+														</xs:complexType>
+													</xs:element>
+												</xs:sequence>
+											</xs:complexType>
+										</xs:element>
+									</xs:all>
+									<xs:attribute name="imageCount" use="optional" default="1">
+										<xs:simpleType>
+											<xs:restriction base="xs:integer">
+												<xs:minInclusive value="1"/>
+											</xs:restriction>
+										</xs:simpleType>
+									</xs:attribute>
+									<xs:attribute name="name" type="xs:string" use="required" />
+									<xs:attribute name="filename" type="xs:string" use="required" />
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="sounds" minOccurs="0" maxOccurs="1">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="sound" minOccurs="0" maxOccurs="unbounded">
+								<xs:complexType>
+									<xs:simpleContent>
+										<xs:extension base="xs:string">
+											<xs:attribute name="name" type="xs:string" use="required" />
+											<xs:attribute name="filename" type="xs:string" use="required" />
+										</xs:extension>
+									</xs:simpleContent>
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="batches" minOccurs="0" maxOccurs="1">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element maxOccurs="unbounded" name="batch">
+								<xs:complexType>
+									<xs:choice minOccurs="0" maxOccurs="unbounded">
+										
+										<xs:element name="sprite">
+											<xs:complexType>
+												<xs:attribute name="name" type="xs:string" use="required" />
+											</xs:complexType>
+										</xs:element>
+
+										<xs:element name="sound">
+											<xs:complexType>
+												<xs:attribute name="name" type="xs:string" use="required" />
+											</xs:complexType>
+										</xs:element>
+										<xs:element name="batch">
+											<xs:complexType>
+												<xs:attribute name="name" type="xs:string" use="required" />
+											</xs:complexType>
+										</xs:element>
+									</xs:choice>
+									<xs:attribute name="name" type="xs:string" use="required" />
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+			</xs:all>
+			<xs:attribute name="namespace" type="xs:string" use="required" />
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

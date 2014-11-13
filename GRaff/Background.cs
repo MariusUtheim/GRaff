@@ -1,0 +1,75 @@
+﻿using System;
+using System.Runtime.InteropServices;
+using GRaff.OpenGL;
+
+namespace GRaff
+{
+	public sealed class Background : GameElement
+	{
+		private GLRenderSystem _renderSystem;
+		private readonly IntPtr _4 = new IntPtr(4 * Marshal.SizeOf(typeof(Point)));
+
+		public Background()
+		{
+			Depth = Int32.MinValue;
+			_renderSystem = new GLRenderSystem();
+			_renderSystem.SetColors(UsageHint.StaticDraw, Color.White, Color.White, Color.White, Color.White);
+		}
+
+		internal static void Initialize()
+		{
+			Default = new Background { Color = Color.LightGray };
+		}
+
+		public static Background Default { get; private set; }
+
+		public Color Color { get; set; } = Color.LightGray;
+
+		public Sprite Sprite { get; set; } = null;
+
+		public bool IsTiled { get; set; } = false;
+
+		public bool DrawColor { get; set; } = true;
+
+		public double XOffset { get; set; }
+		public double YOffset { get; set; }
+		public Vector Offset
+		{
+			get { return new Vector(XOffset, YOffset); }
+			set { XOffset = value.X; YOffset = value.Y; }
+		}
+
+		public double HSpeed { get; set; }
+		public double VSpeed { get; set; }
+		public Vector Velocity
+		{
+			get { return new Vector(HSpeed, VSpeed); }
+			set { HSpeed = value.X; VSpeed = value.Y; }
+		}
+
+		public override void OnDraw()
+		{
+			if (DrawColor)
+				Draw.Clear(Color);
+
+			if (Sprite != null)
+			{
+				if (IsTiled)
+				{
+					float u0 = -(float)(XOffset / Sprite.Width), v0 = -(float)(YOffset / Sprite.Height);
+					float u1 = u0 + Room.Width / (float)Sprite.Width, v1 = v0 + Room.Height / (float)Sprite.Height;
+
+					_renderSystem.SetVertices(UsageHint.StreamDraw, 0.0f, 0.0f, Room.Width, 0.0f, Room.Width, Room.Height, 0.0f, Room.Height);
+					_renderSystem.SetTexCoords(UsageHint.StreamDraw, u0, v0, u1, v0, u1, v1, u0, v1);
+
+					Sprite.Texture.Bind();
+					ShaderProgram.Current = ShaderProgram.DefaultTextured;
+
+					_renderSystem.Render(PrimitiveType.Quads, 4);
+				}
+				else
+					Draw.Sprite(Sprite, 0, XOffset, YOffset);
+			}
+		}
+	}
+}

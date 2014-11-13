@@ -1,0 +1,202 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{64447CF0-9D21-4B49-B12B-7830BEE354C7}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>GRaff</RootNamespace>
+    <AssemblyName>GRaff</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="OpenTK">
+      <HintPath>..\..\..\..\OpenTK\1.1\Binaries\OpenTK\Release\OpenTK.dll</HintPath>
+    </Reference>
+    <Reference Include="OpenTK.GLControl">
+      <HintPath>..\..\..\..\OpenTK\1.1\Binaries\OpenTK\Release\OpenTK.GLControl.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Alarm.cs" />
+    <Compile Include="Angle.cs" />
+    <Compile Include="AnimationStrip.cs" />
+    <Compile Include="Async.cs" />
+    <Compile Include="Async.Operations.cs" />
+    <Compile Include="GMath.SystemMathOverloads.cs" />
+    <Compile Include="IAsset.cs" />
+    <Compile Include="OpenAL\DistanceModel.cs" />
+    <Compile Include="OpenAL\Listener.cs" />
+    <Compile Include="OpenAL\OggVorbisDecoder\AudioInfo.cs" />
+    <Compile Include="OpenAL\OggVorbisDecoder\Externals.cs" />
+    <Compile Include="OpenAL\OggVorbisDecoder\OggVorbisEncodedStream.cs" />
+    <Compile Include="OpenAL\OggVorbisDecoder\OggVorbisException.cs" />
+    <Compile Include="OpenAL\OggVorbisDecoder\OggVorbisFile.cs" />
+    <Compile Include="OpenAL\OggVorbisDecoder\OggVorbisFileStream.cs" />
+    <Compile Include="OpenAL\OggVorbisDecoder\OggVorbisMemoryStream.cs" />
+    <Compile Include="OpenAL\OggVorbisDecoder\VorbisInfo.cs" />
+    <Compile Include="OpenAL\_Initializer.cs" />
+    <Compile Include="OpenGL\Context.cs" />
+    <Compile Include="OpenGL\Scissor.cs" />
+    <Compile Include="OpenGL\_Initializer.cs" />
+    <Compile Include="SoundBuffer.cs" />
+    <Compile Include="Particles\AttractionBehavior.cs" />
+    <Compile Include="Particles\AttractionProperty.cs" />
+    <Compile Include="AssetBatch.cs" />
+    <Compile Include="Synchronization2\AsyncEventArgs.cs" />
+    <Compile Include="Synchronization2\AsyncOperation.cs" />
+    <Compile Include="Synchronization\AsyncCatchContext.cs" />
+    <Compile Include="Synchronization\AsyncEventArgs.cs" />
+    <Compile Include="Synchronization\AsyncException.cs" />
+    <Compile Include="Synchronization\MergeOrganizer.cs" />
+    <Compile Include="Synchronization\ParallelTaskHandle.cs" />
+    <Compile Include="Synchronization\AsyncOperationBase.cs" />
+    <Compile Include="Synchronization\IAsyncTaskHandle.cs" />
+    <Compile Include="Synchronization\AsyncOperation.cs" />
+    <Compile Include="Synchronization\AsyncWorker.cs" />
+    <Compile Include="Synchronization\AsyncOrchestrator.cs" />
+    <Compile Include="Synchronization\IAsyncTaskFactory.cs" />
+    <Compile Include="Synchronization\IAsyncOperation.cs" />
+    <Compile Include="Background.cs" />
+    <Compile Include="Color.cs" />
+    <Compile Include="Color.Definitions.cs" />
+    <Compile Include="OpenGL\BlendEquation.cs" />
+    <Compile Include="OpenGL\BlendMode.cs" />
+    <Compile Include="OpenGL\ColorMap.cs" />
+    <Compile Include="Complex.cs" />
+    <Compile Include="DraggableObject.cs" />
+    <Compile Include="Draw.cs" />
+    <Compile Include="Fill.cs" />
+    <Compile Include="Font.cs" />
+    <Compile Include="OpenGL\GLRaffExtensions.cs" />
+    <Compile Include="OpenGL\PrimitiveType.cs" />
+    <Compile Include="OpenGL\UsageHint.cs" />
+    <Compile Include="OpenGL\FragmentShader.cs" />
+    <Compile Include="Giraffe.cs" />
+    <Compile Include="GameElement.cs" />
+    <Compile Include="GameObject.cs" />
+    <Compile Include="GlobalEvent.cs" />
+    <Compile Include="OpenGL\GLRenderSystem.cs" />
+    <Compile Include="GMath.cs" />
+    <Compile Include="GMath.FromSystemMath.cs" />
+    <Compile Include="GRandom.cs" />
+    <Compile Include="IAnimationEndListener.cs" />
+    <Compile Include="ICollisionListener.cs" />
+    <Compile Include="IKeyListener.cs" />
+    <Compile Include="Image.cs" />
+    <Compile Include="IMouseListener.cs" />
+    <Compile Include="Instance.cs" />
+    <Compile Include="IntRectangle.cs" />
+    <Compile Include="IntVector.cs" />
+    <Compile Include="Key.cs" />
+    <Compile Include="Keyboard.cs" />
+    <Compile Include="KeyEventArgs.cs" />
+    <Compile Include="Line.cs" />
+    <Compile Include="Mask.cs" />
+    <Compile Include="MaskShape.cs" />
+    <Compile Include="Matrix.cs" />
+    <Compile Include="Mouse.cs" />
+    <Compile Include="MouseButton.cs" />
+    <Compile Include="MouseEventArgs.cs" />
+    <Compile Include="MovingObject.cs" />
+    <Compile Include="MutableList.cs" />
+    <Compile Include="Particles\ColorBehavior.cs" />
+    <Compile Include="Particles\MotionBehavior.cs" />
+    <Compile Include="Particles\IParticleBehavior.cs" />
+    <Compile Include="Particles\IParticleProperty.cs" />
+    <Compile Include="Particles\LinearMotionProperty.cs" />
+    <Compile Include="Particles\ParallelParticleSystem.cs" />
+    <Compile Include="Particles\Particle.cs" />
+    <Compile Include="Particles\ParticleSystem.cs" />
+    <Compile Include="Particles\ParticleType.cs" />
+    <Compile Include="Particles\RandomColorBehavior.cs" />
+    <Compile Include="Particles\RotationBehavior.cs" />
+    <Compile Include="Particles\ScaleBehavior.cs" />
+    <Compile Include="Particles\SpiralBehavior.cs" />
+    <Compile Include="Point.cs" />
+    <Compile Include="Polygon.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Rectangle.cs" />
+    <Compile Include="AssetState.cs" />
+    <Compile Include="Room.cs" />
+    <Compile Include="OpenGL\ShaderException.cs" />
+    <Compile Include="OpenGL\ShaderProgram.cs" />
+    <Compile Include="OpenGL\VertexShader.cs" />
+    <Compile Include="Sound.cs" />
+    <Compile Include="SoundInstance.cs" />
+    <Compile Include="SoundState.cs" />
+    <Compile Include="Sprite.cs" />
+    <Compile Include="OpenGL\Surface.cs" />
+    <Compile Include="Synchronization\MergeTaskFactory.cs" />
+    <Compile Include="Synchronization\BranchTaskFactory.cs" />
+    <Compile Include="Synchronization\SingleTaskFactory.cs" />
+    <Compile Include="Synchronization\SerialTaskHandle.cs" />
+    <Compile Include="Synchronization\SpecificThreadTaskScheduler.cs" />
+    <Compile Include="Texture.cs" />
+    <Compile Include="TextureBuffer.cs" />
+    <Compile Include="Time.cs" />
+    <Compile Include="Transform.cs" />
+    <Compile Include="Tween.cs" />
+    <Compile Include="Vector.cs" />
+    <Compile Include="View.cs" />
+    <Compile Include="Window.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="External\libogg.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="External\openal32.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="External\vorbis.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="External\vorbisfile.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

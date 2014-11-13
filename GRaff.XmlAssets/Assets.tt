@@ -1,0 +1,212 @@
+﻿<# var assetsFile = "Assets.xml"; #>
+
+<#@ template debug="true" hostspecific="true" language="C#" #>
+<#@ output extension=".cs" #>
+<#@ parameter name="inputFile" type="System.String" #>
+<#@ assembly name="System.Core" #>
+<#@ assembly name="System.Xml" #>
+<#@ import namespace="System" #>
+<#@ import namespace="System.Globalization" #>
+<#@ import namespace="System.IO" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Xml.Serialization" #>
+<#
+
+	var hostFile = new FileInfo(this.Host.TemplateFile);
+	var xmlFilePath = hostFile.Directory.FullName + Path.DirectorySeparatorChar + assetsFile;
+	AssetElement source = Utility.LoadXml(xmlFilePath);
+#>
+
+namespace <#= source.Namespace #>
+{
+	public static class Sprites
+	{
+		static Sprites()
+		{
+<# foreach (var sprite in source.Sprites) { #>
+			<#=sprite.GenerateConstructorCode()#>
+<# } #>
+		}
+
+		public static void LoadAll()
+		{
+<# foreach (var sprite in source.Sprites) { #>
+			<#=sprite.Name#>.Load();
+<# } #>
+		}
+
+<# foreach (var sprite in source.Sprites) { #>
+		public static global::GRaff.Sprite <#= sprite.Name #> { get; private set; }
+<# } #>	
+	}
+
+	public static class Sounds
+	{
+		static Sounds()
+		{
+<# foreach (var sound in source.Sounds) { #>
+			<#=sound.Name#> = new global::GRaff.Sound(@"<#=sound.Filename#>");
+<# } #>
+		}
+
+		public static void LoadAll()
+		{
+<# foreach (var sound in source.Sounds) { #>
+			<#=sound.Name#>.Load();
+<# } #>
+		}
+
+<# foreach (var sound in source.Sounds) { #>
+		public static global::GRaff.Sound <#=sound.Name#> { get; private set; }
+<# } #>
+	}
+
+	public static class Batches
+	{
+		static Batches()
+		{
+<# foreach (var batch in source.Batches) { #>
+			<#=batch.GenerateConstructorCode()#>
+<# } #>
+		}
+
+		public static void LoadAll()
+		{
+<# foreach (var batch in source.Batches) { #>
+			<#=batch.Name#>.Load();
+<# } #>
+		}
+
+<# foreach (var batch in source.Batches) { #>
+		public static global::GRaff.AssetBatch <#=batch.Name#> { get; private set; }
+<# } #>
+	}
+}
+
+<#+
+	public class Utility {
+		public static AssetElement Source;
+
+		public static AssetElement LoadXml(string path)
+		{
+			var xml = File.ReadAllText(path);
+			using (var reader = new StringReader(xml))
+			{
+				var serializer = new XmlSerializer(typeof(AssetElement));
+				Source = (AssetElement)serializer.Deserialize(reader);
+				return Source;
+			}
+		}
+	}
+
+
+	public class AnimationFrameElement {
+		[XmlAttribute("index")] public int Index;
+		[XmlAttribute("duration")] public double Duration;
+		public static string ToParameter(AnimationFrameElement frame)
+		{
+			return string.Format(CultureInfo.InvariantCulture, "new global::System.Tuple<int, double>({0}, {1})", frame.Index, frame.Duration);
+		}
+		public static string ToParameter(int frameCount)
+		{
+			return string.Format(CultureInfo.InvariantCulture, "new global::GRaff.AnimationStrip({0})", frameCount);
+		}
+		public static string ToParameter(AnimationFrameElement[] frames)
+		{
+			if (frames == null || frames.Length == 0) return "null";
+			var result = new StringBuilder();
+			result.Append("new global::GRaff.AnimationStrip(");
+			result.Append(ToParameter(frames[0]));
+			for (var i = 1; i < frames.Length; i++)
+				result.Append(", " + ToParameter(frames[i]));
+			result.Append(")");
+			return result.ToString();
+		}
+	}
+
+	[XmlRoot(ElementName = "assets"), XmlType("assets")]
+	public class AssetElement {
+		[XmlAttribute("namespace")] public string Namespace; 
+		[XmlArray("sprites"), XmlArrayItem("sprite")] public SpriteElement[] Sprites; 
+		[XmlArray("sounds"), XmlArrayItem("sound")] public SoundElement[] Sounds; 
+		[XmlArray("batches"), XmlArrayItem("batch")] public BatchElement[] Batches;
+	}
+
+	public class AssetReferenceElement {
+		[XmlAttribute("name")] public string Name;
+	}
+
+	public class BatchElement {
+		[XmlAttribute("name")] public string Name; 
+		[XmlElement("sprite")] public AssetReferenceElement[] Sprites; 
+		[XmlElement("sound")] public AssetReferenceElement[] Sounds;
+		[XmlElement("batch")] public AssetReferenceElement[] Batches;
+		public string GenerateConstructorCode()
+		{
+			var result = new StringBuilder();
+			result.Append(Name + " = new global::GRaff.AssetBatch(");
+			if (Sprites != null)
+				foreach (var sprite in Sprites)
+					result.AppendFormat(CultureInfo.InvariantCulture, "global::{0}.Sprites.{1}, ", Utility.Source.Namespace, sprite.Name);
+			if (Sounds != null)
+				foreach (var sound in Sounds)
+					result.AppendFormat(CultureInfo.InvariantCulture, "global::{0}.Sounds.{1}, ", Utility.Source.Namespace, sound.Name);
+			if (Batches != null)
+				foreach (var batch in Batches)
+					result.AppendFormat(CultureInfo.InvariantCulture, "global::{0}.Batches.{1}, ", Utility.Source.Namespace, batch.Name);
+			var index = result.ToString().LastIndexOf(",");
+			if (index > 0)
+				result.Remove(index, result.Length - index);
+			result.Append(");");
+			return result.ToString();
+		}
+	}
+
+	public class MaskElement {
+		[XmlAttribute("shape")] public string Shape;
+		[XmlAttribute("x")] public double X;
+		[XmlAttribute("y")] public double Y;
+		[XmlAttribute("width")] public double Width;
+		[XmlAttribute("height")] public double Height;
+	}
+
+	public class OriginElement {
+		[XmlAttribute("x")] public int X;
+		[XmlAttribute("y")] public int Y;
+		public static string ToParameter(OriginElement element)
+		{
+			if (element == null) return "null";
+			else return string.Format(CultureInfo.InvariantCulture, "new global::GRaff.IntVector({0}, {1})", element.X, element.Y);
+		}
+	}
+
+	public class SoundElement {
+		[XmlAttribute("name")] public string Name;
+		[XmlAttribute("filename")] public string Filename;
+	}
+
+	public class SpriteElement {
+		[XmlAttribute("name")] public string Name;
+		[XmlAttribute("filename")] public string Filename;
+		[XmlAttribute("imageCount")] public int ImageCount;
+		[XmlElement("origin")] public OriginElement Origin;
+		[XmlElement("mask")] public MaskElement Mask;
+		[XmlArray("animationStrip"), XmlArrayItem("animationFrame")] public AnimationFrameElement[] AnimationStrip;
+
+		public string GenerateConstructorCode()
+		{
+			var result = new StringBuilder();
+			result.Append(Name + " = new global::GRaff.Sprite(");
+			result.Append("@\"" + Filename + "\", ");
+			result.Append(ImageCount.ToString(CultureInfo.InvariantCulture) + ", ");
+			result.Append(OriginElement.ToParameter(Origin) + ", ");
+			if (AnimationStrip != null)
+				result.Append(AnimationFrameElement.ToParameter(AnimationStrip));
+			else
+				result.Append(AnimationFrameElement.ToParameter(ImageCount));
+			result.Append(");");
+			return result.ToString();
+		}
+	}
+
+#>
