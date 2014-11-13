@@ -1,3 +1,0 @@
-﻿Optimizations:
-- Cache the polynomial retrieved from Mask.GetPolynomial() and the matrix from Transform.GetMatrix()
-- 
