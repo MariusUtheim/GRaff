@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{E1F9F27C-0D7C-4A28-A4FD-0ACDD42D9636}</ProjectGuid>
-    <OutputType>WinExe</OutputType>
+    <ProjectGuid>{C205A8C0-6C8C-4536-B217-597EBDF22B5D}</ProjectGuid>
+    <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>GRaff.RoomEditor.Windows</RootNamespace>
-    <AssemblyName>GRaff.RoomEditor.Windows</AssemblyName>
+    <RootNamespace>GRaff.RoomEditor</RootNamespace>
+    <AssemblyName>GRaff.RoomEditor</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -31,7 +31,13 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
   <ItemGroup>
+    <Reference Include="OpenTK">
+      <HintPath>..\..\..\..\OpenTK\1.1\Binaries\OpenTK\Release\OpenTK.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -44,9 +50,21 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EditorItem.cs" />
+    <Compile Include="ElementView.cs" />
+    <Compile Include="GiraffeEditor.cs" />
+    <Compile Include="EditorConstructorAttribute.cs" />
+    <Compile Include="EditorPropertyAttribute.cs" />
     <Compile Include="MyGame\Toolbar.cs" />
-    <Compile Include="Program.cs" />
+    <Compile Include="ObjectCreator.cs" />
+    <Compile Include="ToolbarItem.cs" />
+    <Compile Include="IEditorPlaceable.cs" />
+    <Compile Include="ObjectLoader.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RoomCreator.cs" />
+    <Compile Include="EditorPlaceableAttribute.cs" />
+    <Compile Include="RoomView.cs" />
+    <Compile Include="ToolbarView.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -70,10 +88,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\GRaff.RoomEditor\GRaff.RoomEditor.csproj">
-      <Project>{c205a8c0-6c8c-4536-b217-597ebdf22b5d}</Project>
-      <Name>GRaff.RoomEditor</Name>
-    </ProjectReference>
     <ProjectReference Include="..\GRaff\GRaff.csproj">
       <Project>{64447cf0-9d21-4b49-b12b-7830bee354c7}</Project>
       <Name>GRaff</Name>

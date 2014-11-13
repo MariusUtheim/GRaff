@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace GRaff.RoomEditor.Forms.Properties
+namespace GRaff.RoomEditor.Properties
 {
 
 
@@ -44,7 +44,7 @@ namespace GRaff.RoomEditor.Forms.Properties
 			{
 				if ((resourceMan == null))
 				{
-					global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("GRaff.RoomEditor.Forms.Properties.Resources", typeof(Resources).Assembly);
+					global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("GRaff.RoomEditor.Properties.Resources", typeof(Resources).Assembly);
 					resourceMan = temp;
 				}
 				return resourceMan;

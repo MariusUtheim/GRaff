@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("GRaff.RoomEditor.Forms")]
+[assembly: AssemblyTitle("TestGame")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("GRaff.RoomEditor.Forms")]
+[assembly: AssemblyProduct("TestGame")]
 [assembly: AssemblyCopyright("Copyright ©  2014")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("d1e3c2ba-deef-47c8-bd64-727ec56a3282")]
+[assembly: Guid("487da532-2a4a-47af-ad36-a8daaf0a6d32")]
 
 // Version information for an assembly consists of the following four values:
 //
