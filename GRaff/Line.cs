@@ -44,6 +44,13 @@ namespace GRaff
 
 		public override int GetHashCode() { return Origin.GetHashCode() ^ Direction.GetHashCode(); }
 
+		/// <summary>
+		/// Compares two GRaff.Line structures. The result specifies whether they are equal.
+		/// </summary>
+		/// <param name="left">The first GRaff.Line to compare.</param>
+		/// <param name="right">The second GRaff.Line to compare.</param>
+		/// <returns>true if the two GRaff.Line structures are equal.</returns>
+		/// <remarks>Since lines are directed and there is a distinction between the left and right normals, the line from point a to b is not equal to the line from point b to a.</remarks>
 		public static bool operator ==(Line left, Line right) { return left.Origin == right.Origin && left.Direction == right.Direction; }
 
 		public static bool operator !=(Line left, Line right) { return left.Origin != right.Origin || left.Direction != right.Direction; }

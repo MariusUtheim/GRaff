@@ -8,26 +8,11 @@ namespace GRaff
 	/// <summary>
 	/// Represents a two dimensional vector.
 	/// <remarks>
-	/// GRaff.Vector is similar to GRaff.Point, but this struct stores its structure internally
-	/// in polar coordinates (as opposed to cartesian coordinates used by GRaff.Point).
-	/// This way, the class conserves direction even when the magnitude is set to zero.
+	/// GRaff.Vector is similar to GRaff.Point, but the direction is conserved even if magnitude is set to zero.
 	/// </remarks>
 	/// </summary>
 	public struct Vector
 	{
-		public Vector(double magnitude, Angle direction)
-			:this()
-		{
-			if (magnitude < 0)
-			{
-				magnitude = -magnitude;
-				direction *= -1;
-			}
-
-			Magnitude = magnitude;
-			Direction = direction;
-		}
-		
 		/// <summary>
 		/// Represents the vector [0, 0].
 		/// </summary>
@@ -38,27 +23,41 @@ namespace GRaff
 		/// </summary>
 		/// <param name="x">The x-component.</param>
 		/// <param name="y">The y-component.</param>
-		public Vector(double x, double y) : this(GMath.Sqrt(x * x + y * y), (x == 0 && y == 0) ? Angle.Zero : GMath.Atan2(y, x)) { }
+		public Vector(double x, double y) 
+			: this()
+		{
+			X = x;
+			Y = y;
+		}
+
+
+		public Vector(double magnitude, Angle direction)
+			:this()
+		{
+			X = magnitude * GMath.Cos(direction);
+			Y = magnitude * GMath.Sin(direction);
+		}
+
 
 		/// <summary>
 		/// Gets the magnitude of this GRaff.Vector.
 		/// </summary>
-		public double Magnitude { get; private set;  }
+		public double Magnitude { get { return GMath.Sqrt(X * X + Y * Y); } }
 
 		/// <summary>
 		/// Gets the direction of this GRaff.Vector.
 		/// </summary>
-		public Angle Direction { get; private set; } 
+		public Angle Direction { get { return GMath.Atan2(Y, X); } } 
 
 		/// <summary>
 		/// Gets the x-component of this GRaff.Vector.
 		/// </summary>
-		public double X { get { return Magnitude * GMath.Cos(Direction); } }
+		public double X { get; private set; }
 
 		/// <summary>
 		/// Gets the y-component of this GRaff.Vector.
 		/// </summary>
-		public double Y { get { return Magnitude * GMath.Sin(Direction); } }
+		public double Y { get; private set; }
 
 
 		/// <summary>
@@ -67,12 +66,12 @@ namespace GRaff
 		public Vector UnitVector { get { return new Vector(1, this.Direction); } }
 
 
-/// <summary>
-/// Computes the dot product of this and the specified GRaff.Vector.
-/// </summary>
-/// <param name="other">The other GRaff.Vector.</param>
-/// <returns>The dot product of the two vectors.</returns>
-public double DotProduct(Vector other) { return Magnitude * other.Magnitude * GMath.Cos(Direction - other.Direction); }
+		/// <summary>
+		/// Computes the dot product of this and the specified GRaff.Vector.
+		/// </summary>
+		/// <param name="other">The other GRaff.Vector.</param>
+		/// <returns>The dot product of the two vectors.</returns>
+		public double DotProduct(Vector other) { return X * other.X + Y * other.Y; }
 
 
 		/// <summary>
@@ -92,7 +91,7 @@ public double DotProduct(Vector other) { return Magnitude * other.Magnitude * GM
 		/// Returns a hash code for this GRaff.Vector.
 		/// </summary>
 		/// <returns>An integer value that specifies a hash value for this GRaff.Vector.</returns>
-		public override int GetHashCode() { return Magnitude.GetHashCode() ^ Direction.GetHashCode(); }
+		public override int GetHashCode() { return X.GetHashCode() ^ GMath.BitBlockShift(Y.GetHashCode()); }
 
 		/// <summary>
 		/// Compares two GRaff.Vector objects. The result specifies whether their magnitude and direction are equal.
@@ -100,7 +99,7 @@ public double DotProduct(Vector other) { return Magnitude * other.Magnitude * GM
 		/// <param name="left">The first GRaff.Vector to compare.</param>
 		/// <param name="right">The second GRaff.Vector to compare.</param>
 		/// <returns>true if the magnitudes and the directions of the two GRaff.Vector structures are equal.</returns>
-		public static bool operator ==(Vector left, Vector right){ return (left.Magnitude == right.Magnitude && left.Direction == right.Direction); }
+		public static bool operator ==(Vector left, Vector right) { return (left.X == right.X && left.Y == right.Y); }
 
 		/// <summary>
 		/// Compares two GRaff.Vector objects. The result specifies whether their magnitude and direction are unequal.
@@ -108,7 +107,7 @@ public double DotProduct(Vector other) { return Magnitude * other.Magnitude * GM
 		/// <param name="left">The first GRaff.Vector to compare.</param>
 		/// <param name="right">The second GRaff.Vector to compare.</param>
 		/// <returns>true if the magnitudes and the directions of the two GRaff.Vector structures are unequal.</returns>
-		public static bool operator !=(Vector left, Vector right) { return (left.Magnitude != right.Magnitude || left.Direction != right.Direction); }
+		public static bool operator !=(Vector left, Vector right) { return !(left == right); }
 
 
 		/// <summary>
@@ -133,7 +132,7 @@ public double DotProduct(Vector other) { return Magnitude * other.Magnitude * GM
 		/// </summary>
 		/// <param name="v">The GRaff.Vector</param>
 		/// <returns>A GRaff.Vector structure with the same magnitude and opposite direction of the specified GRaff.Vector.</returns>
-		public static Vector operator -(Vector v) { return new Vector(-v.Magnitude, v.Direction + Angle.Deg(180)); }
+		public static Vector operator -(Vector v) { return new Vector(-v.X, -v.Y); }
 
 		/// <summary>
 		/// Scales the GRaff.Vector by a specified scalar.
@@ -141,7 +140,7 @@ public double DotProduct(Vector other) { return Magnitude * other.Magnitude * GM
 		/// <param name="v">The GRaff.Vector to be scaled.</param>
 		/// <param name="d">The double to scale by.</param>
 		/// <returns>The scaled GRaff.Vector.</returns>
-		public static Vector operator *(Vector v, double d) { return new Vector(v.Magnitude * d, v.Direction); }
+		public static Vector operator *(Vector v, double d) { return new Vector(v.X * d, v.Y * d); }
 
 
 		/// <summary>
@@ -150,7 +149,7 @@ public double DotProduct(Vector other) { return Magnitude * other.Magnitude * GM
 		/// <param name="d">The double to scale by.</param>
 		/// <param name="v">The GRaff.Vector to be scaled.</param>
 		/// <returns>The scaled GRaff.Vector.</returns>
-		public static Vector operator *(double d, Vector v) { return new Vector(d * v.Magnitude, v.Direction); }
+		public static Vector operator *(double d, Vector v) { return new Vector(d * v.X, d * v.Y); }
 
 
 		/// <summary>
@@ -159,7 +158,7 @@ public double DotProduct(Vector other) { return Magnitude * other.Magnitude * GM
 		/// <param name="v">The GRaff.Vector to be scaled.</param>
 		/// <param name="d">The double to scale by.</param>
 		/// <returns>The scaled GRaff.Vector.</returns>
-		public static Vector operator /(Vector v, double d) { return new Vector(v.Magnitude / d, v.Direction); }
+		public static Vector operator /(Vector v, double d) { return new Vector(v.X / d, v.Y / d); }
 
 
 		/// <summary>

@@ -36,7 +36,7 @@ namespace GRaff
 			if (pts.Length <= 2)
 				return;
 
-			double sum = 0;
+			Angle sum = Angle.Zero;
 			Angle a;
 			Vector previous, next;
 			previous = Edge(-1).Direction;
@@ -45,7 +45,7 @@ namespace GRaff
 			a = next.Direction - previous.Direction;
 			if (a.Degrees > 180)
 				pts = pts.Reverse().ToArray();
-			sum += a.Degrees;
+			sum += a;
 
 			for (int i = 1; i < pts.Length; i++)
 			{
@@ -54,10 +54,10 @@ namespace GRaff
 				a = next.Direction - previous.Direction;
 				if (a.Degrees > 180)
 					throw new ArgumentException("The points must specify a convex polygon.");
-				sum += a.Degrees;
+				sum += a;
 			}
 
-			if (GMath.Abs(sum - 360.0) > 1000 * Angle.Epsilon.Degrees)
+			if (sum != Angle.Epsilon)
 				throw new ArgumentException("The points must specify a convex polygon with winding number equal to 1. Winding is " + sum.ToString());
 		}
 
@@ -143,10 +143,10 @@ namespace GRaff
 		{
 			get
 			{
-				for (int i = 1; i < pts.Length; i++)
-					yield return new Line(pts[i], pts[i - 1]);
+				for (int i = 0; i < pts.Length - 1; i++)
+					yield return new Line(pts[i], pts[i + 1]);
 				if (pts.Length != 0)
-					yield return new Line(pts[0], pts[Length - 1]);
+					yield return new Line(pts[Length - 1], pts[0]);
 			}
 		}
 
@@ -164,7 +164,7 @@ namespace GRaff
 			 * */
 
 			foreach (Line L in Edges)
-				if (L.RightNormal.DotProduct(pt - L.Origin) > 0)
+				if (L.LeftNormal.DotProduct(pt - L.Origin) > 0)
 					return false;
 
 			return true;
@@ -191,7 +191,7 @@ namespace GRaff
 			IEnumerable<Point> otherVertices = other.Vertices;
 			foreach (Line l in Edges)
 			{
-				Vector n = l.RightNormal;
+				Vector n = l.LeftNormal;
 				if (otherVertices.All(pt => n.DotProduct(pt - l.Origin) > 0))
 					return false;
 			}

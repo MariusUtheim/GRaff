@@ -14,6 +14,17 @@ namespace GRaff
 		public static readonly Complex I = new Complex(0, 1);
 		public const double GoldenRatio = 1.6180339887498948482045868343656;
 
+
+
+		public static int BitBlockShift(int x)
+		{
+			return (x << 16) | (x >> 16);
+		}
+		public static uint BitBlockShift(uint x)
+		{
+			return (x << 16) | (x >> 16);
+		}
+
 		public static byte Median(byte x1, byte x2, byte x3)
 		{
 			if ((x1 <= x2 && x2 <= x3) || (x3 <= x2 && x2 <= x1))
@@ -116,28 +127,43 @@ namespace GRaff
 
 		public static int RoundInt(double x)
 		{
-			return (int)(x + 0.5);
+			return (int)Round(x);
 		}
 		public static int RoundInt(float x)
 		{
-			return (int)(x + 0.5f);
+			return (int)Round(x);
 		}
 		public static int RoundInt(decimal x)
 		{
-			return (int)(x + 0.5m);
+			return (int)Round(x);
 		}
-
 		public static uint RoundUInt(double x)
 		{
-			return (uint)(x + 0.5);
+			return (uint)Round(x);
 		}
 		public static uint RoundUInt(float x)
 		{
-			return (uint)(x + 0.5f);
+			return (uint)Round(x);
 		}
 		public static uint RoundUInt(decimal x)
 		{
-			return (uint)(x + 0.5m);
+			return (uint)Round(x);
+		}
+		public static long RoundLong(double x)
+		{
+			return (long)Round(x);
+		}
+		public static long RoundLong(decimal x)
+		{
+			return (long)Round(x);
+		}
+		public static ulong RoundULong(double x)
+		{
+			return (ulong)Round(x);
+		}
+		public static ulong RoundULong(decimal x)
+		{
+			return (ulong)Round(x);
 		}
 
 

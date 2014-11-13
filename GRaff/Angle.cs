@@ -15,12 +15,13 @@ namespace GRaff
 	public struct Angle
 	{
 		/*C#6.0*/
-		private const double radToData = UInt32.MaxValue / GMath.Tau;
-		private const double degToData = UInt32.MaxValue / 360.0;
-		private const double dataToDeg = 360.0 / UInt32.MaxValue;
-		private const double dataToRad = GMath.Tau / UInt32.MaxValue;
-		private const uint acuteThreshold = UInt32.MaxValue / 2;
-        private uint _data;
+		private const double radToData = ulong.MaxValue / GMath.Tau;
+		private const double degToData = ulong.MaxValue / 360.0;
+		private const double dataToDeg = 360.0 / ulong.MaxValue;
+		private const double dataToRad = GMath.Tau / ulong.MaxValue;
+		private const ulong acuteThreshold = ulong.MaxValue / 2;
+		private const ulong precision = 0x000000000000FFFF;
+        private ulong _data;
 
 		/// <summary>
 		/// Represents an angle of zero.
@@ -35,9 +36,9 @@ namespace GRaff
 		/// <summary>
 		/// Represents the largest representable angle that is less than a full turn.
 		/// </summary>
-		public static readonly Angle MaxAngle = new Angle(UInt32.MaxValue);
+		public static readonly Angle MaxAngle = new Angle(ulong.MaxValue);
 
-		private Angle(uint data)
+		private Angle(ulong data)
 		{
 			_data = data;
 		}
@@ -47,14 +48,14 @@ namespace GRaff
 		/// </summary>
 		/// <param name="radians">The angle, in radians.</param>
 		/// <returns>the created GRaff.Angle</returns>
-		public static Angle Rad(double radians) { return new Angle(GMath.RoundUInt((radians * radToData) % UInt32.MaxValue)); }
+		public static Angle Rad(double radians) { return new Angle(GMath.RoundULong((radians * radToData) % ulong.MaxValue)); }
 
 		/// <summary>
 		/// Creates a GRaff.Angle with a value specified in degrees.
 		/// </summary>
 		/// <param name="degrees">The angle, in degrees</param>
 		/// <returns>the created GRaff.Angle</returns>
-		public static Angle Deg(double degrees) { return new Angle(GMath.RoundUInt((degrees * degToData) % UInt32.MaxValue)); }
+		public static Angle Deg(double degrees) { return new Angle(GMath.RoundULong((degrees * degToData) % ulong.MaxValue)); }
 
 		
 		/// <summary>
@@ -117,7 +118,7 @@ namespace GRaff
 		/// <param name="a1">The first GRaff.Angle to compute the acute angle with.</param>
 		/// <param name="a2">The second GRaff.Angle to compute the acute angle with.</param>
 		/// <returns>The acute angle between the two angles.</returns>
-		public static Angle Acute(Angle a1, Angle a2) { return unchecked(new Angle((a1._data - a2._data < acuteThreshold) ? (a1._data - a2._data) : (a2._data - a1._data))); }
+		public static Angle Acute(Angle a1, Angle a2) { return unchecked(new Angle((a1._data - a2._data < acuteThreshold) ? (a1._data - a2._data) : (a2._data - a1._data - 1))); }
 
 		private static Angle _acute(double d)
 		{
@@ -132,7 +133,7 @@ namespace GRaff
 		/// Converts this GRaff.Angle to a human-readable string, showing the value in degrees.
 		/// </summary>
 		/// <returns>A string that represents this GRaff.Angle</returns>
-		public override string ToString() { return String.Format("{0}\u00B0", Degrees); }
+		public override string ToString() { return String.Format("{0:0.############}\u00B0", Degrees); }
 
 		/// <summary>
 		/// Specifies whether this GRaff.Angle is equal to the specified System.Object.
@@ -148,20 +149,20 @@ namespace GRaff
 		public override int GetHashCode() { return _data.GetHashCode(); }
 
 		/// <summary>
-		/// Compares two GRaff.Angle objects. The result specifies whether they are equal.
+		/// Compares two GRaff.Angle structures. The result specifies whether they are equal.
 		/// </summary>
 		/// <param name="left">The first GRaff.Angle to compare.</param>
 		/// <param name="right">The second GRaff.Angle to compare.</param>
 		/// <returns>true if the values of the two GRaff.Angle structures are equal.</returns>
-		public static bool operator ==(Angle left, Angle right) { return (left._data == right._data); }
+		public static bool operator ==(Angle left, Angle right) { return (left._data - right._data <= precision) || (right._data - left._data <= precision); }
 
 		/// <summary>
-		/// Compares two GRaff.Angle objects. The result specifies whether they are unequal.
+		/// Compares two GRaff.Angle structures. The result specifies whether they are unequal.
 		/// </summary>
 		/// <param name="left">The first GRaff.Angle to compare.</param>
 		/// <param name="right">The second GRaff.Angle to compare.</param>
 		/// <returns>true if the values of the two GRaff.Angle structures are unequal.</returns>
-		public static bool operator !=(Angle left, Angle right) { return (left._data != right._data); }
+		public static bool operator !=(Angle left, Angle right) { return !(left == right); }
 
 
 		/// <summary>

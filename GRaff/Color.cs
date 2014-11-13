@@ -84,7 +84,7 @@ namespace GRaff
 		/// </summary>
 		/// <param name="colors">An array of GRaff.Color structures that will be merged.</param>
 		/// <returns>The average of the specified GRaff.Color structures.</returns>
-		public static Color Merge(params Color[] colors)
+		public static Color Merge(Color[] colors)
 		{
 			if (colors == null) throw new ArgumentNullException("colors", "Cannot be null");
 			if (colors.Length == 0) throw new ArgumentException("Must have at least one element", "colors");
