@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Windows.Threading;
 using GRaff.Synchronization;
-
+using GRaff.Synchronization;
 
 namespace GRaff
 {
@@ -11,7 +11,7 @@ namespace GRaff
 	{
 		private static List<AsyncEventArgs> _queuedEvents = new List<AsyncEventArgs>();
 		private static List<Exception> _exceptions = new List<Exception>();
-		private static AsyncCatchContext _catcher = new AsyncCatchContext();
+		private static CatchContext _catcher = new CatchContext();
 
 		public static Dispatcher MainThreadDispatcher
 		{
@@ -64,6 +64,11 @@ namespace GRaff
 					try
 					{
 						processingEvents[i].Action();
+					}
+					catch (AsyncException)
+					{
+#warning Throwing a custom AsyncException should throw a wrapped AsyncException?
+						throw; 
 					}
 					catch (Exception ex)
 					{

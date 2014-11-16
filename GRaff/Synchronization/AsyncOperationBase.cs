@@ -1,57 +1,91 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Collections.Concurrent;
+using System.Diagnostics;
 
 namespace GRaff.Synchronization
 {
 	public abstract class AsyncOperationBase
 	{
-		protected AsyncOrchestrator _orchestrator;
+		protected AsyncOperationBase _preceedingOperation = null;
+		protected ConcurrentQueue<AsyncOperationBase> _continuations = new ConcurrentQueue<AsyncOperationBase>();
+		protected AsyncEventArgs _actionHandle;
+		internal AsyncOperationResult _result;	 /*C#6.0*/
 
-		internal AsyncOperationBase(AsyncOrchestrator underlyingHandler)
-		{
-			_orchestrator = underlyingHandler;
-		}
+		public AsyncOperationState State { get; protected set; }
+		public bool IsDone { get; private set; }
 
-		public bool IsHandled { get; private set; } = false;
-
-		public void Wait()
-		{
-			IsHandled = true;
-			_orchestrator.Wait();
-		}
 
 		public void Abort()
 		{
-			IsHandled = true;
-			_orchestrator.Abort();
+			if (State == AsyncOperationState.Aborted)
+				return;
+			if (State == AsyncOperationState.Dispatched)
+				_actionHandle.Resolve();
+
+			State = AsyncOperationState.Aborted;
+
+			foreach (var continuation in _continuations)
+				continuation.Abort();
 		}
 
-		protected AsyncOperation _pass()
+		public void Done()
 		{
-			if (IsHandled)
-				throw new InvalidOperationException("Trying to add a new continuation action to a GRaff.Synchronization.AsyncOperation that already has a continuation.");
-
-			IsHandled = true;
-			return new AsyncOperation(_orchestrator);
+			if (_continuations.Count > 0) throw new InvalidOperationException("Cannot mark an operation as Done if it has continuations.");
+			if (_result != null && !_result.IsSuccessful) throw new AsyncException((Exception)_result.Value);
+			IsDone = true;
 		}
 
-		protected AsyncOperation<TPass> _pass<TPass>()
+		protected void assertState(string verb)
 		{
-			if (IsHandled)
-				throw new InvalidOperationException("Trying to add a new continuation action to a GRaff.Synchronization.AsyncOperation that already has a continuation.");
-
-			IsHandled = true;
-			return new AsyncOperation<TPass>(_orchestrator);
+			if (State == AsyncOperationState.Aborted) throw new InvalidOperationException("Cannot " + verb + " an aborted operation.");
+			if (IsDone) throw new InvalidOperationException("Cannot " + verb + " a done operation.");
 		}
 
-		public AsyncOperation Catch<TException>(Action<TException> catchHandler)
-			where TException : Exception
+		protected void then(AsyncOperationBase continuation)
 		{
-			_orchestrator.Catch(catchHandler);
-			return _pass();
+			assertState("add a continuation to");
+			if (State == AsyncOperationState.Completed)
+				continuation.Dispatch(_result);
+
+			_continuations.Enqueue(continuation);
+		}
+
+		internal abstract void Dispatch(AsyncOperationResult result);
+
+		protected void passToAll()
+		{
+			AsyncOperationBase continuation;
+			while (_continuations.TryDequeue(out continuation))
+				continuation.Dispatch(_result);
+		}
+
+		protected void wait()
+		{
+			switch (State)
+			{
+				case AsyncOperationState.Aborted:
+					throw new InvalidOperationException("Cannot wait for an operation that has been aborted.");
+
+				case AsyncOperationState.Failed:
+					throw new AsyncException((Exception)_result.Value);
+
+				case AsyncOperationState.Initial:
+					Debug.Assert(_preceedingOperation != null);
+					_preceedingOperation.wait();
+					goto case AsyncOperationState.Dispatched;
+
+				case AsyncOperationState.Dispatched:
+					_actionHandle.Resolve();
+					_actionHandle.Action();
+					passToAll();
+					goto case AsyncOperationState.Completed;
+
+				case AsyncOperationState.Completed:
+					return;
+
+				default:
+					throw new NotSupportedException("Unsupported AsyncOperationState '" + Enum.GetName(typeof(AsyncOperationState), State) + "'");
+			}
 		}
 	}
 }

@@ -9,35 +9,16 @@ namespace GRaff
 	public static partial class Async
 	{
 		/*C#6.0*/
-		public static AsyncOperation Operation()
-		{
-			return new AsyncOperation();
-		}
+
 
 		public static AsyncOperation Run(Action action)
 		{
-			var newOperation = new AsyncOperation();
-			return newOperation.Then(action);
+			return new AsyncOperation().Then(action);
 		}
 
-		public static AsyncOperation Run(Func<Task> action)
+		public static AsyncOperation<TPass> Run<TPass>(Func<TPass> action)
 		{
-			var newOperation = new AsyncOperation();
-			return newOperation.ThenAsync(action);
+			return new AsyncOperation().Then(action);
 		}
-
-		public static AsyncOperation<TOutput> Run<TOutput>(Func<TOutput> action)
-		{
-			var newOperation = new AsyncOperation();
-			return newOperation.Then(action);
-		}
-
-		public static AsyncOperation<TOutput> Run<TOutput>(Func<Task<TOutput>> action)
-		{
-			var newOperation = new AsyncOperation();
-			return newOperation.ThenAsync(action);
-		}
-
-
 	}
 }

@@ -75,20 +75,16 @@
     <Compile Include="Particles\AttractionBehavior.cs" />
     <Compile Include="Particles\AttractionProperty.cs" />
     <Compile Include="AssetBatch.cs" />
-    <Compile Include="Synchronization2\AsyncEventArgs.cs" />
-    <Compile Include="Synchronization2\AsyncOperation.cs" />
-    <Compile Include="Synchronization\AsyncCatchContext.cs" />
     <Compile Include="Synchronization\AsyncEventArgs.cs" />
     <Compile Include="Synchronization\AsyncException.cs" />
-    <Compile Include="Synchronization\MergeOrganizer.cs" />
-    <Compile Include="Synchronization\ParallelTaskHandle.cs" />
-    <Compile Include="Synchronization\AsyncOperationBase.cs" />
-    <Compile Include="Synchronization\IAsyncTaskHandle.cs" />
     <Compile Include="Synchronization\AsyncOperation.cs" />
-    <Compile Include="Synchronization\AsyncWorker.cs" />
-    <Compile Include="Synchronization\AsyncOrchestrator.cs" />
-    <Compile Include="Synchronization\IAsyncTaskFactory.cs" />
+    <Compile Include="Synchronization\AsyncOperationBase.cs" />
+    <Compile Include="Synchronization\AsyncOperationState.cs" />
+    <Compile Include="Synchronization\AsyncOperationResult.cs" />
+    <Compile Include="Synchronization\IAsyncIn.cs" />
     <Compile Include="Synchronization\IAsyncOperation.cs" />
+    <Compile Include="Synchronization\CatchContext.cs" />
+    <Compile Include="Synchronization\IAsyncOut.cs" />
     <Compile Include="Background.cs" />
     <Compile Include="Color.cs" />
     <Compile Include="Color.Definitions.cs" />
@@ -159,11 +155,6 @@
     <Compile Include="SoundState.cs" />
     <Compile Include="Sprite.cs" />
     <Compile Include="OpenGL\Surface.cs" />
-    <Compile Include="Synchronization\MergeTaskFactory.cs" />
-    <Compile Include="Synchronization\BranchTaskFactory.cs" />
-    <Compile Include="Synchronization\SingleTaskFactory.cs" />
-    <Compile Include="Synchronization\SerialTaskHandle.cs" />
-    <Compile Include="Synchronization\SpecificThreadTaskScheduler.cs" />
     <Compile Include="Texture.cs" />
     <Compile Include="TextureBuffer.cs" />
     <Compile Include="Time.cs" />
@@ -187,7 +178,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Compile Include="Synchronization\AsyncOperation.Generic.cs" />
+  </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>

@@ -1,34 +1,32 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace GRaff.Synchronization
 {
 	public interface IAsyncOperation
 	{
+		AsyncOperationState State { get; }
 		IAsyncOperation Then(Action action);
-		IAsyncOperation ThenAsync(Func<Task> action);
-		IAsyncOperation<TPass> Then<TPass>(Func<TPass> action);
-		IAsyncOperation<TPass> ThenAsync<TPass>(Func<Task<TPass>> action);
-		IAsyncOperation<TPass> ThenBranch<TPass>(Func<IEnumerable<TPass>> action);
-		IAsyncOperation<TPass> ThenBranchAsync<TPass>(Func<IEnumerable<Task<TPass>>> action);
-		IAsyncOperation ThenMerge(Action action);
-		IAsyncOperation ThenMergeAsync(Func<Task> action);
-		IAsyncOperation<TPass> ThenMerge<TPass>(Func<TPass> action);
-		IAsyncOperation<TPass> ThenMergeAsync<TPass>(Func<Task<TPass>> action);
+		IAsyncOperation<TNext> Then<TNext>(Func<TNext> action);
+		IAsyncOperation Catch<TException>(Action<TException> handler);
+		IAsyncOperation CatchThen<TException>(Action<TException> handler);
+		void Abort();
+
+		IAsyncOperation<TNext> ThenBranch<TNext>(Func<IEnumerable<TNext>> action);
 	}
 
-	public interface IAsyncOperation<TInput>
+	public interface IAsyncOperation<out TPass>
 	{
-		IAsyncOperation Then(Action<TInput> action);
-		IAsyncOperation ThenAsync(Func<TInput, Task> action);
-		IAsyncOperation<TPass> Then<TPass>(Func<TInput, TPass> action);
-		IAsyncOperation<TPass> ThenAsync<TPass>(Func<TInput, Task<TPass>> action);
-		IAsyncOperation<TPass> ThenBranch<TPass>(Func<TInput, IEnumerable<TPass>> action);
-		IAsyncOperation<TPass> ThenBranchAsync<TPass>(Func<TInput, IEnumerable<Task<TPass>>> action);
-		IAsyncOperation ThenMerge(Action<IEnumerable<TInput>> action);
-		IAsyncOperation ThenMergeAsync(Func<IEnumerable<TInput>, Task> action);
-		IAsyncOperation<TPass> ThenMerge<TPass>(Func<IEnumerable<TInput>, TPass> action);
-		IAsyncOperation<TPass> ThenMergeAsync<TPass>(Func<IEnumerable<TInput>, Task<TPass>> action);
+		IAsyncOperation Then(Action<TPass> action);
+		IAsyncOperation<TNext> Then<TNext>(Func<TPass, TNext> action);
+		IAsyncOperation<TPass> Catch<TException>(Action<TException> handler);
+		IAsyncOperation<TPass> CatchThen<TException, TNext>(Func<TException, TNext> handler);
+		void Abort();
+
+		IAsyncOperation<TNext> ThenBranch<TNext>(Func<TPass, IEnumerable<TNext>> acion);
+
 	}
 }
