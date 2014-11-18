@@ -52,6 +52,7 @@
   <ItemGroup>
     <Compile Include="EditorItem.cs" />
     <Compile Include="ElementView.cs" />
+    <Compile Include="Example.cs" />
     <Compile Include="GiraffeEditor.cs" />
     <Compile Include="EditorConstructorAttribute.cs" />
     <Compile Include="EditorPropertyAttribute.cs" />
@@ -92,6 +93,12 @@
       <Project>{64447cf0-9d21-4b49-b12b-7830bee354c7}</Project>
       <Name>GRaff</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Examle.xml">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="TextFile1.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

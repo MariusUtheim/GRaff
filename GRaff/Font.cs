@@ -2,9 +2,16 @@ using System;
 
 namespace GRaff
 {
-	public class Font
+	public class FontCharacter
 	{
-		public TextureBuffer Texture { get; private set; }
+		public Texture Texture { get; private set; }
+
+		public int X { get; private set; }
+		public int Y { get; private set; }
+		public int Width { get; private set; }
+		public int Height { get; private set; }
+		public int XOffset { get; private set; }
+		public int YOffset { get; private set; }
 
 		public double Height { get; private set; }
 
