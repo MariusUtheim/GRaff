@@ -109,6 +109,16 @@ namespace GRaff.OpenGL
 			Render(new[] { p1, p2 }, new[] { col1, col2 }, PrimitiveType.Lines);
 		}
 
+		public void DrawTriangle(Color col1, Color col2, Color col3, Point p1, Point p2, Point p3)
+		{
+			Render(new[] { p1, p2, p3 }, new[] { col1, col2, col3 }, PrimitiveType.LineStrip);
+		}
+
+		public void FillTriangle(Color col1, Color col2, Color col3, Point p1, Point p2, Point p3)
+		{
+			Render(new[] { p1, p2, p3 }, new[] { col1, col2, col3 }, PrimitiveType.Triangles);
+		}
+
 		public void DrawRectangle(Color col1, Color col2, Color col3, Color col4, double x, double y, double w, double h)
 		{
 			Render(new[] { new Point(x, y), new Point(x + w, y), new Point(x + w, y + h), new Point(x, y + h) },
@@ -181,7 +191,7 @@ namespace GRaff.OpenGL
 
 		}
 
-		public void DrawText(Font font, Color color, string text, double x, double y)
+		public void DrawText(FontCharacter font, Color color, string text, double x, double y)
 		{
 			throw new NotImplementedException();
 			/*

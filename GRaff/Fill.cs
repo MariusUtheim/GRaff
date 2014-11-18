@@ -28,6 +28,26 @@ namespace GRaff
 			Draw.CurrentSurface.FillCircle(col1, col2, new Point(x, y), radius);
 		}
 
+		public static void Triangle(Color color, double x1, double y1, double x2, double y2, double x3, double y3)
+		{
+			Draw.CurrentSurface.FillTriangle(color, color, color, new Point(x1, y1), new Point(x2, y2), new Point(x3, y3));
+		}
+
+		public static void Triangle(Color color, Point p1, Point p2, Point p3)
+		{
+			Draw.CurrentSurface.FillTriangle(color, color, color, p1, p2, p3);
+		}
+
+		public static void Triangle(Color col1, Color col2, Color col3, double x1, double y1, double x2, double y2, double x3, double y3)
+		{
+			Draw.CurrentSurface.FillTriangle(col1, col2, col3, new Point(x1, y1), new Point(x2, y2), new Point(x3, y3));
+		}
+
+		public static void Triangle(Color col1, Color col2, Color col3, Point p1, Point p2, Point p3)
+		{
+			Draw.CurrentSurface.FillTriangle(col1, col2, col3, p1, p2, p3);
+		}
+
 		public static void Rectangle(Color color, double x, double y, double width, double height)
 		{
 			Draw.CurrentSurface.FillRectangle(color, color, color, color, x, y, width, height);

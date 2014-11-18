@@ -43,6 +43,27 @@ namespace GRaff
 			CurrentSurface.DrawCircle(color, location, radius);
 		}
 
+		public static void Triangle(Color color, double x1, double y1, double x2, double y2, double x3, double y3)
+		{
+			Draw.CurrentSurface.DrawTriangle(color, color, color, new Point(x1, y1), new Point(x2, y2), new Point(x3, y3));
+		}
+
+		public static void Triangle(Color color, Point p1, Point p2, Point p3)
+		{
+			Draw.CurrentSurface.DrawTriangle(color, color, color, p1, p2, p3);
+		}
+
+		public static void Triangle(Color col1, Color col2, Color col3, double x1, double y1, double x2, double y2, double x3, double y3)
+		{
+			Draw.CurrentSurface.DrawTriangle(col1, col2, col3, new Point(x1, y1), new Point(x2, y2), new Point(x3, y3));
+		}
+
+		public static void Triangle(Color col1, Color col2, Color col3, Point p1, Point p2, Point p3)
+		{
+			Draw.CurrentSurface.DrawTriangle(col1, col2, col3, p1, p2, p3);
+		}
+
+
 		public static void Rectangle(Color color, double x, double y, double width, double height)
 		{
 			CurrentSurface.DrawRectangle(color, color, color, color, x, y, width, height);
@@ -106,7 +127,7 @@ namespace GRaff
 			CurrentSurface.DrawImage(image);
 		}
 
-		public static void Text(Font font, string text, double x, double y)
+		public static void Text(FontCharacter font, string text, double x, double y)
 		{
 			CurrentSurface.DrawText(font, Color.Black, text, x, y);
 		}

@@ -7,7 +7,7 @@ using GRaff.Synchronization;
 
 namespace GRaff
 {
-	public  static partial class Async
+	public static class Async
 	{
 		private static List<AsyncEventArgs> _queuedEvents = new List<AsyncEventArgs>();
 		private static List<Exception> _exceptions = new List<Exception>();
@@ -27,6 +27,16 @@ namespace GRaff
 		public static TaskScheduler TaskScheduler
 		{
 			get; internal set;
+		}
+
+		public static AsyncOperation Run(Action action)
+		{
+			return new AsyncOperation().Then(action);
+		}
+
+		public static AsyncOperation<TPass> Run<TPass>(Func<TPass> action)
+		{
+			return new AsyncOperation().Then(action);
 		}
 
 		public static void ThrowException(Exception ex)
