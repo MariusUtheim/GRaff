@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Threading;
-using GRaff.OpenGL;
+using GRaff.Graphics;
 using OpenTK;
 using OpenTK.Graphics;
 using OpenTK.Graphics.ES30;
@@ -71,8 +71,8 @@ namespace GRaff
 				Thread.CurrentThread.Name = "Giraffe";
 				Async.MainThreadDispatcher = System.Windows.Threading.Dispatcher.CurrentDispatcher;
 				Draw.CurrentSurface = new Surface(initialRoom.GetWidth(), initialRoom.GetHeight());
-				OpenGL._Initializer.Initialize();
-				OpenAL._Initializer.Initialize();
+				Graphics._Initializer.Initialize();
+				Audio._Initializer.Initialize();
 				initialRoom.Enter();
 				Background.Initialize();
 				if (gameStart != null)
