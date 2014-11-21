@@ -125,7 +125,7 @@ namespace GRaff
 			if (!_disposed)
 			{
 				_disposed = true;
-				if (OpenGL.Context.IsAlive)
+				if (Graphics.Context.IsAlive)
 					GL.DeleteTexture(_id);
 				else
 					Async.Run(() => GL.DeleteTexture(_id));

@@ -8,16 +8,21 @@ namespace GRaff.Particles
 {
 	public sealed class Particle
 	{
-		public Particle(double x, double y, ParticleType type)
+		internal List<IParticleProperty> Properties = new List<IParticleProperty>();
+
+		public Particle(double x, double y, int lifetime)
 		{
-			Properties = new List<IParticleProperty>();
-			TransformationMatrix = Matrix.Translation(x, y);
+			Location = new Point(x, y);
+			TransformationMatrix = new LinearMatrix();
 			Color = Color.White;
-			TotalLifetime = type.Lifetime;
-			type.Initialize(this);
+			TotalLifetime = lifetime;
 		}
 
-		public Matrix TransformationMatrix { get; set; }
+		public Point Location { get; set; }
+
+		public Vector Velocity { get; set; }
+
+		public LinearMatrix TransformationMatrix { get; set; }
 
 		public Color Color { get; set; }
 
@@ -25,18 +30,20 @@ namespace GRaff.Particles
 
 		public int Lifetime { get; set; }
 
-		internal List<IParticleProperty> Properties;
 
 		internal bool Update()
 		{
 			if (++Lifetime >= TotalLifetime)
 				return false;
+
+			Location += Velocity;
 			foreach (var property in Properties)
 				property.Update(this);
+
 			return true;
 		}
 
-		internal void AddProperty(IParticleProperty property)
+		public void AttachProperty(IParticleProperty property)
 		{
 			Properties.Add(property);
 		}

@@ -6,18 +6,11 @@ using System.Threading.Tasks;
 
 namespace GRaff.Particles
 {
-	public class ColorBehavior : IParticleBehavior
+	public class FadeBehavior : IParticleBehavior
 	{
-		private Color _color;
-
-		public ColorBehavior(Color color)
-		{
-			this._color = color;
-		}
-
 		public void AttachTo(Particle particle)
 		{
-			particle.Color = _color;
+			particle.AttachProperty(new FadeProperty());
 		}
 	}
 }

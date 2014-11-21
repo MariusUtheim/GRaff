@@ -8,25 +8,8 @@ namespace GRaff.Particles
 {
 	public class RotationBehavior : IParticleBehavior
 	{
-		private Angle _maxAngle;
-		private Angle _minAngle;
-		private Angle _maxRotation;
-		private Angle _minRotation;
-
-		class RotationProperty : IParticleProperty
-		{
-			private Angle _rotation;
-
-			public RotationProperty(Angle rotation)
-			{
-				this._rotation = rotation;
-			}
-
-			public void Update(Particle particle)
-			{
-				particle.TransformationMatrix.Rotate(_rotation);
-			}
-		}
+		Angle _maxAngle, _minAngle;
+		Angle _maxRotation, _minRotation;
 
 		public RotationBehavior(Angle minAngle, Angle maxAngle, Angle minRotation, Angle maxRotation)
 		{
@@ -45,17 +28,11 @@ namespace GRaff.Particles
 		{ }
 
 
-		public IParticleProperty Generate()
-		{
-			if (_minRotation == Angle.Zero && _maxRotation == Angle.Zero)
-				return null;
-			else
-				return new RotationProperty(GRandom.Angle(_minRotation, _maxRotation));
-		}
-
-		public void Initialize(Particle particle)
+		public void AttachTo(Particle particle)
 		{
 			particle.TransformationMatrix.Rotate(GRandom.Angle(_minAngle, _maxAngle));
+			if (_minRotation != Angle.Zero || _maxRotation != Angle.Zero)
+				particle.AttachProperty(new RotationProperty(GRandom.Angle(_minRotation, _maxRotation)));
 		}
 	}
 }

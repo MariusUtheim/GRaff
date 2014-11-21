@@ -1,4 +1,4 @@
-﻿using GRaff.OpenGL;
+﻿using GRaff.Graphics;
 
 
 namespace GRaff

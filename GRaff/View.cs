@@ -1,7 +1,7 @@
 ﻿using System;
 using OpenTK;
 using OpenTK.Graphics.ES30;
-using GRaff.OpenGL;
+using GRaff.Graphics;
 
 namespace GRaff
 {

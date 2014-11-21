@@ -5,16 +5,10 @@ namespace GRaff.Particles
 	public interface IParticleBehavior
 	{
 		/// <summary>
-		/// Initializes a new GRaff.Particle with the custom behavior of this GRaff.IParticleBehavior
+		/// Attaches this GRaff.Particles.IParticleBehavior to the specified GRaff.Particles.Particle. This could include attaching properties to that GRaff.Particles.Particle.
 		/// </summary>
 		/// <param name="particle">The GRaff.Particle to initialize</param>
-		void Initialize(Particle particle);
+		void AttachTo(Particle particle);
 
-		/// <summary>
-		/// Generates a new GRaff.IParticleProperty based on this GRaff.IParticleBehavior.
-		/// If null is returned, the GRaff.Particle will not add any 
-		/// </summary>
-		/// <returns>A new GRaff.IParticleProperty based on this GRaff.IParticleBehavior</returns>
-		IParticleProperty Generate();
 	}
 }

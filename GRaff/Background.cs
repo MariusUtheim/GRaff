@@ -1,18 +1,18 @@
 ﻿using System;
 using System.Runtime.InteropServices;
-using GRaff.OpenGL;
+using GRaff.Graphics;
 
 namespace GRaff
 {
 	public sealed class Background : GameElement
 	{
-		private GLRenderSystem _renderSystem;
+		private TexturedRenderSystem _renderSystem;
 		private readonly IntPtr _4 = new IntPtr(4 * Marshal.SizeOf(typeof(Point)));
 
 		public Background()
 		{
 			Depth = Int32.MinValue;
-			_renderSystem = new GLRenderSystem();
+			_renderSystem = new TexturedRenderSystem();
 			_renderSystem.SetColors(UsageHint.StaticDraw, Color.White, Color.White, Color.White, Color.White);
 		}
 

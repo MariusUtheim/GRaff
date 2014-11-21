@@ -11,23 +11,6 @@ namespace GRaff.Particles
 		private double _xScale, _yScale;
 		private double _xScaleFactor, _yScaleFactor;
 
-		class ScaleProperty : IParticleProperty
-		{
-			private double _xScaleFactor;
-			private double _yScaleFactor;
-
-			public ScaleProperty(double xScaleFactor, double yScaleFactor)
-			{
-				this._xScaleFactor = xScaleFactor;
-				this._yScaleFactor = yScaleFactor;
-			}
-
-			public void Update(Particle particle)
-			{
-				particle.TransformationMatrix.Scale(_xScaleFactor, _yScaleFactor);
-			}
-		}
-
 		public ScaleBehavior(double xScale = 1, double yScale = 1, double xScaleFactor = 1, double yScaleFactor = 1)
 		{
 			_xScale = xScale;
@@ -36,17 +19,12 @@ namespace GRaff.Particles
 			this._yScaleFactor = yScaleFactor;
 		}
 
-		public void Initialize(Particle particle)
+		public void AttachTo(Particle particle)
 		{
 			particle.TransformationMatrix.Scale(_xScale, _yScale);
-		}
 
-		public IParticleProperty Generate()
-		{
-			if (_xScaleFactor == 1 && _yScaleFactor == 1)
-				return null;
-			else
-				return new ScaleProperty(_xScaleFactor, _yScaleFactor);
+			if (_xScaleFactor != 1 || _yScaleFactor == 1)
+				particle.AttachProperty(new ScaleProperty(_xScaleFactor, _yScaleFactor));
 		}
 	}
 }

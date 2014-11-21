@@ -10,15 +10,10 @@ namespace GRaff.Particles
 	{
 		private Angle t = Angle.Zero;
 
-		public IParticleProperty Generate()
+		public void AttachTo(Particle particle)
 		{
-			t += Angle.Deg(GMath.Tau / 3.0);
-			return new LinearMotionProperty(new Vector(5, t));
-		}
-
-		public void Initialize(Particle particle)
-		{
-			return;
+			t += Angle.Deg(3.0);
+			particle.Velocity = new Vector(5, t);
 		}
 	}
 }
