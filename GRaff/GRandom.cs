@@ -11,17 +11,20 @@ namespace GRaff
 	/// These methods encapsulate an instance of the System.Random class, initialized with a seed value that is
 	/// dependant on when the game started. 
 	/// </summary>
+	/// <remarks>The extension methods are not thread-safe. The other static methods use the same System.Random object to generate random numbers, using serialized thread-safe access.</remarks>
 	public static class GRandom
 	{
 #region Static calls
 		/*C#6.0*/
 		private static Random _rnd = new Random(Time.StartTime);
 
+		public static Random Source { get { return _rnd; } }
+
 		/// <summary>
 		/// Returns a nonnegative random number.
 		/// </summary>
 		/// <returns>An integer greater than or equal to zero and less than System.Int32.MaxValue.</returns>
-		public static int Integer() { return _rnd.Integer(); }
+		public static int Integer() { lock (_rnd) return _rnd.Integer(); }
 
 		
 		/// <summary>
@@ -30,7 +33,7 @@ namespace GRaff
 		/// <param name="maxValue">The exclusive upper bound of the random number to be generated. maxValue must be greater than or equal to zero.</param>
 		/// <returns>An integer greater than or equal to zero and less than maxValue. If however maxValue is zero, then 0 is returned.</returns>
 		/// <exception cref="System.ArgumentOutOfRangeException">maxValue is less than zero.</exception>
-		public static int Integer(int maxValue) { return _rnd.Integer(maxValue); }
+		public static int Integer(int maxValue) { lock (_rnd) return _rnd.Integer(maxValue); }
 	
 
 		/// <summary>
@@ -40,14 +43,14 @@ namespace GRaff
 		/// <param name="maxValue">The exclusive upper bound of the random number to be generated. maxValue must be greater than or equal to minValue.</param>
 		/// <returns>An integer greater than or equal to minValue and less than maxValue. If however maxValue and minValue are equal, that value is returned.</returns>
 		/// <exception cref="System.ArgumentOutOfRangeException">minValue is greater than maxValue</exception>
-		public static int Integer(int minValue, int maxValue) { return _rnd.Integer(minValue, maxValue); }
+		public static int Integer(int minValue, int maxValue) { lock (_rnd) return _rnd.Integer(minValue, maxValue); }
 		
 
 		/// <summary>
 		/// Returns a random number between 0.0 and 1.0 exclusive.
 		/// </summary>
 		/// <returns>A number greater than or equal to 0.0 and less than 1.0.</returns>
-		public static double Double() { return _rnd.Double(); }
+		public static double Double() { lock (_rnd) return _rnd.Double(); }
 		
 
 		/// <summary>
@@ -55,7 +58,7 @@ namespace GRaff
 		/// </summary>
 		/// <param name="boundaryValue">The exclusive boundary value. The returned value will have the same sign as this number.</param>
 		/// <returns>A number between 0.0 inclusive and boundaryValue exclusive.</returns>
-		public static double Double(double boundaryValue) { return _rnd.Double(boundaryValue); }
+		public static double Double(double boundaryValue) { lock (_rnd) return _rnd.Double(boundaryValue); }
 		
 
 		/// <summary>
@@ -65,7 +68,7 @@ namespace GRaff
 		/// <param name="firstValue">The first inclusive bound of the random number returned.</param>
 		/// <param name="secondValue">The second exclusive bound of the random number returned.</param>
 		/// <returns>A number in the specified range.</returns>
-		public static double Double(double firstValue, double secondValue) { return _rnd.Double(firstValue, secondValue); }
+		public static double Double(double firstValue, double secondValue) { lock (_rnd)  return _rnd.Double(firstValue, secondValue); }
 
 		/// <summary>
 		/// Returns a string of random letters with the specified length.
@@ -76,8 +79,9 @@ namespace GRaff
 		public static String String(int length)
 		{
 			StringBuilder stringBuilder = new StringBuilder(length);
-			for (int i = 0; i < length; i++)
-				stringBuilder.Append((char)_rnd.Next('A', 'z'));
+			lock (_rnd)
+				for (int i = 0; i < length; i++)
+					stringBuilder.Append((char)_rnd.Next('A', 'z'));
 			return stringBuilder.ToString();
 		}
 
@@ -86,7 +90,7 @@ namespace GRaff
 		/// I.e. a normally distributed variable with mean 0 and standard deviation 1.
 		/// </summary>
 		/// <returns>A standard normally distributed number.</returns>
-		public static double Gaussian() { return GMath.Sqrt(-2 * GMath.Log(Double())); }
+		public static double Gaussian() { lock (_rnd) return GMath.Sqrt(-2 * GMath.Log(Double())); }
 		
 
 		/// <summary>
@@ -103,13 +107,13 @@ namespace GRaff
 		/// </summary>
 		/// <returns>A unit vector with random direction.</returns>
 		public static Vector Vector() { return new Vector(1, GRandom.Angle()); }
-	
+
 
 		/// <summary>
 		/// Returns a random angle.
 		/// </summary>
 		/// <returns>Returns a random angle.</returns>
-		public static Angle Angle() { return GRaff.Angle.Deg(_rnd.NextDouble() * 360.0); }
+		public static Angle Angle() { lock (_rnd) return GRaff.Angle.Deg(_rnd.NextDouble() * 360.0); }
 		
 
 		/// <summary>
@@ -118,7 +122,7 @@ namespace GRaff
 		/// <param name="lowerBound">The lower bound.</param>
 		/// <param name="upperBound">The upper bound.</param>
 		/// <returns>A random angle in the specified range.</returns>
-		public static Angle Angle(Angle lowerBound, Angle upperBound) { return GRaff.Angle.Deg(lowerBound.Degrees + _rnd.NextDouble() * (upperBound - lowerBound).Degrees); }
+		public static Angle Angle(Angle lowerBound, Angle upperBound) { lock (_rnd) return GRaff.Angle.Deg(lowerBound.Degrees + _rnd.NextDouble() * (upperBound - lowerBound).Degrees); }
 		
 
 		/// <summary>
@@ -134,7 +138,8 @@ namespace GRaff
 			if (items.Length == 0)
 				return default(T);
 			else
-				return items[_rnd.Next(items.Length)];
+				lock (_rnd)
+					return items[_rnd.Next(items.Length)];
 		}
 
 		/// <summary>
@@ -144,10 +149,11 @@ namespace GRaff
 		/// <returns>True with probability p; otherwise, false. If p ≥ 1.0, it always returns true, and if p ≤ 0, it always returns false.</returns>
 		public static bool Probability(double p)
 		{
-			if (_rnd.NextDouble() < p)
-				return true;
-			else
-				return false;
+			lock (_rnd)
+				if (_rnd.NextDouble() < p)
+					return true;
+				else
+					return false;
 		}
 
 		/// <summary>
@@ -166,8 +172,9 @@ namespace GRaff
 				return 0;
 
 			int sum = dice;
-			for (int i = 0; i < dice; i++)
-				sum += GRandom.Integer(sides);
+			lock (_rnd)
+				for (int i = 0; i < dice; i++)
+					sum += _rnd.Integer(sides);
 			return sum;
 		}
 
@@ -178,7 +185,8 @@ namespace GRaff
 		/// <returns>A random GRaff.Color with random RGB channels.</returns>
 		public static Color Color()
 		{
-			return (Color)(0xFF000000 | Integer(0x00FFFFFF));
+			lock (_rnd)
+				return (Color)(0xFF000000 | Integer(0x01000000));
 		}
 
 		#endregion
@@ -236,10 +244,10 @@ namespace GRaff
 		/// Note that Double(a, b) is equivalent to Double(b, a) except inclusivity is reversed.
 		/// </summary>
 		/// <param name="rnd">The System.Random to generate the numbers.</param>
-		/// <param name="firstValue">The first inclusive bound of the random number returned.</param>
-		/// <param name="secondValue">The second exclusive bound of the random number returned.</param>
+		/// <param name="firstValueInclusive">The first inclusive bound of the random number returned.</param>
+		/// <param name="secondValueExclusive">The second exclusive bound of the random number returned.</param>
 		/// <returns>A number in the specified range.</returns>
-		public static double Double(this Random rnd, double firstValue, double secondValue) { return firstValue + rnd.NextDouble() * (secondValue - firstValue); }
+		public static double Double(this Random rnd, double firstValueInclusive, double secondValueExclusive) { return firstValueInclusive + rnd.NextDouble() * (secondValueExclusive - firstValueInclusive); }
 
 		/// <summary>
 		/// Returns a string of random letters with the specified length.
@@ -271,7 +279,7 @@ namespace GRaff
 		/// <param name="mean">The mean of the distribution.</param>
 		/// <param name="std">The standard deviation of the distribution.</param>
 		/// <returns>A normally distributed number.</returns>
-		public static double Gaussian(this Random rnd, double mean, double std) { return std * (rnd.Gaussian() + mean); }
+		public static double Gaussian(this Random rnd, double mean, double std) { return std * rnd.Gaussian() + mean; }
 
 
 		/// <summary>
