@@ -13,27 +13,20 @@ namespace GRaff
 		/// </summary>
 		public static void Frame()
 		{
-			_loopCount++;
+			LoopCount++;
 			_updateFps();
 		}
 
 
-		private static int _loopCount = 0;
 		/// <summary>
 		/// Gets the number of steps that has occurred since the game started.
 		/// </summary>
-		public static int LoopCount()
-		{
-			return _loopCount;
-		}
+		public static int LoopCount { get; private set; }
 
 		/// <summary>
 		/// Gets the number of milliseconds since the computer started.
 		/// </summary>
-		public static int MachineTime()
-		{
-			return Environment.TickCount;
-		}
+		public static int MachineTime { get { return Environment.TickCount; } }
 
 		/// <summary>
 		/// Gets the machine time at the time the game was started.
@@ -43,10 +36,8 @@ namespace GRaff
 		/// <summary>
 		/// Gets the number of milliseconds since the game started.
 		/// </summary>
-		public static int GameTime()
-		{
-			return MachineTime() - StartTime;
-		}
+		public static int GameTime { get { return MachineTime - StartTime; } }
+		
 
 		private static int _fps;
 		private static int _currentFps = 0;
@@ -78,9 +69,6 @@ namespace GRaff
 		/// <summary>
 		/// Gets the numer of frames per second at which the game is actually running.
 		/// </summary>
-		public static int FPS()
-		{
-			return _fps;
-		}
+		public static int FPS { get { return _fps; } }
 	}
 }

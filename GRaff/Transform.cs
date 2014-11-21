@@ -60,10 +60,10 @@ namespace GRaff
 		public double YShear { get; set; } = 0;
 
 
-		public Matrix GetMatrix()
+		public AffineMatrix GetMatrix()
 		{
 			double c = GMath.Cos(Rotation), s = GMath.Sin(Rotation);
-			return new Matrix(
+			return new AffineMatrix(
 				XScale * (c - s * YShear), YScale * (-s + c * XShear), X,
 				XScale * (s + c * YShear), YScale * (c + s * XShear), Y
 				);
@@ -99,7 +99,7 @@ namespace GRaff
 
 		public Point[] Rectangle(Rectangle rect)
 		{
-			Matrix T = GetMatrix();
+			AffineMatrix T = GetMatrix();
 			return new Point[] {
 				T * this.Point(rect.Left, rect.Top),
 				T * this.Point(rect.Right, rect.Top),
@@ -111,7 +111,7 @@ namespace GRaff
 		public Polygon Polygon(Polygon polygon)
 		{
 			if (polygon == null) return null;
-			Matrix T = GetMatrix();
+			AffineMatrix T = GetMatrix();
 			return new GRaff.Polygon(polygon.Vertices.Select(v => T * v));
 		}
 	}

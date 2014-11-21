@@ -41,7 +41,7 @@ namespace GRaff
 		/// <param name="gameStart">An action that is performed when the game begins. If omitted or set to null, no action is performed.</param>
 		public static void Run(string[] args, Room initialRoom, double fps, Action gameStart)
 		{
-			Time.StartTime = Time.MachineTime();
+			Time.StartTime = Time.MachineTime;
 			Window = new GameWindow(initialRoom.GetWidth(), initialRoom.GetHeight(), GraphicsMode.Default, "Giraffe", GameWindowFlags.Default, DisplayDevice.Default);
 			Window.WindowBorder = WindowBorder.Fixed;
 
@@ -69,7 +69,6 @@ namespace GRaff
 
 			Window.Load += (sender, e) => {
 				Thread.CurrentThread.Name = "Giraffe";
-				Async.TaskScheduler = System.Threading.Tasks.TaskScheduler.FromCurrentSynchronizationContext();
 				Async.MainThreadDispatcher = System.Windows.Threading.Dispatcher.CurrentDispatcher;
 				Draw.CurrentSurface = new Surface(initialRoom.GetWidth(), initialRoom.GetHeight());
 				OpenGL._Initializer.Initialize();
@@ -79,18 +78,11 @@ namespace GRaff
 				if (gameStart != null)
 					gameStart();
 				Window.VSync = VSyncMode.On;
-				GL.Enable(EnableCap.Blend);
-				GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
 			};
 
 			Window.Run(fps, fps);
 		}
 
-
-		public static bool IsAlive
-		{
-			get { return OpenTK.Graphics.GraphicsContext.CurrentContext != null; }
-		}
 
 		/// <summary>
 		/// Quits the game.

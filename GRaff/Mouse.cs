@@ -21,6 +21,8 @@ namespace GRaff
 		/// </summary>
 		internal static void Update()
 		{
+			XPrevious = X;
+			YPrevious = Y;
 			for (int i = 0; i < _buttonCount; i++)
 				_pressed[i] = _released[i] = false;
 		}
@@ -51,6 +53,33 @@ namespace GRaff
 			}
 		}
 	
+		/// <summary>
+		/// Gets the x-coordinate of the previous position of the cursor in the room. This value might be non-integer if the View is scaled.
+		/// </summary>
+		public static double XPrevious
+		{
+			get; private set;
+		}
+
+		/// <summary>
+		/// Gets the y-coordinate of the previous position of the cursor in the room. This value might be non-integer if the View is scaled.
+		/// </summary>
+		public static double YPrevious
+		{
+			get; private set;
+		}
+
+		/// <summary>
+		/// Gets the previous location of the cursor in the room. The coordinates might be non-integer if the View is scaled.
+		/// </summary>
+		public static Point LocationPrevious
+		{
+			get
+			{
+				return new Point(XPrevious, YPrevious);
+			}
+		}
+
 		/// <summary>
 		/// Gets the x-coordinate of the cursor in the room. This value might be non-integer if the View is scaled.
 		/// </summary>

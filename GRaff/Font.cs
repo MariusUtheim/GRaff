@@ -13,8 +13,6 @@ namespace GRaff
 		public int XOffset { get; private set; }
 		public int YOffset { get; private set; }
 
-		public double Height { get; private set; }
-
 		public static double GetWidth(char c)
 		{
 			throw new NotImplementedException();

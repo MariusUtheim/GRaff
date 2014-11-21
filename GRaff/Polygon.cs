@@ -15,11 +15,11 @@ namespace GRaff
 	/// </remarks>
 	public sealed class Polygon
 	{
-		private Point[] pts;
+		private Point[] _pts;
 
 		public Polygon(IEnumerable<Point> pts)
 		{
-			this.pts = pts.ToArray();
+			this._pts = pts.ToArray();
 			_SanityCheck();
 		}
 
@@ -27,13 +27,18 @@ namespace GRaff
 		{
 			if (pts == null)
 				throw new ArgumentNullException("pts", "Cannot be null.");
-			this.pts = pts.Clone() as Point[];
+			this._pts = pts.Clone() as Point[];
 			_SanityCheck();
+		}
+
+		private Polygon()
+		{
+			return;	// Used to create Polygon in an efficient way without doing sanity checks
 		}
 
 		private void _SanityCheck()
 		{
-			if (pts.Length <= 2)
+			if (_pts.Length <= 2)
 				return;
 
 			Angle sum = Angle.Zero;
@@ -44,10 +49,10 @@ namespace GRaff
 
 			a = next.Direction - previous.Direction;
 			if (a.Degrees > 180)
-				pts = pts.Reverse().ToArray();
+				_pts = _pts.Reverse().ToArray();
 			sum += a;
 
-			for (int i = 1; i < pts.Length; i++)
+			for (int i = 1; i < _pts.Length; i++)
 			{
 				previous = next;
 				next = Edge(i).Direction;
@@ -61,38 +66,33 @@ namespace GRaff
 				throw new ArgumentException("The points must specify a convex polygon with winding number equal to 1. Winding is " + sum.ToString());
 		}
 
-#warning TODO: Put the Enumerate- methods someplace else. Shape class?
-		public static IEnumerable<Point> EnumerateCircle(Point center, double radius)
-		{
-			return EnumerateCircle(center, radius, (int)(radius));
-		}
 
-		public static IEnumerable<Point> EnumerateCircle(Point center, double radius, int precision)
+		public static Polygon Circle(Point center, double radius)
 		{
-			if (radius == 0 || precision == 1)
-			{
-				yield return center;
-				yield break;
-			}
-			if (precision <= 0) throw new ArgumentOutOfRangeException("precision", "Must be greater than zero.");
-			
+			if (radius == 0)
+				return new Polygon { _pts = new[] { center } };
+
+			int precision = (int)GMath.Ceiling(radius);			
 
 			double dt = GMath.Tau / precision;
 			double c = GMath.Cos(dt), s = GMath.Sin(dt);
 
 			double x = radius, y = 0, tmp;
+			Point[] pts = new Point[precision];
 
 			for (int i = 0; i < precision; i++)
 			{
-				yield return new Point(center.X + x, center.Y + y);
+				pts[i] = new Point(center.X + x, center.Y + y);
 
 				tmp = x;
 				x = c * x - s * y;
 				y = s * tmp + c * y;
 			}
+
+			return new Polygon { _pts = pts };
 		}
 
-		public static IEnumerable<Point> EnumerateEllipse(Point center, double xRadius, double yRadius)
+		public static Polygon Ellipse(Point center, double xRadius, double yRadius)
 		{
 			int precision = (int)GMath.Ceiling(GMath.Pi * (xRadius + yRadius));
 			double dt = GMath.Tau / precision;
@@ -103,25 +103,87 @@ namespace GRaff
 			Point[] pts = new Point[precision];
 			for (int i = 0; i < precision; i++)
 			{
-				yield return new Point(center.X + x * xRadius, center.Y + y * yRadius);
+				pts[i] = new Point(center.X + x * xRadius, center.Y + y * yRadius);
 
 				tmp = x;
 				x = c * x - s * y;
 				y = s * tmp + c * y;
 			}
+
+			return new Polygon { _pts = pts };
 		}
 
+		public static Polygon Regular(int degree, double radius)
+		{
+			return Regular(degree, Point.Zero, radius);
+		}
+		public static Polygon Regular(int degree, Point center, double radius)
+		{
+			if (degree < 3) throw new ArgumentException("Degree must be greater than or equal to 3.", "degree");
+
+			double dt = GMath.Tau / degree;
+			double c = GMath.Cos(dt), s = GMath.Sin(dt);
+
+			double x = 0, y = -radius, tmp;
+			Point[] pts = new Point[degree];
+
+			for (int i = 0; i < degree; i++)
+			{
+				pts[i] = new Point(center.X + x, center.Y + y);
+
+				tmp = x;
+				x = c * x - s * y;
+				y = s * tmp + c * y;
+			}
+
+			return new Polygon { _pts = pts };
+		}
+		/*
+		public static Polygon Star(int arms, double innerRadius, double outerRadius)
+		{
+			return Star(arms, Point.Zero, innerRadius, outerRadius);
+		}
+		
+		public static Polygon Star(int arms, Point center, double innerRadius, double outerRadius)
+		{
+			if (arms < 2) throw new ArgumentException("Must have at least 2 arms.", "arms");
+
+			double dt = GMath.Tau / arms;
+			double c = GMath.Cos(dt), s = GMath.Sin(dt);
+
+			double outerX = 0, outerY = -outerRadius;
+			double innerX = innerRadius * GMath.Cos(GMath.Tau / 4 + dt / 2), innerY = innerRadius * GMath.Sin(GMath.Tau / 4 + dt / 2);
+			double tmp;
+			Point[] pts = new Point[arms * 2];
+
+			for (int i = 0; i < arms; i++)
+			{
+				pts[2 * i] = new Point(center.X + outerX, center.Y + outerY);
+				pts[2 * i + 1] = new Point(center.X + innerX, center.Y + innerY);
+
+				tmp = outerX;
+				outerX = c * outerX - s * outerY;
+				outerY = s * tmp + c * outerY;
+
+				tmp = innerX;
+				innerX = c * innerX - s * innerY;
+				innerY = s * tmp + c * innerY;
+			}
+
+			return new Polygon { _pts = pts };
+		}
+		*/
 		/// <summary>
 		/// Gets the number of vertices in this GRaff.Polynomial.
 		/// </summary>
-		public int Length { get { return pts.Length; } }
+		public int Length { get { return _pts.Length; } }
 
 
 		public Point Vertex(int index)
 		{
 			if (Length == 0)
 				throw new InvalidOperationException("The specified polygon has no vertices.");
-			return pts[(index % pts.Length + pts.Length) % pts.Length];
+			return _pts[(index % _pts.Length + _pts.Length) % _pts.Length];
 		}
 
 		public Line Edge(int index)
@@ -136,17 +198,17 @@ namespace GRaff
 
 		public IEnumerable<Point> Vertices
 		{
-			get { return pts.AsEnumerable(); }
+			get { return _pts.AsEnumerable(); }
 		}
 
 		public IEnumerable<Line> Edges
 		{
 			get
 			{
-				for (int i = 0; i < pts.Length - 1; i++)
-					yield return new Line(pts[i], pts[i + 1]);
-				if (pts.Length != 0)
-					yield return new Line(pts[Length - 1], pts[0]);
+				for (int i = 0; i < _pts.Length - 1; i++)
+					yield return new Line(_pts[i], _pts[i + 1]);
+				if (_pts.Length != 0)
+					yield return new Line(_pts[Length - 1], _pts[0]);
 			}
 		}
 
@@ -194,6 +256,8 @@ namespace GRaff
 				Vector n = l.LeftNormal;
 				if (otherVertices.All(pt => n.DotProduct(pt - l.Origin) > 0))
 					return false;
+
+				var x = _pts.Where(pt => pt.X > 0).Select(pt => pt.X * pt.X).First();
 			}
 
 			return result;

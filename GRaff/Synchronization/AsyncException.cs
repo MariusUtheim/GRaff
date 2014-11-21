@@ -2,6 +2,7 @@ using System;
 
 namespace GRaff.Synchronization
 {
+	[Serializable]
 	public class AsyncException : Exception
 	{
 		public AsyncException(Exception innerException)

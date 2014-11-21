@@ -36,7 +36,7 @@ namespace GRaff
 		/// <summary>
 		/// Represents the largest representable angle that is less than a full turn.
 		/// </summary>
-		public static readonly Angle MaxAngle = new Angle(ulong.MaxValue);
+		public static readonly Angle MaxAngle = new Angle(ulong.MaxValue - precision);
 
 		private Angle(ulong data)
 		{

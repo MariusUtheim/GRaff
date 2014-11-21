@@ -8,12 +8,18 @@ namespace GRaff
 {
 	public sealed class MaskShape
 	{
+		public MaskShape(Polygon polygon)
+		{
+			this.Polygon = polygon;
+		}
+
 		private MaskShape(params Point[] pts)
 		{
 			Polygon = new Polygon(pts);
 		}
 
 		public Polygon Polygon { get; private set; }
+
 
 		public static MaskShape Rectangle(double x, double y, double width, double height)
 		{
@@ -57,28 +63,19 @@ namespace GRaff
 
 		public static MaskShape Circle(double radius)
 		{
-			return Circle(new Point(0, 0), radius, (int)(3 * GMath.Abs(radius)));
+			return Circle(new Point(0, 0), radius);
 		}
 
-		public static MaskShape Circle(double radius, int precision)
-		{
-			return Circle(new Point(0, 0), radius, precision);
-		}
 
 		public static MaskShape Circle(Point center, double radius)
 		{
-			return Circle(center, radius, (int)GMath.Ceiling(3 * GMath.Abs(radius)));
-		}
-
-		public static MaskShape Circle(Point center, double radius, int precision)
-		{
-			return new MaskShape(Polygon.EnumerateCircle(center, radius, precision).ToArray());
+			return new MaskShape(Polygon.Circle(center, radius));
 		}
 
 		public static MaskShape Ellipse(double x, double y, double width, double height)
 		{
 			double w = width / 2, h = height / 2;
-			return new MaskShape(Polygon.EnumerateEllipse(new Point(x + w, y + h), w, h).ToArray());
+			return new MaskShape(Polygon.Ellipse(new Point(x + w, y + h), w, h).Vertices.ToArray());
 		}
 
 		public static MaskShape Ellipse(double width, double height)

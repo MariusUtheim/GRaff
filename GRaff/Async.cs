@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Windows.Threading;
 using GRaff.Synchronization;
-using GRaff.Synchronization;
 
 namespace GRaff
 {
@@ -24,11 +23,6 @@ namespace GRaff
 			_catcher.Catch(exceptionHandler);
 		}
 
-		public static TaskScheduler TaskScheduler
-		{
-			get; internal set;
-		}
-
 		public static AsyncOperation Run(Action action)
 		{
 			return new AsyncOperation().Then(action);
@@ -46,7 +40,7 @@ namespace GRaff
 
 		public static void Dispatch(AsyncEventArgs e)
 		{
-			lock (_queuedEvents)
+			lock (_queuedEvents)  
 				_queuedEvents.Add(e);
 		}
 
@@ -54,7 +48,7 @@ namespace GRaff
 		{
 			AsyncEventArgs[] processingEvents;
 
-			lock (typeof(Async))
+			lock (_exceptions)
 			{
 				foreach (AsyncException exception in _exceptions)
 				{
@@ -62,9 +56,11 @@ namespace GRaff
 						throw new AsyncException(exception);
 				}
 
-
-				processingEvents = _queuedEvents.ToArray();
-				_queuedEvents = new List<AsyncEventArgs>();
+				lock (_queuedEvents)
+				{
+					processingEvents = _queuedEvents.ToArray();
+					_queuedEvents = new List<AsyncEventArgs>();
+				}
 			}
 
 			for (int i = 0; i < processingEvents.Length; i++)
