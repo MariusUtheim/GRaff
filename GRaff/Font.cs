@@ -52,10 +52,10 @@ namespace GRaff
 
 		public TextureBuffer TextureBuffer { get; private set; }
 
-		public void Render(string str, FontAlignment alignment, out Point[] rectCoords, out Point[] texCoords)
+		internal void Render(string str, FontAlignment alignment, out PointF[] rectCoords, out PointF[] texCoords)
 		{
-			rectCoords = new Point[str.Length * 4];
-			texCoords = new Point[str.Length * 4];
+			rectCoords = new PointF[str.Length * 4];
+			texCoords = new PointF[str.Length * 4];
 
 			float tXScale = 1.0f / TextureBuffer.Width, tYScale = 1.0f / TextureBuffer.Height;
 			float xOffset = 0, yOffset = 0;

@@ -21,22 +21,22 @@ namespace GRaff.Particles
 		public void Render(IEnumerable<Particle> particles)
 		{
 			int count = particles.Count();
-			Point[] vertices = new Point[4 * count];
+			PointF[] vertices = new PointF[4 * count];
 			Color[] colors = new Color[4 * count];
 
-			Point
-				tl = new Point(-Sprite.XOrigin, -Sprite.YOrigin),
-				tr = new Point(Sprite.XOrigin, -Sprite.YOrigin),
-				bl = new Point(-Sprite.XOrigin, Sprite.YOrigin),
-				br = new Point(Sprite.XOrigin, Sprite.YOrigin);
+			PointF
+				tl = new PointF(-Sprite.XOrigin, -Sprite.YOrigin),
+				tr = new PointF(Sprite.XOrigin, -Sprite.YOrigin),
+				bl = new PointF(-Sprite.XOrigin, Sprite.YOrigin),
+				br = new PointF(Sprite.XOrigin, Sprite.YOrigin);
 
 			Parallel.ForEach(particles, (particle, loopState, index) =>
 			{
 				index *= 4;
-				vertices[index] = particle.TransformationMatrix * tl + particle.Location;
-				vertices[index + 1] = particle.TransformationMatrix * tr + particle.Location;
-				vertices[index + 2] = particle.TransformationMatrix * br + particle.Location;
-				vertices[index + 3] = particle.TransformationMatrix * bl + particle.Location;
+				vertices[index] = (PointF)(particle.TransformationMatrix * tl + particle.Location);
+				vertices[index + 1] = (PointF)(particle.TransformationMatrix * tr + particle.Location);
+				vertices[index + 2] = (PointF)(particle.TransformationMatrix * br + particle.Location);
+				vertices[index + 3] = (PointF)(particle.TransformationMatrix * bl + particle.Location);
 				colors[index] = colors[index + 1] = colors[index + 2] = colors[index + 3] = particle.Color;
 			});
 

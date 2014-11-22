@@ -9,8 +9,8 @@ namespace GRaff.Graphics
 {
 	public sealed class Surface
 	{
-		private static readonly int sizeofPoint = Marshal.SizeOf(typeof(Point)), sizeofColor = Marshal.SizeOf(typeof(Color));
-		private static readonly Point[] defaultTexCoords = { new Point(0.0f, 0.0f), new Point(1.0f, 0.0f), new Point(0.0f, 1.0f), new Point(1.0f, 1.0f)};
+		private static readonly int sizeofPoint = Marshal.SizeOf(typeof(PointF)), sizeofColor = Marshal.SizeOf(typeof(Color));
+		private static readonly PointF[] defaultTexCoords = { new PointF(0.0f, 0.0f), new PointF(1.0f, 0.0f), new PointF(0.0f, 1.0f), new PointF(1.0f, 1.0f)};
 		private int _vertexArray;
 		private int _vertexBuffer, _colorBuffer, _textureBuffer;
 
@@ -62,7 +62,7 @@ namespace GRaff.Graphics
 
 		#endregion
 
-		private void Render(Point[] vertices, Color[] colors, PrimitiveType type)
+		private void Render(PointF[] vertices, Color[] colors, PrimitiveType type)
 		{
 			ShaderProgram.Current = ShaderProgram.DefaultColored;
 			GL.BindVertexArray(_vertexArray);
@@ -73,7 +73,7 @@ namespace GRaff.Graphics
 			GL.DrawArrays((GLPrimitiveType)type, 0, vertices.Length);
 		}
 
-		private void RenderTextured(Texture texture, Point[] vertices, Color[] colors, PrimitiveType type)
+		private void RenderTextured(Texture texture, PointF[] vertices, Color[] colors, PrimitiveType type)
 		{
 			GL.BindVertexArray(_vertexArray);
 			GL.BindTexture(TextureTarget.Texture2D, texture.Id);
@@ -100,53 +100,54 @@ namespace GRaff.Graphics
 			return c;
 		}
 
-		public void SetPixel(Color color, Point location)
+		public void SetPixel(Color color, PointF location)
 		{
 			Render(new[] { location }, new[] { color }, PrimitiveType.Points);
 		}
 
-		public void DrawLine(Color col1, Color col2, Point p1, Point p2)
+		public void DrawLine(Color col1, Color col2, PointF p1, PointF p2)
 		{
 			Render(new[] { p1, p2 }, new[] { col1, col2 }, PrimitiveType.Lines);
 		}
 
-		public void DrawTriangle(Color col1, Color col2, Color col3, Point p1, Point p2, Point p3)
+		public void DrawTriangle(Color col1, Color col2, Color col3, PointF p1, PointF p2, PointF p3)
 		{
 			Render(new[] { p1, p2, p3 }, new[] { col1, col2, col3 }, PrimitiveType.LineStrip);
 		}
 
-		public void FillTriangle(Color col1, Color col2, Color col3, Point p1, Point p2, Point p3)
+		public void FillTriangle(Color col1, Color col2, Color col3, PointF p1, PointF p2, PointF p3)
 		{
 			Render(new[] { p1, p2, p3 }, new[] { col1, col2, col3 }, PrimitiveType.Triangles);
 		}
 
-		public void DrawRectangle(Color col1, Color col2, Color col3, Color col4, double x, double y, double w, double h)
+		public void DrawRectangle(Color col1, Color col2, Color col3, Color col4, float x, float y, float w, float h)
 		{
-			Render(new[] { new Point(x, y), new Point(x + w, y), new Point(x + w, y + h), new Point(x, y + h) },
+			Render(new[] { new PointF(x, y), new PointF(x + w, y), new PointF(x + w, y + h), new PointF(x, y + h) },
 				   new[] { col1, col2, col3, col4 }, PrimitiveType.LineLoop);
 		}
 
-		public void FillRectangle(Color col1, Color col2, Color col3, Color col4, double x, double y, double w, double h)
+		public void FillRectangle(Color col1, Color col2, Color col3, Color col4, float x, float y, float w, float h)
 		{
-			Render(new[] { new Point(x, y), new Point(x + w, y), new Point(x, y + h), new Point(x + w, y + h) },
+			Render(new[] { new PointF(x, y), new PointF(x + w, y), new PointF(x, y + h), new PointF(x + w, y + h) },
 				   new[] { col1, col2, col4, col3 }, PrimitiveType.TriangleStrip);
 		}
 
-		public void DrawCircle(Color color, Point center, double radius)
+#warning Too unoptimized. Maybe just drop it?
+		public void DrawCircle(Color color, PointF center, double radius)
 		{
 			int precision = (int)(GMath.Tau * radius);
-			Render(Polygon.Circle(center, radius).Vertices.ToArray(), Enumerable.Repeat(color, precision).ToArray(), PrimitiveType.LineLoop);
+			Render(Polygon.Circle(center, radius).Vertices.Cast<PointF>().ToArray(), Enumerable.Repeat(color, precision).ToArray(), PrimitiveType.LineLoop);
 		}
 
-		public void FillCircle(Color col1, Color col2, Point center, double radius)
+		public void FillCircle(Color col1, Color col2, PointF center, double radius)
 		{
 			int precision = (int)GMath.Ceiling(radius);
-			Point[] vertices = new Point[precision + 2];
+			PointF[] vertices = new PointF[precision + 2];
 			int i = 0;
 			vertices[i++] = center;
-			foreach (Point p in Polygon.Circle(center, radius).Vertices)
+			foreach (PointF p in Polygon.Circle(center, radius).Vertices)
 				vertices[i++] = p;
-			vertices[i] = new Point(center.X + radius, center.Y);
+			vertices[i] = new PointF(center.X + (float)radius, center.Y);
 
 			Color[] colors = new Color[precision + 2];
 			colors[0] = col1;
@@ -158,23 +159,23 @@ namespace GRaff.Graphics
 
 		public void DrawPolygon(Color color, Polygon polygon)
 		{
-			Render(polygon.Vertices.ToArray(), Enumerable.Repeat(color, polygon.Length).ToArray(), PrimitiveType.LineLoop);
+			Render(polygon.Vertices.Cast<PointF>().ToArray(), Enumerable.Repeat(color, polygon.Length).ToArray(), PrimitiveType.LineLoop);
 		}
 
-		public void DrawSprite(Sprite sprite, int subimage, double x, double y)
+		public void DrawSprite(Sprite sprite, int subimage, float x, float y)
 		{
 			float left = (float)(x - sprite.XOrigin), top = (float)(y - sprite.YOrigin), right = left + sprite.Width, bottom = top + sprite.Height;
-			RenderTextured(sprite.SubImage(subimage), new[] { new Point(left, top), new Point(right, top), new Point(left, bottom), new Point(right, bottom) },
+			RenderTextured(sprite.SubImage(subimage), new[] { new PointF(left, top), new PointF(right, top), new PointF(left, bottom), new PointF(right, bottom) },
 				   new[] { Color.White, Color.White, Color.White, Color.White }, PrimitiveType.TriangleStrip);
 		}
 
 		public void DrawSprite(Sprite sprite, int subimage, Color blend, AffineMatrix transform)
 		{
-			Point[] vertices = {
-				transform * new Point(-sprite.XOrigin, -sprite.YOrigin),
-				transform * new Point(sprite.XOrigin, -sprite.YOrigin),
-				transform * new Point(-sprite.XOrigin, sprite.YOrigin),
-				transform * new Point(sprite.XOrigin, sprite.YOrigin)
+			PointF[] vertices = {
+				transform * new PointF(-sprite.XOrigin, -sprite.YOrigin),
+				transform * new PointF(sprite.XOrigin, -sprite.YOrigin),
+				transform * new PointF(-sprite.XOrigin, sprite.YOrigin),
+				transform * new PointF(sprite.XOrigin, sprite.YOrigin)
 			};
 
 			RenderTextured(sprite.SubImage(subimage), vertices, new[] { blend, blend, blend, blend }, PrimitiveType.TriangleStrip);
@@ -184,18 +185,18 @@ namespace GRaff.Graphics
 		{
 			AffineMatrix t = image.Transform.GetMatrix();
 			RenderTextured(image.CurrentTexture, new[] {
-					t * new Point(-image.Sprite.XOrigin, -image.Sprite.YOrigin),
-					t * new Point(image.Sprite.Width - image.Sprite.XOrigin, -image.Sprite.YOrigin),
-					t * new Point(-image.Sprite.XOrigin, image.Sprite.Height - image.Sprite.YOrigin),
-					t * new Point(image.Sprite.Width - image.Sprite.XOrigin, image.Sprite.Height - image.Sprite.YOrigin),
+					t * new PointF(-image.Sprite.XOrigin, -image.Sprite.YOrigin),
+					t * new PointF(image.Sprite.Width - image.Sprite.XOrigin, -image.Sprite.YOrigin),
+					t * new PointF(-image.Sprite.XOrigin, image.Sprite.Height - image.Sprite.YOrigin),
+					t * new PointF(image.Sprite.Width - image.Sprite.XOrigin, image.Sprite.Height - image.Sprite.YOrigin),
 			}, new[] { image.Blend, image.Blend, image.Blend, image.Blend }, PrimitiveType.TriangleStrip);
 
 		}
 
-		public void DrawText(Font font, FontAlignment alignment, Color color, string text, Point location)
+		public void DrawText(Font font, FontAlignment alignment, Color color, string text, PointF location)
 		{
-			Point[] vertices;
-			Point[] texCoords;
+			PointF[] vertices;
+			PointF[] texCoords;
 
 			font.Render(text, alignment, out vertices, out texCoords);
 
@@ -221,8 +222,8 @@ namespace GRaff.Graphics
 
 		public void DrawText(Font font, FontAlignment alignment, Color color, string text, Transform transform)
 		{
-			Point[] vertices;
-			Point[] texCoords;
+			PointF[] vertices;
+			PointF[] texCoords;
 
 			font.Render(text, alignment, out vertices, out texCoords);
 

@@ -59,10 +59,10 @@ namespace GRaff
 		}
 
 
-		public Point Point(Point pt) { return GetMatrix() * pt; }
+		public Point PointD(Point pt) { return GetMatrix() * pt; }
 
 
-		public Point Point(double x, double y)
+		public Point PointD(double x, double y)
 		{
 			// We're keeping this code around in case we want to change the GetMatrix() method. It is easier to debug this one and check that each step works individually.
 			double tx, ty;
@@ -83,17 +83,17 @@ namespace GRaff
 		}
 
 
-		public Line Line(Line line) { return new Line(this.Point(line.Origin), this.Point(line.Destination)); }
+		public Line Line(Line line) { return new Line(this.PointD(line.Origin), this.PointD(line.Destination)); }
 
 
 		public Point[] Rectangle(Rectangle rect)
 		{
 			AffineMatrix T = GetMatrix();
 			return new Point[] {
-				T * this.Point(rect.Left, rect.Top),
-				T * this.Point(rect.Right, rect.Top),
-				T * this.Point(rect.Right, rect.Bottom),
-				T * this.Point(rect.Left, rect.Bottom)
+				T * this.PointD(rect.Left, rect.Top),
+				T * this.PointD(rect.Right, rect.Top),
+				T * this.PointD(rect.Right, rect.Bottom),
+				T * this.PointD(rect.Left, rect.Bottom)
 			};
 		}
 

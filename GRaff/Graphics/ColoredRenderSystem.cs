@@ -27,7 +27,7 @@ namespace GRaff.Graphics
 
 		}
 
-		public void SetVertices(UsageHint usage, params Point[] vertices)
+		public void SetVertices(UsageHint usage, params PointF[] vertices)
 		{
 			GL.BindBuffer(BufferTarget.ArrayBuffer, _vertexBuffer);
 			GL.BufferData(BufferTarget.ArrayBuffer, new IntPtr(2 * sizeof(float) * vertices.Length), vertices, (BufferUsageHint)usage);

@@ -7,7 +7,6 @@ namespace GRaff
 	public sealed class Background : GameElement
 	{
 		private TexturedRenderSystem _renderSystem;
-		private readonly IntPtr _4 = new IntPtr(4 * Marshal.SizeOf(typeof(Point)));
 
 		public Background()
 		{

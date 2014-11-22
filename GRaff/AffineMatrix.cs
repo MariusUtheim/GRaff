@@ -90,10 +90,10 @@ namespace GRaff
 			);
 		}
 
+
 		public static Point operator *(AffineMatrix m, Point p) { return new Point(m.M00 * p.X + m.M01 * p.Y + m.M02, m.M10 * p.X + m.M11 * p.Y + m.M12); }
 
 		public static Point operator *(Point p, AffineMatrix m) { return new Point(m.M00 * p.X + m.M01 * p.Y + m.M02, m.M10 * p.X + m.M11 * p.Y + m.M12); }
-
 
 		public static Vector operator *(AffineMatrix m, Vector v) { return new Vector(m.M00 * v.X + m.M01 * v.Y, m.M10 * v.X + m.M11 * v.Y); }
 	}

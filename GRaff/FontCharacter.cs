@@ -18,11 +18,5 @@ namespace GRaff
 		{
 			throw new NotImplementedException();
 		}
-
-		internal static void PushTexCoords(char c, ref int t, ref Point[] texCoords)
-		{
-#warning TODO: Remove this ugly method
-			throw new NotImplementedException();
-		}
 	}
 }

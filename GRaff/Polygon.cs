@@ -138,41 +138,7 @@ namespace GRaff
 			return new Polygon { _pts = pts };
 		}
 
-		/*
-		public static Polygon Star(int arms, double innerRadius, double outerRadius)
-		{
-			return Star(arms, Point.Zero, innerRadius, outerRadius);
-		}
-		
-		public static Polygon Star(int arms, Point center, double innerRadius, double outerRadius)
-		{
-			if (arms < 2) throw new ArgumentException("Must have at least 2 arms.", "arms");
 
-			double dt = GMath.Tau / arms;
-			double c = GMath.Cos(dt), s = GMath.Sin(dt);
-
-			double outerX = 0, outerY = -outerRadius;
-			double innerX = innerRadius * GMath.Cos(GMath.Tau / 4 + dt / 2), innerY = innerRadius * GMath.Sin(GMath.Tau / 4 + dt / 2);
-			double tmp;
-			Point[] pts = new Point[arms * 2];
-
-			for (int i = 0; i < arms; i++)
-			{
-				pts[2 * i] = new Point(center.X + outerX, center.Y + outerY);
-				pts[2 * i + 1] = new Point(center.X + innerX, center.Y + innerY);
-
-				tmp = outerX;
-				outerX = c * outerX - s * outerY;
-				outerY = s * tmp + c * outerY;
-
-				tmp = innerX;
-				innerX = c * innerX - s * innerY;
-				innerY = s * tmp + c * innerY;
-			}
-
-			return new Polygon { _pts = pts };
-		}
-		*/
 		/// <summary>
 		/// Gets the number of vertices in this GRaff.Polynomial.
 		/// </summary>
@@ -212,7 +178,6 @@ namespace GRaff
 			}
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "pt")]
 		public bool ContainsPoint(Point pt)
 		{
 			/**

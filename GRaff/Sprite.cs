@@ -235,7 +235,7 @@ namespace GRaff
 		public Texture SubImage(int index)
 		{
 			index %= ImageCount;
-			double r = 1.0 / ImageCount;
+			float r = 1.0f / ImageCount;
 			return new Texture(Texture, r * index, 0, r * (index + 1), 1);
 		}
 

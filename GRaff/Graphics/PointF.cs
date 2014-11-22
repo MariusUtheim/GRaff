@@ -4,6 +4,9 @@ using System.Runtime.InteropServices;
 
 namespace GRaff.Graphics
 {
+	/// <summary>
+	/// Represents a point with single-precision floating point coordinates. This structure is used for optimization in OpenGL; for general purposes, use GRaff.Point instead.
+	/// </summary>
 	[StructLayout(LayoutKind.Sequential)]
 	public struct PointF
 	{
@@ -18,9 +21,20 @@ namespace GRaff.Graphics
 
 		public float Y { get; private set; }
 
+		public static PointF operator *(AffineMatrix m, PointF p) { return new PointF((float)(m.M00 * p.X + m.M01 * p.Y + m.M02), (float)(m.M10 * p.X + m.M11 * p.Y + m.M12)); }
+
+		public static PointF operator *(PointF p, AffineMatrix m) { return new PointF((float)(m.M00 * p.X + m.M01 * p.Y + m.M02), (float)(m.M10 * p.X + m.M11 * p.Y + m.M12)); }
+
+		public static PointF operator +(PointF left, PointF right) { return new PointF(left.X + right.X, left.Y + right.Y); }
+
 		public static implicit operator Point(PointF value)
 		{
 			return new Point(value.X, value.Y);
+		}
+
+		public static explicit operator PointF(Point value)
+		{
+			return new PointF((float)value.X, (float)value.Y);
 		}
 
 		public static explicit operator Vector(PointF value)

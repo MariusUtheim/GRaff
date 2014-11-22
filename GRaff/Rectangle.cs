@@ -102,9 +102,9 @@ namespace GRaff
 		}
 
 		/// <summary>
-		/// Tests whether this GRaff.Rectangle contains the specified GRaff.Point.
+		/// Tests whether this GRaff.Rectangle contains the specified GRaff.PointD.
 		/// </summary>
-		/// <param name="pt">The GRaff.Point to test.</param>
+		/// <param name="pt">The GRaff.PointD to test.</param>
 		/// <returns>true if this GRaff.Rectangle contains pt.</returns>
 		public bool ContainsPoint(Point pt)
 		{

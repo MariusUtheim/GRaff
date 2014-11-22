@@ -9,7 +9,7 @@ namespace GRaff.Particles
 {
 	internal class ColoredParticleRenderer : IParticleRenderer
 	{
-		Point[] _polygonVertices;
+		PointF[] _polygonVertices;
 		int _verticesPerParticle;
 		ColoredRenderSystem _renderSystem;
 
@@ -17,15 +17,15 @@ namespace GRaff.Particles
 		{
 			if (polygon.Length < 3) throw new ArgumentException("The polygon must have at least three vertices.", "polygon");
 			_verticesPerParticle = 3 + (polygon.Length - 3) * 3;	// First three vertices contribute one triangle; each remaining vertex contributes one triangle
-			_polygonVertices = new Point[_verticesPerParticle];
-			_polygonVertices[0] = polygon.Vertex(0);
-			_polygonVertices[1] = polygon.Vertex(1);
-			_polygonVertices[2] = polygon.Vertex(2);
+			_polygonVertices = new PointF[_verticesPerParticle];
+			_polygonVertices[0] = (PointF)polygon.Vertex(0);
+			_polygonVertices[1] = (PointF)polygon.Vertex(1);
+			_polygonVertices[2] = (PointF)polygon.Vertex(2);
 			for (int i = 3, c = 3; i < polygon.Length; i++)
 			{
 				_polygonVertices[c++] = _polygonVertices[0];
-				_polygonVertices[c++] = polygon.Vertex(i - 1);
-				_polygonVertices[c++] = polygon.Vertex(i);
+				_polygonVertices[c++] = (PointF)polygon.Vertex(i - 1);
+				_polygonVertices[c++] = (PointF)polygon.Vertex(i);
 			}
 
 			_renderSystem = new ColoredRenderSystem();
@@ -34,7 +34,7 @@ namespace GRaff.Particles
 		public void Render(IEnumerable<Particle> particles)
 		{
 			int count = particles.Count();
-			Point[] vertices = new Point[_polygonVertices.Length * count];
+			PointF[] vertices = new PointF[_polygonVertices.Length * count];
 			Color[] colors = new Color[_polygonVertices.Length * count];
 
 			Parallel.ForEach(particles, (particle, loopState, index) =>
@@ -42,7 +42,7 @@ namespace GRaff.Particles
 				index *= _verticesPerParticle;
 				for (int c = 0; c < _verticesPerParticle; c++)
 				{
-					vertices[index + c] = particle.TransformationMatrix * _polygonVertices[c] + particle.Location;
+					vertices[index + c] = (PointF)(particle.TransformationMatrix * _polygonVertices[c] + particle.Location);
 					colors[index + c] = particle.Color;
 				}
 			});

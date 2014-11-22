@@ -58,7 +58,7 @@ namespace GRaff.Graphics
 			GL.VertexAttribPointer(2, 2, VertexAttribPointerType.Float, false, 0, 0);
 		}
 
-		public void SetVertices(UsageHint usage, params Point[] vertices)
+		public void SetVertices(UsageHint usage, params PointF[] vertices)
 		{
 			GL.BindBuffer(BufferTarget.ArrayBuffer, _vertexBuffer);
 			GL.BufferData(BufferTarget.ArrayBuffer, new IntPtr(2 * sizeof(float) * vertices.Length), vertices, (BufferUsageHint)usage);
@@ -76,7 +76,7 @@ namespace GRaff.Graphics
 			GL.BufferData(BufferTarget.ArrayBuffer, new IntPtr(4 * colors.Length), colors, (BufferUsageHint)usage);
 		}
 
-		public void SetTexCoords(UsageHint usage, params Point[] texCoords)
+		public void SetTexCoords(UsageHint usage, params PointF[] texCoords)
 		{
 			GL.BindBuffer(BufferTarget.ArrayBuffer, _texCoordBuffer);
 			GL.BufferData(BufferTarget.ArrayBuffer, new IntPtr(2 * sizeof(float) * texCoords.Length), texCoords, (BufferUsageHint)usage);
