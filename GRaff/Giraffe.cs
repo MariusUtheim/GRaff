@@ -20,17 +20,12 @@ namespace GRaff
 
 		public static void Run()
 		{
-			Run(new String[0], new Room(1024, 768), 60.0, null);
+			Run(new Room(1024, 768), 60.0, null);
 		}
 
 		public static void Run(int windowWidth, int windowHeight, Action gameStart)
 		{
-			Run(new String[0], new Room(windowWidth, windowHeight), 60.0, delegate
-			{
-				GlobalEvent.ExitOnEscape = true;
-				new Background { Color = Color.Gray };
-				gameStart();
-			});
+			Run(new Room(windowWidth, windowHeight), 60.0, gameStart);
 		}
 
 		/// <summary>
@@ -39,16 +34,13 @@ namespace GRaff
 		/// <param name="initialRoom">The initial room that is entered when the game begins.</param>
 		/// <param name="fps">The framerate at which the game runs. The default value is 60.</param>
 		/// <param name="gameStart">An action that is performed when the game begins. If omitted or set to null, no action is performed.</param>
-		public static void Run(string[] args, Room initialRoom, double fps, Action gameStart)
+		public static void Run(Room initialRoom, double fps, Action gameStart)
 		{
 			Time.StartTime = Time.MachineTime;
 			Window = new GameWindow(initialRoom.GetWidth(), initialRoom.GetHeight(), GraphicsMode.Default, "Giraffe", GameWindowFlags.Default, DisplayDevice.Default);
 			Window.WindowBorder = WindowBorder.Fixed;
 
-			Window.UpdateFrame += (sender, e) => {
-					Giraffe.Loop();
-
-			};
+			Window.UpdateFrame += (sender, e) => Giraffe.Loop();
 
 			Window.KeyDown += (sender, e) => { Keyboard.Press((Key)e.Key); };
 			Window.KeyUp += (sender, e) => { Keyboard.Release((Key)e.Key); };

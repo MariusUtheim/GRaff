@@ -57,6 +57,9 @@
     <Compile Include="Graphics\BlendModeContext.cs" />
     <Compile Include="IAsset.cs" />
     <Compile Include="LinearMatrix.cs" />
+    <Compile Include="Randomness\BinomialDistribution.cs" />
+    <Compile Include="Randomness\Combinatorics.cs" />
+    <Compile Include="Randomness\UniformLineDistribution.cs" />
     <Compile Include="Sound\DistanceModel.cs" />
     <Compile Include="Sound\Listener.cs" />
     <Compile Include="Sound\OggVorbisDecoder\AudioInfo.cs" />

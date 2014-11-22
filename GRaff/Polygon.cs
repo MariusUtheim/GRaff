@@ -31,6 +31,31 @@ namespace GRaff
 			_SanityCheck();
 		}
 
+		public Polygon(int degree, int radius)
+			: this(degree, radius, Point.Zero) { }
+
+		public Polygon(int degree, int radius, Point center)
+		{
+			if (degree < 3) throw new ArgumentException("Degree must be greater than or equal to 3.", "degree");
+
+			double dt = GMath.Tau / degree;
+			double c = GMath.Cos(dt), s = GMath.Sin(dt);
+
+			double x = 0, y = -radius, tmp;
+			Point[] pts = new Point[degree];
+
+			for (int i = 0; i < degree; i++)
+			{
+				pts[i] = new Point(center.X + x, center.Y + y);
+
+				tmp = x;
+				x = c * x - s * y;
+				y = s * tmp + c * y;
+			}
+
+			_pts = pts;
+		}
+
 		private Polygon()
 		{
 			return;	// Used to create Polygon in an efficient way without doing sanity checks
@@ -113,31 +138,6 @@ namespace GRaff
 			return new Polygon { _pts = pts };
 		}
 
-		public static Polygon Regular(int degree, double radius)
-		{
-			return Regular(degree, Point.Zero, radius);
-		}
-		public static Polygon Regular(int degree, Point center, double radius)
-		{
-			if (degree < 3) throw new ArgumentException("Degree must be greater than or equal to 3.", "degree");
-
-			double dt = GMath.Tau / degree;
-			double c = GMath.Cos(dt), s = GMath.Sin(dt);
-
-			double x = 0, y = -radius, tmp;
-			Point[] pts = new Point[degree];
-
-			for (int i = 0; i < degree; i++)
-			{
-				pts[i] = new Point(center.X + x, center.Y + y);
-
-				tmp = x;
-				x = c * x - s * y;
-				y = s * tmp + c * y;
-			}
-
-			return new Polygon { _pts = pts };
-		}
 		/*
 		public static Polygon Star(int arms, double innerRadius, double outerRadius)
 		{

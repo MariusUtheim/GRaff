@@ -20,11 +20,11 @@ namespace GRaff.Particles
 		}
 
 		public RotationBehavior()
-			: this(Angle.Zero, Angle.Zero, Angle.Zero, Angle.Zero)
+			: this(Angle.Zero, Angle.MaxAngle, Angle.Zero, Angle.Zero)
 		{ }
 
 		public RotationBehavior(Angle minRotation, Angle maxRotation)
-			: this(Angle.Zero, Angle.Zero, minRotation, maxRotation)
+			: this(Angle.Zero, Angle.MaxAngle, minRotation, maxRotation)
 		{ }
 
 

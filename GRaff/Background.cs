@@ -14,6 +14,8 @@ namespace GRaff
 			Depth = Int32.MinValue;
 			_renderSystem = new TexturedRenderSystem();
 			_renderSystem.SetColors(UsageHint.StaticDraw, Color.White, Color.White, Color.White, Color.White);
+			Color = Color.LightGray;
+			DrawColor = true;
 		}
 
 		internal static void Initialize()
@@ -23,13 +25,13 @@ namespace GRaff
 
 		public static Background Default { get; private set; }
 
-		public Color Color { get; set; } = Color.LightGray;
+		public Color Color { get; set; }
 
-		public Sprite Sprite { get; set; } = null;
+		public Sprite Sprite { get; set; }
 
-		public bool IsTiled { get; set; } = false;
+		public bool IsTiled { get; set; }
 
-		public bool DrawColor { get; set; } = true;
+		public bool DrawColor { get; set; }
 
 		public double XOffset { get; set; }
 		public double YOffset { get; set; }
