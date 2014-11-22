@@ -24,8 +24,6 @@ namespace GRaff
 		private MaskShape _maskShape;
 		private AnimationStrip _animationStrip;
 
-	//	private Task _loadingOperation;
-
 		/// <summary>
 		/// Initializes a new instance of the GRaff.Sprite class.
 		/// </summary>
@@ -59,12 +57,12 @@ namespace GRaff
 		/// </summary>
 		public string FileName { get; private set; }
 
-		public bool IsLoaded { get { return ResourceState == AssetState.Loaded; } } /*C#6.0*/
+		public bool IsLoaded { get { return AssetState == AssetState.Loaded; } } /*C#6.0*/
 
 		/// <summary>
 		/// Gets whether the texture of this GRaff.Sprite is loaded.
 		/// </summary>
-		public AssetState ResourceState { get; private set; }
+		public AssetState AssetState { get; private set; }
 
 		/// <summary>
 		/// Gets the width of this GRaff.Sprite.
@@ -74,7 +72,7 @@ namespace GRaff
 		{
 			get 
 			{
-				if (ResourceState != AssetState.Loaded) throw new InvalidOperationException("The texture is not loaded.");
+				if (AssetState != AssetState.Loaded) throw new InvalidOperationException("The texture is not loaded.");
 				return _width;
 			}
 		}
@@ -87,7 +85,7 @@ namespace GRaff
 		{
 			get
 			{
-				if (ResourceState != AssetState.Loaded) throw new InvalidOperationException("The texture is not loaded.");
+				if (AssetState != AssetState.Loaded) throw new InvalidOperationException("The texture is not loaded.");
 				return _height;
 			}
 		}
@@ -100,7 +98,7 @@ namespace GRaff
 		{
 			get
 			{
-				if (ResourceState != AssetState.Loaded) throw new InvalidOperationException("The texture is not loaded.");
+				if (AssetState != AssetState.Loaded) throw new InvalidOperationException("The texture is not loaded.");
 				return new IntVector(_width, _height);
 			}
 		}
@@ -116,7 +114,7 @@ namespace GRaff
 			{
 				if (_origin.HasValue)
 					return _origin.Value;
-				else if (ResourceState != AssetState.Loaded)
+				else if (AssetState != AssetState.Loaded)
 					return new IntVector(_width / 2, _height / 2);
 				else
 					return null;
@@ -133,7 +131,7 @@ namespace GRaff
 			{
 				if (_origin.HasValue)
 					return _origin.Value.X;
-				else if (ResourceState == AssetState.Loaded)
+				else if (AssetState == AssetState.Loaded)
 					return _width / 2;
 				else
 					return 0;
@@ -150,7 +148,7 @@ namespace GRaff
 			{
 				if (_origin.HasValue)
 					return _origin.Value.Y;
-				else if (ResourceState == AssetState.Loaded)
+				else if (AssetState == AssetState.Loaded)
 					return _height / 2;
 				else
 					return 0;
@@ -161,7 +159,7 @@ namespace GRaff
 		{
 			get
 			{
-				if (ResourceState != AssetState.Loaded) throw new InvalidOperationException("The texture is not loaded.");
+				if (AssetState != AssetState.Loaded) throw new InvalidOperationException("The texture is not loaded.");
 				return _maskShape;
 			}
 		}
@@ -173,7 +171,7 @@ namespace GRaff
 			_height = _texture.Height;
 			if (!_hasCustomMask)
 				_maskShape = MaskShape.Rectangle(-XOrigin, -YOrigin, _width, _height);
-			ResourceState = AssetState.Loaded;
+			AssetState = AssetState.Loaded;
 		}
 
 		/// <summary>
@@ -183,36 +181,40 @@ namespace GRaff
 		/// <remarks>If the texture is already loading asynchronously, calling GRaff.Sprite.Load blocks until loading completes.</remarks>
 		public void Load()
 		{
+			TextureBuffer textureBuffer;
 			lock (this)
 			{
-				if (ResourceState == AssetState.Loaded)
+				if (AssetState == AssetState.Loaded)
 					return;
-				ResourceState = AssetState.Loaded;
+				textureBuffer = TextureBuffer.Load(FileName);
 			}
-			var textureBuffer = TextureBuffer.Load(FileName);
+
 			_load(textureBuffer);
 		}
 
 		public async Task LoadAsync()
 		{
-			if (ResourceState != AssetState.NotLoaded)
+			if (AssetState != AssetState.NotLoaded)
 				return;
 
-			ResourceState = AssetState.LoadingAsync;
+			AssetState = AssetState.LoadingAsync;
 
 			var textureBuffer = await TextureBuffer.LoadAsync(FileName);
 
-			if (ResourceState == AssetState.LoadingAsync)
-				_load(textureBuffer);
+			lock (this)
+			{
+				if (AssetState == AssetState.LoadingAsync)
+					_load(textureBuffer);
+			}
 		}
 
 		public void Unload()
 		{
 			lock (this)
 			{
-				if (ResourceState == AssetState.NotLoaded)
+				if (AssetState == AssetState.NotLoaded)
 					return;
-				ResourceState = AssetState.NotLoaded;
+				AssetState = AssetState.NotLoaded;
 			}
 
 			if (_texture != null)
@@ -227,7 +229,7 @@ namespace GRaff
 		{
 			get
 			{
-				if (ResourceState != AssetState.Loaded) throw new InvalidOperationException("The texture is not loaded.");
+				if (AssetState != AssetState.Loaded) throw new InvalidOperationException("The texture is not loaded.");
 				return _texture;//[imageIndex % _subimages];
 			}
 		}

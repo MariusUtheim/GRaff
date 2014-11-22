@@ -1,5 +1,4 @@
 ﻿using System.Threading.Tasks;
-using GRaff.Synchronization;
 
 
 namespace GRaff
@@ -9,6 +8,6 @@ namespace GRaff
 		void Load();
 		Task LoadAsync();
 		void Unload();
-		AssetState ResourceState { get; }
+		AssetState AssetState { get; }
 	}
 }

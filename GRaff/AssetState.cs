@@ -5,7 +5,7 @@ namespace GRaff
 		/// <summary>
 		/// Indicates that the resource is not loaded.
 		/// </summary>
-		NotLoaded,
+		NotLoaded = 0,
 
 		/// <summary>
 		/// Indicates that an operation is currently loading the resource or part of the resource asynchronously.

@@ -51,13 +51,12 @@
     <Compile Include="Angle.cs" />
     <Compile Include="AnimationStrip.cs" />
     <Compile Include="Async.cs" />
-    <Compile Include="BitmapFont.cs" />
     <Compile Include="Font.cs" />
     <Compile Include="FontAlignment.cs" />
     <Compile Include="FontInfo.cs" />
     <Compile Include="GMath.SystemMathOverloads.cs" />
     <Compile Include="Graphics\BlendModeContext.cs" />
-    <Compile Include="Graphics\BMFont\BmFont.cs" />
+    <Compile Include="Graphics\FontLoader.cs" />
     <Compile Include="Graphics\PointF.cs" />
     <Compile Include="IAsset.cs" />
     <Compile Include="LinearMatrix.cs" />

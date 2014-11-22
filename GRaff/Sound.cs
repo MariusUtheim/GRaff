@@ -33,7 +33,7 @@ namespace GRaff
 
 		public string FileName { get; private set; }
 
-		public AssetState ResourceState { get; private set; }
+		public AssetState AssetState { get; private set; }
 
 		/// <summary>
 		/// Gets the bitrate of this GRaff.Sound class. That is, the number of bits of data in one second of this sample.
@@ -42,7 +42,7 @@ namespace GRaff
 		{
 			get
 			{
-				if (ResourceState != AssetState.Loaded) throw new InvalidOperationException("The texture is not loaded.");
+				if (AssetState != AssetState.Loaded) throw new InvalidOperationException("The texture is not loaded.");
 				return _buffer.Bitrate;
 			}
 		}
@@ -55,7 +55,7 @@ namespace GRaff
 		{
 			get
 			{
-				if (ResourceState != AssetState.Loaded) throw new InvalidOperationException("The texture is not loaded.");
+				if (AssetState != AssetState.Loaded) throw new InvalidOperationException("The texture is not loaded.");
 				return _buffer.Channels;
 			}
 		}
@@ -67,7 +67,7 @@ namespace GRaff
 		{
 			get
 			{
-				if (ResourceState != AssetState.Loaded) throw new InvalidOperationException("The texture is not loaded.");
+				if (AssetState != AssetState.Loaded) throw new InvalidOperationException("The texture is not loaded.");
 				return _buffer.Duration;
 			}
 		}
@@ -79,7 +79,7 @@ namespace GRaff
 		{
 			get
 			{
-				if (ResourceState != AssetState.Loaded) throw new InvalidOperationException("The texture is not loaded.");
+				if (AssetState != AssetState.Loaded) throw new InvalidOperationException("The texture is not loaded.");
 				return _buffer.Frequency;
 			}
 		}
@@ -87,7 +87,7 @@ namespace GRaff
 		private void _load(SoundBuffer buffer)
 		{
 			_buffer = buffer;
-			ResourceState = AssetState.Loaded;
+			AssetState = AssetState.Loaded;
 		}
 
 		/// <summary>
@@ -98,9 +98,9 @@ namespace GRaff
 		{
 			lock (this)
 			{
-				if (ResourceState == AssetState.Loaded)
+				if (AssetState == AssetState.Loaded)
 					return;
-				ResourceState = AssetState.Loaded;
+				AssetState = AssetState.Loaded;
 			}
 
 			var soundBuffer = SoundBuffer.Load(FileName);
@@ -109,14 +109,14 @@ namespace GRaff
 
 		public async Task LoadAsync()
 		{
-			if (ResourceState != AssetState.NotLoaded)
+			if (AssetState != AssetState.NotLoaded)
 				return;
 
-			ResourceState = AssetState.LoadingAsync;
+			AssetState = AssetState.LoadingAsync;
 
 			var soundBuffer = await SoundBuffer.LoadAsync(FileName);
 
-			if (ResourceState == AssetState.LoadingAsync)
+			if (AssetState == AssetState.LoadingAsync)
 				_load(soundBuffer);
 		}
 
@@ -124,9 +124,9 @@ namespace GRaff
 		{
 			lock (this)
 			{
-				if (ResourceState == AssetState.NotLoaded)
+				if (AssetState == AssetState.NotLoaded)
 					return;
-				ResourceState = AssetState.NotLoaded;
+				AssetState = AssetState.NotLoaded;
 			}
 
 			StopAll();
@@ -149,7 +149,7 @@ namespace GRaff
 		/// <exception cref="System.InvalidOperationException">The sound is not loaded.</exception>
 		public SoundInstance Play(bool loop = false, double volume = 1.0, double pitch = 1.0)
 		{
-			if (ResourceState != AssetState.Loaded) throw new InvalidOperationException("The sound is not loaded.");
+			if (AssetState != AssetState.Loaded) throw new InvalidOperationException("The sound is not loaded.");
 			if (volume < 0) throw new ArgumentOutOfRangeException("volume", "Must be greater than or equal to zero.");
 			var instance = new SoundInstance(this, _buffer.Id, loop, volume, pitch);
 			_instances.Add(instance);

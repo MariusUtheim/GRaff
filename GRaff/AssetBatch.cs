@@ -41,19 +41,19 @@ namespace GRaff
 				resource.Unload();
 		}
 
-		public AssetState ResourceState
+		public AssetState AssetState
 		{
 			get
 			{
 				bool loaded = false, loadingAsync = false, notLoaded = false, partiallyLoaded = false;
 				foreach (var resource in _resources)
-					switch (resource.ResourceState)
+					switch (resource.AssetState)
 					{
 						case AssetState.Loaded: loaded = true; break;
 						case AssetState.LoadingAsync: loadingAsync = true; break;
 						case AssetState.NotLoaded: notLoaded = true; break;
 						case AssetState.PartiallyLoaded: partiallyLoaded = true; break;
-						default: throw new NotSupportedException(String.Format("GRaff.ResourceState.{0} is not supported in GRaff.ResourceBatch.ResourceState.get", Enum.GetName(typeof(AssetState), resource.ResourceState)));
+						default: throw new NotSupportedException(String.Format("GRaff.ResourceState.{0} is not supported in GRaff.ResourceBatch.ResourceState.get", Enum.GetName(typeof(AssetState), resource.AssetState)));
                     }
 
 				if (!loadingAsync && !notLoaded && !partiallyLoaded)
