@@ -22,17 +22,6 @@ namespace GRaff
 		{
 		}
 
-		public Transform(double x = 0, double y = 0, double xScale = 1, double yScale = 1, Angle rotation = default(Angle), double xShear = 0, double yShear = 0)
-		{
-			this.X = x;
-			this.Y = y;
-			this.XScale = xScale;
-			this.YScale = yScale;
-			this.Rotation = rotation;
-			this.XShear = xShear;
-			this.YShear = yShear;
-		}
-
 		public double X { get; set; } = 0;
 
 		public double Y { get; set; } = 0;

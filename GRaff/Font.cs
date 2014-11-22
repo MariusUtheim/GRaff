@@ -1,27 +1,92 @@
-using System;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using GRaff.Graphics;
 
 namespace GRaff
 {
-	public class FontCharacter
+	public class Font
 	{
-		public Texture Texture { get; private set; }
+		private Dictionary<char, FontCharacter> _characters = new Dictionary<char, FontCharacter>();
 
-		public int X { get; private set; }
-		public int Y { get; private set; }
-		public int Width { get; private set; }
-		public int Height { get; private set; }
-		public int XOffset { get; private set; }
-		public int YOffset { get; private set; }
 
-		public static double GetWidth(char c)
+		public static Font Load(string bitmapFile, string characterFile)
 		{
-			throw new NotImplementedException();
+			var fontData = BmFont.FontLoader.Load(characterFile);
+			var font = new Font();
+
+			font.TextureBuffer = TextureBuffer.Load(bitmapFile);
+
+			foreach (var c in fontData.Chars)
+			{
+				var character = new FontCharacter
+				{
+					X = c.X,
+					Y = c.Y,
+					Width = c.Width,
+					Height = c.Height,
+					XAdvance = c.XAdvance,
+					XOffset = c.XOffset,
+					YOffset = c.YOffset
+				};
+
+				font._characters.Add((char)c.ID, character);
+			}
+
+			font.Height = fontData.Common.LineHeight;
+
+			return font;
 		}
 
-		internal static void PushTexCoords(char c, ref int t, ref Point[] texCoords)
+		public int Height { get; private set; }
+
+		public double GetWidth(string str)
 		{
-#warning TODO: Remove this ugly method
-			throw new NotImplementedException();
+			double width = 0;
+			foreach (var c in str)
+				width += _characters[c].XAdvance;
+			return width;
+		}
+
+		public TextureBuffer TextureBuffer { get; private set; }
+
+		public void Render(string str, FontAlignment alignment, out Point[] rectCoords, out Point[] texCoords)
+		{
+			rectCoords = new Point[str.Length * 4];
+			texCoords = new Point[str.Length * 4];
+
+			float tXScale = 1.0f / TextureBuffer.Width, tYScale = 1.0f / TextureBuffer.Height;
+			float xOffset = 0, yOffset = 0;
+
+			if ((alignment & FontAlignment.HorizontalCenter) == FontAlignment.HorizontalCenter)
+				xOffset = -(float)GetWidth(str) / 2;
+			else if ((alignment & FontAlignment.Right) == FontAlignment.Right)
+				xOffset = -(float)GetWidth(str);
+
+			if ((alignment & FontAlignment.VerticalCenter) == FontAlignment.VerticalCenter)
+				yOffset = -Height / 2;
+			else if ((alignment & FontAlignment.Bottom) == FontAlignment.Bottom)
+				yOffset = -Height;
+
+			for (int index = 0; index < str.Length; index++)
+			{
+				var character = _characters[str[index]];
+				var coordIndex = index * 4;
+				rectCoords[coordIndex] = new PointF(xOffset + character.XOffset, yOffset + character.YOffset);
+				rectCoords[coordIndex + 1] = new PointF(xOffset + character.XOffset + character.Width, yOffset + character.YOffset);
+				rectCoords[coordIndex + 2] = new PointF(xOffset + character.XOffset + character.Width, yOffset + character.YOffset + character.Height);
+				rectCoords[coordIndex + 3] = new PointF(xOffset + character.XOffset, yOffset + character.YOffset + character.Height);
+
+				texCoords[coordIndex] = new PointF(tXScale * character.X, tYScale * character.Y);
+				texCoords[coordIndex + 1] = new PointF(tXScale * (character.X + character.Width), tYScale * character.Y);
+				texCoords[coordIndex + 2] = new PointF(tXScale * (character.X + character.Width), tYScale * (character.Y + character.Height));
+				texCoords[coordIndex + 3] = new PointF(tXScale * character.X, tYScale * (character.Y + character.Height));
+
+				xOffset += character.XAdvance;
+			}
+
 		}
 	}
 }

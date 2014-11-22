@@ -47,7 +47,6 @@ namespace GRaff
 		/// <returns>A new GRaff.Texture representing the loaded file.</returns>
 		public static TextureBuffer Load(string filename)
 		{
-			Console.WriteLine("<{0}>", Thread.CurrentThread.Name);
 			using (var stream = new FileStream(filename, FileMode.Open))
 			using (var bmp = new Bitmap(stream))
 			{

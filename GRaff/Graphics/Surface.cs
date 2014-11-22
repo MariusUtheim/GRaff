@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Threading.Tasks;
 using OpenTK.Graphics.ES30;
 using GLPrimitiveType = OpenTK.Graphics.ES30.PrimitiveType;
 
@@ -191,48 +192,60 @@ namespace GRaff.Graphics
 
 		}
 
-		public void DrawText(FontCharacter font, Color color, string text, double x, double y)
+		public void DrawText(Font font, FontAlignment alignment, Color color, string text, Point location)
 		{
-			throw new NotImplementedException();
-			/*
+			Point[] vertices;
+			Point[] texCoords;
+
+			font.Render(text, alignment, out vertices, out texCoords);
+
+			for (int i = 0; i < vertices.Length; i++)
+				vertices[i] += location;
+			
+			Color[] colors = Enumerable.Repeat(color, vertices.Length).ToArray();
+
 			GL.BindVertexArray(_vertexArray);
-			GL.BindTexture(TextureTarget.Texture2D, font.Texture.Id);
+			GL.BindTexture(TextureTarget.Texture2D, font.TextureBuffer.Id);
 
-			ShaderProgram.EnableTexture();
-
-			int len = 4 * text.Length;
-
-			Point[] vertices = new Point[len];
-			Point[] texCoords = new Point[len];
-			double dx;
-			double y0 = y, y1 = y + font.Height;
-			int v = 0, t = 0;
-			for (int i = 0; i < text.Length; i++)
-			{
-				dx = Font.GetWidth(text[i]);
-
-				vertices[v++] = new Point(x, y0);
-				vertices[v++] = new Point(x + dx, y0);
-				vertices[v++] = new Point(x + dx, y1);
-				vertices[v++] = new Point(x, y1);
-
-				x += dx;
-				Font.PushTexCoords(text[i], ref t, ref texCoords);
-			}
+			ShaderProgram.Current = ShaderProgram.DefaultTextured;
 
 			GL.BindBuffer(BufferTarget.ArrayBuffer, _vertexBuffer);
-			GL.BufferData(BufferTarget.ArrayBuffer, new IntPtr(len * sizeofPoint), vertices, BufferUsageHint.StreamDraw);
-
+			GL.BufferData(BufferTarget.ArrayBuffer, new IntPtr(vertices.Length * sizeofPoint), vertices, BufferUsageHint.StreamDraw);
 			GL.BindBuffer(BufferTarget.ArrayBuffer, _colorBuffer);
-			GL.BufferData(BufferTarget.ArrayBuffer, new IntPtr(len * sizeofColor), Enumerable.Repeat(color, len).ToArray(), BufferUsageHint.StreamDraw);
-
+			GL.BufferData(BufferTarget.ArrayBuffer, new IntPtr(vertices.Length * sizeofColor), colors, BufferUsageHint.StreamDraw);
 			GL.BindBuffer(BufferTarget.ArrayBuffer, _textureBuffer);
-			GL.BufferData(BufferTarget.ArrayBuffer, new IntPtr(len * sizeofPoint), texCoords, BufferUsageHint.StreamDraw);
+			GL.BufferData(BufferTarget.ArrayBuffer, new IntPtr(vertices.Length * sizeofPoint), texCoords, BufferUsageHint.StreamDraw);
+
+			GL.DrawArrays(GLPrimitiveType.Quads, 0, vertices.Length);
+		}
+
+		public void DrawText(Font font, FontAlignment alignment, Color color, string text, Transform transform)
+		{
+			Point[] vertices;
+			Point[] texCoords;
+
+			font.Render(text, alignment, out vertices, out texCoords);
+
+			var matrix = transform.GetMatrix();
+			Parallel.For(0, vertices.Length, i => vertices[i] = matrix * vertices[i]);
+
+			Color[] colors = Enumerable.Repeat(color, vertices.Length).ToArray();
+
+			GL.BindVertexArray(_vertexArray);
+			GL.BindTexture(TextureTarget.Texture2D, font.TextureBuffer.Id);
+
+			ShaderProgram.Current = ShaderProgram.DefaultTextured;
+
+			GL.BindBuffer(BufferTarget.ArrayBuffer, _vertexBuffer);
+			GL.BufferData(BufferTarget.ArrayBuffer, new IntPtr(vertices.Length * sizeofPoint), vertices, BufferUsageHint.StreamDraw);
+			GL.BindBuffer(BufferTarget.ArrayBuffer, _colorBuffer);
+			GL.BufferData(BufferTarget.ArrayBuffer, new IntPtr(vertices.Length * sizeofColor), colors, BufferUsageHint.StreamDraw);
+			GL.BindBuffer(BufferTarget.ArrayBuffer, _textureBuffer);
+			GL.BufferData(BufferTarget.ArrayBuffer, new IntPtr(vertices.Length * sizeofPoint), texCoords, BufferUsageHint.StreamDraw);
 
 			GL.DrawArrays(GLPrimitiveType.Quads, 0, vertices.Length);
 
-			ShaderProgram.DisableTexture();
-			*/
+
 		}
 	}
 }

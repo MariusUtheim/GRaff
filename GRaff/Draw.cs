@@ -127,9 +127,14 @@ namespace GRaff
 			CurrentSurface.DrawImage(image);
 		}
 
-		public static void Text(FontCharacter font, string text, double x, double y)
+		public static void Text(Font font, Color color, string text, double x, double y)
 		{
-			CurrentSurface.DrawText(font, Color.Black, text, x, y);
+			CurrentSurface.DrawText(font, FontAlignment.Center, color, text, new Point(x, y));
+		}
+
+		public static void Text(Font font, Color color, string text, Transform transform)
+		{
+			CurrentSurface.DrawText(font, FontAlignment.Center, color, text, transform);
 		}
 	}
 }

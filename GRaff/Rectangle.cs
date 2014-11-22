@@ -26,6 +26,10 @@ namespace GRaff
 		/// <param name="size">The size of the rectangle.</param>
 		public Rectangle(Point location, Vector size) : this(location.X, location.Y, size.X, size.Y) { }
 
+		public Rectangle(Point topLeft, Point bottomRight)
+			: this(topLeft.X, topLeft.Y, bottomRight.X - topLeft.X, bottomRight.Y - topLeft.Y) { }
+
+
 		/// <summary>
 		/// Gets the width of this GRaff.Rectangle.
 		/// </summary>

@@ -52,9 +52,13 @@
     <Compile Include="AnimationStrip.cs" />
     <Compile Include="Async.cs" />
     <Compile Include="BitmapFont.cs" />
+    <Compile Include="Font.cs" />
+    <Compile Include="FontAlignment.cs" />
     <Compile Include="FontInfo.cs" />
     <Compile Include="GMath.SystemMathOverloads.cs" />
     <Compile Include="Graphics\BlendModeContext.cs" />
+    <Compile Include="Graphics\BMFont\BmFont.cs" />
+    <Compile Include="Graphics\PointF.cs" />
     <Compile Include="IAsset.cs" />
     <Compile Include="LinearMatrix.cs" />
     <Compile Include="Randomness\BinomialDistribution.cs" />
@@ -117,7 +121,7 @@
     <Compile Include="DraggableObject.cs" />
     <Compile Include="Draw.cs" />
     <Compile Include="Fill.cs" />
-    <Compile Include="Font.cs" />
+    <Compile Include="FontCharacter.cs" />
     <Compile Include="Graphics\GLRaffExtensions.cs" />
     <Compile Include="Graphics\PrimitiveType.cs" />
     <Compile Include="Graphics\UsageHint.cs" />
