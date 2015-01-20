@@ -9,7 +9,7 @@ namespace GRaff.Graphics
 	//
 	// Summary:
 	//     Used in GL.BufferData
-	public enum UsageHint
+	internal enum UsageHint
 	{
 		//
 		// Summary:

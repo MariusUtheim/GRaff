@@ -11,9 +11,16 @@ namespace GRaff.Graphics
 	{
 		public static void Initialize()
 		{
-			ShaderProgram.Current = ShaderProgram.DefaultColored;
-			ColorMap.BlendMode = BlendMode.AlphaBlend;
-			GL.Enable(EnableCap.Blend);
+			try
+			{
+				ColorMap.BlendMode = BlendMode.AlphaBlend;
+				GL.Enable(EnableCap.Blend);
+			}
+			catch (TypeInitializationException ex)
+			{
+				var innerException = ex.InnerException;
+				throw innerException;
+			}
 		}
 	}
 }

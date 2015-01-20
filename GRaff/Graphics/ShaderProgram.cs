@@ -1,52 +1,102 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using OpenTK.Graphics.ES30;
+
 
 namespace GRaff.Graphics
 {
 	public class ShaderProgram : IDisposable
 	{
+		public const string ShaderVersion = "400 core";
+
 		private bool _disposed = false;
-		public static ShaderProgram DefaultColored { get; } = _defaultProgram();
-		static ShaderProgram _defaultProgram()
-		{
-			var program = new ShaderProgram(VertexShader.DefaultColored, FragmentShader.DefaultColored);
-			GL.BindAttribLocation(program.Id, 0, "in_Position");
-			GL.BindAttribLocation(program.Id, 1, "in_Color");
-			return program;
-		}
 
-		public static ShaderProgram DefaultTextured { get; } = _texturedProgram();
+		public static ShaderProgram DefaultColored = new ShaderProgram(Shader.DefaultColoredVertexShader, Shader.DefaultColoredFragmentShader);
+		public static ShaderProgram DefaultTextured = new ShaderProgram(Shader.DefaultTexturedVertexShader, Shader.DefaultTexturedFragmentShader);
+		public static ShaderProgram CurrentColored = DefaultColored;
+		public static ShaderProgram CurrentTextured = DefaultTextured;
 
-		public static string ShaderVersion
-		{
-			get { return "400 core"; }
-		}
-
-		static ShaderProgram _texturedProgram()
-		{
-			var program = new ShaderProgram(VertexShader.DefaultTextured, FragmentShader.DefaultTextured);
-			GL.BindAttribLocation(program.Id, 0, "in_Position");
-			GL.BindAttribLocation(program.Id, 1, "in_Color");
-			GL.BindAttribLocation(program.Id, 2, "in_TexCoord");
-			return program;
-		}
-
-		public ShaderProgram(VertexShader vertexShader, FragmentShader fragmentShader)
+		public ShaderProgram(params Shader[] shaders)
 		{
 			Id = GL.CreateProgram();
-			GL.AttachShader(Id, vertexShader.Id);
-			GL.AttachShader(Id, fragmentShader.Id);
+
+			foreach (var shader in shaders)
+				GL.AttachShader(Id, shader.Id);
+
 			GL.LinkProgram(Id);
 			string log;/*C#6.0*/
 			if ((log = GL.GetProgramInfoLog(Id)) != "")
 				throw new ShaderException("Linking a GRaff.ShaderProgram caused a message: " + log);
-			GL.DetachShader(Id, vertexShader.Id);
-			GL.DetachShader(Id, fragmentShader.Id);
+
+			GL.BindAttribLocation(Id, 0, "in_Position");
+			GL.BindAttribLocation(Id, 1, "in_Color");
+			GL.BindAttribLocation(Id, 2, "in_TexCoord");
+
+			foreach (var shader in shaders)
+				GL.DetachShader(Id, shader.Id);
 		}
+
+		public void SetCurrent()
+		{
+			GL.UseProgram(Id);
+		}
+
+		public static void SetCurrent(int id)
+		{
+			GL.UseProgram(id);
+		}
+
+		public static int GetCurrentId()
+		{
+			return GL.GetInteger(GetPName.CurrentProgram);
+		}
+
+		public void UpdateUniformValues()
+		{
+			int currentProgram = GL.GetInteger(GetPName.CurrentProgram);
+			try
+			{
+				int location;
+
+				SetCurrent();
+
+				location = GL.GetUniformLocation(Id, "GRaff_LoopCount");
+				GL.Uniform1(location, Time.LoopCount);
+
+				location = GL.GetUniformLocation(Id, "GRaff_RoomWidth");
+				GL.Uniform1(location, Room.Width);
+
+				location = GL.GetUniformLocation(Id, "GRaff_RoomHeight");
+				GL.Uniform1(location, Room.Height);
+
+				View.LoadMatrix(Id);
+			}
+			finally
+			{
+				GL.UseProgram(currentProgram);
+			}
+		}
+
+		protected void SetUniform(string name, int value)
+		{
+			GL.Uniform1(GL.GetUniformLocation(Id, name), value);
+		}
+
+		protected void SetUniform(string name, uint value)
+		{
+			GL.Uniform1(GL.GetUniformLocation(Id, name), value);
+		}
+
+		protected void SetUniform(string name, float value)
+		{
+			GL.Uniform1(GL.GetUniformLocation(Id, name), value);
+		}
+
+		protected void SetUniform(string name, double value)
+		{
+			GL.Uniform1(GL.GetUniformLocation(Id, name), (float)value);
+		}
+
+		public int Id { get; private set; }
 
 		~ShaderProgram()
 		{
@@ -61,8 +111,10 @@ namespace GRaff.Graphics
 				{
 				}
 
-				if (Giraffe.Window.Exists)
+				if (Context.IsAlive)
 					GL.DeleteProgram(Id);
+				else
+					Async.Run(() => GL.DeleteProgram(Id));
 				_disposed = true;
 			}
 		}
@@ -73,25 +125,5 @@ namespace GRaff.Graphics
 			GC.SuppressFinalize(this);
 		}
 
-		private static ShaderProgram _currentProgram;
-        public static ShaderProgram Current
-		{
-			get
-			{
-				int actualProgramId;
-				GL.GetInteger(GetPName.CurrentProgram, out actualProgramId);
-				if (_currentProgram.Id != actualProgramId)
-					throw new InvalidOperationException("The current program id is not equal to the id of the managed ShaderProgram object. Did you manually invoke a GL function (e.g. GL.UseProgram)?");
-				return _currentProgram;
-			}
-			set
-			{
-				_currentProgram = value;
-				GL.UseProgram(_currentProgram.Id);
-			}
-		}
-
-
-		public int Id { get; private set; }
 	}
 }

@@ -1,23 +1,18 @@
 ﻿using System;
 
+
 namespace GRaff
 {
-	[Flags]
 	public enum FontAlignment
 	{
-		Left = 0x00,
-		HorizontalCenter = 0x01,
+		TopLeft = 0x11,
+		Top = 0x10,
+		TopRight = 0x12,
+		Left = 0x01,
+		Center = 0x00,
 		Right = 0x02,
-
-		Top = 0x00,
-		VerticalCenter = 0x10,
+		BottomLeft = 0x21,
 		Bottom = 0x20,
-
-		TopLeft = 0x00,
-		TopRight = 0x02,
-		BottomLeft = 0x20,
-		BottomRight = 0x22,
-
-		Center = 0x11
+		BottomRight = 0x22
 	}
 }

@@ -8,13 +8,13 @@ namespace GRaff.Graphics
 {
 	public sealed class BlendModeContext : IDisposable
 	{
-		private BlendMode _previous, _current;
+		private BlendMode _previous;
 		private bool _isDisposed = false;
 
 		public BlendModeContext(BlendMode mode) /*C#6.0*/
 		{
 			_previous = ColorMap.BlendMode;
-			_current = ColorMap.BlendMode = mode;
+			ColorMap.BlendMode = mode;
 		}
 
 		void Dispose(bool disposing)
@@ -23,7 +23,7 @@ namespace GRaff.Graphics
 			{
 				_isDisposed = true;
 				ColorMap.BlendMode = _previous;
-				_previous = _current = null;
+				_previous = null;
 			}
 		}
 

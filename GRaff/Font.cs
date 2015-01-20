@@ -142,15 +142,15 @@ namespace GRaff
 			float tXScale = 1.0f / TextureBuffer.Width, tYScale = 1.0f / TextureBuffer.Height;
 			float xOffset = 0, yOffset = 0;
 
-			if ((alignment & FontAlignment.HorizontalCenter) == FontAlignment.HorizontalCenter)
-				xOffset = -(float)GetWidth(str) / 2;
-			else if ((alignment & FontAlignment.Right) == FontAlignment.Right)
-				xOffset = -(float)GetWidth(str);
-
-			if ((alignment & FontAlignment.VerticalCenter) == FontAlignment.VerticalCenter)
-				yOffset = -Height / 2;
-			else if ((alignment & FontAlignment.Bottom) == FontAlignment.Bottom)
-				yOffset = -Height;
+			//if ((alignment & FontAlignment.HorizontalCenter) == FontAlignment.HorizontalCenter)
+			//	xOffset = -(float)GetWidth(str) / 2;
+			//else if ((alignment & FontAlignment.Right) == FontAlignment.Right)
+			//	xOffset = -(float)GetWidth(str);
+			//
+			//if ((alignment & FontAlignment.VerticalCenter) == FontAlignment.VerticalCenter)
+			//	yOffset = -Height / 2;
+			//else if ((alignment & FontAlignment.Bottom) == FontAlignment.Bottom)
+			//	yOffset = -Height;
 
 			for (int index = 0; index < str.Length; index++)
 			{

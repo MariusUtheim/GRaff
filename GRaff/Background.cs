@@ -10,7 +10,7 @@ namespace GRaff
 
 		public Background()
 		{
-			Depth = Int32.MinValue;
+			Depth = Int32.MaxValue;
 			_renderSystem = new TexturedRenderSystem();
 			_renderSystem.SetColors(UsageHint.StaticDraw, Color.White, Color.White, Color.White, Color.White);
 			Color = Color.LightGray;
@@ -19,7 +19,7 @@ namespace GRaff
 
 		internal static void Initialize()
 		{
-			Default = new Background { Color = Color.LightGray };
+			Default = Instance.Create(new Background { Color = Color.LightGray });
 		}
 
 		public static Background Default { get; private set; }
@@ -64,7 +64,7 @@ namespace GRaff
 					_renderSystem.SetTexCoords(UsageHint.StreamDraw, u0, v0, u1, v0, u1, v1, u0, v1);
 
 					Sprite.Texture.Bind();
-					ShaderProgram.Current = ShaderProgram.DefaultTextured;
+					ShaderProgram.CurrentTextured.SetCurrent();
 
 					_renderSystem.Render(PrimitiveType.Quads, 4);
 				}

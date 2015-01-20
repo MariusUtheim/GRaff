@@ -52,7 +52,8 @@ namespace GRaff
 
 				GL.Clear(ClearBufferMask.ColorBufferBit);
 
-				View.LoadMatrix();
+				ShaderProgram.CurrentColored.UpdateUniformValues();
+				ShaderProgram.CurrentTextured.UpdateUniformValues();
 
 				Giraffe.Redraw();
 
@@ -129,7 +130,8 @@ namespace GRaff
 					var arg = collisionInterface.GetGenericArguments().First();
 					foreach (var other in Instance.Objects.Where(i => i.GetType() == arg || arg.IsAssignableFrom(i.GetType())))
 					{
-						if ((gen as GameObject).Intersects(other))
+#warning TODO: Don't collide if objects are destroyed
+						if (gen.Intersects(other))
 							collisionInterface.GetMethods().First().Invoke(gen, new object[] { other });
 					}
 				}

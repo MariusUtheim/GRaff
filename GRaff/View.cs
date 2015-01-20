@@ -65,7 +65,7 @@ namespace GRaff
 		}
 
 
-		internal static void LoadMatrix()
+		internal static void LoadMatrix(int programId)
 		{
 			Rectangle rect = RoomView;
 			
@@ -76,19 +76,9 @@ namespace GRaff
 
 			Matrix4 projectionMatrix = translateToOrigin * rotate * translateFromOrigin * project;
 
-			ShaderProgram previousProgram = ShaderProgram.Current;
-
 			int matrixLocation;
-			matrixLocation = GL.GetUniformLocation(ShaderProgram.DefaultColored.Id, "projectionMatrix");
-			ShaderProgram.Current = ShaderProgram.DefaultColored;
+			matrixLocation = GL.GetUniformLocation(programId, "GRaff_ViewMatrix");
 			GL.UniformMatrix4(matrixLocation, false, ref projectionMatrix);
-
-			matrixLocation = GL.GetUniformLocation(ShaderProgram.DefaultTextured.Id, "projectionMatrix");
-			ShaderProgram.Current = ShaderProgram.DefaultTextured;
-			GL.UniformMatrix4(matrixLocation, false, ref projectionMatrix);
-
-			ShaderProgram.Current = previousProgram;
-			//GL.UseProgram(0);
 		}
 
 
