@@ -31,7 +31,7 @@ using System.Text;
 namespace OggVorbisDecoder
 {
     [global::System.Serializable]
-    public class OggVorbisException : Exception
+    internal class OggVorbisException : Exception
     {
         public OggVorbisException() { }
         public OggVorbisException(string message) : base(message) { }

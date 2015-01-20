@@ -31,7 +31,7 @@ using System.Runtime.InteropServices;
 
 namespace OggVorbisDecoder
 {
-	public enum NativeSeekMode : int
+	internal enum NativeSeekMode : int
 	{
 		Cur = 1,
 		End = 2,
@@ -56,7 +56,7 @@ namespace OggVorbisDecoder
 		internal TellFunctionDelegate TellFunction;
 	}
 
-    public class OggVorbisEncodedStream : MemoryStream
+    internal class OggVorbisEncodedStream : MemoryStream
     {
         #region Properties
         private MemoryStream rawStream;

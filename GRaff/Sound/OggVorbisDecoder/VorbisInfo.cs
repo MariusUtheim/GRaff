@@ -43,7 +43,7 @@ namespace OggVorbisDecoder
 		internal IntPtr CodecSetup;
 	}
 
-	public class VorbisInfo : AudioInfo, IDisposable
+	internal class VorbisInfo : AudioInfo, IDisposable
 	{
 		#region Variables
         private NativeVorbisInfo info;

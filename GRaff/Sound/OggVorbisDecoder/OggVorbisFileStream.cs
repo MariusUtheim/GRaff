@@ -36,7 +36,7 @@ namespace OggVorbisDecoder
     /// <summary>
     /// This class acts like a read FileStream on a Ogg Vorbis file, will handle the file and stream the decoded contents
     /// </summary>
-    public class OggVorbisFileStream : Stream
+    internal class OggVorbisFileStream : Stream
     {
         #region Properties
         private NativeOggVorbisFile file = null;

@@ -32,7 +32,7 @@ using System.IO;
 namespace OggVorbisDecoder
 {
 
-    public class OggVorbisMemoryStream : MemoryStream
+    internal class OggVorbisMemoryStream : MemoryStream
     {
         #region Properties
         private VorbisInfo info = null;

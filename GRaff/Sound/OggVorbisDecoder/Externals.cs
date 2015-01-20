@@ -4,7 +4,7 @@ using System.Text;
 
 namespace OggVorbisDecoder
 {
-    public static class Externals
+    internal static class Externals
     {
         // Win32
         public const string VorbisFileLibrary = @"External\vorbisfile.dll";

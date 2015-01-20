@@ -33,7 +33,7 @@ namespace OggVorbisDecoder
     /// <summary>
     /// Contains simple audio file information
     /// </summary>
-    public class AudioInfo
+    internal class AudioInfo
     {
         private int rate;
         private int channels;
