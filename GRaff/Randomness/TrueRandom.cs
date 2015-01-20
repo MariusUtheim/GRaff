@@ -6,6 +6,7 @@ using System.Linq;
 using System.Net;
 using System.Runtime.Serialization;
 using System.Text;
+using System.Threading.Tasks;
 using System.Web.Script.Serialization;
 
 namespace GRaff.Randomness
@@ -27,8 +28,8 @@ namespace GRaff.Randomness
 		/// <param name="min">The inclusive lower bound of the generated values. Must be in the range [-1e9, 1e9].</param>
 		/// <param name="max">The inclusive upper bound of the generated values. Must be in the range [-1e9, 1e9], and strictly greater than min.</param>
 		/// <param name="replacement">Specifies whether the generated values should be selected with replacement, or if they should all be unique.</param>
-		/// <returns>A list of n true random integers.</returns>
-		public static int[] Integers(int n, int min, int max, bool replacement)
+		/// <returns>A System.Threading.Tasks.Task that upon completion will result in an array of n true random integers.</returns>
+		public static async Task<int[]> IntegersAsync(int n, int min, int max, bool replacement)
 		{
 			if (n < 1 || n > 1e4) throw new ArgumentOutOfRangeException("n", n, "must be in the range [1, 1e4]");
 			if (min < -1e9 || 1e9 < min) throw new ArgumentOutOfRangeException("min", min, "must be in the range [-1e9, 1e9]");
@@ -44,7 +45,7 @@ namespace GRaff.Randomness
 				{ "replacement", replacement },
 			});
 
-			var responseString = _makeRequest(requestData);
+			var responseString = await _makeRequestAsync(requestData);
 			var response = serializer.Deserialize<_Response>(responseString);
 			if (response.error != null)
 				throw new WebException("An unhandled error occurred when querying random.org: " + response.error.message + " (code: " + response.error.code.ToString() + ")");
@@ -57,8 +58,8 @@ namespace GRaff.Randomness
 		/// <param name="n">The number of values to generate. Must be in the range [1, 1e4].</param>
 		/// <param name="decimalPlaces">The number of decimal places in the generated valeus. Must be in the range [1, 20].</param>
 		/// <param name="replacement">Specifies whether the generated values should be selected with replacement, or if they should all be unique.</param>
-		/// <returns>A list of n true random decimals in the range [0, 1).</returns>
-		public static decimal[] Decimals(int n, int decimalPlaces, bool replacement)
+		/// <returns>A System.Threading.Tasks.Task that upon completion will result in an array of n true random decimals in the range [0, 1).</returns>
+		public static async Task<decimal[]> Decimals(int n, int decimalPlaces, bool replacement)
 		{
 			if (n < 1 || n > 1e4) throw new ArgumentOutOfRangeException("n", n, "must be in the range [1, 1e4]");
 			if (decimalPlaces < 1 || decimalPlaces > 20) throw new ArgumentOutOfRangeException("decimalPlaces", decimalPlaces, "must be in the range [1, 20]");
@@ -72,7 +73,7 @@ namespace GRaff.Randomness
 				{ "replacement", replacement }
 			});
 
-			var responseString = _makeRequest(requestData);
+			var responseString = await _makeRequestAsync(requestData);
 			var response = serializer.Deserialize<_Response>(responseString);
 			if (response.error != null)
 				throw new WebException("An unhandled error occurred when querying random.org: " + response.error.message + " (code: " + response.error.code.ToString() + ")");
@@ -86,8 +87,8 @@ namespace GRaff.Randomness
 		/// <param name="mean">The mean of the Gaussian distribution. Must be in the range [-1e6, 1e6].</param>
 		/// <param name="standardDeviation">The standard deviation of the Gaussian distribution. Must be in the range [-1e6, 1e6].</param>
 		/// <param name="significantDigits">The number of significant digits in the returned values. Must be in the range [2, 20].</param>
-		/// <returns>A list of true random normally distributed values.</returns>
-		public static decimal[] Gaussians(int n, double mean, double standardDeviation, int significantDigits)
+		/// <returns>A System.Threading.Tasks.Task that upon completion will result in an array of true random normally distributed values.</returns>
+		public static async Task<decimal[]> Gaussians(int n, double mean, double standardDeviation, int significantDigits)
 		{
 			if (n < 1 || n > 1e4) throw new ArgumentOutOfRangeException("n", n, "must be in the range [1, 1e4]");
 			if (mean < -1e6 || mean > 1e6) throw new ArgumentOutOfRangeException("mean", mean, "must be in the range [-1e6, 1e6]");
@@ -102,7 +103,7 @@ namespace GRaff.Randomness
 				{ "significantDigits", significantDigits }
 			});
 
-			var responseString = _makeRequest(requestData);
+			var responseString = await _makeRequestAsync(requestData);
 			var response = serializer.Deserialize<_Response>(responseString);
 			if (response.error != null)
 				throw new WebException("An unhandled error occurred when querying random.org: " + response.error.message + " (code: " + response.error.code.ToString() + ")");
@@ -116,8 +117,8 @@ namespace GRaff.Randomness
 		/// <param name="length">The length of each generated string. Must be in the range [1, 20].</param>
 		/// <param name="characters">The characters to use in the generated strings. At most 80 characters are allowed.</param>
 		/// <param name="replacement">Specifies whether the generated strings should be selected with replacement, or if they should all be unique.</param>
-		/// <returns>A list of true random strings.</returns>
-		public static string[] Strings(int n, int length, string characters, bool replacement)
+		/// <returns>A System.Threading.Tasks.Task that upon completion will result in an array of true random strings.</returns>
+		public static async Task<string[]> Strings(int n, int length, string characters, bool replacement)
 		{
 			if (n < 1 || n > 1e4) throw new ArgumentOutOfRangeException("n", n, "n must be in the range [1, 1e4]");
 			if (length < 1 || n > 20) throw new ArgumentOutOfRangeException("length", length, "must be in the range [1, 20]");
@@ -135,7 +136,7 @@ namespace GRaff.Randomness
 				{ "replacement", replacement },
 			});
 
-			var responseString = _makeRequest(requestData);
+			var responseString = await _makeRequestAsync(requestData);
 			var response = serializer.Deserialize<_Response>(responseString);
 			if (response.error != null)
 				throw new WebException("An unhandled error occurred when querying random.org: " + response.error.message + " (code: " + response.error.code.ToString() + ")");
@@ -199,19 +200,19 @@ namespace GRaff.Randomness
 
 
 
-		private static string _makeRequest(string requestData)
+		private static async Task<string> _makeRequestAsync(string requestData)
 		{
 			var request = WebRequest.CreateHttp(baseUrl);
 			request.ContentType = contentType;
 			request.Method = "POST";
 
 			using (var writer = new StreamWriter(request.GetRequestStream()))
-				writer.Write(requestData);
+				await writer.WriteAsync(requestData);
 
-			var response = request.GetResponse();
+			var response = await request.GetResponseAsync();
 			string responseString;
 			using (var reader = new StreamReader(response.GetResponseStream()))
-				responseString = reader.ReadToEnd();
+				responseString = await reader.ReadToEndAsync();
 
 			return responseString;
 		}
