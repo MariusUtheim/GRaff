@@ -2,7 +2,7 @@
 using GRaff.Randomness;
 
 
-namespace GRaff.Particles
+namespace GRaff.Particles.Behaviors
 {
 	public class LinearMotionFeature : IParticleFeature
 	{

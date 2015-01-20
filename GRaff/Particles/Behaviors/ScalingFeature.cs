@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿
 
-namespace GRaff.Particles
+namespace GRaff.Particles.Behaviors
 {
 	public class ScalingFeature : IParticleFeature
 	{
