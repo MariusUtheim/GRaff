@@ -12,6 +12,8 @@ namespace GRaff
 	{
 		public Texture(TextureBuffer buffer, float left, float bottom, float right, float top)
 		{
+			if (buffer == null)
+				throw new ArgumentNullException("buffer"); /*C#6.0*/
 			Buffer = buffer;
 			TopLeft = new PointF(left, top);
 			TopRight = new PointF(right, top);
@@ -30,5 +32,22 @@ namespace GRaff
 		public PointF BottomLeft { get; private set; }
 
 		public PointF BottomRight { get; private set; }
+
+		public float PixelWidth
+		{
+			get
+			{
+				return Buffer.Width * (BottomRight.X - TopLeft.X);
+			}
+		}
+
+		public float PixelHeight
+		{
+			get
+			{
+				return Buffer.Height * (BottomRight.Y + TopLeft.Y);
+			}
+		}
+
 	}
 }

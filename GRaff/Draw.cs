@@ -1,4 +1,5 @@
-﻿using GRaff.Graphics;
+﻿using System;
+using GRaff.Graphics;
 
 
 namespace GRaff
@@ -38,6 +39,7 @@ namespace GRaff
 		{
 			CurrentSurface.DrawCircle(color, new PointF((float)x, (float)y), radius);
 		}
+
 		public static void Circle(Color color, Point location, double radius)
 		{
 			CurrentSurface.DrawCircle(color, (PointF)location, radius);
@@ -110,6 +112,11 @@ namespace GRaff
 		public static void Line(Color col1, Color col2, Point p1, Point p2)
 		{
 			CurrentSurface.DrawLine(col1, col2, (PointF)p1, (PointF)p2);
+		}
+
+		public static void Texture(Texture texture, double x, double y)
+		{
+			CurrentSurface.DrawTexture(texture, new PointF((float)x, (float)y));
 		}
 
 		public static void Sprite(Sprite sprite, int imageIndex, double x, double y)

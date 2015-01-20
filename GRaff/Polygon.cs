@@ -31,10 +31,12 @@ namespace GRaff
 			_SanityCheck();
 		}
 
-		public Polygon(int degree, int radius)
-			: this(degree, radius, Point.Zero) { }
+		public static Polygon Regular(int degree, int radius)
+		{
+			return Regular(degree, radius, Point.Zero);
+		}
 
-		public Polygon(int degree, int radius, Point center)
+		public static Polygon Regular(int degree, int radius, Point center)
 		{
 			if (degree < 3) throw new ArgumentException("Degree must be greater than or equal to 3.", "degree");
 
@@ -53,7 +55,7 @@ namespace GRaff
 				y = s * tmp + c * y;
 			}
 
-			_pts = pts;
+			return new Polygon { _pts = pts };
 		}
 
 		private Polygon()
@@ -87,17 +89,21 @@ namespace GRaff
 				sum += a;
 			}
 
-			if (sum != Angle.Epsilon)
+			if (sum != Angle.Zero)
 				throw new ArgumentException("The points must specify a convex polygon with winding number equal to 1. Winding is " + sum.ToString());
 		}
 
+		public static Polygon Circle(double radius)
+		{
+			return Circle(Point.Zero, radius);
+		}
 
 		public static Polygon Circle(Point center, double radius)
 		{
 			if (radius == 0)
 				return new Polygon { _pts = new[] { center } };
 
-			int precision = (int)GMath.Ceiling(radius);			
+			int precision = (int)GMath.Ceiling(GMath.Tau * radius);			
 
 			double dt = GMath.Tau / precision;
 			double c = GMath.Cos(dt), s = GMath.Sin(dt);

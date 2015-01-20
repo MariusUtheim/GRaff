@@ -8,88 +8,88 @@ namespace GRaff
 {
 	public static class GlobalEvent
 	{
-		public static event EventHandler Step;
-		public static event EventHandler BeginStep;
-		public static event EventHandler EndStep;
-		public static event EventHandler DrawBackground;
-		public static event EventHandler DrawForeground;
-		public static event EventHandler<KeyEventArgs> Key;
-		public static event EventHandler<KeyEventArgs> KeyPressed;
-		public static event EventHandler<KeyEventArgs> KeyReleased;
-		public static event EventHandler<MouseEventArgs> Mouse;
-		public static event EventHandler<MouseEventArgs> MousePressed;
-		public static event EventHandler<MouseEventArgs> MouseReleased;
+		public static event Action Step;
+		public static event Action BeginStep;
+		public static event Action EndStep;
+		public static event Action DrawBackground;
+		public static event Action DrawForeground;
+		public static event Action<Key> Key;
+		public static event Action<Key> KeyPressed;
+		public static event Action<Key> KeyReleased;
+		public static event Action<MouseButton> Mouse;
+		public static event Action<MouseButton> MousePressed;
+		public static event Action<MouseButton> MouseReleased;
 
 		internal static void OnBeginStep()
 		{
 			if (BeginStep != null)
-				BeginStep.Invoke(null, new EventArgs());
+				BeginStep.Invoke();
 		}
 
 		internal static void OnStep()
 		{
 			if (Step != null)
-				Step.Invoke(null, new EventArgs());
+				Step.Invoke();
 		}
 
 		internal static void OnEndStep()
 		{
 			if (EndStep != null)
-				EndStep.Invoke(null, new EventArgs());
+				EndStep.Invoke();
 		}
 
 
 		internal static void OnKey(Key key)
 		{
 			if (Key != null)
-				Key.Invoke(null, new KeyEventArgs(key));
+				Key.Invoke(key);
 		}
 
 		internal static void OnKeyPressed(Key key)
 		{
 			if (KeyPressed != null)
-				KeyPressed.Invoke(null, new KeyEventArgs(key));
+				KeyPressed.Invoke(key);
 		}
 
 		internal static void OnKeyReleased(Key key)
 		{
 			if (KeyReleased != null)
-				KeyReleased.Invoke(null, new KeyEventArgs(key));
+				KeyReleased.Invoke(key);
 		}
 
 		internal static void OnDrawBackground()
 		{
 			if (DrawBackground != null)
-				DrawBackground(null, new EventArgs());
+				DrawBackground();
 		}
 
 		internal static void OnDrawForeground()
 		{
 			if (DrawForeground != null)
-				DrawForeground(null, new EventArgs());
+				DrawForeground();
 		}
 
 		internal static void OnMouse(MouseButton button)
 		{
 			if (Mouse != null)
-				Mouse(null, new MouseEventArgs(button));
+				Mouse(button);
 		}
 
 		internal static void OnMousePressed(MouseButton button)
 		{
 			if (MousePressed != null)
-				MousePressed(null, new MouseEventArgs(button));
+				MousePressed(button);
 		}
 
 		internal static void OnMouseReleased(MouseButton button)
 		{
 			if (MouseReleased != null)
-				MouseReleased(null, new MouseEventArgs(button));
+				MouseReleased(button);
 		}
 
-		private static void _ExitOnEscape(object sender, KeyEventArgs e)
+		private static void _ExitOnEscape(Key key)
 		{
-			if (e.Key == GRaff.Key.Escape)
+			if (key == GRaff.Key.Escape)
 				Giraffe.Quit();
 		}
 

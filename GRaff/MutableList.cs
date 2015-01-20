@@ -23,7 +23,7 @@ namespace GRaff
 		public void Sort()
 		{
 		//	_list.Sort(GameElementDepthComparer.Instance);
-			_list = _list.OrderBy(instance => instance.Depth).ToList();
+			_list = _list.OrderByDescending(instance => instance.Depth).ToList();
 		}
 
 		public override void Add(GameElement item)

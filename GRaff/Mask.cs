@@ -11,7 +11,7 @@ namespace GRaff
 		internal Mask(GameObject owner)
 		{
 			this._owner = owner;
-			this.Shape = MaskShape.SameAsSprite;
+			this.Shape = MaskShape.Automatic;
 		}
 		Sprite mySprite = new Sprite("Assets/MySprite.png");
 
@@ -28,7 +28,7 @@ namespace GRaff
 		private MaskShape _maskShape;
 		/// <summary>
 		/// Gets or sets the shape of this GRaff.Mask.
-		/// If the shape is set to GRaff.MaskShape.SameAsSprite, it instead gets the maskshape of the underlying sprite, or GRaff.MaskShape.None if that sprite is null.
+		/// If the shape is set to GRaff.MaskShape.Automatic, it instead returns the MaskShape of the underlying sprite, or GRaff.MaskShape.None if that sprite is null.
 		/// This value cannot be set to null.
 		/// </summary>
 		/// <exception cref="ArgumentNullException">the value is null.</exception>
@@ -37,7 +37,7 @@ namespace GRaff
 		{
 			get
 			{
-				if (_maskShape == MaskShape.SameAsSprite)
+				if (_maskShape == MaskShape.Automatic)
 					return (_owner.Sprite != null) ? _owner.Sprite.MaskShape : MaskShape.None; /*C#6.0*/
 				else
 					return _maskShape;	
@@ -46,7 +46,7 @@ namespace GRaff
 			set
 			{
 				if (value == null)
-					throw new ArgumentNullException(String.Format("The value of {0}.{1}.{2} cannot be null. Consider using {0}.{3}.{4} or {0}.{3}.{5}.", "GRaff", "Mask", "Shape", "MaskShape", "MaskShape.None", "MaskShape.SameAsSprite"));
+					throw new ArgumentNullException(String.Format("The value of {0}.{1}.{2} cannot be null. Consider using {0}.{3}.{4} or {0}.{3}.{5}.", "GRaff", "Mask", "Shape", "MaskShape", "MaskShape.None", "MaskShape.Automatic"));
 				_maskShape = value;
 			}
 		}

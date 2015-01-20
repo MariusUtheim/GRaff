@@ -31,14 +31,14 @@ namespace GRaff
 		/// <summary>
 		/// Represents the smallest representable non-zero angle.
 		/// </summary>
-		public static readonly Angle Epsilon = new Angle(1);
+		public static readonly Angle Epsilon = new Angle(precision);
 
 		/// <summary>
 		/// Represents the largest representable angle that is less than a full turn.
 		/// </summary>
-		public static readonly Angle MaxAngle = new Angle(ulong.MaxValue - precision);
+		public static readonly Angle MaxAngle = new Angle(ulong.MaxValue - precision + 1);
 
-		private Angle(ulong data)
+		internal Angle(ulong data)
 		{
 			_data = data;
 		}
@@ -154,7 +154,7 @@ namespace GRaff
 		/// <param name="left">The first GRaff.Angle to compare.</param>
 		/// <param name="right">The second GRaff.Angle to compare.</param>
 		/// <returns>true if the values of the two GRaff.Angle structures are equal.</returns>
-		public static bool operator ==(Angle left, Angle right) { return (left._data - right._data <= precision) || (right._data - left._data <= precision); }
+		public static bool operator ==(Angle left, Angle right) { return (left._data - right._data < precision) || (right._data - left._data < precision); }
 
 		/// <summary>
 		/// Compares two GRaff.Angle structures. The result specifies whether they are unequal.

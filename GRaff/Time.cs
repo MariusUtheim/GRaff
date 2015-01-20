@@ -1,6 +1,5 @@
 ﻿using System;
 
-
 namespace GRaff
 {
 	/// <summary>
@@ -21,7 +20,11 @@ namespace GRaff
 		/// <summary>
 		/// Gets the number of steps that has occurred since the game started.
 		/// </summary>
-		public static int LoopCount { get; private set; }
+		public static int LoopCount
+		{
+			get;
+			private set;
+		}
 
 		/// <summary>
 		/// Gets the number of milliseconds since the computer started.

@@ -37,17 +37,37 @@ namespace GRaff
 	/// <summary>
 	/// Ticks down every step, and fires an event when the tick reaches zero.
 	/// </summary>
-	public sealed class Alarm : GameElement
+	public class Alarm : GameElement
 	{
 		public event EventHandler<AlarmEventArgs> Callback;
 
+		/// <summary>
+		/// Starts a new GRaff.Alarm.
+		/// </summary>
+		/// <param name="count">The number of frames before the Alarm fires.</param>
+		/// <param name="isLooping">Specifies whether the Alarm should fire only once or repeat with the same duration.</param>
+		/// <param name="action">An action to perform when the Alarm fires.</param>
+		/// <returns>The new GRaff.Alarm that was started.</returns>
 		public static Alarm Start(int count, bool isLooping, EventHandler<AlarmEventArgs> action)
 		{
 			var alarm = new Alarm();
 			alarm.Callback += action;
 			alarm.IsLooping = isLooping;
 			alarm.Restart(count);
+			Instance.Create(alarm);
 			return alarm;
+		}
+
+		/// <summary>
+		/// Starts a new GRaff.Alarm.
+		/// </summary>
+		/// <param name="count">The number of frames before the Alarm fires.</param>
+		/// <param name="isLooping">Specifies whether the Alarm should fire only once or repeat with the same duration.</param>
+		/// <param name="action">An action to perform when the Alarm fires.</param>
+		/// <returns>The new GRaff.Alarm that was started.</returns>
+		public static Alarm Start(int count, bool isLooping, Action action)
+		{
+			return Start(count, isLooping, (e, sender) => action());
 		}
 
 		/// <summary>
@@ -78,7 +98,7 @@ namespace GRaff
 		public void Restart()
 		{
 			Count = InitialCount;
-			Start();	
+			Start();
 		}
 
 		/// <summary>
@@ -92,7 +112,9 @@ namespace GRaff
 			Start();
 		}
 
-
+		/// <summary>
+		/// Starts this GRaff.Alarm. If it is already started or if it has finished, this does nothing.
+		/// </summary>
 		public void Start()
 		{
 			if (Count > 0)
@@ -101,13 +123,18 @@ namespace GRaff
 			}
 		}
 
+		/// <summary>
+		/// Stops this GRaff.Alarm. The Alarm will be set to a stopped state, and subsequently calling Start or Pause does nothing.
+		/// </summary>
 		public void Stop()
 		{
 			Count = 0;
 			State = AlarmState.Stopped;
 		}
 
-
+		/// <summary>
+		/// Pauses this GRaff.Alarm. It can subsequently be resumed with the current Count value by calling Start, or reset to a different Count value by calling Restart.
+		/// </summary>
 		public void Pause()
 		{
 			if (Count > 0)
@@ -117,7 +144,8 @@ namespace GRaff
 		/// <summary>
 		/// Reduces the countdown of this GRaff.Alarm if it is running, and fires the alarm event if countdown reaches zero.
 		/// </summary>
-		public override void OnStep()
+		/// <remarks>This method cannot be overriden by subclasses of GRaff.Alarm.</remarks>
+		public sealed override void OnStep()
 		{
 			if (State == AlarmState.Running)
 			{

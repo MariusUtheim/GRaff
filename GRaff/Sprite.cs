@@ -25,30 +25,59 @@ namespace GRaff
 		private AnimationStrip _animationStrip;
 
 		/// <summary>
-		/// Initializes a new instance of the GRaff.Sprite class.
+		/// Initializes a new instance of the GRaff.Sprite class. This only declares the sprite data, it will not be loaded until you call Sprite.Load.
 		/// </summary>
-		/// <param name="filename">The texture file that is loaded from disk.</param>
+		/// <param name="filename">The texture file that will be loaded from disk.</param>
 		/// <param name="subimages">The number of subimages if the texture is an animation strip. The default value is 1.</param>
 		/// <param name="origin">A GRaff.IntVector? representing the origin of the image. If null, the origin will be automatically set to the center of the loaded texture. The default value is null.</param>
-		/// <param name="preload">If true, the texture is automatically loaded when the instance is initialized. The default value is true.</param>
+		/// <param name="maskShape">Specifies the mask of the sprite. If the value is GRaff.MaskShape.Automatic, a rectangular mask filling the whole image will be used. If the value is null, it will default to GRaff.MaskShape.Automatic.</param>
+		/// <param name="animationStrip">Specifies the animation strip of the sprite. If null, the strip will consist of all the subimages in order and with uniform duration. The default value is null.</param>
 		/// <exception cref="System.ArgumentOutOfRangeException">subimages is less than or equal to 0.</exception>
-		/// <exception cref="System.IO.FileNotFoundException">preload is true and the file is not found.</exception>
-		public Sprite(string filename, int subimages = 1, IntVector? origin = default(IntVector?), AnimationStrip customAnimationStrip = null)
+		public Sprite(string filename, int subimages = 1, IntVector? origin = default(IntVector?), MaskShape maskShape = null, AnimationStrip animationStrip = null)
 		{
 			if (subimages < 1) throw new ArgumentOutOfRangeException("subimages", "Must be greater than or equal to 1");
-
 			this.ImageCount = subimages;
 			this.FileName = filename;
 			this._origin = origin;
-			this._hasCustomMask = false;
-			this._maskShape = null;
-			this._animationStrip = customAnimationStrip ?? new AnimationStrip(subimages);
+			this._hasCustomMask = maskShape != null;
+			this._maskShape = maskShape ?? MaskShape.Automatic;
+			this._animationStrip = animationStrip ?? new AnimationStrip(subimages);
 		}
 
-		public static Sprite Load(string path, int subimages, IntVector? origin)
+
+		/// <summary>
+		/// Loads a sprite from a file.
+		/// </summary>
+		/// <param name="path">The file to load.</param>
+		/// <param name="subimages">The number of subimages if the texture is an animation strip. The default value is 1.</param>
+		/// <param name="origin">A GRaff.IntVector? representing the origin of the image. If null, the origin will be automatically set to the center of the loaded texture. The default value is null.</param>
+		/// <param name="maskShape">Specifies the mask of the sprite. If null, a rectangular mask filling the whole image will be used. The default value is null.</param>
+		/// <param name="animationStrip">Specifies the animation strip of the sprite. If null, the strip will consist of all the subimages in order and with uniform duration. The default value is null.</param>
+		/// <returns>The loaded sprite.</returns>
+		/// <exception cref="System.ArgumentOutOfRangeException">subimages is less than or equal to 0.</exception>
+		/// <exception cref="System.IO.IOException">The specified file does not exist.</exception>
+		public static Sprite Load(string path, int subimages = 1, IntVector? origin = null, MaskShape maskShape = null, AnimationStrip animationStrip = null)
 		{
-			var result = new Sprite(path, subimages, origin);
+			var result = new Sprite(path, subimages, origin, maskShape, animationStrip);
 			result.Load();
+			return result;
+		}
+
+		/// <summary>
+		/// Asynchronously loads a sprite from a file.
+		/// </summary>
+		/// <param name="path">The file to load.</param>
+		/// <param name="subimages">The number of subimages if the texture is an animation strip. The default value is 1.</param>
+		/// <param name="origin">A GRaff.IntVector? representing the origin of the image. If null, the origin will be automatically set to the center of the loaded texture. The default value is null.</param>
+		/// <param name="maskShape">Specifies the mask of the sprite. If null, a rectangular mask filling the whole image will be used. The default value is null.</param>
+		/// <param name="animationStrip">Specifies the animation strip of the sprite. If null, the strip will consist of all the subimages in order and with uniform duration. The default value is null.</param>
+		/// <returns>A System.Treading.Tasks.Task`1 that will return the loaded GRaff.Sprite upon completion.</returns>
+		/// <exception cref="System.ArgumentOutOfRangeException">subimages is less than or equal to 0.</exception>
+		/// <exception cref="System.IO.IOException">The specified file does not exist.</exception>
+		public static async Task<Sprite> LoadAsync(string path, int subimages = 1, IntVector? origin = null, MaskShape maskShape = null, AnimationStrip animationStrip = null)
+		{
+			var result = new Sprite(path, subimages, origin, maskShape, animationStrip);
+			await result.LoadAsync();
 			return result;
 		}
 
@@ -57,10 +86,13 @@ namespace GRaff
 		/// </summary>
 		public string FileName { get; private set; }
 
+		/// <summary>
+		/// Gets whether the texture of this GRaff.Sprite is loaded.
+		/// </summary>
 		public bool IsLoaded { get { return AssetState == AssetState.Loaded; } } /*C#6.0*/
 
 		/// <summary>
-		/// Gets whether the texture of this GRaff.Sprite is loaded.
+		/// Gets the asset state of the texture of this GRaff.Sprite.
 		/// </summary>
 		public AssetState AssetState { get; private set; }
 
@@ -155,12 +187,29 @@ namespace GRaff
 			}
 		}
 
+		/// <summary>
+		/// Gets or sets the MaskShape of this GRaff.Sprite. If set to MaskShape.Automatic, a rectangular mask filling the whole image will be used.
+		/// </summary>
 		public MaskShape MaskShape
 		{
 			get
 			{
-				if (AssetState != AssetState.Loaded) throw new InvalidOperationException("The texture is not loaded.");
 				return _maskShape;
+			}
+
+			set
+			{
+				if (value == MaskShape.Automatic)
+				{
+					_hasCustomMask = false;
+					if (IsLoaded)
+						_maskShape = MaskShape.Rectangle(_width, _height);
+				}
+				else
+				{
+					_hasCustomMask = true;
+					_maskShape = value;
+				}
 			}
 		}
 
@@ -170,7 +219,7 @@ namespace GRaff
 			_width = _texture.Width / ImageCount;
 			_height = _texture.Height;
 			if (!_hasCustomMask)
-				_maskShape = MaskShape.Rectangle(-XOrigin, -YOrigin, _width, _height);
+				_maskShape = MaskShape.Rectangle(_width, _height);
 			AssetState = AssetState.Loaded;
 		}
 
@@ -192,6 +241,10 @@ namespace GRaff
 			_load(textureBuffer);
 		}
 
+		/// <summary>
+		/// Loads the texture asynchronously.
+		/// </summary>
+		/// <returns>A System.Threading.Tasks.Task that will complete when the texture is finished loading.</returns>
 		public async Task LoadAsync()
 		{
 			if (AssetState != AssetState.NotLoaded)
@@ -208,6 +261,9 @@ namespace GRaff
 			}
 		}
 
+		/// <summary>
+		/// Unloads the texture.
+		/// </summary>
 		public void Unload()
 		{
 			lock (this)
@@ -224,7 +280,10 @@ namespace GRaff
 			}
 		}
 
-
+		/// <summary>
+		/// Gets the GRaff.TextureBuffer containing the texture of this GRaff.Sprite.
+		/// </summary>
+		/// <exception cref="System.InvalidOperationException">The texture is not loaded.</exception>
 		public TextureBuffer Texture
 		{
 			get
@@ -234,9 +293,16 @@ namespace GRaff
 			}
 		}
 
+		/// <summary>
+		/// Gets the GRaff.Texture containing the specified subimage of this GRaff.Sprite.
+		/// </summary>
+		/// <param name="index">The index of the subimage. If the value is not in the range [0, ImageCount), the modulus will be used.</param>
+		/// <returns>A GRaff.Texture containing the specified subimage.</returns>
+		/// <exception cref="System.InvalidOperationException">The texture is not loaded.</exception>
 		public Texture SubImage(int index)
 		{
-			index %= ImageCount;
+			if (AssetState != AssetState.Loaded) throw new InvalidOperationException("The texture is not loaded.");
+			index = ((index % ImageCount) + ImageCount) % ImageCount;
 			float r = 1.0f / ImageCount;
 			return new Texture(Texture, r * index, 0, r * (index + 1), 1);
 		}

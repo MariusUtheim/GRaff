@@ -7,11 +7,18 @@ using System.Text;
 namespace GRaff
 {
 	/// <summary>
-	/// Represents an ARGB color. This struct is immutable. Colors can be cast from uint structures.
+	/// Represents an ARGB color. Note that colors can be cast from uint structures on the form 0xAARRGGBB.
 	/// </summary>
 	[StructLayout(LayoutKind.Sequential)]
 	public partial struct Color
 	{
+		/// <summary>
+  /// Initializes a new instance of the GRaff.Color structure using the specifed alpha, red, green and blue values.
+  /// </summary>
+  /// <param name="a">The alpha channel.</param>
+  /// <param name="r">The red channel.</param>
+  /// <param name="g">The green channel.</param>
+  /// <param name="b">The blue channel.</param>
 		public Color(byte a, byte r, byte g, byte b)
 			:this()
 		{
@@ -40,8 +47,6 @@ namespace GRaff
 		/// Gets the value of the alpha channel of this GRaff.Color.
 		/// </summary>
 		public byte A { get; private set; }
-
-
 
 		/// <summary>
 		/// Initializes a new instance of the GRaff.Color class, using the specified ARGB values.
@@ -80,6 +85,17 @@ namespace GRaff
 		}
 
 		/// <summary>
+		/// Gets the inverse of this GRaff.Color. The alpha channel is unchanged while the other channels are inverted.
+		/// </summary>
+		public Color Inverse
+		{
+			get
+			{
+				return new Color(A, 255 - R, 255 - G, 255 - B);
+			}
+		}
+
+		/// <summary>
 		/// Averages the specified GRaff.Color structures, calculating the average of each channel separately.
 		/// </summary>
 		/// <param name="colors">An array of GRaff.Color structures that will be merged.</param>
@@ -106,12 +122,12 @@ namespace GRaff
 		/// </summary>
 		/// <param name="c1">The first GRaff.Color.</param>
 		/// <param name="c2">The second GRaff.Color.</param>
-		/// <param name="a">A parameter specifying the weights of the two colors. If this is zero, c1 is returned, and if this is one, c2 is returned.</param>
+		/// <param name="amount">A parameter specifying the weights of the two colors. If this is zero, c1 is returned, and if this is one, c2 is returned.</param>
 		/// <returns>The weighted average of the two colors: c1 * (1 - a) + c2 * a</returns>
-		public static Color Merge(Color c1, Color c2, double a)
+		public static Color Merge(Color c1, Color c2, double amount)
 		{
-			double b = 1 - a;
-			return new Color((int)(c1.A * b + c2.A * a), (int)(c1.R * b + c2.R * a), (int)(c1.G * b + c2.G * a), (int)(c1.B * b + c2.B * a));
+			double b = 1 - amount;
+			return new Color((int)(c1.A * b + c2.A * amount), (int)(c1.R * b + c2.R * amount), (int)(c1.G * b + c2.G * amount), (int)(c1.B * b + c2.B * amount));
 		}
 
 		/// <summary>

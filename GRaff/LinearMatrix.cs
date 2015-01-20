@@ -20,11 +20,11 @@ namespace GRaff
 			this.M11 = m11;
 		}
 
-		public static AffineMatrix Scaling(double scaleX, double scaleY) { return new AffineMatrix(scaleX, 0, 0, 0, scaleY, 0); }
+		public static LinearMatrix Scaling(double scaleX, double scaleY) { return new LinearMatrix(scaleX, 0, 0, scaleY); }
 
-		public static AffineMatrix Shearing(double shearX, double shearY) { return new AffineMatrix(1, shearX, 0, shearY, 1, 0); }
+		public static LinearMatrix Shearing(double shearX, double shearY) { return new LinearMatrix(1, shearX, shearY, 1); }
 
-		public static AffineMatrix Rotation(Angle a) { return new AffineMatrix(GMath.Cos(a), -GMath.Sin(a), 0, GMath.Sin(a), GMath.Cos(a), 0); }
+		public static LinearMatrix Rotation(Angle a) { return new LinearMatrix(GMath.Cos(a), -GMath.Sin(a), GMath.Sin(a), GMath.Cos(a)); }
 
 
 		public double M00 { get; set; }

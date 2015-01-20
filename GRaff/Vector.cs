@@ -32,7 +32,7 @@ namespace GRaff
 
 
 		public Vector(double magnitude, Angle direction)
-			:this()
+			: this()
 		{
 			X = magnitude * GMath.Cos(direction);
 			Y = magnitude * GMath.Sin(direction);
@@ -133,6 +133,8 @@ namespace GRaff
 		/// <param name="v">The GRaff.Vector</param>
 		/// <returns>A GRaff.Vector structure with the same magnitude and opposite direction of the specified GRaff.Vector.</returns>
 		public static Vector operator -(Vector v) { return new Vector(-v.X, -v.Y); }
+
+		public static Vector operator *(Vector left, Vector right) { return new Vector(left.X * right.X, left.Y * right.Y); }
 
 		/// <summary>
 		/// Scales the GRaff.Vector by a specified scalar.

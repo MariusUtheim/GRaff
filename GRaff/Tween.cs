@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace GRaff
 {
@@ -48,6 +45,7 @@ namespace GRaff
 		{
 			return new Tween(duration, t => 0.5 * (1 - GMath.Cos(t * GMath.Pi)), (sender, e) => tweenAction.Invoke(e.T));
 		}
+
 
 		public Tween Inverse()
 		{

@@ -1,5 +1,8 @@
 namespace GRaff
 {
+	/// <summary>
+	/// Represents the loading state of an IAsset.
+	/// </summary>
 	public enum AssetState
 	{
 		/// <summary>

@@ -66,5 +66,42 @@ namespace GRaff
 			get { return Giraffe.Window.Title; }
 			set { Giraffe.Window.Title = value; }
 		}
+
+		public static bool IsFullscreen
+		{
+			get
+			{
+				return Giraffe.Window.WindowState == WindowState.Fullscreen;
+			}
+			set
+			{
+				Giraffe.Window.WindowState = WindowState.Fullscreen;
+			}
+		}
+
+		public static int X
+		{
+			get
+			{
+				return Giraffe.Window.X;
+			}
+			set
+			{
+				Giraffe.Window.X = value;
+			}
+		}
+
+		public static int Y
+		{
+			get
+			{
+				return Giraffe.Window.Y;
+			}
+
+			set
+			{
+				Giraffe.Window.Y = value;
+			}
+		}
 	}
 }

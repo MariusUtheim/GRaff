@@ -18,11 +18,10 @@ namespace GRaff
 			NeedsSort = false;
 		}
 
-		public static bool RegisterAutomatically { get; set; } = true;
-
-		public static void Add(GameElement instance)
+		public static TGameElement Create<TGameElement>(TGameElement instance) where TGameElement : GameElement
 		{
 			_elements.Add(instance);
+			return instance;
 		}
 
 		public static void Remove(GameElement instance)

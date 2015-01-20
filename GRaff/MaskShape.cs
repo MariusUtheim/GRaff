@@ -99,6 +99,6 @@ namespace GRaff
 		/// This will always return the exact same instance; they can for example be compared with == operator, or Object.ReferenceEquals.
 		/// Calling GRaff.MaskShape.SameAsSprite.Polygon leads to undefined behavior.
 		/// </summary>
-		public static MaskShape SameAsSprite { get; } = new MaskShape();
+		public static MaskShape Automatic { get; } = new MaskShape();
 	}
 }

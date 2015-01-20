@@ -6,7 +6,7 @@ using System.Text;
 namespace GRaff
 {
 	/// <summary>
-	/// Represents the most general game object that is handled in the game. Most instances would inherit from this class.
+	/// Represents a game element that has a spatial location in the room.
 	/// </summary>
 	public abstract class GameObject : GameElement
 	{

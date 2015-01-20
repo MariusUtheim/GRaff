@@ -11,11 +11,10 @@ namespace GRaff
 	public sealed class SoundBuffer : IDisposable
 	{
 
-		public SoundBuffer(int bitrate, int channels, int duration, int frequency, byte[] buffer)
+		public SoundBuffer(int bitrate, int channels, double duration, int frequency, byte[] buffer)
 		{
 			Id = AL.GenBuffer();
-#warning TODO: Support other formats
-			bitrate = 16;
+
 			this.Bitrate = bitrate;
 			this.Channels = channels;
 			this.Duration = duration;
@@ -45,7 +44,7 @@ namespace GRaff
 
 		public int Channels { get; private set; }
 
-		public int Duration { get; private set; } 
+		public double Duration { get; private set; } 
 
 		public int Frequency { get; private set; }
 
@@ -64,7 +63,7 @@ namespace GRaff
 				using (var outputStream = new OggVorbisMemoryStream(buffer, info, stream.RawLength, info.Duration))
 					stream.CopyTo(outputStream);
 
-				return new SoundBuffer(info.BitrateNominal, info.Channels, (int)info.Duration, info.Rate, buffer);
+				return new SoundBuffer((int)(8 * buffer.Length / (info.Duration * info.Rate)), info.Channels, info.Duration, info.Rate, buffer);
             }
 		}
 
@@ -78,7 +77,7 @@ namespace GRaff
 				using (var outputStream = new OggVorbisMemoryStream(buffer, info, stream.RawLength, info.Duration))
 					await stream.CopyToAsync(outputStream);
 
-				return await Async.MainThreadDispatcher.InvokeAsync(() => new SoundBuffer(info.BitrateNominal, info.Channels, (int)info.Duration, info.Rate, buffer));
+				return await Async.MainThreadDispatcher.InvokeAsync(() => new SoundBuffer(info.BitrateNominal, info.Channels, (double)info.Duration, info.Rate, buffer));
             }
 		}
 

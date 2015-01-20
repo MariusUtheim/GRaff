@@ -124,6 +124,14 @@ namespace GRaff
 			else
 				return x1;
 		}
+		public static Point Median(Point x1, Point x2, Point x3)
+		{
+			return new Point(Median(x1.X, x2.X, x3.X), Median(x1.Y, x2.Y, x3.Y));
+		}
+		public static Vector Median(Vector x1, Vector x2, Vector x3)
+		{
+			return new Vector(Median(x1.X, x2.X, x3.X), Median(x1.Y, x2.Y, x3.Y));
+		}
 
 		public static int RoundInt(double x)
 		{

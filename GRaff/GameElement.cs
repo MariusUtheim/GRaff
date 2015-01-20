@@ -6,14 +6,11 @@ using System.Threading.Tasks;
 
 namespace GRaff
 {
+	/// <summary>
+	/// Represents the most general game element that is automatically handled by the engine.
+	/// </summary>
 	public abstract class GameElement
 	{
-		protected GameElement()
-		{
-			if (Instance.RegisterAutomatically)
-				Instance.Add(this);
-		}
-
 		private int _depth;
 		/// <summary>
 		/// Gets or sets the depth of this GRaff.GameObject.
@@ -34,10 +31,9 @@ namespace GRaff
 		/// but the C# object is not garbage collected while it is still being referenced.
 		/// </summary>
 		/// <param name="suppressDestroyEvent">If set to true, the OnDestroy() action will not be performed.</param>
-		public void Destroy(bool suppressDestroyEvent = false)
+		public void Destroy()
 		{
-			if (!suppressDestroyEvent)
-				OnDestroy();
+			OnDestroy();
 			Instance.Remove(this);
 		}
 
