@@ -6,7 +6,7 @@ using GRaff.Graphics;
 
 namespace GRaff.Particles
 {
-	public class ParticleSystem : GameElement, IEnumerable<Particle>
+	public class ParticleSystem : GameElement
 	{
 		protected LinkedList<Particle> particles;
 
@@ -23,16 +23,6 @@ namespace GRaff.Particles
 		}
 		
 		public ParticleType ParticleType { get; private set; }
-
-		public IEnumerator<Particle> GetEnumerator()
-		{
-			return particles.GetEnumerator();
-		}
-
-		IEnumerator IEnumerable.GetEnumerator()
-		{
-			return GetEnumerator();
-		}
 
 		protected void Remove(Particle particle)
 		{
@@ -59,7 +49,7 @@ namespace GRaff.Particles
 		public override void OnStep()
 		{
 			ConcurrentBag<Particle> removeBag = new ConcurrentBag<Particle>();
-			Parallel.ForEach(this, particle =>
+			Parallel.ForEach(particles, particle =>
 			{
 				if (!particle.Update())
 					removeBag.Add(particle);

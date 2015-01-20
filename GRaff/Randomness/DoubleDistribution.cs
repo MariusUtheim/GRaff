@@ -1,17 +1,17 @@
 ﻿using System;
 
-
+ 
 namespace GRaff.Randomness
 {
-	public sealed class UniformDoubleDistribution : IDistribution<double>
+	public sealed class DoubleDistribution : IDistribution<double>
 	{
 		Random _rnd;
 		double _firstValueInclusive, _secondValueExclusive;
 
-		public UniformDoubleDistribution(double firstValueInclusive, double secondValueExclusive)
+		public DoubleDistribution(double firstValueInclusive, double secondValueExclusive)
 			: this(GRandom.Source, firstValueInclusive, secondValueExclusive) { }
 
-		public UniformDoubleDistribution(Random rng, double firstValueInclusive, double secondValueExclusive)
+		public DoubleDistribution(Random rng, double firstValueInclusive, double secondValueExclusive)
 		{
 			_rnd = rng;
 			_firstValueInclusive = firstValueInclusive;

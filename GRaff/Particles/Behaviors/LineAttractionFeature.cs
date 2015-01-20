@@ -1,18 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿
+ 
 namespace GRaff.Particles
 {
-	public class LineAttractionBehavior : IParticleBehavior
+	public class LineAttractionFeature : IParticleFeature
 	{
-		class LineAttractionProperty : IParticleProperty
+		class LineAttractionBehavior : IParticleBehavior
 		{
-			private LineAttractionBehavior _source;
+			private LineAttractionFeature _source;
 
-			public LineAttractionProperty(LineAttractionBehavior source)
+			public LineAttractionBehavior(LineAttractionFeature source)
 			{
 				_source = source;
 			}
@@ -25,7 +21,7 @@ namespace GRaff.Particles
 			}
 		}
 
-		public LineAttractionBehavior(Line line, double strength)
+		public LineAttractionFeature(Line line, double strength)
 		{
 			this.Line = line;
 			this.Strength = strength;
@@ -37,7 +33,7 @@ namespace GRaff.Particles
 
 		public void AttachTo(Particle particle)
 		{
-			particle.AttachProperty(new LineAttractionProperty(this));
+			particle.AttachBehavior(new LineAttractionBehavior(this));
 		}
 	}
 }

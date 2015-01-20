@@ -37,14 +37,14 @@ namespace GRaff.Particles
 				vertices[index + 1] = (PointF)(particle.TransformationMatrix * tr + particle.Location);
 				vertices[index + 2] = (PointF)(particle.TransformationMatrix * br + particle.Location);
 				vertices[index + 3] = (PointF)(particle.TransformationMatrix * bl + particle.Location);
-				colors[index] = colors[index + 1] = colors[index + 2] = colors[index + 3] = particle.Color;
+				colors[index] = colors[index + 1] = colors[index + 2] = colors[index + 3] = particle.Blend;
 			});
 
 			_renderSystem.SetVertices(UsageHint.StreamDraw, vertices);
 			_renderSystem.SetColors(UsageHint.StreamDraw, colors);
 			_renderSystem.QuadTexCoords(UsageHint.StreamDraw, count);
 
-			ShaderProgram.Current = ShaderProgram.DefaultTextured;
+			ShaderProgram.CurrentTextured.SetCurrent();
 			Sprite.Texture.Bind();
 			_renderSystem.Render(PrimitiveType.Quads, vertices.Length);
 		}

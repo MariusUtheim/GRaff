@@ -6,14 +6,14 @@ using System.Threading.Tasks;
 
 namespace GRaff.Randomness
 {
-	public sealed class UniformRectangleDistribution : IDistribution<Point>
+	public sealed class RectanglePointDistribution : IDistribution<Point>
 	{
 		Random _rnd;
 
-		public UniformRectangleDistribution(Rectangle region)
+		public RectanglePointDistribution(Rectangle region)
 			: this(GRandom.Source, region) { }
 
-		public UniformRectangleDistribution(Random rnd, Rectangle region)
+		public RectanglePointDistribution(Random rnd, Rectangle region)
 		{
 			_rnd = rnd;
 			Region = region;

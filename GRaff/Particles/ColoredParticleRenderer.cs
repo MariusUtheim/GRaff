@@ -43,14 +43,14 @@ namespace GRaff.Particles
 				for (int c = 0; c < _verticesPerParticle; c++)
 				{
 					vertices[index + c] = (PointF)(particle.TransformationMatrix * _polygonVertices[c] + particle.Location);
-					colors[index + c] = particle.Color;
+					colors[index + c] = particle.Blend;
 				}
 			});
 
 			_renderSystem.SetVertices(UsageHint.StreamDraw, vertices);
 			_renderSystem.SetColors(UsageHint.StreamDraw, colors);
 
-			ShaderProgram.Current = ShaderProgram.DefaultColored;
+			ShaderProgram.CurrentColored.SetCurrent();
 			_renderSystem.Render(PrimitiveType.Triangles, vertices.Length);
 
 		}

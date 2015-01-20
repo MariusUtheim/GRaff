@@ -1,30 +1,27 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace GRaff.Randomness
 {
-	public sealed class UniformLineDistribution : IDistribution<Point>
+	public sealed class LinePointDistribution : IDistribution<Point>
 	{
 		private Random _rnd;
 		private Point _firstPointInclusive;
 		private Point _secondPointExclusive;
 
-		public UniformLineDistribution(Point firstPointInclusive, Point secondPointExclusive)
+		public LinePointDistribution(Point firstPointInclusive, Point secondPointExclusive)
 			: this(GRandom.Source, firstPointInclusive, secondPointExclusive)
 		{ }
 
-        public UniformLineDistribution(Line line)
+        public LinePointDistribution(Line line)
 			: this(GRandom.Source, line.Origin, line.Destination)
 		{ }
 
-		public UniformLineDistribution(Random rnd, Line line)
+		public LinePointDistribution(Random rnd, Line line)
 			: this(rnd, line.Origin, line.Destination)
 		{ }
 
-		public UniformLineDistribution(Random rnd, Point firstPointInclusive, Point secondPointExclusive)
+		public LinePointDistribution(Random rnd, Point firstPointInclusive, Point secondPointExclusive)
 		{
 			this._rnd = rnd;
 			this._firstPointInclusive = firstPointInclusive;

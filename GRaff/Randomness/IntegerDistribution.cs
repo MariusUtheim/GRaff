@@ -3,15 +3,15 @@
 
 namespace GRaff.Randomness
 {
-	public sealed class UniformIntegerDistribution : IDistribution<int>
+	public sealed class IntegerDistribution : IDistribution<int>
 	{
 		Random _rnd;
 		int _firstValueInclusive, _secondValueExclusive;
 
-		public UniformIntegerDistribution(int firstValueInclusive, int secondValueExclusive)
+		public IntegerDistribution(int firstValueInclusive, int secondValueExclusive)
 			: this(GRandom.Source, firstValueInclusive, secondValueExclusive) { }
 
-		public UniformIntegerDistribution(Random rng, int firstValueInclusive, int secondValueExclusive)
+		public IntegerDistribution(Random rng, int firstValueInclusive, int secondValueExclusive)
 		{
 			_rnd = rng;
 			_firstValueInclusive = firstValueInclusive;

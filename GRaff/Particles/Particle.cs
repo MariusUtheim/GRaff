@@ -8,13 +8,13 @@ namespace GRaff.Particles
 {
 	public sealed class Particle
 	{
-		internal List<IParticleProperty> Properties = new List<IParticleProperty>();
+		internal List<IParticleBehavior> Properties = new List<IParticleBehavior>();
 
 		public Particle(double x, double y, int lifetime)
 		{
 			Location = new Point(x, y);
 			TransformationMatrix = new LinearMatrix();
-			Color = Color.White;
+			Blend = Color.White;
 			TotalLifetime = lifetime;
 		}
 
@@ -24,7 +24,7 @@ namespace GRaff.Particles
 
 		public LinearMatrix TransformationMatrix { get; set; }
 
-		public Color Color { get; set; }
+		public Color Blend { get; set; }
 
 		public int TotalLifetime { get; set; }
 
@@ -43,9 +43,9 @@ namespace GRaff.Particles
 			return true;
 		}
 
-		public void AttachProperty(IParticleProperty property)
+		public void AttachBehavior(IParticleBehavior behavior)
 		{
-			Properties.Add(property);
+			Properties.Add(behavior);
 		}
 	}
 }
