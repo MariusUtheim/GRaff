@@ -60,7 +60,6 @@
     <Compile Include="CollisionTest.cs" />
     <Compile Include="TransformTest.cs" />
     <Compile Include="ColorTest.cs" />
-    <Compile Include="TextureTest.cs" />
     <Compile Include="PolygonTest.cs" />
     <Compile Include="AngleTest.cs" />
   </ItemGroup>
