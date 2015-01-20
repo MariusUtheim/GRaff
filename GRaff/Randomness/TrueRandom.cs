@@ -12,7 +12,7 @@ using System.Web.Script.Serialization;
 namespace GRaff.Randomness
 {
 	/// <summary>
-	/// 
+	/// Represents static methods that provide true random number generations by querying www.random.org.
 	/// </summary>
 	public static class TrueRandom
 	{
