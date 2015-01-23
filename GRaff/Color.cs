@@ -13,14 +13,14 @@ namespace GRaff
 	public partial struct Color
 	{
 		/// <summary>
-  /// Initializes a new instance of the GRaff.Color structure using the specifed alpha, red, green and blue values.
-  /// </summary>
-  /// <param name="a">The alpha channel.</param>
-  /// <param name="r">The red channel.</param>
-  /// <param name="g">The green channel.</param>
-  /// <param name="b">The blue channel.</param>
+		/// Initializes a new instance of the GRaff.Color structure using the specifed alpha, red, green and blue values.
+		/// </summary>
+		/// <param name="a">The alpha channel.</param>
+		/// <param name="r">The red channel.</param>
+		/// <param name="g">The green channel.</param>
+		/// <param name="b">The blue channel.</param>
 		public Color(byte a, byte r, byte g, byte b)
-			:this()
+			: this()
 		{
 			A = a;
 			R = r;
@@ -96,15 +96,18 @@ namespace GRaff
 		}
 
 		/// <summary>
-		/// Averages the specified GRaff.Color structures, calculating the average of each channel separately.
+		/// Averages this with the specified GRaff.Color structures, calculating the average of each channel separately.
 		/// </summary>
-		/// <param name="colors">An array of GRaff.Color structures that will be merged.</param>
-		/// <returns>The average of the specified GRaff.Color structures.</returns>
-		public static Color Merge(Color[] colors)
+		/// <param name="colors">An array of GRaff.Color structures that will be merged with this GRaff.Color.</param>
+		/// <returns>The average of all the GRaff.Color structures.</returns>
+		/// <exception cref="System.ArgumentNullException">colors is null.</exception>
+		public Color Merge(params Color[] colors)
 		{
 			if (colors == null) throw new ArgumentNullException("colors", "Cannot be null");
-			if (colors.Length == 0) throw new ArgumentException("Must have at least one element", "colors");
-			int a = 0, r = 0, g = 0, b = 0;
+			if (colors.Length == 0)
+				return this;
+
+			int a = A, r = R, g = G, b = B;
 
 			for (int i = 0; i < colors.Length; i++)
 			{
@@ -114,20 +117,19 @@ namespace GRaff
 				b += colors[i].B;
 			}
 
-			return new Color(a / colors.Length, r / colors.Length, g / colors.Length, b / colors.Length);
+			return new Color(a / (colors.Length + 1), r / (colors.Length + 1), g / (colors.Length + 1), b / (colors.Length + 1));
 		}
 
 		/// <summary>
 		/// Finds the weighted average of the two GRaff.Color structures, calculating the average of each channel separately.
 		/// </summary>
-		/// <param name="c1">The first GRaff.Color.</param>
-		/// <param name="c2">The second GRaff.Color.</param>
-		/// <param name="amount">A parameter specifying the weights of the two colors. If this is zero, c1 is returned, and if this is one, c2 is returned.</param>
-		/// <returns>The weighted average of the two colors: c1 * (1 - a) + c2 * a</returns>
-		public static Color Merge(Color c1, Color c2, double amount)
+		/// <param name="c">The GRaff.Color to merge with.</param>
+		/// <param name="amount">A parameter specifying the weights of the two colors. If it is 0, this GRaff.Color is unchange, and if this is 1, c is returned.</param>
+		/// <returns>The weighted average of the two colors.</returns>
+		public Color Merge(Color c, double amount)
 		{
 			double b = 1 - amount;
-			return new Color((int)(c1.A * b + c2.A * amount), (int)(c1.R * b + c2.R * amount), (int)(c1.G * b + c2.G * amount), (int)(c1.B * b + c2.B * amount));
+			return new Color((int)(A * b + c.A * amount), (int)(R * b + c.R * amount), (int)(G * b + c.G * amount), (int)(B * b + c.B * amount));
 		}
 
 		/// <summary>
@@ -186,7 +188,7 @@ namespace GRaff
 		/// <param name="right">The second GRaff.Color to compare.</param>
 		/// <returns>true if the ARGB values of the two GRaff.Color structures are equal.</returns>
 		public static bool operator ==(Color left, Color right) { return (left.A == right.A && left.R == right.R && left.G == right.G && left.B == right.B); }
-	
+
 		/// <summary>
 		/// Compares two GRaff.Color objects. The results specifies whether their ARGB values are unequal.
 		/// </summary>
