@@ -11,8 +11,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GRaff.XmlAssets", "GRaff.Xm
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GRaff.UnitTesting", "GRaff.UnitTesting\GRaff.UnitTesting.csproj", "{6EC500EE-F34A-48A5-96E5-C013EC53705A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GRaff.EyeTracking", "GRaff.EyeTracking\GRaff.EyeTracking.csproj", "{7A1645D9-A488-4E62-A294-481252E63599}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -47,12 +45,6 @@ Global
 		{6EC500EE-F34A-48A5-96E5-C013EC53705A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6EC500EE-F34A-48A5-96E5-C013EC53705A}.Test|Any CPU.ActiveCfg = Test|Any CPU
 		{6EC500EE-F34A-48A5-96E5-C013EC53705A}.Test|Any CPU.Build.0 = Test|Any CPU
-		{7A1645D9-A488-4E62-A294-481252E63599}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7A1645D9-A488-4E62-A294-481252E63599}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7A1645D9-A488-4E62-A294-481252E63599}.Publish|Any CPU.ActiveCfg = Publish|Any CPU
-		{7A1645D9-A488-4E62-A294-481252E63599}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7A1645D9-A488-4E62-A294-481252E63599}.Test|Any CPU.ActiveCfg = Release|Any CPU
-		{7A1645D9-A488-4E62-A294-481252E63599}.Test|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
