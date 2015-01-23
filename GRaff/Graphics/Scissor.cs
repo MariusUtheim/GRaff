@@ -7,6 +7,10 @@ using OpenTK.Graphics.ES30;
 
 namespace GRaff.Graphics
 {
+	/// <summary>
+ /// Provides static methods for performing scissor testing. When scissor testing is active,
+ /// pixels outside a specified region will not be drawn.
+ /// </summary>
 	public static class Scissor
 	{
 		public static bool IsEnabled

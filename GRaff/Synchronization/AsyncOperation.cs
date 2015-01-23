@@ -21,7 +21,6 @@ namespace GRaff.Synchronization
 			_actionHandle = new AsyncEventArgs(() => _execute(action));
 		}
 
-
 		internal override void Dispatch(AsyncOperationResult result)
 		{
 			if (result.IsSuccessful)

@@ -23,7 +23,9 @@ namespace GRaff.Graphics
 		public static BlendMode Max { get { return new BlendMode(BlendEquation.Max, BlendingFactor.SrcAlpha, BlendingFactor.DstAlpha); } }
 
 		public BlendingFactor DestinationFactor { get; private set; }
+
 		public BlendEquation Equation { get; private set; }
+
 		public BlendingFactor SourceFactor { get; private set; }
 
 		public override bool Equals(object obj)
@@ -36,7 +38,7 @@ namespace GRaff.Graphics
 
 		public override int GetHashCode()
 		{
-			return DestinationFactor.GetHashCode() ^ GMath.BitBlockShift(SourceFactor.GetHashCode()) ^ Equation.GetHashCode();
+			return GMath.HashCombine(DestinationFactor.GetHashCode(), SourceFactor.GetHashCode(), Equation.GetHashCode());
 		}
 	}
 }
