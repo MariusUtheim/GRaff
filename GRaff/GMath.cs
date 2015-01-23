@@ -11,18 +11,26 @@ namespace GRaff
 		public const double DegToRad = 0.01745329251994329576923690768489;
 		/// <summary>Conversion factor for radians to degrees. Is equal to 360 / τ.</summary>
 		public const double RadToDeg = 57.2957795130823208767981548141050;
+		/// <summary>
+		/// The complex number i.
+		/// </summary>
 		public static readonly Complex I = new Complex(0, 1);
+		/// <summary>
+		/// The golden ratio, φ
+		/// </summary>
 		public const double GoldenRatio = 1.6180339887498948482045868343656;
 
-
-
-		public static int BitBlockShift(int x)
+		public static int HashCombine(params int[] values)
 		{
-			return (x << 16) | (x >> 16);
-		}
-		public static uint BitBlockShift(uint x)
-		{
-			return (x << 16) | (x >> 16);
+			if (values == null)
+				return 0;
+			unchecked
+			{
+				int result = 0;
+				for (int i = 0; i < values.Length; i++)
+					result = 37 * result + values[i];
+				return result;
+			}
 		}
 
 		public static byte Median(byte x1, byte x2, byte x3)

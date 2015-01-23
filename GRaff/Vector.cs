@@ -91,7 +91,7 @@ namespace GRaff
 		/// Returns a hash code for this GRaff.Vector.
 		/// </summary>
 		/// <returns>An integer value that specifies a hash value for this GRaff.Vector.</returns>
-		public override int GetHashCode() { return X.GetHashCode() ^ GMath.BitBlockShift(Y.GetHashCode()); }
+		public override int GetHashCode() { return GMath.HashCombine(X.GetHashCode(), Y.GetHashCode()); }
 
 		/// <summary>
 		/// Compares two GRaff.Vector objects. The result specifies whether their magnitude and direction are equal.

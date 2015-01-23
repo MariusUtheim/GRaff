@@ -20,7 +20,6 @@ namespace GRaff
 		/// <param name="looping">Specifies whether the instance should loop.</param>
 		/// <param name="volume">Specifies the volume of the sound instance.</param>
 		/// <param name="pitch">Specifies the pitch shift of the sound instance.</param>
-#warning CA1801
 		internal SoundInstance(Sound sound, int bid, bool looping, double volume, double pitch)
 		{
 			this.Sound = sound;

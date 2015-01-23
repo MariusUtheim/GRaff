@@ -18,37 +18,70 @@ namespace GRaff
 	/// </remarks>
 	public sealed class Transform
 	{
+		/// <summary>
+		/// Initializes a new instance of the GRaff.Transform class with default values.
+		/// </summary>
 		public Transform()
 		{
 		}
 
+		/// <summary>
+		/// Gets or sets the translation in the x-direction of this GRaff.Transform.
+		/// </summary>
 		public double X { get; set; } = 0;
 
+		/// <summary>
+		/// Gets or sets the translation in the y-direction of this GRaff.Transform.
+		/// </summary>
 		public double Y { get; set; } = 0;
 
+		/// <summary>
+		/// Gets or sets the translation of this GRaff.Transform.
+		/// </summary>
 		public Point Location
 		{
 			get { return new Point(X, Y); }
 			set { X = value.X; Y = value.Y; }
 		}
 
+		/// <summary>
+		/// Gets or sets the horizontal scale of this GRaff.Transform.
+		/// </summary>
 		public double XScale { get; set; } = 1;
 
+		/// <summary>
+		/// Gets or sets the vertical scale of this GRaff.Transform.
+		/// </summary>
 		public double YScale { get; set; } = 1;
 
+		/// <summary>
+		/// Gets or sets the scale of this GRaff.Transform.
+		/// </summary>
 		public Vector Scale
 		{
 			get { return new Vector(XScale, YScale); }
 			set { XScale = value.X; YScale = value.Y; }
 		}
 
+		/// <summary>
+		/// Gets or sets the rotation of this GRaff.Transform.
+		/// </summary>
 		public Angle Rotation { get; set; } = Angle.Zero;
 
+		/// <summary>
+		/// Gets or sets the horizontal shear of this GRaff.Transform.
+		/// </summary>
 		public double XShear { get; set; } = 0;
 
+		/// <summary>
+		/// Gets or sets the vertical shear of this GRaff.Transform.
+		/// </summary>
 		public double YShear { get; set; } = 0;
 
-
+		/// <summary>
+		/// Gets an GRaff.AffineMatrix representing this GRaff.Transform.
+		/// </summary>
+		/// <returns>A GRaff.AffineMatrix representing the transformation.</returns>
 		public AffineMatrix GetMatrix()
 		{
 			double c = GMath.Cos(Rotation), s = GMath.Sin(Rotation);
@@ -58,11 +91,20 @@ namespace GRaff
 				);
 		}
 
+		/// <summary>
+		/// Transforms the specified GRaff.Point.
+		/// </summary>
+		/// <param name="p">The GRaff.Point to transform</param>
+		/// <returns>The resulting GRaff.Point.</returns>
+		public Point Point(Point p) { return GetMatrix() * p; }
 
-		public Point PointD(Point pt) { return GetMatrix() * pt; }
-
-
-		public Point PointD(double x, double y)
+		/// <summary>
+		/// Transforms the point with the specified x- and y-coordinates.
+		/// </summary>
+		/// <param name="x">The x-coordinate of the transformed point.</param>
+		/// <param name="y">The y-coordinate of the transformed point.</param>
+		/// <returns>The resulting GRaff.Point.</returns>
+		public Point Point(double x, double y)
 		{
 			// We're keeping this code around in case we want to change the GetMatrix() method. It is easier to debug this one and check that each step works individually.
 			double tx, ty;
@@ -82,21 +124,34 @@ namespace GRaff
 			return new Point(tx, ty);
 		}
 
+		/// <summary>
+		/// Transforms the specified GRaff.Line. This is equivalent to transforming its endpoints.
+		/// </summary>
+		/// <param name="line">The GRaff.Line to transform.</param>
+		/// <returns>The resulting GRaff.Line.</returns>
+		public Line Line(Line line) { return new Line(this.Point(line.Origin), this.Point(line.Destination)); }
 
-		public Line Line(Line line) { return new Line(this.PointD(line.Origin), this.PointD(line.Destination)); }
-
-
+		/// <summary>
+		/// Transforms the specified GRaff.Rectangle. This is equivalent to transforming its vertices.
+		/// </summary>
+		/// <param name="rect">The GRaff.Rectangle to transform.</param>
+		/// <returns>A GRaff.Point[] containing the resulting vertices of the transformed rectangle.</returns>
 		public Point[] Rectangle(Rectangle rect)
 		{
 			AffineMatrix T = GetMatrix();
 			return new Point[] {
-				T * this.PointD(rect.Left, rect.Top),
-				T * this.PointD(rect.Right, rect.Top),
-				T * this.PointD(rect.Right, rect.Bottom),
-				T * this.PointD(rect.Left, rect.Bottom)
+				T * this.Point(rect.Left, rect.Top),
+				T * this.Point(rect.Right, rect.Top),
+				T * this.Point(rect.Right, rect.Bottom),
+				T * this.Point(rect.Left, rect.Bottom)
 			};
 		}
 
+		/// <summary>
+		/// Transforms the specified GRaff.Polygon. This is equivalent to transforming each of its vertices.
+		/// </summary>
+		/// <param name="polygon">The GRaff.Polygon to transform.</param>
+		/// <returns>The resulting GRaff.Polygon.</returns>
 		public Polygon Polygon(Polygon polygon)
 		{
 			if (polygon == null) return null;

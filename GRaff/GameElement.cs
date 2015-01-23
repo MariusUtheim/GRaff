@@ -23,6 +23,9 @@ namespace GRaff
 			set { _depth = value; Instance.NeedsSort = true; }
 		}
 
+		/// <summary>
+		/// Gets or sets whether this GRaff.GameElement should be drawn. If set to false, OnDraw methods will not be called automatically.
+		/// </summary>
 		public bool IsVisible { get; set; } = true;
 
 		/// <summary>
@@ -42,11 +45,17 @@ namespace GRaff
 		/// </summary>
 		public virtual void OnDestroy() { }
 
-
+		/// <summary>
+		/// An action that is performed once every update loop.
+		/// </summary>
 		public virtual void OnStep()
 		{
 		}
 
+		/// <summary>
+		/// An action that is performed once every draw loop.
+		/// </summary>
+		/// <remarks>Draw loops may occur at different rates from update loops, and can be suppressed by setting IsVisible to false. Do not override this method with game logic, such as object motion.</remarks>
 		public virtual void OnDraw()
 		{
 		}

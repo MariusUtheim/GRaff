@@ -88,18 +88,18 @@ namespace GRaff
 		}
 
 		/// <summary>
-		/// An action that is performed at the beginning of each step.
+		/// An action that is performed at the beginning of each update loop.
 		/// </summary>
 		public virtual void OnBeginStep() { }
 
 		/// <summary>
-		/// An action that is performed at the end of each step.
+		/// An action that is performed at the end of each update loop.
 		/// </summary>
 		public virtual void OnEndStep() { }
 
 		/// <summary>
-		/// An action that is performed when the instance is drawn. Calls to methods in the static classes GRaff.Draw and
-		/// GRaff.Fill will generally not have any effect unless called inside the draw event.
+		/// An action that is performed when the instance is drawn. This will draw the Sprite of this GRaff.GameObject at the correct position
+		/// as specified by its Transform. This method can be overridden.
 		/// </summary>
 		public override void OnDraw()
 		{

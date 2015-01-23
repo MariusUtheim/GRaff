@@ -1,7 +1,6 @@
 ﻿using System;
 
 
-
 namespace GRaff
 {
 	public sealed class Mask
@@ -13,7 +12,6 @@ namespace GRaff
 			this._owner = owner;
 			this.Shape = MaskShape.Automatic;
 		}
-		Sprite mySprite = new Sprite("Assets/MySprite.png");
 
 		public Polygon GetPolygon()
 		{

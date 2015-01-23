@@ -4,6 +4,7 @@ using System.Linq;
 
 namespace GRaff
 {
+#warning Missing documentation
 	public sealed class AnimationStrip
 	{
 		Tuple<int, double>[] _images;
