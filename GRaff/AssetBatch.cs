@@ -7,6 +7,8 @@ using GRaff.Synchronization;
 
 namespace GRaff
 {
+	#if !PUBLISH
+	#warning Missing documentation
 	public sealed class AssetBatch : IAsset
 	{
 		private List<IAsset> _resources;
@@ -72,4 +74,5 @@ namespace GRaff
 			}
 		}
 	}
+	#endif
 }

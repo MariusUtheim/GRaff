@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GRaff.Graphics
 {
+#if !PUBLISH
 	public sealed class BlendModeContext : IDisposable
 	{
 		private BlendMode _previous;
@@ -37,4 +34,5 @@ namespace GRaff.Graphics
 			GC.SuppressFinalize(this);
 		}
 	}
+#endif
 }

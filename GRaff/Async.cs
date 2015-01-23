@@ -6,7 +6,12 @@ using GRaff.Synchronization;
 
 namespace GRaff
 {
+#if PUBLISH
+	internal static class Async
+#else
+#warning Missing documentation
 	public static class Async
+#endif
 	{
 		private static List<AsyncEventArgs> _queuedEvents = new List<AsyncEventArgs>();
 		private static List<Exception> _exceptions = new List<Exception>();
@@ -40,7 +45,7 @@ namespace GRaff
 
 		public static void Dispatch(AsyncEventArgs e)
 		{
-			lock (_queuedEvents)  
+			lock (_queuedEvents)
 				_queuedEvents.Add(e);
 		}
 
@@ -74,7 +79,7 @@ namespace GRaff
 					catch (AsyncException)
 					{
 #warning Throwing a custom AsyncException should throw a wrapped AsyncException?
-						throw; 
+						throw;
 					}
 					catch (Exception ex)
 					{

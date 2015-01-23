@@ -9,13 +9,12 @@ namespace GRaff
 	public class Room
 	{
 		private int _width, _height;
-
-		public Room(int width, int height, Action roomStart = null)
+		internal Room(int width, int height, Action roomStart = null)
 		{
 			this._width = width;
 			this._height = height;
-			this.RoomStart = roomStart;
 		}
+		internal Action RoomStart { get; private set; }
 
 		private static Room _current;
 
@@ -25,12 +24,12 @@ namespace GRaff
 		{
 			get { return new IntVector(Width, Height); }
 		}
+		public static Point Center { get { return new Point(Width / 2, Height / 2); } }
 
-		public Action RoomStart { get; private set; }
 
-		public void Enter()
+		internal void Enter()
 		{
-			foreach (var instance in Instance.Elements)
+			foreach (var instance in Instance.All)
 				instance.Destroy();
 			_current = this;
 			View.RoomView = new IntRectangle(0, 0, Width, Height);
@@ -38,14 +37,13 @@ namespace GRaff
 				this.RoomStart();
 		}
 
-		public static Point Center { get { return new Point(Width / 2, Height / 2); } }
 
-		public int GetWidth()
+		internal int GetWidth()
 		{
 			return _width;
 		}
 
-		public int GetHeight()
+		internal int GetHeight()
 		{
 			return _height;
 		}
