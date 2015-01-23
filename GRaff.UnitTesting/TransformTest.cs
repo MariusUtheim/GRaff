@@ -16,7 +16,7 @@ namespace GRaff.UnitTesting
 
 			Point pt = new Point(4, 8);
 			Point expected = new Point(54, 68);
-			Point actual = transform.PointD(pt);
+			Point actual = transform.Point(pt);
 			Assert.AreEqual<Point>(expected, actual);
 		}
 		
@@ -31,12 +31,12 @@ namespace GRaff.UnitTesting
 
 			pt = new Point(10, 13);
 			expected = new Point(30, 26);
-			actual = transform.PointD(pt);
+			actual = transform.Point(pt);
 			Assert.AreEqual<Point>(expected, actual);
 
 			pt = new Point(-15, -11);
 			expected = new Point(-45, -22);
-			actual = transform.PointD(pt);
+			actual = transform.Point(pt);
 			Assert.AreEqual<Point>(expected, actual);
 		}
 
@@ -50,20 +50,20 @@ namespace GRaff.UnitTesting
 
 			pt = new Point(1, 0);
 			expected = new Point(1 / GMath.Sqrt(2), 1 / GMath.Sqrt(2));
-			actual = transform.PointD(pt);
+			actual = transform.Point(pt);
 			Assert.AreEqual(expected.X, actual.X, 1e-9);
 			Assert.AreEqual(expected.Y, actual.Y, 1e-9);
 
 			pt = new Point(1, 1);
 			expected = new Point(0, GMath.Sqrt(2));
-			actual = transform.PointD(pt);
+			actual = transform.Point(pt);
 			Assert.AreEqual(expected.X, actual.X, 1e-9);
 			Assert.AreEqual(expected.Y, actual.Y, 1e-9);
 
 			transform.Rotation = Angle.Deg(-45 - 30);
 			pt = new Point(-1, -1);
 			expected = new Point(0.5, GMath.Sqrt(3) / 2);
-			actual = transform.PointD(pt);
+			actual = transform.Point(pt);
 		}
 
 		[TestMethod]
@@ -77,19 +77,19 @@ namespace GRaff.UnitTesting
 			transform.XShear = 2;
 			transform.YShear = 0;
 			expected = new Point(25, 10);
-			actual = transform.PointD(pt);
+			actual = transform.Point(pt);
 			Assert.AreEqual<Point>(expected, actual);
 
 			transform.XShear = 0;
 			transform.YShear = 1;
 			expected = new Point(5, 15);
-			actual = transform.PointD(pt);
+			actual = transform.Point(pt);
 			Assert.AreEqual<Point>(expected, actual);
 
 			transform.XShear = 2;
 			transform.YShear = 1;
 			expected = new Point(25, 15);
-			actual = transform.PointD(pt);
+			actual = transform.Point(pt);
 			Assert.AreEqual<Point>(expected, actual);
 		}
 
@@ -105,7 +105,7 @@ namespace GRaff.UnitTesting
 
 			Point pt = new Point(1 / 2.0, 1 / 3.0);
 			Point expected = new Point(10, 20);
-			Point actual = transform.PointD(pt);
+			Point actual = transform.Point(pt);
 			Assert.AreEqual<Point>(expected, actual);
 		}
 	}

@@ -6,8 +6,8 @@ namespace TestGame.Assets
 	{
 		static Sprites()
 		{
-			Particle = new global::GRaff.Sprite(@"Star.png", 1, new global::GRaff.IntVector(12, 13), new global::GRaff.AnimationStrip(new global::System.Tuple<int, double>(0, 1), new global::System.Tuple<int, double>(4, 0.5)));
-			Xujia = new global::GRaff.Sprite(@"Xujia.jpg", 1, new global::GRaff.IntVector(0, 0), new global::GRaff.AnimationStrip(1));
+			Particle = new global::GRaff.Sprite(@"Star.png", 1, new global::GRaff.IntVector(12, 13), null  , new global::GRaff.AnimationStrip(new global::System.Tuple<int, double>(0, 1), new global::System.Tuple<int, double>(4, 0.5)));
+			Xujia = new global::GRaff.Sprite(@"Xujia.jpg", 1, new global::GRaff.IntVector(0, 0), null, new global::GRaff.AnimationStrip(1));
 		}
 
 		public static void LoadAll()

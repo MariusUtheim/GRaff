@@ -168,6 +168,13 @@ namespace <#= source.Namespace #>
 		[XmlAttribute("y")] public double Y;
 		[XmlAttribute("width")] public double Width;
 		[XmlAttribute("height")] public double Height;
+		public static string ToParameter(MaskElement mask)
+		{
+			if (mask == null)
+				return "null";
+			else
+				return "null  ";
+		}
 	}
 
 	public class OriginElement {
@@ -200,6 +207,7 @@ namespace <#= source.Namespace #>
 			result.Append("@\"" + Filename + "\", ");
 			result.Append(ImageCount.ToString(CultureInfo.InvariantCulture) + ", ");
 			result.Append(OriginElement.ToParameter(Origin) + ", ");
+			result.Append(MaskElement.ToParameter(Mask) + ", ");
 			if (AnimationStrip != null)
 				result.Append(AnimationFrameElement.ToParameter(AnimationStrip));
 			else
