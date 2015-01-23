@@ -29,19 +29,11 @@ namespace GRaff
 			_elements.Remove(instance);
 		}
 
-		public static IEnumerable<GameElement> Elements
+		public static IEnumerable<GameElement> All
 		{
             get
 			{
 				return _elements;
-			}
-		}
-
-		public static IEnumerable<GameObject> Objects
-		{
-			get
-			{
-				return _elements.Select(obj => obj as GameObject).Where(obj => obj != null);
 			}
 		}
     }
@@ -50,14 +42,14 @@ namespace GRaff
 	/// Provides static methods to interact with the instances of a specific type.
 	/// </summary>
 	/// <typeparam name="T">The type of GameObject.</typeparam>
-	public static class Instance<T> where T : GameObject
+	public static class Instance<T> where T : GameElement
 	{
 		/// <summary>
 		/// Returns all instances of the specified type.
 		/// </summary>
 		public static IEnumerable<T> All
 		{
-			get { return Instance.Elements.OfType<T>(); }
+			get { return Instance.All.OfType<T>(); }
 		}
 
 		/// <summary>
