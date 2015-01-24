@@ -42,7 +42,30 @@ namespace GRaff
 		public event EventHandler<AlarmEventArgs> Callback;
 
 		/// <summary>
-		/// Starts a new GRaff.Alarm.
+		/// Starts a new non-looping GRaff.Alarm with the specified duration and callback.
+		/// </summary>
+		/// <param name="count">The number of frames before the Alarm fires.</param>
+		/// <param name="action">An action to perform when the Alarm fires.</param>
+		/// <returns>The new GRaff.Alarm that was started.</returns>
+		public static Alarm Start(int count, Action action)
+		{
+			return Start(count, false, (e, sender) => action());
+		}
+
+		/// <summary>
+		/// Starts a new GRaff.Alarm with the specified duration, loop setting and callback.
+		/// </summary>
+		/// <param name="count">The number of frames before the Alarm fires.</param>
+		/// <param name="isLooping">Specifies whether the Alarm should fire only once or repeat with the same duration.</param>
+		/// <param name="action">An action to perform when the Alarm fires.</param>
+		/// <returns>The new GRaff.Alarm that was started.</returns>
+		public static Alarm Start(int count, bool isLooping, Action action)
+		{
+			return Start(count, isLooping, (e, sender) => action());
+		}
+
+		/// <summary>
+		/// Starts a new GRaff.Alarm with the specified duration, loop setting and callback.
 		/// </summary>
 		/// <param name="count">The number of frames before the Alarm fires.</param>
 		/// <param name="isLooping">Specifies whether the Alarm should fire only once or repeat with the same duration.</param>
@@ -56,18 +79,6 @@ namespace GRaff
 			alarm.Restart(count);
 			Instance.Create(alarm);
 			return alarm;
-		}
-
-		/// <summary>
-		/// Starts a new GRaff.Alarm.
-		/// </summary>
-		/// <param name="count">The number of frames before the Alarm fires.</param>
-		/// <param name="isLooping">Specifies whether the Alarm should fire only once or repeat with the same duration.</param>
-		/// <param name="action">An action to perform when the Alarm fires.</param>
-		/// <returns>The new GRaff.Alarm that was started.</returns>
-		public static Alarm Start(int count, bool isLooping, Action action)
-		{
-			return Start(count, isLooping, (e, sender) => action());
 		}
 
 		/// <summary>
