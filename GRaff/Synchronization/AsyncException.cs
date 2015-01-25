@@ -9,5 +9,10 @@ namespace GRaff.Synchronization
 			: base("An asynchronous operation threw an exception. See the inner exception for more details.", innerException)
 		{
 		}
+
+		public AsyncException(string message, Exception innerException) 
+			: base(message, innerException)
+		{
+		}
 	}
 }

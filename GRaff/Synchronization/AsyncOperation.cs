@@ -10,28 +10,55 @@ namespace GRaff.Synchronization
 		private CatchContext _catchHandlers = new CatchContext();
 
 		public AsyncOperation()
-			: base(null, null)
-		{
-			State = AsyncOperationState.Completed;
-		}
+			: base(AsyncOperationResult.Success())
+		{ }
 
 		internal AsyncOperation(AsyncOperationBase preceeding, IAsyncOperator op)
 			: base(preceeding, op)
 		{ }
 
-		public IAsyncOperation Then(Action action)
+		public IAsyncOperation Then(Func<IAsyncOperation> action)
+		{
+			var continuation = new AsyncOperation(this, new InvokerOperator(obj => action()));
+			Then(continuation);
+			return continuation;
+		}
+
+		public IAsyncOperation<TNext> Then<TNext>(Func<IAsyncOperation<TNext>> action)
+		{
+			var continuation = new AsyncOperation<TNext>(this, new InvokerOperator<TNext>(obj => action()));
+			Then(continuation);
+			return continuation;
+		}
+
+		public IAsyncOperation ThenWait(Action action)
+		{
+			var continuation = new AsyncOperation(this, new ImmediateOperator(obj => { action(); return null; }));
+			Then(continuation);
+			return continuation;
+		}
+
+		public IAsyncOperation<TNext> ThenWait<TNext>(Func<TNext> action)
+		{
+			var continuation = new AsyncOperation<TNext>(this, new ImmediateOperator(obj => action()));
+			Then(continuation);
+			return continuation;
+		}
+
+		public IAsyncOperation ThenSync(Action action)
 		{
 			var continuation = new AsyncOperation(this, new SerialOperator(obj => { action(); return null; })); /*C#6.0*/// semicolon
 			Then(continuation);
 			return continuation;
 		}
 
-		public IAsyncOperation<TNext> Then<TNext>(Func<TNext> action)
+		public IAsyncOperation<TNext> ThenSync<TNext>(Func<TNext> action)
 		{
 			var continuation = new AsyncOperation<TNext>(this, new SerialOperator(obj => action()));
 			Then(continuation);
 			return continuation;
 		}
+
 
 		public IAsyncOperation ThenAsync(Func<Task> action)
 		{
@@ -52,13 +79,6 @@ namespace GRaff.Synchronization
 			_assertState("add a catch handler to");
 			_catchHandlers.Catch<TException>(exceptionHandler);
 			return this;
-		}
-
-		public new void Wait()
-		{
-			var result = base.Wait();
-			if (!result.IsSuccessful)
-				throw new AsyncException(result.Error);
 		}
 
 		protected override AsyncOperationResult Handle(Exception exception)
