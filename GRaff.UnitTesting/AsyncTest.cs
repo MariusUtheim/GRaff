@@ -13,7 +13,7 @@ namespace GameMaker.UnitTesting
 		[TestMethod]
 		public void Async_Properties()
 		{
-			AsyncOperation operation;
+			IAsyncOperation operation;
 
 			operation = new AsyncOperation();
 			Assert.AreEqual(AsyncOperationState.Completed, operation.State);
@@ -38,7 +38,7 @@ namespace GameMaker.UnitTesting
 		[TestMethod]
 		public void Async_Then()
 		{
-			AsyncOperation operation;
+			IAsyncOperation operation;
 			int count = 0;
 
 			operation = new AsyncOperation();
@@ -55,7 +55,7 @@ namespace GameMaker.UnitTesting
 		[TestMethod]
 		public void Async_ThenPasses()
 		{
-			AsyncOperation<int> operation;
+			IAsyncOperation<int> operation;
 
 			operation = Async.Run(() => 0);
 			Async.HandleEvents();
@@ -73,7 +73,7 @@ namespace GameMaker.UnitTesting
 		[TestMethod]
 		public void Async_MultipleThen()
 		{
-			AsyncOperation operation = new AsyncOperation();
+			IAsyncOperation operation = new AsyncOperation();
 
 
 			int count = 0;
@@ -98,7 +98,7 @@ namespace GameMaker.UnitTesting
 		[TestMethod]
 		public void Async_Wait()
 		{
-			var operation = new AsyncOperation();
+			IAsyncOperation operation = new AsyncOperation();
 
 			int count = 0;
 			for (int i = 0; i < 10; i++)
@@ -113,11 +113,12 @@ namespace GameMaker.UnitTesting
 		[ExpectedException(typeof(AsyncException))]
 		public void Async_Done()
 		{
-			var operation = Async.Run(() => { throw new Exception("Error"); });
+			IAsyncOperation operation = Async.Run(() => { throw new Exception("Error"); });
 
 			Assert.IsFalse(operation.IsDone);
 			operation.Done();
 			Assert.IsTrue(operation.IsDone);
+			Async.HandleEvents();
 
 			try
 			{
@@ -134,7 +135,7 @@ namespace GameMaker.UnitTesting
 		[TestMethod]
 		public void Async_Catch()
 		{
-			AsyncOperation operation;
+			IAsyncOperation operation;
 			bool caughtException;
 			bool finished;
 

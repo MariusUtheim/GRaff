@@ -136,14 +136,15 @@
     <Compile Include="Randomness\RectanglePointDistribution.cs" />
     <Compile Include="Synchronization\AsyncEventArgs.cs" />
     <Compile Include="Synchronization\AsyncException.cs" />
-    <Compile Include="Synchronization\AsyncOperation.cs" />
+    <Compile Include="Synchronization\AsyncOperation.Generic.cs" />
     <Compile Include="Synchronization\AsyncOperationBase.cs" />
+    <Compile Include="Synchronization\IAsyncOperator.cs" />
+    <Compile Include="Synchronization\SerialOperator.cs" />
+    <Compile Include="Synchronization\AsyncOperation.cs" />
     <Compile Include="Synchronization\AsyncOperationState.cs" />
     <Compile Include="Synchronization\AsyncOperationResult.cs" />
-    <Compile Include="Synchronization\IAsyncIn.cs" />
     <Compile Include="Synchronization\IAsyncOperation.cs" />
     <Compile Include="Synchronization\CatchContext.cs" />
-    <Compile Include="Synchronization\IAsyncOut.cs" />
     <Compile Include="Background.cs" />
     <Compile Include="Color.cs" />
     <Compile Include="Color.Definitions.cs" />
@@ -201,6 +202,7 @@
     <Compile Include="SoundState.cs" />
     <Compile Include="Sprite.cs" />
     <Compile Include="Graphics\Surface.cs" />
+    <Compile Include="Synchronization\ParallelOperator.cs" />
     <Compile Include="Texture.cs" />
     <Compile Include="TextureBuffer.cs" />
     <Compile Include="Time.cs" />
@@ -223,9 +225,6 @@
     <Content Include="External\vorbisfile.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Synchronization\AsyncOperation.Generic.cs" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />

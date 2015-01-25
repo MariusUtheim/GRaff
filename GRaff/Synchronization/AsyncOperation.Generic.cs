@@ -1,98 +1,60 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Collections.Concurrent;
+using System.Diagnostics;
 
 namespace GRaff.Synchronization
 {
-    public class AsyncOperation<TPass> : AsyncOperationBase
-    {
+	public class AsyncOperation<TPass> : AsyncOperationBase, IAsyncOperation<TPass>
+	{
 		private CatchContext<TPass> _catchHandlers = new CatchContext<TPass>();
-		private object _input;
 
-
-		internal AsyncOperation(AsyncOperationBase sender, Func<object, TPass> action)
+		public AsyncOperation(TPass value)
+			: base(AsyncOperationResult.Success(value))
 		{
-			_preceedingOperation = sender;
-			_actionHandle = new AsyncEventArgs(() => _execute(action));
 		}
 
-		internal override void Dispatch(AsyncOperationResult result)
-		{
-			if (result.IsSuccessful)
-			{
-				State = AsyncOperationState.Dispatched;
-				_input = result.Value;
-				Async.Dispatch(_actionHandle);
-			}
-			else
-			{
-				Throw((Exception)result.Value);
-			}
-		}
 
-		private void _execute(Func<object, TPass> action)
-		{
-			try
-			{
-				_result = AsyncOperationResult.Success(action(_input));
-				State = AsyncOperationState.Completed;
-				passToAll();
-			}
-			catch (Exception ex)
-			{
-				Throw(ex);
-			}
-		}
+		internal AsyncOperation(AsyncOperationBase preceeding, IAsyncOperator op)
+			: base(preceeding, op)
+		{ }
 
-		public AsyncOperation Then(Action<TPass> action)
+		public IAsyncOperation Then(Action<TPass> action)
 		{
-			var continuation = new AsyncOperation(this, obj => action((TPass)obj));
-			then(continuation);
+			var continuation = new AsyncOperation(this, new SerialOperator(obj => { action((TPass)obj); return null; }));
+			Then(continuation);
 			return continuation;
 		}
 
-		public AsyncOperation<TNext> Then<TNext>(Func<TPass, TNext> action)
+		public IAsyncOperation<TNext> Then<TNext>(Func<TPass, TNext> action)
 		{
-			var continuation = new AsyncOperation<TNext>(this, obj => action((TPass)obj));
-			then(continuation);
+			var continuation = new AsyncOperation<TNext>(this, new SerialOperator(obj => action((TPass)obj)));
+			Then(continuation);
 			return continuation;
 		}
 
-		public AsyncOperation<TPass> Catch<TException>(Func<TException, TPass> exceptionHandler) where TException : Exception
+		public IAsyncOperation<TPass> Catch<TException>(Func<TException, TPass> exceptionHandler) where TException : Exception
 		{
-			assertState("add a catch handler to");
+			_assertState("add a catch handler to");
 			_catchHandlers.Catch(exceptionHandler);
 			return this;
 		}
 
-		public void Throw<TException>(TException exception) where TException : Exception
+		public new TPass Wait()
 		{
-			TPass result;
-			if (_catchHandlers.TryHandle(exception, out result))
-			{
-				if (State == AsyncOperationState.Dispatched)
-					_actionHandle.Resolve();
-				State = AsyncOperationState.Completed;
-				_result = AsyncOperationResult.Success(result);
-				passToAll();
-			}
+			var result = base.Wait();
+			if (result.IsSuccessful)
+				return (TPass)result.Value;
 			else
-			{
-				if (IsDone)
-					throw new AsyncException(exception);
-
-				State = AsyncOperationState.Failed;
-				_result = AsyncOperationResult.Failure(exception);
-				passToAll();
-			}
+				throw new AsyncException(result.Error);
 		}
 
-		public TPass Wait()
+		protected override AsyncOperationResult Handle(Exception exception)
 		{
-			wait();
-			return (TPass)_result.Value;
+			TPass resultValue;
+			if (_catchHandlers.TryHandle(exception, out resultValue))
+				return AsyncOperationResult.Success(resultValue);
+			else
+				return AsyncOperationResult.Failure(exception);
 		}
 	}
 }

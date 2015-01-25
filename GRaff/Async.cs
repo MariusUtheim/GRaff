@@ -10,7 +10,7 @@ namespace GRaff
 	internal static class Async
 #else
 #warning Missing documentation
-	public static class Async
+	public static partial class Async
 #endif
 	{
 		private static List<AsyncEventArgs> _queuedEvents = new List<AsyncEventArgs>();
@@ -28,14 +28,24 @@ namespace GRaff
 			_catcher.Catch(exceptionHandler);
 		}
 
-		public static AsyncOperation Run(Action action)
+		public static IAsyncOperation Run(Action action)
 		{
 			return new AsyncOperation().Then(action);
 		}
 
-		public static AsyncOperation<TPass> Run<TPass>(Func<TPass> action)
+		public static IAsyncOperation<TPass> Run<TPass>(Func<TPass> action)
 		{
 			return new AsyncOperation().Then(action);
+		}
+
+		public static IAsyncOperation RunAsync(Func<Task> action)
+		{
+			return new AsyncOperation().ThenAsync(action);
+		}
+
+		public static IAsyncOperation<TPass> RunAsync<TPass>(Func<Task<TPass>> action)
+		{
+			return new AsyncOperation().ThenAsync(action);
 		}
 
 		public static void ThrowException(Exception ex)
@@ -55,11 +65,18 @@ namespace GRaff
 
 			lock (_exceptions)
 			{
-				foreach (AsyncException exception in _exceptions)
+				var unhandledExceptions = new List<Exception>();
+				foreach (var exception in _exceptions)
 				{
-					if (!_catcher.TryHandle(exception.InnerException))
-						throw new AsyncException(exception);
+					if (!_catcher.TryHandle(exception))
+						unhandledExceptions.Add(exception);
 				}
+				_exceptions = new List<Exception>();
+
+				if (unhandledExceptions.Count == 1)
+					throw new AsyncException(unhandledExceptions[0]);
+				else if (unhandledExceptions.Count >= 2)
+					throw new AsyncException(new AggregateException(unhandledExceptions));
 
 				lock (_queuedEvents)
 				{

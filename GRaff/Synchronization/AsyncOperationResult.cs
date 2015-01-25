@@ -3,23 +3,25 @@
 
 namespace GRaff.Synchronization
 {
-	internal class AsyncOperationResult
+	public class AsyncOperationResult
 	{
-		internal static AsyncOperationResult Null = new AsyncOperationResult { IsSuccessful = true, Value = null };
+		public static AsyncOperationResult Success() { return new AsyncOperationResult { IsSuccessful = true }; }
 
-		internal static AsyncOperationResult Success() { return new AsyncOperationResult { IsSuccessful = true, Value = null }; }
+		public static AsyncOperationResult Null = new AsyncOperationResult { IsSuccessful = true };
 
-		internal static AsyncOperationResult Success(object result)
+		public static AsyncOperationResult Success(object result)
 		{
 			return new AsyncOperationResult { IsSuccessful = true, Value = result };
 		}
 
-		internal static AsyncOperationResult Failure(Exception exception)
+		public static AsyncOperationResult Failure(Exception exception)
 		{
-			return new AsyncOperationResult { IsSuccessful = false, Value = exception };
+			return new AsyncOperationResult { IsSuccessful = false, Error = exception };
 		}
 
-		internal bool IsSuccessful;
-		internal object Value;
+		public bool IsSuccessful;
+		public object Value;
+		public Exception Error;
+
 	}
 }
