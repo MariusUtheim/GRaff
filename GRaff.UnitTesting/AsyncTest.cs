@@ -27,7 +27,7 @@ namespace GameMaker.UnitTesting
 			operation.Abort();
 			Assert.AreEqual(AsyncOperationState.Aborted, operation.State);
 
-			operation = Async.Run(() => { }).Then(() => { });
+			operation = Async.Run(() => { }).ThenSync(() => { });
 			Assert.AreEqual(AsyncOperationState.Initial, operation.State);
 
 			operation = Async.Run(() =>  { throw new Exception("Error"); });
@@ -36,14 +36,14 @@ namespace GameMaker.UnitTesting
 		}
 		
 		[TestMethod]
-		public void Async_Then()
+		public void Async_ThenSync()
 		{
 			IAsyncOperation operation;
 			int count = 0;
 
 			operation = new AsyncOperation();
 			for (int i = 0; i < 10; i++)
-				operation = operation.Then(() => { count++; });
+				operation = operation.ThenSync(() => { count++; });
 
 			for (int i = 0; i < 10; i++)
 			{
@@ -61,7 +61,7 @@ namespace GameMaker.UnitTesting
 			Async.HandleEvents();
 
 			for (int i = 0; i < 10; i++)
-				operation = operation.Then(count => count + 1);
+				operation = operation.ThenSync(count => count + 1);
 
 			for (int i = 0; i < 10; i++)
 				Async.HandleEvents();
@@ -80,8 +80,8 @@ namespace GameMaker.UnitTesting
 			Func<int, Action> incrementBy = i => (() => count += i);
 			for (int i = 0; i < 10; i++)
 			{
-				operation.Then(incrementBy(i));
-				operation = operation.Then(incrementBy(i));
+				operation.ThenSync(incrementBy(i));
+				operation = operation.ThenSync(incrementBy(i));
 			}
 
 			int expected = 0;
@@ -94,6 +94,33 @@ namespace GameMaker.UnitTesting
 			}
 		}
 
+		[TestMethod]
+		public void Async_Then()
+		{
+			IAsyncOperation<int> operation = Async.Run(() => 0);
+			Async.HandleEvents();
+
+			for (int i = 0; i < 10; i++)
+				operation = operation.Then(count => Async.Run(() => count + 1));
+
+			for (int i = 0; i < 10; i++)
+				Async.HandleEvents();
+
+			Assert.AreEqual(AsyncOperationState.Completed, operation.State);
+			Assert.AreEqual(10, operation.Wait());
+		}
+
+		[TestMethod]
+		public void Async_ThenWait()
+		{
+			int count = 0;
+			Async.Run(() => { count += 1; }).ThenWait(() => { count += 1; }).Done();
+
+			Assert.AreEqual(0, count);
+			Async.HandleEvents();
+			Assert.AreEqual(2, count);
+		}
+
 
 		[TestMethod]
 		public void Async_Wait()
@@ -102,7 +129,7 @@ namespace GameMaker.UnitTesting
 
 			int count = 0;
 			for (int i = 0; i < 10; i++)
-				operation = operation.Then(() => { count++; });
+				operation = operation.ThenSync(() => { count++; });
 			
 			operation.Wait();
 			Assert.AreEqual(10, count);
@@ -139,37 +166,35 @@ namespace GameMaker.UnitTesting
 			bool caughtException;
 			bool finished;
 
-
+			// Exceptions get caught
 			caughtException = finished = false;
 			operation = Async
 				.Run(() => { throw new Exception("Error"); })
-				.Catch<Exception>(exception => { caughtException = true; })
-				.Then(() => { finished = true; });
+				.Catch<Exception>(ex => { caughtException = true; })
+				.ThenSync(() => { finished = true; });
 			Async.HandleEvents();
 			Async.HandleEvents();
 			Assert.IsTrue(caughtException);
 			Assert.IsTrue(finished);
 
-
+			// An early exception might skip some work before it gets caught.
 			caughtException = finished = false;
 			operation = Async
 				.Run(() => { throw new Exception("Error"); })
-				.Catch<Exception>(exception =>
-				{
-					caughtException = true;
-				})
-				.Then(() => { finished = true; });
-			Async.HandleEvents();
-			Async.HandleEvents();
-			Assert.IsTrue(caughtException);
-			Assert.IsTrue(finished);
-
-
-			caughtException = finished = false;
-			operation = Async
-				.Run(() => { throw new Exception("Error"); })
-				.Then(() => { finished = true; })
+				.ThenSync(() => { finished = true; })
 				.Catch<Exception>(ex => caughtException = true);
+			Async.HandleEvents();
+			Async.HandleEvents();
+			Assert.IsTrue(caughtException);
+			Assert.IsFalse(finished);
+
+			// Subclasses of exceptions will be caught, superclasses will not.
+			caughtException = finished = false;
+			operation = Async
+				.Run(() => { throw new ArithmeticException("Error"); })
+				.Catch<DivideByZeroException>(ex => { caughtException = true; })
+				.ThenSync(() => { finished = true; })
+				.Catch<Exception>(ex => { caughtException = true; });
 			Async.HandleEvents();
 			Async.HandleEvents();
 			Assert.IsTrue(caughtException);

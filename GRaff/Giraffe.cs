@@ -17,6 +17,7 @@ namespace GRaff
 		/// The OpenTK.GameWindow instance.
 		/// </summary>
 		internal static GameWindow Window { get; set; }
+		public static bool IsRunning { get; private set; }
 
 		public static void Run()
 		{
@@ -41,6 +42,7 @@ namespace GRaff
 			Window.WindowBorder = WindowBorder.Fixed;
 
 			Window.UpdateFrame += (sender, e) => Giraffe.Loop();
+			Window.Closing += (sender, e) => IsRunning = false;
 
 			Window.KeyDown += (sender, e) => { Keyboard.Press((Key)e.Key); };
 			Window.KeyUp += (sender, e) => { Keyboard.Release((Key)e.Key); };
@@ -68,10 +70,12 @@ namespace GRaff
 				Audio._Initializer.Initialize();
 				initialRoom.Enter();
 				Background.Initialize();
+				IsRunning = true;
 				if (gameStart != null)
 					gameStart();
 				Window.VSync = VSyncMode.On;
 			};
+
 
 			Window.Run(fps, fps);
 		}

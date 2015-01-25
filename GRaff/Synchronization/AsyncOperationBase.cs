@@ -8,9 +8,11 @@ namespace GRaff.Synchronization
 	{
 		private ConcurrentQueue<AsyncOperationBase> _continuations = new ConcurrentQueue<AsyncOperationBase>();
 		private AsyncOperationBase _preceedingOperation;
+		private bool _hasPassedException = false;
 
 		public AsyncOperationBase(IAsyncOperator op)
 		{
+			State = AsyncOperationState.Initial;
 			_preceedingOperation = null;
 			Operator = op;
 		}
@@ -23,8 +25,15 @@ namespace GRaff.Synchronization
 
 		protected AsyncOperationBase(AsyncOperationBase preceeding, IAsyncOperator op)
 		{
+			State = AsyncOperationState.Initial;
 			_preceedingOperation = preceeding;
 			Operator = op;
+		}
+
+		~AsyncOperationBase()
+		{
+			if (!_hasPassedException && Result != null && !Result.IsSuccessful && Giraffe.IsRunning)
+				Async.ThrowException(new AsyncException("An asynchronous operation threw an exception that was finalized before it was handled. See the inner exception for more details.", Result.Error));
 		}
 
 		protected IAsyncOperator Operator { get; private set; }
@@ -47,6 +56,7 @@ namespace GRaff.Synchronization
 			if (Result != null && !Result.IsSuccessful)
 				throw new AsyncException(Result.Error);
 			IsDone = true;
+			_hasPassedException = true;
 		}
 
 		public void Abort()
@@ -72,13 +82,21 @@ namespace GRaff.Synchronization
 		protected void Then(AsyncOperationBase continuation)
 		{
 			_assertState("add a continuation to");
+			_hasPassedException = true;
 			if (State == AsyncOperationState.Completed)
-				continuation._dispatch(Result);
+				continuation.Dispatch(Result != null ? Result.Value : null); /*C#6.0*/
 			else
 				_continuations.Enqueue(continuation);
 		}
 
-		protected AsyncOperationResult Wait()
+		public void Wait()
+		{
+			var result = _Wait();
+			if (!result.IsSuccessful)
+				throw new AsyncException(result.Error);
+		}
+
+		protected AsyncOperationResult _Wait()
 		{
 			switch (State)
 			{
@@ -89,7 +107,7 @@ namespace GRaff.Synchronization
 					return AsyncOperationResult.Failure(new AsyncException(Result.Error));
 
 				case AsyncOperationState.Initial:
-					var pass = _preceedingOperation.Wait();
+					var pass = _preceedingOperation._Wait();
 					if (!pass.IsSuccessful)
 						pass = Handle(pass.Error);
 					if (pass.IsSuccessful)
@@ -118,6 +136,7 @@ namespace GRaff.Synchronization
 		/// </summary>
 		private void _completed(AsyncOperationResult result)
 		{
+			Console.WriteLine("Thing completed");
 			if (result.IsSuccessful)
 				Accept(result.Value);
 			else
@@ -134,10 +153,7 @@ namespace GRaff.Synchronization
 			Result = AsyncOperationResult.Success(result);
 			AsyncOperationBase continuation;
 			while (_continuations.TryDequeue(out continuation))
-			{
-				continuation.State = AsyncOperationState.Dispatched;
-				continuation._dispatch(Result);
-			}
+				continuation.Dispatch(Result != null ? Result.Value : null); /*C#6.0*/
 		}
 
 		/// <summary>
@@ -162,10 +178,13 @@ namespace GRaff.Synchronization
 			}
 		}
 
-		public void _dispatch(AsyncOperationResult result)
+		public void Dispatch(object arg)
 		{
-			State = AsyncOperationState.Dispatched;
-			Operator.Dispatch(result != null ? result.Value : null, _completed);
+			if (State == AsyncOperationState.Initial)
+			{
+				State = AsyncOperationState.Dispatched;
+				Operator.Dispatch(arg, _completed);
+			}
 		}
 
 		protected abstract AsyncOperationResult Handle(Exception exception);

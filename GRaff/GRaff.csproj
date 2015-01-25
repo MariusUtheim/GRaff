@@ -139,6 +139,8 @@
     <Compile Include="Synchronization\AsyncOperation.Generic.cs" />
     <Compile Include="Synchronization\AsyncOperationBase.cs" />
     <Compile Include="Synchronization\IAsyncOperator.cs" />
+    <Compile Include="Synchronization\ImmediateOperator.cs" />
+    <Compile Include="Synchronization\InvokerOperator.cs" />
     <Compile Include="Synchronization\SerialOperator.cs" />
     <Compile Include="Synchronization\AsyncOperation.cs" />
     <Compile Include="Synchronization\AsyncOperationState.cs" />
