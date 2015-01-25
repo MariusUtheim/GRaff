@@ -29,12 +29,9 @@ namespace GRaff
 				resource.Load();
 		}
 
-		public async Task LoadAsync()
+		public IAsyncOperation LoadAsync()
 		{
-			List<Task> loadingTasks = new List<Task>();
-			foreach (var resource in _resources)
-				loadingTasks.Add(resource.LoadAsync());
-			await Task.WhenAll(loadingTasks);
+			throw new NotImplementedException();
 		}
 
 		public void Unload()

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using GRaff.Synchronization;
 using OggVorbisDecoder;
 using OpenTK.Audio.OpenAL;
 
@@ -40,12 +41,25 @@ namespace GRaff
 
 		public int Id { get; private set; }
 
+		/// <summary>
+		/// Gets the number of bits per sample of this GRaff.SoundBuffer.
+		/// </summary>
 		public int Bitrate { get; private set; }
 
+		/// <summary>
+		/// Gets the number of channels of this GRaff.SoundBuffer (1 for mono, 2 for stereo)
+		/// </summary>
 		public int Channels { get; private set; }
 
-		public double Duration { get; private set; } 
+		/// <summary>
+		/// Gets the duration of this GRaff.SoundBuffer in seconds.
+		/// </summary>
+		/// <returns></returns>
+		public double Duration { get; private set; }
 
+		/// <summary>
+		/// Gets the frequency of the data in this GRaff.SoundBuffer. That is, the number of samples per second.
+		/// </summary>
 		public int Frequency { get; private set; }
 
 		/// <summary>
@@ -64,21 +78,23 @@ namespace GRaff
 					stream.CopyTo(outputStream);
 
 				return new SoundBuffer((int)(8 * buffer.Length / (info.Duration * info.Rate)), info.Channels, info.Duration, info.Rate, buffer);
-            }
+			}
 		}
 
-		public static async Task<SoundBuffer> LoadAsync(string file)
+		public static IAsyncOperation<SoundBuffer> LoadAsync(string file)
 		{
-			using (var stream = new OggVorbisFileStream(file))
-			{
-				var info = stream.Info;
+			VorbisInfo info = null;
+			byte[] buffer = null;
+			return Async.RunAsync(async () => {
+				using (var stream = new OggVorbisFileStream(file))
+				{
+					info = stream.Info;
+					buffer = new byte[stream.Length];
+					using (var outputStream = new OggVorbisMemoryStream(buffer, info, stream.RawLength, info.Duration))
+						await stream.CopyToAsync(outputStream);
+				}
 
-				byte[] buffer = new byte[stream.Length];
-				using (var outputStream = new OggVorbisMemoryStream(buffer, info, stream.RawLength, info.Duration))
-					await stream.CopyToAsync(outputStream);
-
-				return await Async.MainThreadDispatcher.InvokeAsync(() => new SoundBuffer(info.BitrateNominal, info.Channels, (double)info.Duration, info.Rate, buffer));
-            }
+			}).Then(() => new SoundBuffer(info.BitrateNominal, info.Channels, info.Duration, info.Rate, buffer));
 		}
 
 #region IDisposable implementation

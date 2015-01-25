@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using GRaff.Graphics;
+using GRaff.Synchronization;
 
 namespace GRaff
 {
@@ -11,6 +12,7 @@ namespace GRaff
 		private string _bitmapFile, _dataFile;
 		private int _height;
 		private TextureBuffer _textureBuffer;
+		private IAsyncOperation _loadingOperation;
 
 		public Font(string bitmapFile, string dataFile)
 		{
@@ -55,83 +57,62 @@ namespace GRaff
 			}
 		}
 
-		private void _load(TextureBuffer textureBuffer, FontFile fontData)
-		{
-			_textureBuffer = textureBuffer;
-
-			foreach (var c in fontData.Chars)
-			{
-				var character = new FontCharacter
-				{
-					X = c.X,
-					Y = c.Y,
-					Width = c.Width,
-					Height = c.Height,
-					XAdvance = c.XAdvance,
-					XOffset = c.XOffset,
-					YOffset = c.YOffset
-				};
-
-				_characters.Add((char)c.Id, character);
-			}
-
-			_height = fontData.Common.LineHeight;
-
-			AssetState = AssetState.Loaded;
-		}
 
 		public void Load()
 		{
-			TextureBuffer textureBuffer;
-			FontFile fontData;
-
-			lock (this)
-			{
-				if (AssetState == AssetState.Loaded)
-					return;
-				AssetState = AssetState.Loaded;
-
-				textureBuffer = TextureBuffer.Load(_bitmapFile);
-				fontData = FontLoader.Load(_dataFile);
-			}
-
-			_load(textureBuffer, fontData);
+			if (AssetState == AssetState.Loaded)
+				return;
+			else
+				LoadAsync().Wait();
 		}
 
-		public async Task LoadAsync()
+		public IAsyncOperation LoadAsync()
 		{
 			if (AssetState != AssetState.NotLoaded)
-				return;
+				return _loadingOperation;
 
 			AssetState = AssetState.LoadingAsync;
 
-			var textureBuffer = await TextureBuffer.LoadAsync(_bitmapFile);
-			var fontData = FontLoader.Load(_dataFile);
 
-			lock (this)
-			{
-				if (AssetState == AssetState.LoadingAsync)
-					_load(textureBuffer, fontData);
-			}
+			return TextureBuffer.LoadAsync(_bitmapFile)
+				.Then(textureBuffer => {
+					_textureBuffer = textureBuffer;
+					var fontData = FontLoader.Load(_dataFile);
+
+					foreach (var c in fontData.Chars)
+					{
+						var character = new FontCharacter {
+							X = c.X,
+							Y = c.Y,
+							Width = c.Width,
+							Height = c.Height,
+							XAdvance = c.XAdvance,
+							XOffset = c.XOffset,
+							YOffset = c.YOffset
+						};
+
+						_characters.Add((char)c.Id, character);
+					}
+
+					_height = fontData.Common.LineHeight;
+
+					AssetState = AssetState.Loaded;
+				});
 		}
 
 		public void Unload()
 		{
-			lock (this)
+			if (AssetState == AssetState.NotLoaded)
+				return;
+
+			if (_textureBuffer != null)
 			{
-				if (AssetState == AssetState.NotLoaded)
-					return;
-
-				if (_textureBuffer != null)
-				{
-					_textureBuffer.Dispose();
-					_textureBuffer = null;
-				}
-
-				_characters.Clear();
-
-				AssetState = AssetState.NotLoaded;
+				_textureBuffer.Dispose();
+				_textureBuffer = null;
 			}
+
+			_characters.Clear();
+			AssetState = AssetState.NotLoaded;
 		}
 
 		internal void Render(string str, FontAlignment alignment, out PointF[] rectCoords, out PointF[] texCoords)

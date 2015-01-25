@@ -23,6 +23,7 @@ namespace GRaff
 		private bool _hasCustomMask;
 		private MaskShape _maskShape;
 		private AnimationStrip _animationStrip;
+		private IAsyncOperation _loadingOperation;
 
 		/// <summary>
 		/// Initializes a new instance of the GRaff.Sprite class. This only declares the sprite data, it will not be loaded until you call Sprite.Load.
@@ -74,11 +75,10 @@ namespace GRaff
 		/// <returns>A System.Treading.Tasks.Task`1 that will return the loaded GRaff.Sprite upon completion.</returns>
 		/// <exception cref="System.ArgumentOutOfRangeException">subimages is less than or equal to 0.</exception>
 		/// <exception cref="System.IO.IOException">The specified file does not exist.</exception>
-		public static async Task<Sprite> LoadAsync(string path, int subimages = 1, IntVector? origin = null, MaskShape maskShape = null, AnimationStrip animationStrip = null)
+		public static IAsyncOperation<Sprite> LoadAsync(string path, int subimages = 1, IntVector? origin = null, MaskShape maskShape = null, AnimationStrip animationStrip = null)
 		{
 			var result = new Sprite(path, subimages, origin, maskShape, animationStrip);
-			await result.LoadAsync();
-			return result;
+			return result.LoadAsync().Then(() => result);
 		}
 
 		/// <summary>
@@ -230,35 +230,25 @@ namespace GRaff
 		/// <remarks>If the texture is already loading asynchronously, calling GRaff.Sprite.Load blocks until loading completes.</remarks>
 		public void Load()
 		{
-			TextureBuffer textureBuffer;
-			lock (this)
-			{
-				if (AssetState == AssetState.Loaded)
-					return;
-				textureBuffer = TextureBuffer.Load(FileName);
-			}
-
-			_load(textureBuffer);
+			if (AssetState == AssetState.Loaded)
+				return;
+			else
+				LoadAsync().Wait();
 		}
 
 		/// <summary>
 		/// Loads the texture asynchronously.
 		/// </summary>
 		/// <returns>A System.Threading.Tasks.Task that will complete when the texture is finished loading.</returns>
-		public async Task LoadAsync()
+		public IAsyncOperation LoadAsync()
 		{
 			if (AssetState != AssetState.NotLoaded)
-				return;
+				return _loadingOperation;
 
 			AssetState = AssetState.LoadingAsync;
 
-			var textureBuffer = await TextureBuffer.LoadAsync(FileName);
-
-			lock (this)
-			{
-				if (AssetState == AssetState.LoadingAsync)
-					_load(textureBuffer);
-			}
+			return TextureBuffer.LoadAsync(FileName)
+								.Then(textureBuffer => _load(textureBuffer));
 		}
 
 		/// <summary>
@@ -266,13 +256,13 @@ namespace GRaff
 		/// </summary>
 		public void Unload()
 		{
-			lock (this)
-			{
-				if (AssetState == AssetState.NotLoaded)
-					return;
-				AssetState = AssetState.NotLoaded;
-			}
-
+			if (AssetState == AssetState.NotLoaded)
+				return;
+			if (AssetState == AssetState.LoadingAsync)
+				_loadingOperation.Abort();
+	
+			AssetState = AssetState.NotLoaded;
+			
 			if (_texture != null)
 			{
 				_texture.Dispose();

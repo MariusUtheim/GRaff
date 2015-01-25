@@ -16,6 +16,8 @@ namespace GRaff
 	{
 		private SoundBuffer _buffer;
 		private List<SoundInstance> _instances;
+		private IAsyncOperation _loadingOperation;
+
 
 		/// <summary>
 		/// Initializes a new instance of the GRaff.Sound class.
@@ -96,41 +98,30 @@ namespace GRaff
 		/// <exception cref="System.IO.FileNotFoundException">The sound file does not exists.</exception>
 		public void Load()
 		{
-			lock (this)
-			{
-				if (AssetState == AssetState.Loaded)
-					return;
-				AssetState = AssetState.Loaded;
-			}
-
-			var soundBuffer = SoundBuffer.Load(FileName);
-			_load(soundBuffer);
+			if (AssetState == AssetState.Loaded)
+				return;
+			else
+				LoadAsync().Wait();
 		}
 
-		public async Task LoadAsync()
+		public IAsyncOperation LoadAsync()
 		{
 			if (AssetState != AssetState.NotLoaded)
-				return;
+				return _loadingOperation;
 
 			AssetState = AssetState.LoadingAsync;
-
-			var soundBuffer = await SoundBuffer.LoadAsync(FileName);
-
-			if (AssetState == AssetState.LoadingAsync)
-				_load(soundBuffer);
+			return SoundBuffer.LoadAsync(FileName).Then(_load);
 		}
 
 		public void Unload()
 		{
-			lock (this)
-			{
-				if (AssetState == AssetState.NotLoaded)
-					return;
-				AssetState = AssetState.NotLoaded;
-			}
+			if (AssetState == AssetState.NotLoaded)
+				return;
 
+			_loadingOperation.Abort();
 			StopAll();
 			_instances.Clear();
+
 			if (_buffer != null)
 			{
 				_buffer.Dispose();

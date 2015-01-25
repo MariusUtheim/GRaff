@@ -1,5 +1,5 @@
 ﻿using System.Threading.Tasks;
-
+using GRaff.Synchronization;
 
 namespace GRaff
 {
@@ -17,7 +17,7 @@ namespace GRaff
 		/// Loads the asset asynchronously.
 		/// </summary>
 		/// <returns>A System.Threading.Tasks.Task that will complete when the asset is completely loaded.</returns>
-		Task LoadAsync();
+		IAsyncOperation LoadAsync();
 
 		/// <summary>
 		/// Unloads the asset from memory.

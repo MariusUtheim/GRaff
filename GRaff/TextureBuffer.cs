@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Threading.Tasks;
+using GRaff.Synchronization;
 using OpenTK.Graphics.ES30;
 using GLPixelFormat = OpenTK.Graphics.ES30.PixelFormat;
 
@@ -89,14 +90,15 @@ namespace GRaff
 			return bitmap;
 		}
 
-		public static async Task<TextureBuffer> LoadAsync(string filename)
+		public static IAsyncOperation<TextureBuffer> LoadAsync(string filename)
 		{
-			var bitmap = await LoadBitmapAsync(filename);
-			var textureData = bitmap.LockBits(new System.Drawing.Rectangle(0, 0, bitmap.Width, bitmap.Height),
-												 ImageLockMode.ReadOnly,
-												System.Drawing.Imaging.PixelFormat.Format32bppArgb);
-
-			return await Async.MainThreadDispatcher.InvokeAsync(() => new TextureBuffer(bitmap.Width, bitmap.Height, textureData.Scan0));
+			return Async.RunAsync(() => LoadBitmapAsync(filename))
+				.Then(bitmap => {
+					var textureData = bitmap.LockBits(new System.Drawing.Rectangle(0, 0, bitmap.Width, bitmap.Height),
+														 ImageLockMode.ReadOnly,
+														System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+					return new TextureBuffer(bitmap.Width, bitmap.Height, textureData.Scan0);
+                });
 		}
 
 		public int Width

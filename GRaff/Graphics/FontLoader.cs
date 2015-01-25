@@ -351,9 +351,10 @@ namespace GRaff.Graphics
 
 	public class FontLoader
 	{
+		private static XmlSerializer deserializer = new XmlSerializer(typeof(FontFile));
+
 		public static FontFile Load(string filename)
 		{
-			var deserializer = new XmlSerializer(typeof(FontFile));
 			using (var textReader = new StreamReader(filename))
 				return (FontFile)deserializer.Deserialize(textReader);
 		}
