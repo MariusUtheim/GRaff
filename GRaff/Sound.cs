@@ -110,7 +110,7 @@ namespace GRaff
 				return _loadingOperation;
 
 			AssetState = AssetState.LoadingAsync;
-			return SoundBuffer.LoadAsync(FileName).Then(_load);
+			return SoundBuffer.LoadAsync(FileName).ThenSync(_load);
 		}
 
 		public void Unload()

@@ -93,7 +93,7 @@ namespace GRaff
 		public static IAsyncOperation<TextureBuffer> LoadAsync(string filename)
 		{
 			return Async.RunAsync(() => LoadBitmapAsync(filename))
-				.Then(bitmap => {
+				.ThenSync(bitmap => {
 					var textureData = bitmap.LockBits(new System.Drawing.Rectangle(0, 0, bitmap.Width, bitmap.Height),
 														 ImageLockMode.ReadOnly,
 														System.Drawing.Imaging.PixelFormat.Format32bppArgb);

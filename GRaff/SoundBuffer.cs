@@ -94,7 +94,7 @@ namespace GRaff
 						await stream.CopyToAsync(outputStream);
 				}
 
-			}).Then(() => new SoundBuffer(info.BitrateNominal, info.Channels, info.Duration, info.Rate, buffer));
+			}).ThenSync(() => new SoundBuffer(info.BitrateNominal, info.Channels, info.Duration, info.Rate, buffer));
 		}
 
 #region IDisposable implementation

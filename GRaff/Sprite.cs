@@ -78,7 +78,7 @@ namespace GRaff
 		public static IAsyncOperation<Sprite> LoadAsync(string path, int subimages = 1, IntVector? origin = null, MaskShape maskShape = null, AnimationStrip animationStrip = null)
 		{
 			var result = new Sprite(path, subimages, origin, maskShape, animationStrip);
-			return result.LoadAsync().Then(() => result);
+			return result.LoadAsync().ThenSync(() => result);
 		}
 
 		/// <summary>
@@ -248,7 +248,7 @@ namespace GRaff
 			AssetState = AssetState.LoadingAsync;
 
 			return TextureBuffer.LoadAsync(FileName)
-								.Then(textureBuffer => _load(textureBuffer));
+								.ThenSync(textureBuffer => _load(textureBuffer));
 		}
 
 		/// <summary>
