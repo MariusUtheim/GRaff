@@ -10,6 +10,13 @@ namespace GRaff
 	/// </summary>
 	public struct Rectangle
 	{
+		/// <summary>
+		/// Initializes a new instance of the GRaff.Rectangle structure at the specified (x, y) coordinates and with the specified width and height.
+		/// </summary>
+		/// <param name="x">The x-coordinate of the top left corner.</param>
+		/// <param name="y">The y-coordinate of the top left corner.</param>
+		/// <param name="width">The width of the rectangle.</param>
+		/// <param name="height">The height of the rectangle.</param>
 		public Rectangle(double x, double y, double width, double height)
 			: this()
 		{
@@ -20,14 +27,20 @@ namespace GRaff
 		}
 
 		/// <summary>
-		/// Initializes a new instance of the GRaff.Rectangle class at the specified location and with the specified size.
+		/// Initializes a new instance of the GRaff.Rectangle structure at the specified location and with the specified size.
 		/// </summary>
 		/// <param name="location">The location of the top-left corner.</param>
 		/// <param name="size">The size of the rectangle.</param>
 		public Rectangle(Point location, Vector size) : this(location.X, location.Y, size.X, size.Y) { }
 
+		/// <summary>
+		/// Initializes a new instance of the GRaff.Rectangle structure with the specified top-left and bottom-right corners.
+		/// </summary>
+		/// <param name="topLeft">The top-left corner of the GRaff.Rectangle.</param>
+		/// <param name="bottomRight">The bottom-right corner of the GRaff.Rectangle.</param>
 		public Rectangle(Point topLeft, Point bottomRight)
-			: this(topLeft.X, topLeft.Y, bottomRight.X - topLeft.X, bottomRight.Y - topLeft.Y) { }
+			: this(topLeft.X, topLeft.Y, bottomRight.X - topLeft.X, bottomRight.Y - topLeft.Y)
+		{ }
 
 
 		/// <summary>
@@ -154,7 +167,7 @@ namespace GRaff
 		/// <param name="v">The GRaff.Vector to translate by.</param>
 		/// <returns>The translated GRaff.Rectangle.</returns>
 		public static Rectangle operator +(Rectangle r, Vector v) { return new Rectangle(r.Location + v, r.Size); }
-		
+
 
 		/// <summary>
 		/// Translates a GRaff.Rectangle by subtracting a given GRaff.Vector.
