@@ -78,6 +78,7 @@
     <Compile Include="Graphics\Shaders\CausticShader.cs" />
     <Compile Include="IAsset.cs" />
     <Compile Include="LinearMatrix.cs" />
+    <Compile Include="MatrixException.cs" />
     <Compile Include="Particles\Behaviors\FrictionBehavior.cs" />
     <Compile Include="Particles\Behaviors\GravityBehavior.cs" />
     <Compile Include="Particles\Behaviors\AccelerationFeature.cs" />

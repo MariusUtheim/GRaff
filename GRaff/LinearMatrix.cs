@@ -77,16 +77,41 @@ namespace GRaff
 		public double M11 { get; set; }
 
 		/// <summary>
+  /// Gets the determinant of this GRaff.LinearMatrix.
+  /// </summary>
+		public double Determinant
+		{
+			get { return M00 * M11 - M01 * M10; }
+		}
+
+
+		/// <summary>
+		/// Gets the inverse of this GRaff.LinearMatrix.
+		/// </summary>
+		/// <exception cref="GRaff.MatrixException">If the determinant is zero.</exception>
+		public LinearMatrix Inverse
+		{
+			get
+			{
+				double det = Determinant;
+				return new LinearMatrix(M11 / det, -M01 / det, -M10 / det, M00 / det);
+			}
+		}
+
+
+
+		/// <summary>
 		/// Applies a scaling transformation to this GRaff.AffineMatrix.
 		/// </summary>
 		/// <param name="scaleX">The horizontal scale factor.</param>
 		/// <param name="scaleY">The vertical scale factor.</param>
-		public void Scale(double scaleX, double scaleY)
+		public LinearMatrix Scale(double scaleX, double scaleY)
 		{
 			M00 *= scaleX;
-			M10 *= scaleX;
-			M01 *= scaleY;
+			M01 *= scaleX;
+			M10 *= scaleY;
 			M11 *= scaleY;
+			return this;
 		}
 
 
@@ -94,32 +119,33 @@ namespace GRaff
 		/// Applies a rotation transformation to this GRaff.AffineMatrix.
 		/// </summary>
 		/// <param name="a">The angle to rotate by.</param>
-		public void Rotate(Angle a)
+		public LinearMatrix Rotate(Angle a)
 		{
 			double c = GMath.Cos(a), s = GMath.Sin(a);
-			double xx = M00, yx = M10, xy = M01, yy = M11;
-			M00 = xx * c + xy * s;
-			M10 = yx * c + yy * s;
-			M01 = xy * c - xx * s;
-			M11 = yy * c - yx * s;
+			double m00 = M00, m01 = M01, m10 = M10, m11 = M11;
+			M00 = m00 * c - m10 * s;
+			M01 = m01 * c - m11 * s;
+			M10 = m00 * s + m10 * c;
+			M11 = m01 * s + m11 * c;
+			return this;
 		}
 
-
 		/// <summary>
-		/// Specifies whether this GRaff.LinearMatrix contains the same elements as the specified System.Object.
+		/// Applies a shear transformation to this GRaff.LinearMatrix.
 		/// </summary>
-		/// <param name="obj">The System.Object to compare to.</param>
-		/// <returns>true if obj is a GRaff.LinearMatrix and has the same elements as this GRaff.LinearMatrix.</returns>
-		public override bool Equals(object obj)
+		/// <param name="shearX">The horizontal shear factor.</param>
+		/// <param name="shearY">The vertical shear factor.</param>
+		/// <returns>This GRaff.LinearMatrix, after the transformation.</returns>
+		public LinearMatrix Shear(double shearX, double shearY)
 		{
-			return ((obj is LinearMatrix) ? (this == (LinearMatrix)obj) : base.Equals(obj));
+			double[] add = new[] { shearX * M10, shearX * M11, shearY * M00, shearY * M01 };
+			M00 += add[0];
+			M01 += add[1];
+			M10 += add[2];
+			M11 += add[3];
+			return this; 
 		}
 
-		/// <summary>
-		/// Returns a hash code for this GRaff.LinearMatrix.
-		/// </summary>
-		/// <returns>An integer value that specifies a hash value for this GRaff.LinearMatrix.</returns>
-		public override int GetHashCode() { return GMath.HashCombine(M00.GetHashCode(), M01.GetHashCode(), M10.GetHashCode(), M11.GetHashCode()); }
 
 		/// <summary>
 		/// Creates a deep clone of this GRaff.LinearMatrix.
@@ -139,7 +165,35 @@ namespace GRaff
 			return Clone();
 		}
 
+		/// <summary>
+		/// Converts this GRaff.LinearMatrix to a human-readable string, displaying the values of the elements.
+		/// </summary>
+		/// <returns>A string that represents this GRaff.LinearMatrix.</returns>
+		public override string ToString()
+		{
+			return string.Format("[[{0}, {1}], [{2}, {3}]]", M00, M01, M10, M11);
+		}
 
+		/// <summary>
+		/// Specifies whether this GRaff.LinearMatrix contains the same elements as the specified System.Object.
+		/// </summary>
+		/// <param name="obj">The System.Object to compare to.</param>
+		/// <returns>true if obj is a GRaff.LinearMatrix and has the same elements as this GRaff.LinearMatrix.</returns>
+		public override bool Equals(object obj)
+		{
+			return ((obj is LinearMatrix) ? (this == (LinearMatrix)obj) : base.Equals(obj));
+		}
+
+		/// <summary>
+		/// Returns a hash code for this GRaff.LinearMatrix.
+		/// </summary>
+		/// <returns>An integer value that specifies a hash value for this GRaff.LinearMatrix.</returns>
+		public override int GetHashCode() { return GMath.HashCombine(M00.GetHashCode(), M01.GetHashCode(), M10.GetHashCode(), M11.GetHashCode()); }
+
+		private double _magnitude
+		{
+			get { return M00 * M00 + M01 * M01 + M10 * M10 + M11 * M11; }
+		}
 		/// <summary>
 		/// Compares two GRaff.LinearMatrix objects. The result specifies whether all their elements are equal.
 		/// </summary>
@@ -148,12 +202,12 @@ namespace GRaff
 		/// <returns>true if all elements of the two GRaff.LinearMatrix objects are equal.</returns>
 		public static bool operator ==(LinearMatrix left, LinearMatrix right)
 		{
-			if (left == null && right == null)
-				return true;
-			else if (left == null || right == null)
+			if (ReferenceEquals(left, null))
+				return ReferenceEquals(right, null);
+			else if (ReferenceEquals(right, null))
 				return false;
 			else
-				return (left.M00 == right.M00 && left.M01 == right.M01 && left.M10 == right.M10 && left.M11 == right.M11);
+				return (left - right)._magnitude < 1e-14;
 		}
 
 		/// <summary>

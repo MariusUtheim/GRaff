@@ -96,30 +96,96 @@ namespace GRaff
 		public double M12 { get; set; }
 
 		/// <summary>
+		/// Gets the determinant of this GRaff.AffineMatrix.
+		/// </summary>
+		public double Determinant
+		{
+			get
+			{
+				return M00 * M11 - M01 * M10;
+			}
+		}
+
+		/// <summary>
+		/// Gets the inverse of this GRaff.AffineMatrix.
+		/// </summary>
+		/// <exception cref="GRaff.MatrixException">If the determinant is zero.</exception>
+		public AffineMatrix Inverse
+		{
+			get
+			{
+				double det = Determinant;
+				if (det == 0)
+					throw new MatrixException("Cannot invert a matrix with determinant 0.");
+				return new AffineMatrix(M11 / det, -M01 / det, (-M02 * M11 + M01 * M12) / det, -M10 / det, M00 / det, (M02 * M10 - M00 * M12) / det);
+			}
+		}
+
+
+		/// <summary>
 		/// Applies a scaling transformation to this GRaff.AffineMatrix.
 		/// </summary>
 		/// <param name="scaleX">The horizontal scale factor.</param>
 		/// <param name="scaleY">The vertical scale factor.</param>
-		public void Scale(double scaleX, double scaleY)
+		/// <returns>This GRaff.AffineMatrix, after the transformation.</returns>
+		public AffineMatrix Scale(double scaleX, double scaleY)
 		{
 			M00 *= scaleX;
-			M10 *= scaleX;
-			M01 *= scaleY;
+			M01 *= scaleX;
+			M02 *= scaleX;
+			M10 *= scaleY;
 			M11 *= scaleY;
+			M12 *= scaleY;
+			return this;
 		}
 
 		/// <summary>
 		/// Applies a rotation transformation to this GRaff.AffineMatrix.
 		/// </summary>
 		/// <param name="a">The angle to rotate by.</param>
-		public void Rotate(Angle a)
+		/// <returns>This GRaff.AffineMatrix, after the transformation.</returns>
+		public AffineMatrix Rotate(Angle a)
 		{
 			double c = GMath.Cos(a), s = GMath.Sin(a);
-			double xx = M00, yx = M10, xy = M01, yy = M11;
-			M00 = xx * c + xy * s;
-			M10 = yx * c + yy * s;
-			M01 = xy * c - xx * s;
-			M11 = yy * c - yx * s;
+			double m00 = M00, m01 = M01, m02 = M02, m10 = M10, m11 = M11, m12 = M12;
+			M00 = m00 * c - m10 * s;
+			M01 = m01 * c - m11 * s;
+			M02 = m02 * c - m12 * s;
+			M10 = m00 * s + m10 * c;
+			M11 = m01 * s + m11 * c;
+			M12 = m02 * s + m12 * c;
+			return this;
+		}
+
+		/// <summary>
+		/// Applies a translation transformation to this GRaff.AffineMatrix.
+		/// </summary>
+		/// <param name="tx">The horizontal translation.</param>
+		/// <param name="ty">The vertical translation.</param>
+		/// <returns>This GRaff.AffineMatrix, after the transformation.</returns>
+		public AffineMatrix Translate(double tx, double ty)
+		{
+			M02 += tx;
+			M12 += ty;
+			return this;
+		}
+
+		/// <summary>
+		/// Applies a shear transformation to this GRaff.AffineMatrix.
+		/// </summary>
+		/// <param name="shearX">The horizontal shear factor.</param>
+		/// <param name="shearY">The vertical shear factor.</param>
+		/// <returns>This GRaff.AffineMatrix, after the transformation.</returns>
+		public AffineMatrix Shear(double shearX, double shearY)
+		{
+			double[] add = new[] { shearX * M10, shearX * M11, shearX * M12, shearY * M00, shearY * M01, shearY * M02 };
+			M00 += add[0];
+			M01 += add[1];
+			M02 += add[2];
+			M10 += add[3];
+			M11 += add[4];
+			M12 += add[5];
+			return this;
 		}
 
 		/// <summary>
@@ -134,6 +200,15 @@ namespace GRaff
 		/// </summary>
 		/// <returns>An integer value that specifies a hash value for this GRaff.AffineMatrix.</returns>
 		public override int GetHashCode() { return GMath.HashCombine(M00.GetHashCode(), M01.GetHashCode(), M02.GetHashCode(), M10.GetHashCode(), M11.GetHashCode(), M12.GetHashCode()); }
+
+		/// <summary>
+		/// Converts this GRaff.AffineMatrix to a human-readable string, displaying the values of the elements.
+		/// </summary>
+		/// <returns>A string that represents this GRaff.AffineMatrix.</returns>
+		public override string ToString()
+		{
+			return string.Format("[[{0}, {1}, {2}], [{3}, {4}, {5}]]", M00, M01, M02, M10, M11, M12);
+		}
 
 		/// <summary>
 		/// Creates a deep clone of this GRaff.AffineMatrix.
@@ -153,6 +228,10 @@ namespace GRaff
 			return Clone();
 		}
 
+		private double _magnitude
+		{
+			get { return M00 * M00 + M01 * M01 + M02 * M02 + M10 * M10 + M11 * M11 + M12 * M12; }
+		}
 
 		/// <summary>
 		/// Compares two GRaff.AffineMatrix objects. The result specifies whether all their elements are equal.
@@ -162,10 +241,10 @@ namespace GRaff
 		/// <returns>true if all elements of the two GRaff.AffineMatrix objects are equal.</returns>
 		public static bool operator ==(AffineMatrix left, AffineMatrix right)   /*C#6.0*/ // left?.Equals(right) ?? right == null;
 		{
-			if (left == null)
-				return right == null;
+			if (ReferenceEquals(left, null))
+				return object.ReferenceEquals(right, null);
 			else
-				return left.Equals(right);
+				return (left - right)._magnitude < 10e-14;
 		}
 
 		/// <summary>
