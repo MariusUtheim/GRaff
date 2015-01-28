@@ -61,31 +61,21 @@ namespace GRaff
 		/// <returns></returns>
 		public static AffineMatrix GetMatrix()
 		{
-			return AffineMatrix.Scaling(2 / Width, -2 / Height) * AffineMatrix.Rotation(Rotation) * AffineMatrix.Translation(-X, -Y);
+			double w = 2.0 / Width, h = -2.0 / Height, c = GMath.Cos(Rotation), s = -GMath.Sin(Rotation);
+			return new AffineMatrix(w * c, w * s, -w * (c * X + s * Y), -h * s, h * c, h * (s * X - c * Y));
+			// Result is given by Scale(w, h) * Rotate(t) * Translate(-X, -Y)
 		}
 
 		internal static void LoadMatrix(int programId)
 		{
 			var tr = GetMatrix();
-			//Matrix4 project = Matrix4.CreateOrthographicOffCenter((float)rect.Left, (float)rect.Right, (float)rect.Bottom, (float)rect.Top, 1, 0);
-			//Matrix4 translateFromOrigin = Matrix4.CreateTranslation((float)Center.X, (float)Center.Y, 0);
-			//Matrix4 rotate = Matrix4.CreateRotationZ((float)Rotation.Radians);
-			//Matrix4 translateToOrigin = Matrix4.CreateTranslation(-(float)Center.X, -(float)Center.Y, 0);
 
-/**/			var projectionMatrix = new Matrix4(
+			var projectionMatrix = new Matrix4(
 				(float)tr.M00, (float)tr.M10, 0, 0,
 				(float)tr.M01, (float)tr.M11, 0, 0,
-				0, 0, 1, 0,
+							0,			   0, 1, 0,
 				(float)tr.M02, (float)tr.M12, 0, 1
 			);
-			/**
-			var projectionMatrix = new Matrix4(
-				(float)tr.M00, (float)tr.M01, 0, (float)tr.M02,
-				(float)tr.M01, (float)tr.M11, 0, (float)tr.M12,
-				0, 0, 1, 0,
-				0, 0, 0, 1
-			);
-			/**/
 
 			int matrixLocation;
 			matrixLocation = GL.GetUniformLocation(programId, "GRaff_ViewMatrix");
