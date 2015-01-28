@@ -32,7 +32,7 @@ namespace GRaff
 			foreach (var instance in Instance.All)
 				instance.Destroy();
 			_current = this;
-			View.RoomView = new IntRectangle(0, 0, Width, Height);
+			View.FocusRegion = new IntRectangle(0, 0, Width, Height);
 			if (RoomStart != null)
 				this.RoomStart();
 		}
