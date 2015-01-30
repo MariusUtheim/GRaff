@@ -21,7 +21,7 @@ namespace GRaff.Particles.Behaviors
 
 		public void AttachTo(Particle particle)
 		{
-			particle.TransformationMatrix.Rotate(_direction.Generate());
+			particle.TransformationMatrix = particle.TransformationMatrix.Rotate(_direction.Generate());
 		}
 	}
 }

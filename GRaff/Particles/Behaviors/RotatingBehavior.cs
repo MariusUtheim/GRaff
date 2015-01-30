@@ -13,7 +13,7 @@ namespace GRaff.Particles.Behaviors
 
 		public void Update(Particle particle)
 		{
-			particle.TransformationMatrix.Rotate(_rotation);
+			particle.TransformationMatrix = particle.TransformationMatrix.Rotate(_rotation);
 		}
 	}
 }

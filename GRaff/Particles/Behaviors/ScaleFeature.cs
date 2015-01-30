@@ -29,7 +29,7 @@ namespace GRaff.Particles.Behaviors
 
 		public void AttachTo(Particle particle)
 		{
-			particle.TransformationMatrix.Scale(_xScale.Generate(), _yScale.Generate());
+			particle.TransformationMatrix = particle.TransformationMatrix.Scale(_xScale.Generate(), _yScale.Generate());
 		}
 	}
 }

@@ -20,7 +20,7 @@ namespace GRaff.Particles.Behaviors
 
 		public void Update(Particle particle)
 		{
-			particle.TransformationMatrix.Scale(_xScaleFactor, _yScaleFactor);
+			particle.TransformationMatrix = particle.TransformationMatrix.Scale(_xScaleFactor, _yScaleFactor);
 		}
 	}
 }
