@@ -106,10 +106,13 @@ namespace GRaff
 			{
 				if (IsTiled)
 				{
-					float u0 = -(float)(XOffset / Sprite.Width), v0 = -(float)(YOffset / Sprite.Height);
-					float u1 = u0 + Room.Width / (float)Sprite.Width, v1 = v0 + Room.Height / (float)Sprite.Height;
+					var viewBox = View.BoundingBox;
+					float u0 = -(float)((XOffset + viewBox.Left) / Sprite.Width), v0 = -(float)((YOffset + viewBox.Top) / Sprite.Height);
+					float u1 = u0 + (float)(viewBox.Width / Sprite.Width), v1 = v0 + (float)(viewBox.Height / Sprite.Height);
 
-					_renderSystem.SetVertices(UsageHint.StreamDraw, 0.0f, 0.0f, Room.Width, 0.0f, Room.Width, Room.Height, 0.0f, Room.Height);
+					float left = (float)viewBox.Left, right = (float)viewBox.Right, top = (float)viewBox.Top, bottom = (float)viewBox.Bottom;
+
+					_renderSystem.SetVertices(UsageHint.StreamDraw, left, top, right, top, right, bottom, left, bottom);
 					_renderSystem.SetTexCoords(UsageHint.StreamDraw, u0, v0, u1, v0, u1, v1, u0, v1);
 
 					Sprite.Texture.Bind();

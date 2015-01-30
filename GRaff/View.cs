@@ -2,6 +2,7 @@
 using OpenTK;
 using OpenTK.Graphics.ES30;
 using GRaff.Graphics;
+using System.Linq;
 
 namespace GRaff
 {
@@ -10,10 +11,6 @@ namespace GRaff
 	/// </summary>
 	public static class View
 	{
-		static View()
-		{
-
-		}
 
 		/// <summary>
 		/// Gets or sets the x-coordinate of the center of the view in the room.
@@ -34,7 +31,7 @@ namespace GRaff
 		/// Gets or sets the height of the view in the room.
 		/// </summary>
 		public static double Height { get; set; }
-	
+
 		public static Rectangle FocusRegion
 		{
 			get { return new Rectangle(X - Width / 2, Y - Height / 2, Width, Height); }
@@ -73,7 +70,7 @@ namespace GRaff
 			var projectionMatrix = new Matrix4(
 				(float)tr.M00, (float)tr.M10, 0, 0,
 				(float)tr.M01, (float)tr.M11, 0, 0,
-							0,			   0, 1, 0,
+							0, 0, 1, 0,
 				(float)tr.M02, (float)tr.M12, 0, 1
 			);
 
@@ -103,16 +100,25 @@ namespace GRaff
 
 		/// <summary>
 		/// Gets a GRaff.Rectangle that is orthogonal to the axes, and that contains the whole section of the room visible in the View. 
+		/// Anything outside this GRaff.Rectangle will not be seen by the View.
 		/// </summary>
+		/// <remarks>
+		/// Things outside this GRaff.Rectangle will not be seen by the View, but they are still drawn automatically by default.
+		/// The developer needs to manually disable drawing for instances outside this region (for example by setting IsVisible to false).
+		/// </remarks>
 		public static Rectangle BoundingBox
 		{
 			get
 			{
-				double left = double.PositiveInfinity, right = double.NegativeInfinity, top = double.NegativeInfinity, bottom = double.PositiveInfinity;
-				var transform = GetMatrix();
-				
+				double c = GMath.Cos(Rotation), s = GMath.Sin(Rotation), w = Width / 2, h = Height / 2;
+				Point[] pts = new[] {
+					new Point(X + c * w - s * h, Y + s * w + c *h),
+					new Point(X + c * -w - s * h, Y + s * -w + c * h),
+					new Point(X + c * -w - s * -h,Y +  s * -w + c * -h),
+					new Point(X + c * w - s * -h, Y + s * w + c * -h)
+				};
 
-				throw new NotImplementedException();
+				return new Rectangle(new Point(pts.Min(p => p.X), pts.Min(p => p.Y)), new Point(pts.Max(p => p.X), pts.Max(p => p.Y)));
 			}
 		}
 	}
