@@ -2,7 +2,7 @@ using System;
 
 namespace GRaff.Synchronization
 {
-	public interface IAsyncOperator
+	internal interface IAsyncOperator
 	{
 		AsyncOperationResult DispatchSynchronously(object arg);
 		void Cancel();

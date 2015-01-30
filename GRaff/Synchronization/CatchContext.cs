@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace GRaff.Synchronization
 {
-	public class CatchContext
+	internal class CatchContext
 	{
 		List<KeyValuePair<Type, Action<Exception>>> _handledTypes = new List<KeyValuePair<Type, Action<Exception>>>();
 
@@ -33,7 +33,7 @@ namespace GRaff.Synchronization
 		}
 	}
 
-	public class CatchContext<TResult>
+	internal class CatchContext<TResult>
 	{
 		List<KeyValuePair<Type, Func<Exception, TResult>>> _handlers = new List<KeyValuePair<Type, Func<Exception, TResult>>>();
 
@@ -47,7 +47,7 @@ namespace GRaff.Synchronization
 			var exceptionType = exception.GetType();
 
 			var query = from pair in _handlers
-						where exceptionType.IsAssignableFrom(pair.Key)
+						where pair.Key.IsAssignableFrom(exceptionType)
 						select pair.Value;
 
 			var handler = query.FirstOrDefault();

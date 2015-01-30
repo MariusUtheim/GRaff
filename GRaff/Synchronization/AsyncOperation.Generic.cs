@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace GRaff.Synchronization
 {
-	public class AsyncOperation<TPass> : AsyncOperationBase, IAsyncOperation<TPass>
+	internal class AsyncOperation<TPass> : AsyncOperationBase, IAsyncOperation<TPass>
 	{
 		private CatchContext<TPass> _catchHandlers = new CatchContext<TPass>();
 

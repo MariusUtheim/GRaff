@@ -15,7 +15,7 @@ namespace GameMaker.UnitTesting
 		{
 			IAsyncOperation operation;
 
-			operation = new AsyncOperation();
+			operation = Async.Operation();
 			Assert.AreEqual(AsyncOperationState.Completed, operation.State);
 
 			operation = Async.Run(() => { });
@@ -41,7 +41,7 @@ namespace GameMaker.UnitTesting
 			IAsyncOperation operation;
 			int count = 0;
 
-			operation = new AsyncOperation();
+			operation = Async.Operation();
 			for (int i = 0; i < 10; i++)
 				operation = operation.ThenSync(() => { count++; });
 
@@ -73,7 +73,7 @@ namespace GameMaker.UnitTesting
 		[TestMethod]
 		public void Async_MultipleThen()
 		{
-			IAsyncOperation operation = new AsyncOperation();
+			IAsyncOperation operation = Async.Operation();
 
 
 			int count = 0;
@@ -125,8 +125,7 @@ namespace GameMaker.UnitTesting
 		[TestMethod]
 		public void Async_Wait()
 		{
-			IAsyncOperation operation = new AsyncOperation();
-
+			IAsyncOperation operation = Async.Operation();
 			int count = 0;
 			for (int i = 0; i < 10; i++)
 				operation = operation.ThenSync(() => { count++; });
@@ -199,6 +198,46 @@ namespace GameMaker.UnitTesting
 			Async.HandleEvents();
 			Assert.IsTrue(caughtException);
 			Assert.IsFalse(finished);
+		}
+
+		[TestMethod]
+		[ExpectedException(typeof(InvalidOperationException))]
+		public void Async_Deferred()
+		{
+			var completed = false;
+			var deferredVoid = new Deferred();
+
+			deferredVoid.Operation.ThenWait(() => completed = true);
+
+			Assert.IsFalse(completed);
+			Assert.IsFalse(deferredVoid.IsResolved);
+			deferredVoid.Accept();
+			Assert.IsTrue(completed);
+			Assert.IsTrue(deferredVoid.IsResolved);
+
+
+			var deferredInt = new Deferred<int>();
+			int result = 0;
+			deferredInt.Operation.ThenWait(i => result = i);
+
+			Assert.AreEqual(0, result);
+			Assert.IsFalse(deferredInt.IsResolved);
+			deferredInt.Accept(10);
+			Assert.AreEqual(10, result);
+			Assert.IsTrue(deferredInt.IsResolved);
+
+
+			deferredInt = new Deferred<int>();
+			result = 0;
+			deferredInt.Operation
+				.Catch<ArithmeticException>(ex => -1)
+				.ThenWait(i => { result = i; });
+
+			deferredInt.Reject(new DivideByZeroException());
+			Assert.AreEqual(-1, result);
+
+
+			deferredInt.Accept(0); // Throw InvalidOperationException
 		}
 	}
 }

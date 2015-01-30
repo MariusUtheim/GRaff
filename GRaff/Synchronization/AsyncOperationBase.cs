@@ -4,7 +4,7 @@ using System.Collections.Concurrent;
 
 namespace GRaff.Synchronization
 {
-	public abstract class AsyncOperationBase : IAsyncOperationBase
+	internal abstract class AsyncOperationBase : IAsyncOperationBase
 	{
 		private ConcurrentQueue<AsyncOperationBase> _continuations = new ConcurrentQueue<AsyncOperationBase>();
 		private AsyncOperationBase _preceedingOperation;
@@ -134,7 +134,7 @@ namespace GRaff.Synchronization
 		/// Is called when an operator completes. The result can be successful or failed.
 		/// This should try to handle the exception, then pass the result to all continuations.
 		/// </summary>
-		private void _completed(AsyncOperationResult result)
+		private void _complete(AsyncOperationResult result)
 		{
 			Console.WriteLine("Thing completed");
 			if (result.IsSuccessful)
@@ -147,7 +147,7 @@ namespace GRaff.Synchronization
 		/// Signals that the operation has completed with the specified result.
   /// The result should be passed to all continuations.
 		/// </summary>
-		private void Accept(object result)
+		internal void Accept(object result)
 		{
 			State = AsyncOperationState.Completed;
 			Result = AsyncOperationResult.Success(result);
@@ -162,7 +162,7 @@ namespace GRaff.Synchronization
 		/// will be passed to all continuations. If this operation is marked as Done, the error
 		/// will be thrown on Async.
 		/// </summary>
-		private void Reject(Exception reason)
+		internal void Reject(Exception reason)
 		{
 			Result = Handle(reason);
 			if (Result.IsSuccessful)
@@ -172,7 +172,7 @@ namespace GRaff.Synchronization
 				State = AsyncOperationState.Failed;
 				AsyncOperationBase continuation;
 				while (_continuations.TryDequeue(out continuation))
-					continuation._completed(Result);
+					continuation._complete(Result);
 				if (IsDone)
 					Async.ThrowException(reason);
 			}
@@ -183,7 +183,7 @@ namespace GRaff.Synchronization
 			if (State == AsyncOperationState.Initial)
 			{
 				State = AsyncOperationState.Dispatched;
-				Operator.Dispatch(arg, _completed);
+				Operator.Dispatch(arg, _complete);
 			}
 		}
 

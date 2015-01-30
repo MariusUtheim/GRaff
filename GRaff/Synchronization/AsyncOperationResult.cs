@@ -3,7 +3,7 @@
 
 namespace GRaff.Synchronization
 {
-	public class AsyncOperationResult
+	internal class AsyncOperationResult
 	{
 		public static AsyncOperationResult Success() { return new AsyncOperationResult { IsSuccessful = true }; }
 

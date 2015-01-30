@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace GRaff.Synchronization
 {
-	public class ParallelOperator : IAsyncOperator
+	internal class ParallelOperator : IAsyncOperator
 	{
 		private Task<AsyncOperationResult> _task;
 		private Func<object, Task<object>> _action;

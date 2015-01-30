@@ -28,6 +28,16 @@ namespace GRaff
 			_catcher.Catch(exceptionHandler);
 		}
 
+		public static IAsyncOperation Operation()
+		{
+			return new AsyncOperation();
+		}
+
+		public static IAsyncOperation<TPass> Operation<TPass>(TPass value)
+		{
+			return new AsyncOperation<TPass>(value);
+		}
+
 		public static IAsyncOperation Run(Action action)
 		{
 			return new AsyncOperation().ThenSync(action);

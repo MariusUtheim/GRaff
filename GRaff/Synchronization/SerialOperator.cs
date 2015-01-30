@@ -3,7 +3,7 @@ using System.Diagnostics;
 
 namespace GRaff.Synchronization
 {
-	public class SerialOperator : IAsyncOperator
+	internal class SerialOperator : IAsyncOperator
 	{
 		private AsyncEventArgs _actionHandle;
 		private Func<object, object> _action;
