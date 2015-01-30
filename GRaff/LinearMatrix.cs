@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 namespace GRaff
 {
 	/// <summary>
-	/// Represents the matrix of a linear transformation.
+	/// Represents the matrix of a linear transformation. This class is immutable.
 	/// </summary>
-	public sealed class LinearMatrix : ICloneable
+	public sealed class LinearMatrix
 	{
 		/// <summary>
 		/// Initializes a new instance of the GRaff.LinearMatrix class as an identity matrix.
@@ -59,22 +59,22 @@ namespace GRaff
 		/// <summary>
 		/// Gets the first element of the first row of this GRaff.AffineMatrix.
 		/// </summary>
-		public double M00 { get; set; }
+		public double M00 { get; private set; }
 
 		/// <summary>
 		/// Gets the second element of the first row of this GRaff.AffineMatrix.
 		/// </summary>
-		public double M01 { get; set; }
+		public double M01 { get; private set; }
 
 		/// <summary>
 		/// Gets the first element of the second row of this GRaff.AffineMatrix.
 		/// </summary>
-		public double M10 { get; set; }
+		public double M10 { get; private set; }
 
 		/// <summary>
 		/// Gets the second element of the second row of this GRaff.AffineMatrix.
 		/// </summary>
-		public double M11 { get; set; }
+		public double M11 { get; private set; }
 
 		/// <summary>
   /// Gets the determinant of this GRaff.LinearMatrix.
@@ -107,11 +107,7 @@ namespace GRaff
 		/// <param name="scaleY">The vertical scale factor.</param>
 		public LinearMatrix Scale(double scaleX, double scaleY)
 		{
-			M00 *= scaleX;
-			M01 *= scaleX;
-			M10 *= scaleY;
-			M11 *= scaleY;
-			return this;
+			return new LinearMatrix(M00 * scaleX, M01 * scaleX, M10 * scaleY, M11 * scaleY);
 		}
 
 
@@ -123,11 +119,7 @@ namespace GRaff
 		{
 			double c = GMath.Cos(a), s = GMath.Sin(a);
 			double m00 = M00, m01 = M01, m10 = M10, m11 = M11;
-			M00 = m00 * c - m10 * s;
-			M01 = m01 * c - m11 * s;
-			M10 = m00 * s + m10 * c;
-			M11 = m01 * s + m11 * c;
-			return this;
+			return new LinearMatrix(m00 * c - m10 * s, m01 * c - m11 * s, m00 * s + m10 * c, m01 * s + m11 * c);
 		}
 
 		/// <summary>
@@ -138,31 +130,7 @@ namespace GRaff
 		/// <returns>This GRaff.LinearMatrix, after the transformation.</returns>
 		public LinearMatrix Shear(double shearX, double shearY)
 		{
-			double[] add = new[] { shearX * M10, shearX * M11, shearY * M00, shearY * M01 };
-			M00 += add[0];
-			M01 += add[1];
-			M10 += add[2];
-			M11 += add[3];
-			return this; 
-		}
-
-
-		/// <summary>
-		/// Creates a deep clone of this GRaff.LinearMatrix.
-		/// </summary>
-		/// <returns>A deep clone of this GRaff.LinearMatrix.</returns>
-		public LinearMatrix Clone()
-		{
-			return new LinearMatrix(M00, M01, M10, M11);
-		}
-
-		/// <summary>
-		/// Creates a deep clone of this GRaff.LinearMatrix.
-		/// </summary>
-		/// <returns>A deep clone of this GRaff.LinearMatrix.</returns>
-		object ICloneable.Clone()
-		{
-			return Clone();
+			return new LinearMatrix(M00 + shearX * M10, M01 + shearX * M11, M10 + shearY * M00, M11 + shearY * M01);
 		}
 
 		/// <summary>

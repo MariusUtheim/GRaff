@@ -63,15 +63,15 @@ namespace GameMaker.UnitTesting
 			double kx = 2, ky = 13;
 
 			var affine = new AffineMatrix(1, 9, 8, 6, 9, 1);
-			Assert.AreEqual(AffineMatrix.Rotation(t) * affine, affine.Clone().Rotate(t));
-			Assert.AreEqual(AffineMatrix.Scaling(sx, sy) * affine, affine.Clone().Scale(sx, sy));
-			Assert.AreEqual(AffineMatrix.Translation(tx, ty) * affine, affine.Clone().Translate(tx, ty));
-			Assert.AreEqual(AffineMatrix.Shearing(kx, ky) * affine, affine.Clone().Shear(kx, ky));
+			Assert.AreEqual(AffineMatrix.Rotation(t) * affine, affine.Rotate(t));
+			Assert.AreEqual(AffineMatrix.Scaling(sx, sy) * affine, affine.Scale(sx, sy));
+			Assert.AreEqual(AffineMatrix.Translation(tx, ty) * affine, affine.Translate(tx, ty));
+			Assert.AreEqual(AffineMatrix.Shearing(kx, ky) * affine, affine.Shear(kx, ky));
 
 			var linear = new LinearMatrix(11, 6, 11, 1);
-			Assert.AreEqual(LinearMatrix.Rotation(t) * linear, linear.Clone().Rotate(t));
-			Assert.AreEqual(LinearMatrix.Scaling(sx, sy) * linear, linear.Clone().Scale(sx, sy));
-			Assert.AreEqual(LinearMatrix.Shearing(kx, ky) * linear, linear.Clone().Shear(kx, ky));
+			Assert.AreEqual(LinearMatrix.Rotation(t) * linear, linear.Rotate(t));
+			Assert.AreEqual(LinearMatrix.Scaling(sx, sy) * linear, linear.Scale(sx, sy));
+			Assert.AreEqual(LinearMatrix.Shearing(kx, ky) * linear, linear.Shear(kx, ky));
 		}
 	}
 }

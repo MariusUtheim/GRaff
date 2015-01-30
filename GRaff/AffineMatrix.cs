@@ -68,32 +68,32 @@ namespace GRaff
 		/// <summary>
 		/// Gets the first element of the first row of this GRaff.AffineMatrix.
 		/// </summary>
-		public double M00 { get; set; }
+		public double M00 { get; private set; }
 
 		/// <summary>
 		/// Gets the second element of the first row of this GRaff.AffineMatrix.
 		/// </summary>
-		public double M01 { get; set; }
+		public double M01 { get; private set; }
 
 		/// <summary>
 		/// Gets the third element of the first row of this GRaff.AffineMatrix.
 		/// </summary>
-		public double M02 { get; set; }
+		public double M02 { get; private set; }
 
 		/// <summary>
 		/// Gets the first element of the second row of this GRaff.AffineMatrix.
 		/// </summary>
-		public double M10 { get; set; }
+		public double M10 { get; private set; }
 
 		/// <summary>
 		/// Gets the second element of the second row of this GRaff.AffineMatrix.
 		/// </summary>
-		public double M11 { get; set; }
+		public double M11 { get; private set; }
 
 		/// <summary>
 		/// Gets the third element of the second row of this GRaff.AffineMatrix.
 		/// </summary>
-		public double M12 { get; set; }
+		public double M12 { get; private set; }
 
 		/// <summary>
 		/// Gets the determinant of this GRaff.AffineMatrix.
@@ -130,13 +130,7 @@ namespace GRaff
 		/// <returns>This GRaff.AffineMatrix, after the transformation.</returns>
 		public AffineMatrix Scale(double scaleX, double scaleY)
 		{
-			M00 *= scaleX;
-			M01 *= scaleX;
-			M02 *= scaleX;
-			M10 *= scaleY;
-			M11 *= scaleY;
-			M12 *= scaleY;
-			return this;
+			return new AffineMatrix(M00 * scaleX, M01 * scaleX, M02 * scaleX, M10 * scaleY, M11 * scaleY, M12 * scaleY);
 		}
 
 		/// <summary>
@@ -147,14 +141,7 @@ namespace GRaff
 		public AffineMatrix Rotate(Angle a)
 		{
 			double c = GMath.Cos(a), s = GMath.Sin(a);
-			double m00 = M00, m01 = M01, m02 = M02, m10 = M10, m11 = M11, m12 = M12;
-			M00 = m00 * c - m10 * s;
-			M01 = m01 * c - m11 * s;
-			M02 = m02 * c - m12 * s;
-			M10 = m00 * s + m10 * c;
-			M11 = m01 * s + m11 * c;
-			M12 = m02 * s + m12 * c;
-			return this;
+			return new AffineMatrix(M00 * c - M10 * s, M01 * c - M11 * s, M02 * c - M12 * s, M00 * s + M10 * c, M01 * s + M11 * c, M02 * s + M12 * c);
 		}
 
 		/// <summary>
@@ -165,9 +152,7 @@ namespace GRaff
 		/// <returns>This GRaff.AffineMatrix, after the transformation.</returns>
 		public AffineMatrix Translate(double tx, double ty)
 		{
-			M02 += tx;
-			M12 += ty;
-			return this;
+			return new AffineMatrix(M00, M01, M02 + tx, M10, M11, M12 + ty);
 		}
 
 		/// <summary>
@@ -178,14 +163,7 @@ namespace GRaff
 		/// <returns>This GRaff.AffineMatrix, after the transformation.</returns>
 		public AffineMatrix Shear(double shearX, double shearY)
 		{
-			double[] add = new[] { shearX * M10, shearX * M11, shearX * M12, shearY * M00, shearY * M01, shearY * M02 };
-			M00 += add[0];
-			M01 += add[1];
-			M02 += add[2];
-			M10 += add[3];
-			M11 += add[4];
-			M12 += add[5];
-			return this;
+			return new AffineMatrix(M00 + shearX * M10, M01 + shearX * M11, M02 + shearX * M12, M10 + shearY * M00, M11 + shearY * M01, M12 + shearY * M02);
 		}
 
 		/// <summary>

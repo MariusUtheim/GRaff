@@ -4,7 +4,7 @@ using System.Runtime.Serialization;
 namespace GRaff
 {
 	[Serializable]
-	internal class MatrixException : ArithmeticException
+	public class MatrixException : ArithmeticException
 	{
 		public MatrixException()
 		{
