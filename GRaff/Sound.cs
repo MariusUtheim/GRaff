@@ -18,24 +18,40 @@ namespace GRaff
 		private List<SoundInstance> _instances;
 		private IAsyncOperation _loadingOperation;
 
-
 		/// <summary>
 		/// Initializes a new instance of the GRaff.Sound class.
 		/// </summary>
-		/// <param name="filename">The sound file that is loaded from disk.</param>
+		/// <param name="fileName">The sound file that is loaded from disk.</param>
 		/// <param name="preload">If true, the sound is automatically loaded when the instance is initialized. The default value is true.</param>
 		/// <exception cref="System.IO.FileNotFoundException">preload is true and the file is not found.</exception>
-		public Sound(string filename, bool preload = true)
+		public Sound(string fileName, bool isLooping, double loopOffset = 0)
 		{
-			this.FileName = filename;
+			this.FileName = fileName;
 			this._instances = new List<SoundInstance>();
-			if (preload)		
-				Load();
+			this.IsLooping = isLooping;
+			this.LoopOffset = loopOffset;
+		}
+
+		public static Sound Load(string fileName, bool isLooping, double loopOffset = 0)
+		{
+			var sound = new Sound(fileName, isLooping, loopOffset);
+			sound.Load();
+			return sound;
+		}
+
+		public static IAsyncOperation<Sound> LoadAsync(string fileName, bool isLooping, double loopOffset = 0)
+		{
+			var sound = new Sound(fileName, isLooping, loopOffset);
+			return sound.LoadAsync().ThenWait(() => sound);
 		}
 
 		public string FileName { get; private set; }
 
-		public AssetState AssetState { get; private set; }
+		public bool IsLoaded { get; private set; }
+
+		public bool IsLooping { get; private set; }
+
+		public double LoopOffset { get; private set; }
 
 		/// <summary>
 		/// Gets the bitrate of this GRaff.Sound class. That is, the number of bits of data in one second of this sample.
@@ -44,7 +60,7 @@ namespace GRaff
 		{
 			get
 			{
-				if (AssetState != AssetState.Loaded) throw new InvalidOperationException("The texture is not loaded.");
+				if (!IsLoaded) throw new InvalidOperationException("The texture is not loaded.");
 				return _buffer.Bitrate;
 			}
 		}
@@ -57,7 +73,7 @@ namespace GRaff
 		{
 			get
 			{
-				if (AssetState != AssetState.Loaded) throw new InvalidOperationException("The texture is not loaded.");
+				if (!IsLoaded) throw new InvalidOperationException("The texture is not loaded.");
 				return _buffer.Channels;
 			}
 		}
@@ -69,7 +85,7 @@ namespace GRaff
 		{
 			get
 			{
-				if (AssetState != AssetState.Loaded) throw new InvalidOperationException("The texture is not loaded.");
+				if (!IsLoaded) throw new InvalidOperationException("The texture is not loaded.");
 				return _buffer.Duration;
 			}
 		}
@@ -81,7 +97,7 @@ namespace GRaff
 		{
 			get
 			{
-				if (AssetState != AssetState.Loaded) throw new InvalidOperationException("The texture is not loaded.");
+				if (!IsLoaded) throw new InvalidOperationException("The texture is not loaded.");
 				return _buffer.Frequency;
 			}
 		}
@@ -89,7 +105,7 @@ namespace GRaff
 		private void _load(SoundBuffer buffer)
 		{
 			_buffer = buffer;
-			AssetState = AssetState.Loaded;
+			IsLoaded = true;
 		}
 
 		/// <summary>
@@ -98,29 +114,30 @@ namespace GRaff
 		/// <exception cref="System.IO.FileNotFoundException">The sound file does not exists.</exception>
 		public void Load()
 		{
-			if (AssetState == AssetState.Loaded)
+			if (IsLoaded)
 				return;
 			else
-				LoadAsync().Wait();
+				_load(SoundBuffer.Load(FileName, LoopOffset));//LoadAsync().Wait();
 		}
 
 		public IAsyncOperation LoadAsync()
 		{
-			if (AssetState != AssetState.NotLoaded)
+			if (!IsLoaded)
 				return _loadingOperation;
 
-			AssetState = AssetState.LoadingAsync;
-			return SoundBuffer.LoadAsync(FileName).ThenSync(_load);
+			return SoundBuffer.LoadAsync(FileName, LoopOffset).ThenSync(_load);
 		}
 
 		public void Unload()
 		{
-			if (AssetState == AssetState.NotLoaded)
+			if (_loadingOperation != null)
+				_loadingOperation.Abort();
+			if (!IsLoaded)
 				return;
 
-			_loadingOperation.Abort();
 			StopAll();
 			_instances.Clear();
+			IsLoaded = false;
 
 			if (_buffer != null)
 			{
@@ -138,11 +155,12 @@ namespace GRaff
 		/// <returns>A GRaff.SoundInstance representing the sound being played.</returns>
 		/// <exception cref="System.ArgumentOutOfRangeException">volume is less than zero, or pitch is less than or equal to zero.</exception>
 		/// <exception cref="System.InvalidOperationException">The sound is not loaded.</exception>
-		public SoundInstance Play(bool loop = false, double volume = 1.0, double pitch = 1.0)
+		public SoundInstance Play(double volume = 1.0, double pitch = 1.0)
 		{
-			if (AssetState != AssetState.Loaded) throw new InvalidOperationException("The sound is not loaded.");
+			if (!IsLoaded) throw new InvalidOperationException("The sound is not loaded.");
 			if (volume < 0) throw new ArgumentOutOfRangeException("volume", "Must be greater than or equal to zero.");
-			var instance = new SoundInstance(this, _buffer.Id, loop, volume, pitch);
+
+			var instance = Instance.Create(new SoundInstance(this, _buffer.IntroId, _buffer.MainId, IsLooping, volume, pitch));
 			_instances.Add(instance);
 			return instance;
 		}

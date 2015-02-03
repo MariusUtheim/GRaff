@@ -27,20 +27,20 @@ namespace GRaff
 			return font;
 		}
 
-		public AssetState AssetState { get; private set; }
+		public bool IsLoaded { get; private set; }
 
 		public int Height
 		{
 			get
 			{
-				if (AssetState != AssetState.Loaded) throw new InvalidOperationException("The font is not loaded.");
+				if (!IsLoaded) throw new InvalidOperationException("The font is not loaded.");
 				return _height;
 			}
 		}
 
 		public double GetWidth(string str)
 		{
-			if (AssetState != AssetState.Loaded) throw new InvalidOperationException("The font is not loaded.");
+			if (!IsLoaded) throw new InvalidOperationException("The font is not loaded.");
 
 			double width = 0;
 			foreach (var c in str)
@@ -52,7 +52,7 @@ namespace GRaff
 		{
 			get
 			{
-				if (AssetState != AssetState.Loaded) throw new InvalidOperationException("The font is not loaded.");
+				if (!IsLoaded) throw new InvalidOperationException("The font is not loaded.");
 				return _textureBuffer;
 			}
 		}
@@ -60,7 +60,7 @@ namespace GRaff
 
 		public void Load()
 		{
-			if (AssetState == AssetState.Loaded)
+			if (IsLoaded)
 				return;
 			else
 				LoadAsync().Wait();
@@ -68,11 +68,8 @@ namespace GRaff
 
 		public IAsyncOperation LoadAsync()
 		{
-			if (AssetState != AssetState.NotLoaded)
+			if (!IsLoaded)
 				return _loadingOperation;
-
-			AssetState = AssetState.LoadingAsync;
-
 
 			return TextureBuffer.LoadAsync(_bitmapFile)
 				.ThenSync(textureBuffer => {
@@ -96,13 +93,13 @@ namespace GRaff
 
 					_height = fontData.Common.LineHeight;
 
-					AssetState = AssetState.Loaded;
+					IsLoaded = true;
 				});
 		}
 
 		public void Unload()
 		{
-			if (AssetState == AssetState.NotLoaded)
+			if (!IsLoaded)
 				return;
 
 			if (_textureBuffer != null)
@@ -112,7 +109,7 @@ namespace GRaff
 			}
 
 			_characters.Clear();
-			AssetState = AssetState.NotLoaded;
+			IsLoaded = false;
 		}
 
 		internal void Render(string str, FontAlignment alignment, out PointF[] rectCoords, out PointF[] texCoords)

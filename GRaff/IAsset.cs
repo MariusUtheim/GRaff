@@ -25,8 +25,8 @@ namespace GRaff
 		void Unload();
 
 		/// <summary>
-		/// Gets the state of the asset.
+		/// Gets whether this GRaff.IAsset is loaded in memory.
 		/// </summary>
-		AssetState AssetState { get; }
+		bool IsLoaded { get; }
 	}
 }

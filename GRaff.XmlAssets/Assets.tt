@@ -45,7 +45,7 @@ namespace <#= source.Namespace #>
 		static Sounds()
 		{
 <# foreach (var sound in source.Sounds) { #>
-			<#=sound.Name#> = new global::GRaff.Sound(@"<#=sound.Filename#>");
+			<#=sound.GenerateConstructorCode()#>
 <# } #>
 		}
 
@@ -173,7 +173,21 @@ namespace <#= source.Namespace #>
 			if (mask == null)
 				return "null";
 			else
-				return "null  ";
+			{
+				return string.Format("global::GRaff.MaskShape.{0}({1}, {2}, {3}, {4})", mask.Shape, mask.X, mask.Y, mask.Width, mask.Height);
+				switch (mask.Shape)
+				{
+					case "Circle":
+						return "CIRCLE";
+						break;
+
+					case "Rectangle":
+						return "RECT";
+
+					default:
+						return "Not found";
+				}
+			}
 		}
 	}
 
@@ -190,6 +204,18 @@ namespace <#= source.Namespace #>
 	public class SoundElement {
 		[XmlAttribute("name")] public string Name;
 		[XmlAttribute("filename")] public string Filename;
+		[XmlAttribute("isLoaded")] public bool IsLoaded;
+		[XmlAttribute("loopOffset")] public double LoopOffset;
+		public string GenerateConstructorCode()
+		{
+			var result = new StringBuilder();
+			result.Append(Name + " = new global::GRaff.Sound(");
+			result.Append("@\"" + Filename + "\", ");
+			result.Append(IsLoaded.ToString(CultureInfo.InvariantCulture).ToLower() + ", ");
+			result.Append(LoopOffset.ToString(CultureInfo.InvariantCulture) + "");
+			result.Append(");");
+			return result.ToString();
+		}
 	}
 
 	public class SpriteElement {

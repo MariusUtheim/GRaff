@@ -6,7 +6,7 @@ namespace TestGame.Assets
 	{
 		static Sprites()
 		{
-			Particle = new global::GRaff.Sprite(@"Star.png", 1, new global::GRaff.IntVector(12, 13), null  , new global::GRaff.AnimationStrip(new global::System.Tuple<int, double>(0, 1), new global::System.Tuple<int, double>(4, 0.5)));
+			Particle = new global::GRaff.Sprite(@"Star.png", 1, new global::GRaff.IntVector(12, 13), global::GRaff.MaskShape.Rectangle(50, 50, 400, 400), new global::GRaff.AnimationStrip(new global::System.Tuple<int, double>(0, 1), new global::System.Tuple<int, double>(4, 0.5)));
 			Xujia = new global::GRaff.Sprite(@"Xujia.jpg", 1, new global::GRaff.IntVector(0, 0), null, new global::GRaff.AnimationStrip(1));
 		}
 
@@ -25,8 +25,8 @@ namespace TestGame.Assets
 	{
 		static Sounds()
 		{
-			theSound = new global::GRaff.Sound(@"theSound.ogg");
-			theOtherSound = new global::GRaff.Sound(@"theOtherSound.ogg");
+			theSound = new global::GRaff.Sound(@"theSound.ogg", false, 0);
+			theOtherSound = new global::GRaff.Sound(@"theOtherSound.ogg", false, 1.04312);
 		}
 
 		public static void LoadAll()

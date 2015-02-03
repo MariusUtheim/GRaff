@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using GRaff.Audio;
 using GRaff.Synchronization;
 using OggVorbisDecoder;
 using OpenTK.Audio.OpenAL;
@@ -12,15 +13,15 @@ namespace GRaff
 	public sealed class SoundBuffer : IDisposable
 	{
 
-		public SoundBuffer(int bitrate, int channels, double duration, int frequency, byte[] buffer)
+		public SoundBuffer(int bitrate, int channels, int frequency, byte[] buffer, double offset)
 		{
-			Id = AL.GenBuffer();
+			IntroId = AL.GenBuffer();
+			MainId = AL.GenBuffer();
 
+			Buffer = buffer;
 			this.Bitrate = bitrate;
 			this.Channels = channels;
-			this.Duration = duration;
 			this.Frequency = frequency;
-			this.Buffer = buffer;
 
 			ALFormat format;
 			switch (Channels + Bitrate)
@@ -29,17 +30,32 @@ namespace GRaff
 				case 1 + 16: format = ALFormat.Mono16; break;
 				case 2 + 8: format = ALFormat.Stereo8; break;
 				case 2 + 16: format = ALFormat.Stereo16; break;
-				default: throw new NotSupportedException(String.Format("Ogg files must have exactly 1 or 2 channels, and a bitrate of exacty 8 or 16 bits per sample (you have {0} channel(s) and {1} bit(s) per sample).", Channels, Bitrate));
+				default: throw new NotSupportedException(String.Format("Sound files must have exactly 1 or 2 channels, and a bitrate of exacty 8 or 16 bits per sample (you have {0} channel(s) and {1} bit(s) per sample).", Channels, Bitrate));
 			}
 
-			AL.BufferData(Id, format, Buffer, Buffer.Length, Frequency);
+			int bytesPerSample = bitrate / 8 * channels;
+			int offsetBytes = (int)(offset * frequency * bytesPerSample);
+			offsetBytes -= offsetBytes % bytesPerSample;
 
+			unsafe
+			{
+				fixed (byte *p = buffer)
+				{
+					AL.BufferData(IntroId, format, new IntPtr(p), offsetBytes, Frequency);
+					AL.BufferData(MainId, format, new IntPtr(p + offsetBytes), buffer.Length - offsetBytes, Frequency);
+				}
+			}
+			
 			ALError err;/*C#6.0*/
 			if ((err = AL.GetError()) != ALError.NoError)
 				throw new Exception(String.Format("An error occurred: {0} (error code {1} {2})", AL.GetErrorString(err), (int)err, Enum.GetName(typeof(ALError), err)));
 		}
 
-		public int Id { get; private set; }
+		public int IntroId { get; private set; }
+
+		public int MainId { get; private set; }
+
+		public byte[] Buffer { get; private set; }
 
 		/// <summary>
 		/// Gets the number of bits per sample of this GRaff.SoundBuffer.
@@ -55,46 +71,24 @@ namespace GRaff
 		/// Gets the duration of this GRaff.SoundBuffer in seconds.
 		/// </summary>
 		/// <returns></returns>
-		public double Duration { get; private set; }
+		public double Duration { get { return Buffer.Length * 8.0 / (Bitrate * Channels * Frequency); } }
 
 		/// <summary>
 		/// Gets the frequency of the data in this GRaff.SoundBuffer. That is, the number of samples per second.
 		/// </summary>
 		public int Frequency { get; private set; }
 
-		/// <summary>
-		/// Gets the data buffer of this GRaff.SoundBuffer.
-		/// </summary>
-		public byte[] Buffer { get; private set; }
 
-		public static SoundBuffer Load(string file)
+		public static SoundBuffer Load(string fileName, double offset)
 		{
-			using (var stream = new OggVorbisFileStream(file))
-			{
-				VorbisInfo info = stream.Info;
-
-				byte[] buffer = new byte[stream.Length];
-				using (var outputStream = new OggVorbisMemoryStream(buffer, info, stream.RawLength, info.Duration))
-					stream.CopyTo(outputStream);
-
-				return new SoundBuffer((int)(8 * buffer.Length / (info.Duration * info.Rate)), info.Channels, info.Duration, info.Rate, buffer);
-			}
+			var soundFile = SoundFileLoader.Load(fileName);
+			return new SoundBuffer(soundFile.Bitrate, soundFile.Channels, soundFile.Frequency, soundFile.Buffer, offset);
 		}
 
-		public static IAsyncOperation<SoundBuffer> LoadAsync(string file)
+		public static IAsyncOperation<SoundBuffer> LoadAsync(string fileName, double offset)
 		{
-			VorbisInfo info = null;
-			byte[] buffer = null;
-			return Async.RunAsync(async () => {
-				using (var stream = new OggVorbisFileStream(file))
-				{
-					info = stream.Info;
-					buffer = new byte[stream.Length];
-					using (var outputStream = new OggVorbisMemoryStream(buffer, info, stream.RawLength, info.Duration))
-						await stream.CopyToAsync(outputStream);
-				}
-
-			}).ThenSync(() => new SoundBuffer(info.BitrateNominal, info.Channels, info.Duration, info.Rate, buffer));
+			return Async.RunAsync(() => SoundFileLoader.LoadAsync(fileName))
+						.ThenSync(soundFile => new SoundBuffer(soundFile.Bitrate, soundFile.Channels, soundFile.Frequency, soundFile.Buffer, offset));
 		}
 
 #region IDisposable implementation
@@ -116,7 +110,7 @@ namespace GRaff
 			if (!_isDisposed)
 			{
 				_isDisposed = true;
-				Async.Run(() => AL.DeleteBuffer(Id));
+				Async.Run(() => AL.DeleteBuffer(IntroId));
 
 				if (disposing)
 				{

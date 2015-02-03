@@ -11,6 +11,7 @@ namespace GRaff
 	{
 		private int _sid;
 		private bool _isDisposed = false;
+		private bool _shouldDropIntro;
 
 		/// <summary>
 		/// Initializes a new instance of the GRaff.SoundInstance class with the specified sound reference, buffer id, looping, volume and pitch.
@@ -20,18 +21,32 @@ namespace GRaff
 		/// <param name="looping">Specifies whether the instance should loop.</param>
 		/// <param name="volume">Specifies the volume of the sound instance.</param>
 		/// <param name="pitch">Specifies the pitch shift of the sound instance.</param>
-		internal SoundInstance(Sound sound, int bid, bool looping, double volume, double pitch)
+		internal SoundInstance(Sound sound, int introBufferId, int mainBufferId, bool looping, double volume, double pitch)
 		{
 			this.Sound = sound;
 
 			AL.GenSources(1, out _sid);
-			AL.Source(_sid, ALSourcei.Buffer, bid);
 
-			this.Looping = looping;
+		//	this.Looping = looping;
 			this.Volume = volume;
 			this.Pitch = pitch;
-			this.Play();
+
+
+			if (looping)
+			{
+				AL.SourceQueueBuffer(_sid, introBufferId);
+				this.Play();
+				AL.SourceQueueBuffer(_sid, mainBufferId);
+				_shouldDropIntro = true;
+			}
+			else
+			{
+				AL.Source(_sid, ALSourcei.Buffer, mainBufferId);
+				_shouldDropIntro = false;
+				this.Play();
+			}
 		}
+
 
 		/// <summary>
 		/// Gets the GRaff.Sound that this GRaff.SoundInstance is an instance of.
@@ -110,12 +125,13 @@ namespace GRaff
 		}
 
 		/// <summary>
-		/// Stops this GRaff.SoundInstance. It can be restarted by calling GRaff.SoundInstance.Play().
+		/// Stops this GRaff.SoundInstance. It cannot be restarted.
 		/// </summary>
-#warning TODO: Check what happens if calling Play() after Stop(). Also, figure the difference between Stop and Pause.
 		public void Stop()
 		{
 			AL.SourceStop(_sid);
+			_isDisposed = true;
+			Destroy();
 		}
 
 		/// <summary>
@@ -164,6 +180,18 @@ namespace GRaff
 		{
 			if (State == SoundState.Stopped)
 				this.Destroy();
+			else if (State == SoundState.Playing && _shouldDropIntro)
+			{
+				int buffersProcessed;
+				AL.GetSource(_sid, ALGetSourcei.BuffersProcessed, out buffersProcessed);
+				if (buffersProcessed > 0)
+				{
+					Console.WriteLine("[SoundInstance] Unqueueing buffer");
+					AL.SourceUnqueueBuffers(_sid, 1);
+					_shouldDropIntro = false;
+					Looping = true;
+				}
+			}
 		}
 	}
 }

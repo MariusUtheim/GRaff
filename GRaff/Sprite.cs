@@ -87,14 +87,9 @@ namespace GRaff
 		public string FileName { get; private set; }
 
 		/// <summary>
-		/// Gets whether the texture of this GRaff.Sprite is loaded.
+		/// Gets whether this GRaff.Sprite is loaded.
 		/// </summary>
-		public bool IsLoaded { get { return AssetState == AssetState.Loaded; } } /*C#6.0*/
-
-		/// <summary>
-		/// Gets the asset state of the texture of this GRaff.Sprite.
-		/// </summary>
-		public AssetState AssetState { get; private set; }
+		public bool IsLoaded { get; private set; }
 
 		/// <summary>
 		/// Gets the width of this GRaff.Sprite.
@@ -104,7 +99,7 @@ namespace GRaff
 		{
 			get 
 			{
-				if (AssetState != AssetState.Loaded) throw new InvalidOperationException("The texture is not loaded.");
+				if (!IsLoaded) throw new InvalidOperationException("The texture is not loaded.");
 				return _width;
 			}
 		}
@@ -117,7 +112,7 @@ namespace GRaff
 		{
 			get
 			{
-				if (AssetState != AssetState.Loaded) throw new InvalidOperationException("The texture is not loaded.");
+				if (!IsLoaded) throw new InvalidOperationException("The texture is not loaded.");
 				return _height;
 			}
 		}
@@ -130,7 +125,7 @@ namespace GRaff
 		{
 			get
 			{
-				if (AssetState != AssetState.Loaded) throw new InvalidOperationException("The texture is not loaded.");
+				if (!IsLoaded) throw new InvalidOperationException("The texture is not loaded.");
 				return new IntVector(_width, _height);
 			}
 		}
@@ -146,7 +141,7 @@ namespace GRaff
 			{
 				if (_origin.HasValue)
 					return _origin.Value;
-				else if (AssetState != AssetState.Loaded)
+				else if (!IsLoaded)
 					return new IntVector(_width / 2, _height / 2);
 				else
 					return null;
@@ -163,7 +158,7 @@ namespace GRaff
 			{
 				if (_origin.HasValue)
 					return _origin.Value.X;
-				else if (AssetState == AssetState.Loaded)
+				else if (IsLoaded)
 					return _width / 2;
 				else
 					return 0;
@@ -180,7 +175,7 @@ namespace GRaff
 			{
 				if (_origin.HasValue)
 					return _origin.Value.Y;
-				else if (AssetState == AssetState.Loaded)
+				else if (IsLoaded)
 					return _height / 2;
 				else
 					return 0;
@@ -220,7 +215,7 @@ namespace GRaff
 			_height = _texture.Height;
 			if (!_hasCustomMask)
 				_maskShape = MaskShape.Rectangle(_width, _height);
-			AssetState = AssetState.Loaded;
+			IsLoaded = true;
 		}
 
 		/// <summary>
@@ -230,7 +225,7 @@ namespace GRaff
 		/// <remarks>If the texture is already loading asynchronously, calling GRaff.Sprite.Load blocks until loading completes.</remarks>
 		public void Load()
 		{
-			if (AssetState == AssetState.Loaded)
+			if (IsLoaded)
 				return;
 			else
 				LoadAsync().Wait();
@@ -242,10 +237,8 @@ namespace GRaff
 		/// <returns>A System.Threading.Tasks.Task that will complete when the texture is finished loading.</returns>
 		public IAsyncOperation LoadAsync()
 		{
-			if (AssetState != AssetState.NotLoaded)
+			if (!IsLoaded)
 				return _loadingOperation;
-
-			AssetState = AssetState.LoadingAsync;
 
 			return TextureBuffer.LoadAsync(FileName)
 								.ThenSync(textureBuffer => _load(textureBuffer));
@@ -256,12 +249,11 @@ namespace GRaff
 		/// </summary>
 		public void Unload()
 		{
-			if (AssetState == AssetState.NotLoaded)
+			if (_loadingOperation != null) _loadingOperation.Abort(); /*C#6.0*/
+			if (!IsLoaded)
 				return;
-			if (AssetState == AssetState.LoadingAsync)
-				_loadingOperation.Abort();
-	
-			AssetState = AssetState.NotLoaded;
+
+			IsLoaded = false;
 			
 			if (_texture != null)
 			{
@@ -278,7 +270,7 @@ namespace GRaff
 		{
 			get
 			{
-				if (AssetState != AssetState.Loaded) throw new InvalidOperationException("The texture is not loaded.");
+				if (!IsLoaded) throw new InvalidOperationException("The texture is not loaded.");
 				return _texture;//[imageIndex % _subimages];
 			}
 		}
@@ -291,7 +283,7 @@ namespace GRaff
 		/// <exception cref="System.InvalidOperationException">The texture is not loaded.</exception>
 		public Texture SubImage(int index)
 		{
-			if (AssetState != AssetState.Loaded) throw new InvalidOperationException("The texture is not loaded.");
+			if (!IsLoaded) throw new InvalidOperationException("The texture is not loaded.");
 			index = ((index % ImageCount) + ImageCount) % ImageCount;
 			float r = 1.0f / ImageCount;
 			return new Texture(Texture, r * index, 0, r * (index + 1), 1);

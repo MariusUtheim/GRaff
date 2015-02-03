@@ -4,7 +4,7 @@
 	<sprites>
 		<sprite name="Particle" filename="Star.png" imageCount="1">
 			<origin x="12" y="13" />
-			<mask shape="Rectangle" x="50" y="50"	width="400" height="400" />
+			<mask shape="Rectangle" x="50" y="50" width="400" height="400" />
 			<animationStrip>
 				<animationFrame index="0" duration="1" />
 				<animationFrame index="4" duration="0.5" />
@@ -16,8 +16,8 @@
 	</sprites>
 
 	<sounds>
-		<sound name="theSound" filename="theSound.ogg" />
-		<sound name="theOtherSound" filename="theOtherSound.ogg" />
+		<sound name="theSound" filename="theSound.ogg" isLooping="true" />
+		<sound name="theOtherSound" filename="theOtherSound.ogg" isLooping="0" loopOffset="1.04312" />
 	</sounds>
 
 	<batches>
