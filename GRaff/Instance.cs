@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -22,6 +23,50 @@ namespace GRaff
 		{
 			_elements.Add(instance);
 			return instance;
+		}
+
+		public static TGameElement Create<TGameElement>() where TGameElement : GameElement
+		{
+			return Instance.Create(Activator.CreateInstance<TGameElement>());
+		}
+
+		public static TGameObject Create<TGameObject>(Point location) where TGameObject : GameObject
+		{
+			var type = typeof(TGameObject);
+			var constructors = type.GetConstructors();
+			ConstructorInfo chosenConstructor;
+
+			chosenConstructor = constructors.FirstOrDefault(c => c.GetParameters().Select(p => p.ParameterType).SequenceEqual(new[] { typeof(Point) }));
+			if (chosenConstructor != null)
+				return Create((TGameObject)chosenConstructor.Invoke(new object[] { location }));
+
+			chosenConstructor = constructors.FirstOrDefault(c => c.GetParameters().Select(p => p.ParameterType).SequenceEqual(new[] { typeof(double), typeof(double) }));
+			if (chosenConstructor != null)
+				return Create((TGameObject)chosenConstructor.Invoke(new object[] { location.X, location.Y }));
+
+			var constructedObject = Activator.CreateInstance<TGameObject>();
+			constructedObject.Location = location;
+			return Create(constructedObject);
+		}
+
+		public static TGameElement Create<TGameElement>(double x, double y) where TGameElement : GameObject
+		{
+			var type = typeof(TGameElement);
+			var constructors = type.GetConstructors();
+			ConstructorInfo chosenConstructor;
+
+			chosenConstructor = constructors.FirstOrDefault(c => c.GetParameters().Select(p => p.ParameterType).SequenceEqual(new[] { typeof(double), typeof(double) }));
+			if (chosenConstructor != null)
+				return Create((TGameElement)chosenConstructor.Invoke(new object[] { x, y }));
+
+			chosenConstructor = constructors.FirstOrDefault(c => c.GetParameters().Select(p => p.ParameterType).SequenceEqual(new[] { typeof(Point) }));
+			if (chosenConstructor != null)
+				return Create((TGameElement)chosenConstructor.Invoke(new object[] { new Point(x, y) }));
+
+			var constructedObject = Activator.CreateInstance<TGameElement>();
+			constructedObject.X = x;
+			constructedObject.Y = y;
+			return Create(constructedObject);
 		}
 
 		public static void Remove(GameElement instance)
