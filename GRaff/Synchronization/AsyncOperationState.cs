@@ -6,6 +6,7 @@
 		Dispatched,
 		Completed,
 		Failed,
-		Aborted
+		Aborted,
+		Deferred
 	}
 }

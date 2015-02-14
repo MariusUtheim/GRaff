@@ -10,7 +10,7 @@ namespace GRaff.Synchronization
 
 		public Deferred()
 		{
-			_operation = new AsyncOperation(null, new ImmediateOperator(obj => obj));
+			_operation = new AsyncOperation(true);
 		}
 
 		public IAsyncOperation Operation { get { return _operation; } }
@@ -41,7 +41,7 @@ namespace GRaff.Synchronization
 
 		public Deferred()
 		{
-			_operation = new AsyncOperation<TPass>(null, new ImmediateOperator(obj => obj));
+			_operation = new AsyncOperation<TPass>();
 		}
 
 		public IAsyncOperation<TPass> Operation { get { return _operation; } }

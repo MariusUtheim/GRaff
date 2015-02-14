@@ -5,17 +5,21 @@ using System.Threading.Tasks;
 
 namespace GRaff.Synchronization
 {
-	internal class AsyncOperation<TPass> : AsyncOperationBase, IAsyncOperation<TPass>
+	internal class AsyncOperation<TPass> : AsyncOperation, IAsyncOperation<TPass>
 	{
 		private CatchContext<TPass> _catchHandlers = new CatchContext<TPass>();
+
+		internal AsyncOperation()
+		{
+			State = AsyncOperationState.Deferred;
+		}
 
 		public AsyncOperation(TPass value)
 			: base(AsyncOperationResult.Success(value))
 		{
 		}
 
-
-		internal AsyncOperation(AsyncOperationBase preceeding, IAsyncOperator op)
+		internal AsyncOperation(AsyncOperation preceeding, IAsyncOperator op)
 			: base(preceeding, op)
 		{ }
 
@@ -91,7 +95,7 @@ namespace GRaff.Synchronization
 				throw new AsyncException(result.Error);
 		}
 
-		protected override AsyncOperationResult Handle(Exception exception)
+		internal override AsyncOperationResult Handle(Exception exception)
 		{
 			TPass resultValue;
 			if (_catchHandlers.TryHandle(exception, out resultValue))
