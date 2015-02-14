@@ -134,7 +134,7 @@
     <Compile Include="Randomness\ConstantDistribution.cs" />
     <Compile Include="SoundBuffer.cs" />
     <Compile Include="AssetBatch.cs" />
-    <Compile Include="Randomness\FiniteDistribution.cs" />
+    <Compile Include="Randomness\DiscreteDistribution.cs" />
     <Compile Include="Randomness\IDistribution.cs" />
     <Compile Include="Randomness\NormalDistribution2D.cs" />
     <Compile Include="Randomness\NormalDistribution.cs" />
