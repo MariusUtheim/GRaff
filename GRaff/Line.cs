@@ -8,6 +8,10 @@ namespace GRaff
 	/// </summary>
 	public struct Line
 	{
+		public Line(double xOrigin, double yOrigin, double xDestination, double yDestination)
+			: this(new Point(xOrigin, yOrigin), new Vector(xDestination - xOrigin, yDestination - yOrigin))
+		{ }
+
 		/// <summary>
 		/// Creates a new instance of the GRaff.Line structure, using the specified origin point and direction.
 		/// </summary>

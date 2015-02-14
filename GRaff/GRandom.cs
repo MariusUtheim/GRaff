@@ -94,6 +94,14 @@ namespace GRaff
 		/// <returns>A standard normally distributed number.</returns>
 		public static double Gaussian(this Random rnd) { return GMath.Sqrt(-2 * GMath.Log(rnd.NextDouble())); }
 
+		/// <summary>
+  /// Returns a random number that is distributed in accordance with a normal distribution with mean zero and the specified standard deviation.
+  /// </summary>
+  /// <param name="rnd">The System.Random to generate the numbers.</param>
+  /// <param name="std">The standard deviation of the distribution.</param>
+  /// <returns>A normally distributed number.</returns>
+		public static double Gaussian(this Random rnd, double std) { return std * rnd.Gaussian(); }
+
 
 		/// <summary>
 		/// Returns a random number that is distributed in accordance with a normal distribution with the specified mean and standard deviation.
@@ -103,7 +111,6 @@ namespace GRaff
 		/// <param name="std">The standard deviation of the distribution.</param>
 		/// <returns>A normally distributed number.</returns>
 		public static double Gaussian(this Random rnd, double mean, double std) { return std * rnd.Gaussian() + mean; }
-
 
 		/// <summary>
 		/// Returns a unit GRaff.Vector with random direction.
@@ -142,7 +149,7 @@ namespace GRaff
 		/// <returns>A random angle in the specified range.</returns>
 		public static Angle Angle(this Random rnd, Angle lowerBound, Angle upperBound)
 		{
-			return GRaff.Angle.Deg(lowerBound.Radians + rnd.NextDouble() * (upperBound - lowerBound).Radians);
+			return GRaff.Angle.Rad(lowerBound.Radians + rnd.NextDouble() * (upperBound - lowerBound).Radians);
 		}
 
 

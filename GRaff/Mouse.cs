@@ -85,7 +85,7 @@ namespace GRaff
 		/// </summary>
 		public static double X
 		{
-			get { return View.X + WindowX / View.HZoom; }
+			get { return Location.X; }
 		}
 
 		/// <summary>
@@ -93,7 +93,7 @@ namespace GRaff
 		/// </summary>
 		public static double Y
 		{
-			get { return View.Y + WindowY / View.VZoom; }
+			get { return Location.Y; }
 		}
 
 		/// <summary>
@@ -101,7 +101,7 @@ namespace GRaff
 		/// </summary>
 		public static Point Location
 		{
-			get { return new Point(X, Y); }
+			get { return View.ScreenToRoom(WindowX, WindowY); }
 		}
 
 		/// <summary>

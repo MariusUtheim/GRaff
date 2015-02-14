@@ -88,6 +88,18 @@ namespace GRaff
 		{
 			get { return Width / Room.Width; }
 		}
+		
+		public static Point ScreenToRoom(double x, double y)
+		{
+			return GetMatrix().Inverse * new Point(2.0 * x / Window.Width - 1.0, -2.0 * y / Window.Height + 1.0);
+			//return GetMatrix() * new Point(
+		}
+
+		public static Point RoomToScreen(double x, double y)
+		{
+			var p = GetMatrix() * new Point(x, y);
+			return new Point((p.X + 1.0) / 2.0 * Window.Width, (p.Y - 1.0) / 2.0 * -Window.Height);
+		}
 
 		/// <summary>
 		/// Gets a factor representing the actual vertical zoom of the view.
