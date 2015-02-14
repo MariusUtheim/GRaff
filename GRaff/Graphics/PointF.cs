@@ -27,6 +27,8 @@ namespace GRaff.Graphics
 
 		public static PointF operator +(PointF left, PointF right) { return new PointF(left.X + right.X, left.Y + right.Y); }
 
+		public static PointF operator +(PointF left, Vector right) { return new PointF((float)(left.X + right.X), (float)(left.Y + right.Y)); }
+
 		public static implicit operator Point(PointF value)
 		{
 			return new Point(value.X, value.Y);

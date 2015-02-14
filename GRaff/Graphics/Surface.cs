@@ -29,7 +29,7 @@ namespace GRaff.Graphics
 			GL.BindBuffer(BufferTarget.ArrayBuffer, _colorBuffer);
 			GL.EnableVertexAttribArray(1);
 			GL.VertexAttribPointer(1, 4, VertexAttribPointerType.UnsignedByte, true, 0, 0);
-
+			
 			GL.GenBuffers(1, out _textureBuffer);
 			GL.BindBuffer(BufferTarget.ArrayBuffer, _textureBuffer);
 			GL.BufferData(BufferTarget.ArrayBuffer, new IntPtr(8 * sizeof(float)), defaultTexCoords, BufferUsageHint.StreamDraw);

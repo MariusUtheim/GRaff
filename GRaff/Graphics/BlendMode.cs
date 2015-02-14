@@ -20,6 +20,8 @@ namespace GRaff.Graphics
 
 		public static BlendMode Additive { get { return new BlendMode(BlendEquation.Add, BlendingFactor.SrcAlpha, BlendingFactor.DstAlpha); } }
 
+		public static BlendMode Subtractive { get { return new BlendMode(BlendEquation.ReverseSubtract, BlendingFactor.SrcAlpha, BlendingFactor.DstAlpha); } }
+
 		public static BlendMode Max { get { return new BlendMode(BlendEquation.Max, BlendingFactor.SrcAlpha, BlendingFactor.DstAlpha); } }
 
 		public BlendingFactor DestinationFactor { get; private set; }
