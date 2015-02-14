@@ -63,6 +63,7 @@
     <Compile Include="Alarm.cs" />
     <Compile Include="Angle.cs" />
     <Compile Include="AnimationStrip.cs" />
+    <Compile Include="Async.Aggregate.cs" />
     <Compile Include="Async.cs" />
     <Compile Include="Font.cs" />
     <Compile Include="FontAlignment.cs" />
@@ -71,6 +72,9 @@
     <Compile Include="Graphics\BlendModeContext.cs" />
     <Compile Include="Graphics\ColorMatrix.cs" />
     <Compile Include="Graphics\FontLoader.cs" />
+    <Compile Include="Graphics\Lighting\LightObstacle.cs" />
+    <Compile Include="Graphics\Lighting\LightSource.cs" />
+    <Compile Include="Graphics\Lighting\WallSystem.cs" />
     <Compile Include="Graphics\PointF.cs" />
     <Compile Include="Graphics\Shader.cs" />
     <Compile Include="Graphics\ShaderElement.cs" />
@@ -91,6 +95,7 @@
     <Compile Include="Particles\Behaviors\LineAttractionFeature.cs" />
     <Compile Include="Particles\Behaviors\PointAttractionFeature.cs" />
     <Compile Include="Particles\Behaviors\RandomColorFeature.cs" />
+    <Compile Include="Particles\Behaviors\RotatingFeature.cs" />
     <Compile Include="Particles\Behaviors\RotationFeature.cs" />
     <Compile Include="Particles\Behaviors\RotatingBehavior.cs" />
     <Compile Include="Particles\Behaviors\ScaleFeature.cs" />
@@ -140,7 +145,6 @@
     <Compile Include="Synchronization\AsyncEventArgs.cs" />
     <Compile Include="Synchronization\AsyncException.cs" />
     <Compile Include="Synchronization\AsyncOperation.Generic.cs" />
-    <Compile Include="Synchronization\AsyncOperationBase.cs" />
     <Compile Include="Synchronization\Deferred.cs" />
     <Compile Include="Synchronization\IAsyncOperator.cs" />
     <Compile Include="Synchronization\ImmediateOperator.cs" />
@@ -236,6 +240,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Graphics\Shader.BuiltIn.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Draw.Primitive.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

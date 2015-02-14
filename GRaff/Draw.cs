@@ -4,7 +4,7 @@ using GRaff.Graphics;
 
 namespace GRaff
 {
-	public static class Draw
+	public static partial class Draw
 	{
 		public static Surface CurrentSurface
 		{
