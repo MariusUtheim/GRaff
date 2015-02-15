@@ -6,14 +6,14 @@ namespace GRaff.Graphics.Lighting
 			: this(wall, Color.Black)
 		{ }
 
-		public LightObstacle(Line wall, Color color)
+		public LightObstacle(Line wall, Color filter)
 		{
 			Wall = wall;
-			Color = color;
+			Filter = filter;
 		}
 
 		public Line Wall { get; private set; }
 
-		public Color Color { get; private set; }
+		public Color Filter { get; private set; }
 	}
 }
