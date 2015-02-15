@@ -121,6 +121,30 @@ namespace GameMaker.UnitTesting
 			Assert.AreEqual(2, count);
 		}
 
+		[TestMethod]
+		public void Async_Otherwise()
+		{
+			bool thenPath = false, otherwisePath = false;
+
+			var operation = Async.Run(() => { throw new Exception(); });
+			operation.ThenWait(() => thenPath = true);
+			operation.Otherwise().ThenWait(() => otherwisePath = true);
+
+			Async.HandleEvents();
+			Assert.IsFalse(thenPath);
+			Assert.IsTrue(otherwisePath);
+
+			bool caughtException = thenPath = otherwisePath = false;
+			operation = Async.Run(() => { throw new Exception(); });
+			operation.ThenWait(() => thenPath = true);
+			operation.Otherwise().ThenWait(() => otherwisePath = true);
+			operation.Catch<Exception>(ex => caughtException = true);
+
+			Async.HandleEvents();
+			Assert.IsTrue(thenPath);
+			Assert.IsFalse(otherwisePath);
+			Assert.IsTrue(caughtException);
+		}
 
 		[TestMethod]
 		public void Async_Wait()
@@ -132,6 +156,21 @@ namespace GameMaker.UnitTesting
 			
 			operation.Wait();
 			Assert.AreEqual(10, count);
+
+
+			bool completed = false;
+			operation = Async.Operation();
+
+			Assert.IsFalse(completed);
+			operation.ThenWait(() => completed = true);
+			Assert.IsTrue(completed);
+
+			completed = false;
+			operation = Async.Run(() => { });
+			operation.ThenWait(() => completed = true);
+			Assert.IsFalse(completed);
+			operation.Wait();
+			Assert.IsTrue(completed);
 		}
 
 
@@ -238,6 +277,94 @@ namespace GameMaker.UnitTesting
 
 
 			deferredInt.Accept(0); // Throw InvalidOperationException
+		}
+
+		[TestMethod]
+		public void Async_All()
+		{
+			int completedOperations = 0;
+			bool allCompleted = false;
+
+			IAsyncOperation op1 = Async.Run(() => { completedOperations += 1; }), op2 = Async.Run(() => { completedOperations += 1; });
+
+			IAsyncOperation all = Async.All(op1, op2);
+			all.ThenWait(() => {
+				allCompleted = true;
+			});
+
+			Assert.AreEqual(0, completedOperations);
+			Assert.IsFalse(allCompleted);
+			op1.Wait();
+			Assert.AreEqual(1, completedOperations);
+			Assert.IsFalse(allCompleted);
+			op2.Wait();
+			Assert.AreEqual(2, completedOperations);
+			Assert.IsTrue(allCompleted);
+
+			Async.HandleEvents();
+			bool errorsWereHandled = false;
+			all = Async.All(
+				Async.Run(() => {
+					throw new Exception("1");
+				}),
+				Async.Run(() => { }),
+				Async.Run(() => { throw new Exception("3"); })
+			).Catch<AggregateException>(ex => {
+				Assert.AreEqual(3, ex.InnerExceptions.Count);
+				Assert.AreEqual("1", ex.InnerExceptions[0].Message);
+				Assert.AreEqual("", ex.InnerExceptions[1].Message);
+				Assert.AreEqual("3", ex.InnerExceptions[2].Message);
+				errorsWereHandled = true;
+			});
+
+			Async.HandleEvents();
+			Async.HandleEvents();
+			Assert.IsTrue(errorsWereHandled);
+		}
+
+		[TestMethod]
+		public void Async_Any()
+		{
+			int completedIndex;
+
+			completedIndex = -1;
+			IAsyncOperation any;
+			any = Async.Any(
+				Async.Run(() => { }).ThenSync(() => { }),
+				Async.Run(() => { })
+			).ThenWait(index => completedIndex = index);
+
+			Async.HandleEvents();
+			Async.HandleEvents();
+			Assert.AreEqual(1, completedIndex);
+
+
+			completedIndex = -1;
+			any = Async.Any(
+				Async.Run(() => { throw new Exception("1"); }),
+				Async.Run(() => { }),
+				Async.Run(() => { throw new Exception("3"); })
+			).ThenWait(index => completedIndex = index);
+
+			Async.HandleEvents();
+			Assert.AreEqual(1, completedIndex);
+
+
+			completedIndex = -1;
+			any = Async.Any(
+				Async.Run(() => { throw new Exception("1"); }),
+				Async.Run(() => { throw new Exception("2"); }),
+				Async.Run(() => { throw new Exception("3"); })
+			)
+			.ThenWait(index => completedIndex = index)
+			.Catch<AggregateException>(ex => {
+				Assert.AreEqual(3, ex.InnerExceptions.Count);
+				Assert.AreEqual("1", ex.InnerExceptions[0].Message);
+				Assert.AreEqual("2", ex.InnerExceptions[1].Message);
+				Assert.AreEqual("3", ex.InnerExceptions[2].Message);
+			});
+
+			Async.HandleEvents();
 		}
 	}
 }
