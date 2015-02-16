@@ -29,10 +29,21 @@ namespace GRaff
 
 		public Tween(int duration, Func<double, double> tweeningFunction, Action<double> tweenAction, Action completeAction)
 		{
+			if (tweeningFunction == null) throw new ArgumentNullException("tweeningFunction"); /*C#6.0*/
 			Duration = duration;
 			TweeningFunction = tweeningFunction;
 			_tweenAction = tweenAction;
 			_completeAction = completeAction;
+		}
+
+		public static Tween Run(int duration, Func<double, double> tweeningFunction, Action<double> tweenAction)
+		{
+			return Instance.Create(new Tween(duration, tweeningFunction, tweenAction));
+		}
+
+		public static Tween Run(int duration, Func<double, double> tweeningFunction, Action<double> tweenAction, Action completeAction)
+		{
+			return Instance.Create(new Tween(duration, tweeningFunction, tweenAction, completeAction));
 		}
 
 		/*C#6.0*/
@@ -77,8 +88,8 @@ namespace GRaff
 		public sealed override void OnStep()
 		{
 			Progress++;
-			if (_tweenAction != null) /*C#6.0*/
-				_tweenAction.Invoke((double)Progress / Duration);
+			if (_tweenAction != null)  /*C#6.0*/
+				_tweenAction.Invoke(TweeningFunction((double)Progress / Duration));
 			if (Progress == Duration)
 			{
 				if (_completeAction != null)
