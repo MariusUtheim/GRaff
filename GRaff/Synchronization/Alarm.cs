@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GRaff
+namespace GRaff.Synchronization
 {
 	/// <summary>
 	/// Specifies the state of an alarm
@@ -47,9 +47,9 @@ namespace GRaff
 		/// <param name="count">The number of frames before the Alarm fires.</param>
 		/// <param name="action">An action to perform when the Alarm fires.</param>
 		/// <returns>The new GRaff.Alarm that was started.</returns>
-		public static Alarm Run(int count, Action action)
+		public static Alarm Start(int count, Action action)
 		{
-			return Run(count, false, (e, sender) => action());
+			return Start(count, false, (e, sender) => action());
 		}
 
 		/// <summary>
@@ -59,9 +59,9 @@ namespace GRaff
 		/// <param name="isLooping">Specifies whether the Alarm should fire only once or repeat with the same duration.</param>
 		/// <param name="action">An action to perform when the Alarm fires.</param>
 		/// <returns>The new GRaff.Alarm that was started.</returns>
-		public static Alarm Run(int count, bool isLooping, Action action)
+		public static Alarm Start(int count, bool isLooping, Action action)
 		{
-			return Run(count, isLooping, (e, sender) => action());
+			return Start(count, isLooping, (e, sender) => action());
 		}
 
 		/// <summary>
@@ -71,7 +71,7 @@ namespace GRaff
 		/// <param name="isLooping">Specifies whether the Alarm should fire only once or repeat with the same duration.</param>
 		/// <param name="action">An action to perform when the Alarm fires.</param>
 		/// <returns>The new GRaff.Alarm that was started.</returns>
-		public static Alarm Run(int count, bool isLooping, EventHandler<AlarmEventArgs> action)
+		public static Alarm Start(int count, bool isLooping, EventHandler<AlarmEventArgs> action)
 		{
 			var alarm = new Alarm();
 			alarm.Callback += action;

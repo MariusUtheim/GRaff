@@ -1,7 +1,7 @@
 ﻿using System;
 
 
-namespace GRaff
+namespace GRaff.Synchronization
 {
 
 /*	public sealed class TweenEventArgs : EventArgs
@@ -36,12 +36,12 @@ namespace GRaff
 			_completeAction = completeAction;
 		}
 
-		public static Tween Run(int duration, Func<double, double> tweeningFunction, Action<double> tweenAction)
+		public static Tween Start(int duration, Func<double, double> tweeningFunction, Action<double> tweenAction)
 		{
 			return Instance.Create(new Tween(duration, tweeningFunction, tweenAction));
 		}
 
-		public static Tween Run(int duration, Func<double, double> tweeningFunction, Action<double> tweenAction, Action completeAction)
+		public static Tween Start(int duration, Func<double, double> tweeningFunction, Action<double> tweenAction, Action completeAction)
 		{
 			return Instance.Create(new Tween(duration, tweeningFunction, tweenAction, completeAction));
 		}

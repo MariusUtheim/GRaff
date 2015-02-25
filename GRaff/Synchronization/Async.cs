@@ -2,9 +2,8 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Windows.Threading;
-using GRaff.Synchronization;
 
-namespace GRaff
+namespace GRaff.Synchronization
 {
 #if PUBLISH
 	internal static class Async
@@ -56,6 +55,11 @@ namespace GRaff
 		public static IAsyncOperation<TPass> RunAsync<TPass>(Func<Task<TPass>> action)
 		{
 			return new AsyncOperation().ThenAsync(action);
+		}
+
+		public static IAsyncOperation Fail<TException>(TException ex) where TException : Exception
+		{
+			return new AsyncOperation(AsyncOperationResult.Failure(ex));
 		}
 
 		public static void ThrowException(Exception ex)

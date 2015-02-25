@@ -4,9 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using GRaff.Synchronization;
 
-namespace GRaff
+namespace GRaff.Synchronization
 {
 	public static partial class Async
 	{
