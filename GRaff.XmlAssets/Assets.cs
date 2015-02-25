@@ -12,8 +12,8 @@ namespace TestGame.Assets
 
 		public static void LoadAll()
 		{
-			Particle.Load();
-			Xujia.Load();
+			global::GRaff.GRaffExtensions.Load(Particle);
+			global::GRaff.GRaffExtensions.Load(Xujia);
 		}
 
 		public static global::GRaff.Sprite Particle { get; private set; }
@@ -31,8 +31,8 @@ namespace TestGame.Assets
 
 		public static void LoadAll()
 		{
-			theSound.Load();
-			theOtherSound.Load();
+			global::GRaff.GRaffExtensions.Load(theSound);
+			global::GRaff.GRaffExtensions.Load(theOtherSound);
 		}
 
 		public static global::GRaff.Sound theSound { get; private set; }
@@ -49,8 +49,8 @@ namespace TestGame.Assets
 
 		public static void LoadAll()
 		{
-			MainMenu.Load();
-			Everything.Load();
+			global::GRaff.GRaffExtensions.Load(MainMenu);
+			global::GRaff.GRaffExtensions.Load(Everything);
 		}
 
 		public static global::GRaff.AssetBatch MainMenu { get; private set; }

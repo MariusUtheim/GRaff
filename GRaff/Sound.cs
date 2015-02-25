@@ -108,18 +108,6 @@ namespace GRaff
 			IsLoaded = true;
 		}
 
-		/// <summary>
-		/// Loads the sound.
-		/// </summary>
-		/// <exception cref="System.IO.FileNotFoundException">The sound file does not exists.</exception>
-		public void Load()
-		{
-			if (IsLoaded)
-				return;
-			else
-				_load(SoundBuffer.Load(FileName, LoopOffset));//LoadAsync().Wait();
-		}
-
 		public IAsyncOperation LoadAsync()
 		{
 			if (!IsLoaded)

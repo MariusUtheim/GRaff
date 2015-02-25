@@ -9,11 +9,6 @@ namespace GRaff
 	public interface IAsset
 	{
 		/// <summary>
-		/// Loads the asset into memory.
-		/// </summary>
-		void Load();
-
-		/// <summary>
 		/// Loads the asset asynchronously.
 		/// </summary>
 		/// <returns>A System.Threading.Tasks.Task that will complete when the asset is completely loaded.</returns>

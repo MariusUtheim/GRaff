@@ -219,19 +219,6 @@ namespace GRaff
 		}
 
 		/// <summary>
-		/// Loads the texture.
-		/// </summary>
-		/// <exception cref="System.IO.FileNotFoundException">The texture file does not exists.</exception>
-		/// <remarks>If the texture is already loading asynchronously, calling GRaff.Sprite.Load blocks until loading completes.</remarks>
-		public void Load()
-		{
-			if (IsLoaded)
-				return;
-			else
-				LoadAsync().Wait();
-		}
-
-		/// <summary>
 		/// Loads the texture asynchronously.
 		/// </summary>
 		/// <returns>A System.Threading.Tasks.Task that will complete when the texture is finished loading.</returns>

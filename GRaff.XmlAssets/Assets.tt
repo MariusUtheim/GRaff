@@ -31,7 +31,7 @@ namespace <#= source.Namespace #>
 		public static void LoadAll()
 		{
 <# foreach (var sprite in source.Sprites) { #>
-			<#=sprite.Name#>.Load();
+			global::GRaff.GRaffExtensions.Load(<#=sprite.Name#>);
 <# } #>
 		}
 
@@ -52,7 +52,7 @@ namespace <#= source.Namespace #>
 		public static void LoadAll()
 		{
 <# foreach (var sound in source.Sounds) { #>
-			<#=sound.Name#>.Load();
+			global::GRaff.GRaffExtensions.Load(<#=sound.Name#>);
 <# } #>
 		}
 
@@ -73,7 +73,7 @@ namespace <#= source.Namespace #>
 		public static void LoadAll()
 		{
 <# foreach (var batch in source.Batches) { #>
-			<#=batch.Name#>.Load();
+			global::GRaff.GRaffExtensions.Load(<#=batch.Name#>);
 <# } #>
 		}
 

@@ -9,7 +9,7 @@ namespace GRaff
 {
 	#if !PUBLISH
 	#warning Missing documentation
-	public sealed class AssetBatch : IAsset
+	public class AssetBatch : IAsset
 	{
 		private List<IAsset> _resources;
 
@@ -21,12 +21,6 @@ namespace GRaff
 		public AssetBatch(params IAsset[] resources)
 		{
 			_resources = new List<IAsset>(resources);
-		}
-
-		public void Load()
-		{
-			foreach (var resource in _resources)
-				resource.Load();
 		}
 
 		public IAsyncOperation LoadAsync()

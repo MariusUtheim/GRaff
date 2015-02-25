@@ -57,15 +57,6 @@ namespace GRaff
 			}
 		}
 
-
-		public void Load()
-		{
-			if (IsLoaded)
-				return;
-			else
-				LoadAsync().Wait();
-		}
-
 		public IAsyncOperation LoadAsync()
 		{
 			if (!IsLoaded)
