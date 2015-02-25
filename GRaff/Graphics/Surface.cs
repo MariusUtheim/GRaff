@@ -151,6 +151,11 @@ namespace GRaff.Graphics
 
 		public void FillCircle(Color col1, Color col2, PointF center, double radius)
 		{
+			if (radius == 0)
+			{
+				SetPixel(col1, center);
+				return;
+			}
 			int precision = (int)GMath.Ceiling(GMath.Tau * radius);
 			PointF[] vertices = new PointF[precision + 2];
 			int i = 0;
