@@ -1,55 +1,3 @@
-/** using System;
-using System.Collections.Generic;
-
-namespace GRaff.Graphics.Lighting
-{
-	public class LightSource
-	{
-		public LightSource(Point location, double radius)
-		{
-			Location = location;
-			Radius = radius;
-		}
-
-		public Point Location { get; set; }
-		public double Radius { get; set; }
-
-		internal void Render(IEnumerable<LightObstacle> obstacles)
-		{
-			Draw.FillCircle(Color.White, Location, Radius);
-
-			foreach (var obstacle in obstacles)
-			{
-				var w1 = obstacle.Wall.Origin;
-				var w2 = obstacle.Wall.Destination;
-
-				double d = ((w1 - Location).Direction- (w2 - Location).Direction).Degrees;
-			    if (d < 180)
-				{
-					var tmp = w1;
-					w1 = w2;
-					w2 = tmp;
-				}
-
-				var p1 = Location + Radius * (w1 - Location).UnitVector;
-				var p2 = Location + Radius * (w2 - Location).UnitVector;
-
-				var s1 = p1 + new Line(w1, p1).RightNormal * Radius;
-				var s2 = p2 + new Line(w2, p2).LeftNormal * Radius;
-
-				Draw.FillTriangle(Color.Black, w1, w2, p1);
-				Draw.FillTriangle(Color.Black, w2, p1, p2);
-			
-				Draw.FillTriangle(Color.Black, p1, p2, s1);
-				Draw.FillTriangle(Color.Black, p2, s1, s2);
-
-				Draw.Line(Color.Red, w1, w2);
-			}
-		}
-	}
-}
-
-/* */
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -80,7 +28,8 @@ namespace GRaff.Graphics.Lighting
 		internal void Render(IEnumerable<LightObstacle> obstacles)
 		{
 			//Draw.FillCircle(Color, Location, Radius);
-			Draw.FillCircle(Color, Color.Black, Location, Radius);
+			using (new BlendModeContext(BlendMode.Additive))
+				Draw.FillCircle(Color, Color.Black, Location, Radius);
 
 			var vertices = new PointF[obstacles.Count() * 12];
 			var colors = new Color[obstacles.Count() * 12];
