@@ -9,6 +9,7 @@ namespace GRaff.Randomness
 	public static class Combinatorics
 	{
 		#region Tables and helper constants
+
 		private const double LogTauOver2 = 0.918938533204673;
         private static readonly ulong[] factorialTable_0_to_20 = new ulong[] {
 			1,
@@ -318,7 +319,7 @@ namespace GRaff.Randomness
 			src[j] = tmp;
 		}
 
-		private static IEnumerable<IEnumerable<T>> _Permute<T>(T[] array, int startIndex)
+		private static IEnumerable<T[]> _Permute<T>(T[] array, int startIndex)
 		{
 			if (startIndex == array.Length -1)
 				yield return array;
@@ -349,7 +350,7 @@ namespace GRaff.Randomness
 			var originalArray = elements.ToArray();
 
 			foreach (var permutation in _Permute(originalArray, 0))
-				yield return permutation;
+				yield return Array.AsReadOnly(permutation);
 		}
 
 		public static double LogGamma(int x)
