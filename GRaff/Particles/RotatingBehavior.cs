@@ -9,22 +9,25 @@ namespace GRaff.Particles
 {
 	public class RotatingBehavior : IParticleBehavior
 	{
-		private IDistribution<Angle> _direction;
+		private IDistribution<Angle> _rotation;
 
-		public RotatingBehavior()
-			: this(new AngleDistribution())
+		public RotatingBehavior(Angle rotation)
+			: this(new ConstantDistribution<Angle>(rotation))
 		{ }
 
+		public RotatingBehavior(Angle minRotation, Angle maxRotation)
+			: this(new AngleDistribution(minRotation, maxRotation))
+		{ }
 
-		public RotatingBehavior(IDistribution<Angle> initialDirection)
+		public RotatingBehavior(IDistribution<Angle> rotation)
 		{
-			if (initialDirection == null) throw new ArgumentNullException("initialDirection");	 /*C#6.0*/
-			_direction = initialDirection;
+			if (rotation == null) throw new ArgumentNullException("rotation");	 /*C#6.0*/
+			_rotation = rotation;
 		}
 
 		public void AttachTo(Particle particle)
 		{
-			particle.AttachBehavior(new RotatingProperty(_direction.Generate()));
+			particle.AttachBehavior(new RotatingProperty(_rotation.Generate()));
 		}
 	}
 }
