@@ -39,10 +39,10 @@ namespace GRaff.Particles
 			return result;
 		}
 
-		public void AddFeature(IParticleBehavior feature)
+		public void AddBehavior(IParticleBehavior behavior)
 		{
-			if (feature == null) throw new ArgumentNullException("behavior");
-			_behaviors.Add(feature);
+			if (behavior == null) throw new ArgumentNullException("behavior"); /*C#6.0*/
+			_behaviors.Add(behavior);
 		}
 
 		public IDistribution<int> Lifetime { get; set; }

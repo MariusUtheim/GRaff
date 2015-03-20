@@ -60,7 +60,6 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Display.cs" />
     <Compile Include="Synchronization\Alarm.cs" />
     <Compile Include="Angle.cs" />
     <Compile Include="AnimationStrip.cs" />

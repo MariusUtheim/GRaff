@@ -4,11 +4,11 @@ namespace GRaff.Particles
 {
 	public class LineAttractionBehavior : IParticleBehavior
 	{
-		class LineAttractionBehavior : IParticleProperty
+		class LineAttractionProperty : IParticleProperty
 		{
 			private Particles.LineAttractionBehavior _source;
 
-			public LineAttractionBehavior(Particles.LineAttractionBehavior source)
+			public LineAttractionProperty(Particles.LineAttractionBehavior source)
 			{
 				_source = source;
 			}
@@ -33,7 +33,7 @@ namespace GRaff.Particles
 
 		public void AttachTo(Particle particle)
 		{
-			particle.AttachBehavior(new LineAttractionBehavior(this));
+			particle.AttachBehavior(new LineAttractionProperty(this));
 		}
 	}
 }
