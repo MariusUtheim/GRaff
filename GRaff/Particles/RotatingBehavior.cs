@@ -5,18 +5,18 @@ using System.Text;
 using System.Threading.Tasks;
 using GRaff.Randomness;
 
-namespace GRaff.Particles.Behaviors
+namespace GRaff.Particles
 {
-	public class RotatingFeature : IParticleFeature
+	public class RotatingBehavior : IParticleBehavior
 	{
 		private IDistribution<Angle> _direction;
 
-		public RotatingFeature()
+		public RotatingBehavior()
 			: this(new AngleDistribution())
 		{ }
 
 
-		public RotatingFeature(IDistribution<Angle> initialDirection)
+		public RotatingBehavior(IDistribution<Angle> initialDirection)
 		{
 			if (initialDirection == null) throw new ArgumentNullException("initialDirection");	 /*C#6.0*/
 			_direction = initialDirection;
@@ -24,7 +24,7 @@ namespace GRaff.Particles.Behaviors
 
 		public void AttachTo(Particle particle)
 		{
-			particle.AttachBehavior(new RotatingBehavior(_direction.Generate()));
+			particle.AttachBehavior(new RotatingProperty(_direction.Generate()));
 		}
 	}
 }

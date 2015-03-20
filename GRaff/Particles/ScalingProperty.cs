@@ -1,18 +1,18 @@
 ﻿
 
-namespace GRaff.Particles.Behaviors
+namespace GRaff.Particles
 {
-	public class ScalingBehavior : IParticleBehavior
+	public class ScalingProperty : IParticleProperty
 	{
 		private double _xScaleFactor;
 		private double _yScaleFactor;
 
-		public ScalingBehavior(double scaleFactor) 
+		public ScalingProperty(double scaleFactor) 
 		{
 			this._xScaleFactor = this._yScaleFactor = scaleFactor;
 		}
 
-		public ScalingBehavior(double xScaleFactor, double yScaleFactor)
+		public ScalingProperty(double xScaleFactor, double yScaleFactor)
 		{
 			this._xScaleFactor = xScaleFactor;
 			this._yScaleFactor = yScaleFactor;

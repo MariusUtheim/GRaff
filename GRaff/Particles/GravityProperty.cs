@@ -1,10 +1,10 @@
 ﻿ 
 
-namespace GRaff.Particles.Behaviors
+namespace GRaff.Particles
 {
-	public class GravityBehavior : IParticleBehavior
+	public class GravityProperty : IParticleProperty
 	{
-		public GravityBehavior(Vector gravity)
+		public GravityProperty(Vector gravity)
 		{
 			this.Gravity = gravity;
 		}

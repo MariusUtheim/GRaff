@@ -1,14 +1,14 @@
 ﻿
  
-namespace GRaff.Particles.Behaviors
+namespace GRaff.Particles
 {
-	public class LineAttractionFeature : IParticleFeature
+	public class LineAttractionBehavior : IParticleBehavior
 	{
-		class LineAttractionBehavior : IParticleBehavior
+		class LineAttractionBehavior : IParticleProperty
 		{
-			private LineAttractionFeature _source;
+			private Particles.LineAttractionBehavior _source;
 
-			public LineAttractionBehavior(LineAttractionFeature source)
+			public LineAttractionBehavior(Particles.LineAttractionBehavior source)
 			{
 				_source = source;
 			}
@@ -21,7 +21,7 @@ namespace GRaff.Particles.Behaviors
 			}
 		}
 
-		public LineAttractionFeature(Line line, double strength)
+		public LineAttractionBehavior(Line line, double strength)
 		{
 			this.Line = line;
 			this.Strength = strength;

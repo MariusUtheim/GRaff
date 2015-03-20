@@ -2,24 +2,24 @@
 using GRaff.Randomness;
 
 
-namespace GRaff.Particles.Behaviors
+namespace GRaff.Particles
 {
-	public class LinearMotionFeature : IParticleFeature
+	public class LinearMotionBehavior : IParticleBehavior
 	{
 		private IDistribution<Vector> _velocity;
 
-		public LinearMotionFeature(double speed)
+		public LinearMotionBehavior(double speed)
 			: this(new VectorDistribution(speed))
 		{ }
 
-		public LinearMotionFeature(double minSpeed, double maxSpeed)
+		public LinearMotionBehavior(double minSpeed, double maxSpeed)
 			: this(new VectorDistribution(GRandom.Source, minSpeed, maxSpeed)) { }
 
-		public LinearMotionFeature(Vector velocity)
+		public LinearMotionBehavior(Vector velocity)
 			: this(new ConstantDistribution<Vector>(velocity))
 		{ }
 
-		public LinearMotionFeature(IDistribution<Vector> distribution)
+		public LinearMotionBehavior(IDistribution<Vector> distribution)
 		{
 			this._velocity = distribution;
 		}

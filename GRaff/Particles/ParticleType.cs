@@ -9,7 +9,7 @@ namespace GRaff.Particles
 {
 	public class ParticleType
 	{
-		List<IParticleFeature> _behaviors = new List<IParticleFeature>();
+		List<IParticleBehavior> _behaviors = new List<IParticleBehavior>();
 		IParticleRenderer _renderer;
 
 		public ParticleType(Sprite sprite, int lifetime)
@@ -39,7 +39,7 @@ namespace GRaff.Particles
 			return result;
 		}
 
-		public void AddFeature(IParticleFeature feature)
+		public void AddFeature(IParticleBehavior feature)
 		{
 			if (feature == null) throw new ArgumentNullException("behavior");
 			_behaviors.Add(feature);

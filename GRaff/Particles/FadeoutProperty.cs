@@ -1,8 +1,8 @@
 ﻿ 
 
-namespace GRaff.Particles.Behaviors
+namespace GRaff.Particles
 {
-	public class FadeoutBehavior : IParticleBehavior
+	public class FadeoutProperty : IParticleProperty
 	{
 		public void Update(Particle particle)
 		{

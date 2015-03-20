@@ -1,10 +1,10 @@
 ﻿ 
 
-namespace GRaff.Particles.Behaviors
+namespace GRaff.Particles
 {
-	internal class FrictionBehavior : IParticleBehavior
+	internal class FrictionProperty : IParticleProperty
 	{
-		public FrictionBehavior(double friction)
+		public FrictionProperty(double friction)
 		{
 			this.Friction = friction;
 		}

@@ -1,14 +1,14 @@
 ﻿ 
 
-namespace GRaff.Particles.Behaviors
+namespace GRaff.Particles
 {
-	public class PointAttractionFeature : IParticleFeature
+	public class PointAttractionBehavior : IParticleBehavior
 	{
-		class PointAttractionBehavior : IParticleBehavior
+		class PointAttractionProperty : IParticleProperty
 		{
-			private PointAttractionFeature _source;
+			private Particles.PointAttractionBehavior _source;
 
-			public PointAttractionBehavior(PointAttractionFeature source)
+			public PointAttractionProperty(Particles.PointAttractionBehavior source)
 			{
 				_source = source;
 			}
@@ -20,7 +20,7 @@ namespace GRaff.Particles.Behaviors
 			}
 		}
 
-		public PointAttractionFeature(Point location, double strength)
+		public PointAttractionBehavior(Point location, double strength)
 		{
 			this.Location = location;
 			this.Strength = strength;
@@ -32,7 +32,7 @@ namespace GRaff.Particles.Behaviors
 
 		public void AttachTo(Particle particle)
 		{
-			particle.AttachBehavior(new PointAttractionBehavior(this));
+			particle.AttachBehavior(new PointAttractionProperty(this));
 		}
 	}
 }

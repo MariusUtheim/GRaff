@@ -8,7 +8,7 @@ namespace GRaff.Particles
 {
 	public sealed class Particle
 	{
-		internal List<IParticleBehavior> Properties = new List<IParticleBehavior>();
+		internal List<IParticleProperty> Properties = new List<IParticleProperty>();
 
 		public Particle(double x, double y, int lifetime)
 		{
@@ -43,7 +43,7 @@ namespace GRaff.Particles
 			return true;
 		}
 
-		public void AttachBehavior(IParticleBehavior behavior)
+		public void AttachBehavior(IParticleProperty behavior)
 		{
 			Properties.Add(behavior);
 		}

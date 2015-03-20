@@ -2,18 +2,18 @@
 using GRaff.Randomness;
 
 
-namespace GRaff.Particles.Behaviors
+namespace GRaff.Particles
 {
-	public class RotationFeature : IParticleFeature
+	public class RotationBehavior : IParticleBehavior
 	{
 		private IDistribution<Angle> _direction; 
 
-		public RotationFeature()
+		public RotationBehavior()
 			: this(new AngleDistribution())
 		{ }
 
 
-		public RotationFeature(IDistribution<Angle> initialDirection)
+		public RotationBehavior(IDistribution<Angle> initialDirection)
 		{
 			if (initialDirection == null) throw new ArgumentNullException("initialDirection");   /*C#6.0*/
 			_direction = initialDirection;

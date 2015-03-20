@@ -1,12 +1,12 @@
 ﻿
  
-namespace GRaff.Particles.Behaviors
+namespace GRaff.Particles
 {
-	public class RotatingBehavior : IParticleBehavior
+	public class RotatingProperty : IParticleProperty
 	{
 		private Angle _rotation;
 
-		public RotatingBehavior(Angle rotation)
+		public RotatingProperty(Angle rotation)
 		{
 			this._rotation = rotation;
 		}

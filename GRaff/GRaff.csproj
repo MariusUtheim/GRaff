@@ -60,6 +60,7 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Display.cs" />
     <Compile Include="Synchronization\Alarm.cs" />
     <Compile Include="Angle.cs" />
     <Compile Include="AnimationStrip.cs" />
@@ -85,24 +86,21 @@
     <Compile Include="IAsset.cs" />
     <Compile Include="LinearMatrix.cs" />
     <Compile Include="MatrixException.cs" />
-    <Compile Include="Particles\Behaviors\FrictionBehavior.cs" />
-    <Compile Include="Particles\Behaviors\GravityBehavior.cs" />
-    <Compile Include="Particles\Behaviors\AccelerationFeature.cs" />
-    <Compile Include="Particles\Behaviors\ColorFeature.cs" />
-    <Compile Include="Particles\Behaviors\DynamicRotationFeature.cs" />
-    <Compile Include="Particles\Behaviors\DynamicScaleFeature.cs" />
-    <Compile Include="Particles\Behaviors\FadeoutFeature.cs" />
-    <Compile Include="Particles\Behaviors\FadeoutBehavior.cs" />
-    <Compile Include="Particles\Behaviors\LinearMotionFeature.cs" />
-    <Compile Include="Particles\Behaviors\LineAttractionFeature.cs" />
-    <Compile Include="Particles\Behaviors\PointAttractionFeature.cs" />
-    <Compile Include="Particles\Behaviors\RandomColorFeature.cs" />
-    <Compile Include="Particles\Behaviors\RotatingFeature.cs" />
-    <Compile Include="Particles\Behaviors\RotationFeature.cs" />
-    <Compile Include="Particles\Behaviors\RotatingBehavior.cs" />
-    <Compile Include="Particles\Behaviors\ScaleFeature.cs" />
-    <Compile Include="Particles\Behaviors\ScalingBehavior.cs" />
-    <Compile Include="Particles\Behaviors\ScalingFeature.cs" />
+    <Compile Include="Particles\FrictionProperty.cs" />
+    <Compile Include="Particles\GravityProperty.cs" />
+    <Compile Include="Particles\AccelerationProperty.cs" />
+    <Compile Include="Particles\ColorBehavior.cs" />
+    <Compile Include="Particles\FadeoutBehavior.cs" />
+    <Compile Include="Particles\FadeoutProperty.cs" />
+    <Compile Include="Particles\LinearMotionBehavior.cs" />
+    <Compile Include="Particles\LineAttractionBehavior.cs" />
+    <Compile Include="Particles\PointAttractionBehavior.cs" />
+    <Compile Include="Particles\RotatingBehavior.cs" />
+    <Compile Include="Particles\RotationBehavior.cs" />
+    <Compile Include="Particles\RotatingProperty.cs" />
+    <Compile Include="Particles\ScaleBehavior.cs" />
+    <Compile Include="Particles\ScalingProperty.cs" />
+    <Compile Include="Particles\ScalingBehavior.cs" />
     <Compile Include="Randomness\BinomialDistribution.cs" />
     <Compile Include="Randomness\PolarVectorDistribution.cs" />
     <Compile Include="Randomness\RadialDistribution.cs" />
@@ -197,8 +195,8 @@
     <Compile Include="MouseButton.cs" />
     <Compile Include="MovingObject.cs" />
     <Compile Include="MutableList.cs" />
-    <Compile Include="Particles\IParticleFeature.cs" />
     <Compile Include="Particles\IParticleBehavior.cs" />
+    <Compile Include="Particles\IParticleProperty.cs" />
     <Compile Include="Particles\Particle.cs" />
     <Compile Include="Particles\ParticleSystem.cs" />
     <Compile Include="Particles\ParticleType.cs" />
