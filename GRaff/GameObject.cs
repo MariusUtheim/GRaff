@@ -11,6 +11,12 @@ namespace GRaff
 	public abstract class GameObject : GameElement
 	{
 		/// <summary>
+		/// Initializes a new instance of the GRaff.GameObject class.
+		/// </summary>
+		protected GameObject()
+			: this(0, 0) { }
+
+		/// <summary>
 		/// Initializes a new instance of the GRaff.GameObject class with the specified x- and y-coordinates.
 		/// </summary>
 		/// <param name="x">The x-coordinate.</param>

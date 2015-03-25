@@ -25,50 +25,6 @@ namespace GRaff
 			return instance;
 		}
 
-		public static TGameElement Create<TGameElement>() where TGameElement : GameElement
-		{
-			return Instance.Create(Activator.CreateInstance<TGameElement>());
-		}
-
-		public static TGameObject Create<TGameObject>(Point location) where TGameObject : GameObject
-		{
-			var type = typeof(TGameObject);
-			var constructors = type.GetConstructors();
-			ConstructorInfo chosenConstructor;
-
-			chosenConstructor = constructors.FirstOrDefault(c => c.GetParameters().Select(p => p.ParameterType).SequenceEqual(new[] { typeof(Point) }));
-			if (chosenConstructor != null)
-				return Create((TGameObject)chosenConstructor.Invoke(new object[] { location }));
-
-			chosenConstructor = constructors.FirstOrDefault(c => c.GetParameters().Select(p => p.ParameterType).SequenceEqual(new[] { typeof(double), typeof(double) }));
-			if (chosenConstructor != null)
-				return Create((TGameObject)chosenConstructor.Invoke(new object[] { location.X, location.Y }));
-
-			var constructedObject = Activator.CreateInstance<TGameObject>();
-			constructedObject.Location = location;
-			return Create(constructedObject);
-		}
-
-		public static TGameElement Create<TGameElement>(double x, double y) where TGameElement : GameObject
-		{
-			var type = typeof(TGameElement);
-			var constructors = type.GetConstructors();
-			ConstructorInfo chosenConstructor;
-
-			chosenConstructor = constructors.FirstOrDefault(c => c.GetParameters().Select(p => p.ParameterType).SequenceEqual(new[] { typeof(double), typeof(double) }));
-			if (chosenConstructor != null)
-				return Create((TGameElement)chosenConstructor.Invoke(new object[] { x, y }));
-
-			chosenConstructor = constructors.FirstOrDefault(c => c.GetParameters().Select(p => p.ParameterType).SequenceEqual(new[] { typeof(Point) }));
-			if (chosenConstructor != null)
-				return Create((TGameElement)chosenConstructor.Invoke(new object[] { new Point(x, y) }));
-
-			var constructedObject = Activator.CreateInstance<TGameElement>();
-			constructedObject.X = x;
-			constructedObject.Y = y;
-			return Create(constructedObject);
-		}
-
 		public static void Remove(GameElement instance)
 		{
 			_elements.Remove(instance);
@@ -87,8 +43,101 @@ namespace GRaff
 	/// Provides static methods to interact with the instances of a specific type.
 	/// </summary>
 	/// <typeparam name="T">The type of GameObject.</typeparam>
-	public static class Instance<T> where T : GameElement
+	public static class Instance<T> where T : GameObject
 	{
+		private static Func<T> _parameterlessConstructor;
+		private static Func<Point, T> _locationConstructor;
+		private static Func<double, double, T> _xyConstructor;
+
+		static Instance()
+		{
+			var type = typeof(T);
+			var constructors = type.GetConstructors();
+			var paremeterTypes = constructors.Select(c => c.GetParameters().Select(p => p.ParameterType)).ToArray();
+
+			var parameterlessMatch = constructors.FirstOrDefault(c => !c.GetParameters().Select(p => p.ParameterType).Any());
+			var locationMatch = constructors.FirstOrDefault(c => c.GetParameters().Select(p => p.ParameterType).SequenceEqual(new[] { typeof(Point) }));
+			var xyMatch = constructors.FirstOrDefault(c => c.GetParameters().Select(p => p.ParameterType).SequenceEqual(new[] { typeof(double), typeof(double) }));
+
+			if (parameterlessMatch == null && locationMatch == null && xyMatch == null)
+				throw new InvalidOperationException(string.Format("Unable to create instances through {0}: Type {1} must specify a parameterless constructor, a constructor taking a GRaff.Point structure or a constructor taking two System.Double structures.", typeof(Instance<T>).Name, type.Name));
+
+			if (locationMatch == null && xyMatch == null)
+			{
+				_parameterlessConstructor = () => (T)parameterlessMatch.Invoke(new object[0]);
+				_locationConstructor = location => { var obj = (T)parameterlessMatch.Invoke(new object[0]); obj.Location = location; return obj; };
+				_xyConstructor = (x, y) => { var obj = (T)parameterlessMatch.Invoke(new object[0]); obj.X = x; obj.Y = y; return obj; };
+			}
+			else
+			{
+				if (locationMatch != null)
+					_locationConstructor = location => (T)locationMatch.Invoke(new object[] { location });
+				if (xyMatch != null)
+					_xyConstructor = (x, y) => (T)xyMatch.Invoke(new object[] { x, y });
+
+				if (locationMatch == null)
+					_locationConstructor = location => _xyConstructor(location.X, location.Y);
+				if (xyMatch == null)
+					_xyConstructor = (x, y) => _locationConstructor(new Point(x, y));
+
+				if (parameterlessMatch != null)
+					_parameterlessConstructor = () => (T)parameterlessMatch.Invoke(new object[0]);
+				else if (locationMatch != null)
+					_parameterlessConstructor = () => _xyConstructor(0, 0);
+				else
+					_parameterlessConstructor = () => _locationConstructor(Point.Zero);
+			}
+		}
+
+		/// <summary>
+		/// Creates a new instance of TGameObject.
+		/// </summary>
+		/// <returns>The created TGameObject.</returns>
+		/// <remarks>
+		/// If TGameObject has a parameterless constructor, this constructor is used.
+		/// Otherwise, if it has a constructor accepting two System.Double structures, this constructor is called with (0.0, 0.0).
+		/// Otherwise, if it has a constructor accepting a GRaff.Point, this constructor is called with GRaff.Point.Zero.
+		/// If TGameObject has none of these constructors, a System.InvalidOperationException is thrown when Instance´1 is used.
+		/// </remarks>
+		public static T Create()
+		{
+			return _parameterlessConstructor();
+		}
+
+		/// <summary>
+		/// Creates a new instance of TGameObject, using the specified GRaff.Point as the argument.
+		/// </summary>
+		/// <param name="location">The argument of the called constructor, or the location where the TGameObject will be placed.</param>
+		/// <returns>The created TGameObject.</returns>
+		/// <remarks>
+		/// If TGameObject has a constructor accepting a GRaff.Point, this constructor is called with location.
+		/// Otherwise, if it has a constructor accepting two System.Double structures, this constructor is called with (location.X, location.Y).
+		/// Otherwise, if it has a parameterless constructor, this constructor is called; then the Location property of the created object is set to location.
+		/// If TGameObject has none of these constructors, a System.InvalidOperationException is thrown when Instance´1 is used.</remarks>
+		/// </remarks>
+		public static T Create(Point location)
+		{
+			return _locationConstructor(location);
+		}
+
+		/// <summary>
+		/// Creates a new instance of TGameObject, using the specified x- and y-coordinates as the arguments.
+		/// </summary>
+		/// <param name="x">The first argument of the called constructor, or the x-coordinate where the TGameObject will be placed.</param>
+		/// <param name="y">The second argument of the called constructor, or the y-coordinate where the TGameObject will be placed.</param>
+		/// <returns>The created TGameObject</returns>
+		/// If TGameobject has a constructor accepting two System.Double structures, this constructor is called with (x, y).
+		/// Otherwise, f TGameObject has a constructor accepting a GRaff.Point, this constructor is called with a new GRaff.Point using the specified (x, y) coordinates.
+		/// Otherwise, if it has a parameterless constructor, this constructor is called; then the X property of the created object is set to x, and the Y property is set to y.
+		/// If TGameObject has none of these constructors, a System.InvalidOperationException is thrown when Instance´1 is used.</remarks>
+		/// </remarks>
+		public static T Create(double x, double y)
+		{
+			return _xyConstructor(x, y);
+		}
+
+
+
 		/// <summary>
 		/// Returns all instances of the specified type.
 		/// </summary>
@@ -110,9 +159,12 @@ namespace GRaff
 		/// <summary>
 		/// Returns one instance of the specified type.
 		/// </summary>
-		public static T First()
+		public static T First
 		{
-			return All.First();
+			get
+			{
+				return All.First();
+			}
 		}
 
 		/// <summary>

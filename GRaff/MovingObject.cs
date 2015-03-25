@@ -13,6 +13,12 @@ namespace GRaff
 	public abstract class MovingObject : GameObject
 	{
 		/// <summary>
+		/// Initializes a new instance of the GRaff.MovingObject class.
+		/// </summary>
+		protected MovingObject()
+		{ }
+
+		/// <summary>
 		/// Initializes a new instance of the GRaff.MovingObject class with the specified x- and y-coordinates.
 		/// </summary>
 		/// <param name="x">The x-coordinate.</param>
