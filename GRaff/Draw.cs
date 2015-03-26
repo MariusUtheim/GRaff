@@ -121,15 +121,24 @@ namespace GRaff
 
 		public static void FillRectangle(Color color, double x, double y, double width, double height)
 		{
-			Draw.CurrentSurface.FillRectangle(color, color, color, color, (float)x, (float)y, (float)width, (float)height);
+			CurrentSurface.FillRectangle(color, color, color, color, (float)x, (float)y, (float)width, (float)height);
+		}
+		public static void FillRectangle(Color color, Point location, Vector size)
+		{
+			CurrentSurface.FillRectangle(color, color, color, color, (float)location.X, (float)location.Y, (float)size.X, (float)size.Y);
 		}
 		public static void FillRectangle(Color color, Rectangle rectangle)
 		{
 			Draw.CurrentSurface.FillRectangle(color, color, color, color, (float)rectangle.Left, (float)rectangle.Top, (float)rectangle.Width, (float)rectangle.Height);
 		}
+
 		public static void FillRectangle(Color col1, Color col2, Color col3, Color col4, double x, double y, double width, double height)
 		{
 			Draw.CurrentSurface.FillRectangle(col1, col2, col3, col4, (float)x, (float)y, (float)width, (float)height);
+		}
+		public static void FillRectangle(Color col1, Color col2, Color col3, Color col4, Point location, Vector size)
+		{
+			CurrentSurface.FillRectangle(col1, col2, col3, col4, (float)location.X, (float)location.Y, (float)size.X, (float)size.Y);
 		}
 		public static void FillRectangle(Color col1, Color col2, Color col3, Color col4, Rectangle rectangle)
 		{

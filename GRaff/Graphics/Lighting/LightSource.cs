@@ -28,14 +28,14 @@ namespace GRaff.Graphics.Lighting
 		internal void Render(IEnumerable<LightObstacle> obstacles)
 		{
 			//Draw.FillCircle(Color, Location, Radius);
-			using (new BlendModeContext(BlendMode.Additive))
+			using (BlendMode.Use(BlendMode.Additive))
 				Draw.FillCircle(Color, Color.Black, Location, Radius);
 
 			var vertices = new PointF[obstacles.Count() * 12];
 			var colors = new Color[obstacles.Count() * 12];
 
 			//Parallel.ForEach( obstacles, (obstacle, loopState, index) => {
-			using (new BlendModeContext(new BlendMode(BlendEquation.Add, BlendingFactor.Zero, BlendingFactor.SrcColor)))
+			using (BlendMode.Use(new BlendMode(BlendEquation.Add, BlendingFactor.Zero, BlendingFactor.SrcColor)))
 			{
 				foreach (var obstacle in obstacles)
 				{

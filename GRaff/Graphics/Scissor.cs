@@ -13,6 +13,52 @@ namespace GRaff.Graphics
  /// </summary>
 	public static class Scissor
 	{
+		private class ScissorContext : IDisposable
+		{
+			private IntRectangle _previous;
+			private bool _wasEnabled;
+			private bool _isDisposed = false;
+
+			public ScissorContext(IntRectangle region)
+			{
+				this._wasEnabled = Scissor.IsEnabled;
+				this._previous = Scissor.Region;
+				Scissor.Region = region;
+				Scissor.IsEnabled = true;
+			}
+
+			~ScissorContext()
+			{
+				throw new InvalidOperationException("A context returned from GRaff.Graphics.Scissor.Context was garbage collected before Dispose was called.");
+			}
+
+			public void Dispose()
+			{
+				if (!_isDisposed)
+				{
+					GC.SuppressFinalize(this);
+					_isDisposed = true;
+					Scissor.Region = _previous;
+					Scissor.IsEnabled = _wasEnabled;
+				}
+				else
+					throw new InvalidOperationException("Object was already disposed");
+			}
+		}
+
+		public static IDisposable Use(IntRectangle region)
+		{
+			return new ScissorContext(region);
+		}
+
+		public static IDisposable UseIntersection(IntRectangle region)
+		{
+			if (IsEnabled)
+				return Use(region.Intersection(Region) ?? IntRectangle.Zero);
+			else
+				return Use(region);
+		}
+
 		public static bool IsEnabled
 		{
 			get
@@ -35,7 +81,7 @@ namespace GRaff.Graphics
 			{
 				int[] scissorCoords = new int[4];
 				GL.GetInteger(GetPName.ScissorBox, scissorCoords);
-				return new IntRectangle(scissorCoords[0], Window.Height - scissorCoords[1], scissorCoords[2], scissorCoords[3]);
+				return new IntRectangle(scissorCoords[0], Window.Height - scissorCoords[1] - scissorCoords[3], scissorCoords[2], scissorCoords[3]);
 			}
 
 			set
