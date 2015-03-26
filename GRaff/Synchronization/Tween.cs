@@ -54,7 +54,7 @@ namespace GRaff.Synchronization
 
 		public static Tween Cubic(int duration, Action<double> tweenAction, Action completeAction = null)
 		{
-			return Instance.Create(new Tween(duration, t => (GMath.Sqr(t) + GMath.Sqr(1 - t)) * t * (1 - t), tweenAction, completeAction));
+			return Instance.Create(new Tween(duration, t => t * t * (2 - t), tweenAction, completeAction));
 		}
 
 		public static Tween Sine(int duration, Action<double> tweenAction, Action completeAction = null)
