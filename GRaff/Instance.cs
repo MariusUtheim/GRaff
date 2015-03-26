@@ -58,14 +58,13 @@ namespace GRaff
 			var parameterlessMatch = constructors.FirstOrDefault(c => !c.GetParameters().Select(p => p.ParameterType).Any());
 			var locationMatch = constructors.FirstOrDefault(c => c.GetParameters().Select(p => p.ParameterType).SequenceEqual(new[] { typeof(Point) }));
 			var xyMatch = constructors.FirstOrDefault(c => c.GetParameters().Select(p => p.ParameterType).SequenceEqual(new[] { typeof(double), typeof(double) }));
-
-			if (parameterlessMatch == null && locationMatch == null && xyMatch == null)
-				throw new InvalidOperationException(string.Format("Unable to create instances through {0}: Type {1} must specify a parameterless constructor, a constructor taking a GRaff.Point structure or a constructor taking two System.Double structures.", typeof(Instance<T>).Name, type.Name));
-
+			
 			if (locationMatch == null && xyMatch == null)
 			{
+				if (parameterlessMatch == null)
+					return;
 				_parameterlessConstructor = () => (T)parameterlessMatch.Invoke(new object[0]);
-				_locationConstructor = location => { var obj = (T)parameterlessMatch.Invoke(new object[0]); obj.Location = location; return obj; };
+				_locationConstructor = location => { var obj = (T)parameterlessMatch.Invoke(new object[0]); (obj as GameObject).Location = location; return obj; };
 				_xyConstructor = (x, y) => { var obj = (T)parameterlessMatch.Invoke(new object[0]); obj.X = x; obj.Y = y; return obj; };
 			}
 			else
@@ -101,6 +100,8 @@ namespace GRaff
 		/// </remarks>
 		public static T Create()
 		{
+			if (_parameterlessConstructor == null)
+				throw new InvalidOperationException(string.Format("Unable to create instances through {0}: Type {1} must specify a parameterless constructor, a constructor taking a GRaff.Point structure or a constructor taking two System.Double structures.", typeof(Instance<T>).Name, typeof(T).Name));
 			return _parameterlessConstructor();
 		}
 
@@ -117,6 +118,8 @@ namespace GRaff
 		/// </remarks>
 		public static T Create(Point location)
 		{
+			if (_parameterlessConstructor == null)
+				throw new InvalidOperationException(string.Format("Unable to create instances through {0}: Type {1} must specify a parameterless constructor, a constructor taking a GRaff.Point structure or a constructor taking two System.Double structures.", typeof(Instance<T>).Name, typeof(T).Name));
 			return _locationConstructor(location);
 		}
 
@@ -133,6 +136,8 @@ namespace GRaff
 		/// </remarks>
 		public static T Create(double x, double y)
 		{
+			if (_parameterlessConstructor == null)
+				throw new InvalidOperationException(string.Format("Unable to create instances through {0}: Type {1} must specify a parameterless constructor, a constructor taking a GRaff.Point structure or a constructor taking two System.Double structures.", typeof(Instance<T>).Name, typeof(T).Name));
 			return _xyConstructor(x, y);
 		}
 
