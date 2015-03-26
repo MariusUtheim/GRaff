@@ -72,6 +72,7 @@
     <Compile Include="PolygonTest.cs" />
     <Compile Include="AngleTest.cs" />
     <Compile Include="MatrixTest.cs" />
+    <Compile Include="RectangleTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\GRaff\GRaff.csproj">

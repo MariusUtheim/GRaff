@@ -17,6 +17,8 @@ namespace GRaff
 			Height = height;
 		}
 
+		public static readonly IntRectangle Zero;
+
 		/// <summary>
 		/// Initializes a new instance of the GRaff.IntRectangle class at the specified location and with the specified size.
 		/// </summary>
@@ -60,7 +62,7 @@ namespace GRaff
 		/// <summary>
 		/// Gets or sets the location of the top-left corner of this GRaff.IntRectangle.
 		/// </summary>
-		public IntVector Location { get { return new IntVector(Left, Top); } }
+		public IntVector TopLeft { get { return new IntVector(Left, Top); } }
 
 
 		/// <summary>
@@ -76,6 +78,19 @@ namespace GRaff
 		public bool Intersects(IntRectangle other)
 		{
 			return !(Left > other.Right || Top > other.Bottom || Right < other.Left || Bottom < other.Top);
+		}
+
+		public IntRectangle? Intersection(IntRectangle other)
+		{
+			var left = GMath.Max(Left, other.Left);
+			var top = GMath.Max(Top, other.Top);
+			var right = GMath.Min(Right, other.Right);
+			var bottom = GMath.Min(Bottom, other.Bottom);
+
+			if (left > right || top > bottom)
+				return null;
+			else
+				return new IntRectangle(left, top, right - left, bottom - top);
 		}
 
 
@@ -121,7 +136,7 @@ namespace GRaff
 		/// <param name="r">The GRaff.IntRectangle to translate.</param>
 		/// <param name="v">The GRaff.IntVector to translate by.</param>
 		/// <returns>The translated GRaff.IntRectangle.</returns>
-		public static IntRectangle operator +(IntRectangle r, IntVector v) { return new IntRectangle(r.Location + v, r.Size); }
+		public static IntRectangle operator +(IntRectangle r, IntVector v) { return new IntRectangle(r.TopLeft + v, r.Size); }
 		
 
 		/// <summary>
@@ -130,7 +145,7 @@ namespace GRaff
 		/// <param name="r">The GRaff.IntRectangle to translate.</param>
 		/// <param name="v">The negative GRaff.IntVector to translate by.</param>
 		/// <returns>The translated GRaff.IntRectangle.</returns>
-		public static IntRectangle operator -(IntRectangle r, IntVector v) { return new IntRectangle(r.Location - v, r.Size); }
+		public static IntRectangle operator -(IntRectangle r, IntVector v) { return new IntRectangle(r.TopLeft - v, r.Size); }
 
 
 		/// <summary>
@@ -139,5 +154,13 @@ namespace GRaff
 		/// <param name="r">The GRaff.IntRectangle to be converted</param>
 		/// <returns>The GRaff.Rectangle that results from the conversion.</returns>
 		public static implicit operator Rectangle(IntRectangle r) { return new Rectangle(r.Left, r.Top, r.Width, r.Height); }
+
+		/// <summary>
+		/// Converts the specified GRaff.Rectangle to a GRaff.IntRectangle, truncating the top-left coordinates and the dimensions.
+		/// </summary>
+		/// <param name="r">The GRaff.Rectangle to be converted</param>
+		/// <returns>The GRaff.IntRectangle that results from the conversion.</returns>
+		public static explicit operator IntRectangle(Rectangle r) { return new IntRectangle((int)r.Left, (int)r.Top, (int)r.Width, (int)r.Height); }
+
 	}
 }

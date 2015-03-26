@@ -116,12 +116,25 @@ namespace GRaff
 		public static implicit operator Point(IntVector v) { return new Point(v.X, v.Y); }
 
 		/// <summary>
+		/// Converts the specified GRaff.Point to a GRaff.IntVector, converting each coordinate separately.
+		/// </summary>
+		/// <param name="p">The GRaff.Point to be converted.</param>
+		/// <returns>The GRaff.IntVector that results from the conversion.</returns>
+		public static explicit operator IntVector(Point p) { return new IntVector((int)p.X, (int)p.Y); }
+
+		/// <summary>
 		/// Converts the specified GRaff.IntVector to a GRaff.Vector.
 		/// </summary>
 		/// <param name="i">The GRaff.IntVector to be converted.</param>
 		/// <returns>The GRaff.Vector that results from the conversion.</returns>
 		public static implicit operator Vector(IntVector i) { return new Vector(i.X, i.Y); }
 
+		/// <summary>
+		/// Converts the specified GRaff.Vector to a GRaff.IntVector, converting each coordinate separately.
+		/// </summary>
+		/// <param name="v">The GRaff.Vector to be converted.</param>
+		/// <returns>The GRaff.IntVector that results from the conversion.</returns>
+		public static explicit operator IntVector(Vector v) { return new IntVector((int)v.X, (int)v.Y); }
 
 	}
 }

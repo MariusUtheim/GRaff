@@ -33,15 +33,6 @@ namespace GRaff
 		/// <param name="size">The size of the rectangle.</param>
 		public Rectangle(Point location, Vector size) : this(location.X, location.Y, size.X, size.Y) { }
 
-		/// <summary>
-		/// Initializes a new instance of the GRaff.Rectangle structure with the specified top-left and bottom-right corners.
-		/// </summary>
-		/// <param name="topLeft">The top-left corner of the GRaff.Rectangle.</param>
-		/// <param name="bottomRight">The bottom-right corner of the GRaff.Rectangle.</param>
-		public Rectangle(Point topLeft, Point bottomRight)
-			: this(topLeft.X, topLeft.Y, bottomRight.X - topLeft.X, bottomRight.Y - topLeft.Y)
-		{ }
-
 
 		/// <summary>
 		/// Gets the width of this GRaff.Rectangle.
@@ -76,7 +67,7 @@ namespace GRaff
 		/// <summary>
 		/// Gets the location of the top-left corner of this GRaff.Rectangle.
 		/// </summary>
-		public Point Location { get { return new Point(Left, Top); } }
+		public Point TopLeft { get { return new Point(Left, Top); } }
 
 		/// <summary>
 		/// Gets the size of this GRaff.Rectangle.
@@ -86,7 +77,7 @@ namespace GRaff
 		/// <summary>
 		/// Gets the location of the center of this GRaff.Rectangle.
 		/// </summary>
-		public Point Center { get { return Location + Size / 2; } }
+		public Point Center { get { return TopLeft + Size / 2; } }
 
 		/// <summary>
 		/// Tests whether two GRaff.Rectangle structures intersect.
@@ -98,20 +89,17 @@ namespace GRaff
 			return !(Left > other.Right || Top > other.Bottom || Right < other.Left || Bottom < other.Top);
 		}
 
-		/// <summary>
-		/// Finds the intersection of this and the other GRaff.Rectangle structures. That is, a new GRaff.Rectangle 
-		/// representing the area they overlap.
-		/// </summary>
-		/// <param name="other">The other GRaff.Rectangle to find intersection with.</param>
-		/// <returns>A GRaff.Rectangle representing the intersection of the two GRaff.Rectangle structures.</returns>
-		public Rectangle Intersection(Rectangle other)
+		public Rectangle? Intersection(Rectangle other)
 		{
-			if (!this.Intersects(other))
-				return new Rectangle(0, 0, 0, 0);
+			var left = GMath.Max(Left, other.Left);
+			var top = GMath.Max(Top, other.Top);
+			var right = GMath.Min(Right, other.Right);
+			var bottom = GMath.Min(Bottom, other.Bottom);
 
-			throw new NotImplementedException();
-			//return new Rectangle { Left = GMath.Max(this.Left, other.Left), Top = GMath.Max(this.Top, other.Top),
-			//					   Right = GMath.Min(this.Right, other.Right), Bottom = GMath.Min(this.Bottom, other.Bottom) };
+			if (left > right || top > bottom)
+				return null;
+			else
+				return new Rectangle(left, top, right - left, bottom - top);
 		}
 
 		/// <summary>
@@ -121,14 +109,14 @@ namespace GRaff
 		/// <returns>true if this GRaff.Rectangle contains pt.</returns>
 		public bool ContainsPoint(Point pt)
 		{
-			return pt.X >= this.Left && pt.Y >= this.Top && pt.X < this.Right + this.Width && pt.Y < this.Bottom;
+			return pt.X >= this.Left && pt.Y >= this.Top && pt.X < this.Right && pt.Y < this.Bottom;
 		}
 
 		/// <summary>
 		/// Converts this GRaff.Rectangle to a human-readable string.
 		/// </summary>
 		/// <returns>A string that represents this GRaff.Rectangle</returns>
-		public override string ToString() { return String.Format("{{Rectangle {0} by {1}}}", Location, Size); }
+		public override string ToString() { return String.Format("{{Rectangle {0} by {1}}}", TopLeft, Size); }
 
 		/// <summary>
 		/// Specifies whether this GRaff.Rectangle contains the same location and size as the specified System.Object.
@@ -159,15 +147,13 @@ namespace GRaff
 		/// <returns>true if the locations and sizes of the two GRaff.Rectangle structures are unequal.</returns>
 		public static bool operator !=(Rectangle left, Rectangle right) { return (left.Left != right.Left || left.Top != right.Top || left.Width == right.Width || left.Height == right.Height); }
 
-
 		/// <summary>
 		/// Translates a GRaff.Rectangle by a given GRaff.Vector.
 		/// </summary>
 		/// <param name="r">The GRaff.Rectangle to translate.</param>
 		/// <param name="v">The GRaff.Vector to translate by.</param>
 		/// <returns>The translated GRaff.Rectangle.</returns>
-		public static Rectangle operator +(Rectangle r, Vector v) { return new Rectangle(r.Location + v, r.Size); }
-
+		public static Rectangle operator +(Rectangle r, Vector v) { return new Rectangle(r.TopLeft + v, r.Size); }
 
 		/// <summary>
 		/// Translates a GRaff.Rectangle by subtracting a given GRaff.Vector.
@@ -175,6 +161,6 @@ namespace GRaff
 		/// <param name="r">The GRaff.Rectangle to translate.</param>
 		/// <param name="v">The negative GRaff.Vector to translate by.</param>
 		/// <returns>The translated GRaff.Rectangle.</returns>
-		public static Rectangle operator -(Rectangle r, Vector v) { return new Rectangle(r.Location - v, r.Size); }
+		public static Rectangle operator -(Rectangle r, Vector v) { return new Rectangle(r.TopLeft - v, r.Size); }
 	}
 }
