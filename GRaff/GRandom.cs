@@ -154,6 +154,20 @@ namespace GRaff
 		/// <returns>A random GRaff.Color with random RGB channels.</returns>
 		public static Color Color() { lock (_rnd) return _rnd.Color(); }
 
+		/// <summary>
+		/// Randomizes the order of the elements in the specified array.
+		/// </summary>
+		/// <typeparam name="T">The type of elements in the array.</typeparam>
+		/// <param name="array">The array to be shuffled.</param>
+		public static void Shuffle<T>(ref T[] array) { lock (_rnd) _rnd.Shuffle(ref array); }
+
+		/// <summary>
+		/// Creates a new array containing the elements of the specified array in a random order.
+		/// </summary>
+		/// <typeparam name="T">The type of elements in the array.</typeparam>
+		/// <param name="array">The array the elements will be selected from.</param>
+		/// <returns>The randomized array.</returns>
+		public static T[] Shuffle<T>(T[] array) { lock (_rnd) return _rnd.Shuffle(array); }
 	}
 
 }

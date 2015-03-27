@@ -60,10 +60,29 @@ namespace GRaff
 
 
 		/// <summary>
-		/// Gets or sets the location of the top-left corner of this GRaff.IntRectangle.
+		/// Gets the location of the top-left corner of this GRaff.IntRectangle.
 		/// </summary>
 		public IntVector TopLeft { get { return new IntVector(Left, Top); } }
 
+		/// <summary>
+		/// Gets the location of the top-right corner of this GRaff.IntRectangle.
+		/// </summary>
+		public IntVector TopRight { get { return new IntVector(Right, Top); } }
+
+		/// <summary>
+		/// Gets the location of the bottom-left corner of this GRaff.IntRectangle.
+		/// </summary>
+		public IntVector BottomLeft { get { return new IntVector(Left, Bottom); } }
+
+		/// <summary>
+		/// Gets the location of the bottom-right corner of this GRaff.IntRectangle.
+		/// </summary>
+		public IntVector BottomRight { get { return new IntVector(Right, Bottom); } }
+
+		/// <summary>
+		/// Gets the area of this GRaff.IntRectangle.
+		/// </summary>
+		public int Area { get { return Width * Height; } }
 
 		/// <summary>
 		/// Gets or sets the size of this GRaff.IntRectangle.

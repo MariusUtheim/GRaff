@@ -65,6 +65,26 @@ namespace GRaff
 		/// <returns>A new GRaff.AffineMatrix representing the transformation.</returns>
 		public static AffineMatrix Translation(double dx, double dy) { return new AffineMatrix(1, 0, dx, 0, 1, dy); }
 
+		public static AffineMatrix Mapping(Triangle src, Triangle dst)
+		{
+			double c12 = src.X1 * src.Y2 - src.X2 * src.Y1;
+			double c23 = src.X2 * src.Y3 - src.X3 * src.Y2;
+			double c31 = src.X3 * src.Y1 - src.X1 * src.Y3;
+			double determinant = c12 + c23 + c31;
+
+			if (determinant == 0)
+				throw new MatrixException("The components of the source triangle are not linearly independent.");
+
+			return new AffineMatrix(
+				(src.Y2 - src.Y3) * dst.X1 + (src.Y3 - src.Y1) * dst.X2 + (src.Y1 - src.Y2) * dst.X3,
+				(src.X3 - src.X2) * dst.X1 + (src.X1 - src.X3) * dst.X2 + (src.X2 - src.X1) * dst.X3,
+				c23 * dst.X1 + c31 * dst.X2 + c12 * dst.X3,
+				(src.Y2 - src.Y3) * dst.Y1 + (src.Y3 - src.Y1) * dst.Y2 + (src.Y1 - src.Y2) * dst.Y3,
+				(src.X3 - src.X2) * dst.Y1 + (src.X1 - src.X3) * dst.Y2 + (src.X2 - src.X1) * dst.Y3,
+				c23 * dst.Y1 + c31 * dst.Y2 + c12 * dst.Y3
+            ) / determinant;
+		}
+
 		/// <summary>
 		/// Gets the first element of the first row of this GRaff.AffineMatrix.
 		/// </summary>
@@ -264,6 +284,16 @@ namespace GRaff
 				left.M00 * right.M00 + left.M01 * right.M10, left.M00 * right.M01 + left.M01 * right.M11, left.M00 * right.M02 + left.M01 * right.M12 + left.M02,
 				left.M10 * right.M00 + left.M11 * right.M10, left.M10 * right.M01 + left.M11 * right.M11, left.M10 * right.M02 + left.M11 * right.M12 + left.M12
 			);
+		}
+
+		public static AffineMatrix operator *(AffineMatrix left, double right)
+		{
+			return new AffineMatrix(left.M00 * right, left.M01 * right, left.M02 * right, left.M10 * right, left.M11 * right, left.M12 * right);
+		}
+
+		public static AffineMatrix operator /(AffineMatrix left, double right)
+		{
+			return new AffineMatrix(left.M00 / right, left.M01 / right, left.M02 / right, left.M10 / right, left.M11 / right, left.M12 / right);
 		}
 
 		/// <summary>

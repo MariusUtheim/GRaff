@@ -70,6 +70,26 @@ namespace GRaff
 		public Point TopLeft { get { return new Point(Left, Top); } }
 
 		/// <summary>
+		/// Gets the location of the top-right corner of this GRaff.Rectangle.
+		/// </summary>
+		public Point TopRight { get { return new Point(Right, Top); } }
+
+		/// <summary>
+		/// Gets the location of the bottom-left corner of this GRaff.Rectangle.
+		/// </summary>	
+		public Point BottomLeft { get { return new Point(Left, Bottom); } }
+
+		/// <summary>
+		/// Gets the location of the bottom-right corner of this GRaff.Rectangle.
+		/// </summary>
+		public Point BottomRight { get { return new Point(Right, Bottom); } }
+
+		/// <summary>
+		/// Gets the area of this GRaff.Rectangle.
+		/// </summary>
+		public double Area { get { return Width * Height; } }
+
+		/// <summary>
 		/// Gets the size of this GRaff.Rectangle.
 		/// </summary>
 		public Vector Size { get { return new Vector(Width, Height); } }
