@@ -68,6 +68,10 @@ namespace GRaff
 		{
 			Draw.CurrentSurface.DrawTriangle(color, color, color, (PointF)p1, (PointF)p2, (PointF)p3);
 		}
+		public static void Triangle(Color color, Triangle triangle)
+		{
+			CurrentSurface.DrawTriangle(color, color, color, (PointF)triangle.V1, (PointF)triangle.V2, (PointF)triangle.V3);
+		}
 		public static void Triangle(Color col1, Color col2, Color col3, double x1, double y1, double x2, double y2, double x3, double y3)
 		{
 			Draw.CurrentSurface.DrawTriangle(col1, col2, col3, new PointF((float)x1, (float)y1), new PointF((float)x2, (float)y2), new PointF((float)x3, (float)y3));
@@ -75,6 +79,10 @@ namespace GRaff
 		public static void Triangle(Color col1, Color col2, Color col3, Point p1, Point p2, Point p3)
 		{
 			Draw.CurrentSurface.DrawTriangle(col1, col2, col3, (PointF)p1, (PointF)p2, (PointF)p3);
+		}
+		public static void Triangle(Color col1, Color col2, Color col3, Triangle triangle)
+		{
+			CurrentSurface.DrawTriangle(col1, col2, col3, (PointF)triangle.V1, (PointF)triangle.V2, (PointF)triangle.V3);
 		}
 		public static void FillTriangle(Color color, double x1, double y1, double x2, double y2, double x3, double y3)
 		{
@@ -84,6 +92,10 @@ namespace GRaff
 		{
 			Draw.CurrentSurface.FillTriangle(color, color, color, (PointF)p1, (PointF)p2, (PointF)p3);
 		}
+		public static void FillTriangle(Color color, Triangle triangle)
+		{
+			CurrentSurface.FillTriangle(color, color, color, (PointF)triangle.V1, (PointF)triangle.V2, (PointF)triangle.V3);
+		}
 		public static void FillTriangle(Color col1, Color col2, Color col3, double x1, double y1, double x2, double y2, double x3, double y3)
 		{
 			Draw.CurrentSurface.FillTriangle(col1, col2, col3, new PointF((float)x1, (float)y1), new PointF((float)x2, (float)y2), new PointF((float)x3, (float)y3));
@@ -91,6 +103,10 @@ namespace GRaff
 		public static void FillTriangle(Color col1, Color col2, Color col3, Point p1, Point p2, Point p3)
 		{
 			Draw.CurrentSurface.FillTriangle(col1, col2, col3, (PointF)p1, (PointF)p2, (PointF)p3);
+		}
+		public static void FillTriangle(Color col1, Color col2, Color col3, Triangle triangle)
+		{
+			CurrentSurface.FillTriangle(col1, col2, col3, (PointF)triangle.V1, (PointF)triangle.V2, (PointF)triangle.V3);
 		}
 
 		public static void Rectangle(Color color, double x, double y, double width, double height)

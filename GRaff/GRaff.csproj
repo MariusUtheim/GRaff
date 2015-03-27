@@ -222,6 +222,7 @@
     <Compile Include="Time.cs" />
     <Compile Include="Transform.cs" />
     <Compile Include="Synchronization\Tween.cs" />
+    <Compile Include="Triangle.cs" />
     <Compile Include="Vector.cs" />
     <Compile Include="View.cs" />
     <Compile Include="Window.cs" />
