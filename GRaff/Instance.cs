@@ -43,7 +43,7 @@ namespace GRaff
 	/// Provides static methods to interact with the instances of a specific type.
 	/// </summary>
 	/// <typeparam name="T">The type of GameObject.</typeparam>
-	public static class Instance<T> where T : GameObject
+	public static class Instance<T> where T : GameElement
 	{
 		private static Func<T> _parameterlessConstructor;
 		private static Func<Point, T> _locationConstructor;
@@ -51,26 +51,35 @@ namespace GRaff
 
 		static Instance()
 		{
+			if (typeof(T).IsSubclassOf(typeof(GameObject)))
+				initializeAsObject();
+			else
+				initializeAsElement();
+		}
+
+		static void initializeAsObject()
+		{
 			var type = typeof(T);
 			var constructors = type.GetConstructors();
-			var paremeterTypes = constructors.Select(c => c.GetParameters().Select(p => p.ParameterType)).ToArray();
+			var parameterTypes = constructors.Select(c => c.GetParameters().Select(p => p.ParameterType)).ToArray();
 
 			var parameterlessMatch = constructors.FirstOrDefault(c => !c.GetParameters().Select(p => p.ParameterType).Any());
 			var locationMatch = constructors.FirstOrDefault(c => c.GetParameters().Select(p => p.ParameterType).SequenceEqual(new[] { typeof(Point) }));
 			var xyMatch = constructors.FirstOrDefault(c => c.GetParameters().Select(p => p.ParameterType).SequenceEqual(new[] { typeof(double), typeof(double) }));
-			
+
 			if (locationMatch == null && xyMatch == null)
 			{
 				if (parameterlessMatch == null)
 					return;
 				_parameterlessConstructor = () => (T)parameterlessMatch.Invoke(new object[0]);
-				_locationConstructor = location => { var obj = (T)parameterlessMatch.Invoke(new object[0]); (obj as GameObject).Location = location; return obj; };
-				_xyConstructor = (x, y) => { var obj = (T)parameterlessMatch.Invoke(new object[0]); obj.X = x; obj.Y = y; return obj; };
+				_locationConstructor = location => { var obj = (GameObject)parameterlessMatch.Invoke(new object[0]); obj.Location = location; return obj as T; };
+				_xyConstructor = (x, y) => { var obj = (GameObject)parameterlessMatch.Invoke(new object[0]); obj.X = x; obj.Y = y; return obj as T; };
 			}
 			else
 			{
 				if (locationMatch != null)
 					_locationConstructor = location => (T)locationMatch.Invoke(new object[] { location });
+
 				if (xyMatch != null)
 					_xyConstructor = (x, y) => (T)xyMatch.Invoke(new object[] { x, y });
 
@@ -88,6 +97,14 @@ namespace GRaff
 			}
 		}
 
+		static void initializeAsElement()
+		{
+			var type = typeof(T);
+			var constructor = type.GetConstructors().FirstOrDefault(c => c.GetParameters().Length == 0);
+			if (constructor != null)
+				_parameterlessConstructor = () => (T)constructor.Invoke(new object[0]);
+		}
+
 		/// <summary>
 		/// Creates a new instance of TGameObject.
 		/// </summary>
@@ -102,7 +119,7 @@ namespace GRaff
 		{
 			if (_parameterlessConstructor == null)
 				throw new InvalidOperationException(string.Format("Unable to create instances through {0}: Type {1} must specify a parameterless constructor, a constructor taking a GRaff.Point structure or a constructor taking two System.Double structures.", typeof(Instance<T>).Name, typeof(T).Name));
-			return _parameterlessConstructor();
+			return Instance.Create(_parameterlessConstructor());
 		}
 
 		/// <summary>
@@ -120,7 +137,7 @@ namespace GRaff
 		{
 			if (_parameterlessConstructor == null)
 				throw new InvalidOperationException(string.Format("Unable to create instances through {0}: Type {1} must specify a parameterless constructor, a constructor taking a GRaff.Point structure or a constructor taking two System.Double structures.", typeof(Instance<T>).Name, typeof(T).Name));
-			return _locationConstructor(location);
+			return Instance.Create(_locationConstructor(location));
 		}
 
 		/// <summary>
@@ -138,7 +155,7 @@ namespace GRaff
 		{
 			if (_parameterlessConstructor == null)
 				throw new InvalidOperationException(string.Format("Unable to create instances through {0}: Type {1} must specify a parameterless constructor, a constructor taking a GRaff.Point structure or a constructor taking two System.Double structures.", typeof(Instance<T>).Name, typeof(T).Name));
-			return _xyConstructor(x, y);
+			return Instance.Create(_xyConstructor(x, y));
 		}
 
 
