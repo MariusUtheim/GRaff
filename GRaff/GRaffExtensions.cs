@@ -217,5 +217,40 @@ namespace GRaff
 			return (Color)(0xFF000000 | (rnd.Next() % 0xFF000000));
 		}
 
+		/// <summary>
+		/// Randomizes the order of the elements in the specified array.
+		/// </summary>
+		/// <param name="rnd">The System.Random to generate the numbers.</param>
+		/// <typeparam name="T">The type of elements in the array.</typeparam>
+		/// <param name="array">The array to be shuffled.</param>
+		public static void Shuffle<T>(this Random rnd, ref T[] array)
+		{
+			if (array == null)
+				return;
+
+			for (int i = 1; i < array.Length; i++)
+			{
+				var randomIndex = rnd.Next(i + 1);
+				
+				var tmp = array[i];
+				array[i] = array[randomIndex];
+				array[randomIndex] = tmp;
+			}
+		}
+
+		/// <summary>
+		/// Creates a new array containing the elements of the specified array in a random order.
+		/// </summary>
+		/// <param name="rnd">The System.Random to generate the numbers.</param>
+		/// <typeparam name="T">The type of elements in the array.</typeparam>
+		/// <param name="array">The array the elements will be selected from.</param>
+		/// <returns>The randomized array.</returns>
+		public static T[] Shuffle<T>(this Random rnd, T[] array)
+		{
+			var result = (T[])array.Clone();
+			Shuffle(rnd, ref result);
+			return result;
+		}
+
 	}
 }
