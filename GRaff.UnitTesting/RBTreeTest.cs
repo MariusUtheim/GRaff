@@ -7,7 +7,7 @@ using System.Collections.Generic;
 namespace GameMaker.UnitTesting
 {
 	[TestClass]
-	public class InstanceCollectionTest
+	public class RBTreeTest
 	{
 		class TestElement : GameElement
 		{
