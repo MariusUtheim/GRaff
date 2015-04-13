@@ -1,6 +1,6 @@
 ﻿using System;
+using System.Diagnostics.Contracts;
 
- 
 namespace GRaff.Randomness
 {
 	public sealed class AngleDistribution : IDistribution<Angle>
@@ -25,8 +25,7 @@ namespace GRaff.Randomness
 
 		public AngleDistribution(Random rnd, Angle minimum, Angle maximum)
 		{
-			if (rnd == null)
-				throw new ArgumentNullException("rnd"); /*C#6.0*/
+			Contract.Requires(rnd != null);
 			_rnd = rnd;
 			_hasRange = true;
 			_minAngle = minimum;
@@ -34,8 +33,6 @@ namespace GRaff.Randomness
 		}
 
 		public Angle Generate()
-		{
-			return _hasRange ? _rnd.Angle(_minAngle, _maxAngle) : _rnd.Angle();
-		}
+			=> _hasRange ? _rnd.Angle(_minAngle, _maxAngle) : _rnd.Angle();
 	}
 }

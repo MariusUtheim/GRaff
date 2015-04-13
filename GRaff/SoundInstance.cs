@@ -7,6 +7,7 @@ namespace GRaff
 	/// <summary>
 	/// Represents an instance of a sound that is currently playing.
 	/// </summary>
+	#warning Review class
 	public sealed class SoundInstance : GameElement
 	{
 		private int _sid;
@@ -149,7 +150,7 @@ namespace GRaff
 		{
 			get 
 			{
-				ALSourceState state; /*C#6.0*/
+				ALSourceState state;
 				switch (state = AL.GetSourceState(_sid))
 				{
 					case ALSourceState.Initial:
@@ -163,7 +164,7 @@ namespace GRaff
 						return SoundState.Playing;
 
 					default:
-						ALError err;/*C#6.0*/
+						ALError err;
 						if ((err = AL.GetError()) != ALError.NoError)
 							throw new InvalidOperationException(String.Format("An AL error occurred: {0} ({1})", AL.GetErrorString(err), err));
                         throw new NotSupportedException(String.Format("GRaff.SoundInstance.SoundState encountered an unknown state '{0}' (code: {1}).", Enum.GetName(typeof(ALSourceState), state), (int)state));

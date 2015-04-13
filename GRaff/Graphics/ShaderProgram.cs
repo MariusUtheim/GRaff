@@ -24,7 +24,7 @@ namespace GRaff.Graphics
 				GL.AttachShader(Id, shader.Id);
 
 			GL.LinkProgram(Id);
-			string log;/*C#6.0*/
+			string log;
 			if ((log = GL.GetProgramInfoLog(Id)) != "")
 				throw new ShaderException("Linking a GRaff.ShaderProgram caused a message: " + log);
 

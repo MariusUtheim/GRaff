@@ -9,7 +9,7 @@ namespace GRaff
 	/// <summary>
 	/// Represents the matrix of a linear transformation. This class is immutable.
 	/// </summary>
-	public sealed class LinearMatrix
+	public sealed class LinearMatrix : ICloneable, IEquatable<LinearMatrix>, IEquatable<AffineMatrix>
 	{
 		/// <summary>
 		/// Initializes a new instance of the GRaff.LinearMatrix class as an identity matrix.
@@ -39,7 +39,8 @@ namespace GRaff
 		/// <param name="scaleX">The horizontal scale factor.</param>
 		/// <param name="scaleY">The vertical scale factor</param>
 		/// <returns>A new GRaff.LinearMatrix representing the transformation.</returns>
-		public static LinearMatrix Scaling(double scaleX, double scaleY) { return new LinearMatrix(scaleX, 0, 0, scaleY); }
+		public static LinearMatrix Scaling(double scaleX, double scaleY)
+			=> new LinearMatrix(scaleX, 0, 0, scaleY);
 
 		/// <summary>
 		/// Creates a GRaff.LinearMatrix representing a shear transformation.
@@ -47,14 +48,16 @@ namespace GRaff
 		/// <param name="shearX">The horizontal shear factor.</param>
 		/// <param name="shearY">The vertical shear factor.</param>
 		/// <returns>A new GRaff.LinearMatrix representing the transformation.</returns>
-		public static LinearMatrix Shearing(double shearX, double shearY) { return new LinearMatrix(1, shearX, shearY, 1); }
+		public static LinearMatrix Shearing(double shearX, double shearY)
+			=> new LinearMatrix(1, shearX, shearY, 1);
 
 		/// <summary>
 		/// Creates a GRaff.AffineMatrix representing a rotation transform around the origin.
 		/// </summary>
 		/// <param name="a">The angle to rotate by.</param>
 		/// <returns>A new GRaff.AffineMatrix representing the transformation.</returns>
-		public static LinearMatrix Rotation(Angle a) { return new LinearMatrix(GMath.Cos(a), -GMath.Sin(a), GMath.Sin(a), GMath.Cos(a)); }
+		public static LinearMatrix Rotation(Angle a)
+			=> new LinearMatrix(GMath.Cos(a), -GMath.Sin(a), GMath.Sin(a), GMath.Cos(a));
 
 		/// <summary>
 		/// Gets the first element of the first row of this GRaff.AffineMatrix.
@@ -77,12 +80,9 @@ namespace GRaff
 		public double M11 { get; private set; }
 
 		/// <summary>
-  /// Gets the determinant of this GRaff.LinearMatrix.
-  /// </summary>
-		public double Determinant
-		{
-			get { return M00 * M11 - M01 * M10; }
-		}
+		/// Gets the determinant of this GRaff.LinearMatrix.
+		/// </summary>
+		public double Determinant => M00 * M11 - M01 * M10;
 
 
 		/// <summary>
@@ -94,6 +94,8 @@ namespace GRaff
 			get
 			{
 				double det = Determinant;
+				if (det == 0)
+					throw new MatrixException();
 				return new LinearMatrix(M11 / det, -M01 / det, -M10 / det, M00 / det);
 			}
 		}
@@ -106,10 +108,7 @@ namespace GRaff
 		/// <param name="scaleX">The horizontal scale factor.</param>
 		/// <param name="scaleY">The vertical scale factor.</param>
 		public LinearMatrix Scale(double scaleX, double scaleY)
-		{
-			return new LinearMatrix(M00 * scaleX, M01 * scaleX, M10 * scaleY, M11 * scaleY);
-		}
-
+			=> new LinearMatrix(M00 * scaleX, M01 * scaleX, M10 * scaleY, M11 * scaleY);
 
 		/// <summary>
 		/// Applies a rotation transformation to this GRaff.AffineMatrix.
@@ -118,8 +117,7 @@ namespace GRaff
 		public LinearMatrix Rotate(Angle a)
 		{
 			double c = GMath.Cos(a), s = GMath.Sin(a);
-			double m00 = M00, m01 = M01, m10 = M10, m11 = M11;
-			return new LinearMatrix(m00 * c - m10 * s, m01 * c - m11 * s, m00 * s + m10 * c, m01 * s + m11 * c);
+			return new LinearMatrix(M00 * c - M10 * s, M01 * c - M11 * s, M00 * s + M10 * c, M01 * s + M11 * c);
 		}
 
 		/// <summary>
@@ -129,18 +127,27 @@ namespace GRaff
 		/// <param name="shearY">The vertical shear factor.</param>
 		/// <returns>This GRaff.LinearMatrix, after the transformation.</returns>
 		public LinearMatrix Shear(double shearX, double shearY)
-		{
-			return new LinearMatrix(M00 + shearX * M10, M01 + shearX * M11, M10 + shearY * M00, M11 + shearY * M01);
-		}
+			=> new LinearMatrix(M00 + shearX * M10, M01 + shearX * M11, M10 + shearY * M00, M11 + shearY * M01);
+		
 
 		/// <summary>
 		/// Converts this GRaff.LinearMatrix to a human-readable string, displaying the values of the elements.
 		/// </summary>
 		/// <returns>A string that represents this GRaff.LinearMatrix.</returns>
 		public override string ToString()
-		{
-			return string.Format("[[{0}, {1}], [{2}, {3}]]", M00, M01, M10, M11);
-		}
+			=> "[[\{M00}, \{M01}], [\{M10}, \{M11}]]";
+
+		public LinearMatrix Clone()
+			=> new LinearMatrix(M00, M01, M10, M11);
+
+		object ICloneable.Clone() => Clone();
+
+
+		public bool Equals(LinearMatrix other)
+			=> (other != null) && M00 == other.M00 && M01 == other.M01 && M10 == other.M10 && M11 == other.M11;
+
+		public bool Equals(AffineMatrix other)
+			=> (other != null) && M00 == other.M00 && M01 == other.M01 && 0 == other.M02 && M10 == other.M10 && M11 == other.M11 && 0 == other.M12;
 
 		/// <summary>
 		/// Specifies whether this GRaff.LinearMatrix contains the same elements as the specified System.Object.
@@ -149,34 +156,31 @@ namespace GRaff
 		/// <returns>true if obj is a GRaff.LinearMatrix and has the same elements as this GRaff.LinearMatrix.</returns>
 		public override bool Equals(object obj)
 		{
-			return ((obj is LinearMatrix) ? (this == (LinearMatrix)obj) : base.Equals(obj));
+			if (obj is LinearMatrix)
+				return Equals((LinearMatrix)obj);
+			else if (obj is AffineMatrix)
+				return Equals((AffineMatrix)obj);
+			else
+				return base.Equals(obj);
 		}
 
 		/// <summary>
 		/// Returns a hash code for this GRaff.LinearMatrix.
 		/// </summary>
 		/// <returns>An integer value that specifies a hash value for this GRaff.LinearMatrix.</returns>
-		public override int GetHashCode() { return GMath.HashCombine(M00.GetHashCode(), M01.GetHashCode(), M10.GetHashCode(), M11.GetHashCode()); }
+		public override int GetHashCode() 
+			=> GMath.HashCombine(M00.GetHashCode(), M01.GetHashCode(), M10.GetHashCode(), M11.GetHashCode());
 
 		private double _magnitude
-		{
-			get { return M00 * M00 + M01 * M01 + M10 * M10 + M11 * M11; }
-		}
+			=> M00 * M00 + M01 * M01 + M10 * M10 + M11 * M11;
+		
 		/// <summary>
 		/// Compares two GRaff.LinearMatrix objects. The result specifies whether all their elements are equal.
 		/// </summary>
 		/// <param name="left">The first GRaff.LinearMatrix to compare.</param>
 		/// <param name="right">The second GRaff.LinearMatrix to compare.</param>
 		/// <returns>true if all elements of the two GRaff.LinearMatrix objects are equal.</returns>
-		public static bool operator ==(LinearMatrix left, LinearMatrix right)
-		{
-			if (ReferenceEquals(left, null))
-				return ReferenceEquals(right, null);
-			else if (ReferenceEquals(right, null))
-				return false;
-			else
-				return (left - right)._magnitude < 1e-14;
-		}
+		public static bool operator ==(LinearMatrix left, LinearMatrix right) => left?.Equals(right) ?? right == null;
 
 		/// <summary>
 		/// Compares two GRaff.LinearMatrix objects. The result specifies whether all their elements are unequal.
@@ -184,10 +188,7 @@ namespace GRaff
 		/// <param name="left">The first GRaff.LinearMatrix to compare.</param>
 		/// <param name="right">The second GRaff.LinearMatrix to compare.</param>
 		/// <returns>true if all elements of thow two GRaff.LinearMatrix objects are unequal.</returns>
-		public static bool operator !=(LinearMatrix left, LinearMatrix right)
-		{
-			return !(left == right);
-		}
+		public static bool operator !=(LinearMatrix left, LinearMatrix right) => !(left == right);
 
 		/// <summary>
 		/// Computes the element-wise sum of the two GRaff.LinearMatrix objects.
@@ -195,7 +196,8 @@ namespace GRaff
 		/// <param name="left">The first GRaff.LinearMatrix.</param>
 		/// <param name="right">The second GRaff.LinearMatrix.</param>
 		/// <returns>The sum of the elements of each GRaff.LinearMatrix.</returns>
-		public static LinearMatrix operator +(LinearMatrix left, LinearMatrix right) { return new LinearMatrix(left.M00 + right.M00, left.M01 + right.M01, left.M10 + right.M10, left.M11 + right.M11); }
+		public static LinearMatrix operator +(LinearMatrix left, LinearMatrix right) 
+			=> new LinearMatrix(left.M00 + right.M00, left.M01 + right.M01, left.M10 + right.M10, left.M11 + right.M11);
 
 		/// <summary>
 		/// Computes the element-wise difference of the two GRaff.LinearMatrix objects.
@@ -203,7 +205,8 @@ namespace GRaff
 		/// <param name="left">The first GRaff.LinearMatrix.</param>
 		/// <param name="right">The second GRaff.LinearMatrix.</param>
 		/// <returns>The difference of the elements of each GRaff.LinearMatrix.</returns>
-		public static LinearMatrix operator -(LinearMatrix left, LinearMatrix right) { return new LinearMatrix(left.M00 - right.M00, left.M01 - right.M01, left.M10 - right.M10, left.M11 - right.M11); }
+		public static LinearMatrix operator -(LinearMatrix left, LinearMatrix right) 
+			=> new LinearMatrix(left.M00 - right.M00, left.M01 - right.M01, left.M10 - right.M10, left.M11 - right.M11);
 
 		/// <summary>
 		/// Computes the matrix product of the two GRaff.LinearMatrix objects.
@@ -212,12 +215,11 @@ namespace GRaff
 		/// <param name="right">The second GRaff.LinearMatrix.</param>
 		/// <returns>The matrix product of the two GRaff.LinearMatrix.</returns>
 		public static LinearMatrix operator *(LinearMatrix left, LinearMatrix right)
-		{
-			return new LinearMatrix(
+			=> new LinearMatrix(
 				left.M00 * right.M00 + left.M01 * right.M10, left.M00 * right.M01 + left.M01 * right.M11,
 				left.M10 * right.M00 + left.M11 * right.M10, left.M10 * right.M01 + left.M11 * right.M11
 			);
-		}
+
 
 		/// <summary>
 		/// Computes the matrix product of the GRaff.LinearMatrix and the GRaff.Point.
@@ -226,7 +228,8 @@ namespace GRaff
 		/// <param name="m">A GRaff.LinearMatrix representing the linear transformation.</param>
 		/// <param name="p">A GRaff.Point to be transformed by the linear transformation.</param>
 		/// <returns>The transformed GRaff.Point.</returns>
-		public static Point operator *(LinearMatrix m, Point p) { return new Point(m.M00 * p.X + m.M01 * p.Y, m.M10 * p.X + m.M11 * p.Y); }
+		public static Point operator *(LinearMatrix m, Point p) 
+			=> new Point(m.M00 * p.X + m.M01 * p.Y, m.M10 * p.X + m.M11 * p.Y);
 
 		/// <summary>
 		/// Computes the matrix product of the GRaff.LinearMatrix and the GRaff.Vector.
@@ -235,7 +238,8 @@ namespace GRaff
 		/// <param name="m">A GRaff.LinearMatrix representing the linear transformation.</param>
 		/// <param name="v">A GRaff.Vector to be transformed by the linear transformation.</param>
 		/// <returns>The transformed GRaff.Vector.</returns>
-		public static Vector operator *(LinearMatrix m, Vector v) { return new Vector(m.M00 * v.X + m.M01 * v.Y, m.M10 * v.X + m.M11 * v.Y); }
+		public static Vector operator *(LinearMatrix m, Vector v) 
+			=> new Vector(m.M00 * v.X + m.M01 * v.Y, m.M10 * v.X + m.M11 * v.Y);
 
 	}
 }

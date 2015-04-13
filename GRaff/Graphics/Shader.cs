@@ -19,7 +19,7 @@ namespace GRaff.Graphics
 			GL.CompileShader(Id);
 
 			string msg;
-			if ((msg = GL.GetShaderInfoLog(Id)) != "")   /*C#6.0*/
+			if ((msg = GL.GetShaderInfoLog(Id)) != "")
 				throw new ShaderException("Compiling a GRaff.Shader caused a message: " + msg);
 		}
 

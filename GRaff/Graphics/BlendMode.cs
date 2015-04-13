@@ -13,7 +13,7 @@ namespace GRaff.Graphics
 			private BlendMode _previous;
 			private bool _isDisposed = false;
 
-			public BlendModeContext(BlendMode mode)	/*C#6.0*/
+			public BlendModeContext(BlendMode mode)
 			{
 				_previous = ColorMap.BlendMode;
 				ColorMap.BlendMode = mode;

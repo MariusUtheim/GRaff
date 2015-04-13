@@ -30,7 +30,7 @@ namespace GRaff
 				case 1 + 16: format = ALFormat.Mono16; break;
 				case 2 + 8: format = ALFormat.Stereo8; break;
 				case 2 + 16: format = ALFormat.Stereo16; break;
-				default: throw new NotSupportedException(String.Format("Sound files must have exactly 1 or 2 channels, and a bitrate of exacty 8 or 16 bits per sample (you have {0} channel(s) and {1} bit(s) per sample).", Channels, Bitrate));
+				default: throw new NotSupportedException("Sound files must have exactly 1 or 2 channels, and a bitrate of exacty 8 or 16 bits per sample (you have \{Channels} channel(s) and \{Bitrate} bit(s) per sample).");
 			}
 
 			int bytesPerSample = bitrate / 8 * channels;
@@ -46,7 +46,7 @@ namespace GRaff
 				}
 			}
 			
-			ALError err;/*C#6.0*/
+			ALError err;
 			if ((err = AL.GetError()) != ALError.NoError)
 				throw new Exception(String.Format("An error occurred: {0} (error code {1} {2})", AL.GetErrorString(err), (int)err, Enum.GetName(typeof(ALError), err)));
 		}

@@ -1,6 +1,6 @@
 ﻿using System;
 using GRaff.Randomness;
-
+using System.Diagnostics.Contracts;
 
 namespace GRaff.Particles
 {
@@ -15,7 +15,7 @@ namespace GRaff.Particles
 
 		public RotationBehavior(IDistribution<Angle> initialDirection)
 		{
-			if (initialDirection == null) throw new ArgumentNullException("initialDirection");   /*C#6.0*/
+			Contract.Requires(initialDirection != null);
 			_direction = initialDirection;
 		}
 

@@ -8,7 +8,7 @@ namespace GRaff.Graphics
 		private int _previous;
 		private bool _isDisposed = false;
 
-		public ShaderProgramContext(ShaderProgram program) /*C#6.0*/
+		public ShaderProgramContext(ShaderProgram program)
 		{
 			_previous = ShaderProgram.GetCurrentId();
 			program.SetCurrent();

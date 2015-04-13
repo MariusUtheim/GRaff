@@ -1,6 +1,6 @@
 ﻿using System;
 using GRaff.Randomness;
-
+using System.Diagnostics.Contracts;
 
 namespace GRaff.Particles
 {
@@ -28,8 +28,8 @@ namespace GRaff.Particles
 		
 		public ScaleBehavior(IDistribution<double> xScaleDistribution, IDistribution<double> yScaleDistribution)
 		{
-			if (xScaleDistribution == null) throw new ArgumentNullException("xScaleDistribution"); /*C#6.0*/
-			if (yScaleDistribution == null) throw new ArgumentNullException("yScaleDistribution");
+			Contract.Requires(xScaleDistribution != null);
+			Contract.Requires(yScaleDistribution != null);
 			_xScale = xScaleDistribution;
 			_yScale = yScaleDistribution;
 		}
@@ -37,7 +37,7 @@ namespace GRaff.Particles
 		public void AttachTo(Particle particle)
 		{
 			double xScale = _xScale.Generate();
-			double yScale = _yScale != null ? _yScale.Generate() : xScale; /*C#6.0*/
+			double yScale = _yScale?.Generate() ?? xScale;
 			particle.TransformationMatrix = particle.TransformationMatrix.Scale(xScale, yScale);
 		}
 	}

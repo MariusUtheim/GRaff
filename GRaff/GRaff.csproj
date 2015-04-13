@@ -67,7 +67,6 @@
     <Compile Include="Forms\FormEventArgs.cs" />
     <Compile Include="Forms\MouseEventArgs.cs" />
     <Compile Include="Forms\Quad.cs" />
-    <Compile Include="Graphics\Framebuffer.cs" />
     <Compile Include="RedBlackTree.cs" />
     <Compile Include="Synchronization\Alarm.cs" />
     <Compile Include="Angle.cs" />

@@ -108,13 +108,13 @@ namespace GRaff.Forms
 
 		public Point PointToLocal(Point p)
 		{
-			var origin = (Parent == null) ? Point.Zero : Parent.DisplayLocation; /*C#6.0*/
+			var origin = Parent?.DisplayLocation ?? Point.Zero;
 			return new Point(p.X - origin.X - X, p.Y - origin.Y - Y);
 		}
 
 		public Point PointToGlobal(Point p)
 		{
-			var origin = (Parent == null) ? Point.Zero : Parent.DisplayLocation;
+			var origin = Parent?.DisplayLocation ?? Point.Zero;
 			return new Point(X + origin.X + p.X, Y + origin.Y + p.Y);
 		}
 
@@ -127,32 +127,21 @@ namespace GRaff.Forms
 		/// Gets the actual location in the room of this GRaff.Forms.DisplayObject.
 		/// </summary>
 		public Point DisplayLocation
-		{
-			get { return (Parent != null) ? Parent.PointToGlobal(Location) : Location; }
-		}
+		 => Parent?.PointToGlobal(Location) ?? Location;
 
 		public Rectangle DisplayRegion
-		{
-			get { return new Rectangle(DisplayLocation, DisplaySize); }
-		}
+		 => new Rectangle(DisplayLocation, DisplaySize);
 
 		public Vector DisplaySize
-		{
-			get { return Size * DisplayScale; }
-		}
+			=> Size * DisplayScale;
 
 		public Vector DisplayScale
-		{
-			get
-			{
-				var p = (Parent == null) ? new Vector(1, 1) : Parent.DisplayScale;
-				return p * Scale;
-			}
-		}
+			=> (Parent?.DisplayScale ?? new Vector(1, 1)) * Scale;
+
 
 		public double XScale { get; set; } = 1;
 		public double YScale { get; set; } = 1;
-		public Vector Scale { get { return new Vector(XScale, YScale); } }
+		public Vector Scale => new Vector(XScale, YScale);
 
 		public virtual void OnPaint()
 		{ }

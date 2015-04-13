@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using GRaff.Synchronization;
+using System.Diagnostics.Contracts;
 
 namespace GRaff
 {
@@ -36,7 +37,7 @@ namespace GRaff
 		/// <exception cref="System.ArgumentOutOfRangeException">subimages is less than or equal to 0.</exception>
 		public Sprite(string filename, int subimages = 1, IntVector? origin = default(IntVector?), MaskShape maskShape = null, AnimationStrip animationStrip = null)
 		{
-			if (subimages < 1) throw new ArgumentOutOfRangeException("subimages", "Must be greater than or equal to 1");
+			Contract.Requires(subimages >= 1);
 			this.ImageCount = subimages;
 			this.FileName = filename;
 			this._origin = origin;
@@ -236,7 +237,7 @@ namespace GRaff
 		/// </summary>
 		public void Unload()
 		{
-			if (_loadingOperation != null) _loadingOperation.Abort(); /*C#6.0*/
+			_loadingOperation?.Abort();
 			if (!IsLoaded)
 				return;
 

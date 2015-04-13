@@ -21,33 +21,34 @@ namespace GRaff.Graphics
 
 		public float Y { get; private set; }
 
-		public static PointF operator *(AffineMatrix m, PointF p) { return new PointF((float)(m.M00 * p.X + m.M01 * p.Y + m.M02), (float)(m.M10 * p.X + m.M11 * p.Y + m.M12)); }
+		public static PointF operator *(AffineMatrix m, PointF p)
+			=> new PointF((float)(m.M00 * p.X + m.M01 * p.Y + m.M02), (float)(m.M10 * p.X + m.M11 * p.Y + m.M12));
 
-		public static PointF operator *(PointF p, AffineMatrix m) { return new PointF((float)(m.M00 * p.X + m.M01 * p.Y + m.M02), (float)(m.M10 * p.X + m.M11 * p.Y + m.M12)); }
+		public static PointF operator *(PointF p, AffineMatrix m)
+			=> new PointF((float)(m.M00 * p.X + m.M01 * p.Y + m.M02), (float)(m.M10 * p.X + m.M11 * p.Y + m.M12));
 
-		public static PointF operator +(PointF left, PointF right) { return new PointF(left.X + right.X, left.Y + right.Y); }
+		public static PointF operator +(PointF left, PointF right)
+			=> new PointF(left.X + right.X, left.Y + right.Y);
 
-		public static PointF operator +(PointF left, Vector right) { return new PointF((float)(left.X + right.X), (float)(left.Y + right.Y)); }
+		public static PointF operator +(PointF left, Vector right)
+			=> new PointF((float)(left.X + right.X), (float)(left.Y + right.Y));
 
 		public static implicit operator Point(PointF value)
-		{
-			return new Point(value.X, value.Y);
-		}
+			=> new Point(value.X, value.Y);
+
 
 		public static explicit operator PointF(Point value)
-		{
-			return new PointF((float)value.X, (float)value.Y);
-		}
+		=> new PointF((float)value.X, (float)value.Y);
+
 
 		public static explicit operator Vector(PointF value)
-		{
-			return new Vector(value.X, value.Y);
-		}
+			=> new Vector(value.X, value.Y);
+
 
 		/// <summary>
 		/// Converts this GRaff.Graphics.PointF to a human-readable string, showing the value of the coordinates.
 		/// </summary>
 		/// <returns>A string that represents this GRaff.Graphics.PointF.</returns>
-		public override string ToString() { return string.Format("({0}, {1})", X, Y); } /*C#6.0*/
+		public override string ToString() => "(\{X}, \{Y})";
 	}
 }

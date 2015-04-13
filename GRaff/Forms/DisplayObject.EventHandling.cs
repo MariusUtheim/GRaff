@@ -16,8 +16,7 @@ namespace GRaff.Forms
 				if (child.onMousePress(sender, e, (Point)(location - child.Region.TopLeft)))
 					return true;
 
-			if (MouseDown != null)
-				MouseDown.Invoke(sender, e); /*C#6.0*/
+			MouseDown?.Invoke(sender, e);
 
 			return e.IsHandled;
 		}
@@ -28,8 +27,7 @@ namespace GRaff.Forms
 				if (child.onMouseRelease(sender, e, (Point)(location - child.Region.TopLeft)))
 					return true;
 
-			if (MouseUp != null)
-				MouseUp.Invoke(sender, e);
+			MouseUp?.Invoke(sender, e);
 
 			return e.IsHandled;
 		}
@@ -44,18 +42,12 @@ namespace GRaff.Forms
 
 			foreach (var child in _children)
 				if (child.onMouseMove(sender, e, PointToLocal(location), PointToLocal(previous)))
-                    return true;
+					return true;
 
 			if (containsNow && !containedPreviously)
-			{
-				if (MouseEnter != null)
-					MouseEnter.Invoke(sender, e);
-			}
+				MouseEnter?.Invoke(sender, e);
 			else if (!containsNow)
-			{
-				if (MouseLeave != null)
-					MouseLeave.Invoke(sender, e);
-            }
+				MouseLeave?.Invoke(sender, e);
 
 			return e.IsHandled;
 		}

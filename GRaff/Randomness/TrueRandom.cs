@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -31,11 +32,11 @@ namespace GRaff.Randomness
 		/// <returns>A System.Threading.Tasks.Task that upon completion will result in an array of n true random integers.</returns>
 		public static async Task<int[]> IntegersAsync(int n, int min, int max, bool replacement)
 		{
-			if (n < 1 || n > 1e4) throw new ArgumentOutOfRangeException("n", n, "must be in the range [1, 1e4]");
-			if (min < -1e9 || 1e9 < min) throw new ArgumentOutOfRangeException("min", min, "must be in the range [-1e9, 1e9]");
-			if (max < -1e9 || 1e9 < max) throw new ArgumentOutOfRangeException("max", max, "must be in the range [-1e9, 1e9]");
-			if (min >= max) throw new ArgumentException("Parameter 'min' must be less than parameter 'max'");
-			if (!replacement && (n > max - min)) throw new ArgumentException(String.Format("When requesting values with replacement, it is not possible to request more values than there are values in the domain (you requested {0} values in the range [{1}, {2}])", n, min, max));
+			Contract.Requires(n >= 1 && n <= 1e4);
+			Contract.Requires(min >= -1e9 && min <= 1e9);
+			Contract.Requires(max >= -1e9 && max <= 1e9);
+			Contract.Requires(max > min);
+			Contract.Requires(replacement || (n > max - min));
 
 			var requestData = _buildRequest("generateIntegers", new Dictionary<string, object>
 			{
@@ -61,9 +62,9 @@ namespace GRaff.Randomness
 		/// <returns>A System.Threading.Tasks.Task that upon completion will result in an array of n true random decimals in the range [0, 1).</returns>
 		public static async Task<decimal[]> Decimals(int n, int decimalPlaces, bool replacement)
 		{
-			if (n < 1 || n > 1e4) throw new ArgumentOutOfRangeException("n", n, "must be in the range [1, 1e4]");
-			if (decimalPlaces < 1 || decimalPlaces > 20) throw new ArgumentOutOfRangeException("decimalPlaces", decimalPlaces, "must be in the range [1, 20]");
-			if (!replacement && (n > GMath.Pow(10, decimalPlaces))) throw new ArgumentException(String.Format("When requesting values with replacement, it is not possible to request more values than there are values in the domain (you requested {0} values, but the domain only contains {1} values)", n, GMath.Pow(10, decimalPlaces)));
+			Contract.Requires(n >= 1 && n <= 1e4);
+			Contract.Requires(decimalPlaces >= 1 && decimalPlaces <= 20);
+			Contract.Requires(replacement || (n <= Math.Pow(10, decimalPlaces)));
 
 #warning Doesn't work for decimalPlaces > 14
 			var requestData = _buildRequest("generateDecimalFractions", new Dictionary<string, object>
@@ -90,10 +91,9 @@ namespace GRaff.Randomness
 		/// <returns>A System.Threading.Tasks.Task that upon completion will result in an array of true random normally distributed values.</returns>
 		public static async Task<decimal[]> Gaussians(int n, double mean, double standardDeviation, int significantDigits)
 		{
-			if (n < 1 || n > 1e4) throw new ArgumentOutOfRangeException("n", n, "must be in the range [1, 1e4]");
-			if (mean < -1e6 || mean > 1e6) throw new ArgumentOutOfRangeException("mean", mean, "must be in the range [-1e6, 1e6]");
-			if (standardDeviation < -1e6 || standardDeviation > 1e6) throw new ArgumentOutOfRangeException("standardDeviation", standardDeviation, "must be in the range [-1e6, 1e6]");
-			if (significantDigits < 2 || significantDigits > 20) throw new ArgumentOutOfRangeException("significantDigits", significantDigits, "must be in the range [2, 20]");
+			Contract.Requires(n >= 1 && n <= 1e4);
+			Contract.Requires(mean >= -1e6 && mean <= 1e6);
+			Contract.Requires(significantDigits >= 2 && significantDigits <= 20);
 
 			var requestData = _buildRequest("generateGaussians", new Dictionary<string, object>
 			{
@@ -120,13 +120,11 @@ namespace GRaff.Randomness
 		/// <returns>A System.Threading.Tasks.Task that upon completion will result in an array of true random strings.</returns>
 		public static async Task<string[]> Strings(int n, int length, string characters, bool replacement)
 		{
-			if (n < 1 || n > 1e4) throw new ArgumentOutOfRangeException("n", n, "n must be in the range [1, 1e4]");
-			if (length < 1 || n > 20) throw new ArgumentOutOfRangeException("length", length, "must be in the range [1, 20]");
-			if (characters == null) throw new ArgumentNullException("characters");
-			if (characters.Length == 0) throw new ArgumentException("characters", "must have at least one character");
-			if (characters.Length > 80) throw new ArgumentException("Cannot specify more than 80 characters", "characters"); /*C#6.0*/
-			if (!replacement && (n > GMath.Pow(length, characters.Length)))
-				throw new ArgumentException(string.Format("When requesting strings with replacement, it is not possible to request more strings than there are possible strings in the domain (you requested {0} values, but the domain only contains {1} values)", n, GMath.Pow(length, characters.Length)));
+			Contract.Requires(n >= 1 && n <= 1e4);
+			Contract.Requires(length >= 1 && length <= 20);
+			Contract.Requires(!String.IsNullOrEmpty(characters));
+			Contract.Requires(characters.Length <= 80);
+			Contract.Requires(replacement || (n <= GMath.Pow(length, characters.Length)));
 
 			var requestData = _buildRequest("generateStrings", new Dictionary<string, object>
 			{

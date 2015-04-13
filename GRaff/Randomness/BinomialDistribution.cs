@@ -1,5 +1,5 @@
 ﻿using System;
-
+using System.Diagnostics.Contracts;
 
 namespace GRaff.Randomness
 {
@@ -13,8 +13,8 @@ namespace GRaff.Randomness
 
 		public BinomialDistribution(Random rnd, int trials, double probability)
 		{
-			if (probability < 0 || probability > 1)
-				throw new ArgumentOutOfRangeException("probability", "Probability must be between 0 and 1 (got " + probability + ")");	 /*C#6.0*/
+			Contract.Requires(rnd != null);
+			Contract.Requires(probability > 0 && probability <= 1);
 
 			_rnd = rnd;
 

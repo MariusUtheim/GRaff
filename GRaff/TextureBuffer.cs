@@ -36,7 +36,7 @@ namespace GRaff
 			GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
 			GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.LinearMipmapLinear);
 			ErrorCode errorCode;
-			if ((errorCode = GL.GetError()) != ErrorCode.NoError)  /*C#6.0*/
+			if ((errorCode = GL.GetError()) != ErrorCode.NoError) 
 				throw new Exception(String.Format("Loading a texture caused an error: {0} (code: {1})", Enum.GetName(typeof(ErrorCode), errorCode), errorCode));
 		}
 

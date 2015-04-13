@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using GRaff.Randomness;
+using System.Diagnostics.Contracts;
 
 namespace GRaff.Particles
 {
@@ -21,7 +22,7 @@ namespace GRaff.Particles
 
 		public RotatingBehavior(IDistribution<Angle> rotation)
 		{
-			if (rotation == null) throw new ArgumentNullException("rotation");	 /*C#6.0*/
+			Contract.Requires(rotation != null);
 			_rotation = rotation;
 		}
 

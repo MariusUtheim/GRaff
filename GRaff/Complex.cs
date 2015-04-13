@@ -9,7 +9,7 @@ namespace GRaff
 	/// <summary>
 	/// Represents a complex number.
 	/// </summary>
-	public struct Complex
+	public struct Complex : IEquatable<Complex>
 	{
 		public Complex(double real, double imaginary) : this()
 		{
@@ -43,20 +43,21 @@ namespace GRaff
 				return String.Format("{0} - {1}i", Real, -Imaginary);
 		}
 
+		public bool Equals(Complex other) => Real == other.Real && Imaginary == other.Imaginary;
+
 		/// <summary>
 		/// Specifies whether this GRaff.Complex is equal to the specified System.Object.
 		/// </summary>
 		/// <param name="obj">The System.Object to compare to.</param>
 		/// <returns>true if obj is a GRaff.Complex and the two complex numbers are equal.</returns>
-		public override bool Equals(object obj) { return (obj is Complex) ? (this == (Complex)obj) : base.Equals(obj); }
+		public override bool Equals(object obj) => (obj is Complex) ?	Equals((Complex)obj) : base.Equals(obj);
 
 		/// <summary>
 		/// Returns a hash code for this GRaff.Complex.
 		/// </summary>
 		/// <returns>An integer value that specified a hash value for this GRaff.Complex.</returns>
-		public override int GetHashCode() {
-			var i = Imaginary.GetHashCode();
-			return Real.GetHashCode() ^ (i << 16 | i >> 16); }
+		public override int GetHashCode()
+			=> GMath.HashCombine(Real.GetHashCode(), Imaginary.GetHashCode());
 
 		/// <summary>
 		/// Compares two GRaff.Complex objects. The results specifies whether the two complex numbers are equal.
@@ -64,7 +65,7 @@ namespace GRaff
 		/// <param name="left">The first GRaff.Complex to compare.</param>
 		/// <param name="right">The second GRaff.Complex to compare.</param>
 		/// <returns>true if the two complex numbers are equal.</returns>
-		public static bool operator ==(Complex left, Complex right) { return (left.Real == right.Real && left.Imaginary == right.Imaginary); }
+		public static bool operator ==(Complex left, Complex right) => left.Equals(right);
 
 		/// <summary>
 		/// Compares two GRaff.Complex objects. The result specifies whether the two complex numbers are unequal. 
@@ -72,7 +73,7 @@ namespace GRaff
 		/// <param name="left">The first GRaff.Complex to compare.</param>
 		/// <param name="right">The second GRaff.Complex to compare.</param>
 		/// <returns>true if the two complex numbers are unequal.</returns>
-		public static bool operator !=(Complex left, Complex right) { return (left.Real != right.Real || left.Imaginary != right.Imaginary); }
+		public static bool operator !=(Complex left, Complex right) => !left.Equals(right);
 
 
 		/// <summary>
@@ -81,7 +82,8 @@ namespace GRaff
 		/// <param name="left">The first number.</param>
 		/// <param name="right">The second number.</param>
 		/// <returns>The complex sum of the two numbers.</returns>
-		public static Complex operator +(Complex left, Complex right) { return new Complex(left.Real + right.Real, left.Imaginary + right.Imaginary); }
+		public static Complex operator +(Complex left, Complex right)  
+			=>new Complex(left.Real + right.Real, left.Imaginary + right.Imaginary);
 
 
 		/// <summary>
@@ -90,7 +92,8 @@ namespace GRaff
 		/// <param name="left">The first number.</param>
 		/// <param name="right">The second number.</param>
 		/// <returns>The complex difference of the two numbers.</returns>
-		public static Complex operator -(Complex left, Complex right) { return new Complex(left.Real - right.Real, left.Imaginary - right.Imaginary); }
+		public static Complex operator -(Complex left, Complex right) 
+			=> new Complex(left.Real - right.Real, left.Imaginary - right.Imaginary);
 
 
 		/// <summary>
@@ -99,7 +102,8 @@ namespace GRaff
 		/// <param name="left">The first number.</param>
 		/// <param name="right">The second number.</param>
 		/// <returns>The complex product of the two numbers.</returns>
-		public static Complex operator *(Complex left, Complex right) { return new Complex(left.Real * right.Real - left.Imaginary * right.Imaginary, left.Real * right.Imaginary + left.Imaginary * right.Real); }
+		public static Complex operator *(Complex left, Complex right) 
+			=> new Complex(left.Real * right.Real - left.Imaginary * right.Imaginary, left.Real * right.Imaginary + left.Imaginary * right.Real);
 		
 
 		/// <summary>
@@ -120,6 +124,6 @@ namespace GRaff
 		/// </summary>
 		/// <param name="d">A real number.</param>
 		/// <returns>The GRaff.Complex that results from the conversion.</returns>
-		public static implicit operator Complex(double d) { return new Complex(d, 0); }
+		public static implicit operator Complex(double d) => new Complex(d, 0);
 	}
 }

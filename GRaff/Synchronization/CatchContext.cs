@@ -23,13 +23,8 @@ namespace GRaff.Synchronization
 
 			var handler = query.FirstOrDefault();
 
-			if (handler == null)
-				return false;
-			else
-			{
-				handler.Invoke(exception);	 /*C#6.0*/
-				return true;
-			}
+			handler?.Invoke(exception);
+			return handler != null;
 		}
 	}
 

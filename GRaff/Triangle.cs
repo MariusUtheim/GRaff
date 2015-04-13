@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace GRaff
 {
-	public struct Triangle
+	public struct Triangle : IEquatable<Triangle>
 	{
 
 		public Triangle(Point v1, Point v2, Point v3)
@@ -31,32 +31,32 @@ namespace GRaff
 
 		public Point V3 { get; private set; }
 
-		public double X1 { get { return V1.X; } }
-		public double Y1 { get { return V1.Y; } }
-		public double X2 { get { return V2.X; } }
-		public double Y2 { get { return V2.Y; } }
-		public double X3 { get { return V3.X; } }
-		public double Y3 { get { return V3.Y; } }
+		public double X1 => V1.X;
+		public double Y1 => V1.Y; 
+		public double X2 => V2.X;
+		public double Y2 => V2.Y;
+		public double X3 => V3.X;
+		public double Y3 => V3.Y;
+
+
+		public bool Equals(Triangle other)
+			=> V1 == other.V1 && V2 == other.V2 && V3 == other.V3;
 
 
 		public static Triangle operator +(Triangle left, Vector right)
-		{
-			return new Triangle(left.V1 + right, left.V2 + right, left.V3 + right);
-		}
+			=> new Triangle(left.V1 + right, left.V2 + right, left.V3 + right);
+		
 
 		public static Triangle operator -(Triangle left, Vector right)
-		{
-			return new Triangle(left.V1 - right, left.V2 - right, left.V3 - right);
-		}
+			=> new  Triangle(left.V1 - right, left.V2 - right, left.V3 - right);
+		
 
 		public static Triangle operator *(LinearMatrix left, Triangle right)
-		{
-			return new Triangle(left * right.V1, left * right.V2, left * right.V3);
-		}
+			=> new Triangle(left * right.V1, left * right.V2, left * right.V3);
+		
 
 		public static Triangle operator *(AffineMatrix left, Triangle right)
-		{
-			return new Triangle(left * right.V1, left * right.V2, left * right.V3);
-		}
+			=> new Triangle(left * right.V1, left * right.V2, left * right.V3);
+		
 	}
 }

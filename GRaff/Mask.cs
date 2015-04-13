@@ -3,6 +3,7 @@
 
 namespace GRaff
 {
+#warning Review class
 	public sealed class Mask
 	{
 		private GameObject _owner;
@@ -36,7 +37,7 @@ namespace GRaff
 			get
 			{
 				if (_maskShape == MaskShape.Automatic)
-					return (_owner.Sprite != null) ? _owner.Sprite.MaskShape : MaskShape.None; /*C#6.0*/
+					return _owner.Sprite?.MaskShape ?? MaskShape.None;
 				else
 					return _maskShape;	
 			}

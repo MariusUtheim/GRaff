@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using GRaff.Graphics;
 using GRaff.Randomness;
-
+using System.Diagnostics.Contracts;
 
 namespace GRaff.Particles
 {
@@ -41,7 +41,7 @@ namespace GRaff.Particles
 
 		public void AddBehavior(IParticleBehavior behavior)
 		{
-			if (behavior == null) throw new ArgumentNullException("behavior"); /*C#6.0*/
+			Contract.Requires(behavior != null);
 			_behaviors.Add(behavior);
 		}
 

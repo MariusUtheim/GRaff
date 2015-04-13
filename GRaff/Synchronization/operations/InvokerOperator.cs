@@ -23,7 +23,7 @@ namespace GRaff.Synchronization
 		{
 			if (operation == null)
 				operation = action(arg);
-			operation.Catch<Exception>(ex => callback(AsyncOperationResult.Failure(ex)));   /*C#6.0*/// Semicolon
+			operation.Catch<Exception>(ex => callback(AsyncOperationResult.Failure(ex)));
 			operation.ThenWait(() => callback(AsyncOperationResult.Success()));//operation.ThenWait(() => callback(null));
 		}
 
@@ -65,7 +65,7 @@ namespace GRaff.Synchronization
 		{
 			if (operation == null)
 				operation = action(arg);
-			operation.Catch<Exception>(ex => { callback(AsyncOperationResult.Failure(ex)); return default(TPass); }); /*C#6.0*/// Semicolon
+			operation.Catch<Exception>(ex => { callback(AsyncOperationResult.Failure(ex)); return default(TPass); });
 			operation.ThenWait(result => callback(AsyncOperationResult.Success(result)));
 			operation.Dispatch(arg);
 		}

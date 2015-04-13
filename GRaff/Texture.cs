@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using GRaff.Graphics;
+﻿using GRaff.Graphics;
+using System.Diagnostics.Contracts;
+
 
 namespace GRaff
 {
@@ -12,8 +9,7 @@ namespace GRaff
 	{
 		public Texture(TextureBuffer buffer, float left, float bottom, float right, float top)
 		{
-			if (buffer == null)
-				throw new ArgumentNullException("buffer"); /*C#6.0*/
+			Contract.Requires(buffer != null);
 			Buffer = buffer;
 			TopLeft = new PointF(left, top);
 			TopRight = new PointF(right, top);
@@ -34,20 +30,9 @@ namespace GRaff
 		public PointF BottomRight { get; private set; }
 
 		public float PixelWidth
-		{
-			get
-			{
-				return Buffer.Width * (BottomRight.X - TopLeft.X);
-			}
-		}
+			=> Buffer.Width * (BottomRight.X - TopLeft.X);
 
 		public float PixelHeight
-		{
-			get
-			{
-				return Buffer.Height * (BottomRight.Y + TopLeft.Y);
-			}
-		}
-
+			=> Buffer.Height * (BottomRight.Y + TopLeft.Y);
 	}
 }

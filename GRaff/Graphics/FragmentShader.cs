@@ -12,7 +12,7 @@ namespace GRaff.Graphics
 			Id = GL.CreateShader(ShaderType.FragmentShader);
 			GL.ShaderSource(Id, source);
 			GL.CompileShader(Id);
-			string msg;/*C#6.0*/
+			string msg;
 			if ((msg = GL.GetShaderInfoLog(Id)) != "")
 				throw new ShaderException("Compiling a GRaff.VertexShader caused a message: " + msg);
 		}

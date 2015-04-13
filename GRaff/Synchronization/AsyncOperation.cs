@@ -99,12 +99,11 @@ namespace GRaff.Synchronization
 			Result = AsyncOperationResult.Success(result);
 			AsyncOperation continuation;
 			while (_continuations.TryDequeue(out continuation))
-				continuation.Dispatch(Result != null ? Result.Value : null); /*C#6.0*/
+				continuation.Dispatch(Result?.Value);
 		}
 
 		internal void Reject(Exception reason)
 		{
-
 			Result = Handle(reason);
 			if (Result.IsSuccessful)
 				Accept(Result.Value);
@@ -117,11 +116,9 @@ namespace GRaff.Synchronization
 				if (IsDone)
 					Async.ThrowException(reason);
 
-				lock (this) /*C#6.0*/
-				{
-					if (_otherwiseClause != null)
-						_otherwiseClause.Accept(reason);
-				}
+
+				lock (this)
+					_otherwiseClause?.Accept(reason);
 			}
 		}
 
@@ -224,7 +221,7 @@ namespace GRaff.Synchronization
 			_assertState("add a continuation to");
 			_hasPassedException = true;
 			if (State == AsyncOperationState.Completed)
-				continuation.Dispatch(Result != null ? Result.Value : null); /*C#6.0*/
+				continuation.Dispatch(Result?.Value);
 			else
 				_continuations.Enqueue(continuation);
 		}
@@ -259,7 +256,7 @@ namespace GRaff.Synchronization
 
 		public IAsyncOperation ThenSync(Action action)
 		{
-			var continuation = new AsyncOperation(this, new SerialOperator(obj => { action(); return null; })); /*C#6.0*/// semicolon
+			var continuation = new AsyncOperation(this, new SerialOperator(obj => { action(); return null; }));
 			Then(continuation);
 			return continuation;
 		}

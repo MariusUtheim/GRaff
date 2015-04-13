@@ -10,7 +10,7 @@ namespace GRaff
 	/// Represents an ARGB color. Note that colors can be cast from uint structures on the form 0xAARRGGBB.
 	/// </summary>
 	[StructLayout(LayoutKind.Sequential)]
-	public partial struct Color
+	public partial struct Color : IEquatable<Color>
 	{
 		/// <summary>
 		/// Initializes a new instance of the GRaff.Color structure using the specifed alpha, red, green and blue values.
@@ -76,24 +76,13 @@ namespace GRaff
 		/// <summary>
 		/// Gets the value of this color as a 32-bit integer in ARGB format.
 		/// </summary>
-		public uint Argb
-		{
-			get
-			{
-				return (uint)((A << 24) | (R << 16) | (G << 8) | B);
-			}
-		}
-
+		public uint Argb => (uint)((A << 24) | (R << 16) | (G << 8) | B);
+	
 		/// <summary>
 		/// Gets the inverse of this GRaff.Color. The alpha channel is unchanged while the other channels are inverted.
 		/// </summary>
-		public Color Inverse
-		{
-			get
-			{
-				return new Color(A, 255 - R, 255 - G, 255 - B);
-			}
-		}
+		public Color Inverse => new Color(A, 255 - R, 255 - G, 255 - B);
+
 
 		/// <summary>
 		/// Averages this with the specified GRaff.Color structures, calculating the average of each channel separately.
@@ -137,35 +126,31 @@ namespace GRaff
 		/// </summary>
 		/// <param name="alphaChannel">The alpha channel of the new color.</param>
 		/// <returns>A new GRaff.Color with the same color as this instance, but with the specified alpha channel.</returns>
-		public Color Transparent(int alphaChannel)
-		{
-			return new Color((byte)alphaChannel, R, G, B);
-		}
+		public Color Transparent(int alphaChannel) => new Color((byte)alphaChannel, R, G, B);
+
 
 		/// <summary>
 		/// Creates a new GRaff.Color, with the same color channels as this instance, but iwth the new specified opacity.
 		/// </summary>
 		/// <param name="opacity">The opacity of the new color. 0.0 means it is completely transparent, and 1.0 means it is completely opaque.</param>
 		/// <returns>A new GRaff.Color with the same color as this instance, but with an alpha channel corresponding to the specified opacity.</returns>
-		public Color Transparent(double opacity)
-		{
-			return new Color((byte)GMath.Round(255.0 * GMath.Median(0.0, opacity, 1.0)), R, G, B);
-		}
+		public Color Transparent(double opacity) => new Color((byte)GMath.Round(255.0 * GMath.Median(0.0, opacity, 1.0)), R, G, B);
 
 		/// <summary>
 		/// Converts this GRaff.Color to an OpenTK.Graphics.Color4 object.
 		/// </summary>
 		/// <returns>The OpenTK.Graphics.Color4 that results from the conversion.</returns>
 		internal OpenTK.Graphics.Color4 ToOpenGLColor()
-		{
-			return new OpenTK.Graphics.Color4(R, G, B, A);
-		}
+		 => new OpenTK.Graphics.Color4(R, G, B, A);
+
 
 		/// <summary>
 		/// Converts this GRaff.Color to a human-readable string, showing the value of each channel.
 		/// </summary>
 		/// <returns>A string that represents this GRaff.Color</returns>
-		public override string ToString() { return String.Format("{0}=0x{1:X}", "Color", Argb); }
+		public override string ToString() => "\{nameof(Color)}=0x\{Argb : X}";
+
+		public bool Equals(Color other) => A == other.A && R == other.R && G == other.G && B == other.B;
 
 
 		/// <summary>
@@ -173,13 +158,13 @@ namespace GRaff
 		/// </summary>
 		/// <param name="obj">The System.Object to compare to.</param>
 		/// <returns>true if obj is a GRaff.Color and has the same ARGB value as this GRaff.Color.</returns>
-		public override bool Equals(object obj) { return (obj is Color) ? (this == (Color)obj) : base.Equals(obj); }
+		public override bool Equals(object obj) => (obj is Color) ? Equals((Color)obj) : base.Equals(obj);
 
 		/// <summary>
 		/// Returns a hash code of this GRaff.Color. The hash code is equal to the ARGB value.
 		/// </summary>
 		/// <returns>An integer value that specifies a hash value for this GRaff.Color.</returns>
-		public override int GetHashCode() { return (int)Argb; }
+		public override int GetHashCode() => (int)Argb;
 
 		/// <summary>
 		/// Compares two GRaff.Color objects. The results specifies whether their ARGB values are equal.
@@ -187,7 +172,7 @@ namespace GRaff
 		/// <param name="left">The first GRaff.Color to compare.</param>
 		/// <param name="right">The second GRaff.Color to compare.</param>
 		/// <returns>true if the ARGB values of the two GRaff.Color structures are equal.</returns>
-		public static bool operator ==(Color left, Color right) { return (left.A == right.A && left.R == right.R && left.G == right.G && left.B == right.B); }
+		public static bool operator ==(Color left, Color right) => left.Equals(right);
 
 		/// <summary>
 		/// Compares two GRaff.Color objects. The results specifies whether their ARGB values are unequal.
@@ -195,7 +180,7 @@ namespace GRaff
 		/// <param name="left">The first GRaff.Color to compare.</param>
 		/// <param name="right">The second GRaff.Color to compare.</param>
 		/// <returns>true if the ARGB values of the two colors are unequal.</returns>
-		public static bool operator !=(Color left, Color right) { return (left.A != right.A || left.R != right.R || left.G != right.G || left.B != right.B); }
+		public static bool operator !=(Color left, Color right) => !left.Equals(right);
 
 
 		/// <summary>
@@ -203,6 +188,6 @@ namespace GRaff
 		/// </summary>
 		/// <param name="argb">The System.Uint32 to be converted.</param>
 		/// <returns>The GRaff.Color resulting from the conversion.</returns>
-		public static implicit operator Color(uint argb) { return new Color(argb); }
+		public static implicit operator Color(uint argb) => new Color(argb);
 	}
 }

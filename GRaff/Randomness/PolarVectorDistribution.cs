@@ -1,6 +1,6 @@
 ﻿using System;
+using System.Diagnostics.Contracts;
 
- 
 namespace GRaff.Randomness
 {
 	/// <summary>
@@ -13,8 +13,8 @@ namespace GRaff.Randomness
 
 		public PolarVectorDistribution(IDistribution<double> magnitudeDistribution, IDistribution<Angle> directionDistribution)
 		{
-			if (magnitudeDistribution == null) throw new ArgumentNullException("magnitudeDistribution");  /*C#6.0*/
-			if (directionDistribution == null) throw new ArgumentNullException("directionDistribution"); 
+			Contract.Requires(magnitudeDistribution != null);
+			Contract.Requires(directionDistribution != null);
 			this._magnitudeDistribution = magnitudeDistribution;
 			this._directionDistribution = directionDistribution;
 		}
@@ -24,7 +24,7 @@ namespace GRaff.Randomness
 			get { return _magnitudeDistribution; }
 			set
 			{
-				if (value == null) throw new ArgumentNullException("value");
+				Contract.Requires(value != null);
 				_magnitudeDistribution = value;
 			}
 		}
@@ -34,14 +34,12 @@ namespace GRaff.Randomness
 			get { return _directionDistribution; }
 			set
 			{
-				if (value == null) throw new ArgumentNullException("value");
+				Contract.Requires(value != null);
 				_directionDistribution = value;
 			}
 		}
 
 		public Vector Generate()
-		{
-			return new Vector(MagnitudeDistribution.Generate(), DirectionDistribution.Generate());
-		}
+			=> new Vector(MagnitudeDistribution.Generate(), DirectionDistribution.Generate());
 	}
 }
