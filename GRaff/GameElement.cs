@@ -12,6 +12,8 @@ namespace GRaff
 	public abstract class GameElement
 	{
 		private int _depth;
+		internal RBTreeNode Node { get; set; }
+
 		/// <summary>
 		/// Gets or sets the depth of this GRaff.GameObject.
 		/// Instances with higher depth take actions before and are drawn behind instances with lower depth.
