@@ -38,6 +38,7 @@ namespace GRaff.Graphics
 		}
 
 
+
 		#region To be implemented
 
 
@@ -62,6 +63,8 @@ namespace GRaff.Graphics
 		}
 
 		#endregion
+
+		#region Drawing functions
 
 		private void Render(PointF[] vertices, Color[] colors, PrimitiveType type)
 		{
@@ -261,7 +264,7 @@ namespace GRaff.Graphics
 
 			GL.DrawArrays(GLPrimitiveType.Quads, 0, vertices.Length);
 
-
 		}
+		#endregion
 	}
 }

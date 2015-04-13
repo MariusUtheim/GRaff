@@ -73,5 +73,19 @@ namespace GameMaker.UnitTesting
 			Assert.AreEqual(LinearMatrix.Scaling(sx, sy) * linear, linear.Scale(sx, sy));
 			Assert.AreEqual(LinearMatrix.Shearing(kx, ky) * linear, linear.Shear(kx, ky));
 		}
+
+		[TestMethod]
+		public void Matrix_Mapping()
+		{
+			Triangle src, dst;
+
+			src = new Triangle(0, 0, 1, 0, 0, 1);
+			dst = new Triangle(0, 0, 2, 0, 0, 3);
+			Assert.AreEqual(AffineMatrix.Scaling(2, 3), AffineMatrix.Mapping(src, dst));
+
+			src = new Triangle(0, 0, 1, 0, 1, 1);
+			dst = new Triangle(0, 0, 0, 1, -1, 1);
+			Assert.AreEqual(AffineMatrix.Rotation(Angle.Deg(90)), AffineMatrix.Mapping(src, dst));
+		}
 	}
 }

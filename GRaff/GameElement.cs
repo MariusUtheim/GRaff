@@ -33,7 +33,6 @@ namespace GRaff
 		/// The instance will stop performing automatic actions such as Step and Draw,
 		/// but the C# object is not garbage collected while it is still being referenced.
 		/// </summary>
-		/// <param name="suppressDestroyEvent">If set to true, the OnDestroy() action will not be performed.</param>
 		public void Destroy()
 		{
 			OnDestroy();
