@@ -20,14 +20,18 @@ namespace GRaff.Forms
 
 		public DisplayObject AddChildFirst(DisplayObject child)
 		{
+			if (this == child || Ancestors.Contains(child))
+				throw new InvalidOperationException("Adding child would create cyclic dependencies.");
 			child.RemoveFromParent();
 			_children.AddFirst(child);
 			child.Parent = this;
 			return child;
 		}
 
-		public DisplayObject AddChildLast(DisplayObject child)
+		public DisplayObject AddChild(DisplayObject child)
 		{
+			if (this == child || Ancestors.Contains(child))
+				throw new InvalidOperationException("Adding child would create cyclic dependencies.");
 			child.RemoveFromParent();
 			_children.AddLast(child._node);
 			child.Parent = this;
@@ -36,8 +40,11 @@ namespace GRaff.Forms
 
 		public DisplayObject RemoveChild(DisplayObject child)
 		{
-			_children.Remove(child._node);
-			child.Parent = null;
+			if (child._node.List == _children)
+			{
+				_children.Remove(child._node);
+				child.Parent = null;
+			}
 			return child;
 		}
 
@@ -47,6 +54,32 @@ namespace GRaff.Forms
 				return;
 			Parent._children.Remove(_node);
 			Parent = null;
+		}
+
+		public IEnumerable<DisplayObject> Ancestors
+		{
+			get
+			{
+				if (Parent != null)
+				{
+					yield return Parent;
+					foreach (var ancestor in Parent.Ancestors)
+						yield return ancestor;
+				}
+			}
+		}
+
+		public IEnumerable<DisplayObject> Descendants
+		{
+			get
+			{
+				foreach (var child in _children)
+				{
+					yield return child;
+					foreach (var descendant in child.Descendants)
+						yield return descendant;
+				}
+			}
 		}
 
 		public DisplayObject Parent { get; private set; }
@@ -72,13 +105,14 @@ namespace GRaff.Forms
 			set { X = value.Left; Y = value.Top; Width = value.Width; Height = value.Height; }
 		}
 
-		public Point ToLocal(Point p)
+
+		public Point PointToLocal(Point p)
 		{
 			var origin = (Parent == null) ? Point.Zero : Parent.DisplayLocation; /*C#6.0*/
 			return new Point(p.X - origin.X - X, p.Y - origin.Y - Y);
 		}
 
-		public Point ToGlobal(Point p)
+		public Point PointToGlobal(Point p)
 		{
 			var origin = (Parent == null) ? Point.Zero : Parent.DisplayLocation;
 			return new Point(X + origin.X + p.X, Y + origin.Y + p.Y);
@@ -86,22 +120,39 @@ namespace GRaff.Forms
 
 		public Rectangle ToGlobal(Rectangle rectangle)
 		{
-			return new Rectangle(ToGlobal(rectangle.TopLeft), rectangle.Size);
+			return new Rectangle(PointToGlobal(rectangle.TopLeft), rectangle.Size);
 		}
 
+		/// <summary>
+		/// Gets the actual location in the room of this GRaff.Forms.DisplayObject.
+		/// </summary>
 		public Point DisplayLocation
 		{
-			get { return (Parent != null) ? Parent.ToGlobal(Location) : Location; }
+			get { return (Parent != null) ? Parent.PointToGlobal(Location) : Location; }
 		}
 
 		public Rectangle DisplayRegion
 		{
-			get { return new Rectangle(DisplayLocation, Size); }
+			get { return new Rectangle(DisplayLocation, DisplaySize); }
 		}
 
-		public double XScale { get; set; }
+		public Vector DisplaySize
+		{
+			get { return Size * DisplayScale; }
+		}
 
-		public double YScale { get; set; }
+		public Vector DisplayScale
+		{
+			get
+			{
+				var p = (Parent == null) ? new Vector(1, 1) : Parent.DisplayScale;
+				return p * Scale;
+			}
+		}
+
+		public double XScale { get; set; } = 1;
+		public double YScale { get; set; } = 1;
+		public Vector Scale { get { return new Vector(XScale, YScale); } }
 
 		public virtual void OnPaint()
 		{ }
@@ -112,7 +163,7 @@ namespace GRaff.Forms
 			{
 				OnPaint();
 				var previous = View.FocusRegion;
-				View.InverseFocusRegion(Region, Size);
+				View.InverseFocusRegion(Region, Size * Scale);
 				View.Refresh();
 				foreach (var child in _children)
 					child.OnDraw();

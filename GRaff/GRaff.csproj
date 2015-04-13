@@ -60,9 +60,11 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Forms\Button.cs" />
     <Compile Include="Forms\DisplayObject.cs" />
     <Compile Include="Forms\DisplayObject.EventHandling.cs" />
     <Compile Include="Forms\Form.cs" />
+    <Compile Include="Forms\FormEventArgs.cs" />
     <Compile Include="Forms\MouseEventArgs.cs" />
     <Compile Include="Forms\Quad.cs" />
     <Compile Include="Graphics\Framebuffer.cs" />

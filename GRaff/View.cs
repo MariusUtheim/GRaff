@@ -38,6 +38,14 @@ namespace GRaff
 			set { X = value.Center.X; Y = value.Center.Y; Width = value.Width; Height = value.Height; }
 		}
 
+		public static void InverseFocusRegion(Rectangle region, Vector size)
+		{
+			X -= region.Left;
+			Y -= region.Top;
+			Width *= region.Width / size.X;
+			Height *= region.Height / size.Y;
+		}
+
 		/// <summary>
 		/// Gets or sets the rotation of the view. The view is rotated around the center of the view.
 		/// </summary>
@@ -63,6 +71,11 @@ namespace GRaff
 			// Result is given by Scale(w, h) * Rotate(t) * Translate(-X, -Y)
 		}
 
+		public static void Refresh()
+		{
+			LoadMatrix(ShaderProgram.GetCurrentId());
+		}
+
 		internal static void LoadMatrix(int programId)
 		{
 			var tr = GetMatrix();
@@ -70,7 +83,7 @@ namespace GRaff
 			var projectionMatrix = new Matrix4(
 				(float)tr.M00, (float)tr.M10, 0, 0,
 				(float)tr.M01, (float)tr.M11, 0, 0,
-							0, 0, 1, 0,
+							0,			   0, 1, 0,
 				(float)tr.M02, (float)tr.M12, 0, 1
 			);
 
@@ -130,7 +143,8 @@ namespace GRaff
 					new Point(X + c * w - s * -h, Y + s * w + c * -h)
 				};
 
-				return new Rectangle(new Point(pts.Min(p => p.X), pts.Min(p => p.Y)), new Point(pts.Max(p => p.X), pts.Max(p => p.Y)));
+				Point tl = new Point(pts.Min(p => p.X), pts.Min(p => p.Y)), br = new Point(pts.Max(p => p.X), pts.Max(p => p.Y));
+                return new Rectangle(tl, br - tl);
 			}
 		}
 	}
