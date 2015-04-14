@@ -197,6 +197,11 @@ namespace GRaff
 			CurrentSurface.DrawPolygon(color, polygon);
 		}
 
+		public static void FillPolygon(Color color, Polygon polygon)
+		{
+			CurrentSurface.FillPolygon(color, polygon);
+		}
+		
 		public static void Image(Image image)
 		{
 			CurrentSurface.DrawImage(image);

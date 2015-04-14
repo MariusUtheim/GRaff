@@ -177,7 +177,24 @@ namespace GRaff.Graphics
 
 		public void DrawPolygon(Color color, Polygon polygon)
 		{
-			Render(polygon.Vertices.Select(v => (PointF)v).ToArray(), Enumerable.Repeat(color, polygon.Length).ToArray(), PrimitiveType.LineLoop);
+			var vertices = polygon.Vertices.Select(v => (PointF)v).ToArray();
+			if (polygon.Length == 1)
+				Render(vertices, new[] { color }, PrimitiveType.Points);
+			else if (polygon.Length == 2)
+				Render(vertices, new[] { color, color }, PrimitiveType.Lines);
+			else
+				Render(vertices, Enumerable.Repeat(color, polygon.Length).ToArray(), PrimitiveType.LineLoop);
+		}
+
+		public void FillPolygon(Color color, Polygon polygon)
+		{
+			var vertices = polygon.Vertices.Select(v => (PointF)v).ToArray();
+			if (polygon.Length == 1)
+				Render(vertices, new[] { color }, PrimitiveType.Points);
+			else if (polygon.Length == 2)
+				Render(vertices, new[] { color, color }, PrimitiveType.Lines);
+			else
+				Render(vertices, Enumerable.Repeat(color, polygon.Length).ToArray(), PrimitiveType.TriangleStrip);
 		}
 
 		public void DrawSprite(Sprite sprite, int subimage, float x, float y)

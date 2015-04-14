@@ -149,7 +149,7 @@ namespace GRaff.Audio
 
 				byte[] buffer = new byte[stream.Length];
 				using (var outputStream = new OggVorbisMemoryStream(buffer, info, stream.RawLength, info.Duration))
-					stream.CopyTo(outputStream);
+					await stream.CopyToAsync(outputStream);
 
 				return new SoundFile((int)(8 * buffer.Length / (info.Duration * info.Rate * info.Channels)), info.Channels, info.Rate, buffer);
 			}

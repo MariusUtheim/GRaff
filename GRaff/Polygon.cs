@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Text;
 
@@ -17,28 +18,30 @@ namespace GRaff
 	{
 		private Point[] _pts;
 
+		private Polygon()
+		{
+			return;	// Used to create Polygon in an efficient way without doing sanity checks
+		}
+
 		public Polygon(IEnumerable<Point> pts)
 		{
-			this._pts = pts.ToArray();
+#warning It should convert to array, then get Length instead of getting Count, then converting
+			Contract.Requires(pts != null && pts.Count() > 0);
+
+			_pts = pts.ToArray();
 			_SanityCheck();
 		}
 
 		public Polygon(params Point[] pts)
-		{
-			if (pts == null)
-				throw new ArgumentNullException("pts", "Cannot be null.");
-			this._pts = pts.Clone() as Point[];
-			_SanityCheck();
-		}
+			: this(pts.AsEnumerable())
+		{ }
 
-		public static Polygon Regular(int degree, int radius)
-		{
-			return Regular(degree, radius, Point.Zero);
-		}
+		public static Polygon Regular(int degree, double radius)
+			=> Regular(degree, radius, Point.Zero);
 
-		public static Polygon Regular(int degree, int radius, Point center)
+		public static Polygon Regular(int degree, double radius, Point center)
 		{
-			if (degree < 3) throw new ArgumentException("Degree must be greater than or equal to 3.", "degree");
+			Contract.Requires(degree >= 2);
 
 			double dt = GMath.Tau / degree;
 			double c = GMath.Cos(dt), s = GMath.Sin(dt);
@@ -58,10 +61,6 @@ namespace GRaff
 			return new Polygon { _pts = pts };
 		}
 
-		private Polygon()
-		{
-			return;	// Used to create Polygon in an efficient way without doing sanity checks
-		}
 
 		private void _SanityCheck()
 		{
@@ -103,24 +102,9 @@ namespace GRaff
 			if (radius == 0)
 				return new Polygon { _pts = new[] { center } };
 
-			int precision = (int)GMath.Ceiling(GMath.Tau * radius);			
+			int precision = (int)GMath.Ceiling(GMath.Tau * radius);
 
-			double dt = GMath.Tau / precision;
-			double c = GMath.Cos(dt), s = GMath.Sin(dt);
-
-			double x = radius, y = 0, tmp;
-			Point[] pts = new Point[precision];
-
-			for (int i = 0; i < precision; i++)
-			{
-				pts[i] = new Point(center.X + x, center.Y + y);
-
-				tmp = x;
-				x = c * x - s * y;
-				y = s * tmp + c * y;
-			}
-
-			return new Polygon { _pts = pts };
+			return Regular(precision, radius, center);
 		}
 
 		public static Polygon Ellipse(Point center, double xRadius, double yRadius)
@@ -148,30 +132,18 @@ namespace GRaff
 		/// <summary>
 		/// Gets the number of vertices in this GRaff.Polynomial.
 		/// </summary>
-		public int Length { get { return _pts.Length; } }
-
+		public int Length => _pts.Length;
 
 		public Point Vertex(int index)
-		{
-			if (Length == 0)
-				throw new InvalidOperationException("The specified polygon has no vertices.");
-			return _pts[(index % _pts.Length + _pts.Length) % _pts.Length];
-		}
+			=> _pts[(index % _pts.Length + _pts.Length) % _pts.Length];
+
 
 		public Line Edge(int index)
-		{
-			if (Length == 0)
-				throw new InvalidOperationException("The specified polygon has no vertices.");
-			checked
-			{
-				return new Line(Vertex(index), Vertex(index + 1));
-			}
-		}
+			=> checked(new Line(Vertex(index), Vertex(index + 1)));
+			
 
 		public IEnumerable<Point> Vertices
-		{
-			get { return _pts.AsEnumerable(); }
-		}
+			=> Array.AsReadOnly(_pts);
 
 		public IEnumerable<Line> Edges
 		{
@@ -204,15 +176,10 @@ namespace GRaff
 		}
 
 		public bool ContainsPoint(double x, double y)
-		{
-			return ContainsPoint(new Point(x, y));
-		}
+			=> ContainsPoint(new Point(x, y));
 
 		public bool Intersects(Polygon other)
-		{
-			if (other == null) return false;
-			return this._Intersects(other) && other._Intersects(this);
-		}
+			=> (other != null) ? this._Intersects(other) && other._Intersects(this) : false;
 
 		private bool _Intersects(Polygon other)
 		{
@@ -220,18 +187,15 @@ namespace GRaff
 			 * Using the separation axis theorem: 
 			 * http://stackoverflow.com/questions/753140/how-do-i-determine-if-two-convex-polygons-intersect
 			 * */
-			bool result = true;
 			IEnumerable<Point> otherVertices = other.Vertices;
 			foreach (Line l in Edges)
 			{
 				Vector n = l.LeftNormal;
 				if (otherVertices.All(pt => n.DotProduct(pt - l.Origin) > 0))
 					return false;
-
-				var x = _pts.Where(pt => pt.X > 0).Select(pt => pt.X * pt.X).First();
 			}
 
-			return result;
+			return true;
 		}
 	}
 }

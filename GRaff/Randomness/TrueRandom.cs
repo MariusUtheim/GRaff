@@ -48,9 +48,9 @@ namespace GRaff.Randomness
 
 			var responseString = await _makeRequestAsync(requestData);
 			var response = serializer.Deserialize<_Response>(responseString);
-			if (response.error != null)
-				throw new WebException("An unhandled error occurred when querying random.org: " + response.error.message + " (code: " + response.error.code.ToString() + ")");
-			return response.result.random.data.Cast<int>().ToArray();
+			if (response.Error != null)
+				throw new WebException("An unhandled error occurred when querying random.org: " + response.Error.Message + " (code: " + response.Error.Code.ToString() + ")");
+			return response.Result.Random.Data.Cast<int>().ToArray();
 		}
 
 		/// <summary>
@@ -76,9 +76,9 @@ namespace GRaff.Randomness
 
 			var responseString = await _makeRequestAsync(requestData);
 			var response = serializer.Deserialize<_Response>(responseString);
-			if (response.error != null)
-				throw new WebException("An unhandled error occurred when querying random.org: " + response.error.message + " (code: " + response.error.code.ToString() + ")");
-			return response.result.random.data.Select(obj => Convert.ToDecimal(obj)).ToArray();
+			if (response.Error != null)
+				throw new WebException("An unhandled error occurred when querying random.org: " + response.Error.Message + " (code: " + response.Error.Code.ToString() + ")");
+			return response.Result.Random.Data.Select(obj => Convert.ToDecimal(obj)).ToArray();
 		}
 
 		/// <summary>
@@ -105,9 +105,9 @@ namespace GRaff.Randomness
 
 			var responseString = await _makeRequestAsync(requestData);
 			var response = serializer.Deserialize<_Response>(responseString);
-			if (response.error != null)
-				throw new WebException("An unhandled error occurred when querying random.org: " + response.error.message + " (code: " + response.error.code.ToString() + ")");
-			return response.result.random.data.Select(obj => Convert.ToDecimal(obj)).ToArray();
+			if (response.Error != null)
+				throw new WebException("An unhandled error occurred when querying random.org: " + response.Error.Message + " (code: " + response.Error.Code.ToString() + ")");
+			return response.Result.Random.Data.Select(obj => Convert.ToDecimal(obj)).ToArray();
 		}
 
 		/// <summary>
@@ -136,64 +136,64 @@ namespace GRaff.Randomness
 
 			var responseString = await _makeRequestAsync(requestData);
 			var response = serializer.Deserialize<_Response>(responseString);
-			if (response.error != null)
-				throw new WebException("An unhandled error occurred when querying random.org: " + response.error.message + " (code: " + response.error.code.ToString() + ")");
-			return response.result.random.data.Cast<string>().ToArray();
+			if (response.Error != null)
+				throw new WebException("An unhandled error occurred when querying random.org: " + response.Error.Message + " (code: " + response.Error.Code.ToString() + ")");
+			return response.Result.Random.Data.Cast<string>().ToArray();
 		}
 
 		[DataContract]
 		private class _Random
 		{
-			[DataMember]
-			public object[] data;
+			[DataMember(Name = "data")]
+			public object[] Data { get; set; }
 
-			[DataMember]
-			public string completionTime;
+			[DataMember(Name = "completionTime")]
+			public string CompletionTime { get; set; }
 		}
 
 		[DataContract]
 		private class _Result
 		{
-			[DataMember]
-			public _Random random;
+			[DataMember(Name = "random")]
+			public _Random Random { get; set; }
 
-			[DataMember]
-			public int bitsUsed;
+			[DataMember(Name = "bitsUsed")]
+			public int BitsUsed { get; set; }
 
-			[DataMember]
-			public int bitsLeft;
+			[DataMember(Name = "bitsLeft")]
+			public int BitsLeft { get; set; }
 
-			[DataMember]
-			public int requestsLeft;
+			[DataMember(Name = "requestsLeft")]
+			public int RequestsLeft { get; set; }
 
-			[DataMember]
-			public int advisoryDelay;
+			[DataMember(Name = "advisoryDelay")]
+			public int AdvisoryDelay { get; set; }
 		}
 
 		[DataContract]
 		private class _Error
 		{
-			[DataMember]
-			public int code;
+			[DataMember(Name = "code")]
+			public int Code { get; set; }
 
-			[DataMember]
-			public string message;
+			[DataMember(Name = "message")]
+			public string Message { get; set; }
 		}
 
 		[DataContract]
 		private class _Response
 		{
-			[DataMember]
-			public string jsonrpc;
+			[DataMember(Name = "jsonrpc")]
+			public string JsonRpc { get; set; }
 
-			[DataMember]
-			public _Result result;
+			[DataMember(Name = "result")]
+			public _Result Result { get; set; }
 
-			[DataMember]
-			public int id;
+			[DataMember(Name = "id")]
+			public int Id { get; set; }
 
-			[DataMember]
-			public _Error error;
+			[DataMember(Name = "error")]
+			public _Error Error { get; set; }
 		}
 
 

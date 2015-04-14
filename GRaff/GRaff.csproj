@@ -79,7 +79,6 @@
     <Compile Include="FontInfo.cs" />
     <Compile Include="GMath.SystemMathOverloads.cs" />
     <Compile Include="GRaffExtensions.cs" />
-    <Compile Include="Graphics\ColorMatrix.cs" />
     <Compile Include="Graphics\FontLoader.cs" />
     <Compile Include="Graphics\Lighting\LightObstacle.cs" />
     <Compile Include="Graphics\Lighting\LightSource.cs" />

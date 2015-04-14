@@ -107,11 +107,6 @@ namespace GRaff.Synchronization
 					{
 						processingEvents[i].Action();
 					}
-					catch (AsyncException)
-					{
-#warning Throwing a custom AsyncException should throw a wrapped AsyncException?
-						throw;
-					}
 					catch (Exception ex)
 					{
 						if (!_catcher.TryHandle(ex))
