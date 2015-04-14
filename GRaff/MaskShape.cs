@@ -21,72 +21,33 @@ namespace GRaff
 		public Polygon Polygon { get; private set; }
 
 
-		public static MaskShape Rectangle(double x, double y, double width, double height)
-		{
-			return new MaskShape(
-				new Point(x, y),
-				new Point(x + width, y),
-				new Point(x + width, y + height),
-				new Point(x, y + height)
-			);
-		}
+		public static MaskShape Rectangle(double x, double y, double width, double height) => Rectangle(x, y, width, height);
 
-		public static MaskShape Rectangle(double width, double height)
-		{
-			return Rectangle(-width / 2, -height / 2, width, height);
-		}
+		public static MaskShape Rectangle(double width, double height) => Rectangle(-width / 2, -height / 2, width, height);
 
-		public static MaskShape Rectangle(Rectangle rectangle)
-		{
-			return Rectangle(rectangle.Left, rectangle.Top, rectangle.Width, rectangle.Height);
-		}
+		public static MaskShape Rectangle(Rectangle rectangle) => new MaskShape(rectangle.TopLeft, rectangle.TopRight, rectangle.BottomRight, rectangle.BottomLeft);
+
 
 		public static MaskShape Diamond(double x, double y, double width, double height)
-		{
-			return new MaskShape(
-				new Point(x + width / 2, y),
-				new Point(x + width, y + height / 2),
-				new Point(x + width / 2, y + height),
-				new Point(x, y + height / 2)
-			);
-		}
+			=> new MaskShape(new Point(x + width / 2, y), new Point(x + width, y + height / 2), new Point(x + width / 2, y + height), new Point(x, y + height / 2) );
 
-		public static MaskShape Diamond(double width, double height)
-		{
-			return MaskShape.Diamond(-width / 2, -height / 2, width, height);
-		}
+		public static MaskShape Diamond(double width, double height) => Diamond(-width / 2, -height / 2, width, height);
 
-		public static MaskShape Diamond(Rectangle rectangle)
-		{
-			return MaskShape.Rectangle(rectangle.Left, rectangle.Top, rectangle.Width, rectangle.Height);
- 		}
+		public static MaskShape Diamond(Rectangle rectangle) => Diamond(rectangle.Left, rectangle.Top, rectangle.Width, rectangle.Height);
+ 		
 
-		public static MaskShape Circle(double radius)
-		{
-			return Circle(new Point(0, 0), radius);
-		}
+		public static MaskShape Circle(double radius) => Circle(new Point(0, 0), radius);
+
+		public static MaskShape Circle(Point center, double radius) => new MaskShape(Polygon.Circle(center, radius));
 
 
-		public static MaskShape Circle(Point center, double radius)
-		{
-			return new MaskShape(Polygon.Circle(center, radius));
-		}
+		public static MaskShape Ellipse(double x, double y, double xRadius, double yRadius) => Ellipse(new Point(x, y), xRadius, yRadius);
 
-		public static MaskShape Ellipse(double x, double y, double width, double height)
-		{
-			double w = width / 2, h = height / 2;
-			return new MaskShape(Polygon.Ellipse(new Point(x + w, y + h), w, h).Vertices.ToArray());
-		}
+		public static MaskShape Ellipse(Point center, double xRadius, double yRadius) => new MaskShape(Polygon.Ellipse(center, xRadius, yRadius));
 
-		public static MaskShape Ellipse(double width, double height)
-		{
-			return Ellipse(-width / 2, -height / 2, width, height);
-		}
-
-		public static MaskShape Ellipse(Rectangle rectangle)
-		{
-			return Ellipse(rectangle.Left, rectangle.Top, rectangle.Width, rectangle.Height);
-		}
+		public static MaskShape Ellipse(double width, double height) => Ellipse(Point.Zero, width, height);
+	
+		public static MaskShape Ellipse(Rectangle rectangle) => Ellipse(rectangle.Center, rectangle.Width, rectangle.Height);
 
 		/// <summary>
 		/// Gets the special GRaff.MaskShape that indicates no mask.
@@ -96,8 +57,6 @@ namespace GRaff
 
 		/// <summary>
 		/// Gets the special GRaff.MaskShape that indicates a mask should use the MaskShape from the sprite of its referred object.
-		/// This will always return the exact same instance; they can for example be compared with == operator, or Object.ReferenceEquals.
-		/// Calling GRaff.MaskShape.SameAsSprite.Polygon leads to undefined behavior.
 		/// </summary>
 		public static MaskShape Automatic { get; } = new MaskShape();
 	}

@@ -1,5 +1,4 @@
-﻿using System;
-
+﻿
 
 namespace GRaff
 {
@@ -7,6 +6,7 @@ namespace GRaff
 	public sealed class Mask
 	{
 		private GameObject _owner;
+		private MaskShape _maskShape;
 
 		internal Mask(GameObject owner)
 		{
@@ -14,40 +14,27 @@ namespace GRaff
 			this.Shape = MaskShape.Automatic;
 		}
 
-		public Polygon GetPolygon()
-		{
-			return Transform.Polygon(Shape.Polygon);
-		}
+		public Polygon GetPolygon() => Transform.Polygon(Shape.Polygon);
 
-		private Transform Transform
-		{
-			get { return _owner.Transform; }
-		}
+		private Transform Transform => _owner.Transform;
 
-		private MaskShape _maskShape;
 		/// <summary>
 		/// Gets or sets the shape of this GRaff.Mask.
 		/// If the shape is set to GRaff.MaskShape.Automatic, it instead returns the MaskShape of the underlying sprite, or GRaff.MaskShape.None if that sprite is null.
 		/// This value cannot be set to null.
 		/// </summary>
 		/// <exception cref="ArgumentNullException">the value is null.</exception>
-#warning DESIGN: What happens if this value is set to null?
 		public MaskShape Shape
 		{
 			get
 			{
 				if (_maskShape == MaskShape.Automatic)
-					return _owner.Sprite?.MaskShape ?? MaskShape.None;
+					return _owner.Sprite?.MaskShape;
 				else
 					return _maskShape;	
 			}
 
-			set
-			{
-				if (value == null)
-					throw new ArgumentNullException(String.Format("The value of {0}.{1}.{2} cannot be null. Consider using {0}.{3}.{4} or {0}.{3}.{5}.", "GRaff", "Mask", "Shape", "MaskShape", "MaskShape.None", "MaskShape.Automatic"));
-				_maskShape = value;
-			}
+			set { _maskShape = value; }
 		}
 
 		public Rectangle BoundingBox
@@ -55,7 +42,7 @@ namespace GRaff
 			get
 			{
 				Polygon _polygon = GetPolygon();
-				if (_polygon.Length == 0)
+				if (_polygon == null)
 					return new Rectangle(Transform.X, Transform.Y, 0, 0);
 
 				Point vertex;
@@ -77,31 +64,15 @@ namespace GRaff
 			}
 		}
 
-		public bool ContainsPoint(Point pt)
-		{
-			return GetPolygon().ContainsPoint(pt);
-		}
+		public bool ContainsPoint(Point pt) => GetPolygon()?.ContainsPoint(pt) ?? false;
 
-		public bool ContainsPoint(double x, double y)
-		{
-			return ContainsPoint(new Point(x, y));
-		}
+		public bool ContainsPoint(double x, double y) => ContainsPoint(new Point(x, y));
 
 		public bool Intersects(Mask other)
 		{
-			if (other == null) throw new ArgumentNullException("other");
-			return GetPolygon().Intersects(other.GetPolygon());
-		}
-
-
-		public void DrawOutline()
-		{ 
-			DrawOutline(Color.Black);
-		}
-
-		public void DrawOutline(Color color)
-		{
-			Draw.Polygon(color, GetPolygon());
+			if (other == null)
+				return false;
+			return GetPolygon()?.Intersects(other.GetPolygon()) ?? false;
 		}
 	}
 }

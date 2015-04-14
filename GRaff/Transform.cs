@@ -13,8 +13,8 @@ namespace GRaff
 	/// Transformation of a point is performed in the following order:
 	/// - Scaling
 	/// - Shearing
-	/// - Rotation (around origin)
-	/// - Translation
+	/// - Rotation
+	/// - Translation (not performed on vectors)
 	/// </remarks>
 	public sealed class Transform
 	{
@@ -88,15 +88,15 @@ namespace GRaff
 			return new AffineMatrix(
 				XScale * (c - s * YShear), YScale * (-s + c * XShear), X,
 				XScale * (s + c * YShear), YScale * (c + s * XShear), Y
-				);
+			);
 		}
 
 		/// <summary>
 		/// Transforms the specified GRaff.Point.
 		/// </summary>
-		/// <param name="p">The GRaff.Point to transform</param>
+		/// <param name="p">The GRaff.Point to transform-</param>
 		/// <returns>The resulting GRaff.Point.</returns>
-		public Point Point(Point p) { return GetMatrix() * p; }
+		public Point Point(Point p) => GetMatrix() * p;
 
 		/// <summary>
 		/// Transforms the point with the specified x- and y-coordinates.
@@ -112,6 +112,7 @@ namespace GRaff
 
 			x *= XScale;
 			y *= YScale;
+
 			tx = x + XShear * y;
 			ty = y + YShear * x;
 			x = tx; y = ty;
@@ -125,11 +126,40 @@ namespace GRaff
 		}
 
 		/// <summary>
+		/// Transforms the specified GRaff.Vector. Note that result is not affected by the translational components of this GRaff.Transform.
+		/// </summary>
+		/// <param name="v">The GRaff.Vector to transform.</param>
+		/// <returns>The resulting GRaff.Vector.</returns>
+		public Vector Vector(Vector v) => GetMatrix() * v;
+
+		/// <summary>
+		/// Transforms the point with the specified x- and y-coordinates. Note that result is not affected by the translational components of this GRaff.Transform.
+		/// </summary>
+		/// <param name="x">The x-coordinate of the transformed vector.</param>
+		/// <param name="y">The y-coordinate of the transformed vector.</param>
+		/// <returns>The resulting GRaff.Vector.</returns>
+		public Vector Vector(double x, double y) => this.Vector(new GRaff.Vector(x, y));
+
+		/// <summary>
 		/// Transforms the specified GRaff.Line. This is equivalent to transforming its endpoints.
 		/// </summary>
 		/// <param name="line">The GRaff.Line to transform.</param>
 		/// <returns>The resulting GRaff.Line.</returns>
-		public Line Line(Line line) { return new Line(this.Point(line.Origin), this.Point(line.Destination)); }
+		public Line Line(Line line) => new Line(this.Point(line.Origin), this.Vector(line.Direction));
+
+		public Triangle Triangle(Triangle triangle)
+			=> this.Triangle(triangle.V1, triangle.V2, triangle.V3);
+
+		public Triangle Triangle(Point v1, Point v2, Point v3)
+		{
+			AffineMatrix T = GetMatrix();
+			return new Triangle(T * v1, T * v2, T * v3);
+		}
+
+		public Triangle Triangle(double x1, double y1, double x2, double y2, double x3, double y3)
+			=> this.Triangle(new Point(x1, y1), new Point(x2, y2), new Point(x3, y3));
+	
+
 
 		/// <summary>
 		/// Transforms the specified GRaff.Rectangle. This is equivalent to transforming its vertices.
@@ -140,10 +170,10 @@ namespace GRaff
 		{
 			AffineMatrix T = GetMatrix();
 			return new Point[] {
-				T * this.Point(rect.Left, rect.Top),
-				T * this.Point(rect.Right, rect.Top),
-				T * this.Point(rect.Right, rect.Bottom),
-				T * this.Point(rect.Left, rect.Bottom)
+				T * rect.TopLeft,
+				T * rect.TopRight,
+				T * rect.BottomRight,
+				T * rect.BottomLeft
 			};
 		}
 
@@ -154,7 +184,8 @@ namespace GRaff
 		/// <returns>The resulting GRaff.Polygon.</returns>
 		public Polygon Polygon(Polygon polygon)
 		{
-			if (polygon == null) return null;
+			if (polygon == null)
+				return null;
 			AffineMatrix T = GetMatrix();
 			return new GRaff.Polygon(polygon.Vertices.Select(v => T * v));
 		}
