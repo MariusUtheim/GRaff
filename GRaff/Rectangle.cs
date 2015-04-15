@@ -33,6 +33,8 @@ namespace GRaff
 		/// <param name="size">The size of the rectangle.</param>
 		public Rectangle(Point location, Vector size) : this(location.X, location.Y, size.X, size.Y) { }
 
+		public static Rectangle Zero { get; } = new Rectangle();
+
 
 		/// <summary>
 		/// Gets the width of this GRaff.Rectangle.

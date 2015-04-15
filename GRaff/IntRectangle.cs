@@ -17,8 +17,6 @@ namespace GRaff
 			Height = height;
 		}
 
-		public static readonly IntRectangle Zero;
-
 		/// <summary>
 		/// Initializes a new instance of the GRaff.IntRectangle class at the specified location and with the specified size.
 		/// </summary>
@@ -27,6 +25,8 @@ namespace GRaff
 		public IntRectangle(IntVector location, IntVector size)
 			: this(location.X, location.Y, size.X, size.Y)
 		{ }
+
+		public static IntRectangle Zero { get; } = new IntRectangle();
 
 		/// <summary>
 		/// Gets the left coordinate of this GRaff.IntRectangle.
@@ -111,6 +111,11 @@ namespace GRaff
 			else
 				return new IntRectangle(left, top, right - left, bottom - top);
 		}
+
+		public bool ContainsPoint(Point pt)
+			=> pt.X >= this.Left && pt.Y >= this.Top && pt.X < this.Right && pt.Y < this.Bottom;
+
+
 
 
 		/// <summary>

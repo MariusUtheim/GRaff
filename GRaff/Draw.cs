@@ -181,30 +181,35 @@ namespace GRaff
 		{
 			CurrentSurface.DrawLine(col1, col2, (PointF)p1, (PointF)p2);
 		}
-
+#warning DESIGN: ArgumentNullExceptions?
 		public static void Texture(Texture texture, double x, double y)
 		{
-			CurrentSurface.DrawTexture(texture, new PointF((float)x, (float)y));
+			if (texture != null)
+				CurrentSurface.DrawTexture(texture, new PointF((float)x, (float)y));
 		}
 
 		public static void Sprite(Sprite sprite, int imageIndex, double x, double y)
 		{
-			CurrentSurface.DrawSprite(sprite, imageIndex, (float)x, (float)y);
+			if (sprite != null)
+				CurrentSurface.DrawSprite(sprite, imageIndex, (float)x, (float)y);
 		}
 
 		public static void Polygon(Color color, Polygon polygon)
 		{
-			CurrentSurface.DrawPolygon(color, polygon);
+			if (polygon != null)
+				CurrentSurface.DrawPolygon(color, polygon);
 		}
 
 		public static void FillPolygon(Color color, Polygon polygon)
 		{
-			CurrentSurface.FillPolygon(color, polygon);
+			if (polygon != null)
+				CurrentSurface.FillPolygon(color, polygon);
 		}
 		
 		public static void Image(Image image)
 		{
-			CurrentSurface.DrawImage(image);
+			if (image != null)
+				CurrentSurface.DrawImage(image);
 		}
 
 		public static void Text(Font font, Color color, string text, double x, double y)

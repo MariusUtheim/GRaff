@@ -17,6 +17,10 @@ namespace GRaff
 			BottomRight = new PointF(right, bottom);
 		}
 
+		public Texture(TextureBuffer buffer, Rectangle region)
+			: this(buffer, (float)(region.Left / buffer.Width), (float)(region.Top / buffer.Height), (float)(region.Right / buffer.Width), (float)(region.Bottom / buffer.Height))
+		{ }
+
 		public int Id { get { return Buffer.Id; } }
 
 		public TextureBuffer Buffer { get; private set; }
@@ -33,6 +37,6 @@ namespace GRaff
 			=> Buffer.Width * (BottomRight.X - TopLeft.X);
 
 		public float PixelHeight
-			=> Buffer.Height * (BottomRight.Y + TopLeft.Y);
+			=> Buffer.Height * (TopRight.Y - BottomLeft.Y);
 	}
 }

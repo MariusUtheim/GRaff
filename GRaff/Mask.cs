@@ -14,7 +14,7 @@ namespace GRaff
 			this.Shape = MaskShape.Automatic;
 		}
 
-		public Polygon GetPolygon() => Transform.Polygon(Shape.Polygon);
+		public Polygon GetPolygon() => Transform.Polygon(Shape?.Polygon);
 
 		private Transform Transform => _owner.Transform;
 
