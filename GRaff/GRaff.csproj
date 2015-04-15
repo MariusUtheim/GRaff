@@ -65,7 +65,9 @@
     <Compile Include="Forms\DisplayObject.EventHandling.cs" />
     <Compile Include="Forms\Form.cs" />
     <Compile Include="Forms\FormEventArgs.cs" />
+    <Compile Include="Forms\MessageBox.cs" />
     <Compile Include="Forms\MouseEventArgs.cs" />
+    <Compile Include="Forms\OpenFileDialog.cs" />
     <Compile Include="Forms\Quad.cs" />
     <Compile Include="RedBlackTree.cs" />
     <Compile Include="Synchronization\Alarm.cs" />
