@@ -29,10 +29,5 @@ namespace GRaff.Forms
 			if (Region.ContainsPoint(globalLocation))
 				onMouseRelease(this, new MouseEventArgs(button, globalLocation), PointToLocal(globalLocation));
 		}
-
-		public override void OnPaint()
-		{
-			Draw.FillRectangle(Color.Teal, Region);
-		}
 	}
 }

@@ -10,6 +10,12 @@ using GLPixelFormat = OpenTK.Graphics.ES30.PixelFormat;
 
 namespace GRaff
 {
+	/// <summary>
+	/// Represents a texture buffer.
+	/// </summary>
+	/// <remarks>
+	/// The following file types are supported: BMP, GIF, EXIF, JPG, PNG and TIFF
+	/// </remarks>
 	public sealed class TextureBuffer : IDisposable
 	{
 		private bool _disposed = false;

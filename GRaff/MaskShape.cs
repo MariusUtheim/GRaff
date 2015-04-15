@@ -21,7 +21,7 @@ namespace GRaff
 		public Polygon Polygon { get; private set; }
 
 
-		public static MaskShape Rectangle(double x, double y, double width, double height) => Rectangle(x, y, width, height);
+		public static MaskShape Rectangle(double x, double y, double width, double height) => Rectangle(new Rectangle(x, y, width, height));
 
 		public static MaskShape Rectangle(double width, double height) => Rectangle(-width / 2, -height / 2, width, height);
 

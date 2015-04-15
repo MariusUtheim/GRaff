@@ -225,8 +225,8 @@ namespace GRaff
 		/// <returns>A System.Threading.Tasks.Task that will complete when the texture is finished loading.</returns>
 		public IAsyncOperation LoadAsync()
 		{
-			if (!IsLoaded)
-				return _loadingOperation;
+		//	if (!IsLoaded)
+		//		return _loadingOperation;
 
 			return TextureBuffer.LoadAsync(FileName)
 								.ThenSync(textureBuffer => _load(textureBuffer));
