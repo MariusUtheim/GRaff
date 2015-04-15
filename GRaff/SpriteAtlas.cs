@@ -79,7 +79,7 @@ namespace GRaff
 #warning Image path from the xml file should be specified relative to the xml
 			var imagePath = ImagePath ?? textureAtlas.imagePath;
 
-			return TextureBuffer.LoadAsync(imagePath).ThenSync(buffer => {
+			return TextureBuffer.LoadAsync(imagePath).Then(buffer => {
 				IsLoaded = true;
 				_subTextures = new Dictionary<string, Texture>(textureAtlas.SubTexture.Length);
 				foreach (var sx in textureAtlas.SubTexture)

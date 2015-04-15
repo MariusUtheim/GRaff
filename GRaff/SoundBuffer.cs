@@ -88,7 +88,7 @@ namespace GRaff
 		public static IAsyncOperation<SoundBuffer> LoadAsync(string fileName, double offset)
 		{
 			return Async.RunAsync(() => SoundFileLoader.LoadAsync(fileName))
-						.ThenSync(soundFile => new SoundBuffer(soundFile.Bitrate, soundFile.Channels, soundFile.Frequency, soundFile.Buffer, offset));
+						.Then(soundFile => new SoundBuffer(soundFile.Bitrate, soundFile.Channels, soundFile.Frequency, soundFile.Buffer, offset));
 		}
 
 #region IDisposable implementation

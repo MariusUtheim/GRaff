@@ -226,14 +226,14 @@ namespace GRaff.Synchronization
 				_continuations.Enqueue(continuation);
 		}
 
-		public IAsyncOperation Then(Func<IAsyncOperation> action)
+		public IAsyncOperation ThenRun(Func<IAsyncOperation> action)
 		{
 			var continuation = new AsyncOperation(this, new InvokerOperator(obj => action()));
 			Then(continuation);
 			return continuation;
 		}
 
-		public IAsyncOperation<TNext> Then<TNext>(Func<IAsyncOperation<TNext>> action)
+		public IAsyncOperation<TNext> ThenRun<TNext>(Func<IAsyncOperation<TNext>> action)
 		{
 			var continuation = new AsyncOperation<TNext>(this, new InvokerOperator<TNext>(obj => action()));
 			Then(continuation);
@@ -254,14 +254,14 @@ namespace GRaff.Synchronization
 			return continuation;
 		}
 
-		public IAsyncOperation ThenSync(Action action)
+		public IAsyncOperation Then(Action action)
 		{
 			var continuation = new AsyncOperation(this, new SerialOperator(obj => { action(); return null; }));
 			Then(continuation);
 			return continuation;
 		}
 
-		public IAsyncOperation<TNext> ThenSync<TNext>(Func<TNext> action)
+		public IAsyncOperation<TNext> Then<TNext>(Func<TNext> action)
 		{
 			var continuation = new AsyncOperation<TNext>(this, new SerialOperator(obj => action()));
 			Then(continuation);

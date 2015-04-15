@@ -23,28 +23,28 @@ namespace GRaff.Synchronization
 			: base(preceeding, op)
 		{ }
 
-		public IAsyncOperation Then(Func<TPass, IAsyncOperation> action)
+		public IAsyncOperation ThenRun(Func<TPass, IAsyncOperation> action)
 		{
 			var continuation = new AsyncOperation(this, new InvokerOperator(obj => action((TPass)obj)));
 			Then(continuation);
 			return continuation;
 		}
 
-		public IAsyncOperation<TNext> Then<TNext>(Func<TPass, IAsyncOperation<TNext>> action)
+		public IAsyncOperation<TNext> ThenRun<TNext>(Func<TPass, IAsyncOperation<TNext>> action)
 		{
 			var continuation = new AsyncOperation<TNext>(this, new InvokerOperator<TNext>(obj => action((TPass)obj)));
 			Then(continuation);
 			return continuation;
 		}
 
-		public IAsyncOperation ThenSync(Action<TPass> action)
+		public IAsyncOperation Then(Action<TPass> action)
 		{
 			var continuation = new AsyncOperation(this, new SerialOperator(obj => { action((TPass)obj); return null; }));
 			Then(continuation);
 			return continuation;
 		}
 
-		public IAsyncOperation<TNext> ThenSync<TNext>(Func<TPass, TNext> action)
+		public IAsyncOperation<TNext> Then<TNext>(Func<TPass, TNext> action)
 		{
 			var continuation = new AsyncOperation<TNext>(this, new SerialOperator(obj => action((TPass)obj)));
 			Then(continuation);

@@ -27,7 +27,7 @@ namespace GameMaker.UnitTesting
 			operation.Abort();
 			Assert.AreEqual(AsyncOperationState.Aborted, operation.State);
 
-			operation = Async.Run(() => { }).ThenSync(() => { });
+			operation = Async.Run(() => { }).Then(() => { });
 			Assert.AreEqual(AsyncOperationState.Initial, operation.State);
 
 			operation = Async.Run(() =>  { throw new Exception("Error"); });
@@ -43,7 +43,7 @@ namespace GameMaker.UnitTesting
 
 			operation = Async.Operation();
 			for (int i = 0; i < 10; i++)
-				operation = operation.ThenSync(() => { count++; });
+				operation = operation.Then(() => { count++; });
 
 			for (int i = 0; i < 10; i++)
 			{
@@ -61,7 +61,7 @@ namespace GameMaker.UnitTesting
 			Async.HandleEvents();
 
 			for (int i = 0; i < 10; i++)
-				operation = operation.ThenSync(count => count + 1);
+				operation = operation.Then(count => count + 1);
 
 			for (int i = 0; i < 10; i++)
 				Async.HandleEvents();
@@ -80,8 +80,8 @@ namespace GameMaker.UnitTesting
 			Func<int, Action> incrementBy = i => (() => count += i);
 			for (int i = 0; i < 10; i++)
 			{
-				operation.ThenSync(incrementBy(i));
-				operation = operation.ThenSync(incrementBy(i));
+				operation.Then(incrementBy(i));
+				operation = operation.Then(incrementBy(i));
 			}
 
 			int expected = 0;
@@ -101,7 +101,7 @@ namespace GameMaker.UnitTesting
 			Async.HandleEvents();
 
 			for (int i = 0; i < 10; i++)
-				operation = operation.Then(count => Async.Run(() => count + 1));
+				operation = operation.ThenRun(count => Async.Run(() => count + 1));
 
 			for (int i = 0; i < 10; i++)
 				Async.HandleEvents();
@@ -152,7 +152,7 @@ namespace GameMaker.UnitTesting
 			IAsyncOperation operation = Async.Operation();
 			int count = 0;
 			for (int i = 0; i < 10; i++)
-				operation = operation.ThenSync(() => { count++; });
+				operation = operation.Then(() => { count++; });
 			
 			operation.Wait();
 			Assert.AreEqual(10, count);
@@ -209,7 +209,7 @@ namespace GameMaker.UnitTesting
 			operation = Async
 				.Run(() => { throw new Exception("Error"); })
 				.Catch<Exception>(ex => { caughtException = true; })
-				.ThenSync(() => { finished = true; });
+				.Then(() => { finished = true; });
 			Async.HandleEvents();
 			Async.HandleEvents();
 			Assert.IsTrue(caughtException);
@@ -219,7 +219,7 @@ namespace GameMaker.UnitTesting
 			caughtException = finished = false;
 			operation = Async
 				.Run(() => { throw new Exception("Error"); })
-				.ThenSync(() => { finished = true; })
+				.Then(() => { finished = true; })
 				.Catch<Exception>(ex => caughtException = true);
 			Async.HandleEvents();
 			Async.HandleEvents();
@@ -231,7 +231,7 @@ namespace GameMaker.UnitTesting
 			operation = Async
 				.Run(() => { throw new ArithmeticException("Error"); })
 				.Catch<DivideByZeroException>(ex => { caughtException = true; })
-				.ThenSync(() => { finished = true; })
+				.Then(() => { finished = true; })
 				.Catch<Exception>(ex => { caughtException = true; });
 			Async.HandleEvents();
 			Async.HandleEvents();
@@ -330,7 +330,7 @@ namespace GameMaker.UnitTesting
 			completedIndex = -1;
 			IAsyncOperation any;
 			any = Async.Any(
-				Async.Run(() => { }).ThenSync(() => { }),
+				Async.Run(() => { }).Then(() => { }),
 				Async.Run(() => { })
 			).ThenWait(index => completedIndex = index);
 

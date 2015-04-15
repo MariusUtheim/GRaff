@@ -63,7 +63,7 @@ namespace GRaff
 				return _loadingOperation;
 
 			return TextureBuffer.LoadAsync(_bitmapFile)
-				.ThenSync(textureBuffer => {
+				.Then(textureBuffer => {
 					_textureBuffer = textureBuffer;
 					var fontData = FontLoader.Load(_dataFile);
 

@@ -39,12 +39,12 @@ namespace GRaff.Synchronization
 
 		public static IAsyncOperation Run(Action action)
 		{
-			return new AsyncOperation().ThenSync(action);
+			return new AsyncOperation().Then(action);
 		}
 
 		public static IAsyncOperation<TPass> Run<TPass>(Func<TPass> action)
 		{
-			return new AsyncOperation().ThenSync(action);
+			return new AsyncOperation().Then(action);
 		}
 
 		public static IAsyncOperation RunAsync(Func<Task> action)

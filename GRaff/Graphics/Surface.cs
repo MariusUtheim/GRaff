@@ -135,8 +135,8 @@ namespace GRaff.Graphics
 
 		public void DrawRectangle(Color col1, Color col2, Color col3, Color col4, float x, float y, float w, float h)
 		{
-			Render(new[] { new PointF(x, y), new PointF(x + w, y), new PointF(x + w, y + h), new PointF(x, y + h) },
-				   new[] { col1, col2, col3, col4 }, PrimitiveType.LineLoop);
+			Render(new[] { new PointF(x, y), new PointF(x + w, y), new PointF(x + w, y + h), new PointF(x, y + h), new PointF(x, y + h) },
+				   new[] { col1, col2, col3, col4, col4 }, PrimitiveType.LineLoop);
 		}
 
 		public void FillRectangle(Color col1, Color col2, Color col3, Color col4, float x, float y, float w, float h)
