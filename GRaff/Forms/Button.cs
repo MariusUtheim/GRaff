@@ -13,7 +13,7 @@ namespace GRaff.Forms
 
 		public Button()
 		{
-			Color = Color.LightGray;
+			Color = Colors.LightGray;
 			MouseEnter += (_, e) => { _isHovering = true; };
 			MouseLeave += (_, e) => { _isHovering = false; };
 			MouseDown += (_, e) => { if (e.Button == MouseButton.Left) _isPressed = true; };

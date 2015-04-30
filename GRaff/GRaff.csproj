@@ -165,7 +165,7 @@
     <Compile Include="Synchronization\CatchContext.cs" />
     <Compile Include="Background.cs" />
     <Compile Include="Color.cs" />
-    <Compile Include="Color.Definitions.cs" />
+    <Compile Include="Colors.cs" />
     <Compile Include="Graphics\BlendEquation.cs" />
     <Compile Include="Graphics\BlendMode.cs" />
     <Compile Include="Graphics\ColorMap.cs" />

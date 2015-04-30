@@ -21,12 +21,7 @@ namespace GRaff.Graphics
 
 		public static void Bind(this Texture texture)
 		{
-			GL.BindTexture(TextureTarget.Texture2D, texture.Id);
-		}
-
-		public static PointF[] GetTexCoords(this Texture texture)
-		{
-			return new[] { texture.BottomLeft, texture.BottomRight, texture.TopLeft, texture.TopRight };
+			GL.BindTexture(TextureTarget.Texture2D, texture.Buffer.Id);
 		}
 	}
 }

@@ -16,147 +16,106 @@ namespace GRaff
 	/// <remarks>
 	/// The following file types are supported: BMP, GIF, EXIF, JPG, PNG and TIFF
 	/// </remarks>
-	public sealed class TextureBuffer : IDisposable
+	public sealed class TextureBuffer : IAsset
 	{
-		private bool _disposed = false;
-		private int _id;
+		private IAsyncOperation _loadingOperation;
 
-		private TextureBuffer(int width, int height)
+		public TextureBuffer(string path)
 		{
 			Debug.Assert(GRaff.Graphics.Context.IsAlive);
-
-			GL.GenTextures(1, out _id);
-
-			if (_id == 0)
-				Console.WriteLine("[TextureBuffer] Got id 0");
-			Debug.Assert(_id != 0);
-
-			this.Width = width;
-			this.Height = height;
-
-
-			GL.BindTexture(TextureTarget.Texture2D, _id);
-
-			//GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, Width, Height, 0, OpenTK.Graphics.ES30.PixelFormat.Bgra, PixelType.UnsignedByte, textureData.Scan0);
-			//GL.GenerateMipmap(GenerateMipmapTarget.Texture2D);
-			GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
-			GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.LinearMipmapLinear);
-			ErrorCode errorCode;
-			if ((errorCode = GL.GetError()) != ErrorCode.NoError) 
-				throw new Exception(String.Format("Loading a texture caused an error: {0} (code: {1})", Enum.GetName(typeof(ErrorCode), errorCode), errorCode));
+			Id = GL.GenTexture();
+			Debug.Assert(Id != 0);
+			this.Path = path;
+			Texture = new Texture(this, new Rectangle(0, 0, 1, 1));
 		}
 
-		public TextureBuffer(int width, int height, IntPtr textureData)
-			: this(width, height)
-		{
-			GL.TexImage2D(TextureTarget2d.Texture2D, 0, TextureComponentCount.Rgba, Width, Height, 0, GLPixelFormat.Rgba, PixelType.UnsignedByte, textureData);
-			GL.GenerateMipmap(TextureTarget.Texture2D);
-		}
-
-		public TextureBuffer(int width, int height, byte[] data)
-			: this(width, height)
-		{
-			Debug.Assert(data.Length == width * height * 4);
-			GL.TexImage2D(TextureTarget2d.Texture2D, 0, TextureComponentCount.Rgba, Width, Height, 0, GLPixelFormat.Rgba, PixelType.UnsignedByte, data);
-			GL.GenerateMipmap(TextureTarget.Texture2D);
-		}
-
-		/// <summary>
-		/// Loads a texture from the specified file. 
-		/// </summary>
-		/// <param name="filename">The texture filename and path.</param>
-		/// <returns>A new GRaff.Texture representing the loaded file.</returns>
-		public static TextureBuffer Load(string filename)
-		{
-			using (var stream = new FileStream(filename, FileMode.Open))
-			using (var bmp = new Bitmap(stream))
-			{
-				var textureData = bmp.LockBits(new System.Drawing.Rectangle(0, 0, bmp.Width, bmp.Height),
-												ImageLockMode.ReadOnly,
-												System.Drawing.Imaging.PixelFormat.Format32bppArgb);
-				return new TextureBuffer(bmp.Width, bmp.Height, textureData.Scan0);
-			}
-
-		}
-
-		private static async Task<Bitmap> LoadBitmapAsync(string filename)
-		{
-			byte[] buffer;
-
-            using (var inputStream = new FileStream(filename, FileMode.Open))
-			{
-				buffer = new byte[inputStream.Length];
-				using (var outputStream = new MemoryStream(buffer))
-					await inputStream.CopyToAsync(outputStream);
-			}
-
-			Bitmap bitmap;
-			using (var bitmapStream = new MemoryStream(buffer))
-				bitmap = new Bitmap(bitmapStream);
-			return bitmap;
-		}
-
-		public static IAsyncOperation<TextureBuffer> LoadAsync(string filename)
-		{
-			return Async.RunAsync(() => LoadBitmapAsync(filename))
-				.ThenSync(bitmap => {
-					var textureData = bitmap.LockBits(new System.Drawing.Rectangle(0, 0, bitmap.Width, bitmap.Height),
-														 ImageLockMode.ReadOnly,
-														System.Drawing.Imaging.PixelFormat.Format32bppArgb);
-					return new TextureBuffer(bitmap.Width, bitmap.Height, textureData.Scan0);
-                });
-		}
-
-		public int Width
-		{
-			get;
-			private set;
-		}
-
-		public int Height
-		{
-			get;
-			private set;
-		}
-
-		public int Id
-		{
-			get
-			{
-				if (_disposed)
-					throw new ObjectDisposedException("Texture");
-				return _id;
-			}
-		}
-
-		public Texture GetTexture()
-		{
-			return new Texture(this, 0, 0, 1.0f, 1.0f); 
-		}
-
-#region IDisposable implementation
 		~TextureBuffer()
 		{
-			Dispose(false);
-		}
-
-		public void Dispose()
-		{
-			GC.SuppressFinalize(this);
-			Dispose(true);
-		}
-
-		private void Dispose(bool disposing)
-		{
-			if (!_disposed)
+			_loadingOperation?.Abort();
+			Async.Run(() =>
 			{
-				_disposed = true;
-				if (Graphics.Context.IsAlive)
-					GL.DeleteTexture(_id);
-				else
-					Async.Run(() => GL.DeleteTexture(_id));
+				if (GL.IsBuffer(Id))
+					GL.DeleteBuffer(Id);
+			});
+		}
+
+		public static TextureBuffer Load(string path)
+		{
+			var buffer = new TextureBuffer(path);
+			buffer.Load();
+			return buffer;
+		}
+
+		public static IAsyncOperation<TextureBuffer> LoadAsync(string path)
+			=> Async.Run(() => new TextureBuffer(path)).ThenRun(buffer => buffer.LoadAsync().Then(() => buffer));
+
+		public int Id { get; private set; }
+
+		public Texture Texture { get; private set; }
+
+		public bool IsLoaded { get; private set; }
+
+		public string Path { get; private set; }
+
+		public int Width { get; private set; }
+
+		public int Height { get; private set; }
+
+		public IAsyncOperation LoadAsync()
+		{
+			return Async.RunAsync(async () =>
+			{
+				byte[] buffer;
+
+				using (var inputStream = new FileStream(Path, FileMode.Open))
+				{
+					buffer = new byte[inputStream.Length];
+					using (var outputStream = new MemoryStream(buffer))
+						await inputStream.CopyToAsync(outputStream);
+				}
+
+				using (var bitmapStream = new MemoryStream(buffer))
+					return new Bitmap(bitmapStream);
+			})
+			.Then(bitmap =>
+			{
+				var textureData = bitmap.LockBits(new System.Drawing.Rectangle(0, 0, bitmap.Width, bitmap.Height),
+													ImageLockMode.ReadOnly,
+													System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+
+				this.Width = bitmap.Width;
+				this.Height = bitmap.Height;
+
+				GL.BindTexture(TextureTarget.Texture2D, Id);
+				GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
+				GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.LinearMipmapLinear);
+				GL.TexImage2D(TextureTarget2d.Texture2D, 0, TextureComponentCount.Rgba, Width, Height, 0, GLPixelFormat.Rgba, PixelType.UnsignedByte, textureData.Scan0);
+				GL.GenerateMipmap(TextureTarget.Texture2D);
+
+				IsLoaded = true;
+				_loadingOperation = null;
+
+				var err = GL.GetError();
+				if (err != ErrorCode.NoError)
+					throw new Exception(Enum.GetName(typeof(ErrorCode), err));
+			});
+		}
+
+		public void Unload()
+		{
+			_loadingOperation?.Abort();
+			_loadingOperation = null;
+			if (IsLoaded)
+			{
+				GL.DeleteBuffer(Id);
+				Width = 0;
+				Height = 0;
+				IsLoaded = false;
 			}
 		}
-#endregion
+
+		public Texture Subtexture(Rectangle region)
+			=> new Texture(this, region);
 	}
+
 }

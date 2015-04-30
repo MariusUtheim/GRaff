@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.Contracts;
 using GRaff.Graphics;
 
 
@@ -188,10 +189,24 @@ namespace GRaff
 				CurrentSurface.DrawTexture(texture, new PointF((float)x, (float)y));
 		}
 
+
 		public static void Sprite(Sprite sprite, int imageIndex, double x, double y)
 		{
 			if (sprite != null)
 				CurrentSurface.DrawSprite(sprite, imageIndex, (float)x, (float)y);
+		}
+
+		public static void Sprite(Sprite sprite, int imageIndex, Point p)
+		{
+			if (sprite != null)
+				CurrentSurface.DrawSprite(sprite, imageIndex, (float)p.X, (float)p.Y);
+		}
+
+		public static void Sprite(Sprite sprite, int imageIndex, Transform transform)
+		{
+			Contract.Requires(transform != null);
+			if (sprite != null)
+				CurrentSurface.DrawSprite(sprite, imageIndex, Colors.White, transform.GetMatrix());
 		}
 
 		public static void Polygon(Color color, Polygon polygon)

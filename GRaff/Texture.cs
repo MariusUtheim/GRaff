@@ -7,36 +7,37 @@ namespace GRaff
 #warning Move to GRaff.Graphics?
 	public sealed class Texture
 	{
-		public Texture(TextureBuffer buffer, float left, float bottom, float right, float top)
+		internal Texture(TextureBuffer buffer, PointF topLeft, PointF topRight, PointF bottomLeft, PointF bottomRight)
 		{
 			Contract.Requires(buffer != null);
 			Buffer = buffer;
-			TopLeft = new PointF(left, top);
-			TopRight = new PointF(right, top);
-			BottomLeft = new PointF(left, bottom);
-			BottomRight = new PointF(right, bottom);
+			TexCoords = new[] { topLeft, topRight, bottomLeft, bottomRight };
 		}
 
 		public Texture(TextureBuffer buffer, Rectangle region)
-			: this(buffer, (float)(region.Left / buffer.Width), (float)(region.Top / buffer.Height), (float)(region.Right / buffer.Width), (float)(region.Bottom / buffer.Height))
+			: this(buffer, (PointF)region.TopLeft, (PointF)region.TopRight, (PointF)region.BottomLeft, (PointF)region.BottomRight)
 		{ }
 
-		public int Id { get { return Buffer.Id; } }
+		internal PointF[] TexCoords { get; private set; }
 
 		public TextureBuffer Buffer { get; private set; }
 
-		public PointF TopLeft { get; private set; }
+		public PointF TopLeft => TexCoords[0];
 		
-		public PointF TopRight { get; private set; }
+		public PointF TopRight => TexCoords[1];
 
-		public PointF BottomLeft { get; private set; }
+		public PointF BottomRight => TexCoords[3];
 
-		public PointF BottomRight { get; private set; }
+		public PointF BottomLeft => TexCoords[2];
 
-		public float PixelWidth
-			=> Buffer.Width * (BottomRight.X - TopLeft.X);
+		public double Width => (0.5 * (Point)(TopLeft + BottomLeft) - 0.5 * (Point)(TopRight + BottomRight)).Magnitude * Buffer.Width;
 
-		public float PixelHeight
-			=> Buffer.Height * (TopRight.Y - BottomLeft.Y);
+		public double Height => (0.5 * (Point)(TopLeft + TopRight) - 0.5 * (Point)(BottomLeft + BottomRight)).Magnitude * Buffer.Height;
+
+		public Vector Size => new Vector(Width, Height);
+
+		internal float PixelWidth => Buffer.Width * (BottomRight.X - TopLeft.X);
+
+		internal float PixelHeight => Buffer.Height * (BottomRight.Y - TopLeft.Y);
 	}
 }

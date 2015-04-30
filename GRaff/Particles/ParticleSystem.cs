@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using System.Threading.Tasks;
 using GRaff.Graphics;
 
@@ -17,6 +18,7 @@ namespace GRaff.Particles
 
 		public ParticleSystem(ParticleType type)
 		{
+			Contract.Requires(type != null);
 			particles = new LinkedList<Particle>();
 			_renderSystem = new TexturedRenderSystem();
 			this.ParticleType = type;

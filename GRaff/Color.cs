@@ -10,7 +10,7 @@ namespace GRaff
 	/// Represents an ARGB color. Note that colors can be cast from uint structures on the form 0xAARRGGBB.
 	/// </summary>
 	[StructLayout(LayoutKind.Sequential)]
-	public partial struct Color : IEquatable<Color>
+	public struct Color : IEquatable<Color>
 	{
 		/// <summary>
 		/// Initializes a new instance of the GRaff.Color structure using the specifed alpha, red, green and blue values.
@@ -83,31 +83,6 @@ namespace GRaff
 		/// </summary>
 		public Color Inverse => new Color(A, 255 - R, 255 - G, 255 - B);
 
-
-		/// <summary>
-		/// Averages this with the specified GRaff.Color structures, calculating the average of each channel separately.
-		/// </summary>
-		/// <param name="colors">An array of GRaff.Color structures that will be merged with this GRaff.Color.</param>
-		/// <returns>The average of all the GRaff.Color structures.</returns>
-		/// <exception cref="System.ArgumentNullException">colors is null.</exception>
-		public Color Merge(params Color[] colors)
-		{
-			if (colors == null) throw new ArgumentNullException("colors", "Cannot be null");
-			if (colors.Length == 0)
-				return this;
-
-			int a = A, r = R, g = G, b = B;
-
-			for (int i = 0; i < colors.Length; i++)
-			{
-				a += colors[i].A;
-				r += colors[i].R;
-				g += colors[i].G;
-				b += colors[i].B;
-			}
-
-			return new Color(a / (colors.Length + 1), r / (colors.Length + 1), g / (colors.Length + 1), b / (colors.Length + 1));
-		}
 
 		/// <summary>
 		/// Finds the weighted average of the two GRaff.Color structures, calculating the average of each channel separately.

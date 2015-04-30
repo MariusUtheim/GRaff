@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Express 2013 for Windows Desktop
-VisualStudioVersion = 12.0.21005.1
+# Visual Studio 14
+VisualStudioVersion = 14.0.22310.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GRaff", "GRaff\GRaff.csproj", "{64447CF0-9D21-4B49-B12B-7830BEE354C7}"
 EndProject
@@ -14,6 +14,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpaceGame", "..\SpaceGame\SpaceGame\SpaceGame.csproj", "{361CE8A3-970B-4247-943E-C588491496A9}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FormsTest", "FormsTest\FormsTest.csproj", "{459D51B3-89E5-47DF-B0C7-E3232E827971}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GRaff.GraphicTest", "GRaff.GraphicTest\GRaff.GraphicTest.csproj", "{FD4FF50D-C554-4946-A639-AAC11BD5D2B1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -38,7 +40,6 @@ Global
 		{94D0C712-DCE2-4A85-BDD2-2CDDC7106B35}.Test|Any CPU.ActiveCfg = Release|Any CPU
 		{94D0C712-DCE2-4A85-BDD2-2CDDC7106B35}.Test|Any CPU.Build.0 = Release|Any CPU
 		{D3FDEF6A-2EB9-4721-B41B-486A70B3C268}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D3FDEF6A-2EB9-4721-B41B-486A70B3C268}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D3FDEF6A-2EB9-4721-B41B-486A70B3C268}.Publish|Any CPU.ActiveCfg = Publish|Any CPU
 		{D3FDEF6A-2EB9-4721-B41B-486A70B3C268}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D3FDEF6A-2EB9-4721-B41B-486A70B3C268}.Test|Any CPU.ActiveCfg = Release|Any CPU
@@ -65,6 +66,14 @@ Global
 		{459D51B3-89E5-47DF-B0C7-E3232E827971}.Release|Any CPU.Build.0 = Release|Any CPU
 		{459D51B3-89E5-47DF-B0C7-E3232E827971}.Test|Any CPU.ActiveCfg = Release|Any CPU
 		{459D51B3-89E5-47DF-B0C7-E3232E827971}.Test|Any CPU.Build.0 = Release|Any CPU
+		{FD4FF50D-C554-4946-A639-AAC11BD5D2B1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FD4FF50D-C554-4946-A639-AAC11BD5D2B1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FD4FF50D-C554-4946-A639-AAC11BD5D2B1}.Publish|Any CPU.ActiveCfg = Release|Any CPU
+		{FD4FF50D-C554-4946-A639-AAC11BD5D2B1}.Publish|Any CPU.Build.0 = Release|Any CPU
+		{FD4FF50D-C554-4946-A639-AAC11BD5D2B1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FD4FF50D-C554-4946-A639-AAC11BD5D2B1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FD4FF50D-C554-4946-A639-AAC11BD5D2B1}.Test|Any CPU.ActiveCfg = Release|Any CPU
+		{FD4FF50D-C554-4946-A639-AAC11BD5D2B1}.Test|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

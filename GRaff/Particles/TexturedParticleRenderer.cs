@@ -11,24 +11,25 @@ namespace GRaff.Particles
 	{
 		TexturedRenderSystem _renderSystem = new TexturedRenderSystem();
 
-		public TexturedParticleRenderer(Sprite sprite)
+		public TexturedParticleRenderer(Texture texture)
 		{
-			Sprite = sprite;
+			Texture = texture;
 		}
 
-		public Sprite Sprite { get; set; }
+		public Texture Texture { get; private set; }
 
 		public void Render(IEnumerable<Particle> particles)
 		{
 			int count = particles.Count();
 			PointF[] vertices = new PointF[4 * count];
 			Color[] colors = new Color[4 * count];
-
+			throw new NotImplementedException();
+			/*
 			PointF
-				tl = new PointF(-Sprite.XOrigin, -Sprite.YOrigin),
-				tr = new PointF(Sprite.XOrigin, -Sprite.YOrigin),
-				bl = new PointF(-Sprite.XOrigin, Sprite.YOrigin),
-				br = new PointF(Sprite.XOrigin, Sprite.YOrigin);
+				tl = new PointF(-(float)Texture.XOrigin, -(float)Texture.YOrigin),
+				tr = new PointF( (float)Texture.XOrigin, -(float)Texture.YOrigin),
+				bl = new PointF(-(float)Texture.XOrigin,  (float)Texture.YOrigin),
+				br = new PointF( (float)Texture.XOrigin,  (float)Texture.YOrigin);
 
 			Parallel.ForEach(particles, (particle, loopState, index) =>
 			{
@@ -45,8 +46,9 @@ namespace GRaff.Particles
 			_renderSystem.QuadTexCoords(UsageHint.StreamDraw, count);
 
 			ShaderProgram.CurrentTextured.SetCurrent();
-			Sprite.Texture.Bind();
+			Sprite.Bind();
 			_renderSystem.Render(PrimitiveType.Quads, vertices.Length);
+			*/
 		}
 	}
 }

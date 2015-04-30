@@ -24,17 +24,17 @@ namespace GRaff
 		/// <summary>
 		/// Represents an angle of zero.
 		/// </summary>
-		public static readonly Angle Zero = new Angle();
+		public static Angle Zero { get; } = new Angle();
 
 		/// <summary>
 		/// Represents the smallest representable non-zero angle.
 		/// </summary>
-		public static readonly Angle Epsilon = new Angle(precision);
+		public static Angle Epsilon { get; } = new Angle(precision);
 
 		/// <summary>
 		/// Represents the largest representable angle that is less than a full turn.
 		/// </summary>
-		public static readonly Angle MaxAngle = new Angle(ulong.MaxValue - precision + 1);
+		public static Angle MaxAngle { get; } = new Angle(ulong.MaxValue - precision + 1);
 
 		internal Angle(ulong data)
 		{
@@ -90,22 +90,22 @@ namespace GRaff
 		/// <summary>
 		/// Finds the direction of the vector from the point (x1,y1) to the point (x2,y2).
 		/// </summary>
-		/// <param name="x1">The x-coordinate of the first point.</param>
-		/// <param name="y1">The y-coordinate of the first point.</param>
-		/// <param name="x2">The x-coordinate of the second point.</param>
-		/// <param name="y2">The y-coordinate of the second point.</param>
+		/// <param name="xFrom">The x-coordinate of the first point.</param>
+		/// <param name="yFrom">The y-coordinate of the first point.</param>
+		/// <param name="xTo">The x-coordinate of the second point.</param>
+		/// <param name="yTo">The y-coordinate of the second point.</param>
 		/// <returns>The direction of the vector from the first to the second point.</returns>
-		public static Angle Direction(double x1, double y1, double x2, double y2) 
-			=> GMath.Atan2(y2 - y1, x2 - x1);
+		public static Angle Direction(double xFrom, double yFrom, double xTo, double yTo) 
+			=> GMath.Atan2(yTo - yFrom, xTo - xFrom);
 
 		/// <summary>
 		/// Finds the direction of the vector between the two points.
 		/// </summary>
-		/// <param name="p1">The first point.</param>
-		/// <param name="p2">The second point.</param>
+		/// <param name="from">The first point.</param>
+		/// <param name="to">The second point.</param>
 		/// <returns>The direction of the vector from the first to the second point.</returns>
-		public static Angle Direction(Point p1, Point p2) 
-			=> GMath.Atan2(p2.Y - p1.Y, p2.X - p1.X);
+		public static Angle Direction(Point from, Point to) 
+			=> (to - from).Direction;
 
 		/// <summary>
 		/// Computes the acute angle between the two angles. This value is always in the interval [0° and 180°).

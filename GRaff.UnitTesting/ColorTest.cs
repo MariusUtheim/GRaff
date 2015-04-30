@@ -26,10 +26,6 @@ namespace GRaff.UnitTesting
 		{
 			Color expected, actual;
 
-			actual = new Color(0xFF300000).Merge(new Color[] { 0xFF003000, 0xFF000030 });
-			expected = 0xFF101010;
-			Assert.AreEqual<Color>(expected, actual);
-
 			actual = new Color(0xFF102030).Transparent(128);
 			expected = 0x80102030;
 			Assert.AreEqual<Color>(expected, actual);

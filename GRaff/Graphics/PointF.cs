@@ -24,8 +24,9 @@ namespace GRaff.Graphics
 		public static PointF operator *(AffineMatrix m, PointF p)
 			=> new PointF((float)(m.M00 * p.X + m.M01 * p.Y + m.M02), (float)(m.M10 * p.X + m.M11 * p.Y + m.M12));
 
-		public static PointF operator *(PointF p, AffineMatrix m)
-			=> new PointF((float)(m.M00 * p.X + m.M01 * p.Y + m.M02), (float)(m.M10 * p.X + m.M11 * p.Y + m.M12));
+
+		public static PointF operator *(float left, PointF right)
+			=> new PointF(left * right.X, left * right.Y);
 
 		public static PointF operator +(PointF left, PointF right)
 			=> new PointF(left.X + right.X, left.Y + right.Y);

@@ -32,7 +32,7 @@ namespace GRaff
 		/// <summary>
 		/// Represents the point (0, 0).
 		/// </summary>
-		public static readonly Point Zero = new Point(0, 0);
+		public static Point Zero { get; } = new Point(0, 0);
 
 
 		/// <summary>

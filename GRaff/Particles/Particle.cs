@@ -14,7 +14,7 @@ namespace GRaff.Particles
 		{
 			Location = new Point(x, y);
 			TransformationMatrix = new LinearMatrix();
-			Blend = Color.White;
+			Blend = Colors.White;
 			TotalLifetime = lifetime;
 		}
 

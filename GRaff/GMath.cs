@@ -12,13 +12,11 @@ namespace GRaff
 		/// <summary>Conversion factor for radians to degrees. Is equal to 360 / τ.</summary>
 		public const double RadToDeg = 57.2957795130823208767981548141050;
 		/// <summary>
-		/// The complex number i.
-		/// </summary>
-		public static readonly Complex I = new Complex(0, 1);
-		/// <summary>
 		/// The golden ratio, φ
 		/// </summary>
 		public const double GoldenRatio = 1.6180339887498948482045868343656;
+		/// <summary>The smallest relative rounding error in double-precision arithmetic.</summary>
+		public const double MachineEpsilon = 2.2204460492503130808472633361816e-16;
 
 		public static int HashCombine(params int[] values)
 		{
@@ -140,6 +138,10 @@ namespace GRaff
 		{
 			return new Vector(Median(x1.X, x2.X, x3.X), Median(x1.Y, x2.Y, x3.Y));
 		}
+
+		public static int Remainder(int x, int q) => ((x % q) + q) % q;
+
+		public static double Remainder(double x, double q) => ((x % q) + q) % q;
 
 		public static int RoundInt(double x)
 		{

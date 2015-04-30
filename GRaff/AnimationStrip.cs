@@ -1,44 +1,66 @@
 ﻿using System;
-using System.Diagnostics;
+using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using System.Linq;
 
 namespace GRaff
 {
-#warning Missing documentation
 	public sealed class AnimationStrip
 	{
-		Tuple<int, double>[] _images;
+		private Texture[] _frames;
+		private int[] _indices;
+		private double[] _durations;
 
-		public AnimationStrip(int uniformImageCount)
+		public AnimationStrip(IEnumerable<Texture> frames)
 		{
-			_images = new Tuple<int, double>[uniformImageCount];
-			for (int i = 0; i < uniformImageCount; i++)
-				_images[i] = new Tuple<int, double>(i, 1.0);
+			Contract.Requires(frames != null && frames.Count() > 0);
+
+			_frames = frames.ToArray();
+			_indices = Enumerable.Range(0, _frames.Length).ToArray();
+			_durations = Enumerable.Repeat(1.0, _frames.Length).ToArray();
 		}
 
-		public AnimationStrip(params Tuple<int, double>[] images)
+		public AnimationStrip(IEnumerable<Texture> frames, params Tuple<int, double>[] frameDurations)
 		{
-			_images = (Tuple < int, double>[])images.Clone();
+			Contract.Requires(frames != null && frames.Count() > 0);
+			Contract.Requires(frameDurations != null && frameDurations.Length > 0);
+			Contract.ForAll(frameDurations, f => f.Item1 < frames.Count() && f.Item2 >= 0);
+
+			_frames = frames.ToArray();
+			_indices = frameDurations.Select(f => f.Item1).ToArray();
+			_durations = frameDurations.Select(f => f.Item2).ToArray();
 		}
 
-
-		public double Duration { get; private set; }
-
-		public int FrameCount { get; private set; }
-
-		public int GetFrameIndex(double dt)
+		public AnimationStrip(TextureBuffer strip, int imageCount)
 		{
-			dt = ((dt % Duration) + Duration) % Duration;
-			double sum = 0;
-			for (int i = 0; i < _images.Length; i++)
+			Contract.Requires(strip != null);
+			Contract.Requires(imageCount >= 1);
+
+			double dw = 1.0 / imageCount;
+			_frames = Enumerable.Range(0, imageCount)
+								.Select(i => strip.Subtexture(new Rectangle(i * dw, 0, dw, 1.0)))	
+								.ToArray();
+			_indices = Enumerable.Range(0, imageCount).ToArray();
+			_durations = Enumerable.Repeat(1.0, imageCount).ToArray();
+		}
+
+		public double Duration => _durations.Sum();
+
+		public int ImageCount => _indices.Length;
+
+		public Texture Frame(int index) => _frames[GMath.Remainder(index, _frames.Length)];
+
+		public Texture SubImage(double dt)
+		{
+			dt = GMath.Remainder(dt, Duration);
+			for (int i = 0; i < _indices.Length; i++)
 			{
-				sum += _images[i].Item2;
-				if (sum > dt)
-					return _images[i].Item1;
+				dt -= _durations[i];
+				if (dt <= 0)
+					return _frames[_indices[i]];
 			}
 
-			Debug.Fail("Unreachable code was reached.");
-			throw new NotSupportedException("Supposedly unreachable code was reached. This indicates a bug in G-Raff.");
+			throw new NotSupportedException("\{nameof(GRaff)}.\{nameof(AnimationStrip)}.\{nameof(SubImage)} did not return a texture. This indicates an internal error with G-Raff.");
 		}
 	}
 }

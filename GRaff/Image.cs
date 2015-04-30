@@ -10,7 +10,7 @@ namespace GRaff
 		internal Image(GameObject parent)
 		{
 			this._parent = parent;
-			this.Blend = Color.White;
+			this.Blend = Colors.White;
 			this.Index = 0;
 			this.Speed = 1;
 		}
@@ -48,7 +48,7 @@ namespace GRaff
 				if (Sprite == null)
 					return 1;
 				else
-					return Sprite.ImageCount;
+					return Sprite.AnimationStrip.ImageCount;
 			}
 		}
 

@@ -12,9 +12,9 @@ namespace GRaff.Particles
 		List<IParticleBehavior> _behaviors = new List<IParticleBehavior>();
 		IParticleRenderer _renderer;
 
-		public ParticleType(Sprite sprite, int lifetime)
+		public ParticleType(Texture texture, int lifetime)
 		{
-			_renderer = new TexturedParticleRenderer(sprite);			
+			_renderer = new TexturedParticleRenderer(texture);			
 			this.Lifetime = new ConstantDistribution<int>(lifetime);
 		}
 

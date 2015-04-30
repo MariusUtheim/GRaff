@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Runtime.Serialization;
 using System.Xml;
 using System.Xml.Serialization;
@@ -8,7 +9,7 @@ using GRaff.Synchronization;
 
 namespace GRaff
 {
-	public class SpriteAtlas : IAsset
+	public class SpriteAtlas
 	{
 		[XmlType]
 		public class SubTexture
@@ -37,62 +38,37 @@ namespace GRaff
 
 		private static readonly XmlSerializer serializer = new XmlSerializer(typeof(TextureAtlas));
 
-		private TextureBuffer _buffer;
 		private Dictionary<string, Texture> _subTextures;
-		private IAsyncOperation _loadingOperation;
 
-		public SpriteAtlas(string xmlPath, string imagePath)
+		public SpriteAtlas(TextureBuffer buffer, string xmlPath)
 		{
-			this.XmlPath = xmlPath;
-			this.ImagePath = imagePath;
-		}
+			TextureAtlas atlasData;
+			using (var stream = File.OpenText(xmlPath))
+				atlasData = (TextureAtlas)serializer.Deserialize(stream);
 
-		public string XmlPath { get; private set; }
-
-		public string ImagePath { get; private set; }
-
-		public Texture this[string subTextureName]
-		{
-			get
+			_subTextures = new Dictionary<string, Texture>(atlasData.SubTexture.Length);
+			foreach (var sx in atlasData.SubTexture)
 			{
-				return _subTextures[subTextureName];
+				var texture = new Texture(buffer, new Rectangle(sx.x, sx.y, sx.width, sx.height));
+				_subTextures.Add(sx.name, texture);
 			}
 		}
 
-		public bool IsLoaded
-		{
-			get; private set;
-		}
 
-		public IAsyncOperation LoadAsync()
-		{
-			if (_loadingOperation != null)
-				return _loadingOperation;
+		public static SpriteAtlas Load(string texturePath, string xmlPath)
+			=> new SpriteAtlas(TextureBuffer.Load(texturePath), xmlPath);
 
-			TextureAtlas textureAtlas;
-			using (var streamReader = File.OpenText(XmlPath))
-				textureAtlas = (TextureAtlas)serializer.Deserialize(streamReader);
+		public static IAsyncOperation<SpriteAtlas> LoadAsync(string texturePath, string xmlPath)
+			=> TextureBuffer.LoadAsync(texturePath).Then(buffer => new SpriteAtlas(buffer, xmlPath));
 
-			if (ImagePath == null && textureAtlas.imagePath == null)
-				return _loadingOperation = Async.Fail(new InvalidOperationException("Image path was not specified by the sprite atlas or the .xml file"));
+		public TextureBuffer Buffer { get; private set; }
 
-#warning Image path from the xml file should be specified relative to the xml
-			var imagePath = ImagePath ?? textureAtlas.imagePath;
+		public Texture this[string subTextureName] => _subTextures[subTextureName];
 
-			return TextureBuffer.LoadAsync(imagePath).Then(buffer => {
-				IsLoaded = true;
-				_subTextures = new Dictionary<string, Texture>(textureAtlas.SubTexture.Length);
-				foreach (var sx in textureAtlas.SubTexture)
-				{
-					var tex = new Texture(buffer, sx.x / buffer.Width, (sx.y) / buffer.Height, (sx.x + sx.width) / buffer.Width, (sx.y + sx.height) / buffer.Height);
-					_subTextures.Add(sx.name, tex);
-				}
-			});
-		}
+		public AnimationStrip CreateStrip(string prefix)
+			=> new AnimationStrip(_subTextures.Keys.Where(key => key.StartsWith(prefix)).OrderBy(s => s).Select(key => _subTextures[key]).ToArray());
 
-		public void Unload()
-		{
-			throw new NotImplementedException();
-		}
+
+
 	}
 }

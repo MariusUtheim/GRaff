@@ -21,7 +21,7 @@ namespace GRaff
 		/// <summary>
 		/// Represents the vector [0, 0].
 		/// </summary>
-		public static readonly IntVector Zero = new IntVector();
+		public static IntVector Zero { get; } = new IntVector();
 
 		/// <summary>
 		/// Gets the x component of this GRaff.IntVector.

@@ -16,7 +16,7 @@ namespace GRaff
 		/// <summary>
 		/// Represents the vector [0, 0].
 		/// </summary>
-		public static readonly Vector Zero = new Vector();
+		public static Vector Zero { get; } = new Vector();
 
 		/// <summary>
 		/// Initializes a new instance of the GRaff.Vector class using the components specified as cartesian coordinates.

@@ -3,7 +3,7 @@ namespace GRaff.Graphics.Lighting
 	public class LightObstacle
 	{
 		public LightObstacle(Line wall)
-			: this(wall, Color.Black)
+			: this(wall, Colors.Black)
 		{ }
 
 		public LightObstacle(Line wall, Color filter)

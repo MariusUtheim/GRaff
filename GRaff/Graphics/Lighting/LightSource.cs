@@ -12,7 +12,7 @@ namespace GRaff.Graphics.Lighting
 		public Color Color { get; set; }
 
 		public LightSource(Point location, double radius)
-			: this(location, radius, Color.White)
+			: this(location, radius, Colors.White)
 		{ }
 
 		public LightSource(Point location, double radius, Color color)
@@ -29,7 +29,7 @@ namespace GRaff.Graphics.Lighting
 		{
 			//Draw.FillCircle(Color, Location, Radius);
 			using (BlendMode.Use(BlendMode.Additive))
-				Draw.FillCircle(Color, Color.Black, Location, Radius);
+				Draw.FillCircle(Color, Colors.Black, Location, Radius);
 
 			var vertices = new PointF[obstacles.Count() * 12];
 			var colors = new Color[obstacles.Count() * 12];

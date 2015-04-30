@@ -112,8 +112,8 @@ namespace GRaff
 			if (Image.Sprite != null)
 			{
 				Draw.Image(Image);
-				if (Image.Animate() && this is IAnimationEndListener)
-					(this as IAnimationEndListener).AnimationEnd();
+				if (Image.Animate())
+					(this as IAnimationEndListener)?.AnimationEnd();
 			}
 		}
 	}

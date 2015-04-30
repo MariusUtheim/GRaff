@@ -5,25 +5,25 @@ using GRaff.Graphics;
 namespace GRaff
 {
 	/// <summary>
- /// Represents an element that is drawn in the background. This can be a fill color, a sprite or both.
- /// </summary>
+	/// Represents an element that is drawn in the background. This can be a fill color, a sprite or both.
+	/// </summary>
 	public sealed class Background : GameElement
 	{
 		private TexturedRenderSystem _renderSystem;
 
 		/// <summary>
-  /// Creates a new instance of the GRaff.Background class with no sprite or color.
-  /// </summary>
+		/// Creates a new instance of the GRaff.Background class with no sprite or color.
+		/// </summary>
 		public Background()
 		{
 			Depth = Int32.MaxValue;
 			_renderSystem = new TexturedRenderSystem();
-			_renderSystem.SetColors(UsageHint.StaticDraw, Color.White, Color.White, Color.White, Color.White);
+			_renderSystem.SetColors(UsageHint.StaticDraw, Colors.White, Colors.White, Colors.White, Colors.White);
 		}
 
 		internal static void Initialize()
 		{
-			Default = Instance.Create(new Background { ClearColor = Color.LightGray });
+			Default = Instance.Create(new Background { ClearColor = Colors.LightGray });
 		}
 
 		/// <summary>
@@ -38,23 +38,23 @@ namespace GRaff
 		public Color? ClearColor { get; set; }
 
 		/// <summary>
-  /// Gets or sets the sprite for this GRaff.Background.
-  /// </summary>
-		public Sprite Sprite { get; set; }
+		/// Gets or sets the sprite for this GRaff.Background.
+		/// </summary>
+		public TextureBuffer Buffer { get; set; }
 
 		/// <summary>
-  /// Gets or sets whether this GRaff.Background should draw its sprite tiled.
-  /// </summary>
+		/// Gets or sets whether this GRaff.Background should draw its sprite tiled.
+		/// </summary>
 		public bool IsTiled { get; set; }
 
 		/// <summary>
-  /// Gets or sets the horizontal offset of the sprite drawn by this GRaff.Background.
-  /// </summary>
+		/// Gets or sets the horizontal offset of the sprite drawn by this GRaff.Background.
+		/// </summary>
 		public double XOffset { get; set; }
 
 		/// <summary>
-  /// Gets or sets the vertical offset of the sprite drawn by this GRaff.Background.
-  /// </summary>
+		/// Gets or sets the vertical offset of the sprite drawn by this GRaff.Background.
+		/// </summary>
 		public double YOffset { get; set; }
 
 		/// <summary>
@@ -67,18 +67,18 @@ namespace GRaff
 		}
 
 		/// <summary>
-  /// Gets or sets the horizontal speed of this GRaff.Background. Each step, this value will be added to the XOffset value of this GRaff.Background.
-  /// </summary>
+		/// Gets or sets the horizontal speed of this GRaff.Background. Each step, this value will be added to the XOffset value of this GRaff.Background.
+		/// </summary>
 		public double HSpeed { get; set; }
 
 		/// <summary>
-  /// Gets or sets the vertical speed of this GRaff.Background. Each step, this value will be added to the YOffset value of this GRaff.Background.
-  /// </summary>
+		/// Gets or sets the vertical speed of this GRaff.Background. Each step, this value will be added to the YOffset value of this GRaff.Background.
+		/// </summary>
 		public double VSpeed { get; set; }
 
 		/// <summary>
-  /// Gets or sets the velocity of this GRaff.Background. Each step, this value will be added to the Offset value of this GRaff.Background.
-  /// </summary>
+		/// Gets or sets the velocity of this GRaff.Background. Each step, this value will be added to the Offset value of this GRaff.Background.
+		/// </summary>
 		public Vector Velocity
 		{
 			get { return new Vector(HSpeed, VSpeed); }
@@ -95,33 +95,33 @@ namespace GRaff
 		}
 
 		/// <summary>
-  /// Overrides GameElement.OnDraw to perform optimized drawing of this GRaff.Background 
-  /// </summary>
+		/// Overrides GameElement.OnDraw to perform optimized drawing of this GRaff.Background 
+		/// </summary>
 		public override void OnDraw()
 		{
 			if (ClearColor != null)
 				Draw.Clear(ClearColor.Value);
 
-			if (Sprite != null)
+			if (Buffer != null)
 			{
 				if (IsTiled)
 				{
 					var viewBox = View.BoundingBox;
-					float u0 = -(float)((XOffset + viewBox.Left) / Sprite.Width), v0 = -(float)((YOffset + viewBox.Top) / Sprite.Height);
-					float u1 = u0 + (float)(viewBox.Width / Sprite.Width), v1 = v0 + (float)(viewBox.Height / Sprite.Height);
+					float u0 = -(float)((XOffset + viewBox.Left) / Buffer.Width), v0 = -(float)((YOffset + viewBox.Top) / Buffer.Height);
+					float u1 = u0 + (float)(viewBox.Width / Buffer.Width), v1 = v0 + (float)(viewBox.Height / Buffer.Height);
 
 					float left = (float)viewBox.Left, right = (float)viewBox.Right, top = (float)viewBox.Top, bottom = (float)viewBox.Bottom;
 
 					_renderSystem.SetVertices(UsageHint.StreamDraw, left, top, right, top, right, bottom, left, bottom);
 					_renderSystem.SetTexCoords(UsageHint.StreamDraw, u0, v0, u1, v0, u1, v1, u0, v1);
 
-					Sprite.Texture.Bind();
+					Buffer.Bind();
 					ShaderProgram.CurrentTextured.SetCurrent();
 
 					_renderSystem.Render(PrimitiveType.Quads, 4);
 				}
 				else
-					Draw.Sprite(Sprite, 0, XOffset, YOffset);
+					Draw.Texture(Buffer.Texture, XOffset, YOffset);
 			}
 		}
 	}

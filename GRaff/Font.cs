@@ -95,7 +95,7 @@ namespace GRaff
 
 			if (_textureBuffer != null)
 			{
-				_textureBuffer.Dispose();
+				_textureBuffer.Unload();
 				_textureBuffer = null;
 			}
 

@@ -10,7 +10,7 @@ namespace GRaff.Graphics.Shaders
 	public class CausticShader : ShaderElement
 	{
 		private const double DefaultIntensity = 0.35;
-		private static readonly Color DefaultColor = Color.White;
+		private static readonly Color DefaultColor = Colors.White;
 		#region Source
 		public const string Source =
 			Shader.Header + @"

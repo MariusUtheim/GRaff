@@ -5,7 +5,7 @@ namespace GRaff
 	/// <summary>
 	/// Represents the matrix of an affine transformation.
 	/// </summary>
-	public sealed class AffineMatrix : ICloneable, IEquatable<AffineMatrix>, IEquatable<LinearMatrix>
+	public sealed class AffineMatrix : ICloneable, IEquatable<AffineMatrix>
 	{
 		/// <summary>
 		/// Initializes a new instance of the GRaff.AffineMatrix class as an identity matrix.
@@ -180,10 +180,7 @@ namespace GRaff
 
 
 		public bool Equals(AffineMatrix other)
-			=> (other != null) && M00 == other.M00 && M01 == other.M01 && M02 == other.M02 && M10 == other.M10 && M11 == other.M11 && M12 == other.M12;
-
-		public bool Equals(LinearMatrix other)
-			=> (other != null) && M00 == other.M00 && M01 == other.M01 && M02 == 0 && M10 == other.M10 && M11 == other.M11 && M12 == 0;
+			=> (!ReferenceEquals(other, null)) && (this - other)._magnitude <= GMath.MachineEpsilon;
 
 		/// <summary>
 		/// Specifies whether this GRaff.AffineMatrix contains the same elements as the specified System.Object.
@@ -194,8 +191,6 @@ namespace GRaff
 		{
 			if (obj is AffineMatrix)
 				return Equals((AffineMatrix)obj);
-			else if (obj is LinearMatrix)
-				return Equals((LinearMatrix)obj);
 			else
 				return base.Equals(obj);
 		}
@@ -234,7 +229,7 @@ namespace GRaff
 		/// <param name="right">The second GRaff.AffineMatrix to compare.</param>
 		/// <returns>true if all elements of the two GRaff.AffineMatrix objects are equal.</returns>
 		public static bool operator ==(AffineMatrix left, AffineMatrix right)
-			=> left?.Equals(right) ?? right == null;
+			=> left?.Equals(right) ?? ReferenceEquals(null, right);
 
 		/// <summary>
 		/// Compares two GRaff.AffineMatrix objects. The result specifies whether all their elements are unequal.

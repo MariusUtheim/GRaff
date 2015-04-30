@@ -9,7 +9,7 @@ namespace GRaff
 	/// <summary>
 	/// Represents the matrix of a linear transformation. This class is immutable.
 	/// </summary>
-	public sealed class LinearMatrix : ICloneable, IEquatable<LinearMatrix>, IEquatable<AffineMatrix>
+	public sealed class LinearMatrix : ICloneable, IEquatable<LinearMatrix>
 	{
 		/// <summary>
 		/// Initializes a new instance of the GRaff.LinearMatrix class as an identity matrix.
@@ -144,10 +144,7 @@ namespace GRaff
 
 
 		public bool Equals(LinearMatrix other)
-			=> (other != null) && M00 == other.M00 && M01 == other.M01 && M10 == other.M10 && M11 == other.M11;
-
-		public bool Equals(AffineMatrix other)
-			=> (other != null) && M00 == other.M00 && M01 == other.M01 && 0 == other.M02 && M10 == other.M10 && M11 == other.M11 && 0 == other.M12;
+			=> (other != null) && (this - other)._magnitude <= GMath.MachineEpsilon;
 
 		/// <summary>
 		/// Specifies whether this GRaff.LinearMatrix contains the same elements as the specified System.Object.
@@ -180,7 +177,7 @@ namespace GRaff
 		/// <param name="left">The first GRaff.LinearMatrix to compare.</param>
 		/// <param name="right">The second GRaff.LinearMatrix to compare.</param>
 		/// <returns>true if all elements of the two GRaff.LinearMatrix objects are equal.</returns>
-		public static bool operator ==(LinearMatrix left, LinearMatrix right) => left?.Equals(right) ?? right == null;
+		public static bool operator ==(LinearMatrix left, LinearMatrix right) => left?.Equals(right) ?? ReferenceEquals(right, null);
 
 		/// <summary>
 		/// Compares two GRaff.LinearMatrix objects. The result specifies whether all their elements are unequal.
