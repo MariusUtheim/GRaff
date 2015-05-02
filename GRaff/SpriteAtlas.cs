@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.Serialization;
+using System.Text;
+using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Serialization;
 using GRaff.Synchronization;
@@ -40,11 +42,13 @@ namespace GRaff
 
 		private Dictionary<string, Texture> _subTextures;
 
-		public SpriteAtlas(TextureBuffer buffer, string xmlPath)
+		public SpriteAtlas(TextureBuffer buffer, string xml)
+			: this(buffer, new MemoryStream(Encoding.UTF8.GetBytes(xml)))
+		{ }
+
+		public SpriteAtlas(TextureBuffer buffer, Stream xmlStream)
 		{
-			TextureAtlas atlasData;
-			using (var stream = File.OpenText(xmlPath))
-				atlasData = (TextureAtlas)serializer.Deserialize(stream);
+			var atlasData = (TextureAtlas)serializer.Deserialize(xmlStream);
 
 			_subTextures = new Dictionary<string, Texture>(atlasData.SubTexture.Length);
 			foreach (var sx in atlasData.SubTexture)
@@ -55,18 +59,53 @@ namespace GRaff
 		}
 
 
-		public static SpriteAtlas Load(string texturePath, string xmlPath)
-			=> new SpriteAtlas(TextureBuffer.Load(texturePath), xmlPath);
+		public static SpriteAtlas Load(string texturePath, string xmlPath = null)
+		{
+			if (xmlPath == null)
+			{
+				var index = texturePath.LastIndexOf('.');
+				if (index == -1)
+					xmlPath = texturePath + ".xml";
+				else
+					xmlPath = texturePath.Substring(0, index) + ".xml";
+			}
+			var texture = TextureBuffer.Load(texturePath);
+			var xml = File.ReadAllText(xmlPath);
+			return new SpriteAtlas(texture, xml);
+		}
 
-		public static IAsyncOperation<SpriteAtlas> LoadAsync(string texturePath, string xmlPath)
-			=> TextureBuffer.LoadAsync(texturePath).Then(buffer => new SpriteAtlas(buffer, xmlPath));
+		public static IAsyncOperation<SpriteAtlas> LoadAsync(string texturePath, string xmlPath = null)
+		{
+			if (xmlPath == null)
+			{
+				var index = texturePath.LastIndexOf('.');
+				if (index == -1)
+					xmlPath = texturePath + ".xml";
+				else
+					xmlPath = texturePath.Substring(0, index) + ".xml";
+			}
+			return
+						TextureBuffer.LoadAsync(texturePath)
+				.ThenAsync(async buffer =>
+				{
+					var xml = await Task.Run(() => File.ReadAllText(xmlPath));
+					return new SpriteAtlas(buffer, new MemoryStream(Encoding.UTF8.GetBytes(xml)));
+				});
+		}
 
 		public TextureBuffer Buffer { get; private set; }
 
-		public Texture this[string subTextureName] => _subTextures[subTextureName];
+		public Texture Texture(string subtextureName) => _subTextures[subtextureName];
 
-		public AnimationStrip CreateStrip(string prefix)
-			=> new AnimationStrip(_subTextures.Keys.Where(key => key.StartsWith(prefix)).OrderBy(s => s).Select(key => _subTextures[key]).ToArray());
+		public Texture this[string subtextureName] => _subTextures[subtextureName];
+
+		public AnimationStrip AnimationStrip(string prefix)
+		{
+			var textures = _subTextures.Keys.Where(key => key.StartsWith(prefix)).OrderBy(s => s).Select(key => _subTextures[key]).ToArray();
+			if (textures.Length == 0)
+				throw new InvalidOperationException("Did not find any subtextures with the prefix '\{prefix}'.");
+			return new AnimationStrip(textures);
+		}
 
 
 

@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics.Contracts;
+using System.Linq;
 using GRaff.Synchronization;
 
 namespace GRaff
@@ -14,8 +15,20 @@ namespace GRaff
 
 			this.AnimationStrip = animationStrip;
 			this.Size = size ?? animationStrip.SubImage(0).Size;
+			Window.Title = Size.ToString();
 			this._origin = origin;
-			this._maskShape = maskShape;
+			this._maskShape = maskShape ?? MaskShape.Automatic;
+		}
+
+		public Sprite(Texture texture, Vector? size = null, Vector? origin = null, MaskShape maskShape = null)
+		{
+			if (texture == null)
+				this.AnimationStrip = new AnimationStrip(Enumerable.Empty<Texture>());
+			else
+				this.AnimationStrip = new AnimationStrip(texture);
+			this.Size = size ?? texture.Size;
+			this._origin = origin;
+			this._maskShape = maskShape ?? MaskShape.Automatic;
 		}
 		
 		public static Sprite Load(string path, int imageCount = 1, Vector? origin = null, MaskShape maskShape = null) 

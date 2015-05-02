@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Diagnostics.Contracts;
 using System.Linq;
 
@@ -20,11 +21,15 @@ namespace GRaff
 			_durations = Enumerable.Repeat(1.0, _frames.Length).ToArray();
 		}
 
+		public AnimationStrip(params Texture[] frames)
+			: this(frames.AsEnumerable())
+		{ }
+
 		public AnimationStrip(IEnumerable<Texture> frames, params Tuple<int, double>[] frameDurations)
 		{
 			Contract.Requires(frames != null && frames.Count() > 0);
 			Contract.Requires(frameDurations != null && frameDurations.Length > 0);
-			Contract.ForAll(frameDurations, f => f.Item1 < frames.Count() && f.Item2 >= 0);
+			Contract.ForAll(frameDurations, f => f.Item1 < frames.Count() && f.Item2 > 0);
 
 			_frames = frames.ToArray();
 			_indices = frameDurations.Select(f => f.Item1).ToArray();
@@ -42,6 +47,19 @@ namespace GRaff
 								.ToArray();
 			_indices = Enumerable.Range(0, imageCount).ToArray();
 			_durations = Enumerable.Repeat(1.0, imageCount).ToArray();
+		}
+
+		public AnimationStrip InOut()
+		{
+			var frames = new Texture[2 * _frames.Length];
+			
+			for (int i = 0; i < _frames.Length; i++)
+			{
+				frames[i] = _frames[i];
+				frames[i + _frames.Length] = _frames[_frames.Length - 1 - i];
+			}
+
+			return new AnimationStrip(frames);
 		}
 
 		public double Duration => _durations.Sum();
