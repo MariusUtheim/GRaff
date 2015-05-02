@@ -15,8 +15,14 @@ namespace GRaff
 		}
 
 		public Texture(TextureBuffer buffer, Rectangle region)
-			: this(buffer, (PointF)region.TopLeft, (PointF)region.TopRight, (PointF)region.BottomLeft, (PointF)region.BottomRight)
-		{ }
+			: this(buffer,
+				  new PointF(region.Left / buffer.Width, region.Top / buffer.Height), 
+				  new PointF(region.Right / buffer.Width, region.Top / buffer.Height),
+				  new PointF(region.Left / buffer.Width, region.Bottom / buffer.Height),
+				  new PointF(region.Right / buffer.Width, region.Bottom / buffer.Height))
+		{
+			Contract.Requires(buffer.IsLoaded);
+		}
 
 		internal PointF[] TexCoords { get; private set; }
 

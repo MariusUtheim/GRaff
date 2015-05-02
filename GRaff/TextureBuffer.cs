@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Threading.Tasks;
+using GRaff.Graphics;
 using GRaff.Synchronization;
 using OpenTK.Graphics.ES30;
 using GLPixelFormat = OpenTK.Graphics.ES30.PixelFormat;
@@ -26,7 +27,7 @@ namespace GRaff
 			Id = GL.GenTexture();
 			Debug.Assert(Id != 0);
 			this.Path = path;
-			Texture = new Texture(this, new Rectangle(0, 0, 1, 1));
+			Texture = new Texture(this, new Graphics.PointF(0, 0), new Graphics.PointF(1, 0), new Graphics.PointF(0, 1), new Graphics.PointF(1, 1));
 		}
 
 		~TextureBuffer()
