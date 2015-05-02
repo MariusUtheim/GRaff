@@ -17,6 +17,10 @@ namespace GRaff.Graphics
 			Y = y;
 		}
 
+		public PointF(double x, double y)
+			: this((float)x, (float)y)
+		{ }
+
 		public float X { get; private set; }
 
 		public float Y { get; private set; }

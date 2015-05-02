@@ -29,7 +29,7 @@ namespace GRaff
 		
 		public static void Pixel(Color color, double x, double y)
 		{
-			CurrentSurface.SetPixel(color, new PointF((float)x, (float)y));
+			CurrentSurface.SetPixel(color, new PointF(x, y));
 		}
 		public static void Pixel(Color color, Point p)
 		{
@@ -38,7 +38,7 @@ namespace GRaff
 
 		public static void Circle(Color color, double x, double y, double radius)
 		{
-			CurrentSurface.DrawCircle(color, new PointF((float)x, (float)y), radius);
+			CurrentSurface.DrawCircle(color, new PointF(x, y), radius);
 		}
 		public static void Circle(Color color, Point location, double radius)
 		{
@@ -50,7 +50,7 @@ namespace GRaff
 		}
 		public static void FillCircle(Color color, double x, double y, double radius)
 		{
-			Draw.CurrentSurface.FillCircle(color, color, new PointF((float)x, (float)y), radius);
+			Draw.CurrentSurface.FillCircle(color, color, new PointF(x, y), radius);
 		}
 		public static void FillCircle(Color col1, Color col2, Point location, double radius)
 		{
@@ -58,7 +58,7 @@ namespace GRaff
 		}
 		public static void FillCircle(Color col1, Color col2, double x, double y, double radius)
 		{
-			Draw.CurrentSurface.FillCircle(col1, col2, new PointF((float)x, (float)y), radius);
+			Draw.CurrentSurface.FillCircle(col1, col2, new PointF(x, y), radius);
 		}
 
 		public static void Triangle(Color color, double x1, double y1, double x2, double y2, double x3, double y3)
@@ -186,7 +186,7 @@ namespace GRaff
 		public static void Texture(Texture texture, double x, double y)
 		{
 			if (texture != null)
-				CurrentSurface.DrawTexture(texture, new PointF((float)x, (float)y));
+				CurrentSurface.DrawTexture(texture, new PointF(x, y));
 		}
 
 
@@ -209,6 +209,12 @@ namespace GRaff
 				CurrentSurface.DrawSprite(sprite, imageIndex, Colors.White, transform.GetMatrix());
 		}
 
+		public static void Sprite(Sprite sprite, int imageIndex, Color blend, Transform transform)
+		{
+			if (sprite != null)
+				CurrentSurface.DrawSprite(sprite, imageIndex, blend, transform.GetMatrix());
+		}
+
 		public static void Polygon(Color color, Polygon polygon)
 		{
 			if (polygon != null)
@@ -229,7 +235,7 @@ namespace GRaff
 
 		public static void Text(Font font, Color color, string text, double x, double y)
 		{
-			CurrentSurface.DrawText(font, FontAlignment.Center, color, text, new PointF((float)x, (float)y));
+			CurrentSurface.DrawText(font, FontAlignment.Center, color, text, new PointF(x, y));
 		}
 
 		public static void Text(Font font, Color color, string text, Transform transform)
