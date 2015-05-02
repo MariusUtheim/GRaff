@@ -4,6 +4,7 @@ using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using GRaff.Synchronization;
 
 namespace GRaff
 {
@@ -17,6 +18,8 @@ namespace GRaff
 		{
 			asset.LoadAsync().Wait();
 		}
+
+		#region Random functions
 
 		/// <summary>
 		/// Returns a nonnegative random number.
@@ -245,5 +248,16 @@ namespace GRaff
 			return result;
 		}
 
+		#endregion
+
+		#region Tween manipulations
+		public static TweeningFunction EaseOut(this TweeningFunction f) => t => f(1 - t);
+
+		public static TweeningFunction Reverse(this TweeningFunction f) => t => 1 - f(t);
+
+		public static TweeningFunction EaseInOut(this TweeningFunction f) => t => f(t) * (1 - t) + f(1 - t) * t;
+
+		public static TweeningFunction BothWays(this TweeningFunction f) => t => t < 0.5 ? f(2 * t) : f(2 * (1 - t));
+		#endregion
 	}
 }
