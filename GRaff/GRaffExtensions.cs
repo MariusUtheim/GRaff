@@ -251,13 +251,19 @@ namespace GRaff
 		#endregion
 
 		#region Tween manipulations
-		public static TweeningFunction EaseOut(this TweeningFunction f) => t => f(1 - t);
 
-		public static TweeningFunction Reverse(this TweeningFunction f) => t => 1 - f(t);
+		public static TweeningFunction Reverse(this TweeningFunction f) => t => f(1 - t);
 
-		public static TweeningFunction EaseInOut(this TweeningFunction f) => t => f(t) * (1 - t) + f(1 - t) * t;
+		public static TweeningFunction In(this TweeningFunction f) => t => f(t);
+
+		public static TweeningFunction Out(this TweeningFunction f) => t => 1 - f(1 - t);
+
+		public static TweeningFunction InOut(this TweeningFunction f) => t => t < 0.5 ? (f(2 * t) / 2) : (1 - f(2 * (1 - t)) / 2);
+
+		public static TweeningFunction OutIn(this TweeningFunction f) => t => t < 0.5 ? 0.5 * (1 - f(1 - 2 * t)) : (1 + f(2 * (t - 0.5))) / 2;
 
 		public static TweeningFunction BothWays(this TweeningFunction f) => t => t < 0.5 ? f(2 * t) : f(2 * (1 - t));
+
 		#endregion
 	}
 }

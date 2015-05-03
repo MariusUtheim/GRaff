@@ -41,14 +41,18 @@ namespace GRaff
 			set;
 		}
 
-		public int Count
+		public int Count => Sprite?.AnimationStrip.ImageCount ?? 1;
+
+		public double Period
 		{
 			get
 			{
 				if (Sprite == null)
-					return 1;
+					return Double.NaN;
+				else if (Speed == 0)
+					return Double.PositiveInfinity;
 				else
-					return Sprite.AnimationStrip.ImageCount;
+					return Sprite.AnimationStrip.Duration / Speed;
 			}
 		}
 

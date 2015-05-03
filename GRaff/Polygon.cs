@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Text;
@@ -42,6 +43,7 @@ namespace GRaff
 		public static Polygon Regular(int degree, double radius, Point center)
 		{
 			Contract.Requires(degree >= 2);
+			Debug.Assert(degree >= 2);
 
 			double dt = GMath.Tau / degree;
 			double c = GMath.Cos(dt), s = GMath.Sin(dt);
@@ -102,7 +104,7 @@ namespace GRaff
 			if (radius == 0)
 				return new Polygon { _pts = new[] { center } };
 
-			int precision = (int)GMath.Ceiling(GMath.Tau * radius);
+			int precision = (int)GMath.Ceiling(GMath.Tau * GMath.Abs(radius));
 
 			return Regular(precision, radius, center);
 		}

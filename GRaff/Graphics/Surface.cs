@@ -165,7 +165,7 @@ namespace GRaff.Graphics
 				SetPixel(col1, center);
 				return;
 			}
-			int precision = (int)GMath.Ceiling(GMath.Tau * radius);
+			int precision = (int)GMath.Ceiling(GMath.Tau * GMath.Abs(radius));
 			PointF[] vertices = new PointF[precision + 2];
 			int i = 0;
 			vertices[i++] = center;
