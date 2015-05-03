@@ -42,12 +42,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BackgroundTest.cs" />
+    <Compile Include="Marker.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SpriteTest.cs" />
     <Compile Include="Test.cs" />
     <Compile Include="TextureBuffers.cs" />
     <Compile Include="TextureBufferTest.cs" />
+    <Compile Include="TweenTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

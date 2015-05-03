@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace GRaff.GraphicTest
 {
-	abstract class Test : GameElement
+	abstract class Test : GameObject
 	{
 	}
 }
