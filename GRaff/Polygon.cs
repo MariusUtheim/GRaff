@@ -37,6 +37,11 @@ namespace GRaff
 			: this(pts.AsEnumerable())
 		{ }
 
+		internal static Polygon CreateUnsafe(Point[] pts)
+		{
+			return new Polygon { _pts = pts };
+		}
+
 		public static Polygon Regular(int degree, double radius)
 			=> Regular(degree, radius, Point.Zero);
 
@@ -77,7 +82,10 @@ namespace GRaff
 
 			a = next.Direction - previous.Direction;
 			if (a.Degrees > 180)
+			{
 				_pts = _pts.Reverse().ToArray();
+				a = -a;
+			}
 			sum += a;
 
 			for (int i = 1; i < _pts.Length; i++)
