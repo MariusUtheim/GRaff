@@ -24,7 +24,7 @@ namespace GRaff.Synchronization
 			Duration = duration;
 			TweeningFunction = tweeningFunction;
 			_step += (sender, e) => stepAction(e);
-			_complete += (sender, e) => completeAction();
+			_complete += (sender, e) => completeAction?.Invoke();
 		}
 
 		public static Tween Start(int duration, TweeningFunction tweeningFunction, Action<double> stepAction)
