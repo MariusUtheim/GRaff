@@ -200,7 +200,7 @@ namespace GRaff.Graphics
 			else if (polygon.Length == 2)
 				Render(vertices, new[] { color, color }, PrimitiveType.Lines);
 			else
-				Render(vertices, Enumerable.Repeat(color, polygon.Length).ToArray(), PrimitiveType.TriangleStrip);
+				Render(vertices, Enumerable.Repeat(color, polygon.Length).ToArray(), PrimitiveType.TriangleFan);
 		}
 
 		public void DrawSprite(Sprite sprite, int subimage, float x, float y)
