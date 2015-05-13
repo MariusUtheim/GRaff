@@ -49,6 +49,7 @@
     <Compile Include="Test.cs" />
     <Compile Include="TextureBuffers.cs" />
     <Compile Include="TextureBufferTest.cs" />
+    <Compile Include="TransformTests.cs" />
     <Compile Include="TweenTest.cs" />
   </ItemGroup>
   <ItemGroup>

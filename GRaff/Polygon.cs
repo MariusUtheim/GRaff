@@ -98,6 +98,7 @@ namespace GRaff
 				sum += a;
 			}
 
+#warning ERROR: Angle arithmetic is modular - this won't fail
 			if (sum != Angle.Zero)
 				throw new ArgumentException("The points must specify a convex polygon with winding number equal to 1. Winding is " + sum.ToString());
 		}

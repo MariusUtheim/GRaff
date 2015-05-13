@@ -202,6 +202,20 @@ namespace GRaff
 				CurrentSurface.DrawSprite(sprite, imageIndex, (float)p.X, (float)p.Y);
 		}
 
+		public static void Sprite(Sprite sprite, int imageIndex, AffineMatrix transform)
+		{
+			Contract.Requires(transform != null);
+			if (sprite != null)
+				CurrentSurface.DrawSprite(sprite, imageIndex, Colors.White, transform);
+		}
+
+		public static void Sprite(Sprite sprite, int imageIndex, Color blend, AffineMatrix transform)
+		{
+			Contract.Requires<ArgumentNullException>(transform != null);
+			if (sprite != null)
+				CurrentSurface.DrawSprite(sprite, imageIndex, blend, transform);
+		}
+
 		public static void Sprite(Sprite sprite, int imageIndex, Transform transform)
 		{
 			Contract.Requires(transform != null);

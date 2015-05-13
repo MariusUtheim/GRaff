@@ -98,5 +98,33 @@ namespace GRaff.UnitTesting
 			Polygon outside = new Polygon(new Point(-5, -5), new Point(2, -5), new Point(-2, 5));
 			Assert.IsFalse(thePolygon.Intersects(outside), "Does intersect non-intersecting polynomial!");
 		}
+
+		[TestMethod]
+		public void Polygon_Constructors()
+		{
+			new Polygon(new[] { new Point(0, 0), new Point(0, 1), new Point(1, 0) });
+			new Polygon(new[] { new Point(0, 0), new Point(1, 0), new Point(0, 1) });
+			new Polygon(new[] { new Point(0, 0) });
+			new Polygon(new Point[0]);
+		}
+
+		[TestMethod]
+		[ExpectedException(typeof(ArgumentException))]
+		public void Polygon_SanityFailureCheck()
+		{
+			var invalidPoints = new[]
+			{
+				new Point(0, 0),
+				new Point(1, 0),
+				new Point(1, 1),
+				new Point(0, 1),
+				new Point(0, 0),
+				new Point(1, 0),
+				new Point(1, 1),
+				new Point(0, 1)
+			};
+
+			new Polygon(invalidPoints);
+		}
 	}
 }
