@@ -122,7 +122,7 @@ namespace GRaff
 		/// Converts this GRaff.IntRectangle to a human-readable string.
 		/// </summary>
 		/// <returns>A string that represents this GRaff.IntRectangle</returns>
-		public override string ToString() => "[(\{Left},\{Top}), (\{Width},\{Height})]";
+		public override string ToString() => $"[({Left},{Top}), ({Width},{Height})]";
 
 		public bool Equals(IntRectangle other)
 			=> Left == other.Left && Top == other.Top && Width == other.Width && Height == other.Height;

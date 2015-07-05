@@ -135,7 +135,7 @@ namespace GRaff
 		/// </summary>
 		/// <returns>A string that represents this GRaff.LinearMatrix.</returns>
 		public override string ToString()
-			=> "[[\{M00}, \{M01}], [\{M10}, \{M11}]]";
+			=> $"[[{M00}, {M01}], [{M10}, {M11}]]";
 
 		public LinearMatrix Clone()
 			=> new LinearMatrix(M00, M01, M10, M11);

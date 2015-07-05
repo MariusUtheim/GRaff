@@ -30,7 +30,7 @@ namespace GRaff
 				case 1 + 16: format = ALFormat.Mono16; break;
 				case 2 + 8: format = ALFormat.Stereo8; break;
 				case 2 + 16: format = ALFormat.Stereo16; break;
-				default: throw new NotSupportedException("Sound files must have exactly 1 or 2 channels, and a bitrate of exacty 8 or 16 bits per sample (you have \{Channels} channel(s) and \{Bitrate} bit(s) per sample).");
+				default: throw new NotSupportedException($"Sound files must have exactly 1 or 2 channels, and a bitrate of exacty 8 or 16 bits per sample (you have {Channels} channel(s) and {Bitrate} bit(s) per sample).");
 			}
 
 			int bytesPerSample = bitrate / 8 * channels;

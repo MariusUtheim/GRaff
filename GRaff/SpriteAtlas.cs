@@ -103,7 +103,7 @@ namespace GRaff
 		{
 			var textures = _subTextures.Keys.Where(key => key.StartsWith(prefix)).OrderBy(s => s).Select(key => _subTextures[key]).ToArray();
 			if (textures.Length == 0)
-				throw new InvalidOperationException("Did not find any subtextures with the prefix '\{prefix}'.");
+				throw new InvalidOperationException($"Did not find any subtextures with the prefix '{prefix}'.");
 			return new AnimationStrip(textures);
 		}
 

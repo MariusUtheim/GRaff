@@ -54,6 +54,6 @@ namespace GRaff.Graphics
 		/// Converts this GRaff.Graphics.PointF to a human-readable string, showing the value of the coordinates.
 		/// </summary>
 		/// <returns>A string that represents this GRaff.Graphics.PointF.</returns>
-		public override string ToString() => "(\{X}, \{Y})";
+		public override string ToString() => $"({X}, {Y})";
 	}
 }

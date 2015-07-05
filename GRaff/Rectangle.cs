@@ -134,13 +134,13 @@ namespace GRaff
 		/// Converts this GRaff.Rectangle to a human-readable string.
 		/// </summary>
 		/// <returns>A string that represents this GRaff.Rectangle</returns>
-		public override string ToString() => "Rectangle \{TopLeft} by \{Size}}}";
+		public override string ToString() => $"Rectangle {TopLeft} by {Size}}}";
 
 		public bool Equals(Rectangle other)
 			=> Left == other.Left && Top == other.Top && Width == other.Width && Height == other.Height;
 
 		/// <summary>
-		/// Specifies whether this GRaff.Rectangle contains the same location and size as the specified System.Object.
+		/// Specifies whether this GRaff.Rectangle contans the same location and size as the specified System.Object.
 		/// </summary>
 		/// <param name="obj">The System.Object to compare to.</param>
 		/// <returns>true if obj is a GRaff.Rectangle and has the same location and size as this GRaff.Rectangle.</returns>

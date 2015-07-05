@@ -69,7 +69,7 @@ namespace GRaff
 		/// Converts this GRaff.Line to a human-readable string, indicating the location of the two endpoints.
 		/// </summary>
 		/// <returns>A string that represents this GRaff.Line.</returns>
-		public override string ToString() => "\{Origin} -> \{Destination}";
+		public override string ToString() => $"{Origin} -> {Destination}";
 
 		public bool Equals(Line other)
 			=> Origin == other.Origin && Direction == other.Direction;

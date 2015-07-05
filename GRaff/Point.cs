@@ -39,7 +39,7 @@ namespace GRaff
 		/// Converts this GRaff.Point to a human-readable string, showing the value of the coordinates.
 		/// </summary>
 		/// <returns>A string that represents this GRaff.Point.</returns>
-		public override string ToString() => "(\{X}, \{Y})";
+		public override string ToString() => $"({X}, {Y})";
 
 		public bool Equals(Point other)
 			=> X == other.X && Y == other.Y;

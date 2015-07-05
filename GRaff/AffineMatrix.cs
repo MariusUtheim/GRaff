@@ -206,7 +206,7 @@ namespace GRaff
 		/// Converts this GRaff.AffineMatrix to a human-readable string, displaying the values of the elements.
 		/// </summary>
 		/// <returns>A string that represents this GRaff.AffineMatrix.</returns>
-		public override string ToString() => "[[\{M00}, \{M01}, \{M02}], [\{M10}, \{M11}, \{M12}]]";
+		public override string ToString() => $"[[{M00}, {M01}, {M02}], [{M10}, {M11}, {M12}]]";
 
 		/// <summary>
 		/// Creates a deep clone of this GRaff.AffineMatrix.

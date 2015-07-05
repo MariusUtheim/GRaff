@@ -78,7 +78,7 @@ namespace GRaff
 					return _frames[_indices[i]];
 			}
 
-			throw new NotSupportedException("\{nameof(GRaff)}.\{nameof(AnimationStrip)}.\{nameof(SubImage)} did not return a texture. This indicates an internal error with G-Raff.");
+			throw new NotSupportedException($"{nameof(GRaff)}.{nameof(AnimationStrip)}.{nameof(SubImage)} did not return a texture. This indicates an internal error with G-Raff.");
 		}
 	}
 }

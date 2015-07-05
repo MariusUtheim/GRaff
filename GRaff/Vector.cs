@@ -79,7 +79,7 @@ namespace GRaff
 		/// Converts this GRaff.Vector to a human-readable string.
 		/// </summary>
 		/// <returns>A string that represents this GRaff.Vector.</returns>
-		public override string ToString() => "[\{X}, \{Y}]";
+		public override string ToString() => $"[{X}, {Y}]";
 
 		public bool Equals(Vector other)
 			=> X == other.X && Y == other.Y;

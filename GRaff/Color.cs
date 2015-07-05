@@ -123,7 +123,7 @@ namespace GRaff
 		/// Converts this GRaff.Color to a human-readable string, showing the value of each channel.
 		/// </summary>
 		/// <returns>A string that represents this GRaff.Color</returns>
-		public override string ToString() => "\{nameof(Color)}=0x\{Argb : X}";
+		public override string ToString() => $"{nameof(Color)}=0x{Argb:X}";
 
 		public bool Equals(Color other) => A == other.A && R == other.R && G == other.G && B == other.B;
 

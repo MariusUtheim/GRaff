@@ -37,7 +37,7 @@ namespace GRaff
 		/// Converts this GRaff.IntVector to a human-readable string.
 		/// </summary>
 		/// <returns>A string that represents this GRaff.IntVector</returns>
-		public override string ToString() => "[\{X}, \{Y}]";
+		public override string ToString() => $"[{X}, {Y}]";
 
 		public bool Equals(IntVector other)
 			=> X == other.X && Y == other.Y;
