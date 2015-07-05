@@ -64,10 +64,10 @@ namespace GRaff.Graphics
 				GL.Uniform1(location, Time.LoopCount);
 
 				location = GL.GetUniformLocation(Id, "GRaff_RoomWidth");
-				GL.Uniform1(location, Room.Width);
+				GL.Uniform1(location, Room.Current.Width);
 
 				location = GL.GetUniformLocation(Id, "GRaff_RoomHeight");
-				GL.Uniform1(location, Room.Height);
+				GL.Uniform1(location, Room.Current.Height);
 
 				View.LoadMatrix(Id);
 			}

@@ -105,7 +105,7 @@ namespace GRaff.Graphics
 		public Color GetPixel(double x, double y)
 		{
 			Color c = 0;
-			GL.ReadPixels((int)x, (int)(Room.Height - y), 1, 1, PixelFormat.Rgba, PixelType.UnsignedByte, ref c);
+			GL.ReadPixels((int)x, (int)(Room.Current.Height - y), 1, 1, PixelFormat.Rgba, PixelType.UnsignedByte, ref c);
 			return c;
 		}
 

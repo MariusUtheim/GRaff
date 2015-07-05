@@ -99,7 +99,7 @@ namespace GRaff
 		/// </summary>
 		public static double HZoom
 		{
-			get { return Width / Room.Width; }
+			get { return Width / Room.Current.Width; }
 		}
 		
 		public static Point ScreenToRoom(double x, double y)
@@ -120,7 +120,7 @@ namespace GRaff
 		/// </summary>
 		public static double VZoom
 		{
-			get { return Height / Room.Height; }
+			get { return Height / Room.Current.Height; }
 		}
 
 		/// <summary>
