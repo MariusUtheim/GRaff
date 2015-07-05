@@ -18,6 +18,8 @@ namespace GRaff
 		/// <summary>The smallest relative rounding error in double-precision arithmetic.</summary>
 		public const double MachineEpsilon = 2.2204460492503130808472633361816e-16;
 
+		public static double Frac(double x) => (x >= 0) ? x - Floor(x) : x - Ceiling(x);
+
 		public static int HashCombine(params int[] values)
 		{
 			if (values == null)
@@ -130,72 +132,36 @@ namespace GRaff
 			else
 				return x1;
 		}
-		public static Point Median(Point x1, Point x2, Point x3)
-		{
-			return new Point(Median(x1.X, x2.X, x3.X), Median(x1.Y, x2.Y, x3.Y));
-		}
-		public static Vector Median(Vector x1, Vector x2, Vector x3)
-		{
-			return new Vector(Median(x1.X, x2.X, x3.X), Median(x1.Y, x2.Y, x3.Y));
-		}
+		public static Point Median(Point x1, Point x2, Point x3) => new Point(Median(x1.X, x2.X, x3.X), Median(x1.Y, x2.Y, x3.Y));
+		public static Vector Median(Vector x1, Vector x2, Vector x3) => new Vector(Median(x1.X, x2.X, x3.X), Median(x1.Y, x2.Y, x3.Y));
 
 		public static int Remainder(int x, int q) => ((x % q) + q) % q;
 
 		public static double Remainder(double x, double q) => ((x % q) + q) % q;
 
-		public static int RoundInt(double x)
-		{
-			return (int)Round(x);
-		}
-		public static int RoundInt(float x)
-		{
-			return (int)Round(x);
-		}
-		public static int RoundInt(decimal x)
-		{
-			return (int)Round(x);
-		}
-		public static uint RoundUInt(double x)
-		{
-			return (uint)Round(x);
-		}
-		public static uint RoundUInt(float x)
-		{
-			return (uint)Round(x);
-		}
-		public static uint RoundUInt(decimal x)
-		{
-			return (uint)Round(x);
-		}
-		public static long RoundLong(double x)
-		{
-			return (long)Round(x);
-		}
-		public static long RoundLong(decimal x)
-		{
-			return (long)Round(x);
-		}
-		public static ulong RoundULong(double x)
-		{
-			return (ulong)Round(x);
-		}
-		public static ulong RoundULong(decimal x)
-		{
-			return (ulong)Round(x);
-		}
+		public static int RoundInt(double x) => (int)Round(x);
+		public static int RoundInt(float x) => (int)Round(x);
+		public static int RoundInt(decimal x) => (int)Round(x);
+		public static uint RoundUInt(double x) => (uint)Round(x);
+		public static uint RoundUInt(float x) => (uint)Round(x);
+		public static uint RoundUInt(decimal x) => (uint)Round(x);
+		public static long RoundLong(double x) => (long)Round(x);
+		public static long RoundLong(decimal x) => (long)Round(x);
+		public static ulong RoundULong(double x) => (ulong)Round(x);
+		public static ulong RoundULong(decimal x) => (ulong)Round(x);
 
 
-		public static int Sqr(byte x) { return x * x; }
-		public static int Sqr(sbyte x) { return x * x; }
-		public static int Sqr(short x) { return x * x; }
-		public static int Sqr(ushort x) { return x * x; }
-		public static int Sqr(int x) { return x * x; }
-		public static uint Sqr(uint x) { return x * x; }
-		public static long Sqr(long x) { return x * x; }
-		public static ulong Sqr(ulong x) { return x * x; }
-		public static float Sqr(float x) { return x * x; }
-		public static double Sqr(double x) { return x * x; }
-		public static decimal Sqr(decimal x) { return x * x; }
+		public static int Sqr(byte x) => x * x;
+		public static int Sqr(sbyte x) => x * x;
+		public static int Sqr(short x) => x * x;
+		public static int Sqr(ushort x) => x * x;
+		public static int Sqr(int x) => x * x;
+		public static uint Sqr(uint x) => x * x;
+		public static long Sqr(long x) => x * x;
+		public static ulong Sqr(ulong x) => x * x;
+		public static float Sqr(float x) => x * x;
+		public static double Sqr(double x) => x * x;
+		public static decimal Sqr(decimal x) => x * x;
 	}
 }
 
