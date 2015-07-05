@@ -59,9 +59,6 @@ namespace GRaff
 
 		public IAsyncOperation LoadAsync()
 		{
-			if (!IsLoaded)
-				return _loadingOperation;
-
 			return TextureBuffer.LoadAsync(_bitmapFile)
 				.Then(textureBuffer => {
 					_textureBuffer = textureBuffer;

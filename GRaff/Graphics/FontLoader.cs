@@ -9,6 +9,7 @@ using System.IO;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 
+
 namespace GRaff.Graphics
 {
 	[Serializable]
@@ -243,7 +244,7 @@ namespace GRaff.Graphics
 		}
 
 		[XmlAttribute("file")]
-		public int File
+		public string File
 		{
 			get;
 			set;
