@@ -82,37 +82,37 @@ namespace GRaff.Synchronization
 			return t => member.SetValue(target, setter(t, initialValue));
 		}
 
-		public static Tween Animate(Expression<Func<int>> property, int finalValue, int duration, TweeningFunction f, Action completeAction = null)
+		public static Tween Animate(int duration, TweeningFunction f, Expression<Func<int>> property, int finalValue, Action completeAction = null)
 		{
 			var s = _setter(property, (double t, int initialValue) => (int)(initialValue * (1 - t) + finalValue * t));
 			return Start(duration, f, s, completeAction);
 		}
 		
-		public static Tween Animate(Expression<Func<double>> property, double finalValue, int duration, TweeningFunction f, Action completeAction = null)
+		public static Tween Animate(int duration, TweeningFunction f, Expression<Func<double>> property, double finalValue, Action completeAction = null)
 		{
 			var s = _setter(property, (double t, double initialValue) => initialValue * (1 - t) + finalValue * t);
 			return Start(duration, f, s, completeAction);
 		}
 
-		public static Tween Animate(Expression<Func<Point>> property, Point finalValue, int duration, TweeningFunction f, Action completeAction = null)
+		public static Tween Animate(int duration, TweeningFunction f, Expression<Func<Point>> property, Point finalValue, Action completeAction = null)
 		{
 			var s = _setter(property, (double t, Point initialValue) => initialValue * (1 - t) + finalValue * t);
 			return Start(duration, f, s, completeAction);
 		}
 
-		public static Tween Animate(Expression<Func<Color>> property, Color finalValue, int duration, TweeningFunction f, Action completeAction = null)
+		public static Tween Animate(int duration, TweeningFunction f, Expression<Func<Color>> property, Color finalValue, Action completeAction = null)
 		{
 			var s = _setter(property, (double t, Color initialValue) => initialValue.Merge(finalValue, t));
 			return Start(duration, f, s, completeAction);
 		}
 
-		public static Tween Animate(Expression<Func<Vector>> property, Vector finalValue, int duration, TweeningFunction f, Action completeAction = null)
+		public static Tween Animate(int duration, TweeningFunction f, Expression<Func<Vector>> property, Vector finalValue, Action completeAction = null)
 		{
 			var s = _setter(property, (double t, Vector initialValue) => initialValue * (1 - t) + finalValue * t);
 			return Start(duration, f, s, completeAction);
 		}
 
-		public static Tween Animate(Expression<Func<Angle>> property, Angle finalValue, int duration, TweeningFunction f, Action completeAction = null)
+		public static Tween Animate(int duration, TweeningFunction f, Expression<Func<Angle>> property, Angle finalValue, Action completeAction = null)
 		{
 			var s = _setter(property, (double t, Angle initialValue) => initialValue + t * Angle.Acute(initialValue, finalValue));
 			return Start(duration, f, s, completeAction);
