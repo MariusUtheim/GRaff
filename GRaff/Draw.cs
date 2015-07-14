@@ -185,8 +185,7 @@ namespace GRaff
 #warning DESIGN: ArgumentNullExceptions?
 		public static void Texture(Texture texture, double x, double y)
 		{
-			if (texture == null)
-				throw new ArgumentNullException(nameof(texture));
+			Contract.Requires<ArgumentNullException>(texture != null);
 			if (!texture.Buffer.IsLoaded)
 				throw new InvalidOperationException("Trying to draw a texture that hasn't been loaded");
 			if (texture != null)
@@ -253,17 +252,32 @@ namespace GRaff
 
 		public static void Text(Font font, Color color, string text, double x, double y)
 		{
-			CurrentSurface.DrawText(font, FontAlignment.Center, color, text, new PointF(x, y));
+			CurrentSurface.DrawText(font, FontAlignment.TopLeft, color, text, new PointF(x, y));
 		}
 
 		public static void Text(Font font, Color color, string text, Point location)
 		{
-			CurrentSurface.DrawText(font, FontAlignment.Center, color, text, (PointF)location);
+			CurrentSurface.DrawText(font, FontAlignment.TopLeft, color, text, (PointF)location);
 		}
 
 		public static void Text(Font font, Color color, string text, Transform transform)
 		{
-			CurrentSurface.DrawText(font, FontAlignment.Center, color, text, transform);
+			CurrentSurface.DrawText(font, FontAlignment.TopLeft, color, text, transform);
+		}
+
+		public static void Text(Font font, FontAlignment alignment, Color color, string text, double x, double y)
+		{
+			CurrentSurface.DrawText(font, alignment, color, text, new PointF(x, y));
+		}
+
+		public static void Text(Font font, FontAlignment alignment, Color color, string text, Point location)
+		{
+			CurrentSurface.DrawText(font, alignment, color, text, (PointF)location);
+		}
+
+		public static void Text(Font font, FontAlignment alignment, Color color, string text, Transform transform)
+		{
+			CurrentSurface.DrawText(font, alignment, color, text, transform);
 		}
 	}
 }

@@ -5,6 +5,8 @@ namespace GRaff
 {
 	public enum FontAlignment
 	{
+		Horizontal = 0x03,
+		Vertical = 0x30,
 		TopLeft = 0x11,
 		Top = 0x10,
 		TopRight = 0x12,

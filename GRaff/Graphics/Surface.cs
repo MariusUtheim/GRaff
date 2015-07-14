@@ -288,6 +288,8 @@ namespace GRaff.Graphics
 			GL.DrawArrays(GLPrimitiveType.Quads, 0, vertices.Length);
 
 		}
+
+
 		#endregion
 	}
 }
