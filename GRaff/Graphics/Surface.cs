@@ -102,10 +102,10 @@ namespace GRaff.Graphics
 			Render(vertices, colors, type);
 		}
 
-		public Color GetPixel(double x, double y)
+		public Color GetPixel(int x, int y)
 		{
 			Color c = 0;
-			GL.ReadPixels((int)x, (int)(Room.Current.Height - y), 1, 1, PixelFormat.Rgba, PixelType.UnsignedByte, ref c);
+			GL.ReadPixels(x, Room.Current.Height - y, 1, 1, PixelFormat.Rgba, PixelType.UnsignedByte, ref c);
 			return c;
 		}
 
