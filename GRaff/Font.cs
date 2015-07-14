@@ -38,11 +38,11 @@ namespace GRaff
 			}
 		}
 
-		public double GetWidth(string str)
+		public int GetWidth(string str)
 		{
 			if (!IsLoaded) throw new InvalidOperationException("The font is not loaded.");
 
-			double width = 0;
+			var width = 0;
 			foreach (var c in str)
 				width += _characters[c].XAdvance;
 			return width;

@@ -44,7 +44,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="OpenTK">
-      <HintPath>..\..\..\..\..\..\Libraries\OpenTK\1.1\Binaries\OpenTK\Release\OpenTK.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\Library\OpenTK\1.1\Binaries\OpenTK\Release\OpenTK.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -69,12 +69,16 @@
     <Compile Include="Forms\MouseEventArgs.cs" />
     <Compile Include="Forms\OpenFileDialog.cs" />
     <Compile Include="Forms\Quad.cs" />
+    <Compile Include="Graphics\TextRenderer.cs" />
+    <Compile Include="Randomness\Statistics.cs" />
     <Compile Include="RedBlackTree.cs" />
     <Compile Include="Synchronization\Alarm.cs" />
     <Compile Include="Angle.cs" />
     <Compile Include="AnimationStrip.cs" />
     <Compile Include="Synchronization\Async.Aggregate.cs" />
     <Compile Include="Synchronization\Async.cs" />
+    <Compile Include="Synchronization\AsyncOperationElement.cs" />
+    <Compile Include="Synchronization\AsyncOperationRejectedEventArgs.cs" />
     <Compile Include="Synchronization\Coroutine.cs" />
     <Compile Include="Font.cs" />
     <Compile Include="FontAlignment.cs" />
@@ -256,7 +260,9 @@
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>COPY /B /Y $(TargetPath)  "C:\Libraries\G-Raff\GRaff.dll"</PostBuildEvent>
+    <PostBuildEvent>IF $(ConfigurationName) == Release (
+    COPY /B /Y $(TargetPath)  "C:\Libraries\G-Raff\GRaff.dll"
+)</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -38,6 +38,12 @@ namespace GRaff.Graphics
 		public static PointF operator +(PointF left, Vector right)
 			=> new PointF((float)(left.X + right.X), (float)(left.Y + right.Y));
 
+		public static PointF operator -(PointF left, Vector right)
+			=> new PointF((float)(left.X - right.X), (float)(left.Y - right.Y));
+
+		public static Vector operator -(PointF left, PointF right)
+			=> new Vector(left.X - right.X, left.Y - right.Y);
+
 		public static implicit operator Point(PointF value)
 			=> new Point(value.X, value.Y);
 

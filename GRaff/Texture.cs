@@ -36,7 +36,7 @@ namespace GRaff
 
 		public PointF BottomLeft => TexCoords[2];
 
-		public double Width => (0.5 * (Point)(TopLeft + BottomLeft) - 0.5 * (Point)(TopRight + BottomRight)).Magnitude * Buffer.Width;
+		public double Width => (0.5f * (TopLeft + BottomLeft) - 0.5f * (TopRight + BottomRight)).Magnitude * Buffer.Width;
 
 		public double Height => (0.5 * (Point)(TopLeft + TopRight) - 0.5 * (Point)(BottomLeft + BottomRight)).Magnitude * Buffer.Height;
 

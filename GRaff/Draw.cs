@@ -185,6 +185,10 @@ namespace GRaff
 #warning DESIGN: ArgumentNullExceptions?
 		public static void Texture(Texture texture, double x, double y)
 		{
+			if (texture == null)
+				throw new ArgumentNullException(nameof(texture));
+			if (!texture.Buffer.IsLoaded)
+				throw new InvalidOperationException("Trying to draw a texture that hasn't been loaded");
 			if (texture != null)
 				CurrentSurface.DrawTexture(texture, new PointF(x, y));
 		}
@@ -250,6 +254,11 @@ namespace GRaff
 		public static void Text(Font font, Color color, string text, double x, double y)
 		{
 			CurrentSurface.DrawText(font, FontAlignment.Center, color, text, new PointF(x, y));
+		}
+
+		public static void Text(Font font, Color color, string text, Point location)
+		{
+			CurrentSurface.DrawText(font, FontAlignment.Center, color, text, (PointF)location);
 		}
 
 		public static void Text(Font font, Color color, string text, Transform transform)
