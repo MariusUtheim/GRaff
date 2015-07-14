@@ -111,11 +111,11 @@ namespace GRaff.Graphics
 		public void Draw(string text, Color color, double x, double y)
 		{
 			var lines = LineSplit(text);
-
 			if ((Alignment & FontAlignment.Vertical) == FontAlignment.Center)
-				y -= (lines.Length * LineSeparation - Font.Height) / 2;
+				y -= lines.Length * LineSeparation / 2 - Font.Height / 2;
 			else if ((Alignment & FontAlignment.Vertical) == FontAlignment.Bottom)
 				y -= lines.Length * LineSeparation - Font.Height;
+
 			for (var i = 0; i < lines.Length; i++)
 				GRaff.Draw.Text(Font, Alignment, color, lines[i], x, y + i * LineSeparation);
 		}
