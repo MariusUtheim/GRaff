@@ -64,7 +64,6 @@ namespace GRaff
 			};
 
 			Window.Load += (sender, e) => {
-				Thread.CurrentThread.Name = "Giraffe";
 				Async.MainThreadDispatcher = System.Windows.Threading.Dispatcher.CurrentDispatcher;
 				Draw.CurrentSurface = new Surface(windowWidth, windowHeight);
 				Graphics._Initializer.Initialize();
