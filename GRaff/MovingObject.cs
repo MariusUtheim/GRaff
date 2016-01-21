@@ -43,7 +43,7 @@ namespace GRaff
 			XPrevious = X;
 			YPrevious = Y;
 
-			Location += Velocity + 0.5 * Acceleration;
+			Location += Velocity;// + 0.5 * Acceleration;
 			Velocity += Acceleration;
 			if (Speed <= Friction)
 				Speed = 0;
