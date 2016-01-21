@@ -294,21 +294,21 @@ namespace GRaff.Randomness
 		};
 		#endregion
 
-		public static int Combinations(int n, int k)
+		public static int Combinations(int n, int r)
 		{
 			double c;
 
 			if (n < 0)
-				c = GMath.Pow(-1, k) * GMath.Exp(LogGamma(k - n) - (LogGamma(k + 1) + LogGamma(-n)));
+				c = GMath.Pow(-1, r) * GMath.Exp(LogGamma(r - n) - (LogGamma(r + 1) + LogGamma(-n)));
 			else
-				c = GMath.Exp(LogGamma(n + 1) - (LogGamma(k + 1) + LogGamma(n - k + 1)));
+				c = GMath.Exp(LogGamma(n + 1) - (LogGamma(r + 1) + LogGamma(n - r + 1)));
 
 			return checked((int)GMath.Round(c));
 		}
 
-		public static int Permutations(int n, int k)
+		public static int Permutations(int n, int r)
 		{
-			double c = GMath.Exp(LogGamma(n + 1) - LogGamma(n - k + 1));
+			double c = GMath.Exp(LogGamma(n + 1) - LogGamma(n - r + 1));
 			return checked((int)GMath.Round(c));
 		}
 
