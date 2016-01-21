@@ -25,7 +25,6 @@ namespace GRaff
 		{
 			Debug.Assert(GRaff.Graphics.Context.IsAlive);
 			Id = GL.GenTexture();
-			Debug.Assert(Id != 0);
 			this.Path = path;
 			Texture = new Texture(this, new Graphics.PointF(0, 0), new Graphics.PointF(1, 0), new Graphics.PointF(0, 1), new Graphics.PointF(1, 1));
 		}

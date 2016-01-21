@@ -77,7 +77,7 @@ namespace GRaff.Graphics
 			GL.DrawArrays((GLPrimitiveType)type, 0, vertices.Length);
 		}
 
-		private void RenderTextured(Texture texture, PointF[] vertices, Color[] colors, PrimitiveType type)
+		internal void RenderTextured(Texture texture, PointF[] vertices, Color[] colors, PrimitiveType type)
 		{
 			GL.BindVertexArray(_vertexArray);
 			texture.Bind();
@@ -234,20 +234,28 @@ namespace GRaff.Graphics
 
 		}
 
-		public void DrawText(Font font, FontAlignment alignment, Color color, string text, PointF location)
+		public void DrawText(TextRenderer renderer, Color color, string text, AffineMatrix transform)
 		{
 			PointF[] vertices;
 			PointF[] texCoords;
 
-			font.Render(text, alignment, out vertices, out texCoords);
+			var split = renderer.RenderCoords(text, out vertices);
+
+			texCoords = new PointF[vertices.Length];
+			var offset = 0;
+			for (var l = 0; l < split.Length; l++)
+			{
+				renderer.Font.RenderTexCoords(split[l], offset, ref texCoords);
+				offset += split[l].Length;
+			}
 
 			for (int i = 0; i < vertices.Length; i++)
-				vertices[i] += location;
+				vertices[i] = transform * vertices[i];
 			
-			Color[] colors = Enumerable.Repeat(color, vertices.Length).ToArray();
+			var colors = Enumerable.Repeat(color, vertices.Length).ToArray();
 
 			GL.BindVertexArray(_vertexArray);
-			GL.BindTexture(TextureTarget.Texture2D, font.TextureBuffer.Id);
+			GL.BindTexture(TextureTarget.Texture2D, renderer.Font.TextureBuffer.Id);
 
 			ShaderProgram.CurrentTextured.SetCurrent();
 
@@ -261,33 +269,6 @@ namespace GRaff.Graphics
 			GL.DrawArrays(GLPrimitiveType.Quads, 0, vertices.Length);
 		}
 
-		public void DrawText(Font font, FontAlignment alignment, Color color, string text, Transform transform)
-		{
-			PointF[] vertices;
-			PointF[] texCoords;
-
-			font.Render(text, alignment, out vertices, out texCoords);
-
-			var matrix = transform.GetMatrix();
-			Parallel.For(0, vertices.Length, i => vertices[i] = matrix * vertices[i]);
-
-			Color[] colors = Enumerable.Repeat(color, vertices.Length).ToArray();
-
-			GL.BindVertexArray(_vertexArray);
-			GL.BindTexture(TextureTarget.Texture2D, font.TextureBuffer.Id);
-
-			ShaderProgram.CurrentTextured.SetCurrent();
-
-			GL.BindBuffer(BufferTarget.ArrayBuffer, _vertexBuffer);
-			GL.BufferData(BufferTarget.ArrayBuffer, new IntPtr(vertices.Length * sizeofPoint), vertices, BufferUsageHint.StreamDraw);
-			GL.BindBuffer(BufferTarget.ArrayBuffer, _colorBuffer);
-			GL.BufferData(BufferTarget.ArrayBuffer, new IntPtr(vertices.Length * sizeofColor), colors, BufferUsageHint.StreamDraw);
-			GL.BindBuffer(BufferTarget.ArrayBuffer, _textureBuffer);
-			GL.BufferData(BufferTarget.ArrayBuffer, new IntPtr(vertices.Length * sizeofPoint), texCoords, BufferUsageHint.StreamDraw);
-
-			GL.DrawArrays(GLPrimitiveType.Quads, 0, vertices.Length);
-
-		}
 
 
 		#endregion

@@ -130,16 +130,31 @@ namespace GRaff
 				CurrentSurface.DrawImage(image);
 		}
 
-		public static void Text(Font font, Color color, string text, double x, double y) => CurrentSurface.DrawText(font, FontAlignment.TopLeft, color, text, new PointF(x, y));
+		public static void Text(string text, TextRenderer renderer, Color color, double x, double y) => CurrentSurface.DrawText(renderer, color, text, AffineMatrix.Translation(x, y));
+		
+		public static void Text(string text, TextRenderer renderer, Color color, Point location) => Text(text, renderer, color, AffineMatrix.Translation(location.X, location.Y));
 
-		public static void Text(Font font, Color color, string text, Point location) => CurrentSurface.DrawText(font, FontAlignment.TopLeft, color, text, (PointF)location);
+		public static void Text(string text, TextRenderer renderer, Color color, Transform transform) => Text(text, renderer, color, transform.GetMatrix());
 
-		public static void Text(Font font, Color color, string text, Transform transform) => CurrentSurface.DrawText(font, FontAlignment.TopLeft, color, text, transform);
+		public static void Text(string text, TextRenderer renderer, Color color, AffineMatrix transform) => CurrentSurface.DrawText(renderer, color, text, transform);
 
-		public static void Text(Font font, FontAlignment alignment, Color color, string text, double x, double y) => CurrentSurface.DrawText(font, alignment, color, text, new PointF(x, y));
+		public static void Text(string text, Font font, Color color, double x, double y) => Text(text, new TextRenderer(font), color, AffineMatrix.Translation(x, y));
+		public static void Text(string text, Font font, Color color, Point location) => Text(text, new TextRenderer(font), color, AffineMatrix.Translation(location.X, location.Y));
 
-		public static void Text(Font font, FontAlignment alignment, Color color, string text, Point location) => CurrentSurface.DrawText(font, alignment, color, text, (PointF)location);
+		public static void Text(string text, Font font, FontAlignment alignment, Color color, double x, double y) => Text(text, new TextRenderer(font, alignment), color, AffineMatrix.Translation(x, y));
 
-		public static void Text(Font font, FontAlignment alignment, Color color, string text, Transform transform) => CurrentSurface.DrawText(font, alignment, color, text, transform);
+		public static void Text(string text, Font font, FontAlignment alignment, Color color, Point location) => Text(text, new TextRenderer(font, alignment), color, AffineMatrix.Translation(location.X, location.Y));
+
+		//public static void Text(string text, Font font, Color color, double x, double y) => CurrentSurface.DrawText(font, )
+
+		/*
+		public static void Text(string text, Font font, Color color, Transform transform) => CurrentSurface.DrawText(font, FontAlignment.TopLeft, color, text, transform);
+		
+		public static void Text(string text, Font font, FontAlignment alignment, Color color, double x, double y) => CurrentSurface.DrawText(font, alignment, color, text, new PointF(x, y));
+
+		public static void Text(string text, Font font, FontAlignment alignment, Color color, Point location) => CurrentSurface.DrawText(font, alignment, color, text, (PointF)location);
+
+		public static void Text(string text, Font font, FontAlignment alignment, Color color, Transform transform) => CurrentSurface.DrawText(font, alignment, color, text, transform);
+		*/
 	}
 }

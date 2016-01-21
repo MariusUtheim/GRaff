@@ -13,6 +13,11 @@ namespace GRaff
     {
 		public static class Primitive
 		{
+			public static void Custom(PrimitiveType primitiveType, Color color, params Point[] vertices)
+			{
+				CurrentSurface.DrawPrimitive(vertices.Select(p => (PointF)p).ToArray(), Enumerable.Repeat(color, vertices.Length).ToArray(), primitiveType);
+            }
+
 			public static void Points(Color color, params Point[] vertices)
 			{
 				Contract.Requires(vertices != null);
@@ -47,11 +52,16 @@ namespace GRaff
 					vertices[3 * i + 1] = (PointF)triangles[i].V2;
 					vertices[3 * i + 2] = (PointF)triangles[i].V3;
 				}
+				CurrentSurface.DrawPrimitive(vertices, Enumerable.Repeat(color, vertices.Length).ToArray(), PrimitiveType.Triangles);
 			}
 
-			public static void TriangleStrip(Color color, Point origin, Point v1, Point v2, params Point[] vertices)
+			public static void TriangleStrip(Color color, Point origin, Point v1, Point v2, params Point[] verts)
 			{
-				throw new NotImplementedException();
+				Contract.Requires(verts != null);
+				var vertices = new PointF[3 + verts.Length];
+				for (var i = 0; i < verts.Length; i++)
+					vertices[i + 3] = (PointF)verts[i];
+				CurrentSurface.DrawPrimitive(vertices, Enumerable.Repeat(color, vertices.Length).ToArray(), PrimitiveType.Triangles);
 			}
 
 			public static void TriangleFan(Point origin, params Point[] vertices)

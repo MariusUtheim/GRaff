@@ -10,6 +10,8 @@ namespace GRaff.Graphics
 	[StructLayout(LayoutKind.Sequential)]
 	public struct PointF
 	{
+		public static PointF Zero { get; } = new PointF();
+
 		public PointF(float x, float y)
 			: this()
 		{
