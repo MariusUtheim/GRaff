@@ -25,7 +25,7 @@ namespace GameMaker.UnitTesting
 
 			public override string ToString()
 			{
-				return "Depth=\{Depth}; Tag=\{Tag}";
+				return $"Depth={Depth}; Tag={Tag}";
 			}
 		}
 

@@ -29,22 +29,22 @@ namespace GRaff.GraphicTest
 
 		public TweenTest()
 		{
-			Background.Default.ClearColor = null;
+			Room.Current.Background.Color = null;
 		}
 
 		public override void OnDraw()
 		{
 			Draw.FillCircle(_color, Location, 8);
-			Draw.Line(Colors.White, Room.Center.X, 0, Room.Center.X, Room.Height);
+			Draw.Line(Colors.White, Room.Current.Center.X, 0, Room.Current.Center.X, Room.Current.Height);
 		}
 
 		public void OnGlobalMouse(MouseButton button)
 		{
 			_color = Colors.Red;
 
-			marker = Instance<Marker>.Create(new Point(GRandom.Integer(Room.Width), GRandom.Integer(Room.Height)));
+			marker = Instance<Marker>.Create(new Point(GRandom.Integer(Room.Current.Width), GRandom.Integer(Room.Current.Height)));
 
-			Tween.Animate(() => this.Location, Mouse.Location, 90, f, () => _color = Colors.DarkRed);
+			Tween.Animate(90, f, () => this.Location, Mouse.Location, () => _color = Colors.DarkRed);
 		}
 
 		public void OnKeyPress(Key key)

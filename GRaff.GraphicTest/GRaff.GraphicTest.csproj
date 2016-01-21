@@ -47,9 +47,11 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SpriteTest.cs" />
     <Compile Include="Test.cs" />
+    <Compile Include="TextTest.cs" />
+    <Compile Include="TextAlignmentTest.cs" />
     <Compile Include="TextureBuffers.cs" />
     <Compile Include="TextureBufferTest.cs" />
-    <Compile Include="TransformTests.cs" />
+    <Compile Include="TransformTest.cs" />
     <Compile Include="TweenTest.cs" />
   </ItemGroup>
   <ItemGroup>

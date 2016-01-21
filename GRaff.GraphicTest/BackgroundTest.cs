@@ -11,16 +11,16 @@ namespace GRaff.GraphicTest
 
 		public BackgroundTest()
 		{
-			Background.Default.ClearColor = Colors.Orange;
-			Background.Default.Buffer = TextureBuffers.Giraffe;
-			Background.Default.IsTiled = true;
-			Background.Default.HSpeed = -1;
-			Background.Default.VSpeed = -1.1;
+			Room.Current.Background.Color = Colors.Orange;
+			Room.Current.Background.Buffer = TextureBuffers.Giraffe;
+			Room.Current.Background.IsTiled = true;
+			Room.Current.Background.HSpeed = -1;
+			Room.Current.Background.VSpeed = -1.1;
 		}
 
 		public override void OnDestroy()
 		{
-			Background.Default.Buffer = null;
+			Room.Current.Background.Buffer = null;
 		}
 
 		public void OnKeyPress(Key key)
@@ -28,15 +28,15 @@ namespace GRaff.GraphicTest
 			switch (key)
 			{
 				case Key.Number1:
-					Background.Default.Velocity = Vector.Zero;
-					Background.Default.Offset = Vector.Zero;
-					Background.Default.IsTiled = false;
+					Room.Current.Background.Velocity = Vector.Zero;
+					Room.Current.Background.Offset = Vector.Zero;
+					Room.Current.Background.IsTiled = false;
 					break;
 
 				case Key.Number2:
-					Background.Default.HSpeed = -1;
-					Background.Default.VSpeed = -1.1;
-					Background.Default.IsTiled = true;
+					Room.Current.Background.HSpeed = -1;
+					Room.Current.Background.VSpeed = -1.1;
+					Room.Current.Background.IsTiled = true;
 					break;
 			}
 		}

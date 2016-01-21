@@ -18,7 +18,7 @@ namespace GRaff.GraphicTest
 			GlobalEvent.ExitOnEscape = true;
 			TextureBuffers.LoadAll();
 
-			Instance<TransformTests>.Create(Room.Center);
+			Instance<TextTest>.Create();
 		}
 	}
 }
