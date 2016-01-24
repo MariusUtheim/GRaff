@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Text;
@@ -252,17 +253,71 @@ namespace GRaff
 
 		#region Tween manipulations
 
+		/// <summary>
+		/// Gives a function that reverses this GRaff.TweeningFunction. That is, it tweens it out from the endpoint to the startpoint.
+		/// </summary>
+		/// <param name="f">The GRaff.TweeningFunction to reverse.</param>
+		/// <returns>A GRaff.TweeningFunction representing the reverse of this GRaff.TweeningFunction.</returns>
 		public static TweeningFunction Reverse(this TweeningFunction f) => t => f(1 - t);
 
+		/// <summary>
+		/// Gives a function that tweens this GRaff.TweeningFunction in. This is equivalent to the function itself.
+		/// </summary>
+		/// <param name="f">The GRaff.TweeningFunction to tween in.</param>
+		/// <returns>A GRaff.TweeningFunction representing this GRaff.TweeningFunction being tweened in.</returns>
 		public static TweeningFunction In(this TweeningFunction f) => t => f(t);
 
+		/// <summary>
+		/// Gives a function that tweens this GRaff.TweeningFunction out. That is, the speed evolution is reversed. 
+		/// </summary>
+		/// <param name="f">The GRaff.TweeningFunction to tween out.</param>
+		/// <returns>A GRaff.TweeningFunction representing this GRaff.TweeningFunction being tweened out.</returns>
 		public static TweeningFunction Out(this TweeningFunction f) => t => 1 - f(1 - t);
 
+		/// <summary>
+		/// Gives a function that tweens this GRaff.TweeningFunction in, then followed by tweening it out.
+		/// This does not change the total time span of the function; therefore, animation will appear faster.
+		/// </summary>
+		/// <param name="f">The GRaff.TweeningFunction to tween.</param>
+		/// <returns>A GRaff.TweeningFunction representing this GRaff.TweeningFunction first being tweened in, then tweened out.</returns>
 		public static TweeningFunction InOut(this TweeningFunction f) => t => t < 0.5 ? (f(2 * t) / 2) : (1 - f(2 * (1 - t)) / 2);
 
+		/// <summary>
+		/// Gives a function that tweens this GRaff.TweeningFunction out, then followed by tweening it in.
+		/// This does not change the total time span of the function; therefore, animation will appear faster.
+		/// </summary>
+		/// <param name="f">The GRaff.TweeningFunction to tween.</param>
+		/// <returns>A GRaff.TweeningFunction representing this GRaff.TweeningFunction first being tweened out, then tweened in.</returns>
 		public static TweeningFunction OutIn(this TweeningFunction f) => t => t < 0.5 ? 0.5 * (1 - f(1 - 2 * t)) : (1 + f(2 * (t - 0.5))) / 2;
 
+		/// <summary>
+		/// Gives a function that performs this GRaff.TweeningFunction, followed by performing it in reverse.
+		/// This does not change the total time span of the function; therefore, animation will appear faster.
+		/// </summary>
+		/// <param name="f">The GRaff.TweeningFunction to tween.</param>
+		/// <returns>A GRaff.TweeningFunction representing this GRaff.TweeningFunction first being tweened in, then being tweened in reverse.</returns>
 		public static TweeningFunction BothWays(this TweeningFunction f) => t => t < 0.5 ? f(2 * t) : f(2 * (1 - t));
+
+		/// <summary>
+		/// Gives a function that performs this GRaff.TweeningFunction for the specified amount of time, followed by the next GRaff.TweeningFunction for the remainder of the time.
+		/// </summary>
+		/// <param name="f">The GRaff.TweeningFunction to perform first.</param>
+		/// <param name="atTime">The duration of the first GRaff.TweeningFunction. This should be in the range [0, 1].</param>
+		/// <param name="next">The GRaff.TweeningFunction to perform second.</param>
+		/// <returns>A GRaff.Synchronization.TweningFunction representing the combination of the two tweening functions.</returns>
+		public static TweeningFunction CombineWith(this TweeningFunction f, double atTime, TweeningFunction next)
+		{
+			Debug.Assert(0 <= atTime && atTime <= 1);
+			return t => t < atTime ? (atTime * f(t / atTime)) : (atTime + (1 - atTime) * next((t - atTime) / (1 - atTime)));
+		}
+
+		/// <summary>
+		/// Gives a function that performs this GRaff.TweeningFunction, followed by the specified GRaff.TweeningFunction.
+		/// </summary>
+		/// <param name="f">The GRaff.TweeningFunction to perform first.</param>
+		/// <param name="next">The GRaff.TweeningFunction to perform second.</param>
+		/// <returns>A GRaff.Synchronization.TweningFunction representing the combination of the two tweening functions.</returns>
+		public static TweeningFunction CombineWith(this TweeningFunction f, TweeningFunction next) => f.CombineWith(0.5, next);
 
 		#endregion
 	}
