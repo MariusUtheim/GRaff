@@ -36,7 +36,7 @@ namespace GRaff
 		public static void FillEllipse(Color color, Rectangle rectangle) => CurrentSurface.FillEllipse(color, color, (PointF)rectangle.TopLeft, rectangle.Width, rectangle.Height);
 		public static void FillEllipse(Color innerColor, Color outerColor, double x, double y, double width, double height) => CurrentSurface.FillEllipse(innerColor, outerColor, new PointF(x, y), (float)width, (float)height);
 		public static void FillEllipse(Color innerColor, Color outerColor, Point location, Vector size) => CurrentSurface.FillEllipse(innerColor, outerColor, (PointF)location, size.X, size.Y);
-		public static void FillEllipse(Color innerColor, Color outerColor, Rectangle rectangle) => CurrentSurface.FillEllipse(innerColor, outerColor, (PointF)rectangle.TopLeft, rectangle.Left, rectangle.Top);
+		public static void FillEllipse(Color innerColor, Color outerColor, Rectangle rectangle) => CurrentSurface.FillEllipse(innerColor, outerColor, (PointF)rectangle.TopLeft, rectangle.Width, rectangle.Height);
 
 
 		public static void Triangle(Color color, double x1, double y1, double x2, double y2, double x3, double y3) => Draw.CurrentSurface.DrawTriangle(color, color, color, new PointF((float)x1, (float)y1), new PointF((float)x2, (float)y2), new PointF((float)x3, (float)y3));
@@ -51,7 +51,7 @@ namespace GRaff
 		public static void FillTriangle(Color col1, Color col2, Color col3, double x1, double y1, double x2, double y2, double x3, double y3) => Draw.CurrentSurface.FillTriangle(col1, col2, col3, new PointF((float)x1, (float)y1), new PointF((float)x2, (float)y2), new PointF((float)x3, (float)y3));
 		public static void FillTriangle(Color col1, Color col2, Color col3, Point p1, Point p2, Point p3) => Draw.CurrentSurface.FillTriangle(col1, col2, col3, (PointF)p1, (PointF)p2, (PointF)p3);
 		public static void FillTriangle(Color col1, Color col2, Color col3, Triangle triangle) => CurrentSurface.FillTriangle(col1, col2, col3, (PointF)triangle.V1, (PointF)triangle.V2, (PointF)triangle.V3);
-
+		
 		public static void Rectangle(Color color, double x, double y, double width, double height) => CurrentSurface.DrawRectangle(color, color, color, color, (float)x, (float)y, (float)width, (float)height);
 		public static void Rectangle(Color color, Point location, Vector size) => CurrentSurface.DrawRectangle(color, color, color, color, (float)location.X, (float)location.Y, (float)size.X, (float)size.Y);
 		public static void Rectangle(Color color, Rectangle rectangle) => CurrentSurface.DrawRectangle(color, color, color, color, (float)rectangle.Left, (float)rectangle.Top, (float)rectangle.Width, (float)rectangle.Height);

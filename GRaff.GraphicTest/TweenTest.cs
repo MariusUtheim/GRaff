@@ -24,6 +24,20 @@ namespace GRaff.GraphicTest
 			{ Key.Number0, Tween.Elastic(3, 4) }
 		};
 
+		private static Dictionary<Key, string> functionNames = new Dictionary<Key, string>
+		{
+			{ Key.Number1, "Linear" },
+			{ Key.Number2, "Quadratic" },
+			{ Key.Number3, "Cubic" },
+			{ Key.Number4, "Quartic" },
+			{ Key.Number5, "Quintic" },
+			{ Key.Number6, "Sine" },
+			{ Key.Number7, "Circle" },
+			{ Key.Number8, "Bounce" },
+			{ Key.Number9, "Spring" },
+			{ Key.Number0, "Elastic" }
+		};
+
 		private static Marker marker { get; set; }
 		private TweeningFunction f = functions[Key.Number1];
 		private Color _color = Colors.DarkRed;
@@ -45,14 +59,17 @@ namespace GRaff.GraphicTest
 
 			marker = Instance<Marker>.Create(new Point(GRandom.Integer(Room.Current.Width), GRandom.Integer(Room.Current.Height)));
 
-			Tween.Animate(90, f, () => this.Location, Mouse.Location, () => _color = Colors.DarkRed);
+			if (button == MouseButton.Left)
+				Tween.Animate(90, f, () => this.Location, Mouse.Location, () => _color = Colors.DarkRed);
+			else if (button == MouseButton.Right)
+				Tween.Animate(90, f.Out(), () => this.Location, Mouse.Location, () => _color = Colors.DarkRed);
 		}
 
 		public void OnKeyPress(Key key)
 		{
 			if (functions.ContainsKey(key))
 			{
-				Window.Title = Enum.GetName(typeof(Key), key);
+				Window.Title = functionNames[key];
 				f = functions[key];
 			}
 		}

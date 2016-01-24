@@ -12,14 +12,13 @@ namespace GRaff.GraphicTest
 	class TextAlignmentTest : GameElement
 	{
 		private const string lipsum = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus rutrum nibh sed nulla dapibus, sit amet tempor nulla feugiat.";
-        private Font _font;
+        private static Font font = Font.Load(@"C:\test\TimesNewRoman.png", @"C:\test\TimesNewRoman.xml");
 		private TextRenderer _render;
 		
 
 		public TextAlignmentTest()
 		{
-			_font = Font.Load(@"C:\test\TimesNewRoman.png", @"C:\test\TimesNewRoman.xml");
-			_render = new TextRenderer(_font, width: 300);
+			_render = new TextRenderer(font, width: 300);
 			_render.Alignment = FontAlignment.Center;
 			
 			var multiline = _render.MultilineFormat(lipsum);
@@ -49,17 +48,17 @@ namespace GRaff.GraphicTest
 			//_render.Draw(lipsum, Colors.White, Room.Current.Center);
 
 			//Draw.Rectangle(Colors.Black, 10, 50, 300, _font.Height);
-			Draw.Text(_render.Truncate(lipsum), _render, Colors.Black, 10, 50);
+			//Draw.Text(_render.Truncate(lipsum), _render, Colors.Black, 10, 50);
 
-			Draw.Text("Top Left", _font, FontAlignment.TopLeft, Colors.Black, 0, 0);
-			Draw.Text("Top", _font, FontAlignment.Top, Colors.Black, Room.Current.Center.X, 0);
-			Draw.Text("Top Right",  _font, FontAlignment.TopRight, Colors.Black, Room.Current.Width, 0);
-			Draw.Text("Left", _font, FontAlignment.Left, Colors.Black, 0, Room.Current.Center.Y);
-			Draw.Text("Center", _font, FontAlignment.Center, Colors.Black, Room.Current.Center);
-			Draw.Text("Right", _font, FontAlignment.Right, Colors.Black, Room.Current.Width, Room.Current.Center.Y);
-			Draw.Text("Bottom Left", _font, FontAlignment.BottomLeft, Colors.Black, 0, Room.Current.Height);
-			Draw.Text("Bottom", _font, FontAlignment.Bottom, Colors.Black, Room.Current.Center.X, Room.Current.Height);
-			Draw.Text("Bottom Right", _font, FontAlignment.BottomRight, Colors.Black, Room.Current.Width, Room.Current.Height);
+			Draw.Text("Top Left", font, FontAlignment.TopLeft, Colors.Black, 0, 0);
+			Draw.Text("Top", font, FontAlignment.Top, Colors.Black, Room.Current.Center.X, 0);
+			Draw.Text("Top Right",  font, FontAlignment.TopRight, Colors.Black, Room.Current.Width, 0);
+			Draw.Text("Left", font, FontAlignment.Left, Colors.Black, 0, Room.Current.Center.Y);
+			Draw.Text("Center", font, FontAlignment.Center, Colors.Black, Room.Current.Center);
+			Draw.Text("Right", font, FontAlignment.Right, Colors.Black, Room.Current.Width, Room.Current.Center.Y);
+			Draw.Text("Bottom Left", font, FontAlignment.BottomLeft, Colors.Black, 0, Room.Current.Height);
+			Draw.Text("Bottom", font, FontAlignment.Bottom, Colors.Black, Room.Current.Center.X, Room.Current.Height);
+			Draw.Text("Bottom Right", font, FontAlignment.BottomRight, Colors.Black, Room.Current.Width, Room.Current.Height);
 		}
 
 	}

@@ -114,13 +114,13 @@ namespace GRaff
 				return new Polygon { _pts = new[] { center } };
 
 			int precision = (int)GMath.Ceiling(GMath.Tau * GMath.Abs(radius));
-
+			
 			return Regular(precision, radius, center);
 		}
 
 		public static Polygon Ellipse(Point center, double width, double height)
 		{
-			int precision = (int)GMath.Ceiling(GMath.Pi * (width + height));
+			int precision = (int)GMath.Ceiling(GMath.Pi * GMath.Abs(width + height));
 			double dt = GMath.Tau / precision;
 			double c = GMath.Cos(dt), s = GMath.Sin(dt);
 

@@ -156,7 +156,6 @@ namespace GRaff.Graphics
 				   new[] { col1, col2, col4, col3 }, PrimitiveType.TriangleStrip);
 		}
 
-#warning Too unoptimized. Maybe just drop it?
 		public void DrawCircle(Color color, PointF center, double radius)
 		{
 			var circle = Polygon.Circle(center, radius);
@@ -176,7 +175,7 @@ namespace GRaff.Graphics
 			vertices[i++] = center;
 			foreach (var p in Polygon.Circle(center, radius).Vertices)
 				vertices[i++] = (PointF)p;
-			vertices[i] = new PointF(center.X + (float)radius, center.Y);
+			vertices[i] = new PointF(center.X, center.Y - (float)radius);
 
 			Color[] colors = new Color[precision + 2];
 			colors[0] = innerColor;
