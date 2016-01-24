@@ -8,7 +8,8 @@ using GRaff.Graphics;
 
 namespace GRaff.GraphicTest
 {
-	class TextAlignmentTest : Test
+	[Test]
+	class TextAlignmentTest : GameElement
 	{
 		private const string lipsum = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus rutrum nibh sed nulla dapibus, sit amet tempor nulla feugiat.";
         private Font _font;

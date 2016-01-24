@@ -211,7 +211,7 @@ namespace GRaff
 		/// <param name="rnd">The System.Random to generate the numbers.</param>
 		/// <returns>A random GRaff.Color with random RGB channels.</returns>
 		public static Color Color(this Random rnd)
-			=> (Color)(0xFF000000 | (rnd.Next() % 0xFF000000));
+			=> (Color)(rnd.Next(0x1000000));
 		
 		/// <summary>
 		/// Randomizes the order of the elements in the specified array.

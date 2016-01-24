@@ -70,6 +70,11 @@
     <Compile Include="Forms\OpenFileDialog.cs" />
     <Compile Include="Forms\Quad.cs" />
     <Compile Include="Graphics\TextRenderer.cs" />
+    <Compile Include="Pathfinding\Graph.cs" />
+    <Compile Include="Pathfinding\Grid.cs" />
+    <Compile Include="Pathfinding\IEdge.cs" />
+    <Compile Include="Pathfinding\Path.cs" />
+    <Compile Include="Pathfinding\IVertex.cs" />
     <Compile Include="Randomness\Statistics.cs" />
     <Compile Include="RedBlackTree.cs" />
     <Compile Include="Synchronization\Alarm.cs" />

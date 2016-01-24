@@ -14,7 +14,7 @@ namespace GRaff
 		/// <summary>
 		/// The golden ratio, φ
 		/// </summary>
-		public const double GoldenRatio = 1.6180339887498948482045868343656;
+		public const double Phi = 1.6180339887498948482045868343656;
 		/// <summary>The smallest relative rounding error in double-precision arithmetic.</summary>
 		public const double MachineEpsilon = 2.2204460492503130808472633361816e-16;
 

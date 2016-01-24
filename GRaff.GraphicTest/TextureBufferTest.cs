@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace GRaff.GraphicTest
 {
-	class TextureBufferTest : Test
+	[Test]
+	class TextureBufferTest : GameElement
 	{
 		
 		public TextureBufferTest()

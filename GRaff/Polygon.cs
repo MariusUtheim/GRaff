@@ -118,9 +118,9 @@ namespace GRaff
 			return Regular(precision, radius, center);
 		}
 
-		public static Polygon Ellipse(Point center, double xRadius, double yRadius)
+		public static Polygon Ellipse(Point center, double width, double height)
 		{
-			int precision = (int)GMath.Ceiling(GMath.Pi * (xRadius + yRadius));
+			int precision = (int)GMath.Ceiling(GMath.Pi * (width + height));
 			double dt = GMath.Tau / precision;
 			double c = GMath.Cos(dt), s = GMath.Sin(dt);
 
@@ -129,7 +129,7 @@ namespace GRaff
 			Point[] pts = new Point[precision];
 			for (int i = 0; i < precision; i++)
 			{
-				pts[i] = new Point(center.X + x * xRadius, center.Y + y * yRadius);
+				pts[i] = new Point(center.X + x * width, center.Y + y * height);
 
 				tmp = x;
 				x = c * x - s * y;

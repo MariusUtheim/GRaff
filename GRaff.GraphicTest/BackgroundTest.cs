@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace GRaff.GraphicTest
 {
-	class BackgroundTest : Test, IKeyPressListener
+	[Test]
+	class BackgroundTest : GameElement, IKeyPressListener
 	{
 
 		public BackgroundTest()

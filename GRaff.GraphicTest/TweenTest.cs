@@ -7,7 +7,8 @@ using GRaff.Synchronization;
 
 namespace GRaff.GraphicTest
 {
-	class TweenTest : Test, IGlobalMouseListener, IKeyPressListener
+	[Test]
+	class TweenTest : GameObject, IGlobalMouseListener, IKeyPressListener
 	{
 		private static Dictionary<Key, TweeningFunction> functions = new Dictionary<Key, TweeningFunction>
 		{

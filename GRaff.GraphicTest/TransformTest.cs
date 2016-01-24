@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace GRaff.GraphicTest
 {
-	class TransformTest : Test
+	[Test]
+	class TransformTest : GameElement
 	{
 		Sprite sprite = new Sprite(TextureBuffers.Giraffe.Texture);
 

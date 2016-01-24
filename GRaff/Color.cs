@@ -7,11 +7,13 @@ using System.Text;
 namespace GRaff
 {
 	/// <summary>
-	/// Represents an ARGB color. Note that colors can be cast from uint structures on the form 0xAARRGGBB.
+	/// Represents an RGBA color. Note that colors can be cast from uint structures on the form 0xAARRGGBB.
 	/// </summary>
 	[StructLayout(LayoutKind.Sequential)]
 	public struct Color : IEquatable<Color>
 	{
+		private byte _r, _g, _b, _a;
+
 		/// <summary>
 		/// Initializes a new instance of the GRaff.Color structure using the specifed alpha, red, green and blue values.
 		/// </summary>
@@ -22,31 +24,31 @@ namespace GRaff
 		public Color(byte a, byte r, byte g, byte b)
 			: this()
 		{
-			A = a;
-			R = r;
-			G = g;
-			B = b;
+			_a = a;
+			_r = r;
+			_g = g;
+			_b = b;
 		}
 
 		/// <summary>
 		/// Gets the value of the red channel of this GRaff.Color.
 		/// </summary>
-		public byte R { get; private set; }
+		public byte R => _r;
 
 		/// <summary>
 		/// Gets the value of the green channel of this GRaff.Color.
 		/// </summary>
-		public byte G { get; private set; }
+		public byte G => _g;
 
 		/// <summary>
 		/// Gets the value of the blue channel of this GRaff.Color.
 		/// </summary>
-		public byte B { get; private set; }
+		public byte B => _b;
 
 		/// <summary>
 		/// Gets the value of the alpha channel of this GRaff.Color.
 		/// </summary>
-		public byte A { get; private set; }
+		public byte A => _a;
 
 		/// <summary>
 		/// Initializes a new instance of the GRaff.Color class, using the specified ARGB values.
@@ -157,9 +159,15 @@ namespace GRaff
 		/// <returns>true if the ARGB values of the two colors are unequal.</returns>
 		public static bool operator !=(Color left, Color right) => !left.Equals(right);
 
+		/// <summary>
+		/// Converts the specified unsigned integer in an RGB format to a GRaff.Color.
+		/// </summary>
+		/// <param name="rgb">The System.Int32 to be converted.</param>
+		/// <returns>The GRaff.Color resulting from the conversion.</returns>
+		public static implicit operator Color(int rgb) => new Color(0xFF000000 | (uint)rgb);
 
 		/// <summary>
-		/// Converts the specified integer in an ARGB format to a GRaff.Color
+		/// Converts the specified unsigned integer in an ARGB format to a GRaff.Color.
 		/// </summary>
 		/// <param name="argb">The System.Uint32 to be converted.</param>
 		/// <returns>The GRaff.Color resulting from the conversion.</returns>

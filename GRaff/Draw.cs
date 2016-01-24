@@ -28,6 +28,17 @@ namespace GRaff
 		public static void FillCircle(Color col1, Color col2, Point location, double radius) => Draw.CurrentSurface.FillCircle(col1, col2, (PointF)location, radius);
 		public static void FillCircle(Color col1, Color col2, double x, double y, double radius) => Draw.CurrentSurface.FillCircle(col1, col2, new PointF(x, y), radius);
 
+		public static void Ellipse(Color color, double x, double y, double width, double height) => CurrentSurface.DrawEllipse(color, new PointF(x, y), (float)width, (float)height);
+		public static void Ellipse(Color color, Point location, Vector size) => CurrentSurface.DrawEllipse(color, (PointF)location, size.X, size.Y);
+		public static void Ellipse(Color color, Rectangle rectangle) => CurrentSurface.DrawEllipse(color, (PointF)rectangle.TopLeft, rectangle.Width, rectangle.Height);
+		public static void FillEllipse(Color color, double x, double y, double width, double height) => CurrentSurface.FillEllipse(color, color, new PointF(x, y), (float)width, (float)height);
+		public static void FillEllipse(Color color, Point location, Vector size) => CurrentSurface.FillEllipse(color, color, (PointF)location, size.X, size.Y);
+		public static void FillEllipse(Color color, Rectangle rectangle) => CurrentSurface.FillEllipse(color, color, (PointF)rectangle.TopLeft, rectangle.Width, rectangle.Height);
+		public static void FillEllipse(Color innerColor, Color outerColor, double x, double y, double width, double height) => CurrentSurface.FillEllipse(innerColor, outerColor, new PointF(x, y), (float)width, (float)height);
+		public static void FillEllipse(Color innerColor, Color outerColor, Point location, Vector size) => CurrentSurface.FillEllipse(innerColor, outerColor, (PointF)location, size.X, size.Y);
+		public static void FillEllipse(Color innerColor, Color outerColor, Rectangle rectangle) => CurrentSurface.FillEllipse(innerColor, outerColor, (PointF)rectangle.TopLeft, rectangle.Left, rectangle.Top);
+
+
 		public static void Triangle(Color color, double x1, double y1, double x2, double y2, double x3, double y3) => Draw.CurrentSurface.DrawTriangle(color, color, color, new PointF((float)x1, (float)y1), new PointF((float)x2, (float)y2), new PointF((float)x3, (float)y3));
 		public static void Triangle(Color color, Point p1, Point p2, Point p3) => Draw.CurrentSurface.DrawTriangle(color, color, color, (PointF)p1, (PointF)p2, (PointF)p3);
 		public static void Triangle(Color color, Triangle triangle) => CurrentSurface.DrawTriangle(color, color, color, (PointF)triangle.V1, (PointF)triangle.V2, (PointF)triangle.V3);

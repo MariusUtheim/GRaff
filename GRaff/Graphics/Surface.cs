@@ -92,6 +92,11 @@ namespace GRaff.Graphics
 			GL.DrawArrays((GLPrimitiveType)type, 0, vertices.Length);
 		}
 
+		internal void FillEllipse(object color1, object color2, PointF topLeft, double left, double top)
+		{
+			throw new NotImplementedException();
+		}
+
 		public void Clear(Color color)
 		{
 			GL.ClearColor(color.ToOpenGLColor());
@@ -104,9 +109,9 @@ namespace GRaff.Graphics
 
 		public Color GetPixel(int x, int y)
 		{
-			Color c = 0;
-			GL.ReadPixels(x, Room.Current.Height - y, 1, 1, PixelFormat.Rgba, PixelType.UnsignedByte, ref c);
-			return c;
+			byte[] rgb = new byte[3];
+			GL.ReadPixels(x, Room.Current.Height - y, 1, 1, PixelFormat.Rgb, PixelType.UnsignedByte, rgb);
+			return new Color(rgb[0], rgb[1], rgb[2]);
 		}
 
 		public void SetPixel(Color color, PointF location)
@@ -154,29 +159,59 @@ namespace GRaff.Graphics
 #warning Too unoptimized. Maybe just drop it?
 		public void DrawCircle(Color color, PointF center, double radius)
 		{
-			int precision = (int)(GMath.Tau * radius);
-			Render(Polygon.Circle(center, radius).Vertices.Select(v => (PointF)v).ToArray(), Enumerable.Repeat(color, precision).ToArray(), PrimitiveType.LineLoop);
+			var circle = Polygon.Circle(center, radius);
+            Render(circle.Vertices.Select(v => (PointF)v).ToArray(), Enumerable.Repeat(color, circle.Length).ToArray(), PrimitiveType.LineLoop);
 		}
 
-		public void FillCircle(Color col1, Color col2, PointF center, double radius)
+		public void FillCircle(Color innerColor, Color outerColor, PointF center, double radius)
 		{
 			if (radius == 0)
 			{
-				SetPixel(col1, center);
+				SetPixel(innerColor, center);
 				return;
 			}
 			int precision = (int)GMath.Ceiling(GMath.Tau * GMath.Abs(radius));
-			PointF[] vertices = new PointF[precision + 2];
+			var vertices = new PointF[precision + 2];
 			int i = 0;
 			vertices[i++] = center;
-			foreach (PointF p in Polygon.Circle(center, radius).Vertices)
-				vertices[i++] = p;
+			foreach (var p in Polygon.Circle(center, radius).Vertices)
+				vertices[i++] = (PointF)p;
 			vertices[i] = new PointF(center.X + (float)radius, center.Y);
 
 			Color[] colors = new Color[precision + 2];
-			colors[0] = col1;
+			colors[0] = innerColor;
 			for (int j = 1; j < colors.Length; j++)
-				colors[j] = col2;
+				colors[j] = outerColor;
+
+			Render(vertices, colors, PrimitiveType.TriangleFan);
+		}
+
+		public void DrawEllipse(Color color, PointF location, double width, double height)
+		{
+			var ellipse = Polygon.Ellipse(location + new Vector(width, height) / 2, width / 2, height / 2);
+			Render(ellipse.Vertices.Select(v => (PointF)v).ToArray(), Enumerable.Repeat(color, ellipse.Length).ToArray(), PrimitiveType.LineLoop);
+		}
+
+		public void FillEllipse(Color innerColor, Color outerColor, PointF location, double width, double height)
+		{
+			var center = location + new PointF(width / 2, height / 2);
+			if (width == 0 && height == 0)
+			{
+				SetPixel(innerColor, center);
+				return;
+			}
+			var ellipse = Polygon.Ellipse(center, width / 2, height / 2);
+			var vertices = new PointF[ellipse.Length + 2];
+			int i = 0;
+			vertices[i++] = center;
+			foreach (var p in ellipse.Vertices)
+				vertices[i++] = (PointF)p;
+			vertices[i] = new PointF(location.X + (float)width, center.Y);
+
+			var colors = new Color[ellipse.Length + 2];
+			colors[0] = innerColor;
+			for (int j = 1; j < colors.Length; j++)
+				colors[j] = outerColor;
 
 			Render(vertices, colors, PrimitiveType.TriangleFan);
 		}
