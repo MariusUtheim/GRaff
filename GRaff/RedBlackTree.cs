@@ -383,7 +383,7 @@ namespace GRaff
 
 		public override string ToString()
 		{
-			return "RBTreeNode Depth=\{Element.Depth} Color=\{_color == Black ? "Black" : "Red"}";
+			return String.Format($"RBTreeNode Depth={Element.Depth} Color={{0}}", _color == Black ? Black : Red);
 		}
 
 		[Conditional("DEBUG")]
