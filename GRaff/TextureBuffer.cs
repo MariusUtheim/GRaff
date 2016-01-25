@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Diagnostics.Contracts;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
@@ -47,6 +48,7 @@ namespace GRaff
 
 		public static TextureBuffer Load(string path)
 		{
+			Contract.Ensures(Contract.Result<TextureBuffer>() != null);
 			var buffer = new TextureBuffer(path);
 			buffer.Load();
 			return buffer;

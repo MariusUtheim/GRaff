@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading;
 using GRaff.Graphics;
+using GRaff.Particles;
 using GRaff.Synchronization;
 using OpenTK;
 using OpenTK.Graphics;
@@ -42,6 +43,8 @@ namespace GRaff
 		/// <param name="gameStart">An action that is performed when the game begins. If omitted or set to null, no action is performed.</param>
 		public static void Run(int windowWidth, int windowHeight, double fps, Action gameStart)
 		{
+			Draw.Sprite(null, 0, (AffineMatrix)null);
+
 			Time.StartTime = Time.MachineTime;
 			Window = new GameWindow(windowWidth, windowHeight, GraphicsMode.Default, "Giraffe", GameWindowFlags.Default, DisplayDevice.Default);
 			Window.WindowBorder = WindowBorder.Fixed;
@@ -143,7 +146,6 @@ namespace GRaff
 					var arg = collisionInterface.GetGenericArguments().First();
 					foreach (var other in Instance<GameObject>.All.Where(i => i.GetType() == arg || arg.IsAssignableFrom(i.GetType())))
 					{
-#warning TODO: Don't collide if objects are destroyed
 						if (gen.Intersects(other))
 							collisionInterface.GetMethods().First().Invoke(gen, new object[] { other });
 					}
@@ -177,7 +179,6 @@ namespace GRaff
 		}
 		*/
 
-#warning CA1502
 		private static void _handleInput()
 		{
 			foreach (var key in Keyboard.Down)

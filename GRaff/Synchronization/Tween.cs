@@ -20,7 +20,7 @@ namespace GRaff.Synchronization
 
 		public Tween(int duration, TweeningFunction tweeningFunction, Action<double> stepAction, Action completeAction)
 		{
-			Contract.Requires(tweeningFunction != null);
+			Contract.Requires<ArgumentNullException>(tweeningFunction != null);
 			Duration = duration;
 			TweeningFunction = tweeningFunction;
 			_step += (sender, e) => stepAction(e);

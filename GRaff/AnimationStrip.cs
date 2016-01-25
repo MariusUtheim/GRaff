@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.Contracts;
 using System.Linq;
+using GRaff.Graphics;
 
 namespace GRaff
 {
@@ -14,7 +15,8 @@ namespace GRaff
 
 		public AnimationStrip(IEnumerable<Texture> frames)
 		{
-			Contract.Requires(frames != null && frames.Count() > 0);
+			Contract.Requires<ArgumentNullException>(frames != null);
+			Contract.Requires<ArgumentException>(frames.Count() > 0);
 
 			_frames = frames.ToArray();
 			_indices = Enumerable.Range(0, _frames.Length).ToArray();
@@ -27,10 +29,6 @@ namespace GRaff
 
 		public AnimationStrip(IEnumerable<Texture> frames, params Tuple<int, double>[] frameDurations)
 		{
-			Contract.Requires(frames != null && frames.Count() > 0);
-			Contract.Requires(frameDurations != null && frameDurations.Length > 0);
-			Contract.ForAll(frameDurations, f => f.Item1 < frames.Count() && f.Item2 > 0);
-
 			_frames = frames.ToArray();
 			_indices = frameDurations.Select(f => f.Item1).ToArray();
 			_durations = frameDurations.Select(f => f.Item2).ToArray();

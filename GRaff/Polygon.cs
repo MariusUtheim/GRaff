@@ -26,8 +26,8 @@ namespace GRaff
 
 		public Polygon(IEnumerable<Point> pts)
 		{
-#warning It should convert to array, then get Length instead of getting Count, then converting
-			Contract.Requires(pts != null && pts.Count() > 0);
+			Contract.Requires<ArgumentNullException>(pts != null);
+			Contract.Requires<ArgumentException>(pts.Count() > 0);
 
 			_pts = pts.ToArray();
 			_SanityCheck();
@@ -74,7 +74,7 @@ namespace GRaff
 			if (_pts.Length <= 2)
 				return;
 
-			Angle sum = Angle.Zero;
+			double sum = 0;
 			Angle a;
 			Vector previous, next;
 			previous = Edge(-1).Direction;
@@ -86,7 +86,7 @@ namespace GRaff
 				_pts = _pts.Reverse().ToArray();
 				a = -a;
 			}
-			sum += a;
+			sum += a.Degrees;
 
 			for (int i = 1; i < _pts.Length; i++)
 			{
@@ -95,11 +95,10 @@ namespace GRaff
 				a = next.Direction - previous.Direction;
 				if (a.Degrees > 180)
 					throw new ArgumentException("The points must specify a convex polygon.");
-				sum += a;
+				sum += a.Degrees;
 			}
 
-#warning ERROR: Angle arithmetic is modular - this won't fail
-			if (sum != Angle.Zero)
+			if (sum != 0)
 				throw new ArgumentException("The points must specify a convex polygon with winding number equal to 1. Winding is " + sum.ToString());
 		}
 

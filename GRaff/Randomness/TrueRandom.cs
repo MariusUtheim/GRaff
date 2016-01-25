@@ -124,7 +124,7 @@ namespace GRaff.Randomness
 			Contract.Requires(length >= 1 && length <= 20);
 			Contract.Requires(!String.IsNullOrEmpty(characters));
 			Contract.Requires(characters.Length <= 80);
-			Contract.Requires(replacement || (n <= GMath.Pow(length, characters.Length)));
+			//Contract.Requires(replacement || (n <= GMath.Pow(length, characters.Length)));
 
 			var requestData = _buildRequest("generateStrings", new Dictionary<string, object>
 			{

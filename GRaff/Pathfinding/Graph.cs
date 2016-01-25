@@ -9,8 +9,8 @@ namespace GRaff.Pathfinding
 {
 	public class Graph
 	{
-		List<IVertex> _vertices;
-		List<IEdge> _edges;
+		private readonly List<IVertex> _vertices = new List<IVertex>();
+		private readonly List<IEdge> _edges = new List<IEdge>();
 
 		public class Vertex : IVertex
 		{
@@ -60,8 +60,8 @@ namespace GRaff.Pathfinding
 		public Edge AddEdge(Vertex v1, Vertex v2)
 		{
 			Contract.Requires<ArgumentNullException>(v1 != null && v2 != null);
-			Contract.Requires<ArgumentException>(v1.Owner == this && v2.Owner == this, "Cannot add an edge between vertices that do not belong to the graph.");
-			Contract.Requires<InvalidOperationException>(!v1.IsConnectedTo(v2), "An edge already exists between the specified vertices.");
+			//Contract.Requires<ArgumentException>(v1.Owner == this && v2.Owner == this, "Cannot add an edge between vertices that do not belong to the graph.");
+			//Contract.Requires<InvalidOperationException>(!v1.IsConnectedTo(v2), "An edge already exists between the specified vertices.");
 			var e = new Edge(this, v1, v2);
 			_edges.Add(e);
 			return e;
@@ -77,16 +77,16 @@ namespace GRaff.Pathfinding
 		public void RemoveEdge(Edge e)
 		{
 			Contract.Requires<ArgumentNullException>(e != null);
-			Contract.Requires<ArgumentException>(e.Owner == this, "The specified edge that does not belong to the graph.");
-			Contract.Requires<InvalidOperationException>(_edges.Contains(e), "The specified edge has already been removed.");
+			//Contract.Requires<ArgumentException>(e.Owner == this, "The specified edge that does not belong to the graph.");
+			//Contract.Requires<InvalidOperationException>(_edges.Contains(e), "The specified edge has already been removed.");
 			_removeUnsafe(e);
 		}
 
 		public void RemoveVertex(Vertex v)
 		{
 			Contract.Requires<ArgumentNullException>(v != null);
-			Contract.Requires<ArgumentException>(v.Owner == this, "The specified vertex does not belong to the graph.");
-			Contract.Requires<InvalidOperationException>(_vertices.Contains(v), "The specified vertex has already been removed.");
+			//Contract.Requires<ArgumentException>(v.Owner == this, "The specified vertex does not belong to the graph.");
+			//Contract.Requires<InvalidOperationException>(_vertices.Contains(v), "The specified vertex has already been removed.");
 			foreach (var e in v.Edges)
 				_removeUnsafe(e);
 			_vertices.Remove(v);
@@ -95,7 +95,7 @@ namespace GRaff.Pathfinding
 		public bool EdgeExists(Vertex v1, Vertex v2)
 		{
 			Contract.Requires<ArgumentNullException>(v1 != null && v2 != null);
-			Contract.Requires<ArgumentException>(v1.Owner == this && v2.Owner == this, "Cannot add an edge between vertices that do not belong to the graph.");
+			//Contract.Requires<ArgumentException>(v1.Owner == this && v2.Owner == this, "Cannot add an edge between vertices that do not belong to the graph.");
 			return v1.IsConnectedTo(v2);
 		}
 

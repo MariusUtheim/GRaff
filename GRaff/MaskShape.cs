@@ -13,6 +13,11 @@ namespace GRaff
 			this.Polygon = polygon;
 		}
 
+		private MaskShape()
+		{
+			Polygon = null;
+		}
+
 		private MaskShape(params Point[] pts)
 		{
 			Polygon = new Polygon(pts);

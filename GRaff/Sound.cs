@@ -15,7 +15,7 @@ namespace GRaff
 	public sealed class Sound : IAsset
 	{
 		private SoundBuffer _buffer;
-		private List<SoundInstance> _instances;
+		private readonly List<SoundInstance> _instances = new List<SoundInstance>();
 		private IAsyncOperation _loadingOperation;
 
 		/// <summary>
@@ -27,7 +27,6 @@ namespace GRaff
 		public Sound(string fileName, bool isLooping, double loopOffset = 0)
 		{
 			this.FileName = fileName;
-			this._instances = new List<SoundInstance>();
 			this.IsLooping = isLooping;
 			this.LoopOffset = loopOffset;
 		}
@@ -113,7 +112,7 @@ namespace GRaff
 			if (!IsLoaded)
 				return _loadingOperation;
 
-			return SoundBuffer.LoadAsync(FileName, LoopOffset).Then(_load);
+			return _loadingOperation = SoundBuffer.LoadAsync(FileName, LoopOffset).Then(_load);
 		}
 
 		public void Unload()

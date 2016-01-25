@@ -1,5 +1,5 @@
-﻿using GRaff.Graphics;
-using System.Diagnostics.Contracts;
+﻿using System.Diagnostics.Contracts;
+using System;
 #if OpenGL4
 using coord = System.Double;
 #else
@@ -7,14 +7,14 @@ using coord = System.Single;
 #endif
 
 
-namespace GRaff
+namespace GRaff.Graphics
 {
 #warning Move to GRaff.Graphics?
 	public sealed class Texture
 	{
 		internal Texture(TextureBuffer buffer, GraphicsPoint topLeft, GraphicsPoint topRight, GraphicsPoint bottomLeft, GraphicsPoint bottomRight)
 		{
-			Contract.Requires(buffer != null);
+			Contract.Requires<ArgumentNullException>(buffer != null);
 			Buffer = buffer;
 			TexCoords = new[] { topLeft, topRight, bottomLeft, bottomRight };
 		}
@@ -26,7 +26,8 @@ namespace GRaff
 				  new GraphicsPoint(region.Left / buffer.Width, region.Bottom / buffer.Height),
 				  new GraphicsPoint(region.Right / buffer.Width, region.Bottom / buffer.Height))
 		{
-			Contract.Requires(buffer.IsLoaded);
+			Contract.Requires<ArgumentNullException>(buffer != null);
+			Contract.Requires<ArgumentException>(buffer.IsLoaded);
 		}
 
 		internal GraphicsPoint[] TexCoords { get; private set; }

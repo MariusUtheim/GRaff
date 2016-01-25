@@ -1,5 +1,7 @@
-﻿using System.Diagnostics.Contracts;
+﻿using System;
+using System.Diagnostics.Contracts;
 using System.Linq;
+using GRaff.Graphics;
 using GRaff.Synchronization;
 
 namespace GRaff
@@ -11,7 +13,7 @@ namespace GRaff
 
 		public Sprite(AnimationStrip animationStrip, Vector? size = null, Vector? origin = null, MaskShape maskShape = null)
 		{
-			Contract.Requires(animationStrip != null);
+			Contract.Requires<ArgumentNullException>(animationStrip != null);
 
 			this.AnimationStrip = animationStrip;
 			this.Size = size ?? animationStrip.SubImage(0).Size;

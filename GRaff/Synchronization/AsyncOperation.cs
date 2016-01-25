@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Diagnostics;
+using System.Diagnostics.Contracts;
 using System.Threading.Tasks;
 
 namespace GRaff.Synchronization
@@ -263,6 +264,7 @@ namespace GRaff.Synchronization
 
 		public IAsyncOperation<TNext> Then<TNext>(Func<TNext> action)
 		{
+			Contract.Ensures(Contract.Result<IAsyncOperation<TNext>>() != null);
 			var continuation = new AsyncOperation<TNext>(this, new SerialOperator(obj => action()));
 			Then(continuation);
 			return continuation;

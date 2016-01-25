@@ -21,6 +21,7 @@ namespace GRaff.Forms
 				if (e.Button == MouseButton.Left && _isPressed)
 				{
 					Console.WriteLine(_isPressed);
+					Console.WriteLine(_isHovering);
                     if (Click != null)
 						Click.Invoke(sender, e);
 				}

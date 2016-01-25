@@ -8,7 +8,6 @@ namespace GRaff.Synchronization
 #if PUBLISH
 	internal static class Async
 #else
-#warning Missing documentation
 	public static partial class Async
 #endif
 	{

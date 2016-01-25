@@ -73,10 +73,11 @@ namespace GRaff
 		public static void Line(Color color, Line line) => CurrentSurface.DrawLine(color, color, (GraphicsPoint)line.Origin, (GraphicsPoint)line.Destination);
 		public static void Line(Color col1, Color col2, double x1, double y1, double x2, double y2) => CurrentSurface.DrawLine(col1, col2, new GraphicsPoint(x1, y1), new GraphicsPoint(x2, y2));
 		public static void Line(Color col1, Color col2, Point p1, Point p2) => CurrentSurface.DrawLine(col1, col2, (GraphicsPoint)p1, (GraphicsPoint)p2);
-#warning DESIGN: ArgumentNullExceptions?
+
 		public static void Texture(Texture texture, double x, double y)
 		{
-			Contract.Requires<ArgumentNullException>(texture != null);
+			if (texture == null)
+				return;
 			if (!texture.Buffer.IsLoaded)
 				throw new InvalidOperationException("Trying to draw a texture that hasn't been loaded");
 			if (texture != null)
@@ -98,7 +99,7 @@ namespace GRaff
 
 		public static void Sprite(Sprite sprite, int imageIndex, AffineMatrix transform)
 		{
-			Contract.Requires(transform != null);
+			Contract.Requires<ArgumentNullException>(transform != null);
 			if (sprite != null)
 				CurrentSurface.DrawSprite(sprite, imageIndex, Colors.White, transform);
 		}
@@ -112,7 +113,7 @@ namespace GRaff
 
 		public static void Sprite(Sprite sprite, int imageIndex, Transform transform)
 		{
-			Contract.Requires(transform != null);
+			Contract.Requires<ArgumentNullException>(transform != null);
 			if (sprite != null)
 				CurrentSurface.DrawSprite(sprite, imageIndex, Colors.White, transform.GetMatrix());
 		}

@@ -54,7 +54,6 @@ namespace GRaff.Graphics.Shaders
 #endregion
 
 		private double _intensity;
-		private double _time;
 
 		public CausticShader(Rectangle region)
 			: this(region, DefaultIntensity, DefaultColor)

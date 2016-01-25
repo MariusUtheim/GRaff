@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
@@ -9,7 +10,7 @@ namespace GRaff.Particles
 {
 	public class ParticleSystem : GameElement
 	{
-		protected LinkedList<Particle> particles;
+		protected readonly LinkedList<Particle> particles = new LinkedList<Particle>();
 
 		// Hiding this from subclasses 
 		private TexturedRenderSystem _renderSystem;
@@ -18,8 +19,7 @@ namespace GRaff.Particles
 
 		public ParticleSystem(ParticleType type)
 		{
-			Contract.Requires(type != null);
-			particles = new LinkedList<Particle>();
+			Contract.Requires<ArgumentNullException>(type != null);
 			_renderSystem = new TexturedRenderSystem();
 			this.ParticleType = type;
 		}
@@ -28,6 +28,7 @@ namespace GRaff.Particles
 
 		protected void Remove(Particle particle)
 		{
+			Contract.Requires(particle != null);
 			particles.Remove(particle);
 		}
 
@@ -44,6 +45,7 @@ namespace GRaff.Particles
 
 		public void Create(IEnumerable<Point> pts)
 		{
+			Contract.Requires<ArgumentNullException>(pts != null);
 			foreach (var p in pts)
 				Create(p.X, p.Y, 1);
 		}

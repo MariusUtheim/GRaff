@@ -91,7 +91,7 @@ namespace GRaff
 
 		public IAsyncOperation LoadAsync()
 		{
-			return TextureBuffer.LoadAsync(_bitmapFile)
+			return _loadingOperation = TextureBuffer.LoadAsync(_bitmapFile)
 				.Then(textureBuffer => {
 					_textureBuffer = textureBuffer;
 					var fontData = FontLoader.Load(_dataFile);

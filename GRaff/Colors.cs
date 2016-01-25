@@ -2,7 +2,6 @@
 
 namespace GRaff
 {
-#warning DESIGN: Use one or two classes?
 	public static class Colors
 	{
 		public static Color Red { get; } = new Color(255, 0, 0);
