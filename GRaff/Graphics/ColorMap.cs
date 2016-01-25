@@ -1,9 +1,6 @@
 ﻿using System;
-#if OpenGL4
-using OpenTK.Graphics.OpenGL4;
-#else
 using OpenTK.Graphics.ES30;
-#endif
+
 
 namespace GRaff.Graphics
 {
@@ -14,7 +11,7 @@ namespace GRaff.Graphics
 		{
 			get
 			{
-				return new BlendMode((BlendEquation)GL.GetInteger(GetPName.BlendEquationRgb), (BlendingFactor)GL.GetInteger(GetPName.BlendSrc), (BlendingFactor)GL.GetInteger(GetPName.BlendDst));
+				return new BlendMode((BlendEquation)GL.GetInteger(GetPName.BlendEquation), (BlendingFactor)GL.GetInteger(GetPName.BlendSrc), (BlendingFactor)GL.GetInteger(GetPName.BlendDst));
 			}
 
 			set
@@ -28,7 +25,7 @@ namespace GRaff.Graphics
 		{
 			get
 			{
-				return (BlendEquation)GL.GetInteger(GetPName.BlendEquationRgb);
+				return (BlendEquation)GL.GetInteger(GetPName.BlendEquation);
 			}
 
 			set

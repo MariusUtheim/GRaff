@@ -32,7 +32,6 @@ namespace GRaff.GraphicTest
 
 			_currentTest = (GameElement)Activator.CreateInstance(test);
 			Instance.Create(_currentTest);
-			Window.Title = test.Name;
 		}
 
 		public void OnKeyPress(Key key)

@@ -133,9 +133,9 @@ namespace GRaff
 		}
 
 
-		internal void RenderTexCoords(string str, int offset, ref GraphicsPoint[] texCoords)
+		internal void RenderTexCoords(string str, int offset, ref PointF[] texCoords)
 		{
-			double tXScale = 1.0 / TextureBuffer.Width, tYScale = 1.0 / TextureBuffer.Height;
+			float tXScale = 1.0f / TextureBuffer.Width, tYScale = 1.0f / TextureBuffer.Height;
 			
 			for (var i = 0; i < str.Length; i++)
 			{
@@ -144,17 +144,17 @@ namespace GRaff
 				FontCharacter character;
 				if (_characters.TryGetValue(str[i], out character))
 				{
-					texCoords[index] = new GraphicsPoint(tXScale * character.X, tYScale * character.Y);
-					texCoords[index + 1] = new GraphicsPoint(tXScale * (character.X + character.Width), tYScale * character.Y);
-					texCoords[index + 2] = new GraphicsPoint(tXScale * (character.X + character.Width), tYScale * (character.Y + character.Height));
-					texCoords[index + 3] = new GraphicsPoint(tXScale * character.X, tYScale * (character.Y + character.Height));
+					texCoords[index] = new PointF(tXScale * character.X, tYScale * character.Y);
+					texCoords[index + 1] = new PointF(tXScale * (character.X + character.Width), tYScale * character.Y);
+					texCoords[index + 2] = new PointF(tXScale * (character.X + character.Width), tYScale * (character.Y + character.Height));
+					texCoords[index + 3] = new PointF(tXScale * character.X, tYScale * (character.Y + character.Height));
 				}
 				else
 				{
-					texCoords[index] = GraphicsPoint.Zero;
-					texCoords[index + 1] = GraphicsPoint.Zero;
-					texCoords[index + 2] = GraphicsPoint.Zero;
-					texCoords[index + 3] = GraphicsPoint.Zero;
+					texCoords[index] = PointF.Zero;
+					texCoords[index + 1] = PointF.Zero;
+					texCoords[index + 2] = PointF.Zero;
+					texCoords[index + 3] = PointF.Zero;
 				}
 			}
 		}

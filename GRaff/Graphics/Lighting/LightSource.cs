@@ -31,7 +31,7 @@ namespace GRaff.Graphics.Lighting
 			using (BlendMode.Use(BlendMode.Additive))
 				Draw.FillCircle(Color, Colors.Black, Location, Radius);
 
-			var vertices = new GraphicsPoint[obstacles.Count() * 12];
+			var vertices = new PointF[obstacles.Count() * 12];
 			var colors = new Color[obstacles.Count() * 12];
 
 			//Parallel.ForEach( obstacles, (obstacle, loopState, index) => {

@@ -1,21 +1,16 @@
-﻿#if OpenGL4
-using OpenTK.Graphics.OpenGL4;
-#else
-using OpenTK.Graphics.ES30;
-#endif
-
+﻿using OpenTK.Graphics.ES30;
 
 namespace GRaff.Graphics
 {
 	public static class GLExtensions
 	{
-		public static GraphicsPoint[] QuadCoordinates(this Rectangle rect)
+		public static PointF[] QuadCoordinates(this Rectangle rect)
 		{
 			return new[] {
-				new GraphicsPoint(rect.Left, rect.Top),
-				new GraphicsPoint(rect.Right, rect.Top),
-				new GraphicsPoint(rect.Right, rect.Bottom),
-				new GraphicsPoint(rect.Left, rect.Bottom)
+				new PointF((float)rect.Left, (float)rect.Top),
+				new PointF((float)rect.Right, (float)rect.Top),
+				new PointF((float)rect.Right, (float)rect.Bottom),
+				new PointF((float)rect.Left, (float)rect.Bottom)
 			};
 		}
 

@@ -21,7 +21,7 @@ namespace GRaff.Particles
 		public void Render(IEnumerable<Particle> particles)
 		{
 			int count = particles.Count();
-			GraphicsPoint[] vertices = new GraphicsPoint[4 * count];
+			PointF[] vertices = new PointF[4 * count];
 			Color[] colors = new Color[4 * count];
 			throw new NotImplementedException();
 			/*

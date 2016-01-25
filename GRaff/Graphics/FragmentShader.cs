@@ -1,10 +1,5 @@
 using System;
-#if OpenGL4
-using OpenTK.Graphics.OpenGL4;
-#else
 using OpenTK.Graphics.ES30;
-#endif
-
 
 namespace GRaff.Graphics
 {

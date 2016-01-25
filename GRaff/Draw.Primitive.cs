@@ -15,23 +15,23 @@ namespace GRaff
 		{
 			public static void Custom(PrimitiveType primitiveType, Color color, params Point[] vertices)
 			{
-				CurrentSurface.DrawPrimitive(vertices.Select(p => (GraphicsPoint)p).ToArray(), Enumerable.Repeat(color, vertices.Length).ToArray(), primitiveType);
+				CurrentSurface.DrawPrimitive(vertices.Select(p => (PointF)p).ToArray(), Enumerable.Repeat(color, vertices.Length).ToArray(), primitiveType);
             }
 
 			public static void Points(Color color, params Point[] vertices)
 			{
 				Contract.Requires(vertices != null);
-				CurrentSurface.DrawPrimitive(vertices.Select(p => (GraphicsPoint)p).ToArray(), Enumerable.Repeat(color, vertices.Length).ToArray(), PrimitiveType.Points);
+				CurrentSurface.DrawPrimitive(vertices.Select(p => (PointF)p).ToArray(), Enumerable.Repeat(color, vertices.Length).ToArray(), PrimitiveType.Points);
 			}
 
 			public static void Lines(Color color, params Line[] lines)
 			{
 				Contract.Requires(lines != null);
-				GraphicsPoint[] vertices = new GraphicsPoint[lines.Length * 2];
+				PointF[] vertices = new PointF[lines.Length * 2];
 				for (var i = 0; i < lines.Length; i++)
 				{
-					vertices[2 * i] = (GraphicsPoint)lines[i].Origin;
-					vertices[2 * i + 1] = (GraphicsPoint)lines[i].Destination;
+					vertices[2 * i] = (PointF)lines[i].Origin;
+					vertices[2 * i + 1] = (PointF)lines[i].Destination;
 				}
 				CurrentSurface.DrawPrimitive(vertices, Enumerable.Repeat(color, 2 * lines.Length).ToArray(), PrimitiveType.Lines);
 			}
@@ -39,18 +39,18 @@ namespace GRaff
 			public static void LineStrip(Color color, Point origin, Point v1, params Point[] vertices)
 			{
 				Contract.Requires(vertices != null);
-				CurrentSurface.DrawPrimitive(Enumerable.Concat(new[] { (GraphicsPoint)origin, (GraphicsPoint)v1 }, vertices.Cast<GraphicsPoint>()).ToArray(), Enumerable.Repeat(color, vertices.Length).ToArray(), PrimitiveType.LineStrip);
+				CurrentSurface.DrawPrimitive(Enumerable.Concat(new[] { (PointF)origin, (PointF)v1 }, vertices.Cast<PointF>()).ToArray(), Enumerable.Repeat(color, vertices.Length).ToArray(), PrimitiveType.LineStrip);
 			}
 
 			public static void Triangles(Color color, params Triangle[] triangles)
 			{
 				Contract.Requires(triangles != null);
-				GraphicsPoint[] vertices = new GraphicsPoint[triangles.Length * 3];
+				PointF[] vertices = new PointF[triangles.Length * 3];
 				for (var i = 0; i < triangles.Length; i++)
 				{
-					vertices[3 * i] = (GraphicsPoint)triangles[i].V1;
-					vertices[3 * i + 1] = (GraphicsPoint)triangles[i].V2;
-					vertices[3 * i + 2] = (GraphicsPoint)triangles[i].V3;
+					vertices[3 * i] = (PointF)triangles[i].V1;
+					vertices[3 * i + 1] = (PointF)triangles[i].V2;
+					vertices[3 * i + 2] = (PointF)triangles[i].V3;
 				}
 				CurrentSurface.DrawPrimitive(vertices, Enumerable.Repeat(color, vertices.Length).ToArray(), PrimitiveType.Triangles);
 			}
@@ -58,9 +58,9 @@ namespace GRaff
 			public static void TriangleStrip(Color color, Point origin, Point v1, Point v2, params Point[] verts)
 			{
 				Contract.Requires(verts != null);
-				var vertices = new GraphicsPoint[3 + verts.Length];
+				var vertices = new PointF[3 + verts.Length];
 				for (var i = 0; i < verts.Length; i++)
-					vertices[i + 3] = (GraphicsPoint)verts[i];
+					vertices[i + 3] = (PointF)verts[i];
 				CurrentSurface.DrawPrimitive(vertices, Enumerable.Repeat(color, vertices.Length).ToArray(), PrimitiveType.Triangles);
 			}
 

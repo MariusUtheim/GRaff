@@ -6,14 +6,8 @@ using System.IO;
 using System.Threading.Tasks;
 using GRaff.Graphics;
 using GRaff.Synchronization;
-#if OpenGL4
-using OpenTK.Graphics.OpenGL4;
-using GLPixelFormat = OpenTK.Graphics.OpenGL4.PixelFormat;
-#else
 using OpenTK.Graphics.ES30;
 using GLPixelFormat = OpenTK.Graphics.ES30.PixelFormat;
-#endif
-
 
 namespace GRaff
 {
@@ -32,7 +26,7 @@ namespace GRaff
 			Debug.Assert(GRaff.Graphics.Context.IsAlive);
 			Id = GL.GenTexture();
 			this.Path = path;
-			Texture = new Texture(this, new Graphics.GraphicsPoint(0, 0), new Graphics.GraphicsPoint(1, 0), new Graphics.GraphicsPoint(0, 1), new Graphics.GraphicsPoint(1, 1));
+			Texture = new Texture(this, new Graphics.PointF(0, 0), new Graphics.PointF(1, 0), new Graphics.PointF(0, 1), new Graphics.PointF(1, 1));
 		}
 
 		~TextureBuffer()
@@ -92,18 +86,11 @@ namespace GRaff
 				this.Width = bitmap.Width;
 				this.Height = bitmap.Height;
 
-#if OpenGL4
-				GL.BindTexture(TextureTarget.Texture2D, Id);
-				GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Linear);
-				GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
-				GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, textureData.Width, textureData.Height, 0, GLPixelFormat.Rgba, PixelType.UnsignedByte, textureData.Scan0); 
-#else
 				GL.BindTexture(TextureTarget.Texture2D, Id);
 				GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
 				GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.LinearMipmapLinear);
 				GL.TexImage2D(TextureTarget2d.Texture2D, 0, TextureComponentCount.Rgba, Width, Height, 0, GLPixelFormat.Rgba, PixelType.UnsignedByte, textureData.Scan0);
 				GL.GenerateMipmap(TextureTarget.Texture2D);
-#endif
 
 				IsLoaded = true;
 				_loadingOperation = null;

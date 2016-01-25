@@ -1,10 +1,6 @@
 ﻿using System;
 using GRaff.Graphics;
-#if OpenGL4
-using coords = System.Double;
-#else
-using coords = System.Single;
-#endif
+
 
 namespace GRaff
 {
@@ -111,10 +107,10 @@ namespace GRaff
 				if (IsTiled)
 				{
 					var viewBox = View.BoundingBox;
-					coords u0 = -(coords)(XOffset + viewBox.Left) / Buffer.Width, v0 = -(coords)((YOffset + viewBox.Top) / Buffer.Height);
-					coords u1 = (coords)(u0 + viewBox.Width / Buffer.Width), v1 = (coords)(v0 + viewBox.Height / Buffer.Height);
+					float u0 = -(float)((XOffset + viewBox.Left) / Buffer.Width), v0 = -(float)((YOffset + viewBox.Top) / Buffer.Height);
+					float u1 = u0 + (float)(viewBox.Width / Buffer.Width), v1 = v0 + (float)(viewBox.Height / Buffer.Height);
 
-					coords left = (coords)viewBox.Left, right = (coords)viewBox.Right, top = (coords)viewBox.Top, bottom = (coords)viewBox.Bottom;
+					float left = (float)viewBox.Left, right = (float)viewBox.Right, top = (float)viewBox.Top, bottom = (float)viewBox.Bottom;
 
 					_renderSystem.SetVertices(UsageHint.StreamDraw, left, top, right, top, right, bottom, left, bottom);
 					_renderSystem.SetTexCoords(UsageHint.StreamDraw, u0, v0, u1, v0, u1, v1, u0, v1);

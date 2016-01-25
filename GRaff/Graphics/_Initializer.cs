@@ -1,9 +1,9 @@
 ﻿using System;
-#if OpenGL4
-using OpenTK.Graphics.OpenGL4;
-#else
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using OpenTK.Graphics.ES30;
-#endif
 
 namespace GRaff.Graphics
 {
@@ -15,13 +15,7 @@ namespace GRaff.Graphics
 			{
 				ColorMap.BlendMode = BlendMode.AlphaBlend;
 				GL.Enable(EnableCap.Blend);
-				GlobalEvent.EndStep += () =>
-				{
-					var err = GL.GetError();
-					if (err != ErrorCode.NoError)
-						throw new Exception($"A GL error occurred: {Enum.GetName(err.GetType(), err)}");
-				};
-            }
+			}
 			catch (TypeInitializationException ex)
 			{
 				var innerException = ex.InnerException;
