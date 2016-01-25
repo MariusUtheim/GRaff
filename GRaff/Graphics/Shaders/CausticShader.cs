@@ -3,7 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+#if OpenGL4
+using OpenTK.Graphics.OpenGL4;
+#else
 using OpenTK.Graphics.ES30;
+#endif
+
 
 namespace GRaff.Graphics.Shaders
 {
@@ -11,11 +16,11 @@ namespace GRaff.Graphics.Shaders
 	{
 		private const double DefaultIntensity = 0.35;
 		private static readonly Color DefaultColor = Colors.White;
-		#region Source
+#region Source
 		public const string Source =
 			Shader.Header + @"
-			#define TAU 6.28318530718
-			#define MAX_ITER 5
+#define TAU 6.28318530718
+#define MAX_ITER 5
 
 			in highp vec4 pass_Color;
 			uniform highp float time;
@@ -46,7 +51,7 @@ namespace GRaff.Graphics.Shaders
 				vec3 colour = vec3(pow(abs(c), 8.0));
 				gl_FragColor = vec4(clamp(colour + pass_Color.rgb, 0.0, 1.0), pass_Color.a);
 			}";
-		#endregion
+#endregion
 
 		private double _intensity;
 		private double _time;

@@ -1,7 +1,15 @@
 ﻿using System;
 using System.Linq;
 using System.Runtime.InteropServices;
+#if OpenGL4
+using OpenTK.Graphics.OpenGL4;
+using GLPrimitiveType = OpenTK.Graphics.OpenGL4.PrimitiveType;
+using coord = System.Double;
+#else
 using OpenTK.Graphics.ES30;
+using GLPrimitiveType = OpenTK.Graphics.ES30.PrimitiveType;
+using coord = System.Single;
+#endif
 
 namespace GRaff.Graphics
 {
@@ -15,16 +23,16 @@ namespace GRaff.Graphics
 		[StructLayout(LayoutKind.Sequential)]
 		struct Quadrilateral
 		{
-			private float v1;
-			private float v2;
-			private float v3;
-			private float v4;
-			private float v5;
-			private float v6;
-			private float v7;
-			private float v8;
+			private coord v1;
+			private coord v2;
+			private coord v3;
+			private coord v4;
+			private coord v5;
+			private coord v6;
+			private coord v7;
+			private coord v8;
 
-			public Quadrilateral(float v1, float v2, float v3, float v4, float v5, float v6, float v7, float v8) : this()
+			public Quadrilateral(coord v1, coord v2, coord v3, coord v4, coord v5, coord v6, coord v7, coord v8) : this()
 			{
 				this.v1 = v1;
 				this.v2 = v2;
@@ -45,7 +53,7 @@ namespace GRaff.Graphics
 			GL.GenBuffers(1, out _vertexBuffer);
 			GL.BindBuffer(BufferTarget.ArrayBuffer, _vertexBuffer);
 			GL.EnableVertexAttribArray(0);
-			GL.VertexAttribPointer(0, 2, VertexAttribPointerType.Float, false, 0, 0);
+			GL.VertexAttribPointer(0, 2, GraphicsPoint.PointerType, false, 0, 0);
 
 			GL.GenBuffers(1, out _colorBuffer);
 			GL.BindBuffer(BufferTarget.ArrayBuffer, _colorBuffer);
@@ -55,19 +63,19 @@ namespace GRaff.Graphics
 			GL.GenBuffers(1, out _texCoordBuffer);
 			GL.BindBuffer(BufferTarget.ArrayBuffer, _texCoordBuffer);
 			GL.EnableVertexAttribArray(2);
-			GL.VertexAttribPointer(2, 2, VertexAttribPointerType.Float, false, 0, 0);
+			GL.VertexAttribPointer(2, 2, GraphicsPoint.PointerType, false, 0, 0);
 		}
 
-		public void SetVertices(UsageHint usage, params PointF[] vertices)
+		public void SetVertices(UsageHint usage, params GraphicsPoint[] vertices)
 		{
 			GL.BindBuffer(BufferTarget.ArrayBuffer, _vertexBuffer);
-			GL.BufferData(BufferTarget.ArrayBuffer, new IntPtr(2 * sizeof(float) * vertices.Length), vertices, (BufferUsageHint)usage);
+			GL.BufferData(BufferTarget.ArrayBuffer, new IntPtr(2 * sizeof(coord) * vertices.Length), vertices, (BufferUsageHint)usage);
 		}
 
-		public void SetVertices(UsageHint usage, params float[] vertices)
+		public void SetVertices(UsageHint usage, params coord[] vertices)
 		{
 			GL.BindBuffer(BufferTarget.ArrayBuffer, _vertexBuffer);
-			GL.BufferData(BufferTarget.ArrayBuffer, new IntPtr(sizeof(float) * vertices.Length), vertices, (BufferUsageHint)usage);
+			GL.BufferData(BufferTarget.ArrayBuffer, new IntPtr(sizeof(coord) * vertices.Length), vertices, (BufferUsageHint)usage);
 		}
 
 		public void SetColors(UsageHint usage, params Color[] colors)
@@ -76,34 +84,34 @@ namespace GRaff.Graphics
 			GL.BufferData(BufferTarget.ArrayBuffer, new IntPtr(4 * colors.Length), colors, (BufferUsageHint)usage);
 		}
 
-		public void SetTexCoords(UsageHint usage, params PointF[] texCoords)
+		public void SetTexCoords(UsageHint usage, params GraphicsPoint[] texCoords)
 		{
 			GL.BindBuffer(BufferTarget.ArrayBuffer, _texCoordBuffer);
-			GL.BufferData(BufferTarget.ArrayBuffer, new IntPtr(2 * sizeof(float) * texCoords.Length), texCoords, (BufferUsageHint)usage);
+			GL.BufferData(BufferTarget.ArrayBuffer, new IntPtr(2 * sizeof(coord) * texCoords.Length), texCoords, (BufferUsageHint)usage);
 		}
 
-		public void SetTexCoords(UsageHint usage, params float[] texCoords)
+		public void SetTexCoords(UsageHint usage, params coord[] texCoords)
 		{
 			GL.BindBuffer(BufferTarget.ArrayBuffer, _texCoordBuffer);
-			GL.BufferData(BufferTarget.ArrayBuffer, new IntPtr(sizeof(float) * texCoords.Length), texCoords, (BufferUsageHint)usage);
+			GL.BufferData(BufferTarget.ArrayBuffer, new IntPtr(sizeof(coord) * texCoords.Length), texCoords, (BufferUsageHint)usage);
 		}
 
 		public void QuadTexCoords(UsageHint usage, int count)
 		{
 			GL.BindBuffer(BufferTarget.ArrayBuffer, _texCoordBuffer);
-			GL.BufferData(BufferTarget.ArrayBuffer, new IntPtr(8 * sizeof(float) * count), Enumerable.Repeat(defaultQuadCoords, count).ToArray(), (BufferUsageHint)usage);
+			GL.BufferData(BufferTarget.ArrayBuffer, new IntPtr(8 * sizeof(coord) * count), Enumerable.Repeat(defaultQuadCoords, count).ToArray(), (BufferUsageHint)usage);
 		}
 
 		public void TriangleStripCoords(UsageHint usage, int count)
 		{
 			GL.BindBuffer(BufferTarget.ArrayBuffer, _texCoordBuffer);
-			GL.BufferData(BufferTarget.ArrayBuffer, new IntPtr(8 * sizeof(float) * count), Enumerable.Repeat(defaultTriangleStripCoords, count).ToArray(), (BufferUsageHint)usage);
+			GL.BufferData(BufferTarget.ArrayBuffer, new IntPtr(8 * sizeof(coord) * count), Enumerable.Repeat(defaultTriangleStripCoords, count).ToArray(), (BufferUsageHint)usage);
 		}
 
 		internal void Render(PrimitiveType type, int vertexCount)
 		{
 			GL.BindVertexArray(_array);
-			GL.DrawArrays((OpenTK.Graphics.ES30.PrimitiveType)type, 0, vertexCount);
+			GL.DrawArrays((GLPrimitiveType)type, 0, vertexCount);
 		}
 	}
 }

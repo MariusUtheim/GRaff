@@ -1,5 +1,10 @@
 ﻿using GRaff.Graphics;
 using System.Diagnostics.Contracts;
+#if OpenGL4
+using coord = System.Double;
+#else
+using coord = System.Single;
+#endif
 
 
 namespace GRaff
@@ -7,7 +12,7 @@ namespace GRaff
 #warning Move to GRaff.Graphics?
 	public sealed class Texture
 	{
-		internal Texture(TextureBuffer buffer, PointF topLeft, PointF topRight, PointF bottomLeft, PointF bottomRight)
+		internal Texture(TextureBuffer buffer, GraphicsPoint topLeft, GraphicsPoint topRight, GraphicsPoint bottomLeft, GraphicsPoint bottomRight)
 		{
 			Contract.Requires(buffer != null);
 			Buffer = buffer;
@@ -16,34 +21,34 @@ namespace GRaff
 
 		public Texture(TextureBuffer buffer, Rectangle region)
 			: this(buffer,
-				  new PointF(region.Left / buffer.Width, region.Top / buffer.Height), 
-				  new PointF(region.Right / buffer.Width, region.Top / buffer.Height),
-				  new PointF(region.Left / buffer.Width, region.Bottom / buffer.Height),
-				  new PointF(region.Right / buffer.Width, region.Bottom / buffer.Height))
+				  new GraphicsPoint(region.Left / buffer.Width, region.Top / buffer.Height), 
+				  new GraphicsPoint(region.Right / buffer.Width, region.Top / buffer.Height),
+				  new GraphicsPoint(region.Left / buffer.Width, region.Bottom / buffer.Height),
+				  new GraphicsPoint(region.Right / buffer.Width, region.Bottom / buffer.Height))
 		{
 			Contract.Requires(buffer.IsLoaded);
 		}
 
-		internal PointF[] TexCoords { get; private set; }
+		internal GraphicsPoint[] TexCoords { get; private set; }
 
 		public TextureBuffer Buffer { get; private set; }
 
-		public PointF TopLeft => TexCoords[0];
+		public GraphicsPoint TopLeft => TexCoords[0];
 		
-		public PointF TopRight => TexCoords[1];
+		public GraphicsPoint TopRight => TexCoords[1];
 
-		public PointF BottomRight => TexCoords[3];
+		public GraphicsPoint BottomRight => TexCoords[3];
 
-		public PointF BottomLeft => TexCoords[2];
+		public GraphicsPoint BottomLeft => TexCoords[2];
 
-		public double Width => (0.5f * (TopLeft + BottomLeft) - 0.5f * (TopRight + BottomRight)).Magnitude * Buffer.Width;
+		public double Width => (0.5 * (TopLeft + BottomLeft) - 0.5 * (TopRight + BottomRight)).Magnitude * Buffer.Width;
 
 		public double Height => (0.5 * (Point)(TopLeft + TopRight) - 0.5 * (Point)(BottomLeft + BottomRight)).Magnitude * Buffer.Height;
 
 		public Vector Size => new Vector(Width, Height);
 
-		internal float PixelWidth => Buffer.Width * (BottomRight.X - TopLeft.X);
+		internal coord PixelWidth => Buffer.Width * (BottomRight.Xt - TopLeft.Xt);
 
-		internal float PixelHeight => Buffer.Height * (BottomRight.Y - TopLeft.Y);
+		internal coord PixelHeight => Buffer.Height * (BottomRight.Yt - TopLeft.Yt);
 	}
 }

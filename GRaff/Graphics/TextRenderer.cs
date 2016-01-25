@@ -108,21 +108,21 @@ namespace GRaff.Graphics
 
 
 
-		internal string[] RenderCoords(string text, out PointF[] quadCoords)
+		internal string[] RenderCoords(string text, out GraphicsPoint[] quadCoords)
 		{
 			var lines = LineSplit(text);
 			var length = lines.Sum(line => line.Length);
 
-			quadCoords = new PointF[4 * length];
+			quadCoords = new GraphicsPoint[4 * length];
 
-			var x0 = 0f;
-			var y0 = 0f;
+			var x0 = 0.0;
+			var y0 = 0.0;
 			
 			switch (Alignment & FontAlignment.Vertical)
 			{
 				case FontAlignment.Top: y0 = 0; break;
-				case FontAlignment.Center: y0 = -(float)(LineSeparation * (lines.Length - 1) + Font.Height) / 2f; break;
-				case FontAlignment.Bottom: y0 = -(float)(LineSeparation * (lines.Length - 1) + Font.Height); break;
+				case FontAlignment.Center: y0 = -(LineSeparation * (lines.Length - 1) + Font.Height) / 2; break;
+				case FontAlignment.Bottom: y0 = -(LineSeparation * (lines.Length - 1) + Font.Height); break;
 			}
 
 			var coordIndex = 0;
@@ -142,10 +142,10 @@ namespace GRaff.Graphics
 				{
 					var s = Font.GetSize(lines[l][i]);
 					var d = Font.GetOffset(lines[l][i]);
-					quadCoords[coordIndex] = new PointF(x + d.X, y + d.Y);
-					quadCoords[coordIndex + 1] = new PointF(x + d.X + s.X, y + d.Y);
-					quadCoords[coordIndex + 2] = new PointF(x + d.X + s.X, y + d.Y + s.Y);
-					quadCoords[coordIndex + 3] = new PointF(x + d.X, y + d.Y + s.Y);
+					quadCoords[coordIndex] = new GraphicsPoint(x + d.X, y + d.Y);
+					quadCoords[coordIndex + 1] = new GraphicsPoint(x + d.X + s.X, y + d.Y);
+					quadCoords[coordIndex + 2] = new GraphicsPoint(x + d.X + s.X, y + d.Y + s.Y);
+					quadCoords[coordIndex + 3] = new GraphicsPoint(x + d.X, y + d.Y + s.Y);
 					x += s.X;
 					coordIndex += 4;
 				}
@@ -153,21 +153,8 @@ namespace GRaff.Graphics
 
 			return lines;
 		}
-		/*
-		public void Draw(string text, Color color, Point location) => Draw(text, color, location.X, location.Y);
 
-		public void Draw(string text, Color color, double x, double y)
-		{
-			var lines = LineSplit(text);
-			if ((Alignment & FontAlignment.Vertical) == FontAlignment.Center)
-				y -= lines.Length * LineSeparation / 2 - Font.Height / 2;
-			else if ((Alignment & FontAlignment.Vertical) == FontAlignment.Bottom)
-				y -= lines.Length * LineSeparation - Font.Height;
 
-			for (var i = 0; i < lines.Length; i++)
-				GRaff.Draw.Text(this, color, x, y + i * LineSeparation);
-		}
-		*/
 		public TextureBuffer Render(string text)
 		{
 			throw new NotImplementedException();

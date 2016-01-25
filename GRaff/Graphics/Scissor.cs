@@ -1,16 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+#if OpenGL4
+using OpenTK.Graphics.OpenGL4;
+#else
 using OpenTK.Graphics.ES30;
+#endif
+
 
 namespace GRaff.Graphics
 {
 	/// <summary>
- /// Provides static methods for performing scissor testing. When scissor testing is active,
- /// pixels outside a specified region will not be drawn.
- /// </summary>
+	/// Provides static methods for performing scissor testing. When scissor testing is active,
+	/// pixels outside a specified region will not be drawn.
+	/// </summary>
 	public static class Scissor
 	{
 		private class ScissorContext : IDisposable
