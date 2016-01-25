@@ -12,12 +12,11 @@ namespace GRaff.GraphicTest
 	class TextTest : GameElement
 	{
 		private const string lipsum = "Lorem ipsum dolor sit amet, consectetur adipiscing elit.\nPhasellus rutrum nibh sed nulla dapibus, sit amet tempor nulla feugiat.";
-        private Font _font;
+        private static Font _font = Font.Load(@"C:\test\TimesNewRoman.png", @"C:\test\TimesNewRoman.xml");
 		private TextRenderer _render;
 
 		public TextTest()
 		{
-			_font = Font.Load(@"C:\test\TimesNewRoman.png", @"C:\test\TimesNewRoman.xml");
 			_render = new TextRenderer(_font, width: 300);
 			_render.Alignment = FontAlignment.TopLeft;
 			
