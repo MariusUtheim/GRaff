@@ -32,9 +32,12 @@ namespace GRaff
 			this._origin = origin;
 			this._maskShape = maskShape ?? MaskShape.Automatic;
 		}
-		
-		public static Sprite Load(string path, int imageCount = 1, Vector? origin = null, MaskShape maskShape = null) 
-			=> new Sprite(new AnimationStrip(TextureBuffer.Load(path), imageCount), null, origin, maskShape);
+
+		public static Sprite Load(string path, int imageCount = 1, Vector? origin = null, MaskShape maskShape = null)
+		{
+			Contract.Requires<ArgumentOutOfRangeException>(imageCount >= 1);
+			return new Sprite(new AnimationStrip(TextureBuffer.Load(path), imageCount), null, origin, maskShape);
+		}
 
 		public static IAsyncOperation<Sprite> LoadAsync(string path, int imageCount = 1, Vector? origin = null, MaskShape maskShape = null)
 			=> TextureBuffer.LoadAsync(path).Then(buffer => new Sprite(new AnimationStrip(buffer, imageCount), null, origin, maskShape));

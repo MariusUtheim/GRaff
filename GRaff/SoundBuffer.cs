@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Diagnostics.Contracts;
 using GRaff.Audio;
 using GRaff.Synchronization;
-using OggVorbisDecoder;
 using OpenTK.Audio.OpenAL;
 
 namespace GRaff
@@ -15,6 +11,7 @@ namespace GRaff
 
 		public SoundBuffer(int bitrate, int channels, int frequency, byte[] buffer, double offset)
 		{
+			Contract.Requires<ArgumentNullException>(buffer != null);
 			IntroId = AL.GenBuffer();
 			MainId = AL.GenBuffer();
 

@@ -30,7 +30,7 @@ namespace GRaff
 
 		public TextureBuffer(string path)
 		{
-			Debug.Assert(GRaff.Graphics.Context.IsAlive);
+			Contract.Requires<InvalidOperationException>(GRaff.Graphics.Context.IsAlive);
 			Id = GL.GenTexture();
 			this.Path = path;
 			Texture = new Texture(this, new Graphics.GraphicsPoint(0, 0), new Graphics.GraphicsPoint(1, 0), new Graphics.GraphicsPoint(0, 1), new Graphics.GraphicsPoint(1, 1));

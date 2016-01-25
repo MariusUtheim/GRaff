@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.Contracts;
 
 namespace GRaff
 {
@@ -39,8 +40,11 @@ namespace GRaff
 		/// <param name="scaleX">The horizontal scale factor.</param>
 		/// <param name="scaleY">The vertical scale factor</param>
 		/// <returns>A new GRaff.AffineMatrix representing the transformation.</returns>
-		public static AffineMatrix Scaling(double scaleX, double scaleY) 
-			=> new AffineMatrix(scaleX, 0, 0, 0, scaleY, 0);
+		public static AffineMatrix Scaling(double scaleX, double scaleY)
+		{
+			Contract.Ensures(Contract.Result<AffineMatrix>() != null);
+			return new AffineMatrix(scaleX, 0, 0, 0, scaleY, 0);
+		}
 
 		/// <summary>
 		/// Creates a GRaff.AffineMatrix representing a shear transformation.
@@ -48,16 +52,22 @@ namespace GRaff
 		/// <param name="shearX">The horizontal shear factor.</param>
 		/// <param name="shearY">The vertical shear factor.</param>
 		/// <returns>A new GRaff.AffineMatrix representing the transformation.</returns>
-		public static AffineMatrix Shearing(double shearX, double shearY) 
-			=> new AffineMatrix(1, shearX, 0, shearY, 1, 0);
+		public static AffineMatrix Shearing(double shearX, double shearY)
+		{
+			Contract.Ensures(Contract.Result<AffineMatrix>() != null);
+			return new AffineMatrix(1, shearX, 0, shearY, 1, 0);
+		}
 
 		/// <summary>
 		/// Creates a GRaff.AffineMatrix representing a rotation transform around the origin.
 		/// </summary>
 		/// <param name="a">The angle to rotate by.</param>
 		/// <returns>A new GRaff.AffineMatrix representing the transformation.</returns>
-		public static AffineMatrix Rotation(Angle a) 
-			=> new AffineMatrix(GMath.Cos(a), -GMath.Sin(a), 0, GMath.Sin(a), GMath.Cos(a), 0);
+		public static AffineMatrix Rotation(Angle a)
+		{
+			Contract.Ensures(Contract.Result<AffineMatrix>() != null);
+			return new AffineMatrix(GMath.Cos(a), -GMath.Sin(a), 0, GMath.Sin(a), GMath.Cos(a), 0);
+		}
 
 		/// <summary>
 		/// Creates a GRaff.AffineMatrix representing a translation trnasformation.
@@ -65,11 +75,15 @@ namespace GRaff
 		/// <param name="dx">The amount to translate by in the horizontal direction.</param>
 		/// <param name="dy">The amount to translate by in the vertical direction.</param>
 		/// <returns>A new GRaff.AffineMatrix representing the transformation.</returns>
-		public static AffineMatrix Translation(double dx, double dy) 
-			=> new AffineMatrix(1, 0, dx, 0, 1, dy);
+		public static AffineMatrix Translation(double dx, double dy)
+		{
+			Contract.Ensures(Contract.Result<AffineMatrix>() != null);
+			return new AffineMatrix(1, 0, dx, 0, 1, dy);
+		}
 
 		public static AffineMatrix Mapping(Triangle src, Triangle dst)
 		{
+			Contract.Ensures(Contract.Result<AffineMatrix>() != null);
 			double c12 = src.X1 * src.Y2 - src.X2 * src.Y1;
 			double c23 = src.X2 * src.Y3 - src.X3 * src.Y2;
 			double c31 = src.X3 * src.Y1 - src.X1 * src.Y3;
@@ -131,6 +145,7 @@ namespace GRaff
 		{
 			get
 			{
+				Contract.Ensures(Contract.Result<AffineMatrix>() != null);
 				double det = Determinant;
 				if (det == 0)
 					throw new MatrixException();
@@ -246,8 +261,12 @@ namespace GRaff
 		/// <param name="left">The first GRaff.AffineMatrix.</param>
 		/// <param name="right">The second GRaff.AffineMatrix.</param>
 		/// <returns>The sum of the elements of each GRaff.AffineMatrix.</returns>
-		public static AffineMatrix operator +(AffineMatrix left, AffineMatrix right) 
-			=> new AffineMatrix(left.M00 + right.M00, left.M01 + right.M01, left.M02 + right.M02, left.M10 + right.M10, left.M11 + right.M11, left.M12 + right.M12);
+		public static AffineMatrix operator +(AffineMatrix left, AffineMatrix right)
+		{
+			Contract.Requires<ArgumentNullException>(left != null && right != null);
+			return new AffineMatrix(left.M00 + right.M00, left.M01 + right.M01, left.M02 + right.M02, left.M10 + right.M10, left.M11 + right.M11, left.M12 + right.M12);
+		}
+
 
 		/// <summary>
 		/// Computes the element-wise difference of the two GRaff.AffineMatrix objects.
@@ -256,7 +275,10 @@ namespace GRaff
 		/// <param name="right">The second GRaff.AffineMatrix.</param>
 		/// <returns>The difference of the elements of each GRaff.AffineMatrix.</returns>
 		public static AffineMatrix operator -(AffineMatrix left, AffineMatrix right)
-			=> new AffineMatrix(left.M00 - right.M00, left.M01 - right.M01, left.M02 - right.M02, left.M10 - right.M10, left.M11 - right.M11, left.M12 - right.M12);
+		{
+			Contract.Requires<ArgumentNullException>(left != null && right != null);
+			return new AffineMatrix(left.M00 - right.M00, left.M01 - right.M01, left.M02 - right.M02, left.M10 - right.M10, left.M11 - right.M11, left.M12 - right.M12);
+		}
 
 		/// <summary>
 		/// Computes the matrix product of the two GRaff.AffineMatrix objects.
@@ -265,17 +287,25 @@ namespace GRaff
 		/// <param name="right">The second GRaff.AffineMatrix.</param>
 		/// <returns>The matrix product of the two GRaff.AffineMatrix.</returns>
 		public static AffineMatrix operator *(AffineMatrix left, AffineMatrix right)
-			=> new AffineMatrix(
+		{
+			Contract.Requires<ArgumentNullException>(left != null && right != null);
+			return new AffineMatrix(
 					left.M00 * right.M00 + left.M01 * right.M10, left.M00 * right.M01 + left.M01 * right.M11, left.M00 * right.M02 + left.M01 * right.M12 + left.M02,
 					left.M10 * right.M00 + left.M11 * right.M10, left.M10 * right.M01 + left.M11 * right.M11, left.M10 * right.M02 + left.M11 * right.M12 + left.M12
 				);
+		}
 
 		public static AffineMatrix operator *(AffineMatrix left, double right)
-			=> new AffineMatrix(left.M00 * right, left.M01 * right, left.M02 * right, left.M10 * right, left.M11 * right, left.M12 * right);
-		
-		public static AffineMatrix operator /(AffineMatrix left, double right) 
-			=> new AffineMatrix(left.M00 / right, left.M01 / right, left.M02 / right, left.M10 / right, left.M11 / right, left.M12 / right);
-		
+		{
+			Contract.Requires<ArgumentNullException>(left != null);
+			return new AffineMatrix(left.M00 * right, left.M01 * right, left.M02 * right, left.M10 * right, left.M11 * right, left.M12 * right);
+		}
+
+		public static AffineMatrix operator /(AffineMatrix left, double right)
+		{
+			Contract.Requires<ArgumentNullException>(left != null);
+			return new AffineMatrix(left.M00 / right, left.M01 / right, left.M02 / right, left.M10 / right, left.M11 / right, left.M12 / right);
+		}
 
 		/// <summary>
 		/// Computes the matrix product of the GRaff.AffineMatrix and the GRaff.Point.
@@ -285,7 +315,10 @@ namespace GRaff
 		/// <param name="p">A GRaff.Point to be transformed by the affine transformation.</param>
 		/// <returns>The transformed GRaff.Point.</returns>
 		public static Point operator *(AffineMatrix m, Point p)
-			=> new Point(m.M00 * p.X + m.M01 * p.Y + m.M02, m.M10 * p.X + m.M11 * p.Y + m.M12);
+		{
+			Contract.Requires<ArgumentNullException>(m != null);
+			return new Point(m.M00 * p.X + m.M01 * p.Y + m.M02, m.M10 * p.X + m.M11 * p.Y + m.M12);
+		}
 
 		/// <summary>
 		/// Computes the matrix product of the GRaff.AffineMatrix and the GRaff.Vector.
@@ -294,7 +327,10 @@ namespace GRaff
 		/// <param name="m">A GRaff.AffineMatrix representing the affine transformation.</param>
 		/// <param name="v">A GRaff.Vector to be transformed by the affine transformation.</param>
 		/// <returns>The transformed GRaff.Vector.</returns>
-		public static Vector operator *(AffineMatrix m, Vector v) 
-			=> new Vector(m.M00 * v.X + m.M01 * v.Y, m.M10 * v.X + m.M11 * v.Y);
+		public static Vector operator *(AffineMatrix m, Vector v)
+		{
+			Contract.Requires<ArgumentNullException>(m != null);
+			return new Vector(m.M00 * v.X + m.M01 * v.Y, m.M10 * v.X + m.M11 * v.Y);
+		}
 	}
 }

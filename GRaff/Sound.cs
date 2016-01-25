@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using System.Threading.Tasks;
 using GRaff.Synchronization;
 using OpenTK;
@@ -59,7 +60,7 @@ namespace GRaff
 		{
 			get
 			{
-				if (!IsLoaded) throw new InvalidOperationException("The texture is not loaded.");
+				Contract.Requires<InvalidOperationException>(IsLoaded);
 				return _buffer.Bitrate;
 			}
 		}
@@ -72,7 +73,7 @@ namespace GRaff
 		{
 			get
 			{
-				if (!IsLoaded) throw new InvalidOperationException("The texture is not loaded.");
+				Contract.Requires<InvalidOperationException>(IsLoaded);
 				return _buffer.Channels;
 			}
 		}
@@ -84,7 +85,7 @@ namespace GRaff
 		{
 			get
 			{
-				if (!IsLoaded) throw new InvalidOperationException("The texture is not loaded.");
+				Contract.Requires<InvalidOperationException>(IsLoaded);
 				return _buffer.Duration;
 			}
 		}
@@ -96,7 +97,7 @@ namespace GRaff
 		{
 			get
 			{
-				if (!IsLoaded) throw new InvalidOperationException("The texture is not loaded.");
+				Contract.Requires<InvalidOperationException>(IsLoaded);
 				return _buffer.Frequency;
 			}
 		}

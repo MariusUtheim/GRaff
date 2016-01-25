@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -196,6 +197,7 @@ namespace GRaff
 		/// <returns></returns>
 		public static IEnumerable<T> Where(Func<T, bool> predicate)
 		{
+			Contract.Requires<ArgumentNullException>(predicate != null);
 			return All.Where(predicate);
 		}
 	}

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Text;
 
@@ -36,6 +37,12 @@ namespace GRaff
 		/// <param name="location">The location.</param>
 		protected GameObject(Point location)
 			: this(location.X, location.Y) { }
+
+		[ContractInvariantMethod]
+		private void objectInvariants()
+		{
+			Contract.Invariant(Transform != null);
+		}
 
 		/// <summary>
 		/// Gets or sets the x-coordinate of this GRaff.GameObject.

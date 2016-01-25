@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Globalization;
+using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace GRaff.Graphics
 {
@@ -16,15 +13,24 @@ namespace GRaff.Graphics
 		
 		public TextRenderer(Font font, FontAlignment alignment = FontAlignment.TopLeft, int width = Int32.MaxValue)
 			: this(font, alignment, width, font.Height)
-		{ }
+		{
+			Contract.Requires<ArgumentNullException>(font != null);
+		}
 
 		public TextRenderer(Font font, FontAlignment alignment, int width, double lineSeparation)
 		{
+			Contract.Requires<ArgumentNullException>(font != null);
 			this.Font = font;
 			this.Alignment = alignment;
 			this.Width = width;
 			this.LineSeparation = lineSeparation;
 			lengthOfSpace = GetWidth(" ");
+		}
+
+		[ContractInvariantMethod]
+		private void objectInvariants()
+		{
+			Contract.Invariant(Font != null);
 		}
 
 		public Font Font { get; set; }
@@ -37,9 +43,6 @@ namespace GRaff.Graphics
 
 		private string _multilineFormat(string text)
 		{
-			if (text == null)
-				throw new ArgumentNullException();
-
 			var words = text.Split(' ');
 			var multilineFormat = new StringBuilder(text.Length);
 			var currentLine = new StringBuilder(words[0]);
@@ -72,16 +75,19 @@ namespace GRaff.Graphics
 
 		public string MultilineFormat(string text)
 		{
-			return String.Concat(Regex.Split(text, Environment.NewLine).Select(str => _multilineFormat(str)));
+			return text == null ? "" : String.Concat(Regex.Split(text, Environment.NewLine).Select(str => _multilineFormat(str)));
 		}
 
 		public string[] LineSplit(string text)
 		{
-			return NewlineRegex.Split(text).Select(str => _multilineFormat(str)).SelectMany(str => NewlineRegex.Split(str)).ToArray();
+			return text == null ? new string[0] : NewlineRegex.Split(text).Select(str => _multilineFormat(str)).SelectMany(str => NewlineRegex.Split(str)).ToArray();
 		}
 
 		public string Truncate(string text)
 		{
+			if (text == null)
+				return "";
+
 			var lowerBound = Width - 3 * Font.GetWidth(".");
 			var currentWidth = 0;
 

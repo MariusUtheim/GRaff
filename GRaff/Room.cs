@@ -62,8 +62,7 @@ namespace GRaff
 			Current = this;
 			View.FocusRegion = new IntRectangle(0, 0, Width, Height);
 
-			if (Background != null)
-				Instance.Create(Background);
+			Instance.Create(Background);
 			OnEnter();
 			Enter?.Invoke(this, new EventArgs());
 		}

@@ -15,6 +15,7 @@ namespace GRaff
 		{
 			public static void Custom(PrimitiveType primitiveType, Color color, params Point[] vertices)
 			{
+				Contract.Requires<ArgumentNullException>(vertices != null);
 				CurrentSurface.DrawPrimitive(vertices.Select(p => (GraphicsPoint)p).ToArray(), Enumerable.Repeat(color, vertices.Length).ToArray(), primitiveType);
             }
 

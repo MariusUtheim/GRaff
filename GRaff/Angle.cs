@@ -117,7 +117,7 @@ namespace GRaff
 			=> _acute(deg2 - deg1);
 
 		/// <summary>
-		/// Computes the acute angle between the two angles. This value is always between 0° and 180°.
+		/// Computes the acute angle between the two angles. This value is always in the interval [0°, 180°).
 		/// </summary>
 		/// <param name="a1">The first GRaff.Angle to compute the acute angle with.</param>
 		/// <param name="a2">The second GRaff.Angle to compute the acute angle with.</param>

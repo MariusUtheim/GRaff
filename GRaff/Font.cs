@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -62,7 +63,8 @@ namespace GRaff
 
 		public int GetWidth(string str)
 		{
-			if (!IsLoaded) throw new InvalidOperationException("The font is not loaded.");
+			Contract.Requires<InvalidOperationException>(IsLoaded);
+			Contract.Requires<ArgumentNullException>(str != null);
 
 			var width = 0;
 			foreach (var c in str)

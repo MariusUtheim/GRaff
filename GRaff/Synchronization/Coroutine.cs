@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,10 +11,11 @@ namespace GRaff.Synchronization
 	public class Coroutine : GameElement
 	{
 		private int _count;
-		private IEnumerator<int> _routine;
+		private readonly IEnumerator<int> _routine;
 
 		public Coroutine(IEnumerator<int> routine)
 		{
+			Contract.Requires<ArgumentNullException>(routine != null);
 			_count = 0;
 			_routine = routine;
 		}
@@ -26,21 +28,25 @@ namespace GRaff.Synchronization
 
 		public static Coroutine Start(IEnumerable routine)
 		{
+			Contract.Requires<ArgumentNullException>(routine != null);
 			return Instance.Create(new Coroutine(_project(routine).GetEnumerator()));
 		}
 
 		public static Coroutine Start(IEnumerable<int> routine)
 		{
+			Contract.Requires<ArgumentNullException>(routine != null);
 			return Instance.Create(new Coroutine(routine.GetEnumerator()));
 		}
 
 		public static Coroutine Start(Func<IEnumerable> routine)
 		{
+			Contract.Requires<ArgumentNullException>(routine != null);
 			return Instance.Create(new Coroutine(_project(routine()).GetEnumerator()));
 		}
 
 		public static Coroutine Start(Func<IEnumerable<int>> routine)
 		{
+			Contract.Requires<ArgumentNullException>(routine != null);
 			return Instance.Create(new Coroutine(routine().GetEnumerator()));
 		}
 
@@ -49,7 +55,7 @@ namespace GRaff.Synchronization
 			while (_routine.MoveNext()) ;
 		}
 
-		public override void OnStep()
+		public sealed override void OnStep()
 		{
 			if (--_count <= 0)
 			{

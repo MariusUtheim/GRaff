@@ -1,6 +1,8 @@
 ﻿#if OpenGL4
 using OpenTK.Graphics.OpenGL4;
 #else
+using System;
+using System.Diagnostics.Contracts;
 using OpenTK.Graphics.ES30;
 #endif
 
@@ -21,11 +23,13 @@ namespace GRaff.Graphics
 
 		public static void Bind(this TextureBuffer texture)
 		{
+			Contract.Requires<ArgumentNullException>(texture != null);
 			GL.BindTexture(TextureTarget.Texture2D, texture.Id);
 		}
 
 		public static void Bind(this Texture texture)
 		{
+			Contract.Requires<ArgumentNullException>(texture != null);
 			GL.BindTexture(TextureTarget.Texture2D, texture.Buffer.Id);
 		}
 	}

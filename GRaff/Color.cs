@@ -12,7 +12,7 @@ namespace GRaff
 	[StructLayout(LayoutKind.Sequential)]
 	public struct Color : IEquatable<Color>
 	{
-		private byte _r, _g, _b, _a;
+		private readonly byte _r, _g, _b, _a;
 
 		/// <summary>
 		/// Initializes a new instance of the GRaff.Color structure using the specifed alpha, red, green and blue values.

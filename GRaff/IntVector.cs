@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -109,15 +110,18 @@ namespace GRaff
 		/// <returns>The scaled GRaff.IntVector.</returns>
 		public static IntVector operator *(IntVector v, int i) 
 			=> new IntVector(v.X * i, v.Y * i);
-		
+
 		/// <summary>
 		/// Scales the vector by dividing each component by the integer. The result is rounded down like common int division.
 		/// </summary>
 		/// <param name="v">The GRaff.IntVector to scale.</param>
 		/// <param name="i">The int to scale by.</param>
 		/// <returns>The scaled GRaff.IntVector.</returns>
-		public static IntVector operator /(IntVector v, int i) 
-			=> new IntVector(v.X / i, v.Y / i);
+		public static IntVector operator /(IntVector v, int i)
+		{
+			Contract.Requires<DivideByZeroException>(i != 0);
+			return new IntVector(v.X / i, v.Y / i);
+		}
 
 		/// <summary>
 		/// Negates the vector by negating each component.

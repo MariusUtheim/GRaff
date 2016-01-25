@@ -9,17 +9,19 @@ namespace GRaff.Particles
 {
 	public class ParticleType
 	{
-		List<IParticleBehavior> _behaviors = new List<IParticleBehavior>();
-		IParticleRenderer _renderer;
+		private readonly List<IParticleBehavior> _behaviors = new List<IParticleBehavior>();
+		private readonly IParticleRenderer _renderer;
 
 		public ParticleType(Texture texture, int lifetime)
 		{
+			Contract.Requires<ArgumentNullException>(texture != null);
 			_renderer = new TexturedParticleRenderer(texture);			
 			this.Lifetime = new ConstantDistribution<int>(lifetime);
 		}
 
 		public ParticleType(Polygon polygon, int lifetime)
 		{
+			Contract.Requires<ArgumentNullException>(polygon != null);
 			_renderer = new ColoredParticleRenderer(polygon);
 			this.Lifetime = new ConstantDistribution<int>(lifetime);
 		}
@@ -41,16 +43,17 @@ namespace GRaff.Particles
 
 		public void AddBehavior(IParticleBehavior behavior)
 		{
-			Contract.Requires(behavior != null);
+			Contract.Requires<ArgumentNullException>(behavior != null);
 			_behaviors.Add(behavior);
 		}
 
-		public IDistribution<int> Lifetime { get; set; }
+		public IDistribution<int> Lifetime { get; private set; }
 
 		public BlendMode BlendMode { get; set; }
 
 		public void Initialize(Particle particle)
 		{
+			Contract.Requires<ArgumentNullException>(particle != null);
 			foreach (var behavior in _behaviors)
 				behavior.AttachTo(particle);
 		}

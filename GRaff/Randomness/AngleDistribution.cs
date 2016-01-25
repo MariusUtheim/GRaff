@@ -5,17 +5,16 @@ namespace GRaff.Randomness
 {
 	public sealed class AngleDistribution : IDistribution<Angle>
 	{
-		private Random _rnd;
-		private bool _hasRange;
-		Angle _minAngle, _maxAngle;
+		private readonly Random _rnd;
+		private readonly bool _hasRange;
+		private readonly Angle _minAngle, _maxAngle;
 
 		public AngleDistribution()
 			: this(GRandom.Source) { }
 
 		public AngleDistribution(Random rnd)
 		{
-			if (rnd == null)
-				throw new ArgumentNullException("rnd");
+			Contract.Requires<ArgumentNullException>(rnd != null);
 			this._rnd = rnd;
 			_hasRange = false;
 		}
@@ -25,7 +24,7 @@ namespace GRaff.Randomness
 
 		public AngleDistribution(Random rnd, Angle minimum, Angle maximum)
 		{
-			Contract.Requires(rnd != null);
+			Contract.Requires<ArgumentNullException>(rnd != null);
 			_rnd = rnd;
 			_hasRange = true;
 			_minAngle = minimum;

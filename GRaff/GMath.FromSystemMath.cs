@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.Contracts;
 
 namespace GRaff
 {
@@ -20,7 +21,11 @@ namespace GRaff
 
 		public static long BigMul(int a, int b) => Math.BigMul(a, b);
 
-		public static double Ceiling(double d) => Math.Ceiling(d);
+		public static double Ceiling(double d)
+		{
+			Contract.Ensures(Contract.Result<double>() >= d);
+			return Math.Ceiling(d);
+		}
 		
 		public static decimal Ceiling(decimal d) => Math.Ceiling(d);
 

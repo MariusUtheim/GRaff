@@ -17,6 +17,7 @@ namespace GRaff
 		/// <param name="asset">The GRaff.IAsset to load.</param>
 		public static void Load(this IAsset asset)
 		{
+			Contract.Requires<ArgumentNullException>(asset != null);
 			asset.LoadAsync().Wait();
 		}
 
@@ -27,7 +28,11 @@ namespace GRaff
 		/// </summary>
 		/// <param name="rnd">The System.Random to generate the numbers.</param>
 		/// <returns>An integer greater than or equal to zero and less than System.Int32.MaxValue.</returns>
-		public static int Integer(this Random rnd) => rnd.Next();
+		public static int Integer(this Random rnd)
+		{
+			Contract.Requires<ArgumentNullException>(rnd != null);
+			return rnd.Next();
+		}
 
 
 		/// <summary>
@@ -37,7 +42,11 @@ namespace GRaff
 		/// <param name="maxValue">The exclusive upper bound of the random number to be generated. maxValue must be greater than or equal to zero.</param>
 		/// <returns>An integer greater than or equal to zero and less than maxValue. If however maxValue is zero, then 0 is returned.</returns>
 		/// <exception cref="System.ArgumentOutOfRangeException">maxValue is less than zero.</exception>
-		public static int Integer(this Random rnd, int maxValue) => rnd.Next(maxValue);
+		public static int Integer(this Random rnd, int maxValue)
+		{
+			Contract.Requires<ArgumentNullException>(rnd != null);
+			return rnd.Next(maxValue);
+		}
 
 
 		/// <summary>
@@ -48,7 +57,11 @@ namespace GRaff
 		/// <param name="maxValue">The exclusive upper bound of the random number to be generated. maxValue must be greater than or equal to minValue.</param>
 		/// <returns>An integer greater than or equal to minValue and less than maxValue. If however maxValue and minValue are equal, that value is returned.</returns>
 		/// <exception cref="System.ArgumentOutOfRangeException">minValue is greater than maxValue</exception>
-		public static int Integer(this Random rnd, int minValue, int maxValue) => rnd.Next(minValue, maxValue);
+		public static int Integer(this Random rnd, int minValue, int maxValue)
+		{
+			Contract.Requires<ArgumentNullException>(rnd != null);
+			return rnd.Next(minValue, maxValue);
+		}
 
 
 		/// <summary>
@@ -56,7 +69,11 @@ namespace GRaff
 		/// </summary>
 		/// <param name="rnd">The System.Random to generate the numbers.</param>
 		/// <returns>A number greater than or equal to 0.0 and less than 1.0.</returns>
-		public static double Double(this Random rnd) => rnd.NextDouble();
+		public static double Double(this Random rnd)
+		{
+			Contract.Requires<ArgumentNullException>(rnd != null);
+			return rnd.NextDouble();
+		}
 
 
 		/// <summary>
@@ -65,7 +82,11 @@ namespace GRaff
 		/// <param name="rnd">The System.Random to generate the numbers.</param>
 		/// <param name="boundaryValue">The exclusive boundary value. The returned value will have the same sign as this number.</param>
 		/// <returns>A number between 0.0 inclusive and boundaryValue exclusive.</returns>
-		public static double Double(this Random rnd, double boundaryValue) => rnd.NextDouble() * boundaryValue;
+		public static double Double(this Random rnd, double boundaryValue)
+		{
+			Contract.Requires<ArgumentNullException>(rnd != null);
+			return rnd.NextDouble() * boundaryValue;
+		}
 
 
 		/// <summary>
@@ -76,7 +97,11 @@ namespace GRaff
 		/// <param name="firstValueInclusive">The first inclusive bound of the random number returned.</param>
 		/// <param name="secondValueExclusive">The second exclusive bound of the random number returned.</param>
 		/// <returns>A number in the specified range.</returns>
-		public static double Double(this Random rnd, double firstValueInclusive, double secondValueExclusive) => firstValueInclusive + rnd.NextDouble() * (secondValueExclusive - firstValueInclusive);
+		public static double Double(this Random rnd, double firstValueInclusive, double secondValueExclusive)
+		{
+			Contract.Requires<ArgumentNullException>(rnd != null);
+			return firstValueInclusive + rnd.NextDouble() * (secondValueExclusive - firstValueInclusive);
+		}
 
 		/// <summary>
 		/// Returns a string of random letters with the specified length.
@@ -86,6 +111,7 @@ namespace GRaff
 		/// <returns>A random string of letters.</returns>
 		public static string String(this Random rnd, int length)
 		{
+			Contract.Requires<ArgumentNullException>(rnd != null);
 			StringBuilder stringBuilder = new StringBuilder(length);
 			for (int i = 0; i < length; i++)
 				stringBuilder.Append((char)rnd.Next('A', 'z'));
@@ -98,7 +124,11 @@ namespace GRaff
 		/// </summary>
 		/// <param name="rnd">The System.Random to generate the numbers.</param>
 		/// <returns>A standard normally distributed number.</returns>
-		public static double Gaussian(this Random rnd) => GMath.Sqrt(-2 * GMath.Log(rnd.NextDouble()));
+		public static double Gaussian(this Random rnd)
+		{
+			Contract.Requires<ArgumentNullException>(rnd != null);
+			return GMath.Sqrt(-2 * GMath.Log(rnd.NextDouble()));
+		}
 
 		/// <summary>
 		/// Returns a random number that is distributed in accordance with a normal distribution with mean zero and the specified standard deviation.
@@ -106,7 +136,11 @@ namespace GRaff
 		/// <param name="rnd">The System.Random to generate the numbers.</param>
 		/// <param name="std">The standard deviation of the distribution.</param>
 		/// <returns>A normally distributed number.</returns>
-		public static double Gaussian(this Random rnd, double std) => std * rnd.Gaussian();
+		public static double Gaussian(this Random rnd, double std)
+		{
+			Contract.Requires<ArgumentNullException>(rnd != null);
+			return std * rnd.Gaussian();
+		}
 
 
 		/// <summary>
@@ -116,14 +150,22 @@ namespace GRaff
 		/// <param name="mean">The mean of the distribution.</param>
 		/// <param name="std">The standard deviation of the distribution.</param>
 		/// <returns>A normally distributed number.</returns>
-		public static double Gaussian(this Random rnd, double mean, double std) => std * rnd.Gaussian() + mean;
+		public static double Gaussian(this Random rnd, double mean, double std)
+		{
+			Contract.Requires<ArgumentNullException>(rnd != null);
+			return std * rnd.Gaussian() + mean;
+		}
 
 		/// <summary>
 		/// Returns a unit GRaff.Vector with random direction.
 		/// </summary>
 		/// <param name="rnd">The System.Random to generate the numbers.</param>
 		/// <returns>A unit vector with random direction.</returns>
-		public static Vector Vector(this Random rnd) => new Vector(1, rnd.Angle());
+		public static Vector Vector(this Random rnd)
+		{
+			Contract.Requires<ArgumentNullException>(rnd != null);
+			return new Vector(1, rnd.Angle());
+		}
 
 
 		/// <summary>
@@ -133,6 +175,7 @@ namespace GRaff
 		/// <returns>Returns a random angle.</returns>
 		public static Angle Angle(this Random rnd)
 		{
+			Contract.Requires<ArgumentNullException>(rnd != null);
 			// System.Random.Next() can generate up to 30 full bits uniformly, since it excludes the upper bound
 			ulong firstBits, middleBits, lastFourBits;
 
@@ -154,7 +197,10 @@ namespace GRaff
 		/// <param name="upperBound">The upper bound.</param>
 		/// <returns>A random angle in the specified range.</returns>
 		public static Angle Angle(this Random rnd, Angle lowerBound, Angle upperBound)
-			=> GRaff.Angle.Rad(lowerBound.Radians + rnd.NextDouble() * (upperBound - lowerBound).Radians);
+		{
+			Contract.Requires<ArgumentNullException>(rnd != null);
+			return GRaff.Angle.Rad(lowerBound.Radians + rnd.NextDouble() * (upperBound - lowerBound).Radians);
+		}
 		
 
 
@@ -167,9 +213,8 @@ namespace GRaff
 		/// <returns>One of the items chosen randomly. If the list is empty, returns the default value of the type T.</returns>
 		public static T Choose<T>(this Random rnd, params T[] items)
 		{
+			Contract.Requires<ArgumentNullException>(rnd != null);
 			if (items == null || items.Length == 0)
-				return default(T);
-			if (items.Length == 0)
 				return default(T);
 			else
 				return items[rnd.Next(items.Length)];
@@ -182,7 +227,10 @@ namespace GRaff
 		/// <param name="p">The probability of returning true</param>
 		/// <returns>True with probability p; otherwise, false. If p ≥ 1.0, it always returns true, and if p ≤ 0, it always returns false.</returns>
 		public static bool Probability(this Random rnd, double p)
-			=> (rnd.NextDouble() < p);
+		{
+			Contract.Requires<ArgumentNullException>(rnd != null);
+			return rnd.NextDouble() < p;
+		}
 		
 		/// <summary>
 		/// Rolls a number of dice with the specified number of sides, and returns the sum of the roll.
@@ -212,7 +260,10 @@ namespace GRaff
 		/// <param name="rnd">The System.Random to generate the numbers.</param>
 		/// <returns>A random GRaff.Color with random RGB channels.</returns>
 		public static Color Color(this Random rnd)
-			=> (Color)(rnd.Next(0x1000000));
+		{
+			Contract.Requires<ArgumentNullException>(rnd != null);
+			return (Color)(rnd.Next(0x1000000));
+		}
 		
 		/// <summary>
 		/// Randomizes the order of the elements in the specified array.
@@ -222,6 +273,7 @@ namespace GRaff
 		/// <param name="array">The array to be shuffled.</param>
 		public static void Shuffle<T>(this Random rnd, ref T[] array)
 		{
+			Contract.Requires<ArgumentNullException>(rnd != null);
 			if (array == null)
 				return;
 
@@ -244,6 +296,8 @@ namespace GRaff
 		/// <returns>The randomized array.</returns>
 		public static T[] Shuffle<T>(this Random rnd, T[] array)
 		{
+			Contract.Requires<ArgumentNullException>(rnd != null);
+			Contract.Requires<ArgumentNullException>(array != null);
 			var result = (T[])array.Clone();
 			Shuffle(rnd, ref result);
 			return result;
@@ -307,7 +361,7 @@ namespace GRaff
 		/// <returns>A GRaff.Synchronization.TweningFunction representing the combination of the two tweening functions.</returns>
 		public static TweeningFunction CombineWith(this TweeningFunction f, double atTime, TweeningFunction next)
 		{
-			Debug.Assert(0 <= atTime && atTime <= 1);
+			Contract.Requires<ArgumentOutOfRangeException>(0 <= atTime && atTime <= 1);
 			return t => t < atTime ? (atTime * f(t / atTime)) : (atTime + (1 - atTime) * next((t - atTime) / (1 - atTime)));
 		}
 

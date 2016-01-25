@@ -1,5 +1,5 @@
 ﻿using System;
- 
+using System.Diagnostics.Contracts;
 
 namespace GRaff.Randomness
 {
@@ -38,15 +38,27 @@ namespace GRaff.Randomness
 
 		public VectorDistribution(Random rnd, double minMagnitude, double maxMagnitude)
 			: this(new RadialDistribution(rnd, minMagnitude, maxMagnitude), new AngleDistribution(rnd))
-		{ }
+		{
+			Contract.Requires<ArgumentNullException>(rnd != null);
+			Contract.Requires<ArgumentOutOfRangeException>(minMagnitude >= 0);
+			Contract.Requires<ArgumentOutOfRangeException>(maxMagnitude >= minMagnitude);
+		}
 
 		public VectorDistribution(Random rnd, double minMagnitude, double maxMagnitude, Angle direction)
-#warning This throws an unexpected exception - make sure to validate arguments
 			: this(new RadialDistribution(rnd, minMagnitude, maxMagnitude), new ConstantDistribution<Angle>(direction)) 
-		{ }
+		{
+			Contract.Requires<ArgumentNullException>(rnd != null);
+			Contract.Requires<ArgumentOutOfRangeException>(minMagnitude >= 0);
+			Contract.Requires<ArgumentOutOfRangeException>(maxMagnitude >= minMagnitude);
+		}
 
 		public VectorDistribution(Random rnd, double minMagnitude, double maxMagnitude, Angle minDirection, Angle maxDirection)
-			: this(new RadialDistribution(rnd, minMagnitude, maxMagnitude), new AngleDistribution(rnd, minDirection, maxDirection)) { }
+			: this(new RadialDistribution(rnd, minMagnitude, maxMagnitude), new AngleDistribution(rnd, minDirection, maxDirection))
+		{
+			Contract.Requires<ArgumentNullException>(rnd != null);
+			Contract.Requires<ArgumentOutOfRangeException>(minMagnitude >= 0);
+			Contract.Requires<ArgumentOutOfRangeException>(maxMagnitude > minMagnitude);
+		}
 
 		private VectorDistribution(IDistribution<double> radiusDistribution, IDistribution<Angle> angleDistribution)
 		{

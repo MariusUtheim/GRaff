@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,7 +15,7 @@ namespace GRaff
 	/// <remarks>The extension methods are not thread-safe. The other static methods use the same System.Random object to generate random numbers, using serialized thread-safe access.</remarks>
 	public static class GRandom
 	{
-		private static Random _rnd = new Random(Time.MachineTime);
+		private static readonly Random _rnd = new Random(Time.MachineTime);
 
 		public static Random Source => _rnd;
 
@@ -31,7 +32,11 @@ namespace GRaff
 		/// <param name="maxValue">The exclusive upper bound of the random number to be generated. maxValue must be greater than or equal to zero.</param>
 		/// <returns>An integer greater than or equal to zero and less than maxValue. If however maxValue is zero, then 0 is returned.</returns>
 		/// <exception cref="System.ArgumentOutOfRangeException">maxValue is less than zero.</exception>
-		public static int Integer(int maxValue) { lock (_rnd) return _rnd.Integer(maxValue); }
+		public static int Integer(int maxValue)
+		{
+			Contract.Requires<ArgumentOutOfRangeException>(maxValue >= 0);
+			lock (_rnd) return _rnd.Integer(maxValue);
+		}
 
 
 		/// <summary>
@@ -41,7 +46,11 @@ namespace GRaff
 		/// <param name="maxValue">The exclusive upper bound of the random number to be generated. maxValue must be greater than or equal to minValue.</param>
 		/// <returns>An integer greater than or equal to minValue and less than maxValue. If however maxValue and minValue are equal, that value is returned.</returns>
 		/// <exception cref="System.ArgumentOutOfRangeException">minValue is greater than maxValue</exception>
-		public static int Integer(int minValue, int maxValue) { lock (_rnd) return _rnd.Integer(minValue, maxValue); }
+		public static int Integer(int minValue, int maxValue)
+		{
+			Contract.Requires<ArgumentOutOfRangeException>(minValue <= maxValue);
+			lock (_rnd) return _rnd.Integer(minValue, maxValue);
+		}
 
 
 		/// <summary>
@@ -74,7 +83,11 @@ namespace GRaff
 		/// <param name="rnd">The System.Random to generate the numbers.</param>
 		/// <param name="length">The length of the string.</param>
 		/// <returns>A random string of letters.</returns>
-		public static String String(int length) { lock (_rnd) return _rnd.String(length); }
+		public static String String(int length)
+		{
+			Contract.Requires<ArgumentOutOfRangeException>(length >= 0);
+			lock (_rnd) return _rnd.String(length);
+		}
 
 		/// <summary>
 		/// Returns a random number that is distributed in accordance with standard normal distribution.
@@ -143,8 +156,13 @@ namespace GRaff
 		/// <param name="dice">The number of dice to roll. Must be greater than or equal to 0.</param>
 		/// <param name="sides">The number of sides on each die. Must be greater than 0.</param>
 		/// <returns>The sum of the dice rolled. If nDice is equal to zero, returns 0.</returns>
-		/// <exception cref="System.ArgumentOutOfRangeException">if nDice is less than 0, or if nSides is less than or equal to zero.</exception>
-		public static int Roll(int dice, int sides) { lock (_rnd) return _rnd.Roll(dice, sides); }
+		/// <exception cref="System.ArgumentOutOfRangeException">if dice is less than 0, or if sides is less than or equal to zero.</exception>
+		public static int Roll(int dice, int sides)
+		{
+			Contract.Requires<ArgumentOutOfRangeException>(dice >= 0);
+			Contract.Requires<ArgumentOutOfRangeException>(sides >= 1);
+			lock (_rnd) return _rnd.Roll(dice, sides);
+		}
 
 		/// <summary>
 		/// Returns a GRaff.Color with random RGB channels.

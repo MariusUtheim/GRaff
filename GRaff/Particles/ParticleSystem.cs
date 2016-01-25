@@ -13,7 +13,7 @@ namespace GRaff.Particles
 		protected readonly LinkedList<Particle> particles = new LinkedList<Particle>();
 
 		// Hiding this from subclasses 
-		private TexturedRenderSystem _renderSystem;
+		private readonly TexturedRenderSystem _renderSystem;
 
 		public int Count { get { return particles.Count; } }
 
@@ -28,7 +28,7 @@ namespace GRaff.Particles
 
 		protected void Remove(Particle particle)
 		{
-			Contract.Requires(particle != null);
+			Contract.Requires<ArgumentNullException>(particle != null);
 			particles.Remove(particle);
 		}
 

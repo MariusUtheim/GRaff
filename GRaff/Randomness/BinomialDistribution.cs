@@ -9,12 +9,15 @@ namespace GRaff.Randomness
 		private double[] _cdf;
 
 		public BinomialDistribution(int trials, double probability)
-			: this(GRandom.Source, trials, probability) { }
+			: this(GRandom.Source, trials, probability)
+		{
+			Contract.Requires<ArgumentOutOfRangeException>(probability >= 0 && probability <= 1);
+		}
 
 		public BinomialDistribution(Random rnd, int trials, double probability)
 		{
-			Contract.Requires(rnd != null);
-			Contract.Requires(probability > 0 && probability <= 1);
+			Contract.Requires<ArgumentNullException>(rnd != null);
+			Contract.Requires<ArgumentOutOfRangeException>(probability >= 0 && probability <= 1);
 
 			_rnd = rnd;
 

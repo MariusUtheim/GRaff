@@ -1,18 +1,26 @@
 ﻿using System;
+using System.Diagnostics.Contracts;
 using GRaff.Graphics;
 
 namespace GRaff
 {
 	public sealed class Image
 	{
-		private GameObject _parent;
+		private readonly GameObject _parent;
 
 		internal Image(GameObject parent)
 		{
+			Contract.Requires<ArgumentNullException>(parent != null);
 			this._parent = parent;
 			this.Blend = Colors.White;
 			this.Index = 0;
 			this.Speed = 1;
+		}
+
+		[ContractInvariantMethod]
+		private void objectInvariants()
+		{
+			Contract.Invariant(_parent != null);
 		}
 
 		public Sprite Sprite

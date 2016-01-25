@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -193,8 +194,11 @@ namespace GRaff
 		/// <param name="left">The first GRaff.LinearMatrix.</param>
 		/// <param name="right">The second GRaff.LinearMatrix.</param>
 		/// <returns>The sum of the elements of each GRaff.LinearMatrix.</returns>
-		public static LinearMatrix operator +(LinearMatrix left, LinearMatrix right) 
-			=> new LinearMatrix(left.M00 + right.M00, left.M01 + right.M01, left.M10 + right.M10, left.M11 + right.M11);
+		public static LinearMatrix operator +(LinearMatrix left, LinearMatrix right)
+		{
+			Contract.Requires<ArgumentNullException>(left != null && right != null);
+			return new LinearMatrix(left.M00 + right.M00, left.M01 + right.M01, left.M10 + right.M10, left.M11 + right.M11);
+		}
 
 		/// <summary>
 		/// Computes the element-wise difference of the two GRaff.LinearMatrix objects.
@@ -202,8 +206,11 @@ namespace GRaff
 		/// <param name="left">The first GRaff.LinearMatrix.</param>
 		/// <param name="right">The second GRaff.LinearMatrix.</param>
 		/// <returns>The difference of the elements of each GRaff.LinearMatrix.</returns>
-		public static LinearMatrix operator -(LinearMatrix left, LinearMatrix right) 
-			=> new LinearMatrix(left.M00 - right.M00, left.M01 - right.M01, left.M10 - right.M10, left.M11 - right.M11);
+		public static LinearMatrix operator -(LinearMatrix left, LinearMatrix right)
+		{
+			Contract.Requires<ArgumentNullException>(left != null && right != null);
+			return new LinearMatrix(left.M00 - right.M00, left.M01 - right.M01, left.M10 - right.M10, left.M11 - right.M11);
+		}
 
 		/// <summary>
 		/// Computes the matrix product of the two GRaff.LinearMatrix objects.
@@ -212,10 +219,13 @@ namespace GRaff
 		/// <param name="right">The second GRaff.LinearMatrix.</param>
 		/// <returns>The matrix product of the two GRaff.LinearMatrix.</returns>
 		public static LinearMatrix operator *(LinearMatrix left, LinearMatrix right)
-			=> new LinearMatrix(
+		{
+			Contract.Requires<ArgumentNullException>(left != null && right != null);
+			return new LinearMatrix(
 				left.M00 * right.M00 + left.M01 * right.M10, left.M00 * right.M01 + left.M01 * right.M11,
 				left.M10 * right.M00 + left.M11 * right.M10, left.M10 * right.M01 + left.M11 * right.M11
 			);
+		}
 
 
 		/// <summary>
@@ -225,8 +235,11 @@ namespace GRaff
 		/// <param name="m">A GRaff.LinearMatrix representing the linear transformation.</param>
 		/// <param name="p">A GRaff.Point to be transformed by the linear transformation.</param>
 		/// <returns>The transformed GRaff.Point.</returns>
-		public static Point operator *(LinearMatrix m, Point p) 
-			=> new Point(m.M00 * p.X + m.M01 * p.Y, m.M10 * p.X + m.M11 * p.Y);
+		public static Point operator *(LinearMatrix m, Point p)
+		{
+			Contract.Requires<ArgumentNullException>(m != null);
+			return new Point(m.M00 * p.X + m.M01 * p.Y, m.M10 * p.X + m.M11 * p.Y);
+		}
 
 		/// <summary>
 		/// Computes the matrix product of the GRaff.LinearMatrix and the GRaff.Vector.
@@ -235,8 +248,11 @@ namespace GRaff
 		/// <param name="m">A GRaff.LinearMatrix representing the linear transformation.</param>
 		/// <param name="v">A GRaff.Vector to be transformed by the linear transformation.</param>
 		/// <returns>The transformed GRaff.Vector.</returns>
-		public static Vector operator *(LinearMatrix m, Vector v) 
-			=> new Vector(m.M00 * v.X + m.M01 * v.Y, m.M10 * v.X + m.M11 * v.Y);
+		public static Vector operator *(LinearMatrix m, Vector v)
+		{
+			Contract.Requires<ArgumentNullException>(m != null);
+			return new Vector(m.M00 * v.X + m.M01 * v.Y, m.M10 * v.X + m.M11 * v.Y);
+		}
 
 	}
 }

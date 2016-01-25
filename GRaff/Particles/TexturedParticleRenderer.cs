@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,6 +14,7 @@ namespace GRaff.Particles
 
 		public TexturedParticleRenderer(Texture texture)
 		{
+			Contract.Requires<ArgumentNullException>(texture != null);
 			Texture = texture;
 		}
 
@@ -20,6 +22,7 @@ namespace GRaff.Particles
 
 		public void Render(IEnumerable<Particle> particles)
 		{
+			if (particles == null) return;
 			int count = particles.Count();
 			GraphicsPoint[] vertices = new GraphicsPoint[4 * count];
 			Color[] colors = new Color[4 * count];

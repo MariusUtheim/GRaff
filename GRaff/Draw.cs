@@ -7,11 +7,22 @@ namespace GRaff
 {
 	public static partial class Draw
 	{
+		private static Surface _currentSurface;
 		public static Surface CurrentSurface
 		{
-			get;
-			set;
+			get
+			{
+				Contract.Ensures(Contract.Result<Surface>() != null);
+				return _currentSurface;
+			}
+
+			set
+			{
+				Contract.Requires<ArgumentNullException>(value != null);
+				_currentSurface = value;
+			}
 		}
+
 
 		public static void Clear(Color color) => CurrentSurface.Clear(color);
 
@@ -76,10 +87,7 @@ namespace GRaff
 
 		public static void Texture(Texture texture, double x, double y)
 		{
-			if (texture == null)
-				return;
-			if (!texture.Buffer.IsLoaded)
-				throw new InvalidOperationException("Trying to draw a texture that hasn't been loaded");
+			Contract.Requires<InvalidOperationException>(texture == null || texture.Buffer.IsLoaded);
 			if (texture != null)
 				CurrentSurface.DrawTexture(texture, new GraphicsPoint(x, y));
 		}
@@ -120,6 +128,7 @@ namespace GRaff
 
 		public static void Sprite(Sprite sprite, int imageIndex, Color blend, Transform transform)
 		{
+			Contract.Requires<ArgumentNullException>(transform != null);
 			if (sprite != null)
 				CurrentSurface.DrawSprite(sprite, imageIndex, blend, transform.GetMatrix());
 		}
@@ -142,13 +151,29 @@ namespace GRaff
 				CurrentSurface.DrawImage(image);
 		}
 
-		public static void Text(string text, TextRenderer renderer, Color color, double x, double y) => CurrentSurface.DrawText(renderer, color, text, AffineMatrix.Translation(x, y));
-		
-		public static void Text(string text, TextRenderer renderer, Color color, Point location) => Text(text, renderer, color, AffineMatrix.Translation(location.X, location.Y));
+		public static void Text(string text, TextRenderer renderer, Color color, double x, double y)
+		{
+			Contract.Requires<ArgumentNullException>(renderer != null);
+			CurrentSurface.DrawText(renderer, color, text, AffineMatrix.Translation(x, y));
+		}
 
-		public static void Text(string text, TextRenderer renderer, Color color, Transform transform) => Text(text, renderer, color, transform.GetMatrix());
+		public static void Text(string text, TextRenderer renderer, Color color, Point location)
+		{
+			Contract.Requires<ArgumentNullException>(renderer != null);
+			CurrentSurface.DrawText(renderer, color, text, AffineMatrix.Translation(location.X, location.Y));
+		}
 
-		public static void Text(string text, TextRenderer renderer, Color color, AffineMatrix transform) => CurrentSurface.DrawText(renderer, color, text, transform);
+		public static void Text(string text, TextRenderer renderer, Color color, Transform transform)
+		{
+			Contract.Requires<ArgumentNullException>(renderer != null && transform != null);
+			CurrentSurface.DrawText(renderer, color, text, transform.GetMatrix());
+		}
+
+		public static void Text(string text, TextRenderer renderer, Color color, AffineMatrix transform)
+		{
+			Contract.Requires<ArgumentNullException>(renderer != null && transform != null);
+			CurrentSurface.DrawText(renderer, color, text, transform);
+		}
 
 		public static void Text(string text, Font font, Color color, double x, double y) => Text(text, new TextRenderer(font), color, AffineMatrix.Translation(x, y));
 		public static void Text(string text, Font font, Color color, Point location) => Text(text, new TextRenderer(font), color, AffineMatrix.Translation(location.X, location.Y));

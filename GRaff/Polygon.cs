@@ -21,53 +21,29 @@ namespace GRaff
 
 		private Polygon()
 		{
+			_pts = new Point[1];
 			return;	// Used to create Polygon in an efficient way without doing sanity checks
 		}
 
 		public Polygon(IEnumerable<Point> pts)
+			: this(pts.ToArray())
 		{
 			Contract.Requires<ArgumentNullException>(pts != null);
-			Contract.Requires<ArgumentException>(pts.Count() > 0);
+		}
 
+		public Polygon(params Point[] pts)
+		{
+			Contract.Requires<ArgumentNullException>(pts != null);
+			Contract.Requires<ArgumentException>(pts.Length > 0);
 			_pts = pts.ToArray();
 			_SanityCheck();
 		}
 
-		public Polygon(params Point[] pts)
-			: this(pts.AsEnumerable())
-		{ }
-
 		internal static Polygon CreateUnsafe(Point[] pts)
 		{
+			Contract.Assume(pts != null && pts.Length > 0);
 			return new Polygon { _pts = pts };
 		}
-
-		public static Polygon Regular(int degree, double radius)
-			=> Regular(degree, radius, Point.Zero);
-
-		public static Polygon Regular(int degree, double radius, Point center)
-		{
-			Contract.Requires(degree >= 2);
-			Debug.Assert(degree >= 2);
-
-			double dt = GMath.Tau / degree;
-			double c = GMath.Cos(dt), s = GMath.Sin(dt);
-
-			double x = 0, y = -radius, tmp;
-			Point[] pts = new Point[degree];
-
-			for (int i = 0; i < degree; i++)
-			{
-				pts[i] = new Point(center.X + x, center.Y + y);
-
-				tmp = x;
-				x = c * x - s * y;
-				y = s * tmp + c * y;
-			}
-
-			return new Polygon { _pts = pts };
-		}
-
 
 		private void _SanityCheck()
 		{
@@ -98,8 +74,46 @@ namespace GRaff
 				sum += a.Degrees;
 			}
 
-			if (sum != 0)
+			if (GMath.Abs(sum - 360) < 2 * GMath.MachineEpsilon)
 				throw new ArgumentException("The points must specify a convex polygon with winding number equal to 1. Winding is " + sum.ToString());
+		}
+
+		[ContractInvariantMethod]
+		private void objectInvariants()
+		{
+			Contract.Invariant(_pts != null);
+			Contract.Invariant(_pts.Length > 0);
+		}
+
+		#region Static constructors
+
+		public static Polygon Regular(int degree, double radius)
+		{
+			Contract.Requires<ArgumentOutOfRangeException>(degree >= 2);
+			return Regular(degree, radius, Point.Zero);
+		}
+
+		public static Polygon Regular(int degree, double radius, Point center)
+		{
+			Contract.Requires<ArgumentOutOfRangeException>(degree >= 2);
+			Debug.Assert(degree >= 2);
+
+			double dt = GMath.Tau / degree;
+			double c = GMath.Cos(dt), s = GMath.Sin(dt);
+
+			double x = 0, y = -radius, tmp;
+			Point[] pts = new Point[degree];
+
+			for (int i = 0; i < degree; i++)
+			{
+				pts[i] = new Point(center.X + x, center.Y + y);
+
+				tmp = x;
+				x = c * x - s * y;
+				y = s * tmp + c * y;
+			}
+
+			return new Polygon { _pts = pts };
 		}
 
 		public static Polygon Circle(double radius)
@@ -113,6 +127,8 @@ namespace GRaff
 				return new Polygon { _pts = new[] { center } };
 
 			int precision = (int)GMath.Ceiling(GMath.Tau * GMath.Abs(radius));
+			if (precision < 2)
+				precision = 2;
 			
 			return Regular(precision, radius, center);
 		}
@@ -120,12 +136,14 @@ namespace GRaff
 		public static Polygon Ellipse(Point center, double width, double height)
 		{
 			int precision = (int)GMath.Ceiling(GMath.Pi * GMath.Abs(width + height));
+			if (precision <= 0)
+				return new Polygon(center);
 			double dt = GMath.Tau / precision;
 			double c = GMath.Cos(dt), s = GMath.Sin(dt);
 
 			double x = 1, y = 0, tmp;
 
-			Point[] pts = new Point[precision];
+			var pts = new Point[precision];
 			for (int i = 0; i < precision; i++)
 			{
 				pts[i] = new Point(center.X + x * width, center.Y + y * height);
@@ -138,6 +156,7 @@ namespace GRaff
 			return new Polygon { _pts = pts };
 		}
 
+		#endregion
 
 		/// <summary>
 		/// Gets the number of vertices in this GRaff.Polynomial.
@@ -193,6 +212,7 @@ namespace GRaff
 
 		private bool _Intersects(Polygon other)
 		{
+			if (other == null) return false;
 			/**
 			 * Using the separation axis theorem: 
 			 * http://stackoverflow.com/questions/753140/how-do-i-determine-if-two-convex-polygons-intersect

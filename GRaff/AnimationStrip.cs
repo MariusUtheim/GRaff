@@ -9,14 +9,15 @@ namespace GRaff
 {
 	public sealed class AnimationStrip
 	{
-		private Texture[] _frames;
-		private int[] _indices;
-		private double[] _durations;
+		private readonly Texture[] _frames;
+		private readonly int[] _indices;
+		private readonly double[] _durations;
 
 		public AnimationStrip(IEnumerable<Texture> frames)
 		{
 			Contract.Requires<ArgumentNullException>(frames != null);
 			Contract.Requires<ArgumentException>(frames.Count() > 0);
+			Contract.Requires<ArgumentException>(Contract.ForAll(frames, frame => frame != null));
 
 			_frames = frames.ToArray();
 			_indices = Enumerable.Range(0, _frames.Length).ToArray();
@@ -25,10 +26,17 @@ namespace GRaff
 
 		public AnimationStrip(params Texture[] frames)
 			: this(frames.AsEnumerable())
-		{ }
+		{
+			Contract.Requires<ArgumentNullException>(frames != null);
+			Contract.Requires<ArgumentException>(frames.AsEnumerable().Count() > 0);
+			Contract.Requires<ArgumentException>(Contract.ForAll(frames, frame => frame != null));
+		}
 
 		public AnimationStrip(IEnumerable<Texture> frames, params Tuple<int, double>[] frameDurations)
 		{
+			Contract.Requires<ArgumentNullException>(frames != null && frameDurations != null);
+			Contract.Requires<ArgumentException>(frames.Count() > 0 && frameDurations.Count() > 0);
+			Contract.Requires<ArgumentOutOfRangeException>(Contract.ForAll(frameDurations, f => f.Item1 >= 0 && f.Item1 < frames.Count() && f.Item2 > 0));
 			_frames = frames.ToArray();
 			_indices = frameDurations.Select(f => f.Item1).ToArray();
 			_durations = frameDurations.Select(f => f.Item2).ToArray();
@@ -36,8 +44,8 @@ namespace GRaff
 
 		public AnimationStrip(TextureBuffer strip, int imageCount)
 		{
-			Contract.Requires(strip != null);
-			Contract.Requires(imageCount >= 1);
+			Contract.Requires<ArgumentNullException>(strip != null);
+			Contract.Requires<ArgumentOutOfRangeException>(imageCount >= 1);
 
 			double dw = 1.0 / imageCount;
 			_frames = Enumerable.Range(0, imageCount)
@@ -45,6 +53,14 @@ namespace GRaff
 								.ToArray();
 			_indices = Enumerable.Range(0, imageCount).ToArray();
 			_durations = Enumerable.Repeat(1.0, imageCount).ToArray();
+		}
+
+		[ContractInvariantMethod]
+		private void objectInvariants()
+		{
+			Contract.Invariant(ImageCount >= 1);
+			Contract.Invariant(Duration > 0);
+			Contract.Invariant(_frames != null);
 		}
 
 		public AnimationStrip InOut()
@@ -64,10 +80,15 @@ namespace GRaff
 
 		public int ImageCount => _indices.Length;
 
-		public Texture Frame(int index) => _frames[GMath.Remainder(index, _frames.Length)];
+		public Texture Frame(int index)
+		{
+			Contract.Ensures(Contract.Result<Texture>() != null);
+			return _frames[GMath.Remainder(index, _frames.Length)];
+		}
 
 		public Texture SubImage(double dt)
 		{
+			Contract.Ensures(Contract.Result<Texture>() != null);
 			dt = GMath.Remainder(dt, Duration);
 			for (int i = 0; i < _indices.Length; i++)
 			{

@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
+using System.Diagnostics.Contracts;
 #if OpenGL4
 using OpenTK.Graphics.OpenGL4;
 using GLPrimitiveType = OpenTK.Graphics.OpenGL4.PrimitiveType;
@@ -24,20 +25,20 @@ namespace GRaff.Graphics
 
 		public Surface(int width, int height)
 		{
-			GL.GenVertexArrays(1, out _vertexArray);
+			_vertexArray = GL.GenVertexArray();
 			GL.BindVertexArray(_vertexArray);
 
-			GL.GenBuffers(1, out _vertexBuffer);
+			_vertexBuffer = GL.GenBuffer();
 			GL.BindBuffer(BufferTarget.ArrayBuffer, _vertexBuffer);
 			GL.EnableVertexAttribArray(0);
 			GL.VertexAttribPointer(0, 2, GraphicsPoint.PointerType, false, 0, 0);
 
-			GL.GenBuffers(1, out _colorBuffer);
+			_colorBuffer = GL.GenBuffer();
 			GL.BindBuffer(BufferTarget.ArrayBuffer, _colorBuffer);
 			GL.EnableVertexAttribArray(1);
 			GL.VertexAttribPointer(1, 4, VertexAttribPointerType.UnsignedByte, true, 0, 0);
-			
-			GL.GenBuffers(1, out _textureBuffer);
+
+			_textureBuffer = GL.GenBuffer();
 			GL.BindBuffer(BufferTarget.ArrayBuffer, _textureBuffer);
 			GL.BufferData(BufferTarget.ArrayBuffer, new IntPtr(4 * sizeofPoint), defaultTexCoords, BufferUsageHint.StreamDraw);
 			GL.EnableVertexAttribArray(2);
@@ -138,6 +139,7 @@ namespace GRaff.Graphics
 
 		public void DrawTexture(Texture texture, GraphicsPoint p)
 		{
+			Contract.Requires<ArgumentNullException>(texture != null);
 			coord left = p.Xt, top = p.Yt;
 			coord right = left + texture.PixelWidth, bottom = top + texture.PixelHeight;
 
@@ -173,11 +175,11 @@ namespace GRaff.Graphics
 			}
 			int precision = (int)GMath.Ceiling(GMath.Tau * GMath.Abs(radius));
 			var vertices = new GraphicsPoint[precision + 2];
-			int i = 0;
-			vertices[i++] = center;
+			vertices[0] = center;
+			int i = 1;
 			foreach (var p in Polygon.Circle(center, radius).Vertices)
 				vertices[i++] = (GraphicsPoint)p;
-			vertices[i] = new GraphicsPoint(center.X, center.Y - radius);
+			vertices[vertices.Length - 1] = new GraphicsPoint(center.X, center.Y - radius);
 
 			Color[] colors = new Color[precision + 2];
 			colors[0] = innerColor;
@@ -207,7 +209,7 @@ namespace GRaff.Graphics
 			vertices[i++] = center;
 			foreach (var p in ellipse.Vertices)
 				vertices[i++] = (GraphicsPoint)p;
-			vertices[i] = new GraphicsPoint(location.X + width, center.Y);
+			vertices[vertices.Length - 1] = new GraphicsPoint(location.X + width, center.Y);
 
 			var colors = new Color[ellipse.Length + 2];
 			colors[0] = innerColor;
@@ -219,6 +221,7 @@ namespace GRaff.Graphics
 
 		public void DrawPolygon(Color color, Polygon polygon)
 		{
+			Contract.Requires<ArgumentNullException>(polygon != null);
 			var vertices = polygon.Vertices.Select(v => (GraphicsPoint)v).ToArray();
 			if (polygon.Length == 1)
 				Render(vertices, new[] { color }, PrimitiveType.Points);
@@ -230,6 +233,7 @@ namespace GRaff.Graphics
 
 		public void FillPolygon(Color color, Polygon polygon)
 		{
+			Contract.Requires<ArgumentNullException>(polygon != null);
 			var vertices = polygon.Vertices.Select(v => (GraphicsPoint)v).ToArray();
 			if (polygon.Length == 1)
 				Render(vertices, new[] { color }, PrimitiveType.Points);
@@ -241,6 +245,7 @@ namespace GRaff.Graphics
 
 		public void DrawSprite(Sprite sprite, int subimage, double x, double y)
 		{
+			Contract.Requires<ArgumentNullException>(sprite != null);
 			coord left = (coord)(x - sprite.XOrigin), top = (coord)(y - sprite.YOrigin), right = left + (coord)sprite.Width, bottom = top + (coord)sprite.Height;
 			RenderTextured(sprite.SubImage(subimage), new[] { new GraphicsPoint(left, top), new GraphicsPoint(right, top), new GraphicsPoint(left, bottom), new GraphicsPoint(right, bottom) },
 				   new[] { Colors.White, Colors.White, Colors.White, Colors.White }, PrimitiveType.TriangleStrip);
@@ -248,7 +253,8 @@ namespace GRaff.Graphics
 
 		public void DrawSprite(Sprite sprite, int subimage, Color blend, AffineMatrix transform)
 		{
-			GraphicsPoint[] vertices = {
+			Contract.Requires<ArgumentNullException>(sprite != null && transform != null);
+			var vertices = new[] {
 				transform * new GraphicsPoint(-sprite.XOrigin, -sprite.YOrigin),
 				transform * new GraphicsPoint(sprite.XOrigin, -sprite.YOrigin),
 				transform * new GraphicsPoint(-sprite.XOrigin, sprite.YOrigin),
@@ -260,6 +266,7 @@ namespace GRaff.Graphics
 
 		public void DrawImage(Image image)
 		{
+			Contract.Requires<ArgumentNullException>(image != null);
 			AffineMatrix t = image.Transform.GetMatrix();
 			RenderTextured(image.CurrentTexture, new[] {
 					t * new GraphicsPoint(-image.Sprite.XOrigin, -image.Sprite.YOrigin),
@@ -272,6 +279,8 @@ namespace GRaff.Graphics
 
 		public void DrawText(TextRenderer renderer, Color color, string text, AffineMatrix transform)
 		{
+			Contract.Requires<ArgumentNullException>(renderer != null && transform != null);
+
 			GraphicsPoint[] vertices;
 			GraphicsPoint[] texCoords;
 

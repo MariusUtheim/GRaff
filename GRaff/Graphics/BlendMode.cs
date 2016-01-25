@@ -10,7 +10,7 @@ namespace GRaff.Graphics
 	{
 		private class BlendModeContext : IDisposable
 		{
-			private BlendMode _previous;
+			private readonly BlendMode _previous;
 			private bool _isDisposed = false;
 
 			public BlendModeContext(BlendMode mode)
