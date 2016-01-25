@@ -1,8 +1,13 @@
 ﻿using System;
-using OpenTK;
-using OpenTK.Graphics.ES30;
-using GRaff.Graphics;
 using System.Linq;
+using GRaff.Graphics;
+using OpenTK;
+#if OpenGL4
+using OpenTK.Graphics.OpenGL4;
+#else
+using OpenTK.Graphics.ES30;
+#endif
+
 
 namespace GRaff
 {

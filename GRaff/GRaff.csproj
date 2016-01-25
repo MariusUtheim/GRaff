@@ -94,7 +94,7 @@
     <Compile Include="Graphics\Lighting\LightObstacle.cs" />
     <Compile Include="Graphics\Lighting\LightSource.cs" />
     <Compile Include="Graphics\Lighting\WallSystem.cs" />
-    <Compile Include="Graphics\PointF.cs" />
+    <Compile Include="Graphics\GraphicsPoint.cs" />
     <Compile Include="Graphics\Shader.cs" />
     <Compile Include="Graphics\ShaderElement.cs" />
     <Compile Include="Graphics\ShaderProgramContext.cs" />
@@ -265,9 +265,8 @@
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>IF $(ConfigurationName) == Release (
-    COPY /B /Y $(TargetPath)  "C:\Libraries\G-Raff\GRaff.dll"
-)</PostBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

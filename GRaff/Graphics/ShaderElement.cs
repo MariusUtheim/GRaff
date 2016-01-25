@@ -3,7 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+#if OpenGL4
+using OpenTK.Graphics.OpenGL4;
+using coords = System.Double;
+#else
 using OpenTK.Graphics.ES30;
+using coords = System.Single;
+#endif
 
 namespace GRaff.Graphics
 {
@@ -12,9 +18,9 @@ namespace GRaff.Graphics
 		private ShaderProgram program;
 		private ColoredRenderSystem _renderSystem = new ColoredRenderSystem();
 		private Queue<KeyValuePair<string, int>> _intUniforms = new Queue<KeyValuePair<string, int>>();
-		private Queue<KeyValuePair<string, float>> _floatUniforms = new Queue<KeyValuePair<string, float>>();
+		private Queue<KeyValuePair<string, coords>> _floatUniforms = new Queue<KeyValuePair<string, coords>>();
 		private List<KeyValuePair<string, Func<int>>> _automaticIntUniforms = new List<KeyValuePair<string, Func<int>>>();
-		private List<KeyValuePair<string, Func<float>>> _automaticFloatUniforms = new List<KeyValuePair<string, Func<float>>>();
+		private List<KeyValuePair<string, Func<coords>>> _automaticFloatUniforms = new List<KeyValuePair<string, Func<coords>>>();
 
 		public ShaderElement(string source)
 		{
@@ -25,7 +31,7 @@ namespace GRaff.Graphics
 			}
 		}
 
-		protected void SetPrimitive(PrimitiveType primitiveType, params PointF[] coordinates)
+		protected void SetPrimitive(PrimitiveType primitiveType, params GraphicsPoint[] coordinates)
 		{
 			_renderSystem.SetVertices(UsageHint.StreamDraw, coordinates);
 		}
@@ -42,7 +48,7 @@ namespace GRaff.Graphics
 
 		protected void SetUniform(string name, double value)
 		{
-			_floatUniforms.Enqueue(new KeyValuePair<string, float>(name, (float)value));
+			_floatUniforms.Enqueue(new KeyValuePair<string, coords>(name, (coords)value));
 		}
 
 		protected void AutomaticUniform(string name, Func<int> value)
@@ -52,7 +58,7 @@ namespace GRaff.Graphics
 
 		protected void AutomaticUniform(string name, Func<double> value)
 		{
-			_automaticFloatUniforms.Add(new KeyValuePair<string, Func<float>>(name, () => (float)value()));
+			_automaticFloatUniforms.Add(new KeyValuePair<string, Func<coords>>(name, () => (coords)value()));
 		}
 
 		public override void OnDraw()

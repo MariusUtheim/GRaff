@@ -1,6 +1,13 @@
 ﻿using System;
+#if OpenGL4
+using OpenTK.Graphics.OpenGL4;
+using GLPrimitiveType = OpenTK.Graphics.OpenGL4.PrimitiveType;
+using coord = System.Double;
+#else
 using OpenTK.Graphics.ES30;
-
+using GLPrimitiveType = OpenTK.Graphics.ES30.PrimitiveType;
+using coord = System.Single;
+#endif
 
 namespace GRaff.Graphics
 {
@@ -18,7 +25,7 @@ namespace GRaff.Graphics
 			GL.GenBuffers(1, out _vertexBuffer);
 			GL.BindBuffer(BufferTarget.ArrayBuffer, _vertexBuffer);
 			GL.EnableVertexAttribArray(0);
-			GL.VertexAttribPointer(0, 2, VertexAttribPointerType.Float, false, 0, 0);
+			GL.VertexAttribPointer(0, 2, GraphicsPoint.PointerType, false, 0, 0);
 
 			GL.GenBuffers(1, out _colorBuffer);
 			GL.BindBuffer(BufferTarget.ArrayBuffer, _colorBuffer);
@@ -27,16 +34,16 @@ namespace GRaff.Graphics
 
 		}
 
-		public void SetVertices(UsageHint usage, params PointF[] vertices)
+		public void SetVertices(UsageHint usage, params GraphicsPoint[] vertices)
 		{
 			GL.BindBuffer(BufferTarget.ArrayBuffer, _vertexBuffer);
-			GL.BufferData(BufferTarget.ArrayBuffer, new IntPtr(2 * sizeof(float) * vertices.Length), vertices, (BufferUsageHint)usage);
+			GL.BufferData(BufferTarget.ArrayBuffer, new IntPtr(2 * sizeof(coord) * vertices.Length), vertices, (BufferUsageHint)usage);
 		}
 
-		public void SetVertices(UsageHint usage, params float[] vertices)
+		public void SetVertices(UsageHint usage, params coord[] vertices)
 		{
 			GL.BindBuffer(BufferTarget.ArrayBuffer, _vertexBuffer);
-			GL.BufferData(BufferTarget.ArrayBuffer, new IntPtr(sizeof(float) * vertices.Length), vertices, (BufferUsageHint)usage);
+			GL.BufferData(BufferTarget.ArrayBuffer, new IntPtr(sizeof(coord) * vertices.Length), vertices, (BufferUsageHint)usage);
 		}
 
 		public void SetColors(UsageHint usage, params Color[] colors)
@@ -48,7 +55,7 @@ namespace GRaff.Graphics
 		internal void Render(PrimitiveType type, int vertexCount)
 		{
 			GL.BindVertexArray(_array);
-			GL.DrawArrays((OpenTK.Graphics.ES30.PrimitiveType)type, 0, vertexCount);
+			GL.DrawArrays((GLPrimitiveType)type, 0, vertexCount);
 		}
 	}
 }

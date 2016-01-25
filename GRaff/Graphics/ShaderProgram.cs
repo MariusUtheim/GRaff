@@ -1,6 +1,12 @@
 ﻿using System;
 using GRaff.Synchronization;
+#if OpenGL4
+using OpenTK.Graphics.OpenGL4;
+using coords = System.Double;
+#else
 using OpenTK.Graphics.ES30;
+using coords = System.Single;
+#endif
 
 
 namespace GRaff.Graphics
@@ -87,14 +93,10 @@ namespace GRaff.Graphics
 			GL.Uniform1(GL.GetUniformLocation(Id, name), value);
 		}
 
-		protected void SetUniform(string name, float value)
-		{
-			GL.Uniform1(GL.GetUniformLocation(Id, name), value);
-		}
 
 		protected void SetUniform(string name, double value)
 		{
-			GL.Uniform1(GL.GetUniformLocation(Id, name), (float)value);
+			GL.Uniform1(GL.GetUniformLocation(Id, name), (coords)value);
 		}
 
 		public int Id { get; private set; }
