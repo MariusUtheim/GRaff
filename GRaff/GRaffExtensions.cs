@@ -45,6 +45,7 @@ namespace GRaff
 		public static int Integer(this Random rnd, int maxValue)
 		{
 			Contract.Requires<ArgumentNullException>(rnd != null);
+			Contract.Requires<ArgumentNullException>(maxValue >= 0);
 			return rnd.Next(maxValue);
 		}
 
@@ -54,13 +55,15 @@ namespace GRaff
 		/// </summary>
 		/// <param name="rnd">The System.Random to generate the numbers.</param>
 		/// <param name="minValue">The inclusive lower bound of the random number to be generated.</param>
-		/// <param name="maxValue">The exclusive upper bound of the random number to be generated. maxValue must be greater than or equal to minValue.</param>
+		/// <param name="maxValue">The exclusive upper bound of the random number to be generated.</param>
 		/// <returns>An integer greater than or equal to minValue and less than maxValue. If however maxValue and minValue are equal, that value is returned.</returns>
-		/// <exception cref="System.ArgumentOutOfRangeException">minValue is greater than maxValue</exception>
 		public static int Integer(this Random rnd, int minValue, int maxValue)
 		{
 			Contract.Requires<ArgumentNullException>(rnd != null);
-			return rnd.Next(minValue, maxValue);
+			if (minValue <= maxValue)
+				return rnd.Next(minValue, maxValue);
+			else
+				return 1 + rnd.Next(maxValue, minValue);
 		}
 
 
@@ -112,6 +115,7 @@ namespace GRaff
 		public static string String(this Random rnd, int length)
 		{
 			Contract.Requires<ArgumentNullException>(rnd != null);
+			Contract.Requires<ArgumentOutOfRangeException>(length >= 0);
 			StringBuilder stringBuilder = new StringBuilder(length);
 			for (int i = 0; i < length; i++)
 				stringBuilder.Append((char)rnd.Next('A', 'z'));

@@ -6,7 +6,7 @@ namespace GRaff.Particles
 {
 	public class ScaleBehavior : IParticleBehavior 
 	{
-		private IDistribution<double> _xScale, _yScale;
+		private readonly IDistribution<double> _xScale, _yScale;
 
 		public ScaleBehavior(double scale)
 		{
@@ -22,14 +22,15 @@ namespace GRaff.Particles
 
 		public ScaleBehavior(IDistribution<double> scaleDistribution)
 		{
+			Contract.Requires<ArgumentNullException>(scaleDistribution != null);
 			_xScale = scaleDistribution;
 			_yScale = null;
 		}
 		
 		public ScaleBehavior(IDistribution<double> xScaleDistribution, IDistribution<double> yScaleDistribution)
 		{
-			Contract.Requires(xScaleDistribution != null);
-			Contract.Requires(yScaleDistribution != null);
+			Contract.Requires<ArgumentNullException>(xScaleDistribution != null);
+			Contract.Requires<ArgumentNullException>(yScaleDistribution != null);
 			_xScale = xScaleDistribution;
 			_yScale = yScaleDistribution;
 		}

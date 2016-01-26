@@ -14,10 +14,17 @@ namespace GRaff
 
 		protected internal Room(int width, int height)
 		{
+			Contract.Requires<ArgumentOutOfRangeException>(width > 0 && height > 0);
 			this.Width = width;
 			this.Height = height;
 //			Window.Size = this.Size;
 			this.Background = new Background();
+		}
+
+		[ContractInvariantMethod]
+		private void objectInvariants()
+		{
+			Contract.Invariant(Current != null || !Giraffe.IsRunning);
 		}
 
 		public static Room Current { get; private set; }

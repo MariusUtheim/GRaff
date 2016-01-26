@@ -21,6 +21,15 @@ namespace GRaff.Graphics
 			};
 		}
 
+		public static GraphicsPoint[] ToTriangleStrip(this Polygon polygon)
+		{
+			Contract.Requires<ArgumentNullException>(polygon != null);
+			var result = new GraphicsPoint[polygon.Length];
+			for (int i = 0, sign = 1; i < polygon.Length; i++, sign = -sign)
+				result[i] = (GraphicsPoint)polygon.Vertex(i * sign);
+			return result;
+		}
+
 		public static void Bind(this TextureBuffer texture)
 		{
 			Contract.Requires<ArgumentNullException>(texture != null);

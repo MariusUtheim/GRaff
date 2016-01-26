@@ -6,7 +6,7 @@ namespace GRaff.Particles
 	{
 		class LineAttractionProperty : IParticleProperty
 		{
-			private Particles.LineAttractionBehavior _source;
+			private readonly Particles.LineAttractionBehavior _source;
 
 			public LineAttractionProperty(Particles.LineAttractionBehavior source)
 			{

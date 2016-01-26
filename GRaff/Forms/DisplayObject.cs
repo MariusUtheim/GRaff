@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,8 +21,8 @@ namespace GRaff.Forms
 
 		public DisplayObject AddChildFirst(DisplayObject child)
 		{
-			if (this == child || Ancestors.Contains(child))
-				throw new InvalidOperationException("Adding child would create cyclic dependencies.");
+			Contract.Requires<ArgumentNullException>(child != null);
+			Contract.Requires<InvalidOperationException>(child != this && !Ancestors.Contains(child), "Adding child would create cyclic dependencies.");
 			child.RemoveFromParent();
 			_children.AddFirst(child);
 			child.Parent = this;
@@ -30,8 +31,8 @@ namespace GRaff.Forms
 
 		public DisplayObject AddChild(DisplayObject child)
 		{
-			if (this == child || Ancestors.Contains(child))
-				throw new InvalidOperationException("Adding child would create cyclic dependencies.");
+			Contract.Requires<ArgumentNullException>(child != null);
+			Contract.Requires<InvalidOperationException>(child != this && !Ancestors.Contains(child), "Adding child would create cyclic dependencies.");
 			child.RemoveFromParent();
 			_children.AddLast(child._node);
 			child.Parent = this;
@@ -40,7 +41,7 @@ namespace GRaff.Forms
 
 		public DisplayObject RemoveChild(DisplayObject child)
 		{
-			if (child._node.List == _children)
+			if (child != null && child._node.List == _children)
 			{
 				_children.Remove(child._node);
 				child.Parent = null;

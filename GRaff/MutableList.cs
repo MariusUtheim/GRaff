@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace GRaff
 {
+	[System.Diagnostics.Contracts.ContractVerification(false)]
 	internal class GameElementDepthComparer : IComparer<GameElement>
 	{
 		public static readonly GameElementDepthComparer Instance = new GameElementDepthComparer();
@@ -18,6 +19,7 @@ namespace GRaff
 		}
 	}
 
+	[System.Diagnostics.Contracts.ContractVerification(false)]
 	internal class InstanceList : MutableList<GameElement>
 	{
 		public void Sort()

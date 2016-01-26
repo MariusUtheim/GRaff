@@ -4,7 +4,7 @@ namespace GRaff.Particles
 {
 	public class RotatingProperty : IParticleProperty
 	{
-		private Angle _rotation;
+		private readonly Angle _rotation;
 
 		public RotatingProperty(Angle rotation)
 		{

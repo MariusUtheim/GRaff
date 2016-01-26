@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.Contracts;
 using System.Threading;
 
 namespace GRaff.Synchronization
@@ -27,6 +28,7 @@ namespace GRaff.Synchronization
 
 		public void Reject(Exception reason)
 		{
+			Contract.Requires<ArgumentNullException>(reason != null);
 			if (Interlocked.Exchange(ref _isResolved, 1) == 0)
 				_operation.Reject(reason);
 			else
@@ -58,6 +60,7 @@ namespace GRaff.Synchronization
 
 		public void Reject(Exception reason)
 		{
+			Contract.Requires<ArgumentNullException>(reason != null);
 			if (Interlocked.Exchange(ref _isResolved, 1) == 0)
 				_operation.Reject(reason);
 			else

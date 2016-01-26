@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -314,6 +315,9 @@ namespace GRaff.Randomness
 
 		private static void swap<T>(ref T[] src, int i, int j)
 		{
+			Contract.Requires<ArgumentNullException>(src != null);
+			Contract.Requires<ArgumentException>(src.Length > 0);
+
 			T tmp = src[i];
 			src[i] = src[j];
 			src[j] = tmp;

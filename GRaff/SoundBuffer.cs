@@ -11,7 +11,12 @@ namespace GRaff
 
 		public SoundBuffer(int bitrate, int channels, int frequency, byte[] buffer, double offset)
 		{
+			Contract.Requires<ArgumentOutOfRangeException>(bitrate == 8 || bitrate == 16);
+			Contract.Requires<ArgumentOutOfRangeException>(channels == 1 || channels == 2);
+			Contract.Requires<ArgumentOutOfRangeException>(frequency > 0);
 			Contract.Requires<ArgumentNullException>(buffer != null);
+			Contract.Requires<ArgumentException>(buffer.Length > 0);
+
 			IntroId = AL.GenBuffer();
 			MainId = AL.GenBuffer();
 

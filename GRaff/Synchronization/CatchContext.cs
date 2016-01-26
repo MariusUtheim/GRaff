@@ -17,11 +17,9 @@ namespace GRaff.Synchronization
 		{
 			var exceptionType = exception.GetType();
 
-			var query = from pair in _handledTypes
-						  where pair.Key.IsAssignableFrom(exceptionType)
-						  select pair.Value;
-
-			var handler = query.FirstOrDefault();
+			var handler = _handledTypes.Where(pair => pair.Key.IsAssignableFrom(exceptionType))
+									   .Select(pair => pair.Value)
+									   .FirstOrDefault();
 
 			handler?.Invoke(exception);
 			return handler != null;

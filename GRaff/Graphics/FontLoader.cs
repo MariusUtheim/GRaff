@@ -5,6 +5,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using System.IO;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
@@ -131,7 +132,8 @@ namespace GRaff.Graphics
 			}
 			set
 			{
-				string[] padding = value.Split(',');
+				Contract.Assume(value != null);
+				var padding = value.Split(',');
 				_Padding = new IntRectangle(Convert.ToInt32(padding[0]), Convert.ToInt32(padding[1]), Convert.ToInt32(padding[2]), Convert.ToInt32(padding[3]));
 			}
 		}
@@ -146,7 +148,8 @@ namespace GRaff.Graphics
 			}
 			set
 			{
-				string[] spacing = value.Split(',');
+				Contract.Assume(value != null);
+				var spacing = value.Split(',');
 				_Spacing = new IntVector(Convert.ToInt32(spacing[0]), Convert.ToInt32(spacing[1]));
 			}
 		}

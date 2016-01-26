@@ -30,6 +30,13 @@ namespace GRaff.Graphics
 			Contract.Requires<ArgumentException>(buffer.IsLoaded);
 		}
 
+		[ContractInvariantMethod]
+		private void objectInvariants()
+		{
+			Contract.Invariant(TexCoords != null);
+			Contract.Invariant(TexCoords.Length == 4);
+		}
+
 		internal GraphicsPoint[] TexCoords { get; private set; }
 
 		public TextureBuffer Buffer { get; private set; }

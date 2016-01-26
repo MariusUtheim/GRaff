@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -32,7 +33,7 @@ namespace GRaff
 		public Point V3 { get; private set; }
 
 		public double X1 => V1.X;
-		public double Y1 => V1.Y; 
+		public double Y1 => V1.Y;
 		public double X2 => V2.X;
 		public double Y2 => V2.Y;
 		public double X3 => V3.X;
@@ -45,18 +46,24 @@ namespace GRaff
 
 		public static Triangle operator +(Triangle left, Vector right)
 			=> new Triangle(left.V1 + right, left.V2 + right, left.V3 + right);
-		
+
 
 		public static Triangle operator -(Triangle left, Vector right)
-			=> new  Triangle(left.V1 - right, left.V2 - right, left.V3 - right);
-		
+			=> new Triangle(left.V1 - right, left.V2 - right, left.V3 - right);
+
 
 		public static Triangle operator *(LinearMatrix left, Triangle right)
-			=> new Triangle(left * right.V1, left * right.V2, left * right.V3);
-		
+		{
+			Contract.Requires<ArgumentNullException>(left != null);
+			return new Triangle(left * right.V1, left * right.V2, left * right.V3);
+		}
+
 
 		public static Triangle operator *(AffineMatrix left, Triangle right)
-			=> new Triangle(left * right.V1, left * right.V2, left * right.V3);
+		{
+			Contract.Requires<ArgumentNullException>(left != null);
+			return new Triangle(left* right.V1, left* right.V2, left* right.V3);
+		}
 		
 	}
 }

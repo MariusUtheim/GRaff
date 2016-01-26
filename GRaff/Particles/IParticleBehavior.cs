@@ -1,7 +1,11 @@
 ﻿
 
+using System;
+using System.Diagnostics.Contracts;
+
 namespace GRaff.Particles
 {
+	[ContractClass(typeof(ParticleBehaviorContract))]
 	public interface IParticleBehavior
 	{ 
 		/// <summary>
@@ -10,5 +14,14 @@ namespace GRaff.Particles
 		/// <param name="particle">The GRaff.Particle to initialize</param>
 		void AttachTo(Particle particle);
 
+	}
+
+	[ContractClassFor(typeof(IParticleBehavior))]
+	abstract class ParticleBehaviorContract : IParticleBehavior
+	{
+		public void AttachTo(Particle particle)
+		{
+			Contract.Requires(particle != null);
+		}
 	}
 }

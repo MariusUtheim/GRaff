@@ -4,7 +4,7 @@ namespace GRaff.Particles
 {
 	public class ScalingBehavior : IParticleBehavior
 	{
-		private double _xScaleFactor, _yScaleFactor;
+		private readonly double _xScaleFactor, _yScaleFactor;
 
 		public ScalingBehavior(double scaleFactor)
 		{

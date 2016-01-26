@@ -13,7 +13,7 @@ namespace GRaff
 	/// </summary>
 	public sealed class Background : GameElement
 	{
-		private TexturedRenderSystem _renderSystem;
+		private readonly TexturedRenderSystem _renderSystem;
 
 		/// <summary>
 		/// Creates a new instance of the GRaff.Background class with no sprite or color.

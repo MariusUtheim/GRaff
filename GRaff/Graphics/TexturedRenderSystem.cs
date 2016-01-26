@@ -16,33 +16,33 @@ namespace GRaff.Graphics
 {
 	internal class TexturedRenderSystem : IDisposable
 	{
-		private int _array;
-		private int _vertexBuffer, _colorBuffer, _texCoordBuffer;
+		private readonly int _array;
+		private readonly int _vertexBuffer, _colorBuffer, _texCoordBuffer;
 
 		private static Quadrilateral defaultQuadCoords = new Quadrilateral(0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f);
 		private static Quadrilateral defaultTriangleStripCoords = new Quadrilateral(0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f);
 		[StructLayout(LayoutKind.Sequential)]
 		struct Quadrilateral
 		{
-			private coord v1;
-			private coord v2;
-			private coord v3;
-			private coord v4;
-			private coord v5;
-			private coord v6;
-			private coord v7;
-			private coord v8;
+			public readonly coord V1;
+			public readonly coord V2;
+			public readonly coord V3;
+			public readonly coord V4;
+			public readonly coord V5;
+			public readonly coord V6;
+			public readonly coord V7;
+			public readonly coord V8;
 
 			public Quadrilateral(coord v1, coord v2, coord v3, coord v4, coord v5, coord v6, coord v7, coord v8) : this()
 			{
-				this.v1 = v1;
-				this.v2 = v2;
-				this.v3 = v3;
-				this.v4 = v4;
-				this.v5 = v5;
-				this.v6 = v6;
-				this.v7 = v7;
-				this.v8 = v8;
+				this.V1 = v1;
+				this.V2 = v2;
+				this.V3 = v3;
+				this.V4 = v4;
+				this.V5 = v5;
+				this.V6 = v6;
+				this.V7 = v7;
+				this.V8 = v8;
 			}
 		}
 
@@ -93,6 +93,7 @@ namespace GRaff.Graphics
 		public void SetVertices(UsageHint usage, params GraphicsPoint[] vertices)
 		{
 			Contract.Requires<ObjectDisposedException>(!IsDisposed);
+			Contract.Requires<ArgumentNullException>(vertices != null);
 			GL.BindBuffer(BufferTarget.ArrayBuffer, _vertexBuffer);
 			GL.BufferData(BufferTarget.ArrayBuffer, new IntPtr(2 * sizeof(coord) * vertices.Length), vertices, (BufferUsageHint)usage);
 		}
@@ -100,6 +101,7 @@ namespace GRaff.Graphics
 		public void SetVertices(UsageHint usage, params coord[] vertices)
 		{
 			Contract.Requires<ObjectDisposedException>(!IsDisposed);
+			Contract.Requires<ArgumentNullException>(vertices != null);
 			GL.BindBuffer(BufferTarget.ArrayBuffer, _vertexBuffer);
 			GL.BufferData(BufferTarget.ArrayBuffer, new IntPtr(sizeof(coord) * vertices.Length), vertices, (BufferUsageHint)usage);
 		}
@@ -107,6 +109,7 @@ namespace GRaff.Graphics
 		public void SetColors(UsageHint usage, params Color[] colors)
 		{
 			Contract.Requires<ObjectDisposedException>(!IsDisposed);
+			Contract.Requires<ArgumentNullException>(colors != null);
 			GL.BindBuffer(BufferTarget.ArrayBuffer, _colorBuffer);
 			GL.BufferData(BufferTarget.ArrayBuffer, new IntPtr(4 * colors.Length), colors, (BufferUsageHint)usage);
 		}
@@ -114,6 +117,7 @@ namespace GRaff.Graphics
 		public void SetTexCoords(UsageHint usage, params GraphicsPoint[] texCoords)
 		{
 			Contract.Requires<ObjectDisposedException>(!IsDisposed);
+			Contract.Requires<ArgumentNullException>(texCoords != null);
 			GL.BindBuffer(BufferTarget.ArrayBuffer, _texCoordBuffer);
 			GL.BufferData(BufferTarget.ArrayBuffer, new IntPtr(2 * sizeof(coord) * texCoords.Length), texCoords, (BufferUsageHint)usage);
 		}
@@ -121,6 +125,7 @@ namespace GRaff.Graphics
 		public void SetTexCoords(UsageHint usage, params coord[] texCoords)
 		{
 			Contract.Requires<ObjectDisposedException>(!IsDisposed);
+			Contract.Requires<ArgumentNullException>(texCoords != null);
 			GL.BindBuffer(BufferTarget.ArrayBuffer, _texCoordBuffer);
 			GL.BufferData(BufferTarget.ArrayBuffer, new IntPtr(sizeof(coord) * texCoords.Length), texCoords, (BufferUsageHint)usage);
 		}

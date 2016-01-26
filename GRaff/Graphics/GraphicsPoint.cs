@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.Contracts;
 using System.Runtime.InteropServices;
 #if OpenGL4
 using coord = System.Double;
@@ -42,7 +43,7 @@ namespace GRaff.Graphics
 		public coord Yt => _y;
 
 		public static GraphicsPoint operator *(AffineMatrix m, GraphicsPoint p)
-			=> new GraphicsPoint(m.M00 * p.X + m.M01 * p.Y + m.M02, m.M10 * p.X + m.M11 * p.Y + m.M12);
+			=> m == null ? GraphicsPoint.Zero : new GraphicsPoint(m.M00 * p.X + m.M01 * p.Y + m.M02, m.M10 * p.X + m.M11 * p.Y + m.M12);
 
 
 		public static GraphicsPoint operator *(double left, GraphicsPoint right)

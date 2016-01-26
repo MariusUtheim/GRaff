@@ -2,12 +2,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Diagnostics.Contracts;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace GRaff
 {
+	[ContractVerification(false)]
 	class RedBlackTree : ICollection<GameElement>
 	{
 		
@@ -52,11 +53,13 @@ namespace GRaff
 
 		public bool Remove(GameElement item)
 		{
+			if (item == null)
+				return false;
+
 			var node = _root?.Find(item);
 
 			if (node == null)
 				return false;
-
 
 			if (_root.IsLeaf)
 			{
@@ -406,12 +409,7 @@ namespace GRaff
 			_rightChild?.AssertStructure(_color == Red, ref rightCount);
 
 			if (leftCount != rightCount)
-			{
-				var str = Trace();
-			}
-			Debug.Assert(leftCount == rightCount);
-
-			i = leftCount + (_color == Black ? 1 : 0);
+				Console.WriteLine(Trace());
 		}
 
 		internal string Trace(int depth = 0)

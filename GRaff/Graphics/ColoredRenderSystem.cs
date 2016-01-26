@@ -15,8 +15,8 @@ namespace GRaff.Graphics
 {
 	internal class ColoredRenderSystem : IDisposable
 	{
-		private int _array;
-		private int _vertexBuffer, _colorBuffer;
+		private readonly int _array;
+		private readonly int _vertexBuffer, _colorBuffer;
 
 		public ColoredRenderSystem()
 		{
@@ -54,11 +54,12 @@ namespace GRaff.Graphics
 			IsDisposed = true;
 		}
 
-		public bool IsDisposed { get; private set; } = false;
+		public bool IsDisposed { get; private set; }
 
 		public void SetVertices(UsageHint usage, params GraphicsPoint[] vertices)
 		{
 			Contract.Requires<ObjectDisposedException>(!IsDisposed);
+			Contract.Requires<ArgumentNullException>(vertices != null);
 			GL.BindBuffer(BufferTarget.ArrayBuffer, _vertexBuffer);
 			GL.BufferData(BufferTarget.ArrayBuffer, new IntPtr(2 * sizeof(coord) * vertices.Length), vertices, (BufferUsageHint)usage);
 		}
@@ -66,6 +67,7 @@ namespace GRaff.Graphics
 		public void SetVertices(UsageHint usage, params coord[] vertices)
 		{
 			Contract.Requires<ObjectDisposedException>(!IsDisposed);
+			Contract.Requires<ArgumentNullException>(vertices != null);
 			GL.BindBuffer(BufferTarget.ArrayBuffer, _vertexBuffer);
 			GL.BufferData(BufferTarget.ArrayBuffer, new IntPtr(sizeof(coord) * vertices.Length), vertices, (BufferUsageHint)usage);
 		}
@@ -73,6 +75,7 @@ namespace GRaff.Graphics
 		public void SetColors(UsageHint usage, params Color[] colors)
 		{
 			Contract.Requires<ObjectDisposedException>(!IsDisposed);
+			Contract.Requires<ArgumentNullException>(colors != null);
 			GL.BindBuffer(BufferTarget.ArrayBuffer, _colorBuffer);
 			GL.BufferData(BufferTarget.ArrayBuffer, new IntPtr(4 * colors.Length), colors, (BufferUsageHint)usage);
 		}

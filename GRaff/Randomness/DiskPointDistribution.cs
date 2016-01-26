@@ -5,11 +5,14 @@ namespace GRaff.Randomness
 {
 	public class DiskPointDistribution : IDistribution<Point>
 	{
-		private Random _rnd;
-		private RadialDistribution _radius;
+		private readonly Random _rnd;
+		private readonly RadialDistribution _radius;
 
 		public DiskPointDistribution(Point center, double radius)
-			: this(GRandom.Source, center, 0, radius) { }
+			: this(GRandom.Source, center, 1, radius)
+		{
+			Contract.Requires<ArgumentOutOfRangeException>(radius >= 0);
+		}
 
 		public DiskPointDistribution(Point center, double innerRadius, double outerRadius)
 			: this(GRandom.Source, center, innerRadius, outerRadius)

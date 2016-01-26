@@ -1,5 +1,5 @@
 ﻿using System;
-
+using System.Diagnostics.Contracts;
 
 namespace GRaff.Graphics
 {
@@ -10,6 +10,7 @@ namespace GRaff.Graphics
 
 		public ShaderProgramContext(ShaderProgram program)
 		{
+			Contract.Requires<ArgumentNullException>(program != null);
 			_previous = ShaderProgram.GetCurrentId();
 			program.SetCurrent();
 		}

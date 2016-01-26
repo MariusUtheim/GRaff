@@ -62,6 +62,9 @@ namespace GRaff.Synchronization
 
 		private static Action<double> _setter<TValue>(Expression<Func<TValue>> property, Func<double, TValue, TValue> setter)
 		{
+			Contract.Requires<ArgumentNullException>(property != null);
+			Contract.Requires<ArgumentNullException>(setter != null);
+
 			var expression = (MemberExpression)property.Body;
 
 			object target;

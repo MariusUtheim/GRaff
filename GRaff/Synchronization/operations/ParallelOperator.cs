@@ -10,8 +10,8 @@ namespace GRaff.Synchronization
 	internal class ParallelOperator : IAsyncOperator
 	{
 		private Task<AsyncOperationResult> _task;
-		private Func<object, Task<object>> _action;
-		private CancellationTokenSource _cancellation = new CancellationTokenSource();
+		private readonly Func<object, Task<object>> _action;
+		private readonly CancellationTokenSource _cancellation = new CancellationTokenSource();
 		private int _awaitsResolution = 1;
 
 		public ParallelOperator(Func<object, Task<object>> action)

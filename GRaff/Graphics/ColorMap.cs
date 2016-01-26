@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.Contracts;
 #if OpenGL4
 using OpenTK.Graphics.OpenGL4;
 #else
@@ -19,6 +20,7 @@ namespace GRaff.Graphics
 
 			set
 			{
+				Contract.Requires<ArgumentNullException>(value != null);
 				GL.BlendFunc((BlendingFactorSrc)value.SourceFactor, (BlendingFactorDest)value.DestinationFactor);
 				GL.BlendEquation((BlendEquationMode)value.Equation);
 			}

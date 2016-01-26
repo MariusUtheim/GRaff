@@ -6,7 +6,7 @@ namespace GRaff.Particles
 	{
 		class PointAttractionProperty : IParticleProperty
 		{
-			private Particles.PointAttractionBehavior _source;
+			private readonly Particles.PointAttractionBehavior _source;
 
 			public PointAttractionProperty(Particles.PointAttractionBehavior source)
 			{

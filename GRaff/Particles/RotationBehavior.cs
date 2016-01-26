@@ -6,7 +6,7 @@ namespace GRaff.Particles
 {
 	public class RotationBehavior : IParticleBehavior
 	{
-		private IDistribution<Angle> _direction; 
+		private readonly IDistribution<Angle> _direction; 
 
 		public RotationBehavior()
 			: this(new AngleDistribution())
@@ -15,7 +15,7 @@ namespace GRaff.Particles
 
 		public RotationBehavior(IDistribution<Angle> initialDirection)
 		{
-			Contract.Requires(initialDirection != null);
+			Contract.Requires<ArgumentNullException>(initialDirection != null);
 			_direction = initialDirection;
 		}
 

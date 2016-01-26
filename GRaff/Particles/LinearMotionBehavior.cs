@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.Contracts;
 using GRaff.Randomness;
 
 
@@ -13,7 +14,10 @@ namespace GRaff.Particles
 		{ }
 
 		public LinearMotionBehavior(double minSpeed, double maxSpeed)
-			: this(new VectorDistribution(GRandom.Source, minSpeed, maxSpeed)) { }
+			: this(new VectorDistribution(GRandom.Source, minSpeed, maxSpeed))
+		{
+			Contract.Requires<ArgumentOutOfRangeException>(minSpeed >= 0 && maxSpeed >= minSpeed);
+		}
 
 		public LinearMotionBehavior(Vector velocity)
 			: this(new ConstantDistribution<Vector>(velocity))
@@ -21,6 +25,7 @@ namespace GRaff.Particles
 
 		public LinearMotionBehavior(IDistribution<Vector> distribution)
 		{
+			Contract.Requires<ArgumentNullException>(distribution != null);
 			this._velocity = distribution;
 		}
 
@@ -33,8 +38,7 @@ namespace GRaff.Particles
 
 			set
 			{
-				if (value == null)
-					throw new ArgumentNullException("value");
+				Contract.Requires<ArgumentNullException>(value != null);
 				_velocity = value;
 			}
 		}

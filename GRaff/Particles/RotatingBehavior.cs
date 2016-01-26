@@ -10,7 +10,7 @@ namespace GRaff.Particles
 {
 	public class RotatingBehavior : IParticleBehavior
 	{
-		private IDistribution<Angle> _rotation;
+		private readonly IDistribution<Angle> _rotation;
 
 		public RotatingBehavior(Angle rotation)
 			: this(new ConstantDistribution<Angle>(rotation))
@@ -22,7 +22,7 @@ namespace GRaff.Particles
 
 		public RotatingBehavior(IDistribution<Angle> rotation)
 		{
-			Contract.Requires(rotation != null);
+			Contract.Requires<ArgumentNullException>(rotation != null);
 			_rotation = rotation;
 		}
 

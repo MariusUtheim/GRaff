@@ -21,7 +21,7 @@ namespace GRaff
 
 		private Polygon()
 		{
-			_pts = new Point[1];
+			Contract.Assume(_pts != null);
 			return;	// Used to create Polygon in an efficient way without doing sanity checks
 		}
 
@@ -29,12 +29,13 @@ namespace GRaff
 			: this(pts.ToArray())
 		{
 			Contract.Requires<ArgumentNullException>(pts != null);
+			Contract.Requires<ArgumentException>(pts.Count() > 0);
 		}
 
 		public Polygon(params Point[] pts)
 		{
 			Contract.Requires<ArgumentNullException>(pts != null);
-			Contract.Requires<ArgumentException>(pts.Length > 0);
+			Contract.Requires<ArgumentException>(pts.Count() > 0);
 			_pts = pts.ToArray();
 			_SanityCheck();
 		}
@@ -163,13 +164,14 @@ namespace GRaff
 		/// </summary>
 		public int Length => _pts.Length;
 
+		public Point Center => _pts.Aggregate((p, q) => p + q) / _pts.Length;
+
 		public Point Vertex(int index)
 			=> _pts[(index % _pts.Length + _pts.Length) % _pts.Length];
 
 
 		public Line Edge(int index)
 			=> checked(new Line(Vertex(index), Vertex(index + 1)));
-			
 
 		public IEnumerable<Point> Vertices
 			=> Array.AsReadOnly(_pts);

@@ -20,8 +20,8 @@ namespace GRaff.Graphics
 		private static readonly int sizeofPoint = Marshal.SizeOf(typeof(GraphicsPoint)), sizeofColor = Marshal.SizeOf(typeof(Color));
 		private static readonly Color[] white4 = { Colors.White, Colors.White, Colors.White, Colors.White };
 		private static readonly GraphicsPoint[] defaultTexCoords = { new GraphicsPoint(0.0, 0.0), new GraphicsPoint(1.0, 0.0), new GraphicsPoint(0.0, 1.0), new GraphicsPoint(1.0, 1.0)};
-		private int _vertexArray;
-		private int _vertexBuffer, _colorBuffer, _textureBuffer;
+		private readonly int _vertexArray;
+		private readonly int _vertexBuffer, _colorBuffer, _textureBuffer;
 
 		public Surface(int width, int height)
 		{
@@ -76,6 +76,8 @@ namespace GRaff.Graphics
 
 		private void Render(GraphicsPoint[] vertices, Color[] colors, PrimitiveType type)
 		{
+			Contract.Requires(vertices != null && colors != null);
+			Contract.Requires(vertices.Length == colors.Length);
 			ShaderProgram.CurrentColored.SetCurrent();
 			GL.BindVertexArray(_vertexArray);
 			GL.BindBuffer(BufferTarget.ArrayBuffer, _vertexBuffer);
@@ -87,6 +89,8 @@ namespace GRaff.Graphics
 
 		internal void RenderTextured(Texture texture, GraphicsPoint[] vertices, Color[] colors, PrimitiveType type)
 		{
+			Contract.Requires(texture != null && vertices != null && colors != null);
+			Contract.Requires(vertices.Length == colors.Length);
 			GL.BindVertexArray(_vertexArray);
 			texture.Bind();
 
@@ -107,6 +111,8 @@ namespace GRaff.Graphics
 
 		internal void DrawPrimitive(GraphicsPoint[] vertices, Color[] colors, PrimitiveType type)
 		{
+			Contract.Requires(vertices != null && colors != null);
+			Contract.Requires(vertices.Length == colors.Length);
 			Render(vertices, colors, type);
 		}
 
