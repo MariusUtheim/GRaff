@@ -116,11 +116,14 @@
     <Compile Include="Graphics\TextRenderer.cs" />
     <Compile Include="Pathfinding\Edge.cs" />
     <Compile Include="Pathfinding\Graph.cs" />
+    <Compile Include="Pathfinding\GraphExtensions.cs" />
     <Compile Include="Pathfinding\Grid.cs" />
+    <Compile Include="Pathfinding\GridEdge.cs" />
     <Compile Include="Pathfinding\IEdge.cs" />
     <Compile Include="Pathfinding\IGraph.cs" />
     <Compile Include="Pathfinding\IVertex.cs" />
     <Compile Include="Pathfinding\Path.cs" />
+    <Compile Include="Pathfinding\GridVertex.cs" />
     <Compile Include="Pathfinding\Vertex.cs" />
     <Compile Include="Randomness\Statistics.cs" />
     <Compile Include="RedBlackTree.cs" />

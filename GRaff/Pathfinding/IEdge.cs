@@ -3,44 +3,55 @@ using System.Diagnostics.Contracts;
 
 namespace GRaff.Pathfinding
 {
-	[ContractClass(typeof(EdgeContract))]
-	public interface IEdge
+	[ContractClass(typeof(EdgeContract<,>))]
+	public interface IEdge<out TVertex, out TEdge>
+		where TVertex : IVertex<TVertex, TEdge>
+		where TEdge : IEdge<TVertex, TEdge>
 	{
-		IGraph<IVertex, IEdge> Owner { get; }
-		bool IsDirected { get; }
-		IVertex Vertex1 { get; }
-		IVertex Vertex2 { get; }
+		IGraph<TVertex, TEdge> Graph { get; }
+		TVertex From { get; }
+		TVertex To { get; }
+		double Weight { get; }
 	}
 
-	[ContractClassFor(typeof(IEdge))]
-	abstract class EdgeContract : IEdge
+	[ContractClassFor(typeof(IEdge<,>))]
+	abstract class EdgeContract<TVertex, TEdge> : IEdge<TVertex, TEdge>
+		where TVertex : IVertex<TVertex, TEdge>
+		where TEdge : IEdge<TVertex, TEdge>
 	{
-		public IGraph<IVertex, IEdge> Owner
+		public IGraph<TVertex, TEdge> Graph
 		{
 			get
 			{
-				Contract.Ensures(Contract.Result<IGraph<IVertex, IEdge>>() != null);
-				return default(IGraph<IVertex, IEdge>);
+				Contract.Ensures(Contract.Result<IGraph<TVertex, TEdge>>() != null);
+				return default(IGraph<TVertex, TEdge>);
 			}
 		}
 
-		public bool IsDirected => default(bool);
-
-		public IVertex Vertex1
+		public TVertex From
 		{
 			get
 			{
-				Contract.Ensures(Contract.Result<IVertex>() != null);
-				return default(IVertex);
+				Contract.Ensures(Contract.Result<TVertex>() != null);
+				return default(TVertex);
 			}
 		}
 
-		public IVertex Vertex2
+		public TVertex To
 		{
 			get
 			{
-				Contract.Ensures(Contract.Result<IVertex>() != null);
-				return default(IVertex);
+				Contract.Ensures(Contract.Result<TVertex>() != null);
+				return default(TVertex);
+			}
+		}
+
+		public double Weight
+		{
+			get
+			{
+				Contract.Ensures(Contract.Result<double>() >= 0);
+				return default(double);
 			}
 		}
 	}

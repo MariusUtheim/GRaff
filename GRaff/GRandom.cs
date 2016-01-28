@@ -20,6 +20,12 @@ namespace GRaff
 		public static Random Source => _rnd;
 
 		/// <summary>
+		/// Returns true or false with a equal probability.
+		/// </summary>
+		/// <returns>A boolean value.</returns>
+		public static bool Boolean() { lock (_rnd) return _rnd.Boolean(); }
+
+		/// <summary>
 		/// Returns a nonnegative random number.
 		/// </summary>
 		/// <returns>An integer greater than or equal to zero and less than System.Int32.MaxValue.</returns>

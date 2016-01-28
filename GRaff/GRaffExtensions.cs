@@ -11,13 +11,13 @@ namespace GRaff
 {
 	public static class GRaffExtensions
 	{
-		internal static T ArgMin<T>(this IEnumerable<T> enumerable, Func<T, int> selector)
+		internal static T ArgMin<T>(this IEnumerable<T> enumerable, Func<T, double> selector)
 		{
-			T min = default(T);
-			int value = Int32.MaxValue;
+			var min = default(T);
+			var value = System.Double.PositiveInfinity;
 			foreach (var v in enumerable)
 			{
-				int currentValue = selector(v);
+				var currentValue = selector(v);
 				if (currentValue < value)
 				{
 					min = v;
@@ -40,6 +40,17 @@ namespace GRaff
 		}
 
 		#region Random functions
+		
+		/// <summary>
+		/// Returns true or false with equal probability.
+		/// </summary>
+		/// <param name="rnd">The System.Random to generate the boolean value.</param>
+		/// <returns>A boolean value.</returns>
+		public static bool Boolean(this Random rnd)
+		{
+			Contract.Requires<ArgumentNullException>(rnd != null);
+			return rnd.Next() % 2 == 0;
+		}
 
 		/// <summary>
 		/// Returns a nonnegative random number.

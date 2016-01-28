@@ -5,25 +5,25 @@ using System.Linq;
 
 namespace GRaff.Pathfinding
 {
-	public class Vertex : IVertex
+	public class Vertex : IVertex<Vertex, Edge>
 	{
 		internal readonly List<Edge> edges = new List<Edge>();
 
-		public Vertex(Graph owner)
+		public Vertex(IGraph<Vertex, Edge> graph)
 		{
-			Contract.Requires<ArgumentNullException>(owner != null);
-			this.Owner = owner;
+			Contract.Requires<ArgumentNullException>(graph != null);
+			this.Graph = graph;
 		}
 
-		public Graph Owner { get; }
+		public IGraph<Vertex, Edge> Graph { get; }
 
-		public bool IsConnectedTo(IVertex other)
-			=> Edges.Any(e => (e.Vertex1 == this && e.Vertex2 == other) || (e.Vertex1 == other && e.Vertex2 == this));
+		public bool IsConnectedTo(Vertex other)
+			=> Edges.Any(e => e.To == other);
+
+		public double HeuristicDistance(Vertex other) => 0;
 
 		public IEnumerable<Edge> Edges => edges.AsReadOnly();
 
-		IGraph<IVertex, IEdge> IVertex.Owner => Owner;
-
-		IEnumerable<IEdge> IVertex.Edges => Edges;
+	//	IEnumerable<Edge> Vertex.Edges => Edges;
 	}
 }

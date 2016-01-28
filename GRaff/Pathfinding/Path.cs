@@ -5,7 +5,9 @@ using System.Linq;
 
 namespace GRaff.Pathfinding
 {
-	public class Path<TVertex> where TVertex : IVertex
+	public class Path<TVertex, TEdge> 
+		where TVertex : IVertex<TVertex, TEdge>
+		where TEdge : IEdge<TVertex, TEdge>
 	{
 		private TVertex[] _vertices;
 

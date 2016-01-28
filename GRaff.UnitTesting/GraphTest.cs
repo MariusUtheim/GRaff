@@ -2,6 +2,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using GRaff.Pathfinding;
 using System.Linq;
+using GRaff;
 
 namespace GameMaker.UnitTesting
 {
@@ -28,16 +29,6 @@ namespace GameMaker.UnitTesting
 
 		[TestMethod]
 		[ExpectedException(typeof(ArgumentException))]
-		public void Graph_AdjacencyRequiresSymmetry()
-		{
-			new Graph(new[,] {
-				{ false, true },
-                { false, false }
-			});
-		}
-
-		[TestMethod]
-		[ExpectedException(typeof(ArgumentException))]
 		public void Graph_AdjacencyRequiresFalseDiagonal()
 		{
 			new Graph(new[,] {
@@ -54,6 +45,38 @@ namespace GameMaker.UnitTesting
 				{ false, true, false },
 				{ true, false, false }
 			});
+		}
+
+		[TestMethod]
+		public void Graph_DetectDirectedness()
+		{
+			const int length = 20;
+			bool[,] matrix;
+			Graph graph;
+
+			matrix = new bool[length, length];
+			for (var i = 0; i < length; i++)
+			{
+				matrix[i, i] = false;
+				for (var j = i + 1; j < length; j++)
+				{
+					matrix[i, j] = GRandom.Boolean();
+					matrix[j, i] = (j + i) % 2 == 0;
+				}
+			}
+			graph = new Graph(matrix);
+			Assert.IsTrue(graph.IsDirected);
+
+
+			matrix = new bool[length, length];
+			for (var i = 0; i < length; i++)
+			{
+				matrix[i, i] = false;
+				for (var j = i + 1; j < length; j++)
+					matrix[i, j] = matrix[j, i] = GRandom.Boolean();
+			}
+			graph = new Graph(matrix);
+			Assert.IsFalse(graph.IsDirected);
 		}
 
 		[TestMethod]

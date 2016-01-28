@@ -4,40 +4,40 @@ using System.Diagnostics.Contracts;
 
 namespace GRaff.Pathfinding
 {
-	[ContractClass(typeof(VertexContract))]
-	public interface IVertex
+	[ContractClass(typeof(VertexContract<,>))]
+	public interface IVertex<TVertex, TEdge>
+		where TVertex : IVertex<TVertex, TEdge>
+		where TEdge : IEdge<TVertex, TEdge>
 	{
-		IGraph<IVertex, IEdge> Owner { get; }
-		bool IsConnectedTo(IVertex other);
-		IEnumerable<IEdge> Edges { get; }
+		IGraph<TVertex, TEdge> Graph { get; }
+		bool IsConnectedTo(TVertex other);
+		IEnumerable<TEdge> Edges { get; }
+
 	}
 
-	[ContractClassFor(typeof(IVertex))]
-	abstract class VertexContract : IVertex
+	[ContractClassFor(typeof(IVertex<,>))]
+	abstract class VertexContract<TVertex, TEdge> : IVertex<TVertex, TEdge>
+		where TVertex : IVertex<TVertex, TEdge>
+		where TEdge : IEdge<TVertex, TEdge>
 	{
-		public IEnumerable<IEdge> Edges
+		public IEnumerable<TEdge> Edges
 		{
 			get
 			{
-				Contract.Ensures(Contract.ForAll(Contract.Result<IEnumerable<IEdge>>(), e => e != null));
-				return default(IEnumerable<IEdge>);
+				Contract.Ensures(Contract.ForAll(Contract.Result<IEnumerable<TEdge>>(), e => e != null));
+				return default(IEnumerable<TEdge>);
 			}
 		}
 
-		public IGraph<IVertex, IEdge> Owner
+		public IGraph<TVertex, TEdge> Graph
 		{
 			get
 			{
-				Contract.Ensures(Contract.Result<IGraph<IVertex, IEdge>>() != null);
-				return default(IGraph<IVertex, IEdge>);
+				Contract.Ensures(Contract.Result<IGraph<TVertex, TEdge>>() != null);
+				return default(IGraph<TVertex, TEdge>);
 			}
 		}
 
-		public bool IsConnectedTo(IVertex other)
-		{
-			Contract.Requires<ArgumentNullException>(other != null);
-			Contract.Requires<ArgumentException>(Owner == other.Owner);
-			return default(bool);
-		}
+		public bool IsConnectedTo(TVertex other) => default(bool);
 	}
 }
