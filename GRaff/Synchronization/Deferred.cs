@@ -7,7 +7,7 @@ namespace GRaff.Synchronization
 	public class Deferred
 	{
 		private int _isResolved = 0;
-		private AsyncOperation _operation;
+		private readonly AsyncOperation _operation;
 
 		public Deferred()
 		{
@@ -39,14 +39,9 @@ namespace GRaff.Synchronization
 	public class Deferred<TPass>
 	{
 		private int _isResolved = 0;
-		private AsyncOperation<TPass> _operation;
-
-		public Deferred()
-		{
-			_operation = new AsyncOperation<TPass>();
-		}
-
-		public IAsyncOperation<TPass> Operation { get { return _operation; } }
+		private readonly AsyncOperation<TPass> _operation = new AsyncOperation<TPass>();
+		
+		public IAsyncOperation<TPass> Operation => _operation;
 
 		public bool IsResolved { get { return _isResolved == 1; } }
 

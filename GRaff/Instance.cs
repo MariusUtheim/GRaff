@@ -10,7 +10,7 @@ namespace GRaff
 {
     public static class Instance
     {
-		private static InstanceList _elements = new InstanceList();
+		private static readonly InstanceList _elements = new InstanceList();
 
 		internal static bool NeedsSort { get; set; }
 
@@ -26,7 +26,7 @@ namespace GRaff
 			return instance;
 		}
 
-		public static void Remove(GameElement instance)
+		internal static void Remove(GameElement instance)
 		{
 			_elements.Remove(instance);
 		}

@@ -6,7 +6,7 @@ namespace GRaff.Synchronization
 	internal class SerialOperator : IAsyncOperator
 	{
 		private AsyncEventArgs _actionHandle;
-		private Func<object, object> _action;
+		private readonly Func<object, object> _action;
 		private AsyncOperationResult _result;
 
 		internal SerialOperator(Func<object, object> action)

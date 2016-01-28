@@ -9,7 +9,6 @@ namespace GRaff.Graphics
 	public sealed class TextRenderer
 	{
 		private static readonly Regex NewlineRegex = new Regex("\r\n|\n");
-		private int lengthOfSpace;
 		
 		public TextRenderer(Font font, FontAlignment alignment = FontAlignment.TopLeft, int width = Int32.MaxValue)
 			: this(font, alignment, width, font.Height)
@@ -24,7 +23,6 @@ namespace GRaff.Graphics
 			this.Alignment = alignment;
 			this.Width = width;
 			this.LineSeparation = lineSeparation;
-			lengthOfSpace = GetWidth(" ");
 		}
 
 		[ContractInvariantMethod]
@@ -41,12 +39,16 @@ namespace GRaff.Graphics
 
 		public FontAlignment Alignment { get; set; } = FontAlignment.TopLeft;
 
+		public int LengthOfSpace => GetWidth(" ");
+
 		private string _multilineFormat(string text)
 		{
+			Contract.Assume(text != null);
 			var words = text.Split(' ');
 			var multilineFormat = new StringBuilder(text.Length);
 			var currentLine = new StringBuilder(words[0]);
 			var currentLineLength = GetWidth(words[0]);
+			var lengthOfSpace = LengthOfSpace;
 
 			var lengths = words.Select(word => GetWidth(word));
 
@@ -85,6 +87,7 @@ namespace GRaff.Graphics
 
 		public string Truncate(string text)
 		{
+			Contract.Requires<InvalidOperationException>(Font.IsLoaded);
 			if (text == null)
 				return "";
 
@@ -110,8 +113,11 @@ namespace GRaff.Graphics
 			return text;
 		}
 
-		public int GetWidth(string text) => Font.GetWidth(text);
-
+		public int GetWidth(string text)
+		{
+			Contract.Assert(Font.IsLoaded);
+			return Font.GetWidth(text);
+		}
 
 
 		internal string[] RenderCoords(string text, out GraphicsPoint[] quadCoords)

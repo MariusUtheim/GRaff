@@ -24,6 +24,7 @@ namespace GRaff
 		public static double Ceiling(double d)
 		{
 			Contract.Ensures(Contract.Result<double>() >= d);
+			Contract.Assume(Math.Ceiling(d) >= d);
 			return Math.Ceiling(d);
 		}
 		

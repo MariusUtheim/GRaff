@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.Contracts;
 
 namespace GRaff
 {
@@ -133,7 +134,11 @@ namespace GRaff
 		public static Point Median(Point x1, Point x2, Point x3) => new Point(Median(x1.X, x2.X, x3.X), Median(x1.Y, x2.Y, x3.Y));
 		public static Vector Median(Vector x1, Vector x2, Vector x3) => new Vector(Median(x1.X, x2.X, x3.X), Median(x1.Y, x2.Y, x3.Y));
 
-		public static int Remainder(int x, int q) => ((x % q) + q) % q;
+		public static int Remainder(int x, int q)
+		{
+			Contract.Requires(q != 0);
+			return ((x % q) + q) % q;
+		}
 
 		public static double Remainder(double x, double q) => ((x % q) + q) % q;
 

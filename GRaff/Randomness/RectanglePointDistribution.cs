@@ -1,20 +1,18 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Diagnostics.Contracts;
 
 namespace GRaff.Randomness
 {
 	public sealed class RectanglePointDistribution : IDistribution<Point>
 	{
-		Random _rnd;
+		private readonly Random _rnd;
 
 		public RectanglePointDistribution(Rectangle region)
 			: this(GRandom.Source, region) { }
 
 		public RectanglePointDistribution(Random rnd, Rectangle region)
 		{
+			Contract.Requires<ArgumentNullException>(rnd != null);
 			_rnd = rnd;
 			Region = region;
 		}

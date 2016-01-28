@@ -15,8 +15,8 @@ namespace GRaff.Graphics
 		internal Texture(TextureBuffer buffer, GraphicsPoint topLeft, GraphicsPoint topRight, GraphicsPoint bottomLeft, GraphicsPoint bottomRight)
 		{
 			Contract.Requires<ArgumentNullException>(buffer != null);
-			Buffer = buffer;
 			TexCoords = new[] { topLeft, topRight, bottomLeft, bottomRight };
+			Buffer = buffer;
 		}
 
 		public Texture(TextureBuffer buffer, Rectangle region)
@@ -35,11 +35,12 @@ namespace GRaff.Graphics
 		{
 			Contract.Invariant(TexCoords != null);
 			Contract.Invariant(TexCoords.Length == 4);
+			Contract.Invariant(Buffer != null);
 		}
 
-		internal GraphicsPoint[] TexCoords { get; private set; }
+		internal GraphicsPoint[] TexCoords { get; }
 
-		public TextureBuffer Buffer { get; private set; }
+		public TextureBuffer Buffer { get; }
 
 		public GraphicsPoint TopLeft => TexCoords[0];
 		

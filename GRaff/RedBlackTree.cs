@@ -8,7 +8,7 @@ using System.Linq;
 
 namespace GRaff
 {
-	[ContractVerification(false)]
+
 	class RedBlackTree : ICollection<GameElement>
 	{
 		

@@ -217,6 +217,7 @@ namespace GRaff.Randomness
 
 		private static string _buildRequest(string method, Dictionary<string, object> args)
 		{
+			Contract.Requires(args != null);
 			StringBuilder str = new StringBuilder();
 			str.Append("{\"jsonrpc\":\"2.0\",");
 			str.AppendFormat("\"method\":\"{0}\",", method);

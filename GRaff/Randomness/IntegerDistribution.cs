@@ -11,10 +11,10 @@ namespace GRaff.Randomness
 		public IntegerDistribution(int firstValueInclusive, int secondValueExclusive)
 			: this(GRandom.Source, firstValueInclusive, secondValueExclusive) { }
 
-		public IntegerDistribution(Random rng, int firstValueInclusive, int secondValueExclusive)
+		public IntegerDistribution(Random rnd, int firstValueInclusive, int secondValueExclusive)
 		{
-			Contract.Requires<ArgumentNullException>(rng != null);
-			_rnd = rng;
+			Contract.Requires<ArgumentNullException>(rnd != null);
+			_rnd = rnd;
 			_firstValueInclusive = firstValueInclusive;
 			_secondValueExclusive = secondValueExclusive;
 		}

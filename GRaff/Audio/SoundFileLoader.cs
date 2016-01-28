@@ -19,10 +19,10 @@ namespace GRaff.Audio
 				Frequency = frequency;
 				Buffer = buffer;
 			}
-			public int Bitrate;
-			public int Channels;
-			public int Frequency;
-			public byte[] Buffer;
+			public readonly int Bitrate;
+			public readonly int Channels;
+			public readonly int Frequency;
+			public readonly byte[] Buffer;
 		}
 
 		public static SoundFile Load(string fileName)

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.Contracts;
 using GRaff.Synchronization;
 #if OpenGL4
 using OpenTK.Graphics.OpenGL4;
@@ -24,6 +25,7 @@ namespace GRaff.Graphics
 
 		public ShaderProgram(params Shader[] shaders)
 		{
+			Contract.Requires<ArgumentNullException>(shaders != null);
 			Id = GL.CreateProgram();
 
 			foreach (var shader in shaders)

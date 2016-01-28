@@ -1,8 +1,8 @@
-﻿#if OpenGL4
+﻿using System;
+using System.Diagnostics.Contracts;
+#if OpenGL4
 using OpenTK.Graphics.OpenGL4;
 #else
-using System;
-using System.Diagnostics.Contracts;
 using OpenTK.Graphics.ES30;
 #endif
 

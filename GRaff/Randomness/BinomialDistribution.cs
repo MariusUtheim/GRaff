@@ -5,8 +5,8 @@ namespace GRaff.Randomness
 {
 	public sealed class BinomialDistribution : IDistribution<int>
 	{
-		private Random _rnd;
-		private double[] _cdf;
+		private readonly Random _rnd;
+		private readonly double[] _cdf;
 
 		public BinomialDistribution(int trials, double probability)
 			: this(GRandom.Source, trials, probability)

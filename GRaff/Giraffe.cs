@@ -74,12 +74,12 @@ namespace GRaff
 				Graphics._Initializer.Initialize();
 				Audio._Initializer.Initialize();
 				Window.VSync = VSyncMode.On;
-				IsRunning = true; 
 
 				var initialRoom = new Room(windowWidth, windowHeight);
 				initialRoom._Enter();
 			//	Background.Initialize();
 
+				IsRunning = true; 
 
 				/// ANY DEVELOPER LOGIC MAY COME AFTER THIS POINT
 				if (gameStart != null)

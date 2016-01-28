@@ -6,7 +6,7 @@ namespace GRaff.Synchronization
 {
 	internal class CatchContext
 	{
-		List<KeyValuePair<Type, Action<Exception>>> _handledTypes = new List<KeyValuePair<Type, Action<Exception>>>();
+		readonly List<KeyValuePair<Type, Action<Exception>>> _handledTypes = new List<KeyValuePair<Type, Action<Exception>>>();
 
 		public void Catch<TException>(Action<TException> catchHandler) where TException : Exception
 		{

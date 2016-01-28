@@ -317,6 +317,7 @@ namespace GRaff.Randomness
 		{
 			Contract.Requires<ArgumentNullException>(src != null);
 			Contract.Requires<ArgumentException>(src.Length > 0);
+			Contract.Assume(i >= 0 && j >= 0 && i < src.Length && j < src.Length);
 
 			T tmp = src[i];
 			src[i] = src[j];

@@ -42,6 +42,8 @@ namespace GRaff
 		private void objectInvariants()
 		{
 			Contract.Invariant(Transform != null);
+			Contract.Invariant(Image != null);
+			Contract.Invariant(Mask != null);
 		}
 
 		/// <summary>
@@ -84,10 +86,7 @@ namespace GRaff
 		public Transform Transform { get; private set; }
 
 		public bool Intersects(GameObject other)
-		{
-			if (other == null) return false;
-			return Mask.Intersects(other.Mask);
-		}
+			=> other == null || Mask.Intersects(other.Mask);
 
 		public Mask Mask
 		{

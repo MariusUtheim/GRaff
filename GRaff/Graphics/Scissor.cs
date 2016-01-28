@@ -1,4 +1,5 @@
 ﻿using System;
+using GRaff.Synchronization;
 #if OpenGL4
 using OpenTK.Graphics.OpenGL4;
 #else
@@ -30,7 +31,7 @@ namespace GRaff.Graphics
 
 			~ScissorContext()
 			{
-				throw new InvalidOperationException("A context returned from GRaff.Graphics.Scissor.Context was garbage collected before Dispose was called.");
+				Async.ThrowException(new InvalidOperationException("A context returned from GRaff.Graphics.Scissor.Context was garbage collected before Dispose was called."));
 			}
 
 			public void Dispose()
@@ -43,7 +44,7 @@ namespace GRaff.Graphics
 					Scissor.IsEnabled = _wasEnabled;
 				}
 				else
-					throw new InvalidOperationException("Object was already disposed");
+					throw new ObjectDisposedException("Scissor");
 			}
 		}
 

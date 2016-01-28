@@ -287,6 +287,9 @@ namespace GRaff.Graphics
 		{
 			Contract.Requires<ArgumentNullException>(renderer != null && transform != null);
 
+			if (text == null)
+				return;
+
 			GraphicsPoint[] vertices;
 			GraphicsPoint[] texCoords;
 

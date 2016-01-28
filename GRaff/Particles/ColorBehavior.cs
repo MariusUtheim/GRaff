@@ -1,4 +1,6 @@
-﻿using GRaff.Randomness;
+﻿using System;
+using System.Diagnostics.Contracts;
+using GRaff.Randomness;
 
 namespace GRaff.Particles
 {
@@ -16,6 +18,7 @@ namespace GRaff.Particles
 
 		public ColorBehavior(IDistribution<Color> color)
 		{
+			Contract.Requires<ArgumentNullException>(color != null);
 			this._color = color;
 		}
 

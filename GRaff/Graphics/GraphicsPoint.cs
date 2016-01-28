@@ -22,7 +22,7 @@ namespace GRaff.Graphics
 #else
 		internal static OpenTK.Graphics.ES30.VertexAttribPointerType PointerType = OpenTK.Graphics.ES30.VertexAttribPointerType.Float;
 #endif
-		private coord _x, _y;
+		private readonly coord _x, _y;
 
 		public GraphicsPoint(float x, float y)
 		{

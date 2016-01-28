@@ -1,17 +1,27 @@
 ﻿
 
+using System;
+using System.Diagnostics.Contracts;
+
 namespace GRaff
 {
 #warning Review class
 	public sealed class Mask
 	{
-		private GameObject _owner;
+		private readonly GameObject _owner;
 		private MaskShape _maskShape;
 
 		internal Mask(GameObject owner)
 		{
+			Contract.Requires<ArgumentNullException>(owner != null);
 			this._owner = owner;
 			this.Shape = MaskShape.Automatic;
+		}
+
+		[ContractInvariantMethod]
+		private void invariants()
+		{
+			Contract.Invariant(_owner != null);
 		}
 
 		public Polygon GetPolygon() => Transform.Polygon(Shape?.Polygon);

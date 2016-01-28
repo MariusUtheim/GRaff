@@ -13,8 +13,8 @@ namespace GRaff
 	{
 		private static readonly Regex NewlinePattern = new Regex("\r\n|\n");
 
-		private Dictionary<char, FontCharacter> _characters = new Dictionary<char, FontCharacter>();
-		private string _bitmapFile, _dataFile;
+		private readonly Dictionary<char, FontCharacter> _characters = new Dictionary<char, FontCharacter>();
+		private readonly string _bitmapFile, _dataFile;
 		private int _height;
 		private TextureBuffer _textureBuffer;
 		private IAsyncOperation _loadingOperation;
@@ -23,6 +23,12 @@ namespace GRaff
 		{
 			_bitmapFile = bitmapFile;
 			_dataFile = dataFile;
+		}
+
+		[ContractInvariantMethod]
+		private void objectInvariants()
+		{
+			Contract.Invariant(!IsLoaded || _textureBuffer != null);
 		}
 
 		public static Font Load(string bitmapFile, string characterFile)
@@ -64,8 +70,8 @@ namespace GRaff
 		public int GetWidth(string str)
 		{
 			Contract.Requires<InvalidOperationException>(IsLoaded);
-			Contract.Requires<ArgumentNullException>(str != null);
-
+			if (str == null)
+				return 0;
 			var width = 0;
 			foreach (var c in str)
 				width += GetWidth(c);
@@ -86,7 +92,7 @@ namespace GRaff
 		{
 			get
 			{
-				if (!IsLoaded) throw new InvalidOperationException("The font is not loaded.");
+				Contract.Requires<InvalidOperationException>(IsLoaded);
 				return _textureBuffer;
 			}
 		}
@@ -95,7 +101,6 @@ namespace GRaff
 		{
 			return _loadingOperation = TextureBuffer.LoadAsync(_bitmapFile)
 				.Then(textureBuffer => {
-					_textureBuffer = textureBuffer;
 					var fontData = FontLoader.Load(_dataFile);
 
 					foreach (var c in fontData.Chars)
@@ -115,6 +120,7 @@ namespace GRaff
 
 					_height = fontData.Common.LineHeight;
 
+					_textureBuffer = textureBuffer;
 					IsLoaded = true;
 				});
 		}

@@ -8,7 +8,7 @@ namespace GRaff.Particles
 {
 	public sealed class Particle
 	{
-		internal List<IParticleProperty> Properties = new List<IParticleProperty>();
+		internal readonly List<IParticleProperty> Properties = new List<IParticleProperty>();
 
 		public Particle(double x, double y, int lifetime)
 		{

@@ -61,8 +61,12 @@ namespace GRaff
 			Contract.Invariant(ImageCount >= 1);
 			Contract.Invariant(Duration > 0);
 			Contract.Invariant(_frames != null);
+			Contract.Invariant(_frames.Length > 0);
 			Contract.Invariant(_indices != null);
+			Contract.Invariant(_indices.Length > 0);
 			Contract.Invariant(_durations != null);
+			Contract.Invariant(_durations.Length > 0);
+			Contract.Invariant(_indices.Length == _durations.Length);
 		}
 
 		public AnimationStrip InOut()

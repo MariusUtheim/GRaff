@@ -33,6 +33,7 @@ namespace GRaff.Synchronization
 
 		internal AsyncOperation(AsyncOperationResult result)
 		{
+			Contract.Requires(result != null);
 			Result = result;
 			State = result.IsSuccessful ? AsyncOperationState.Completed : AsyncOperationState.Failed;
 		}

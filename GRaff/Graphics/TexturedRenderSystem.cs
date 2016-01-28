@@ -81,10 +81,13 @@ namespace GRaff.Graphics
 		private void Dispose(bool disposing)
 		{
 			Contract.Requires<ObjectDisposedException>(!IsDisposed);
-			GL.DeleteVertexArray(_array);
-			GL.DeleteBuffer(_vertexBuffer);
-			GL.DeleteBuffer(_colorBuffer);
-			GL.DeleteBuffer(_texCoordBuffer);
+			if (Giraffe.IsRunning)
+			{
+				GL.DeleteVertexArray(_array);
+				GL.DeleteBuffer(_vertexBuffer);
+				GL.DeleteBuffer(_colorBuffer);
+				GL.DeleteBuffer(_texCoordBuffer);
+			}
 			IsDisposed = true;
 		}
 
@@ -133,6 +136,7 @@ namespace GRaff.Graphics
 		public void QuadTexCoords(UsageHint usage, int count)
 		{
 			Contract.Requires<ObjectDisposedException>(!IsDisposed);
+			Contract.Requires<ArgumentOutOfRangeException>(count >= 0);
 			GL.BindBuffer(BufferTarget.ArrayBuffer, _texCoordBuffer);
 			GL.BufferData(BufferTarget.ArrayBuffer, new IntPtr(8 * sizeof(coord) * count), Enumerable.Repeat(defaultQuadCoords, count).ToArray(), (BufferUsageHint)usage);
 		}
@@ -140,6 +144,7 @@ namespace GRaff.Graphics
 		public void TriangleStripCoords(UsageHint usage, int count)
 		{
 			Contract.Requires<ObjectDisposedException>(!IsDisposed);
+			Contract.Requires<ArgumentOutOfRangeException>(count >= 0);
 			GL.BindBuffer(BufferTarget.ArrayBuffer, _texCoordBuffer);
 			GL.BufferData(BufferTarget.ArrayBuffer, new IntPtr(8 * sizeof(coord) * count), Enumerable.Repeat(defaultTriangleStripCoords, count).ToArray(), (BufferUsageHint)usage);
 		}

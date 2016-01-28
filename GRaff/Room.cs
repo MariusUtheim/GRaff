@@ -21,13 +21,15 @@ namespace GRaff
 			this.Background = new Background();
 		}
 
-		[ContractInvariantMethod]
-		private void objectInvariants()
+		private static Room _current;
+		public static Room Current
 		{
-			Contract.Invariant(Current != null || !Giraffe.IsRunning);
+			get { Contract.Assume(Contract.Result<Room>() != null); return _current; }
+			private set
+			{
+				_current = value;
+			}
 		}
-
-		public static Room Current { get; private set; }
 
 		public static void Goto(Room room)
 		{

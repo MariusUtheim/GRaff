@@ -10,7 +10,7 @@ namespace GRaff
 	#if !PUBLISH
 	public class AssetBatch : IAsset
 	{
-		private List<IAsset> _resources;
+		private readonly List<IAsset> _resources;
 
 		public AssetBatch()
 		{

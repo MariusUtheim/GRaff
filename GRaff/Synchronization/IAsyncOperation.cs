@@ -77,7 +77,7 @@ namespace GRaff.Synchronization
 	}
 
 	[ContractClassFor(typeof(IAsyncOperation))]
-	internal class AsyncOperationContract : IAsyncOperation
+	abstract class AsyncOperationContract : IAsyncOperation
 	{
 		public bool IsDone => default(bool);
 

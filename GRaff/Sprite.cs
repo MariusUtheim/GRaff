@@ -8,8 +8,8 @@ namespace GRaff
 {
 	public sealed class Sprite
 	{
-		private Vector? _origin;
-		private MaskShape _maskShape;
+		private readonly Vector? _origin;
+		private readonly MaskShape _maskShape;
 
 		public Sprite(AnimationStrip animationStrip, Vector? size = null, Vector? origin = null, MaskShape maskShape = null)
 		{
@@ -42,9 +42,9 @@ namespace GRaff
 		public static IAsyncOperation<Sprite> LoadAsync(string path, int imageCount = 1, Vector? origin = null, MaskShape maskShape = null)
 			=> TextureBuffer.LoadAsync(path).Then(buffer => new Sprite(new AnimationStrip(buffer, imageCount), null, origin, maskShape));
 
-		public AnimationStrip AnimationStrip { get; private set; }
+		public AnimationStrip AnimationStrip { get; }
 
-		public Vector Size { get; private set; }
+		public Vector Size { get; }
 
 		public double Width => Size.X;
 
@@ -61,20 +61,7 @@ namespace GRaff
 			=> Origin.Y;
 
 		public MaskShape MaskShape
-		{
-			get
-			{
-				if (_maskShape == MaskShape.Automatic)
-					return MaskShape.Rectangle(Width, Height);
-				else
-					return _maskShape;
-			}
-
-			set
-			{
-				_maskShape = value;
-			}
-		}
+			=> _maskShape == MaskShape.Automatic ? MaskShape.Rectangle(Width, Height) : _maskShape;
 
 		public Texture SubImage(double dt)
 			=> AnimationStrip.SubImage(dt);

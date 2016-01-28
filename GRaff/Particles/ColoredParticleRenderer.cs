@@ -9,9 +9,9 @@ namespace GRaff.Particles
 {
 	internal class ColoredParticleRenderer : IParticleRenderer
 	{
-		GraphicsPoint[] _polygonVertices;
-		int _verticesPerParticle;
-		ColoredRenderSystem _renderSystem;
+		private readonly GraphicsPoint[] _polygonVertices;
+		private readonly int _verticesPerParticle;
+		private readonly ColoredRenderSystem _renderSystem;
 
 		public ColoredParticleRenderer(Polygon polygon)
 		{
