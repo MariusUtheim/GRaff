@@ -11,6 +11,24 @@ namespace GRaff
 {
 	public static class GRaffExtensions
 	{
+		internal static T ArgMin<T>(this IEnumerable<T> enumerable, Func<T, int> selector)
+		{
+			T min = default(T);
+			int value = Int32.MaxValue;
+			foreach (var v in enumerable)
+			{
+				int currentValue = selector(v);
+				if (currentValue < value)
+				{
+					min = v;
+					value = currentValue;
+				}
+			}
+
+			return min;
+		}
+
+
 		/// <summary>
 		/// Loads this GRaff.IAsset synchronously.
 		/// </summary>

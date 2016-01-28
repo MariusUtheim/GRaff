@@ -36,7 +36,7 @@ namespace GRaff
 		{
 			Contract.Requires<ArgumentNullException>(frames != null && frameDurations != null);
 			Contract.Requires<ArgumentException>(frames.Count() > 0 && frameDurations.Count() > 0);
-			Contract.Requires<ArgumentOutOfRangeException>(Contract.ForAll(frameDurations, f => f.Item1 >= 0 && f.Item1 < frames.Count() && f.Item2 > 0));
+			Contract.Requires<ArgumentOutOfRangeException>(Contract.ForAll(frameDurations, f => f != null && f.Item1 >= 0 && f.Item1 < frames.Count() && f.Item2 > 0));
 			_frames = frames.ToArray();
 			_indices = frameDurations.Select(f => f.Item1).ToArray();
 			_durations = frameDurations.Select(f => f.Item2).ToArray();

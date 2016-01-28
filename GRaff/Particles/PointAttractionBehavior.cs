@@ -1,4 +1,5 @@
-﻿ 
+﻿using System;
+using System.Diagnostics.Contracts;
 
 namespace GRaff.Particles
 {
@@ -6,10 +7,11 @@ namespace GRaff.Particles
 	{
 		class PointAttractionProperty : IParticleProperty
 		{
-			private readonly Particles.PointAttractionBehavior _source;
+			private readonly PointAttractionBehavior _source;
 
-			public PointAttractionProperty(Particles.PointAttractionBehavior source)
+			public PointAttractionProperty(PointAttractionBehavior source)
 			{
+				Contract.Requires<ArgumentNullException>(source != null);
 				_source = source;
 			}
 

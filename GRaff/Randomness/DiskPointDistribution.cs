@@ -33,9 +33,9 @@ namespace GRaff.Randomness
 			Contract.Requires<ArgumentNullException>(rnd != null);
 			Contract.Requires<ArgumentOutOfRangeException>(innerRadius >= 0);
 			Contract.Requires<ArgumentOutOfRangeException>(outerRadius >= innerRadius);
+			_radius = new RadialDistribution(innerRadius, outerRadius);
 			_rnd = rnd;
 			Center = center;
-			_radius = new RadialDistribution(innerRadius, outerRadius);
 		}
 
 		public Point Center { get; set; }

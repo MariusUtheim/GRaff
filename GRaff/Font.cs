@@ -130,14 +130,10 @@ namespace GRaff
 			if (!IsLoaded)
 				return;
 
-			if (_textureBuffer != null)
-			{
-				_textureBuffer.Unload();
-				_textureBuffer = null;
-			}
-
-			_characters.Clear();
+			_textureBuffer.Unload();
+			_textureBuffer = null;
 			IsLoaded = false;
+			_characters.Clear();
 		}
 
 

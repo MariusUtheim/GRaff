@@ -70,7 +70,8 @@ namespace GRaff.Randomness
 
 		public VectorDistribution(IDistribution<double> radiusDistribution, IDistribution<Angle> angleDistribution)
 		{
-			Contract.Requires<ArgumentNullException>(radiusDistribution != null && angleDistribution != null);
+			Contract.Requires<ArgumentNullException>(radiusDistribution != null);
+			Contract.Requires<ArgumentNullException>(angleDistribution != null);
 			this._radius = radiusDistribution;
 			this._angle = angleDistribution;
 		}

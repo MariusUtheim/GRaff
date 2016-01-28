@@ -1,15 +1,17 @@
-﻿
- 
+﻿using System;
+using System.Diagnostics.Contracts;
+
 namespace GRaff.Particles
 {
 	public class LineAttractionBehavior : IParticleBehavior
 	{
 		class LineAttractionProperty : IParticleProperty
 		{
-			private readonly Particles.LineAttractionBehavior _source;
+			private readonly LineAttractionBehavior _source;
 
-			public LineAttractionProperty(Particles.LineAttractionBehavior source)
+			public LineAttractionProperty(LineAttractionBehavior source)
 			{
+				Contract.Requires<ArgumentNullException>(source != null);
 				_source = source;
 			}
 

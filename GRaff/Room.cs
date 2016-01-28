@@ -21,15 +21,7 @@ namespace GRaff
 			this.Background = new Background();
 		}
 
-		private static Room _current;
-		public static Room Current
-		{
-			get { Contract.Assume(Contract.Result<Room>() != null); return _current; }
-			private set
-			{
-				_current = value;
-			}
-		}
+		public static Room Current { get; private set; }
 
 		public static void Goto(Room room)
 		{

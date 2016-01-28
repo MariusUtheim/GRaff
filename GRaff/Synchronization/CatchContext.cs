@@ -1,20 +1,23 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using System.Linq;
 
 namespace GRaff.Synchronization
 {
 	internal class CatchContext
 	{
-		readonly List<KeyValuePair<Type, Action<Exception>>> _handledTypes = new List<KeyValuePair<Type, Action<Exception>>>();
+		private readonly List<KeyValuePair<Type, Action<Exception>>> _handledTypes = new List<KeyValuePair<Type, Action<Exception>>>();
 
 		public void Catch<TException>(Action<TException> catchHandler) where TException : Exception
 		{
+			Contract.Requires<ArgumentNullException>(catchHandler != null);
 			_handledTypes.Add(new KeyValuePair<Type, Action<Exception>>(typeof(TException), exception => catchHandler((TException)exception)));
 		}
 
 		public bool TryHandle(Exception exception)
 		{
+			Contract.Requires<ArgumentNullException>(exception != null);
 			var exceptionType = exception.GetType();
 
 			var handler = _handledTypes.Where(pair => pair.Key.IsAssignableFrom(exceptionType))
@@ -28,15 +31,17 @@ namespace GRaff.Synchronization
 
 	internal class CatchContext<TResult>
 	{
-		List<KeyValuePair<Type, Func<Exception, TResult>>> _handlers = new List<KeyValuePair<Type, Func<Exception, TResult>>>();
+		private readonly List<KeyValuePair<Type, Func<Exception, TResult>>> _handlers = new List<KeyValuePair<Type, Func<Exception, TResult>>>();
 
 		public void Catch<TException>(Func<TException, TResult> catchHandler) where TException : Exception
 		{
+			Contract.Requires<ArgumentNullException>(catchHandler != null);
 			_handlers.Add(new KeyValuePair<Type, Func<Exception, TResult>>(typeof(TException), exception => catchHandler((TException)exception)));
 		}
 
 		public bool TryHandle(Exception exception, out TResult result)
 		{
+			Contract.Requires<ArgumentNullException>(exception != null);
 			var exceptionType = exception.GetType();
 
 			var query = from pair in _handlers
