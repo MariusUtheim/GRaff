@@ -4,7 +4,7 @@ using GRaff;
 using System.Linq;
 using System.Collections.Generic;
 
-namespace GameMaker.UnitTesting
+namespace GRaff.UnitTesting
 {
 	[TestClass]
 	public class RBTreeTest

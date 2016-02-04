@@ -24,6 +24,36 @@ namespace GRaff.Pathfinding
 
 		public IEnumerable<Edge> Edges => edges.AsReadOnly();
 
-	//	IEnumerable<Edge> Vertex.Edges => Edges;
 	}
+
+	public class Vertex<TEdge> : IVertex<Vertex<TEdge>, TEdge>
+		where TEdge : IEdge<Vertex<TEdge>, TEdge>
+	{
+		public IEnumerable<TEdge> Edges
+		{
+			get
+			{
+				throw new NotImplementedException();
+			}
+		}
+
+		public IGraph<Vertex<TEdge>, TEdge> Graph
+		{
+			get
+			{
+				throw new NotImplementedException();
+			}
+		}
+
+		public double HeuristicDistance(Vertex<TEdge> other)
+		{
+			throw new NotImplementedException();
+		}
+
+		public bool IsConnectedTo(Vertex<TEdge> other)
+		{
+			throw new NotImplementedException();
+		}
+	}
+
 }

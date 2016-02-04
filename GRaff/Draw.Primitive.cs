@@ -37,10 +37,11 @@ namespace GRaff
 				CurrentSurface.DrawPrimitive(vertices, Enumerable.Repeat(color, 2 * lines.Length).ToArray(), PrimitiveType.Lines);
 			}
 
-			public static void LineStrip(Color color, Point origin, Point v1, params Point[] vertices)
+			public static void LineStrip(Color color, Point[] vertices)
 			{
 				Contract.Requires<ArgumentNullException>(vertices != null);
-				CurrentSurface.DrawPrimitive(Enumerable.Concat(new[] { (GraphicsPoint)origin, (GraphicsPoint)v1 }, vertices.Cast<GraphicsPoint>()).ToArray(), Enumerable.Repeat(color, vertices.Length).ToArray(), PrimitiveType.LineStrip);
+				Contract.Requires<ArgumentException>(vertices.Length >= 2);
+				CurrentSurface.DrawPrimitive(vertices.Select(v => (GraphicsPoint)v).ToArray(), Enumerable.Repeat(color, vertices.Length).ToArray(), PrimitiveType.LineStrip);
 			}
 
 			public static void Triangles(Color color, params Triangle[] triangles)

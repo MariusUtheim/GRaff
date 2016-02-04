@@ -46,13 +46,13 @@ namespace GRaff
 		public static MaskShape Circle(Point center, double radius) => new MaskShape(Polygon.Circle(center, radius));
 
 
-		public static MaskShape Ellipse(double x, double y, double xRadius, double yRadius) => Ellipse(new Point(x, y), xRadius, yRadius);
+		public static MaskShape Ellipse(double x, double y, double xRadius, double yRadius) => new MaskShape(Polygon.Ellipse(new Rectangle(x, y, xRadius, yRadius)));
 
 		public static MaskShape Ellipse(Point center, double xRadius, double yRadius) => new MaskShape(Polygon.Ellipse(center, xRadius, yRadius));
 
 		public static MaskShape Ellipse(double width, double height) => Ellipse(Point.Zero, width, height);
 	
-		public static MaskShape Ellipse(Rectangle rectangle) => Ellipse(rectangle.Center, rectangle.Width, rectangle.Height);
+		public static MaskShape Ellipse(Rectangle rectangle) => new MaskShape(GRaff.Polygon.Ellipse(rectangle));
 
 		/// <summary>
 		/// Gets the special GRaff.MaskShape that indicates no mask.

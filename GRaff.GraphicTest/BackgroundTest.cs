@@ -12,7 +12,7 @@ namespace GRaff.GraphicTest
 
 		public BackgroundTest()
 		{
-			Room.Current.Background.Color = Colors.Orange;
+			Room.Current.Background.Color = Colors.LightGray;
 			Room.Current.Background.Buffer = TextureBuffers.Giraffe;
 			Room.Current.Background.IsTiled = true;
 			Room.Current.Background.HSpeed = -1;

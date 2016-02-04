@@ -10,12 +10,14 @@ namespace GRaff
 		public const double DegToRad = 0.01745329251994329576923690768489;
 		/// <summary>Conversion factor for radians to degrees. Is equal to 360 / τ.</summary>
 		public const double RadToDeg = 57.2957795130823208767981548141050;
-		/// <summary>
-		/// The golden ratio, φ
-		/// </summary>
+		/// <summary>The golden ratio, φ</summary>
 		public const double Phi = 1.6180339887498948482045868343656;
-		/// <summary>The smallest relative rounding error in double-precision arithmetic.</summary>
+
+		public const float FloatEpsilon = 0.000000059604644775390625f;
+		/// <summary>The smallest detectable relative rounding error in double-precision arithmetic.</summary>
 		public const double MachineEpsilon = 2.2204460492503130808472633361816e-16;
+		/// <summary>A default resolution for discerning the value of two numbers</summary>
+		internal const double DefaultDelta = 1e-9;
 
 		public static double Frac(double x) => (x >= 0) ? x - Floor(x) : x - Ceiling(x);
 

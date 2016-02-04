@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using GRaff.Randomness;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace GameMaker.UnitTesting
+namespace GRaff.UnitTesting
 {
 	[TestClass]
 	public class CombinatoricsTest

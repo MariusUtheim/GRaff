@@ -105,6 +105,12 @@ namespace GRaff.UnitTesting
 			new Polygon(new[] { new Point(0, 0), new Point(0, 1), new Point(1, 0) });
 			new Polygon(new[] { new Point(0, 0), new Point(1, 0), new Point(0, 1) });
 			new Polygon(new[] { new Point(0, 0) });
+		}
+
+		[TestMethod]
+		[ExpectedException(typeof(ArgumentException))]
+		public void Polygon_ZeroPointConstructorFailure()
+		{
 			new Polygon(new Point[0]);
 		}
 

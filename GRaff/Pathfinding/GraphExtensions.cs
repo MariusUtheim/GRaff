@@ -63,7 +63,7 @@ namespace GRaff.Pathfinding
 			return new Path<TVertex, TEdge>(nodes);
 		}
 
-		public static bool EdgeExists<TVertex, TEdge>(IGraph<TVertex, TEdge> graph, TVertex v1, TVertex v2)
+		public static bool EdgeExists<TVertex, TEdge>(this IGraph<TVertex, TEdge> graph, TVertex v1, TVertex v2)
 			where TVertex : IVertex<TVertex, TEdge>
 			where TEdge : IEdge<TVertex, TEdge>
 		{
@@ -72,6 +72,14 @@ namespace GRaff.Pathfinding
 			return v1.IsConnectedTo(v2);
 		}
 
+		public static TEdge EdgeTo<TVertex, TEdge>(this TVertex vertex, TVertex other)
+			where TVertex : IVertex<TVertex, TEdge>
+			where TEdge : IEdge<TVertex, TEdge>
+		{
+			Contract.Requires<ArgumentNullException>(vertex != null && other != null);
+			Contract.Requires<ArgumentNullException>(vertex.Edges.Any(e => e.To.Equals(other)));
+			return vertex.Edges.First(e => e.To.Equals(other));
+		}
 
 		public static IEnumerable<TVertex> Neighbours<TVertex, TEdge>(this TVertex vertex)
 			where TVertex : IVertex<TVertex, TEdge>
@@ -89,7 +97,7 @@ namespace GRaff.Pathfinding
 			where TEdge : IEdge<TVertex, TEdge>
 		{
 			Contract.Requires<ArgumentNullException>(v1 != null && v2 != null);
-			Contract.Requires<ArgumentException>(v1.Graph == graph && v2.Graph == graph);
+			Contract.Requires<ArgumentException>(v1.Graph == graph && v2.Graph == graph && !v1.Equals(v2));
 
 			var distance = graph.Vertices.ToDictionary(v => v, _ => Double.PositiveInfinity);
 			var previous = graph.Vertices.ToDictionary(v => v, _ => default(TVertex));
@@ -124,6 +132,75 @@ namespace GRaff.Pathfinding
 			}
 
 			return null;
+		}
+
+		private static bool _tagTree<TVertex, TEdge>(TVertex vertex, TVertex except, Dictionary<TVertex, bool> tagged)
+			where TVertex : IVertex<TVertex, TEdge>
+			where TEdge : IEdge<TVertex, TEdge>
+		{
+			if (tagged[vertex])
+				return false;
+			tagged[vertex] = true;
+			return vertex.Edges.Select(e => e.To)
+							   .Except(new[] { except })
+							   .All(v => _tagTree<TVertex, TEdge>(v, vertex, tagged));
+
+		}
+		public static bool IsTree<TVertex, TEdge>(this IGraph<TVertex, TEdge> graph)
+			where TVertex : IVertex<TVertex, TEdge>
+			where TEdge : IEdge<TVertex, TEdge>
+		{
+			if (graph.IsDirected)
+				return false;
+			var vertices = graph.Vertices.ToArray();
+			if (vertices.Length == 0)
+				return true;
+
+			var tagged = vertices.ToDictionary(v => v, _ => false);
+			return _tagTree<TVertex, TEdge>(vertices.First(), default(TVertex), tagged);
+		}
+
+		public static IEnumerable<TEdge> GenerateMinimalEdges<TVertex, TEdge>(this IGraph<TVertex, TEdge> graph, TVertex v, double maxDistance)
+			where TVertex : IVertex<TVertex, TEdge>
+			where TEdge : IEdge<TVertex, TEdge>
+		{
+			Contract.Requires<ArgumentNullException>(v != null);
+			Contract.Requires<ArgumentException>(v.Graph == graph);
+
+			var distance = graph.Vertices.ToDictionary(_ => _, _ => Double.PositiveInfinity);
+			var previous = graph.Vertices.ToDictionary(_ => _, _ => default(TVertex));
+
+			distance[v] = 0;
+
+			var candidateNodes = new PriorityQueue<TVertex>();
+			candidateNodes.Push(v, 0);
+
+			while (candidateNodes.Count > 0)
+			{
+				var current = candidateNodes.Pop();
+				var currentDistance = distance[current];
+
+				if (currentDistance > maxDistance)
+					yield break;
+
+				if (previous[current] != null)
+					yield return previous[current].EdgeTo<TVertex, TEdge>(current);
+
+				foreach (var edge in current.Edges)
+				{
+					var neighbour = edge.To;
+					var length = currentDistance + edge.Weight;
+					if (length < distance[neighbour])
+					{
+						if (distance[neighbour] == Double.PositiveInfinity)
+							candidateNodes.Push(neighbour, length);
+						else
+							candidateNodes.SetPriority(neighbour, length);
+						distance[neighbour] = length;
+						previous[neighbour] = current;
+					}
+				}
+			}
 		}
 	}
 }

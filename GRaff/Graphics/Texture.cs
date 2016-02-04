@@ -31,7 +31,7 @@ namespace GRaff.Graphics
 		}
 
 		[ContractInvariantMethod]
-		private void objectInvariants()
+		private void invariants()
 		{
 			Contract.Invariant(TexCoords != null);
 			Contract.Invariant(TexCoords.Length == 4);

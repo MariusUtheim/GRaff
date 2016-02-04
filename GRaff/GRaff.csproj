@@ -115,6 +115,7 @@
     <Compile Include="Forms\Quad.cs" />
     <Compile Include="Graphics\TextRenderer.cs" />
     <Compile Include="Pathfinding\Edge.cs" />
+    <Compile Include="Pathfinding\SimpleGraph.cs" />
     <Compile Include="Pathfinding\Graph.cs" />
     <Compile Include="Pathfinding\GraphExtensions.cs" />
     <Compile Include="Pathfinding\Grid.cs" />
@@ -124,6 +125,9 @@
     <Compile Include="Pathfinding\IVertex.cs" />
     <Compile Include="Pathfinding\Path.cs" />
     <Compile Include="Pathfinding\GridVertex.cs" />
+    <Compile Include="Pathfinding\SpatialEdge.cs" />
+    <Compile Include="Pathfinding\SpatialGraph.cs" />
+    <Compile Include="Pathfinding\SpatialVertex.cs" />
     <Compile Include="Pathfinding\Vertex.cs" />
     <Compile Include="Randomness\Statistics.cs" />
     <Compile Include="RedBlackTree.cs" />
@@ -285,6 +289,7 @@
     <Compile Include="Transform.cs" />
     <Compile Include="Synchronization\Tween.cs" />
     <Compile Include="Triangle.cs" />
+    <Compile Include="Unit.cs" />
     <Compile Include="Vector.cs" />
     <Compile Include="View.cs" />
     <Compile Include="Window.cs" />

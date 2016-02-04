@@ -4,7 +4,7 @@ using System.Diagnostics.Contracts;
 namespace GRaff.Pathfinding
 {
 	[ContractClass(typeof(EdgeContract<,>))]
-	public interface IEdge<out TVertex, out TEdge>
+	public interface IEdge<TVertex, TEdge>
 		where TVertex : IVertex<TVertex, TEdge>
 		where TEdge : IEdge<TVertex, TEdge>
 	{

@@ -4,7 +4,7 @@ using GRaff.Synchronization;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 
-namespace GameMaker.UnitTesting
+namespace GRaff.UnitTesting
 {
 	[TestClass]
 	public class AsyncTest

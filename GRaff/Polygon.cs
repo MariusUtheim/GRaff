@@ -19,10 +19,9 @@ namespace GRaff
 	{
 		private Point[] _pts;
 
-		private Polygon()
+		private Polygon(Point[] pts, Unit sentinel)
 		{
-			Contract.Assume(_pts != null);
-			return;	// Used to create Polygon in an efficient way without doing sanity checks
+			_pts = pts;	// Used to create Polygon in an efficient way without doing sanity checks
 		}
 
 		public Polygon(IEnumerable<Point> pts)
@@ -38,12 +37,6 @@ namespace GRaff
 			Contract.Requires<ArgumentException>(pts.Count() > 0);
 			_pts = pts.ToArray();
 			_SanityCheck();
-		}
-
-		internal static Polygon CreateUnsafe(Point[] pts)
-		{
-			Contract.Assume(pts != null && pts.Length > 0);
-			return new Polygon { _pts = pts };
 		}
 
 		private void _SanityCheck()
@@ -75,15 +68,14 @@ namespace GRaff
 				sum += a.Degrees;
 			}
 
-			if (GMath.Abs(sum - 360) < 2 * GMath.MachineEpsilon)
-				throw new ArgumentException("The points must specify a convex polygon with winding number equal to 1. Winding is " + sum.ToString());
+			if (GMath.Abs(sum - 360) > GMath.DefaultDelta)
+				throw new ArgumentException($"The points must specify a convex polygon with winding number equal to 1. (Winding is {sum} degrees)");
 		}
 
 		[ContractInvariantMethod]
-		private void objectInvariants()
+		private void invariants()
 		{
-			Contract.Invariant(_pts != null);
-			Contract.Invariant(_pts.Length > 0);
+			Contract.Invariant(_pts == null || _pts.Length > 0);
 		}
 
 		#region Static constructors
@@ -114,7 +106,7 @@ namespace GRaff
 				y = s * tmp + c * y;
 			}
 
-			return new Polygon { _pts = pts };
+			return new Polygon(pts, Unit._);
 		}
 
 		public static Polygon Circle(double radius)
@@ -125,7 +117,7 @@ namespace GRaff
 		public static Polygon Circle(Point center, double radius)
 		{
 			if (radius == 0)
-				return new Polygon { _pts = new[] { center } };
+				return new Polygon(new[] { center }, Unit._);
 
 			int precision = (int)GMath.Ceiling(GMath.Tau * GMath.Abs(radius));
 			if (precision < 2)
@@ -134,9 +126,9 @@ namespace GRaff
 			return Regular(precision, radius, center);
 		}
 
-		public static Polygon Ellipse(Point center, double width, double height)
+		public static Polygon Ellipse(Point center, double xRadius, double yRadius)
 		{
-			int precision = (int)GMath.Ceiling(GMath.Pi * GMath.Abs(width + height));
+			int precision = (int)GMath.Ceiling(GMath.Pi * GMath.Abs(xRadius + yRadius));
 			if (precision <= 0)
 				return new Polygon(center);
 			double dt = GMath.Tau / precision;
@@ -147,15 +139,21 @@ namespace GRaff
 			var pts = new Point[precision];
 			for (int i = 0; i < precision; i++)
 			{
-				pts[i] = new Point(center.X + x * width, center.Y + y * height);
+				pts[i] = new Point(center.X + x * xRadius, center.Y + y * yRadius);
 
 				tmp = x;
 				x = c * x - s * y;
 				y = s * tmp + c * y;
 			}
 
-			return new Polygon { _pts = pts };
+			return new Polygon(pts, Unit._);
 		}
+
+		public static Polygon Ellipse(Rectangle rectangle)
+		{
+			return Ellipse(rectangle.Center, rectangle.Width / 2, rectangle.Height / 2);
+		}
+
 
 		#endregion
 

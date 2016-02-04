@@ -86,7 +86,6 @@ namespace GRaff.UnitTesting
 			targetRegion = new TestObject(MaskShape.Ellipse(new Rectangle(1, 1, 40, 40)));
 			Assert.IsTrue(testRegion20x20.Intersects(targetRegion));
 
-
 			targetRegion = new TestObject(MaskShape.Ellipse(5, 5, 40, 40));
 			Assert.IsFalse(testRegion20x20.Intersects(targetRegion));
 		}

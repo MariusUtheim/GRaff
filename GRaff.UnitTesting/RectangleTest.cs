@@ -2,7 +2,7 @@
 using GRaff;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace GameMaker.UnitTesting
+namespace GRaff.UnitTesting
 {
 	[TestClass]
 	public class RectangleTest

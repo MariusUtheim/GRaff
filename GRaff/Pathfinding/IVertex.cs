@@ -12,7 +12,7 @@ namespace GRaff.Pathfinding
 		IGraph<TVertex, TEdge> Graph { get; }
 		bool IsConnectedTo(TVertex other);
 		IEnumerable<TEdge> Edges { get; }
-
+		double HeuristicDistance(TVertex other);
 	}
 
 	[ContractClassFor(typeof(IVertex<,>))]
@@ -36,6 +36,13 @@ namespace GRaff.Pathfinding
 				Contract.Ensures(Contract.Result<IGraph<TVertex, TEdge>>() != null);
 				return default(IGraph<TVertex, TEdge>);
 			}
+		}
+
+		public double HeuristicDistance(TVertex other)
+		{
+			Contract.Requires<ArgumentNullException>(other != null);
+			Contract.Ensures(Contract.Result<double>() >= 0);
+			return default(double);
 		}
 
 		public bool IsConnectedTo(TVertex other) => default(bool);

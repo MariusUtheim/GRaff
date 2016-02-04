@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace GRaff.Pathfinding
 {
-	public interface IGraph<out TVertex, out TEdge> 
+	public interface IGraph<TVertex, TEdge> 
 		where TVertex : IVertex<TVertex, TEdge>
 		where TEdge : IEdge<TVertex, TEdge>
 	{

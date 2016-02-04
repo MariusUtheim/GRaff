@@ -1,11 +1,12 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Linq;
 
 namespace GRaff.Pathfinding
 {
-	public class Path<TVertex, TEdge> 
+	public class Path<TVertex, TEdge>
 		where TVertex : IVertex<TVertex, TEdge>
 		where TEdge : IEdge<TVertex, TEdge>
 	{
@@ -17,8 +18,8 @@ namespace GRaff.Pathfinding
 			_vertices = vertices.ToArray();
 		}
 
-		public TVertex this[int index] => _vertices[index];
-
 		public int Length => _vertices.Length;
+
+		public IEnumerable<TVertex> Vertices => Array.AsReadOnly(_vertices);
 	}
 }

@@ -4,14 +4,14 @@ using GRaff.Pathfinding;
 using System.Linq;
 using GRaff;
 
-namespace GameMaker.UnitTesting
+namespace GRaff.UnitTesting
 {
 	[TestClass]
 	public class GraphTest
 	{
 
 		[TestMethod]
-		public void Graph_Constructor()
+		public void SimpleGraph_Constructor()
 		{
 			var adjacency = new[,] {
 				{ false, true, true },
@@ -19,7 +19,7 @@ namespace GameMaker.UnitTesting
 				{ true, false, false }
 			};
 
-			var graph = new Graph(adjacency);
+			var graph = new SimpleGraph(adjacency);
 
 			var vertices = graph.Vertices.ToArray();
 			for (int i = 0; i < adjacency.GetLength(0); i++)
@@ -29,9 +29,9 @@ namespace GameMaker.UnitTesting
 
 		[TestMethod]
 		[ExpectedException(typeof(ArgumentException))]
-		public void Graph_AdjacencyRequiresFalseDiagonal()
+		public void SimpleGraph_AdjacencyRequiresFalseDiagonal()
 		{
-			new Graph(new[,] {
+			new SimpleGraph(new[,] {
 				{ false, true },
 				{ true, true }
 			});
@@ -78,6 +78,33 @@ namespace GameMaker.UnitTesting
 			graph = new Graph(matrix);
 			Assert.IsFalse(graph.IsDirected);
 		}
+
+		[TestMethod]
+		public void Graph_IsTree()
+		{
+			Graph graph;
+			
+			graph = new Graph(new[,] {
+				{ false, false, false, false, false, true },
+				{ false, false, false, false, false, true },
+				{ false, false, false, false, true, false },
+				{ false, false, false, false, true, false },
+				{ false, false, true, true, false, true },
+				{ true, true, false, false, true, false }
+			});
+			Assert.IsTrue(graph.IsTree());
+
+			graph = new Graph(new[,] {
+				{ false, false, false, true, false, false },
+				{ false, false, true, false, false, false },
+				{ false, true, false, true, true, false },
+				{ true, false, true, false, true, false },
+				{ false, false, true, true, false, true },
+                { false, false, false, false, true, false }
+			});
+			Assert.IsFalse(graph.IsTree());
+		}
+
 
 		[TestMethod]
 		public void Graph_ShortestPath()
