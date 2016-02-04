@@ -24,7 +24,7 @@ namespace GRaff.UnitTesting
 			Assert.AreEqual(6, grid.Height);
 
 			var path = grid.ShortestPath(0, 0, 4, 3);
-			var c = path.Select(v => v.Location).ToArray();
+			var c = path.Vertices.Select(v => v.Location).ToArray();
 			Assert.AreEqual(new IntVector(0, 0), c[0]);
 			Assert.AreEqual(new IntVector(0, 1), c[1]);
 			Assert.AreEqual(new IntVector(0, 2), c[2]);

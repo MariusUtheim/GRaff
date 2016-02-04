@@ -11,14 +11,14 @@ namespace GRaff
 {
 	public static class GRaffExtensions
 	{
-		internal static T ArgMin<T>(this IEnumerable<T> enumerable, Func<T, double> selector)
+		internal static T ArgMin<T, TValue>(this IEnumerable<T> enumerable, Func<T, TValue> selector) where TValue : IComparable<TValue>
 		{
-			var min = default(T);
-			var value = System.Double.PositiveInfinity;
-			foreach (var v in enumerable)
+			var min = enumerable.First();
+			var value = selector(min);
+			foreach (var v in enumerable.Skip(1))
 			{
 				var currentValue = selector(v);
-				if (currentValue < value)
+				if (currentValue.CompareTo(value) < 0)
 				{
 					min = v;
 					value = currentValue;
@@ -28,6 +28,15 @@ namespace GRaff
 			return min;
 		}
 
+		internal static IEnumerable<T> TakeWhilePrevious<T>(this IEnumerable<T> enumerable, Func<T, bool> predicate)
+		{
+			foreach (var v in enumerable)
+			{
+				yield return v;
+				if (!predicate(v))
+					yield break;
+			}
+		}
 
 		/// <summary>
 		/// Loads this GRaff.IAsset synchronously.

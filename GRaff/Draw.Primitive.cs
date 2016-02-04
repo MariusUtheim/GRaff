@@ -37,6 +37,13 @@ namespace GRaff
 				CurrentSurface.DrawPrimitive(vertices, Enumerable.Repeat(color, 2 * lines.Length).ToArray(), PrimitiveType.Lines);
 			}
 
+			public static void Lines(Color color, GraphicsPoint[] vertices)
+			{
+				Contract.Requires<ArgumentNullException>(vertices != null);
+				Contract.Requires<ArgumentException>(vertices.Length % 2 == 0);
+				CurrentSurface.DrawPrimitive(vertices, Enumerable.Repeat(color, vertices.Length).ToArray(), PrimitiveType.Lines);
+			}
+
 			public static void LineStrip(Color color, Point[] vertices)
 			{
 				Contract.Requires<ArgumentNullException>(vertices != null);

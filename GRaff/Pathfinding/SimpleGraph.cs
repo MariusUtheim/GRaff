@@ -51,7 +51,8 @@ namespace GRaff.Pathfinding
 		{
 			Contract.Requires<ArgumentNullException>(from != null && to != null);
 			Contract.Requires<ArgumentException>(from.Graph == this && to.Graph == this);
-			Contract.Requires<InvalidOperationException>(!from.IsConnectedTo(to), "An edge already exists between the specified vertices.");
+			if (from.IsConnectedTo(to))
+				throw new InvalidOperationException("An edge already exists between the specified vertices.");
 			_edges.Add(new Edge(this, from, to));
 			_edges.Add(new Edge(this, to, from));
 		}

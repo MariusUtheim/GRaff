@@ -48,11 +48,13 @@ namespace GRaff.Pathfinding
 
 		public double HeuristicDistance(GridVertex other)
 		{
-			Contract.Requires<ArgumentNullException>(other != null);
-			Contract.Requires<ArgumentException>(other.Graph == this.Graph);
 			return GMath.Abs(X - other.X) + GMath.Abs(Y - other.Y);
 		}
 
+		public override string ToString()
+		{
+			return $"GridVertex {Location}";
+        }
 
-    }
+	}
 }

@@ -18,8 +18,13 @@ namespace GRaff.Pathfinding
 
 		public GridVertex To { get; }
 
-		public double Weight { get; }
+		public double Weight => 1;
 
 		IGraph<GridVertex, GridEdge> IEdge<GridVertex, GridEdge>.Graph => Graph;
+
+		public override string ToString()
+		{
+			return $"GridEdge {From.Location} -> {To.Location}";
+        }
 	}
 }

@@ -29,7 +29,8 @@ namespace GRaff.Pathfinding
 		{
 			Contract.Requires<ArgumentNullException>(v1 != null && v2 != null);
 			Contract.Requires<ArgumentException>(v1.Graph == this && v2.Graph == this);
-			Contract.Requires<ArgumentException>(!v1.IsConnectedTo(v2));
+			if (v1.IsConnectedTo(v2))
+				throw new InvalidOperationException("The vertices are already connected");
 			var edge = new SpatialEdge(this, v1, v2);
 			_edges.Add(new SpatialEdge(this, v2, v1));
 			_edges.Add(edge);

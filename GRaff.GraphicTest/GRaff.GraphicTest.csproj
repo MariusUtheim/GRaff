@@ -43,6 +43,7 @@
   <ItemGroup>
     <Compile Include="BackgroundTest.cs" />
     <Compile Include="GraphTest.cs" />
+    <Compile Include="GridTest.cs" />
     <Compile Include="VectorGraphicsTest.cs" />
     <Compile Include="Marker.cs" />
     <Compile Include="Program.cs" />
