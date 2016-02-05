@@ -33,13 +33,6 @@ namespace GRaff.Pathfinding
 						_vertices[i, j] = new GridVertex(this, i, j);
 		}
 
-		IEnumerable<IntVector> enumerateRange() => Enumerable.Range(0, Width).Zip(Enumerable.Range(0, Height), (x, y) => new IntVector(x, y));
-		[ContractInvariantMethod]
-		void invariants()
-		{
-			Contract.Invariant(Contract.ForAll(enumerateRange(), c => _isBlocked[c.X, c.Y] == (_vertices[c.X, c.Y] == null)));
-		}
-
 		public bool IsAccessible(int x, int y)
 		{
 			return (x >= 0 && y >= 0 && x < Width && y < Height && !_isBlocked[x, y]);
@@ -49,11 +42,7 @@ namespace GRaff.Pathfinding
 		{
 			get
 			{
-				Contract.Requires<IndexOutOfRangeException>(x >= 0 && x < Width);
-				Contract.Requires<IndexOutOfRangeException>(y >= 0 && y < Height);
-				Contract.Requires<InvalidOperationException>(IsAccessible(x, y), "Attempting to get a vertex that is not accessible");
-                Contract.Ensures(Contract.Result<GridVertex>() != null);
-				return _vertices[x, y];
+				return IsAccessible(x, y) ? _vertices[x, y] : null;
 			}
 		}
 		public GridVertex this[IntVector p] => this[p.X, p.Y];

@@ -63,7 +63,7 @@ namespace GRaff.GraphicTest
 
 			if (_fromVertex != null)
 			{
-				foreach (var e in _graph.GenerateMinimalEdges(_fromVertex, Double.PositiveInfinity))
+				foreach (var e in _graph.MinimalSpanningTree(_fromVertex, Double.PositiveInfinity))
 				{
 					Draw.Line(Colors.Green, e.Line);
 				}

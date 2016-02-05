@@ -122,9 +122,8 @@ namespace GRaff.UnitTesting
 			var vertices = graph.Vertices.ToArray();
 
 			var shortestPath = graph.ShortestPath(vertices[0], vertices[3]);
-			Assert.AreEqual(shortestPath[0], vertices[0]);
-			Assert.AreEqual(shortestPath[1], vertices[5]);
-			Assert.AreEqual(shortestPath[2], vertices[3]);
+			var expected = new Path<Vertex, Edge>(new[] { vertices[0], vertices[5], vertices[3] });
+			Assert.AreEqual(expected, shortestPath);
 		}
 	}
 }

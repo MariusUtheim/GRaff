@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace GRaff.Pathfinding
 {
-	public class Path<TVertex, TEdge>
+	public class Path<TVertex, TEdge> : IEquatable<Path<TVertex, TEdge>>
 		where TVertex : IVertex<TVertex, TEdge>
 		where TEdge : IEdge<TVertex, TEdge>
 	{
@@ -46,5 +46,19 @@ namespace GRaff.Pathfinding
 					yield return _vertices[i].EdgeTo(_vertices[i + 1]);
             }
 		}
+
+		public bool Equals(Path<TVertex, TEdge> other)
+		{
+			if (other == null || _vertices.Length != other.Length)
+				return false;
+			for (var i = 0; i < _vertices.Length; i++)
+				if (!_vertices[i].Equals(other._vertices[i]))
+					return false;
+			return true;
+		}
+
+		public override bool Equals(object obj) => Equals(obj as Path<TVertex, TEdge>);
+
+		public override int GetHashCode() => GMath.HashCombine(_vertices.Select(v => v.GetHashCode()).ToArray());
 	}
 }

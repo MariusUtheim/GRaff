@@ -26,15 +26,16 @@ namespace GRaff.GraphicTest
 			var blocked = new bool[width, height];
 			for (var x = 0; x < width; x++)
 				for (var y = 0; y < height; y++)
-					blocked[x, y] = GRandom.Probability(0.1);
+					blocked[x, y] = GRandom.Probability(0.15);
 			_grid = new Grid(blocked);
 		}
 
 		public override void OnStep()
 		{
 			Window.Title = $"GridTest - FPS: {Time.FPS}";
-			if (Time.LoopCount % 10 == 0)
-				n++;
+			//if (Time.LoopCount % 1 == 0)
+			//	n++;
+			n = Int32.MaxValue;
         }
 
 		static Point mapToScreen(IntVector p) => new Point(x0 + dx * p.X, y0 + dy * p.Y);
@@ -57,10 +58,12 @@ namespace GRaff.GraphicTest
 
 		private void drawSpanningTree()
 		{
+			if (_to != null)
+				Draw.FillCircle(Colors.Blue.Transparent(0.5), mapToScreen(_to.Location), 7);
 			if (_from != null)
 			{
 				Draw.FillCircle(Colors.Red.Transparent(0.5), mapToScreen(_from.Location), 7);
-				var edges = _grid.GenerateMinimalEdges(_from);
+				var edges = _grid.MinimalSpanningTree(_from);
 				Draw.Primitive.Lines(Colors.Red, edges.Take(n).Select(e => new Line(mapToScreen(e.From.Location), mapToScreen(e.To.Location))).ToArray());
 			}
 		}
@@ -74,7 +77,7 @@ namespace GRaff.GraphicTest
 			if (_from != null && _to != null)
 			{
 				Draw.FillCircle(Colors.Red.Transparent(0.5), mapToScreen(_from.Location), 7);
-				var path = _grid.ShortestPath(_from, _to, n);
+				var edges = _grid.MinimalSpanningTree(_from, _to);
 				Draw.Primitive.Lines(Colors.Red, edges.Take(n).Select(e => new Line(mapToScreen(e.From.Location), mapToScreen(e.To.Location))).ToArray());
 			}
 		}

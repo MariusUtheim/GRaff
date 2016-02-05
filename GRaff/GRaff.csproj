@@ -114,10 +114,12 @@
     <Compile Include="Forms\OpenFileDialog.cs" />
     <Compile Include="Forms\Quad.cs" />
     <Compile Include="Graphics\TextRenderer.cs" />
+    <Compile Include="Pathfinding\Heap.cs" />
     <Compile Include="Pathfinding\Edge.cs" />
+    <Compile Include="Pathfinding\GraphExtensions.cs" />
     <Compile Include="Pathfinding\SimpleGraph.cs" />
     <Compile Include="Pathfinding\Graph.cs" />
-    <Compile Include="Pathfinding\GraphExtensions.cs" />
+    <Compile Include="Pathfinding\GraphExtensions.Pathfinding.cs" />
     <Compile Include="Pathfinding\Grid.cs" />
     <Compile Include="Pathfinding\GridEdge.cs" />
     <Compile Include="Pathfinding\IEdge.cs" />
@@ -316,6 +318,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Draw.Primitive.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
