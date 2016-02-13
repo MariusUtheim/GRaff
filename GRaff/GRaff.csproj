@@ -113,8 +113,11 @@
     <Compile Include="Forms\MouseEventArgs.cs" />
     <Compile Include="Forms\OpenFileDialog.cs" />
     <Compile Include="Forms\Quad.cs" />
-    <Compile Include="Graphics\TextRenderer.cs" />
+    <Compile Include="Graphics\Text\TextRenderer.cs" />
     <Compile Include="Pathfinding\Heap.cs" />
+    <Compile Include="Pathfinding\DiagonalGrid.cs" />
+    <Compile Include="Pathfinding\DiagonalGridEdge.cs" />
+    <Compile Include="Pathfinding\DiagonalGridVertex.cs" />
     <Compile Include="Pathfinding\Edge.cs" />
     <Compile Include="Pathfinding\GraphExtensions.cs" />
     <Compile Include="Pathfinding\SimpleGraph.cs" />
@@ -143,10 +146,10 @@
     <Compile Include="Synchronization\Coroutine.cs" />
     <Compile Include="Font.cs" />
     <Compile Include="FontAlignment.cs" />
-    <Compile Include="FontInfo.cs" />
+    <Compile Include="Graphics\Text\FontInfo.cs" />
     <Compile Include="GMath.SystemMathOverloads.cs" />
     <Compile Include="GRaffExtensions.cs" />
-    <Compile Include="Graphics\FontLoader.cs" />
+    <Compile Include="Graphics\Text\FontLoader.cs" />
     <Compile Include="Graphics\Lighting\LightObstacle.cs" />
     <Compile Include="Graphics\Lighting\LightSource.cs" />
     <Compile Include="Graphics\Lighting\WallSystem.cs" />
@@ -236,7 +239,7 @@
     <Compile Include="Graphics\ColorMap.cs" />
     <Compile Include="Complex.cs" />
     <Compile Include="Draw.cs" />
-    <Compile Include="FontCharacter.cs" />
+    <Compile Include="Graphics\Text\FontCharacter.cs" />
     <Compile Include="Graphics\GLExtensions.cs" />
     <Compile Include="Graphics\PrimitiveType.cs" />
     <Compile Include="Graphics\UsageHint.cs" />

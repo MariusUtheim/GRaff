@@ -9,9 +9,9 @@ namespace GRaff.Pathfinding
 {
     internal sealed class HeapCollectionDebugView<T>
     {
-        private readonly HeapSet<T> _Heap;
+        private readonly Heap<T> _Heap;
 
-        public HeapCollectionDebugView(HeapSet<T> heap)
+        public HeapCollectionDebugView(Heap<T> heap)
         {
             if (ReferenceEquals(null, heap))
                 throw new ArgumentNullException("heap");
@@ -39,7 +39,7 @@ namespace GRaff.Pathfinding
     /// </typeparam>
     [DebuggerDisplay("Count = {Count}")]
     [DebuggerTypeProxy(typeof(HeapCollectionDebugView<>))]
-    internal sealed class HeapSet<T> : ICollection<T>, ICloneable
+    public sealed class Heap<T> : ICollection<T>, ICloneable
     {
         private readonly IComparer<T> _Comparer;
         private readonly bool _Reverse;
@@ -48,22 +48,22 @@ namespace GRaff.Pathfinding
         private int _Version;
 
         /// <summary>
-        /// This is the version of the <see cref="HeapSet{T}"/> class.
+        /// This is the version of the <see cref="Heap{T}"/> class.
         /// </summary>
         public static readonly Version Version = new Version(1, 0, 0, 0);
 
         /// <summary>
-        /// This is the default size of a new <see cref="HeapSet{T}"/>, unless specified
+        /// This is the default size of a new <see cref="Heap{T}"/>, unless specified
         /// with one of the constructor overloads, or given an initial collection
-        /// to populate the <see cref="HeapSet{T}"/> with.
+        /// to populate the <see cref="Heap{T}"/> with.
         /// </summary>
         public const int DefaultSize = 10;
 
         /// <overloads>
-        /// Initializes a new instance of the <see cref="HeapSet{T}"/> class.
+        /// Initializes a new instance of the <see cref="Heap{T}"/> class.
         /// </overloads>
         /// <summary>
-        /// Initializes a new instance of the <see cref="HeapSet{T}"/> class using the specified capacity, comparer and reverse
+        /// Initializes a new instance of the <see cref="Heap{T}"/> class using the specified capacity, comparer and reverse
         /// settings.
         /// </summary>
         /// <param name="capacity">
@@ -82,7 +82,7 @@ namespace GRaff.Pathfinding
         /// <exception cref="ArgumentNullException">
         /// <para><paramref name="comparer"/> is <c>null</c>.</para>
         /// </exception>
-        public HeapSet(int capacity, IComparer<T> comparer, bool reverse)
+        public Heap(int capacity, IComparer<T> comparer, bool reverse)
         {
             if (capacity <= 0)
                 throw new ArgumentOutOfRangeException("capacity", capacity, "Invalid capacity for heap, must be at least 0");
@@ -95,7 +95,7 @@ namespace GRaff.Pathfinding
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="HeapSet{T}"/> class using the specified capacity.
+        /// Initializes a new instance of the <see cref="Heap{T}"/> class using the specified capacity.
         /// </summary>
         /// <param name="capacity">
         /// The initial capacity to construct the heap with. 10 will be used if the value is less than 10.
@@ -103,23 +103,23 @@ namespace GRaff.Pathfinding
         /// <exception cref="ArgumentOutOfRangeException">
         /// <para><paramref name="capacity"/> is 0 or less than 0.</para>
         /// </exception>
-        public HeapSet(int capacity)
+        public Heap(int capacity)
             : this(capacity, Comparer<T>.Default, false)
         {
             // Do nothing here
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="HeapSet{T}"/> class using the default capacity.
+        /// Initializes a new instance of the <see cref="Heap{T}"/> class using the default capacity.
         /// </summary>
-        public HeapSet()
+        public Heap()
             : this(DefaultSize, Comparer<T>.Default, false)
         {
             // Do nothing here
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="HeapSet{T}"/> class from the items in the collection.
+        /// Initializes a new instance of the <see cref="Heap{T}"/> class from the items in the collection.
         /// settings.
         /// </summary>
         /// <param name="collection">
@@ -128,14 +128,14 @@ namespace GRaff.Pathfinding
         /// <exception cref="ArgumentNullException">
         /// <para><paramref name="collection"/> is <c>null</c>.</para>
         /// </exception>
-        public HeapSet(IEnumerable<T> collection)
+        public Heap(IEnumerable<T> collection)
             : this(Comparer<T>.Default, false, (collection ?? new T[0]).ToArray())
         {
             // Do nothing here
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="HeapSet{T}"/> class from the items in the collection.
+        /// Initializes a new instance of the <see cref="Heap{T}"/> class from the items in the collection.
         /// settings.
         /// </summary>
         /// <param name="collection">
@@ -148,14 +148,14 @@ namespace GRaff.Pathfinding
         /// <exception cref="ArgumentNullException">
         /// <para><paramref name="collection"/> is <c>null</c>.</para>
         /// </exception>
-        public HeapSet(IEnumerable<T> collection, bool reverse)
+        public Heap(IEnumerable<T> collection, bool reverse)
             : this(Comparer<T>.Default, reverse, (collection ?? new T[0]).ToArray())
         {
             // Do nothing here
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="HeapSet{T}"/> class from the specified items.
+        /// Initializes a new instance of the <see cref="Heap{T}"/> class from the specified items.
         /// settings.
         /// </summary>
         /// <param name="values">
@@ -164,14 +164,14 @@ namespace GRaff.Pathfinding
         /// <exception cref="ArgumentNullException">
         /// <para><paramref name="values"/> is <c>null</c>.</para>
         /// </exception>
-        public HeapSet(params T[] values)
+        public Heap(params T[] values)
             : this(Comparer<T>.Default, false, values)
         {
             // Do nothing here
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="HeapSet{T}"/> class with
+        /// Initializes a new instance of the <see cref="Heap{T}"/> class with
         /// the specified comparer.
         /// </summary>
         /// <param name="comparer">
@@ -180,14 +180,14 @@ namespace GRaff.Pathfinding
         /// <exception cref="ArgumentNullException">
         /// <para><paramref name="comparer"/> is <c>null</c>.</para>
         /// </exception>
-        public HeapSet(IComparer<T> comparer)
+        public Heap(IComparer<T> comparer)
             : this(comparer, false)
         {
             // Do nothing here
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="HeapSet{T}"/> class from the items in the collection.
+        /// Initializes a new instance of the <see cref="Heap{T}"/> class from the items in the collection.
         /// </summary>
         /// <param name="comparer">
         /// The comparer object to use.
@@ -200,14 +200,14 @@ namespace GRaff.Pathfinding
         /// <para>- or -</para>
         /// <para><paramref name="collection"/> is <c>null</c>.</para>
         /// </exception>
-        public HeapSet(IComparer<T> comparer, IEnumerable<T> collection)
+        public Heap(IComparer<T> comparer, IEnumerable<T> collection)
             : this(comparer, false, (collection ?? new T[0]).ToArray())
         {
             // Do nothing here
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="HeapSet{T}"/> class from the items in the collection.
+        /// Initializes a new instance of the <see cref="Heap{T}"/> class from the items in the collection.
         /// settings.
         /// </summary>
         /// <param name="comparer">
@@ -225,14 +225,14 @@ namespace GRaff.Pathfinding
         /// <para>- or -</para>
         /// <para><paramref name="collection"/> is <c>null</c>.</para>
         /// </exception>
-        public HeapSet(IComparer<T> comparer, bool reverse, IEnumerable<T> collection)
+        public Heap(IComparer<T> comparer, bool reverse, IEnumerable<T> collection)
             : this(comparer, reverse, (collection ?? new T[0]).ToArray())
         {
             // Do nothing here
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="HeapSet{T}"/> class from the specified items.
+        /// Initializes a new instance of the <see cref="Heap{T}"/> class from the specified items.
         /// settings.
         /// </summary>
         /// <param name="comparer">
@@ -250,7 +250,7 @@ namespace GRaff.Pathfinding
         /// <para>- or -</para>
         /// <para><paramref name="values"/> is <c>null</c>.</para>
         /// </exception>
-        public HeapSet(IComparer<T> comparer, bool reverse, params T[] values)
+        public Heap(IComparer<T> comparer, bool reverse, params T[] values)
         {
             if (comparer == null)
                 throw new ArgumentNullException("comparer");
@@ -297,10 +297,10 @@ namespace GRaff.Pathfinding
         }
 
         /// <summary>
-        /// Adds the elements of the specified collection to this <see cref="HeapSet{T}"/>.
+        /// Adds the elements of the specified collection to this <see cref="Heap{T}"/>.
         /// </summary>
         /// <param name="collection">
-        /// The collection whose elements should be added to this <see cref="HeapSet{T}"/>.
+        /// The collection whose elements should be added to this <see cref="Heap{T}"/>.
         /// </param>
         /// <exception cref="ArgumentNullException">
         /// <para><paramref name="collection"/> is <c>null</c>.</para>
@@ -315,10 +315,10 @@ namespace GRaff.Pathfinding
         }
 
         /// <summary>
-        /// Adds an item to this <see cref="HeapSet{T}"/>
+        /// Adds an item to this <see cref="Heap{T}"/>
         /// </summary>
         /// <param name="item">
-        /// The item to add to this <see cref="HeapSet{T}"/>.
+        /// The item to add to this <see cref="Heap{T}"/>.
         /// </param>
         public void Add(T item)
         {
@@ -346,12 +346,7 @@ namespace GRaff.Pathfinding
             {
                 int parentPos = (pos - 1) / 2;
                 T parent = _Items[parentPos];
-				if (parent.Equals(newItem))
-				{
-					_Items[parentPos] = newItem;
-					return;
-				}
-				if (CompareElements(parent, newItem) < 0)
+                if (CompareElements(parent, newItem) <= 0)
                     break;
                 _Items[pos] = parent;
                 pos = parentPos;
@@ -396,7 +391,7 @@ namespace GRaff.Pathfinding
 
         /// <summary>
         /// This method increases the internal version number, to break enumerators
-        /// that are currently enumerating over this <see cref="HeapSet{T}"/>.
+        /// that are currently enumerating over this <see cref="Heap{T}"/>.
         /// </summary>
         private void BreakEnumerators()
         {
@@ -418,7 +413,7 @@ namespace GRaff.Pathfinding
 
         /// <summary>
         /// Adds a single value to the heap, placing it in the heap so that the heap criteria
-        /// (see <see cref="HeapSet{T}"/>) is satisfied.
+        /// (see <see cref="Heap{T}"/>) is satisfied.
         /// </summary>
         /// <param name="value">
         /// The value to add to the heap.
@@ -579,7 +574,7 @@ namespace GRaff.Pathfinding
         }
 
         /// <summary>
-        /// Removes all items from this <see cref="HeapSet{T}"/>.
+        /// Removes all items from this <see cref="Heap{T}"/>.
         /// </summary>
         public void Clear()
         {
@@ -590,14 +585,14 @@ namespace GRaff.Pathfinding
         }
 
         /// <summary>
-        /// Determines whether this <see cref="HeapSet{T}"/> contains a specific value.
+        /// Determines whether this <see cref="Heap{T}"/> contains a specific value.
         /// </summary>
         /// <returns>
-        /// <c>true</c> if <paramref name="item"/> is found in this <see cref="HeapSet{T}"/>;
+        /// <c>true</c> if <paramref name="item"/> is found in this <see cref="Heap{T}"/>;
         /// otherwise, <c>false</c>.
         /// </returns>
         /// <param name="item">
-        /// The item to locate in this <see cref="HeapSet{T}"/>.
+        /// The item to locate in this <see cref="Heap{T}"/>.
         /// </param>
         public bool Contains(T item)
         {
@@ -700,12 +695,12 @@ namespace GRaff.Pathfinding
         }
 
         /// <summary>
-        /// Copies the elements of this <see cref="HeapSet{T}"/> to an <see cref="Array"/>,
+        /// Copies the elements of this <see cref="Heap{T}"/> to an <see cref="Array"/>,
         /// starting at a particular <see cref="Array"/> index.
         /// </summary>
         /// <param name="array">
         /// The one-dimensional <see cref="Array"/> that is the destination of the elements copied
-        /// from this <see cref="HeapSet{T}"/>. The <see cref="Array"/> must have zero-based indexing.
+        /// from this <see cref="Heap{T}"/>. The <see cref="Array"/> must have zero-based indexing.
         /// </param>
         /// <param name="arrayIndex">
         /// The zero-based index in <paramref name="array"/> at which copying begins.
@@ -716,7 +711,7 @@ namespace GRaff.Pathfinding
         /// <exception cref="ArgumentOutOfRangeException">
         /// <paramref name="arrayIndex"/> is less than 0.</exception>
         /// <exception cref="ArgumentException">
-        /// <para>The number of elements in the source <see cref="HeapSet{T}"/> is greater than the available space from <paramref name="arrayIndex"/> to the end of the destination <paramref name="array"/>.</para>
+        /// <para>The number of elements in the source <see cref="Heap{T}"/> is greater than the available space from <paramref name="arrayIndex"/> to the end of the destination <paramref name="array"/>.</para>
         /// <para>- or -</para>
         /// <para>Type <typeparamref name="T"/> cannot be cast automatically to the type of the destination <paramref name="array"/>.</para>
         /// </exception>
@@ -734,14 +729,14 @@ namespace GRaff.Pathfinding
         }
 
         /// <summary>
-        /// Removes the first occurrence of a specific item from this <see cref="HeapSet{T}"/>.
+        /// Removes the first occurrence of a specific item from this <see cref="Heap{T}"/>.
         /// </summary>
         /// <returns>
-        /// <c>true</c> if <paramref name="item"/> was successfully removed from this <see cref="HeapSet{T}"/>;
+        /// <c>true</c> if <paramref name="item"/> was successfully removed from this <see cref="Heap{T}"/>;
         /// otherwise, <c>false</c>.
         /// </returns>
         /// <param name="item">
-        /// The item to remove from this <see cref="HeapSet{T}"/>.
+        /// The item to remove from this <see cref="Heap{T}"/>.
         /// </param>
         public bool Remove(T item)
         {
@@ -758,10 +753,10 @@ namespace GRaff.Pathfinding
         }
 
         /// <summary>
-        /// Gets the number of elements contained in this <see cref="HeapSet{T}"/>.
+        /// Gets the number of elements contained in this <see cref="Heap{T}"/>.
         /// </summary>
         /// <returns>
-        /// The number of elements contained in this <see cref="HeapSet{T}"/>.
+        /// The number of elements contained in this <see cref="Heap{T}"/>.
         /// </returns>
         public int Count
         {
@@ -773,7 +768,7 @@ namespace GRaff.Pathfinding
 
         /// <summary>
         /// Gets the <see cref="IComparer{T}"/> that dictates the order of the elements in this
-        /// <see cref="HeapSet{T}"/>.
+        /// <see cref="Heap{T}"/>.
         /// </summary>
         /// <remarks>
         /// Note that if <see cref="Reverse"/> is <c>true</c>, the elements are ordered in the
@@ -788,7 +783,7 @@ namespace GRaff.Pathfinding
         }
 
         /// <summary>
-        /// Gets a value indicating whether this <see cref="HeapSet{T}"/> is ordering
+        /// Gets a value indicating whether this <see cref="Heap{T}"/> is ordering
         /// items in the reverse of what <see cref="Comparer"/> dictates.
         /// </summary>
         public bool Reverse
@@ -810,7 +805,7 @@ namespace GRaff.Pathfinding
         /// </returns>
         /// <remarks>
         /// <para>Note that the heap is not kept in sorted order, but at any time the contents of the heap
-        /// satisfies the heap criteria. See <see cref="HeapSet{T}"/> for more information about this.</para>
+        /// satisfies the heap criteria. See <see cref="Heap{T}"/> for more information about this.</para>
         /// <para>Note that to replace an element in the heap, use either <see cref="Replace"/>
         /// or <see cref="ReplaceAt"/>.</para>
         /// </remarks>
@@ -867,7 +862,7 @@ namespace GRaff.Pathfinding
         }
 
         /// <summary>
-        /// Gets a value indicating whether this <see cref="HeapSet{T}"/> is read-only.
+        /// Gets a value indicating whether this <see cref="Heap{T}"/> is read-only.
         /// </summary>
         /// <returns>
         /// Always <c>false</c>.
@@ -881,14 +876,14 @@ namespace GRaff.Pathfinding
         }
 
         /// <summary>
-        /// Creates a new object that is a copy of this <see cref="HeapSet{T}"/>.
+        /// Creates a new object that is a copy of this <see cref="Heap{T}"/>.
         /// </summary>
         /// <returns>
-        /// A new object that is a copy of this <see cref="HeapSet{T}"/>.
+        /// A new object that is a copy of this <see cref="Heap{T}"/>.
         /// </returns>
-        public HeapSet<T> Clone()
+        public Heap<T> Clone()
         {
-            var result = new HeapSet<T>(_Comparer, _Reverse);
+            var result = new Heap<T>(_Comparer, _Reverse);
             result.Capacity = _Items.Length;
             result._Count = _Count;
             for (int index = 0; index < _Count; index++)

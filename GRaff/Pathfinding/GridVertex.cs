@@ -51,6 +51,12 @@ namespace GRaff.Pathfinding
 			return GMath.Abs(X - other.X) + GMath.Abs(Y - other.Y);
 		}
 
+		public double EuclideanDistance(GridVertex other)
+		{
+			double dx = GMath.Abs(X - other.X), dy = GMath.Abs(Y - other.Y);
+			return GMath.Sqrt(dx * dx + dy * dy);
+		}
+
 		public override string ToString()
 		{
 			return $"GridVertex {Location}";

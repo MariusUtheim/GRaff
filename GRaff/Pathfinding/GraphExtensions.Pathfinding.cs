@@ -9,45 +9,64 @@ namespace GRaff.Pathfinding
 {
 	public static partial class GraphExtensions
 	{		
-		private struct VertexLengthMetric<TVertex, TEdge> : IComparable<VertexLengthMetric<TVertex, TEdge>>
+		private class VertexLengthMetric<TVertex, TEdge> : IComparable<VertexLengthMetric<TVertex, TEdge>>
 			where TVertex : IVertex<TVertex, TEdge> where TEdge : IEdge<TVertex, TEdge>
 		{
-			public readonly double Length, DistanceRemaining;
+			public readonly double CurrentDistance, DistanceRemaining, BeautifulDistance;
 			public readonly TVertex Vertex;
+			public readonly VertexLengthMetric<TVertex, TEdge> Previous;
 
-			public VertexLengthMetric(TVertex vertex, double length, double distanceRemaining)
+			public double BestCaseDistance => CurrentDistance + DistanceRemaining;
+
+			public VertexLengthMetric(TVertex vertex, VertexLengthMetric<TVertex, TEdge> previous, double currentDistance, double distanceRemaining, double beautifulDistance)
 			{
 				Vertex = vertex;
-				Length = length;
+				Previous = previous;
+				CurrentDistance = currentDistance;
 				DistanceRemaining = distanceRemaining;
+				BeautifulDistance = beautifulDistance;
 			}
 
 			public int CompareTo(VertexLengthMetric<TVertex, TEdge> other)
 			{
-				if (Length + DistanceRemaining == other.Length + other.DistanceRemaining)
-					return GMath.Sign(DistanceRemaining - other.DistanceRemaining);
+				if (Vertex.Equals(other.Vertex))
+					return 0;
+				if (BestCaseDistance == other.BestCaseDistance)
+				{
+					var closestDistance = DistanceRemaining.CompareTo(other.DistanceRemaining);
+					if (closestDistance == 0)
+						return BeautifulDistance.CompareTo(other.BeautifulDistance);
+					else
+						return closestDistance;
+				}
 				else
-					return GMath.Sign((Length + DistanceRemaining) - (other.Length + other.DistanceRemaining));
+					return BestCaseDistance.CompareTo(other.BestCaseDistance);
 			}
 
-			public override bool Equals(object obj)
-			{
-				return Vertex.Equals(((VertexLengthMetric<TVertex, TEdge>)obj).Vertex);
-            }
+			public override bool Equals(object obj) => Vertex.Equals(((VertexLengthMetric<TVertex, TEdge>)obj).Vertex);
 
 			public override int GetHashCode() => Vertex.GetHashCode();
 		}
 
-		public static Path<TVertex, TEdge> ShortestPath<TVertex, TEdge>(this IGraph<TVertex, TEdge> graph, TVertex v1, TVertex v2, double maxDistance = Double.PositiveInfinity)
+
+		public static Path<TVertex, TEdge> ShortestPath<TVertex, TEdge>(this IGraph<TVertex, TEdge> graph, TVertex origin, TVertex goal, double maxDistance = Double.PositiveInfinity)
 			where TVertex : IVertex<TVertex, TEdge>
 			where TEdge : IEdge<TVertex, TEdge>
 		{
-			Contract.Requires<ArgumentNullException>(v1 != null && v2 != null);
-			Contract.Requires<ArgumentException>(v1.Graph == graph && v2.Graph == graph && !v1.Equals(v2));
+			return graph.ShortestPath(origin, goal, _ => 0, maxDistance);
+		}
 
-			var edges = graph.MinimalSpanningTree(v1, v2, maxDistance).TakeWhilePrevious(e => !e.To.Equals(v2)).ToArray();
 
-			if (!edges[edges.Length - 1].To.Equals(v2))
+		public static Path<TVertex, TEdge> ShortestPath<TVertex, TEdge>(this IGraph<TVertex, TEdge> graph, TVertex origin, TVertex goal, Func<TVertex, double> beautyMetric, double maxDistance = Double.PositiveInfinity)
+			where TVertex : IVertex<TVertex, TEdge>
+			where TEdge : IEdge<TVertex, TEdge>
+		{
+			Contract.Requires<ArgumentNullException>(origin != null && goal != null);
+			Contract.Requires<ArgumentException>(origin.Graph == graph && goal.Graph == graph && !origin.Equals(goal));
+
+			var edges = graph.MinimalSpanningTree(origin, h => h.HeuristicDistance(goal), beautyMetric, maxDistance).TakeWhilePrevious(e => !e.To.Equals(goal)).ToArray();
+
+			if (!edges[edges.Length - 1].To.Equals(goal))
 				return null;
 
 			var pathEdges = new LinkedList<TEdge>();
@@ -66,7 +85,15 @@ namespace GRaff.Pathfinding
 		}
 
 
+
 		public static IEnumerable<TEdge> MinimalSpanningTree<TVertex, TEdge>(this IGraph<TVertex, TEdge> graph, TVertex v, Func<TVertex, double> heuristic, double maxDistance = Double.PositiveInfinity)
+			where TVertex : IVertex<TVertex, TEdge>
+			where TEdge : IEdge<TVertex, TEdge>
+		{
+			return MinimalSpanningTree(graph, v, heuristic, _ => 0, maxDistance);
+        }
+
+		public static IEnumerable<TEdge> MinimalSpanningTree<TVertex, TEdge>(this IGraph<TVertex, TEdge> graph, TVertex v, Func<TVertex, double> heuristic, Func<TVertex, double> beautyHeuristic, double maxDistance)
 			where TVertex : IVertex<TVertex, TEdge>
 			where TEdge : IEdge<TVertex, TEdge>
 		{
@@ -74,34 +101,36 @@ namespace GRaff.Pathfinding
 			Contract.Requires<ArgumentException>(v.Graph == graph);
 
 			var distance = graph.Vertices.ToDictionary(_ => _, _ => Double.PositiveInfinity);
-			var previous = graph.Vertices.ToDictionary(_ => _, _ => default(TVertex));
+			var isTaken = new HashSet<VertexLengthMetric<TVertex, TEdge>>();
 
 			distance[v] = 0;
 
-			var candidateNodes = new HeapSet<VertexLengthMetric<TVertex, TEdge>>();
-			candidateNodes.Push(new VertexLengthMetric<TVertex, TEdge>(v, 0, 0));
+			var candidateNodes = new Heap<VertexLengthMetric<TVertex, TEdge>>();
+			candidateNodes.Add(new VertexLengthMetric<TVertex, TEdge>(v, null, 0, 0, 0));
 
-			while (candidateNodes.Count > 0)
+			while (candidateNodes.Any())
 			{
-				var current = candidateNodes.Pop().Vertex;
-				var currentDistance = distance[current];
+				var currentNode = candidateNodes.Pop();
+				if (isTaken.Contains(currentNode))
+					continue;
 
-				if (currentDistance > maxDistance)
+				var current = currentNode.Vertex;
+				
+				if (currentNode.BestCaseDistance > maxDistance)
 					yield break;
 
-				if (previous[current] != null)
-					yield return previous[current].EdgeTo(current);
+				isTaken.Add(currentNode);
+				if (currentNode.Previous != null)
+					yield return currentNode.Previous.Vertex.EdgeTo(current);
 
 				foreach (var edge in current.Edges)
 				{
 					var neighbour = edge.To;
-					var length = currentDistance + edge.Weight;
+					var length = currentNode.CurrentDistance + edge.Weight;
 					if (length < distance[neighbour])
 					{
-						if (distance[neighbour] == Double.PositiveInfinity)
-							candidateNodes.Push(new VertexLengthMetric<TVertex, TEdge>(neighbour, length, heuristic(neighbour)));
+						candidateNodes.Add(new VertexLengthMetric<TVertex, TEdge>(neighbour, currentNode, length, heuristic(neighbour), beautyHeuristic(neighbour)));
 						distance[neighbour] = length;
-						previous[neighbour] = current;
 					}
 				}
 			}
@@ -115,16 +144,6 @@ namespace GRaff.Pathfinding
 			Contract.Requires<ArgumentNullException>(v != null);
 			Contract.Requires<ArgumentException>(v.Graph == graph);
 			return graph.MinimalSpanningTree(v, _ => 0, maxDistance);
-		}
-
-		public static IEnumerable<TEdge> MinimalSpanningTree<TVertex, TEdge>(this IGraph<TVertex, TEdge> graph, TVertex v, TVertex target, double maxDistance = Double.PositiveInfinity)
-			where TVertex : IVertex<TVertex, TEdge>
-			where TEdge : IEdge<TVertex, TEdge>
-		{
-			Contract.Requires<ArgumentNullException>(graph != null && v != null && target != null);
-			Contract.Requires<ArgumentException>(v.Graph == graph && target.Graph == graph);
-			Contract.Requires<ArgumentException>(!v.Equals(target));
-			return graph.MinimalSpanningTree(v, h => h.HeuristicDistance(target), maxDistance);
 		}
 	}
 }
