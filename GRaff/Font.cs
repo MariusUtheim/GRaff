@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using GRaff.Graphics;
+using GRaff.Graphics.Text;
 using GRaff.Synchronization;
 
 namespace GRaff

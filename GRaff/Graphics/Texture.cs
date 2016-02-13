@@ -9,7 +9,6 @@ using coord = System.Single;
 
 namespace GRaff.Graphics
 {
-#warning Move to GRaff.Graphics?
 	public sealed class Texture
 	{
 		internal Texture(TextureBuffer buffer, GraphicsPoint topLeft, GraphicsPoint topRight, GraphicsPoint bottomLeft, GraphicsPoint bottomRight)

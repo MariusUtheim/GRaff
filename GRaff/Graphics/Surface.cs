@@ -3,6 +3,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using System.Diagnostics.Contracts;
+using GRaff.Graphics.Text;
 #if OpenGL4
 using OpenTK.Graphics.OpenGL4;
 using GLPrimitiveType = OpenTK.Graphics.OpenGL4.PrimitiveType;

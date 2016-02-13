@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 using System.Xml.Serialization;
 
 
-namespace GRaff.Graphics
+namespace GRaff.Graphics.Text
 {
 	[Serializable]
 	[XmlRoot("font")]

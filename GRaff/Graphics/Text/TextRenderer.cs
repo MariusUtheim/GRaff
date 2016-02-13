@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace GRaff.Graphics
+namespace GRaff.Graphics.Text
 {
 	public sealed class TextRenderer
 	{

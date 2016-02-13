@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Diagnostics.Contracts;
 using GRaff.Graphics;
-
+using GRaff.Graphics.Text;
 
 namespace GRaff
 {
