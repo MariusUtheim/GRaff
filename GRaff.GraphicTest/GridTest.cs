@@ -8,7 +8,7 @@ using GRaff.Pathfinding;
 
 namespace GRaff.GraphicTest
 {
-	[Test]
+	[Test(Order = 0)]
 	class GridTest : GameElement, IGlobalMousePressListener, IKeyPressListener
 	{
 		private const int width = 32, height = 24;
@@ -20,6 +20,7 @@ namespace GRaff.GraphicTest
 		private readonly Grid _grid;
 		private GridVertex _from = null, _to = null;
 
+
 		public GridTest()
 		{
 			Room.Current.Background.Color = Colors.Black;
@@ -27,15 +28,15 @@ namespace GRaff.GraphicTest
 			for (var x = 0; x < width; x++)
 				for (var y = 0; y < height; y++)
 					blocked[x, y] = GRandom.Probability(0.15);
+
 			_grid = new Grid(blocked);
 		}
 
 		public override void OnStep()
 		{
 			Window.Title = $"GridTest - FPS: {Time.FPS}";
-			//if (Time.LoopCount % 1 == 0)
-			//	n++;
-			n = Int32.MaxValue;
+			if (Time.LoopCount % 5 == 0)
+				n++;
         }
 
 		static Point mapToScreen(IntVector p) => new Point(x0 + dx * p.X, y0 + dy * p.Y);
@@ -77,8 +78,26 @@ namespace GRaff.GraphicTest
 			if (_from != null && _to != null)
 			{
 				Draw.FillCircle(Colors.Red.Transparent(0.5), mapToScreen(_from.Location), 7);
-				var edges = _grid.MinimalSpanningTree(_from, _to);
-				Draw.Primitive.Lines(Colors.Red, edges.Take(n).Select(e => new Line(mapToScreen(e.From.Location), mapToScreen(e.To.Location))).ToArray());
+				var edges = _grid.MinimalSpanningTree(_from, h => h.HeuristicDistance(_to));
+				Draw.Primitive.Lines(Colors.Red, edges.Take(n)
+													  .TakeWhilePrevious(e => e.To != _to)
+													  .Select(e => new Line(mapToScreen(e.From.Location), mapToScreen(e.To.Location))).ToArray());
+			}
+		}
+
+		public void drawBeautifulTree()
+		{
+			if (_from != null)
+				Draw.FillCircle(Colors.Red.Transparent(0.9), mapToScreen(_from.Location), 7);
+			if (_to != null)
+				Draw.FillCircle(Colors.Blue.Transparent(0.9), mapToScreen(_to.Location), 7);
+			if (_from != null && _to != null)
+			{
+				Draw.FillCircle(Colors.Red.Transparent(0.5), mapToScreen(_from.Location), 7);
+				var edges = _grid.MinimalSpanningTree(_from, h => h.HeuristicDistance(_to), b => b.EuclideanDistance(_to), Double.PositiveInfinity);
+				Draw.Primitive.Lines(Colors.Red, edges.Take(n)
+													  .TakeWhilePrevious(e => e.To != _to)
+													  .Select(e => new Line(mapToScreen(e.From.Location), mapToScreen(e.To.Location))).ToArray());
 			}
 		}
 
@@ -91,6 +110,7 @@ namespace GRaff.GraphicTest
 				case 1: drawShortestPath(); break;
 				case 2: drawSpanningTree(); break;
 				case 3: drawHeuristicSpanningTree(); break;
+				case 4: drawBeautifulTree(); break;
 			}
 		}
 
@@ -113,6 +133,7 @@ namespace GRaff.GraphicTest
 				case Key.Number1: mode = 1; break;
 				case Key.Number2: mode = 2; n = 0; break;
 				case Key.Number3: mode = 3; n = 0; break;
+				case Key.Number4: mode = 4; n = 0; break;
 			}
 		}
 	}

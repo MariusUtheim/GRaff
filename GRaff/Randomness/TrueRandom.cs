@@ -63,10 +63,9 @@ namespace GRaff.Randomness
 		public static async Task<decimal[]> Decimals(int n, int decimalPlaces, bool replacement)
 		{
 			Contract.Requires(n >= 1 && n <= 1e4);
-			Contract.Requires(decimalPlaces >= 1 && decimalPlaces <= 20);
+			Contract.Requires(decimalPlaces >= 1 && decimalPlaces <= 14);
 			Contract.Requires(replacement || (n <= Math.Pow(10, decimalPlaces)));
 
-#warning Doesn't work for decimalPlaces > 14
 			var requestData = _buildRequest("generateDecimalFractions", new Dictionary<string, object>
 			{
 				{ "n", n },

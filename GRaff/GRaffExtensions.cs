@@ -28,7 +28,7 @@ namespace GRaff
 			return min;
 		}
 
-		internal static IEnumerable<T> TakeWhilePrevious<T>(this IEnumerable<T> enumerable, Func<T, bool> predicate)
+		public static IEnumerable<T> TakeWhilePrevious<T>(this IEnumerable<T> enumerable, Func<T, bool> predicate)
 		{
 			foreach (var v in enumerable)
 			{

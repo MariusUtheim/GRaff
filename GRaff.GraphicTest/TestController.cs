@@ -17,8 +17,9 @@ namespace GRaff.GraphicTest
 		{
 			var types = Assembly.GetExecutingAssembly()
 				.GetTypes();
-            _tests = types
+			_tests = types
 				.Where(t => t.GetCustomAttribute<TestAttribute>() != null)
+				.OrderBy(t => t.GetCustomAttribute<TestAttribute>().Order)
 				.ToArray();
 
 			_testIndex = 0;

@@ -1,11 +1,8 @@
-﻿
-
-using System;
+﻿using System;
 using System.Diagnostics.Contracts;
 
 namespace GRaff
 {
-#warning Review class
 	public sealed class Mask
 	{
 		private readonly GameObject _owner;
@@ -44,7 +41,11 @@ namespace GRaff
 					return _maskShape;	
 			}
 
-			set { _maskShape = value; }
+			set
+			{
+				Contract.Requires<ArgumentNullException>(value != null);
+				_maskShape = value;
+			}
 		}
 
 		public Rectangle BoundingBox
