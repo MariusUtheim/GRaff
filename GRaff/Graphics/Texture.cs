@@ -14,7 +14,7 @@ namespace GRaff.Graphics
 		internal Texture(TextureBuffer buffer, GraphicsPoint topLeft, GraphicsPoint topRight, GraphicsPoint bottomLeft, GraphicsPoint bottomRight)
 		{
 			Contract.Requires<ArgumentNullException>(buffer != null);
-			TexCoords = new[] { topLeft, topRight, bottomLeft, bottomRight };
+			QuadCoords = new[] { topLeft, topRight, bottomRight, bottomLeft };
 			Buffer = buffer;
 		}
 
@@ -39,22 +39,22 @@ namespace GRaff.Graphics
 		[ContractInvariantMethod]
 		private void invariants()
 		{
-			Contract.Invariant(TexCoords != null);
-			Contract.Invariant(TexCoords.Length == 4);
+			Contract.Invariant(QuadCoords != null);
+			Contract.Invariant(QuadCoords.Length == 4);
 			Contract.Invariant(Buffer != null);
 		}
 
-		internal GraphicsPoint[] TexCoords { get; }
-
+		internal GraphicsPoint[] QuadCoords { get; }
+		
 		public TextureBuffer Buffer { get; }
 
-		public GraphicsPoint TopLeft => TexCoords[0];
+		public GraphicsPoint TopLeft => QuadCoords[0];
 		
-		public GraphicsPoint TopRight => TexCoords[1];
+		public GraphicsPoint TopRight => QuadCoords[1];
 
-		public GraphicsPoint BottomRight => TexCoords[3];
+		public GraphicsPoint BottomRight => QuadCoords[2];
 
-		public GraphicsPoint BottomLeft => TexCoords[2];
+		public GraphicsPoint BottomLeft => QuadCoords[3];
 
 		public double Width => (0.5 * (TopLeft + BottomLeft) - 0.5 * (TopRight + BottomRight)).Magnitude * Buffer.Width;
 

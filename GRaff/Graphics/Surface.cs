@@ -88,7 +88,7 @@ namespace GRaff.Graphics
 			GL.DrawArrays((GLPrimitiveType)type, 0, vertices.Length);
 		}
 
-		internal void RenderTextured(Texture texture, GraphicsPoint[] vertices, Color[] colors, PrimitiveType type)
+		internal void RenderTextured(Texture texture, GraphicsPoint[] vertices, Color[] colors)
 		{
 			Contract.Requires(texture != null && vertices != null && colors != null);
 			Contract.Requires(vertices.Length == colors.Length);
@@ -101,8 +101,8 @@ namespace GRaff.Graphics
 			GL.BindBuffer(BufferTarget.ArrayBuffer, _colorBuffer);
 			GL.BufferData(BufferTarget.ArrayBuffer, new IntPtr(vertices.Length * sizeofColor), colors, BufferUsageHint.StreamDraw);
 			GL.BindBuffer(BufferTarget.ArrayBuffer, _textureBuffer);
-			GL.BufferData(BufferTarget.ArrayBuffer, new IntPtr(vertices.Length * sizeofPoint), texture.TexCoords, BufferUsageHint.StreamDraw);
-			GL.DrawArrays((GLPrimitiveType)type, 0, vertices.Length);
+			GL.BufferData(BufferTarget.ArrayBuffer, new IntPtr(vertices.Length * sizeofPoint), texture.QuadCoords, BufferUsageHint.StreamDraw);
+			GL.DrawArrays(GLPrimitiveType.Quads, 0, vertices.Length);
 		}
 
 		public void Clear(Color color)
@@ -150,8 +150,7 @@ namespace GRaff.Graphics
 			coord left = p.Xt, top = p.Yt;
 			coord right = left + texture.PixelWidth, bottom = top + texture.PixelHeight;
 
-			RenderTextured(texture, new[] { new GraphicsPoint(left, top), new GraphicsPoint(right, top), new GraphicsPoint(left, bottom), new GraphicsPoint(right, bottom) },
-						   white4, PrimitiveType.TriangleStrip);
+			RenderTextured(texture, new[] { new GraphicsPoint(left, top), new GraphicsPoint(right, top), new GraphicsPoint(right, bottom), new GraphicsPoint(left, bottom) }, white4);
 		}
 
 
@@ -254,8 +253,7 @@ namespace GRaff.Graphics
 		{
 			Contract.Requires<ArgumentNullException>(sprite != null);
 			coord left = (coord)(x - sprite.XOrigin), top = (coord)(y - sprite.YOrigin), right = left + (coord)sprite.Width, bottom = top + (coord)sprite.Height;
-			RenderTextured(sprite.SubImage(subimage), new[] { new GraphicsPoint(left, top), new GraphicsPoint(right, top), new GraphicsPoint(left, bottom), new GraphicsPoint(right, bottom) },
-				   new[] { Colors.White, Colors.White, Colors.White, Colors.White }, PrimitiveType.TriangleStrip);
+			RenderTextured(sprite.SubImage(subimage), new[] { new GraphicsPoint(left, top), new GraphicsPoint(right, top), new GraphicsPoint(right, bottom), new GraphicsPoint(left, bottom) }, white4);
 		}
 
 		public void DrawSprite(Sprite sprite, int subimage, Color blend, AffineMatrix transform)
@@ -264,11 +262,11 @@ namespace GRaff.Graphics
 			var vertices = new[] {
 				transform * new GraphicsPoint(-sprite.XOrigin, -sprite.YOrigin),
 				transform * new GraphicsPoint(sprite.XOrigin, -sprite.YOrigin),
+				transform * new GraphicsPoint(sprite.XOrigin, sprite.YOrigin),
 				transform * new GraphicsPoint(-sprite.XOrigin, sprite.YOrigin),
-				transform * new GraphicsPoint(sprite.XOrigin, sprite.YOrigin)
 			};
 
-			RenderTextured(sprite.SubImage(subimage), vertices, new[] { blend, blend, blend, blend }, PrimitiveType.TriangleStrip);
+			RenderTextured(sprite.SubImage(subimage), vertices, new[] { blend, blend, blend, blend });
 		}
 
 		public void DrawImage(Image image)
@@ -277,10 +275,10 @@ namespace GRaff.Graphics
 			AffineMatrix t = image.Transform.GetMatrix();
 			RenderTextured(image.CurrentTexture, new[] {
 					t * new GraphicsPoint(-image.Sprite.XOrigin, -image.Sprite.YOrigin),
-					t * new GraphicsPoint( (image.Sprite.Width - image.Sprite.XOrigin), -image.Sprite.YOrigin),
-					t * new GraphicsPoint(-image.Sprite.XOrigin, image.Sprite.Height - image.Sprite.YOrigin),
+					t * new GraphicsPoint( image.Sprite.Width - image.Sprite.XOrigin, -image.Sprite.YOrigin),
 					t * new GraphicsPoint( image.Sprite.Width -  image.Sprite.XOrigin, image.Sprite.Height - image.Sprite.YOrigin),
-			}, new[] { image.Blend, image.Blend, image.Blend, image.Blend }, PrimitiveType.TriangleStrip);
+					t * new GraphicsPoint(-image.Sprite.XOrigin, image.Sprite.Height - image.Sprite.YOrigin),
+			}, new[] { image.Blend, image.Blend, image.Blend, image.Blend });
 
 		}
 

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace GRaff.GraphicTest
 {
-	[Test(Order = 0)]
+	[Test]
 	class AnimationTest : GameElement
 	{
 		Sprite sprite = new Sprite(new AnimationStrip(TextureBuffers.Animation, 20), origin: new Vector(0, 0));

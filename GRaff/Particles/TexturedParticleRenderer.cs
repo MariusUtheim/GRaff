@@ -29,15 +29,16 @@ namespace GRaff.Particles
 			int count = particles.Count();
 			GraphicsPoint[] vertices = new GraphicsPoint[4 * count];
 			Color[] colors = new Color[4 * count];
+			GraphicsPoint[] texCoords = new GraphicsPoint[4 * count];
 
 #warning
 			//throw new NotImplementedException();
 
 			GraphicsPoint
 				tl = new GraphicsPoint(-Sprite.XOrigin, -Sprite.YOrigin),
-				tr = new GraphicsPoint( Sprite.XOrigin, -Sprite.YOrigin),
-				bl = new GraphicsPoint(-Sprite.XOrigin,  Sprite.YOrigin),
-				br = new GraphicsPoint( Sprite.XOrigin,  Sprite.YOrigin);
+				tr = new GraphicsPoint(Sprite.Width - Sprite.XOrigin, -Sprite.YOrigin),
+				br = new GraphicsPoint(Sprite.Width - Sprite.XOrigin, Sprite.Height - Sprite.YOrigin),
+				bl = new GraphicsPoint(-Sprite.XOrigin, Sprite.Height - Sprite.YOrigin);
 
 			Parallel.ForEach(particles, (particle, loopState, index) =>
 			{
@@ -47,11 +48,17 @@ namespace GRaff.Particles
 				vertices[index + 2] = (GraphicsPoint)(particle.TransformationMatrix * br + particle.Location);
 				vertices[index + 3] = (GraphicsPoint)(particle.TransformationMatrix * bl + particle.Location);
 				colors[index] = colors[index + 1] = colors[index + 2] = colors[index + 3] = particle.Blend;
+
+				var baseCoords = Sprite.SubImage(_frame).QuadCoords;
+				for (var i = 0; i < 4; i++)
+					texCoords[index + i] = baseCoords[i];
 			});
+
+			
 
 			_renderSystem.SetVertices(UsageHint.StreamDraw, vertices);
 			_renderSystem.SetColors(UsageHint.StreamDraw, colors);
-			_renderSystem.SetTexCoords(UsageHint.StreamDraw, Sprite.SubImage(_frame).TexCoords);
+			_renderSystem.SetTexCoords(UsageHint.StreamDraw, texCoords);
 
 			ShaderProgram.CurrentTextured.SetCurrent();
 			Sprite.SubImage(_frame).Buffer.Bind();

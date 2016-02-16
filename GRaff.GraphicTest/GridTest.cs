@@ -8,7 +8,7 @@ using GRaff.Pathfinding;
 
 namespace GRaff.GraphicTest
 {
-	[Test(Order = 0)]
+	[Test]
 	class GridTest : GameElement, IGlobalMousePressListener, IKeyPressListener
 	{
 		private const int width = 32, height = 24;
