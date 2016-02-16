@@ -48,9 +48,12 @@ namespace GRaff.Graphics
 		private void Dispose(bool disposing)
 		{
 			Contract.Requires<ObjectDisposedException>(!IsDisposed);
-			GL.DeleteVertexArray(_array);
-			GL.DeleteBuffer(_vertexBuffer);
-			GL.DeleteBuffer(_colorBuffer);
+			if (Giraffe.IsRunning)
+			{
+				GL.DeleteVertexArray(_array);
+				GL.DeleteBuffer(_vertexBuffer);
+				GL.DeleteBuffer(_colorBuffer);
+			}
 			IsDisposed = true;
 		}
 

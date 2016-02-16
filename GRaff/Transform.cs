@@ -187,7 +187,7 @@ namespace GRaff
 			if (polygon == null)
 				return null;
 			AffineMatrix T = GetMatrix();
-			return new GRaff.Polygon(polygon.Vertices.Select(v => T * v).ToArray());
+			return new GRaff.Polygon(polygon.Vertices.Select(v => T * v).ToArray(), Unit._);
 		}
 	}
 }

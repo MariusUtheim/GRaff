@@ -15,23 +15,17 @@ namespace GRaff
 	/// The condition that the polygon must be convex is a strong condition that is unlikely to occur with arbitraty vertices.
 	/// In most cases, developers should not have to create their own polygons directly.
 	/// </remarks>
+	#warning How should degenerate polygons be handled? Will they work correctly with collisions?
 	public sealed class Polygon
 	{
 		private Point[] _pts;
 
-		private Polygon(Point[] pts, Unit sentinel)
+		internal Polygon(Point[] pts, Unit sentinel)
 		{
 			_pts = pts;	// Used to create Polygon in an efficient way without doing sanity checks
 		}
 
 		public Polygon(IEnumerable<Point> pts)
-			: this(pts.ToArray())
-		{
-			Contract.Requires<ArgumentNullException>(pts != null);
-			Contract.Requires<ArgumentException>(pts.Count() > 0);
-		}
-
-		public Polygon(params Point[] pts)
 		{
 			Contract.Requires<ArgumentNullException>(pts != null);
 			Contract.Requires<ArgumentException>(pts.Count() > 0);
@@ -130,7 +124,7 @@ namespace GRaff
 		{
 			int precision = (int)GMath.Ceiling(GMath.Pi * GMath.Abs(xRadius + yRadius));
 			if (precision <= 0)
-				return new Polygon(center);
+				return new Polygon(new[] { center }, Unit._);
 			double dt = GMath.Tau / precision;
 			double c = GMath.Cos(dt), s = GMath.Sin(dt);
 

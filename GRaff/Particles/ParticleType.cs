@@ -43,6 +43,14 @@ namespace GRaff.Particles
 			return result;
 		}
 
+		public void AddBehaviors(IEnumerable<IParticleBehavior> behaviors)
+		{
+			Contract.Requires<ArgumentNullException>(behaviors != null);
+			Contract.Requires<ArgumentNullException>(Contract.ForAll(behaviors, b => b != null));
+			foreach (var behavior in behaviors)
+				AddBehavior(behavior);
+		}
+
 		public void AddBehavior(IParticleBehavior behavior)
 		{
 			Contract.Requires<ArgumentNullException>(behavior != null);

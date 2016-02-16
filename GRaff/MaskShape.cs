@@ -20,7 +20,7 @@ namespace GRaff
 
 		private MaskShape(params Point[] pts)
 		{
-			Polygon = new Polygon(pts);
+			Polygon = new Polygon(pts, Unit._);
 		}
 
 		public Polygon Polygon { get; private set; }

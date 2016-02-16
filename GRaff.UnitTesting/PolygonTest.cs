@@ -85,17 +85,17 @@ namespace GRaff.UnitTesting
 		[TestMethod]
 		public void Polygon_Intersects()
 		{
-			Polygon completelyInside = new Polygon(new Point(3, 3), new Point(5, 5), new Point(4, 7));
-			Polygon pointInside = new Polygon(new Point(4, 4), new Point(10, 6), new Point(8, 12));
-			Polygon edgeInside = new Polygon(new Point(1, 0), new Point(10, -1), new Point(8, 9));
-			Polygon completelyEnclosing = new Polygon(new Point(0, 0), new Point(10, 0), new Point(10, 10), new Point(0, 10));
+			Polygon completelyInside = new Polygon(new[] { new Point(3, 3), new Point(5, 5), new Point(4, 7) });
+			Polygon pointInside = new Polygon(new[] { new Point(4, 4), new Point(10, 6), new Point(8, 12) });
+			Polygon edgeInside = new Polygon(new[] { new Point(1, 0), new Point(10, -1), new Point(8, 9) });
+			Polygon completelyEnclosing = new Polygon(new[] { new Point(0, 0), new Point(10, 0), new Point(10, 10), new Point(0, 10) });
 
 			Assert.IsTrue(thePolygon.Intersects(completelyInside), "Doesn't intersect internal polygon!");
 			Assert.IsTrue(thePolygon.Intersects(pointInside), "Doesn't intersect internal vertex!");
 			Assert.IsTrue(thePolygon.Intersects(edgeInside), "Doesn't intersect internal edge!");
 			Assert.IsTrue(thePolygon.Intersects(completelyEnclosing), "Doesn't intersect enclosing polygon!");
 
-			Polygon outside = new Polygon(new Point(-5, -5), new Point(2, -5), new Point(-2, 5));
+			Polygon outside = new Polygon(new[] { new Point(-5, -5), new Point(2, -5), new Point(-2, 5) });
 			Assert.IsFalse(thePolygon.Intersects(outside), "Does intersect non-intersecting polynomial!");
 		}
 
