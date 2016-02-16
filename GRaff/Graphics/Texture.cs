@@ -29,6 +29,13 @@ namespace GRaff.Graphics
 			Contract.Requires<ArgumentException>(buffer.IsLoaded);
 		}
 
+		public static Texture FromTexCoords(TextureBuffer buffer, Rectangle texCoords)
+		{
+			Contract.Requires<ArgumentNullException>(buffer != null);
+			Contract.Ensures(Contract.Result<Texture>() != null);
+			return new Texture(buffer, (GraphicsPoint)texCoords.TopLeft, (GraphicsPoint)texCoords.TopRight, (GraphicsPoint)texCoords.BottomLeft, (GraphicsPoint)texCoords.BottomRight);
+		}
+
 		[ContractInvariantMethod]
 		private void invariants()
 		{

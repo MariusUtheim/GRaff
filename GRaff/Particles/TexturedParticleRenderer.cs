@@ -11,14 +11,17 @@ namespace GRaff.Particles
 	internal class TexturedParticleRenderer : IParticleRenderer
 	{
 		private readonly TexturedRenderSystem _renderSystem = new TexturedRenderSystem();
+		private readonly double _animationSpeed;
+		private double _frame = 0;
 
-		public TexturedParticleRenderer(Texture texture)
+		public TexturedParticleRenderer(Sprite sprite, double animationSpeed)
 		{
-			Contract.Requires<ArgumentNullException>(texture != null);
-			Texture = texture;
+			Contract.Requires<ArgumentNullException>(sprite != null);
+			this.Sprite = sprite;
+			this._animationSpeed = animationSpeed;
 		}
 
-		public Texture Texture { get; private set; }
+		public Sprite Sprite { get; private set; }
 
 		public void Render(IEnumerable<Particle> particles)
 		{
@@ -26,32 +29,35 @@ namespace GRaff.Particles
 			int count = particles.Count();
 			GraphicsPoint[] vertices = new GraphicsPoint[4 * count];
 			Color[] colors = new Color[4 * count];
-			throw new NotImplementedException();
-			/*
-			PointF
-				tl = new PointF(-(float)Texture.XOrigin, -(float)Texture.YOrigin),
-				tr = new PointF( (float)Texture.XOrigin, -(float)Texture.YOrigin),
-				bl = new PointF(-(float)Texture.XOrigin,  (float)Texture.YOrigin),
-				br = new PointF( (float)Texture.XOrigin,  (float)Texture.YOrigin);
+
+#warning
+			//throw new NotImplementedException();
+
+			GraphicsPoint
+				tl = new GraphicsPoint(-Sprite.XOrigin, -Sprite.YOrigin),
+				tr = new GraphicsPoint( Sprite.XOrigin, -Sprite.YOrigin),
+				bl = new GraphicsPoint(-Sprite.XOrigin,  Sprite.YOrigin),
+				br = new GraphicsPoint( Sprite.XOrigin,  Sprite.YOrigin);
 
 			Parallel.ForEach(particles, (particle, loopState, index) =>
 			{
 				index *= 4;
-				vertices[index] = (PointF)(particle.TransformationMatrix * tl + particle.Location);
-				vertices[index + 1] = (PointF)(particle.TransformationMatrix * tr + particle.Location);
-				vertices[index + 2] = (PointF)(particle.TransformationMatrix * br + particle.Location);
-				vertices[index + 3] = (PointF)(particle.TransformationMatrix * bl + particle.Location);
+				vertices[index] = (GraphicsPoint)(particle.TransformationMatrix * tl + particle.Location);
+				vertices[index + 1] = (GraphicsPoint)(particle.TransformationMatrix * tr + particle.Location);
+				vertices[index + 2] = (GraphicsPoint)(particle.TransformationMatrix * br + particle.Location);
+				vertices[index + 3] = (GraphicsPoint)(particle.TransformationMatrix * bl + particle.Location);
 				colors[index] = colors[index + 1] = colors[index + 2] = colors[index + 3] = particle.Blend;
 			});
 
 			_renderSystem.SetVertices(UsageHint.StreamDraw, vertices);
 			_renderSystem.SetColors(UsageHint.StreamDraw, colors);
-			_renderSystem.QuadTexCoords(UsageHint.StreamDraw, count);
+			_renderSystem.SetTexCoords(UsageHint.StreamDraw, Sprite.SubImage(_frame).TexCoords);
 
 			ShaderProgram.CurrentTextured.SetCurrent();
-			Sprite.Bind();
+			Sprite.SubImage(_frame).Buffer.Bind();
 			_renderSystem.Render(PrimitiveType.Quads, vertices.Length);
-			*/
+
+			_frame += -_animationSpeed;
 		}
 	}
 }

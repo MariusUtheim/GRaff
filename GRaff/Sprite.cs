@@ -17,7 +17,6 @@ namespace GRaff
 
 			this.AnimationStrip = animationStrip;
 			this.Size = size ?? animationStrip.SubImage(0).Size;
-			Window.Title = Size.ToString();
 			this._origin = origin;
 			this._maskShape = maskShape ?? MaskShape.Automatic;
 		}

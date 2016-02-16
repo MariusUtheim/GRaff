@@ -32,7 +32,7 @@ namespace GRaff
 			Contract.Requires<ArgumentException>(Contract.ForAll(frames, frame => frame != null));
 		}
 
-		public AnimationStrip(IEnumerable<Texture> frames, params Tuple<int, double>[] frameDurations)
+		public AnimationStrip(IEnumerable<Texture> frames, Tuple<int, double>[] frameDurations)
 		{
 			Contract.Requires<ArgumentNullException>(frames != null && frameDurations != null);
 			Contract.Requires<ArgumentException>(frames.Count() > 0 && frameDurations.Count() > 0);
@@ -42,9 +42,22 @@ namespace GRaff
 			_durations = frameDurations.Select(f => f.Item2).ToArray();
 		}
 
+		public AnimationStrip(TextureBuffer strip, int imageCount, Tuple<int, double>[] frameDurations)
+		{
+			//Contract.Requires<ArgumentNullException>(strip != null);
+			//Contract.Requires<ArgumentOutOfRangeException>(Contract.ForAll(frameDurations, f => f != null && f.Item1 < imageCount && f.Item2 > 0));
+
+			double dw = 1.0 / imageCount;
+			_frames = Enumerable.Range(0, imageCount)
+								.Select(i => strip.Subtexture(new Rectangle(i * dw, 0, dw, 1.0)))
+								.ToArray();
+			_indices = frameDurations.Select(f => f.Item1).ToArray();
+			_durations = frameDurations.Select(f => f.Item2).ToArray();
+		}
+
 		public AnimationStrip(TextureBuffer strip, int imageCount)
 		{
-			Contract.Requires<ArgumentNullException>(strip != null);
+			//Contract.Requires<ArgumentNullException>(strip != null);
 			Contract.Requires<ArgumentOutOfRangeException>(imageCount >= 1);
 
 			double dw = 1.0 / imageCount;
@@ -56,17 +69,19 @@ namespace GRaff
 		}
 
 		[ContractInvariantMethod]
-		private void objectInvariants()
+		private void invariants()
 		{
-			Contract.Invariant(ImageCount >= 1);
-			Contract.Invariant(Duration > 0);
 			Contract.Invariant(_frames != null);
 			Contract.Invariant(_frames.Length > 0);
 			Contract.Invariant(_indices != null);
 			Contract.Invariant(_indices.Length > 0);
+			Contract.Invariant(Contract.ForAll(_indices, i => i >= 0 && i < _frames.Length));
 			Contract.Invariant(_durations != null);
 			Contract.Invariant(_durations.Length > 0);
+			Contract.Invariant(Contract.ForAll(_durations, d => d > 0));
 			Contract.Invariant(_indices.Length == _durations.Length);
+			Contract.Invariant(ImageCount >= 1);
+			Contract.Invariant(Duration > 0);
 		}
 
 		public AnimationStrip InOut()
@@ -99,7 +114,7 @@ namespace GRaff
 			for (int i = 0; i < _indices.Length; i++)
 			{
 				dt -= _durations[i];
-				if (dt <= 0)
+				if (dt < 0)
 					return _frames[_indices[i]];
 			}
 

@@ -12,12 +12,14 @@ namespace GRaff.Particles
 		private readonly List<IParticleBehavior> _behaviors = new List<IParticleBehavior>();
 		private readonly IParticleRenderer _renderer;
 
-		public ParticleType(Texture texture, int lifetime)
+#warning Need some better Sprite logic
+		public ParticleType(Sprite sprite, int lifetime, double animationSpeed = 1.0)
 		{
-			Contract.Requires<ArgumentNullException>(texture != null);
-			_renderer = new TexturedParticleRenderer(texture);			
+			Contract.Requires<ArgumentNullException>(sprite != null);
+			_renderer = new TexturedParticleRenderer(sprite, animationSpeed);
 			this.Lifetime = new ConstantDistribution<int>(lifetime);
 		}
+
 
 		public ParticleType(Polygon polygon, int lifetime)
 		{

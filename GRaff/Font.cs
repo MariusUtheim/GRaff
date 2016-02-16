@@ -39,6 +39,7 @@ namespace GRaff
 			return font;
 		}
 
+
 		public bool IsLoaded { get; private set; }
 
 		public int Height

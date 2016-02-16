@@ -130,7 +130,7 @@ namespace GRaff
 		}
 
 		public Texture Subtexture(Rectangle region)
-			=> new Texture(this, region);
+			=> Texture.FromTexCoords(this, region);
 	}
 
 }
