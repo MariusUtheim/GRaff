@@ -34,7 +34,7 @@ namespace GRaff.Audio
 			{
 				Console.WriteLine(stream.Length);
 				if (stream.Length < 4)
-					throw new FileFormatException("Invalid file format");
+					throw new FileFormatException("Invalid file format. Only .wav and .ogg is supported.");
 				byte[] headerData = new byte[8];
 				stream.ReadAsync(headerData, 0, 8);
 				header = new string(headerData.Select(b => (char)b).ToArray());
@@ -49,7 +49,7 @@ namespace GRaff.Audio
 			else if (header == "OggS")
 				return LoadOgg(fileInfo);
 			else
-				throw new FileFormatException("Invalid file format. Only .wav and .ogg is supported.");
+				throw new FileFormatException($"Invalid file header '{header}'. Only .wav and .ogg is supported.");
 
 		}
 

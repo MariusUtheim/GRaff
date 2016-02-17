@@ -45,20 +45,9 @@
   </PropertyGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <None Include="Assets.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>Assets.cs</LastGenOutput>
-    </None>
     <None Include="Assets.xsd">
       <SubType>Designer</SubType>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Assets.cs">
-      <DependentUpon>Assets.tt</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Assets.xml">

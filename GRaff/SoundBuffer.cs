@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics.Contracts;
+using System.Linq;
 using GRaff.Audio;
 using GRaff.Synchronization;
 using OpenTK.Audio.OpenAL;
@@ -8,6 +10,7 @@ namespace GRaff
 {
 	public sealed class SoundBuffer : IDisposable
 	{
+		private readonly List<SoundInstance> _instances = new List<SoundInstance>();
 
 		public SoundBuffer(int bitrate, int channels, int frequency, byte[] buffer, double offset)
 		{
@@ -53,48 +56,29 @@ namespace GRaff
 				throw new Exception(String.Format("An error occurred: {0} (error code {1} {2})", AL.GetErrorString(err), (int)err, Enum.GetName(typeof(ALError), err)));
 		}
 
-		public int IntroId { get; private set; }
-
-		public int MainId { get; private set; }
-
-		public byte[] Buffer { get; private set; }
-
-		/// <summary>
-		/// Gets the number of bits per sample of this GRaff.SoundBuffer.
-		/// </summary>
-		public int Bitrate { get; private set; }
-
-		/// <summary>
-		/// Gets the number of channels of this GRaff.SoundBuffer (1 for mono, 2 for stereo)
-		/// </summary>
-		public int Channels { get; private set; }
-
-		/// <summary>
-		/// Gets the duration of this GRaff.SoundBuffer in seconds.
-		/// </summary>
-		/// <returns></returns>
-		public double Duration { get { return Buffer.Length * 8.0 / (Bitrate * Channels * Frequency); } }
-
-		/// <summary>
-		/// Gets the frequency of the data in this GRaff.SoundBuffer. That is, the number of samples per second.
-		/// </summary>
-		public int Frequency { get; private set; }
-
-
-		public static SoundBuffer Load(string fileName, double offset)
+		[ContractInvariantMethod]
+		private void invariants()
+		{
+			Contract.Invariant(Bitrate == 8 || Bitrate == 16);
+			Contract.Invariant(Channels == 1 || Channels == 2);
+			Contract.Invariant(Frequency > 0);
+			Contract.Invariant(Duration > 0);
+		}
+		
+		public static SoundBuffer Load(string fileName, double offset = 0)
 		{
 			var soundFile = SoundFileLoader.Load(fileName);
 			return new SoundBuffer(soundFile.Bitrate, soundFile.Channels, soundFile.Frequency, soundFile.Buffer, offset);
 		}
 
-		public static IAsyncOperation<SoundBuffer> LoadAsync(string fileName, double offset)
+		public static IAsyncOperation<SoundBuffer> LoadAsync(string fileName, double offset = 0)
 		{
 			return Async.RunAsync(() => SoundFileLoader.LoadAsync(fileName))
 						.Then(soundFile => new SoundBuffer(soundFile.Bitrate, soundFile.Channels, soundFile.Frequency, soundFile.Buffer, offset));
 		}
 
-#region IDisposable implementation
-		private bool _isDisposed = false;
+
+		public bool IsDisposed { get; private set; }
 
 		~SoundBuffer()
 		{
@@ -103,24 +87,68 @@ namespace GRaff
 
 		public void Dispose()
 		{
+			Contract.Requires<ObjectDisposedException>(!IsDisposed);
 			Dispose(true);
 			GC.SuppressFinalize(this);
 		}
 
 		private void Dispose(bool disposing)
 		{
-			if (!_isDisposed)
+			if (!IsDisposed)
 			{
-				_isDisposed = true;
-				Async.Run(() => AL.DeleteBuffer(IntroId));
+				Async.Run(() =>
+				{
+					if (Giraffe.IsRunning)
+						AL.DeleteBuffer(IntroId);
+					foreach (var instance in _instances.Where(i => !i.IsDisposed))
+						instance.Dispose();
+				});
 
 				if (disposing)
 				{
 					Buffer = null;
 				}
-            }
+
+				IsDisposed = true;
+			}
 		}
 
-#endregion
+		internal void Remove(SoundInstance instance)
+		{
+			_instances.Remove(instance);
+		}
+
+		public int IntroId { get; }
+
+		public int MainId { get; }
+
+		public byte[] Buffer { get; private set; }
+
+		public int Bitrate { get; }
+
+		public int Channels { get; }
+
+		public double Duration => Buffer.Length * 8.0 / (Bitrate * Channels * Frequency);
+
+		public int Frequency { get; }
+
+		public IReadOnlyCollection<SoundInstance> SoundInstances => Array.AsReadOnly(_instances.ToArray());
+
+		public SoundInstance Play(bool loop = false, double volume = 1.0, double pitch = 1.0)
+		{
+			Contract.Requires<ObjectDisposedException>(!IsDisposed);
+			Contract.Requires<ArgumentOutOfRangeException>(volume >= 0 && pitch > 0);
+			Contract.Ensures(Contract.Result<SoundInstance>() != null);
+			
+			var instance = Instance.Create(new SoundInstance(this, IntroId, MainId, loop, volume, pitch));
+			_instances.Add(instance);
+			return instance;
+		}
+
+		public void StopAll()
+		{
+			foreach (var instance in _instances)
+				instance.Stop();
+		}
 	}
 }

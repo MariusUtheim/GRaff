@@ -15,12 +15,13 @@ namespace GRaff.GraphicTest
 
 		public TextureBufferTest()
 		{
+			Room.Current.Background.Color = Colors.LightGray;
 		}
 
 		public override void OnDraw()
 		{
-			//Draw.Texture(TextureBuffers.Giraffe.Texture, 0, 0);
-			Draw.Sprite(sprite, Time.LoopCount / 2, texture.Width, texture.Height);
+			Draw.Texture(TextureBuffers.Giraffe.Texture, 0, 0);
+			Draw.Sprite(sprite, Time.LoopCount / 20, 0.25 * texture.Width, 1.5 * texture.Height);
 		}
 	}
 }

@@ -87,7 +87,6 @@ namespace GRaff.Graphics.Text
 
 		public string Truncate(string text)
 		{
-			Contract.Requires<InvalidOperationException>(Font.IsLoaded);
 			if (text == null)
 				return "";
 
@@ -115,7 +114,6 @@ namespace GRaff.Graphics.Text
 
 		public int GetWidth(string text)
 		{
-			Contract.Assert(Font.IsLoaded);
 			return Font.GetWidth(text);
 		}
 

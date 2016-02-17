@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Diagnostics.Contracts;
+using GRaff.Synchronization;
 using OpenTK.Audio.OpenAL;
 
 
@@ -8,37 +10,36 @@ namespace GRaff
 	/// Represents an instance of a sound that is currently playing.
 	/// </summary>
 	#warning Review class
-	public sealed class SoundInstance : GameElement
+	public class SoundInstance : GameElement, IDisposable
 	{
 		private int _sid;
-		private bool _isDisposed = false;
 		private bool _shouldDropIntro;
 
-		/// <summary>
-		/// Initializes a new instance of the GRaff.SoundInstance class with the specified sound reference, buffer id, looping, volume and pitch.
-		/// </summary>
-		/// <param name="sound">The GRaff.Sound that this GRaff.SoundInstance is an instance of.</param>
-		/// <param name="bid">The buffer id of the data.</param>
-		/// <param name="looping">Specifies whether the instance should loop.</param>
-		/// <param name="volume">Specifies the volume of the sound instance.</param>
-		/// <param name="pitch">Specifies the pitch shift of the sound instance.</param>
-		internal SoundInstance(Sound sound, int introBufferId, int mainBufferId, bool looping, double volume, double pitch)
+		internal SoundInstance(SoundBuffer buffer, int? introBufferId, int mainBufferId, bool looping, double volume, double pitch)
 		{
-			this.Sound = sound;
+			this.Buffer = buffer;
 
-			AL.GenSources(1, out _sid);
-
-		//	this.Looping = looping;
+			_sid = AL.GenSource();
+			Console.WriteLine($"Source created: {_sid}");
+            this.Looping = looping;
 			this.Volume = volume;
 			this.Pitch = pitch;
 
 
 			if (looping)
 			{
-				AL.SourceQueueBuffer(_sid, introBufferId);
-				this.Play();
-				AL.SourceQueueBuffer(_sid, mainBufferId);
-				_shouldDropIntro = true;
+				if (introBufferId != null)
+				{
+					AL.SourceQueueBuffer(_sid, mainBufferId);
+					this.Play();
+				}
+				else
+				{
+					AL.SourceQueueBuffer(_sid, introBufferId.Value);
+					this.Play();
+					AL.SourceQueueBuffer(_sid, mainBufferId);
+					_shouldDropIntro = true;
+				}
 			}
 			else
 			{
@@ -48,19 +49,40 @@ namespace GRaff
 			}
 		}
 
-
-		/// <summary>
-		/// Gets the GRaff.Sound that this GRaff.SoundInstance is an instance of.
-		/// </summary>
-		public Sound Sound
+		~SoundInstance()
 		{
-			get;
-			private set;
+			Dispose(false);
 		}
 
-		/// <summary>
-		/// Gets or sets whether this GRaff.SoundInstance is looping.
-		/// </summary>
+		public bool IsDisposed { get; private set; }
+
+		public void Dispose()
+		{
+			Contract.Requires<ObjectDisposedException>(!IsDisposed);
+			Dispose(true);
+			GC.SuppressFinalize(this);
+		}
+
+		private void Dispose(bool disposing)
+		{
+			if (!IsDisposed)
+			{
+				Async.Run(() =>
+				{
+					if (Giraffe.IsRunning)
+						AL.DeleteSource(_sid);
+					Console.WriteLine("Source deleted: " + _sid.ToString());
+				});
+
+				IsDisposed = true;
+				Destroy();
+				Buffer.Remove(this);
+			}
+		}
+
+		
+		public SoundBuffer Buffer { get; }
+
 		public bool Looping
 		{
 			get
@@ -82,7 +104,7 @@ namespace GRaff
 		{
 			get
 			{
-				if (_isDisposed) throw new ObjectDisposedException("GRaff.SoundInstance");
+				Contract.Requires<ObjectDisposedException>(!IsDisposed);
 				float value;
 				AL.GetSource(_sid, ALSourcef.Pitch, out value);
 				return value;
@@ -90,9 +112,8 @@ namespace GRaff
 
 			set
 			{
-				if (_isDisposed) throw new ObjectDisposedException("GRaff.SoundInstance");
-				if (value <= 0)
-					throw new ArgumentOutOfRangeException("value", "Must be greater than 0");
+				Contract.Requires<ObjectDisposedException>(!IsDisposed);
+				Contract.Requires<ArgumentOutOfRangeException>(value > 0);
 				AL.Source(_sid, ALSourcef.Pitch, (float)value);
 			}
 		}
@@ -110,8 +131,7 @@ namespace GRaff
 			}
 			set
 			{
-				if (value < 0)
-					throw new ArgumentOutOfRangeException("value", "Must be greater than or equal to 0");
+				Contract.Requires<ArgumentOutOfRangeException>(value >= 0);
 				AL.Source(_sid, ALSourcef.Gain, (float)value);
 			}
 		}
@@ -122,6 +142,7 @@ namespace GRaff
 		/// </summary>
 		public void Play()
 		{
+			Contract.Requires<ObjectDisposedException>(!IsDisposed);
 			AL.SourcePlay(_sid);
 		}
 
@@ -130,8 +151,8 @@ namespace GRaff
 		/// </summary>
 		public void Stop()
 		{
+			Contract.Requires<ObjectDisposedException>(!IsDisposed);
 			AL.SourceStop(_sid);
-			_isDisposed = true;
 			Destroy();
 		}
 
@@ -140,6 +161,7 @@ namespace GRaff
 		/// </summary>
 		public void Pause()
 		{
+			Contract.Requires<ObjectDisposedException>(!IsDisposed);
 			AL.SourcePause(_sid);
 		}
 
@@ -150,6 +172,7 @@ namespace GRaff
 		{
 			get 
 			{
+				Contract.Requires<ObjectDisposedException>(!IsDisposed);
 				ALSourceState state;
 				switch (state = AL.GetSourceState(_sid))
 				{
@@ -174,13 +197,16 @@ namespace GRaff
 
 		public override void OnDestroy()
 		{
-			AL.DeleteSources(1, ref _sid);
+			if (!IsDisposed)
+				Dispose();
 		}
 
 		public override void OnStep()
 		{
-			if (State == SoundState.Stopped)
+			if (IsDisposed || State == SoundState.Stopped)
+			{
 				this.Destroy();
+			}
 			else if (State == SoundState.Playing && _shouldDropIntro)
 			{
 				int buffersProcessed;

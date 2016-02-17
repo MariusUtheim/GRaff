@@ -87,7 +87,6 @@ namespace GRaff
 
 		public static void Texture(Texture texture, double x, double y)
 		{
-			Contract.Requires<InvalidOperationException>(texture == null || texture.Buffer.IsLoaded);
 			if (texture != null)
 				CurrentSurface.DrawTexture(texture, new GraphicsPoint(x, y));
 		}

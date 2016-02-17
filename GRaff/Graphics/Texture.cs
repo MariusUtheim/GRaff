@@ -26,7 +26,6 @@ namespace GRaff.Graphics
 				  new GraphicsPoint(region.Right / buffer.Width, region.Bottom / buffer.Height))
 		{
 			Contract.Requires<ArgumentNullException>(buffer != null);
-			Contract.Requires<ArgumentException>(buffer.IsLoaded);
 		}
 
 		public static Texture FromTexCoords(TextureBuffer buffer, Rectangle texCoords)

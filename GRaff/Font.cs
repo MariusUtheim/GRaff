@@ -10,49 +10,74 @@ using GRaff.Synchronization;
 
 namespace GRaff
 {
-	public class Font : IAsset
+	public class Font : IDisposable
 	{
 		private static readonly Regex NewlinePattern = new Regex("\r\n|\n");
 
 		private readonly Dictionary<char, FontCharacter> _characters = new Dictionary<char, FontCharacter>();
-		private readonly string _bitmapFile, _dataFile;
-		private int _height;
-		private TextureBuffer _textureBuffer;
-		private IAsyncOperation _loadingOperation;
+		private TextureBuffer _buffer;
 
-		public Font(string bitmapFile, string dataFile)
+		public Font(TextureBuffer buffer, FontFile fontData)
 		{
-			_bitmapFile = bitmapFile;
-			_dataFile = dataFile;
+			_buffer = buffer;
+			foreach (var c in fontData.Chars)
+				_characters.Add((char)c.Id, new FontCharacter(c));
+
+			Height = fontData.Common.LineHeight;
+
 		}
 
-		[ContractInvariantMethod]
-		private void objectInvariants()
+		public bool IsDisposed { get; private set; }
+
+		~Font()
 		{
-			Contract.Invariant(!IsLoaded || _textureBuffer != null);
+			Dispose(false);
 		}
 
-		public static Font Load(string bitmapFile, string characterFile)
+		public void Dispose()
 		{
-			var font = new Font(bitmapFile, characterFile);
-			font.Load();
-			return font;
+			Contract.Requires<ObjectDisposedException>(!IsDisposed);
+			Dispose(true);
+			GC.SuppressFinalize(this);
 		}
 
-
-		public bool IsLoaded { get; private set; }
-
-		public int Height
+		private void Dispose(bool disposing)
 		{
-			get
+			if (!IsDisposed)
 			{
-				if (!IsLoaded) throw new InvalidOperationException("The font is not loaded.");
-				return _height;
+				if (disposing)
+				{
+					if (!_buffer.IsDisposed)
+						_buffer.Dispose();
+					_buffer = null;
+				}
 			}
 		}
 
+		public static IAsyncOperation<Font> LoadAsync(string bitmapFile, string fontDataFile)
+		{
+			return TextureBuffer.LoadAsync(bitmapFile)
+				.Then(textureBuffer =>
+				{
+					var fontData = FontLoader.Load(fontDataFile);
+					return new Font(textureBuffer, fontData);
+				});
+		}
+
+
+		public static Font Load(string bitmapFile, string fontDataFile)
+		{
+			Contract.Ensures(Contract.Result<Font>() != null);
+			return LoadAsync(bitmapFile, fontDataFile).Wait();
+		}
+
+
+
+		public int Height { get; }
+
 		public int GetWidth(char character)
 		{
+			Contract.Requires<ObjectDisposedException>(!IsDisposed);
 			FontCharacter c;
 			if (_characters.TryGetValue(character, out c))
 				return c.XAdvance;
@@ -62,6 +87,7 @@ namespace GRaff
 
 		public IntVector GetSize(char character)
 		{
+			Contract.Requires<ObjectDisposedException>(!IsDisposed);
 			FontCharacter c;
 			if (_characters.TryGetValue(character, out c))
 				return new IntVector(c.Width, c.Height);
@@ -71,7 +97,7 @@ namespace GRaff
 
 		public int GetWidth(string str)
 		{
-			Contract.Requires<InvalidOperationException>(IsLoaded);
+			Contract.Requires<ObjectDisposedException>(!IsDisposed);
 			if (str == null)
 				return 0;
 			var width = 0;
@@ -83,6 +109,7 @@ namespace GRaff
 
 		public Vector GetOffset(char character)
 		{
+			Contract.Requires<ObjectDisposedException>(!IsDisposed);
 			FontCharacter c;
 			if (_characters.TryGetValue(character, out c))
 				return new Vector(c.XOffset, c.YOffset);
@@ -94,53 +121,16 @@ namespace GRaff
 		{
 			get
 			{
-				Contract.Requires<InvalidOperationException>(IsLoaded);
-				return _textureBuffer;
+				Contract.Requires<ObjectDisposedException>(!IsDisposed);
+				return _buffer;
 			}
 		}
 
-		public IAsyncOperation LoadAsync()
-		{
-			return _loadingOperation = TextureBuffer.LoadAsync(_bitmapFile)
-				.Then(textureBuffer => {
-					var fontData = FontLoader.Load(_dataFile);
-
-					foreach (var c in fontData.Chars)
-					{
-						var character = new FontCharacter {
-							X = c.X,
-							Y = c.Y,
-							Width = c.Width,
-							Height = c.Height,
-							XAdvance = c.XAdvance,
-							XOffset = c.XOffset,
-							YOffset = c.YOffset
-						};
-
-						_characters.Add((char)c.Id, character);
-					}
-
-					_height = fontData.Common.LineHeight;
-
-					_textureBuffer = textureBuffer;
-					IsLoaded = true;
-				});
-		}
-
-		public void Unload()
-		{
-			if (!IsLoaded)
-				return;
-
-			_textureBuffer.Unload();
-			_textureBuffer = null;
-			IsLoaded = false;
-			_characters.Clear();
-		}
 
 
 		internal void RenderTexCoords(string str, int offset, ref GraphicsPoint[] texCoords)
 		{
+			Contract.Requires<ObjectDisposedException>(!IsDisposed);
 			double tXScale = 1.0 / TextureBuffer.Width, tYScale = 1.0 / TextureBuffer.Height;
 			
 			for (var i = 0; i < str.Length; i++)

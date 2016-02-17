@@ -26,9 +26,9 @@ namespace GRaff
 			return instance;
 		}
 
-		internal static void Remove(GameElement instance)
+		internal static bool Remove(GameElement instance)
 		{
-			_elements.Remove(instance);
+			return _elements.Remove(instance);
 		}
 
 		public static IEnumerable<GameElement> All

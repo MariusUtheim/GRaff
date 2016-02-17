@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Diagnostics.Contracts;
+using GRaff.Synchronization;
 #if OpenGL4
 using OpenTK.Graphics.OpenGL4;
 using GLPrimitiveType = OpenTK.Graphics.OpenGL4.PrimitiveType;
@@ -81,13 +82,16 @@ namespace GRaff.Graphics
 		private void Dispose(bool disposing)
 		{
 			Contract.Requires<ObjectDisposedException>(!IsDisposed);
-			if (Giraffe.IsRunning)
+			Async.Run(() =>
 			{
-				GL.DeleteVertexArray(_array);
-				GL.DeleteBuffer(_vertexBuffer);
-				GL.DeleteBuffer(_colorBuffer);
-				GL.DeleteBuffer(_texCoordBuffer);
-			}
+			    if (Giraffe.IsRunning)
+				{
+					GL.DeleteVertexArray(_array);
+					GL.DeleteBuffer(_vertexBuffer);
+					GL.DeleteBuffer(_colorBuffer);
+					GL.DeleteBuffer(_texCoordBuffer);
+				}
+			});
 			IsDisposed = true;
 		}
 
