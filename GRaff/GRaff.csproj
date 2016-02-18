@@ -282,7 +282,7 @@
     <Compile Include="Room.cs" />
     <Compile Include="Graphics\ShaderException.cs" />
     <Compile Include="Graphics\ShaderProgram.cs" />
-    <Compile Include="SoundInstance.cs" />
+    <Compile Include="SoundElement.cs" />
     <Compile Include="SoundState.cs" />
     <Compile Include="Sprite.cs" />
     <Compile Include="Graphics\Surface.cs" />

@@ -79,10 +79,10 @@ namespace GRaff
 		{
 			if (!IsDisposed)
 			{
-				Async.Run(() =>
+				Async.Run(Id, id =>
 				{
 					if (Giraffe.IsRunning)
-						GL.DeleteBuffer(Id);
+						GL.DeleteBuffer(id);
 				});
 
 				IsDisposed = true;
