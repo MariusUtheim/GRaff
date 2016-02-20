@@ -15,9 +15,15 @@ namespace GRaff
 	/// <remarks>The extension methods are not thread-safe. The other static methods use the same System.Random object to generate random numbers, using serialized thread-safe access.</remarks>
 	public static class GRandom
 	{
-		private static readonly Random _rnd = new Random(Time.MachineTime);
+		private static Random _rnd = new Random(Time.MachineTime);
 
 		public static Random Source => _rnd;
+
+		public static void Seed(int seed)
+		{
+			lock (_rnd)
+				_rnd = new Random(seed);
+		}
 
 		/// <summary>
 		/// Returns true or false with a equal probability.

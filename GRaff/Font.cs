@@ -15,11 +15,10 @@ namespace GRaff
 		private static readonly Regex NewlinePattern = new Regex("\r\n|\n");
 
 		private readonly Dictionary<char, FontCharacter> _characters = new Dictionary<char, FontCharacter>();
-		private TextureBuffer _buffer;
 
 		public Font(TextureBuffer buffer, FontFile fontData)
 		{
-			_buffer = buffer;
+			Buffer = buffer;
 			foreach (var c in fontData.Chars)
 				_characters.Add((char)c.Id, new FontCharacter(c));
 
@@ -36,7 +35,6 @@ namespace GRaff
 
 		public void Dispose()
 		{
-			Contract.Requires<ObjectDisposedException>(!IsDisposed);
 			Dispose(true);
 			GC.SuppressFinalize(this);
 		}
@@ -47,12 +45,14 @@ namespace GRaff
 			{
 				if (disposing)
 				{
-					if (!_buffer.IsDisposed)
-						_buffer.Dispose();
-					_buffer = null;
+					if (!Buffer.IsDisposed)
+						Buffer.Dispose();
+					Buffer = null;
 				}
 			}
 		}
+
+		public TextureBuffer Buffer { get; private set; }
 
 		public static IAsyncOperation<Font> LoadAsync(string bitmapFile, string fontDataFile)
 		{
@@ -117,43 +117,29 @@ namespace GRaff
 				return Vector.Zero;
 		}
 
+		public int GetAdvance(char character)
+		{
+			FontCharacter c;
+			if (_characters.TryGetValue(character, out c))
+				return c.XAdvance;
+			else
+				return 0;
+		}
+
 		internal TextureBuffer TextureBuffer
 		{
 			get
 			{
 				Contract.Requires<ObjectDisposedException>(!IsDisposed);
-				return _buffer;
+				return Buffer;
 			}
 		}
 
-
-
-		internal void RenderTexCoords(string str, int offset, ref GraphicsPoint[] texCoords)
+		public bool TryGetCharacter(char c, out FontCharacter fontCharacter)
 		{
-			Contract.Requires<ObjectDisposedException>(!IsDisposed);
-			double tXScale = 1.0 / TextureBuffer.Width, tYScale = 1.0 / TextureBuffer.Height;
-			
-			for (var i = 0; i < str.Length; i++)
-			{
-				var index = 4 * (i + offset);
-
-				FontCharacter character;
-				if (_characters.TryGetValue(str[i], out character))
-				{
-					texCoords[index] = new GraphicsPoint(tXScale * character.X, tYScale * character.Y);
-					texCoords[index + 1] = new GraphicsPoint(tXScale * (character.X + character.Width), tYScale * character.Y);
-					texCoords[index + 2] = new GraphicsPoint(tXScale * (character.X + character.Width), tYScale * (character.Y + character.Height));
-					texCoords[index + 3] = new GraphicsPoint(tXScale * character.X, tYScale * (character.Y + character.Height));
-				}
-				else
-				{
-					texCoords[index] = GraphicsPoint.Zero;
-					texCoords[index + 1] = GraphicsPoint.Zero;
-					texCoords[index + 2] = GraphicsPoint.Zero;
-					texCoords[index + 3] = GraphicsPoint.Zero;
-				}
-			}
+			return _characters.TryGetValue(c, out fontCharacter);
 		}
+
 
 	}
 }

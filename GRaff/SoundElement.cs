@@ -59,7 +59,6 @@ namespace GRaff
 
 		public void Dispose()
 		{
-			Contract.Requires<ObjectDisposedException>(!IsDisposed);
 			Dispose(true);
 			GC.SuppressFinalize(this);
 		}

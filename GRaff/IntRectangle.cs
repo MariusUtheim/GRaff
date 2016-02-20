@@ -96,7 +96,7 @@ namespace GRaff
 		/// <param name="other">The GRaff.IntRectangle to test intersection with.</param>
 		/// <returns>true if the two rectangles intersect.</returns>
 		public bool Intersects(IntRectangle other)
-			=> !(Left > other.Right || Top > other.Bottom || Right < other.Left || Bottom < other.Top);
+			=> !(Left >= other.Right || Top >= other.Bottom || Right <= other.Left || Bottom <= other.Top);
 
 
 		public IntRectangle? Intersection(IntRectangle other)
@@ -112,10 +112,10 @@ namespace GRaff
 				return new IntRectangle(left, top, right - left, bottom - top);
 		}
 
-		public bool ContainsPoint(Point pt)
-			=> pt.X >= this.Left && pt.Y >= this.Top && pt.X < this.Right && pt.Y < this.Bottom;
+		public bool ContainsPoint(double x, double y)
+			=> x >= this.Left && y >= this.Top && x < this.Right && y < this.Bottom;
 
-
+		public bool ContainsPoint(Point pt) => ContainsPoint(pt.X, pt.Y);
 
 
 		/// <summary>

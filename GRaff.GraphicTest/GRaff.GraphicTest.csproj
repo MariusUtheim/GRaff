@@ -46,6 +46,7 @@
     <Compile Include="GraphTest.cs" />
     <Compile Include="GridTest.cs" />
     <Compile Include="ParticleTest.cs" />
+    <Compile Include="RectsPackingTest.cs" />
     <Compile Include="SoundTest.cs" />
     <Compile Include="VectorGraphicsTest.cs" />
     <Compile Include="Marker.cs" />
@@ -68,6 +69,9 @@
       <Project>{64447cf0-9d21-4b49-b12b-7830bee354c7}</Project>
       <Name>GRaff</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="RectPacking\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

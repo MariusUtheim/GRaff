@@ -298,7 +298,7 @@ namespace GRaff.Graphics
 			var offset = 0;
 			for (var l = 0; l < split.Length; l++)
 			{
-				renderer.Font.RenderTexCoords(split[l], offset, ref texCoords);
+				renderer.RenderTexCoords(split[l], offset, ref texCoords);
 				offset += split[l].Length;
 			}
 

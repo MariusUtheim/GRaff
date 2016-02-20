@@ -28,6 +28,13 @@ namespace GRaff
 			return min;
 		}
 
+		public static IEnumerable<TValue> Indexed<T, TValue>(this IEnumerable<T> enumerable, Func<int, T, TValue> selector)
+		{
+			var index = 0;
+			foreach (var x in enumerable)
+				yield return selector(index++, x);
+		}
+
 		public static IEnumerable<T> TakeWhilePrevious<T>(this IEnumerable<T> enumerable, Func<T, bool> predicate)
 		{
 			foreach (var v in enumerable)

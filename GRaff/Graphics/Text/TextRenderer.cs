@@ -123,7 +123,7 @@ namespace GRaff.Graphics.Text
 			var lines = LineSplit(text);
 			var length = lines.Sum(line => line.Length);
 
-			quadCoords = new GraphicsPoint[4 * length];
+			var coords = new GraphicsPoint[4 * length];
 
 			var x0 = 0.0;
 			var y0 = 0.0;
@@ -150,20 +150,49 @@ namespace GRaff.Graphics.Text
 				var y = y0 + l * LineSeparation;
 				for (var i = 0; i < lines[l].Length; i++)
 				{
-					var s = Font.GetSize(lines[l][i]);
-					var d = Font.GetOffset(lines[l][i]);
-					quadCoords[coordIndex] = new GraphicsPoint(x + d.X, y + d.Y);
-					quadCoords[coordIndex + 1] = new GraphicsPoint(x + d.X + s.X, y + d.Y);
-					quadCoords[coordIndex + 2] = new GraphicsPoint(x + d.X + s.X, y + d.Y + s.Y);
-					quadCoords[coordIndex + 3] = new GraphicsPoint(x + d.X, y + d.Y + s.Y);
-					x += s.X;
+					FontCharacter c;
+					if (Font.TryGetCharacter(lines[l][i], out c))
+					{
+						coords[coordIndex] = new GraphicsPoint(x + c.XOffset, y + c.YOffset);
+						coords[coordIndex + 1] = new GraphicsPoint(x + c.XOffset + c.Width, y + c.YOffset);
+						coords[coordIndex + 2] = new GraphicsPoint(x + c.XOffset + c.Width, y + c.YOffset + c.Height);
+						coords[coordIndex + 3] = new GraphicsPoint(x + c.XOffset, y + c.YOffset + c.Height);
+						x += c.XAdvance;
+					}
 					coordIndex += 4;
 				}
 			}
 
+			quadCoords = coords;
 			return lines;
 		}
 
+
+		internal void RenderTexCoords(string str, int offset, ref GraphicsPoint[] texCoords)
+		{
+			double tXScale = 1.0 / Font.Buffer.Width, tYScale = 1.0 / Font.Buffer.Height;
+
+			for (var i = 0; i < str.Length; i++)
+			{
+				var index = 4 * (i + offset);
+
+				FontCharacter character;
+				if (Font.TryGetCharacter(str[i], out character))
+				{
+					texCoords[index] = new GraphicsPoint(tXScale * character.X, tYScale * character.Y);
+					texCoords[index + 1] = new GraphicsPoint(tXScale * (character.X + character.Width), tYScale * character.Y);
+					texCoords[index + 2] = new GraphicsPoint(tXScale * (character.X + character.Width), tYScale * (character.Y + character.Height));
+					texCoords[index + 3] = new GraphicsPoint(tXScale * character.X, tYScale * (character.Y + character.Height));
+				}
+				else
+				{
+					texCoords[index] = GraphicsPoint.Zero;
+					texCoords[index + 1] = GraphicsPoint.Zero;
+					texCoords[index + 2] = GraphicsPoint.Zero;
+					texCoords[index + 3] = GraphicsPoint.Zero;
+				}
+			}
+		}
 
 		public TextureBuffer Render(string text)
 		{

@@ -1,5 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\SharpFont.3.1.0\build\SharpFont.props" Condition="Exists('..\packages\SharpFont.3.1.0\build\SharpFont.props')" />
+  <Import Project="..\packages\SharpFont.Dependencies.2.6\build\SharpFont.Dependencies.props" Condition="Exists('..\packages\SharpFont.Dependencies.2.6\build\SharpFont.Dependencies.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -12,6 +14,8 @@
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <CodeContractsAssemblyMode>1</CodeContractsAssemblyMode>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -90,6 +94,10 @@
     <Reference Include="OpenTK">
       <HintPath>..\..\..\..\..\..\Library\OpenTK\1.1\Binaries\OpenTK\Release\OpenTK.dll</HintPath>
     </Reference>
+    <Reference Include="SharpFont, Version=3.0.1.200, Culture=neutral, PublicKeyToken=48add4c483071cdf, processorArchitecture=MSIL">
+      <HintPath>..\packages\SharpFont.3.1.0\lib\net20\SharpFont.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
@@ -113,6 +121,11 @@
     <Compile Include="Forms\MouseEventArgs.cs" />
     <Compile Include="Forms\OpenFileDialog.cs" />
     <Compile Include="Forms\Quad.cs" />
+    <Compile Include="Graphics\Text\Glyph.cs" />
+    <Compile Include="Graphics\Text\RectPacker\Canvas.cs" />
+    <Compile Include="Graphics\Text\RectPacker\CanvasStats.cs" />
+    <Compile Include="Graphics\Text\RectPacker\DynamicTwoDimensionalArray.cs" />
+    <Compile Include="Graphics\Text\RectPacker\RectanglePacker.cs" />
     <Compile Include="Graphics\Text\TextRenderer.cs" />
     <Compile Include="Pathfinding\Heap.cs" />
     <Compile Include="Pathfinding\DiagonalGrid.cs" />
@@ -322,6 +335,7 @@
     <Compile Include="Draw.Primitive.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Graphics\Text\FontLoader.TrueType.cs" />
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
@@ -329,6 +343,13 @@
     <PostBuildEvent>
     </PostBuildEvent>
   </PropertyGroup>
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\SharpFont.Dependencies.2.6\build\SharpFont.Dependencies.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\SharpFont.Dependencies.2.6\build\SharpFont.Dependencies.props'))" />
+    <Error Condition="!Exists('..\packages\SharpFont.3.1.0\build\SharpFont.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\SharpFont.3.1.0\build\SharpFont.props'))" />
+  </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

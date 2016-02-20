@@ -6,9 +6,15 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
+using System.Drawing;
+using System.Drawing.Text;
 using System.IO;
+using System.Linq;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
+using SharpFont;
+using SysFont = System.Drawing.Font;
 
 
 namespace GRaff.Graphics.Text
@@ -235,9 +241,9 @@ namespace GRaff.Graphics.Text
 			set;
 		}
 	}
-
+	
 	[Serializable]
-	public class FontPage
+ 	public class FontPage
 	{
 		[XmlAttribute("id")]
 		public int Id
@@ -353,7 +359,8 @@ namespace GRaff.Graphics.Text
 		}
 	}
 
-	public class FontLoader
+#warning Implement kerning
+	public partial class FontLoader
 	{
 		private static XmlSerializer deserializer = new XmlSerializer(typeof(FontFile));
 
@@ -361,6 +368,27 @@ namespace GRaff.Graphics.Text
 		{
 			using (var textReader = new StreamReader(filename))
 				return (FontFile)deserializer.Deserialize(textReader);
+		}
+
+
+		[StructLayout(LayoutKind.Sequential)]
+		struct TEXTMETRIC
+		{
+			long tmHeight, tmAscent, tmDescent, tmInternalLeading, tmExternalLeading,
+				tmAveCharWidth, tmMaxCharWidth, tmWeight, tmOverhang, tmDigitizedAspectX, tmDigitizedAspectY;
+			char tmFirstChar, tmLastChar, tmDefaultChar, tmBreakChar;
+			byte tmItalic, tmUnderlined, tmStruckOut, tmPitchAndFamily, tmCharSet;
+		}
+		[DllImport("Gdi32.dll")]
+		private static extern bool GetTextMetrics(IntPtr hdc, out TEXTMETRIC tm);
+
+		public static void TextMetrics()
+		{
+			var f = new SysFont("Arial", 12);
+			TEXTMETRIC tm;
+			GetTextMetrics(f.ToHfont(), out tm);
+
+			Console.WriteLine(tm);
 		}
 	}
 }
