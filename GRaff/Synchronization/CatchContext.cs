@@ -24,8 +24,18 @@ namespace GRaff.Synchronization
 									   .Select(pair => pair.Value)
 									   .FirstOrDefault();
 
-			handler?.Invoke(exception);
-			return handler != null;
+			if (handler == null)
+				return false;
+
+			try
+			{
+				handler?.Invoke(exception);
+				return true;
+			}
+			catch
+			{
+				return false;
+			}
 		}
 	}
 
@@ -55,10 +65,16 @@ namespace GRaff.Synchronization
 				result = default(TResult);
 				return false;
 			}
-			else
+
+			try
 			{
 				result = handler(exception);
 				return true;
+			}
+			catch
+			{
+				result = default(TResult);
+				return false;
 			}
 		}
 

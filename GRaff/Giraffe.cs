@@ -248,7 +248,7 @@ namespace GRaff
 		{
 			GlobalEvent.OnDrawBackground();
 
-			foreach (var instance in Instance.All.Where(element => element.IsVisible))
+			foreach (var instance in Instance<IVisible>.All.Where(element => element.IsVisible))
 				instance.OnDraw();
 
 			GlobalEvent.OnDrawForeground();

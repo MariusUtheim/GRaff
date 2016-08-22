@@ -39,7 +39,7 @@ namespace GRaff
 			: this(location.X, location.Y) { }
 
 		[ContractInvariantMethod]
-		private void objectInvariants()
+		private void invariants()
 		{
 			Contract.Invariant(Transform != null);
 			Contract.Invariant(Image != null);

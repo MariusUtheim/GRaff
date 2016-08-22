@@ -75,7 +75,7 @@ namespace GRaff
 				});
 
 				IsDisposed = true;
-				Destroy();
+				this.Destroy();
 				Buffer.Remove(this);
 			}
 		}
@@ -158,7 +158,7 @@ namespace GRaff
 		{
 			Contract.Requires<ObjectDisposedException>(IsStopped || !IsDisposed);
 			AL.SourceStop(_sid);
-			Destroy();
+			this.Destroy();
 		}
 
 		/// <summary>

@@ -6,13 +6,29 @@ using System.Threading.Tasks;
 
 namespace GRaff
 {
+	public interface IDestroyListener : IGameElement
+	{
+		void OnDestroy();
+	}
+
+	public interface IGameElement
+	{
+		int Depth { get; }
+		void OnStep();
+	}
+
+	public interface IVisible : IGameElement
+	{
+		bool IsVisible { get; }
+		void OnDraw();
+	}
+
 	/// <summary>
 	/// Represents the most general game element that is automatically handled by the engine.
 	/// </summary>
-	public abstract class GameElement
+	public abstract class GameElement : IGameElement, IVisible, IDestroyListener
 	{
 		private int _depth;
-		internal RBTreeNode Node { get; set; }
 
 		/// <summary>
 		/// Gets or sets the depth of this GRaff.GameObject.
@@ -30,35 +46,22 @@ namespace GRaff
 		/// </summary>
 		public bool IsVisible { get; set; } = true;
 
-		/// <summary>
-		/// Destroys the instance of this GRaff.GameObject, removing it from the game.
-		/// The instance will stop performing automatic actions such as Step and Draw,
-		/// but the C# object is not garbage collected while it is still being referenced.
-		/// </summary>
 		public void Destroy()
 		{
-			if (Instance.Remove(this))
-				OnDestroy();
+			Instance.Destroy(this);
 		}
 
-		/// <summary>
-		/// An action that is performed just before the instance is destroyed.
-		/// </summary>
 		public virtual void OnDestroy() { }
 
 		/// <summary>
 		/// An action that is performed once every update loop.
 		/// </summary>
-		public virtual void OnStep()
-		{
-		}
+		public virtual void OnStep() { }
 
 		/// <summary>
 		/// An action that is performed once every draw loop.
 		/// </summary>
 		/// <remarks>Draw loops may occur at different rates from update loops, and can be suppressed by setting IsVisible to false. Do not override this method with game logic, such as object motion.</remarks>
-		public virtual void OnDraw()
-		{
-		}
+		public virtual void OnDraw() { }
 	}
 }

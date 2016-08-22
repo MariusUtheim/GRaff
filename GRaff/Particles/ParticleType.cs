@@ -31,8 +31,9 @@ namespace GRaff.Particles
 		public ParticleSystem Burst(Point location, int count)
 		{
 			var system = new ParticleSystem(this);
+			system.DestroyAutomatically = true;
 			system.Create(location, count);
-			return system;
+			return Instance.Create(system);
 		}
 
 		public Particle Generate(double x, double y)

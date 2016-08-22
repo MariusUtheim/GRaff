@@ -20,18 +20,30 @@ namespace GRaff
 			NeedsSort = false;
 		}
 
-		public static TGameElement Create<TGameElement>(TGameElement instance) where TGameElement : GameElement
+		public static TGameElement Create<TGameElement>(TGameElement instance) where TGameElement : IGameElement
 		{
 			_elements.Add(instance);
 			return instance;
 		}
 
-		internal static bool Remove(GameElement instance)
+		/// <summary>
+		/// Destroys the instance of this GRaff.GameObject, removing it from the game.
+		/// The instance will stop performing automatic actions such as Step and Draw,
+		/// but the C# object is not garbage collected while it is still being referenced.
+		/// </summary>
+		public static void Destroy(this IGameElement element)
+		{
+			if (Remove(element))
+				(element as IDestroyListener)?.OnDestroy();
+		}
+
+
+		internal static bool Remove(IGameElement instance)
 		{
 			return _elements.Remove(instance);
 		}
 
-		public static IEnumerable<GameElement> All
+		public static IEnumerable<IGameElement> All
 		{
             get
 			{
@@ -44,7 +56,7 @@ namespace GRaff
 	/// Provides static methods to interact with the instances of a specific type.
 	/// </summary>
 	/// <typeparam name="T">The type of GameObject.</typeparam>
-	public static class Instance<T> where T : GameElement
+	public static class Instance<T> where T : IGameElement
 	{
 		private static Func<T> _parameterlessConstructor;
 		private static Func<Point, T> _locationConstructor;
@@ -73,8 +85,8 @@ namespace GRaff
 				if (parameterlessMatch == null)
 					return;
 				_parameterlessConstructor = () => (T)parameterlessMatch.Invoke(new object[0]);
-				_locationConstructor = location => { var obj = (GameObject)parameterlessMatch.Invoke(new object[0]); obj.Location = location; return obj as T; };
-				_xyConstructor = (x, y) => { var obj = (GameObject)parameterlessMatch.Invoke(new object[0]); obj.X = x; obj.Y = y; return obj as T; };
+				_locationConstructor = location => { var obj = (GameObject)parameterlessMatch.Invoke(new object[0]); obj.Location = location; return (T)(object)obj; };
+				_xyConstructor = (x, y) => { var obj = (GameObject)parameterlessMatch.Invoke(new object[0]); obj.X = x; obj.Y = y; return (T)(object)obj; };
 			}
 			else
 			{
