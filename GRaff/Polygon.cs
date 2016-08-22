@@ -47,7 +47,7 @@ namespace GRaff
 			a = next.Direction - previous.Direction;
 			if (a.Degrees > 180)
 			{
-				_pts = _pts.Reverse().ToArray();
+				Array.Reverse(_pts);
 				a = -a;
 			}
 			sum += a.Degrees;
@@ -101,6 +101,16 @@ namespace GRaff
 			}
 
 			return new Polygon(pts, Unit._);
+		}
+
+		public static Polygon Rectangle(double width, double height)
+		{
+			return new Polygon(new[] {
+				new Point(-width / 2, -height / 2),
+				new Point(width / 2, -height / 2),
+				new Point(width / 2, height / 2),
+				new Point(-width / 2, height / 2)
+			}, Unit._);
 		}
 
 		public static Polygon Circle(double radius)
@@ -221,5 +231,19 @@ namespace GRaff
 
 			return true;
 		}
+
+
+
+		public static Polygon operator +(Polygon left, Vector right)
+			=> new Polygon(left._pts.Select(p => p + right).ToArray(), Unit._);
+		
+		public static Polygon operator +(Vector left, Polygon right)
+			=> new Polygon(right._pts.Select(p => left + p).ToArray(), Unit._);
+
+		public static Polygon operator -(Polygon left, Vector right)
+			=> new Polygon(left._pts.Select(p => p - right).ToArray(), Unit._);
+
+		public static Polygon operator *(AffineMatrix left, Polygon right)
+			=> new Polygon(right._pts.Select(p => left * p).ToArray(), Unit._);
 	}
 }

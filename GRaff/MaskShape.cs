@@ -50,7 +50,7 @@ namespace GRaff
 
 		public static MaskShape Ellipse(Point center, double xRadius, double yRadius) => new MaskShape(Polygon.Ellipse(center, xRadius, yRadius));
 
-		public static MaskShape Ellipse(double width, double height) => Ellipse(Point.Zero, width, height);
+		public static MaskShape Ellipse(double xRadius, double yRadius) => Ellipse(Point.Zero, xRadius, yRadius);
 	
 		public static MaskShape Ellipse(Rectangle rectangle) => new MaskShape(GRaff.Polygon.Ellipse(rectangle));
 

@@ -132,5 +132,20 @@ namespace GRaff.UnitTesting
 
 			new Polygon(invalidPoints);
 		}
+
+		[TestMethod]
+		public void Polygon_FlippedPolygonConservesWinding()
+		{
+			var originalPolygon = Polygon.Rectangle(2, 1);
+			var intersectingPolygon = Polygon.Rectangle(1, 2);
+
+			Assert.IsTrue(originalPolygon.ContainsPoint(Point.Zero));
+			Assert.IsTrue(originalPolygon.Intersects(intersectingPolygon));
+
+			var flippedPolygon = new Transform { XScale = -1 }.Polygon(originalPolygon);
+
+			Assert.IsTrue(originalPolygon.ContainsPoint(Point.Zero));
+			Assert.IsTrue(originalPolygon.Intersects(intersectingPolygon));
+		}
 	}
 }

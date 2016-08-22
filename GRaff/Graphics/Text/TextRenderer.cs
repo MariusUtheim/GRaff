@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Text;
@@ -31,6 +32,11 @@ namespace GRaff.Graphics.Text
 			Contract.Invariant(Font != null);
 		}
 
+		private static bool _isNewline(char c)
+		{
+			return c == '\r' || c == '\n';
+		}
+
 		public Font Font { get; set; }
 
 		public int Width { get; set; }
@@ -39,8 +45,6 @@ namespace GRaff.Graphics.Text
 
 		public FontAlignment Alignment { get; set; } = FontAlignment.TopLeft;
 
-		public int LengthOfSpace => GetWidth(" ");
-
 		private string _multilineFormat(string text)
 		{
 			Contract.Assume(text != null);
@@ -48,14 +52,14 @@ namespace GRaff.Graphics.Text
 			var multilineFormat = new StringBuilder(text.Length);
 			var currentLine = new StringBuilder(words[0]);
 			var currentLineLength = GetWidth(words[0]);
-			var lengthOfSpace = LengthOfSpace;
+			var lengthOfSpace = GetWidth(" ");
 
 			var lengths = words.Select(word => GetWidth(word));
 
 			for (var i = 1; i < words.Length; i++)
 			{
 				var wordLength = GetWidth(words[i]);
-				if (currentLineLength + wordLength + lengthOfSpace < Width)
+				if (currentLineLength + wordLength < Width)
 				{
 					currentLine.Append(" " + words[i]);
 					currentLineLength += lengthOfSpace + wordLength;
@@ -90,23 +94,35 @@ namespace GRaff.Graphics.Text
 			if (text == null)
 				return "";
 
-			var lowerBound = Width - 3 * Font.GetWidth(".");
-			var currentWidth = 0;
+			var ellipsisWidth = Font.GetWidth("...");
+			var lowerBound = Width - ellipsisWidth;
+			var offset = 0;
 
 			for (var i = 0; i < text.Length; i++)
 			{
+				if (_isNewline(text[i]))
+					return text.Substring(0, i) + "...";
+
 				var nextWidth = Font.GetWidth(text[i]);
-				currentWidth += nextWidth;
-				if (currentWidth > lowerBound)
+				var advance = Font.GetAdvance(text, i);
+
+				if (offset + nextWidth > Width)
+					return text.Substring(0, i) + "...";
+
+				if (offset + advance >= lowerBound)
 				{
+					offset += advance;
 					for (var j = i + 1; j < text.Length; j++)
 					{
-						currentWidth += Font.GetWidth(text[j]);
-						if (currentWidth > Width)
+						nextWidth = Font.GetWidth(text[j]);
+						if (offset + nextWidth > Width)
 							return text.Substring(0, i) + "...";
+						offset += Font.GetAdvance(text, j);
                     }
 					break;
 				}
+
+				offset += advance;
 			}
 
 			return text;
@@ -116,6 +132,7 @@ namespace GRaff.Graphics.Text
 		{
 			return Font.GetWidth(text);
 		}
+
 
 
 		internal string[] RenderCoords(string text, out GraphicsPoint[] quadCoords)
@@ -158,6 +175,8 @@ namespace GRaff.Graphics.Text
 						coords[coordIndex + 2] = new GraphicsPoint(x + c.XOffset + c.Width, y + c.YOffset + c.Height);
 						coords[coordIndex + 3] = new GraphicsPoint(x + c.XOffset, y + c.YOffset + c.Height);
 						x += c.XAdvance;
+						if (i < lines[l].Length - 1)
+							x += Font.GetKerning(lines[l][i], lines[l][i + 1]);
 					}
 					coordIndex += 4;
 				}
@@ -167,13 +186,15 @@ namespace GRaff.Graphics.Text
 			return lines;
 		}
 
-
 		internal void RenderTexCoords(string str, int offset, ref GraphicsPoint[] texCoords)
 		{
 			double tXScale = 1.0 / Font.Buffer.Width, tYScale = 1.0 / Font.Buffer.Height;
 
 			for (var i = 0; i < str.Length; i++)
 			{
+				if (str[i] == '\n')
+					continue;
+
 				var index = 4 * (i + offset);
 
 				FontCharacter character;
@@ -194,9 +215,5 @@ namespace GRaff.Graphics.Text
 			}
 		}
 
-		public TextureBuffer Render(string text)
-		{
-			throw new NotImplementedException();
-		}
 	}
 }

@@ -98,6 +98,15 @@ namespace GRaff
 		public static Point operator +(Point p, Vector v) 
 			=> new Point(p.X + v.X, p.Y + v.Y);
 
+		/// <summary>
+		/// Translates the GRaff.Point by a specified GRaff.Vector.
+		/// </summary>
+		/// <param name="v">The GRaff.Vector to translate by.</param>
+		/// <param name="p">The GRaff.Point to be translated.</param>
+		/// <returns>The translated GRaff.Point.</returns>
+		public static Point operator +(Vector v, Point p)
+			=> new Point(v.X + p.X, v.Y + p.Y);
+
 
 		/// <summary>
 		/// Translates the GRaff.Point by a specified GRaff.IntVector.

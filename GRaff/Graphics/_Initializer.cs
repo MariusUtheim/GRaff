@@ -25,6 +25,7 @@ namespace GRaff.Graphics
 			catch (TypeInitializationException ex)
 			{
 				var innerException = ex.InnerException;
+#warning
 				throw innerException;
 			}
 		}

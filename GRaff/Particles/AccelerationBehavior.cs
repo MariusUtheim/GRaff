@@ -2,15 +2,15 @@
 
 namespace GRaff.Particles
 {
-	public class AccelerationProperty : IParticleBehavior
+	public class AccelerationBehavior : IParticleBehavior
 	{
-		public AccelerationProperty(Vector gravity)
+		public AccelerationBehavior(Vector gravity)
 			:this(gravity, 0) { }
 
-		public AccelerationProperty(double friction)
+		public AccelerationBehavior(double friction)
 			: this(Vector.Zero, friction) { }
 
-		public AccelerationProperty(Vector gravity, double friction)
+		public AccelerationBehavior(Vector gravity, double friction)
 		{
 			this.Gravity = gravity; 
 			this.Friction = friction;

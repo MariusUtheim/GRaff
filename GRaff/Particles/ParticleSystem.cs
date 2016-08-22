@@ -24,6 +24,8 @@ namespace GRaff.Particles
 			this.ParticleType = type;
 		}
 		
+		public bool DestroyAutomatically { get; set; }
+
 		public ParticleType ParticleType { get; private set; }
 
 		protected void Remove(Particle particle)
@@ -68,6 +70,9 @@ namespace GRaff.Particles
 				if (toRemove.Contains(current.Value))
 					particles.Remove(current);
 			}
+
+			if (DestroyAutomatically && particles.Count == 0)
+				this.Destroy();
 		}
 
 		public override void OnDraw()

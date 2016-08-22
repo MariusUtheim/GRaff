@@ -9,10 +9,10 @@ using GRaff.Graphics.Text;
 
 namespace GRaff.GraphicTest
 {
-	[Test]
-	class TextTest : GameElement
+	[Test(Order = -1)]
+	class TextTest : GameElement, IKeyPressListener
 	{
-		private const string lipsum = "Lorem ipsum dolor sit amet, consectetur adipiscing elit.\nPhasellus rutrum nibh sed nulla dapibus, sit amet tempor nulla feugiat.";
+		private const string lipsum = "AVWA TA TO LT EV\nLorem ipsum dolor sit amet, consectetur adipiscing elit.\nPhasellus rutrum nibh sed nulla dapibus, sit amet tempor nulla feugiat.";
         private static Font _font = Font.Load(@"C:\test\TimesNewRoman.png", @"C:\test\TimesNewRoman.xml");
 		private TextRenderer _render;
 
@@ -40,5 +40,13 @@ namespace GRaff.GraphicTest
 			Draw.Text(lipsum, _render, Colors.Black, 350, 10);
 		}
 
+		public void OnKeyPress(Key key)
+		{
+			if (key == Key.K)
+			{
+				_font.EnableKerning = !_font.EnableKerning;
+				Window.Title = $"{_font.GetWidth("AVWA TA TO LT EV")}";
+			}
+		}
 	}
 }

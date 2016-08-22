@@ -121,6 +121,7 @@
     <Compile Include="Forms\MouseEventArgs.cs" />
     <Compile Include="Forms\OpenFileDialog.cs" />
     <Compile Include="Forms\Quad.cs" />
+    <Compile Include="Graphics\Quadrilateral.cs" />
     <Compile Include="Graphics\Text\Glyph.cs" />
     <Compile Include="Graphics\Text\RectPacker\Canvas.cs" />
     <Compile Include="Graphics\Text\RectPacker\CanvasStats.cs" />
@@ -149,6 +150,18 @@
     <Compile Include="Pathfinding\Vertex.cs" />
     <Compile Include="Randomness\Statistics.cs" />
     <Compile Include="RedBlackTree.cs" />
+    <Compile Include="Synchronization2\Alarm.cs" />
+    <Compile Include="Synchronization2\Async.HandleEvents.cs" />
+    <Compile Include="Synchronization2\Async.Aggregation.cs" />
+    <Compile Include="Synchronization2\Async.cs" />
+    <Compile Include="Synchronization2\AsyncException.cs" />
+    <Compile Include="Synchronization2\AsyncOperation.cs" />
+    <Compile Include="Synchronization2\AsyncOperationExtensions.cs" />
+    <Compile Include="Synchronization2\AsyncOperationRejectedEventArgs.cs" />
+    <Compile Include="Synchronization2\CatchContext.cs" />
+    <Compile Include="Synchronization2\Coroutine.cs" />
+    <Compile Include="Synchronization2\Deferred.cs" />
+    <Compile Include="Synchronization2\Tween.cs" />
     <Compile Include="Synchronization\Alarm.cs" />
     <Compile Include="Angle.cs" />
     <Compile Include="AnimationStrip.cs" />
@@ -176,7 +189,7 @@
     <Compile Include="MatrixException.cs" />
     <Compile Include="Particles\FrictionProperty.cs" />
     <Compile Include="Particles\GravityProperty.cs" />
-    <Compile Include="Particles\AccelerationProperty.cs" />
+    <Compile Include="Particles\AccelerationBehavior.cs" />
     <Compile Include="Particles\ColorBehavior.cs" />
     <Compile Include="Particles\FadeoutBehavior.cs" />
     <Compile Include="Particles\FadeoutProperty.cs" />

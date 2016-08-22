@@ -15,6 +15,9 @@ namespace GRaff
 		private static readonly Regex NewlinePattern = new Regex("\r\n|\n");
 
 		private readonly Dictionary<char, FontCharacter> _characters = new Dictionary<char, FontCharacter>();
+		private readonly Dictionary<Tuple<char, char>, int> _kerning = new Dictionary<Tuple<char, char>, int>();
+
+		public IReadOnlyCollection<char> ASCIICharacters { get; } = Array.AsReadOnly("\n !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~".ToArray());
 
 		public Font(TextureBuffer buffer, FontFile fontData)
 		{
@@ -24,6 +27,8 @@ namespace GRaff
 
 			Height = fontData.Common.LineHeight;
 
+			foreach (var kerning in fontData.Kernings)
+				_kerning.Add(new Tuple<char, char>((char)kerning.First, (char)kerning.Second), kerning.Amount);
 		}
 
 		public bool IsDisposed { get; private set; }
@@ -71,10 +76,10 @@ namespace GRaff
 			return LoadAsync(bitmapFile, fontDataFile).Wait();
 		}
 
-
+		public bool EnableKerning { get; set; } = true;
 
 		public int Height { get; }
-
+		
 		public int GetWidth(char character)
 		{
 			Contract.Requires<ObjectDisposedException>(!IsDisposed);
@@ -95,18 +100,6 @@ namespace GRaff
 				return IntVector.Zero;
 		}
 
-		public int GetWidth(string str)
-		{
-			Contract.Requires<ObjectDisposedException>(!IsDisposed);
-			if (str == null)
-				return 0;
-			var width = 0;
-			foreach (var c in str)
-				width += GetWidth(c);
-			return width;
-		}
-		
-
 		public Vector GetOffset(char character)
 		{
 			Contract.Requires<ObjectDisposedException>(!IsDisposed);
@@ -116,8 +109,8 @@ namespace GRaff
 			else
 				return Vector.Zero;
 		}
-
-		public int GetAdvance(char character)
+		
+		private int GetAdvance(char character)
 		{
 			FontCharacter c;
 			if (_characters.TryGetValue(character, out c))
@@ -125,6 +118,36 @@ namespace GRaff
 			else
 				return 0;
 		}
+
+		/// <summary>
+		/// Returns the offset between the position of the character at the specified position in the string and the end of that character.
+		/// If the font uses kerning, this will be taken into consideration.
+		/// </summary>
+		/// <param name="str">A string.</param>
+		/// <param name="i">The position of the character.</param>
+		/// <returns>The horizontal advance of the character, taking kerning into consideration.</returns>
+		public int GetAdvance(string str, int i)
+		{
+			Contract.Requires<ArgumentNullException>(str != null);
+			Contract.Requires<IndexOutOfRangeException>(i >= 0 && i < str.Length);
+
+			if (i == str.Length - 1)
+				return GetAdvance(str[i]);
+			else
+				return GetAdvance(str[i]) + GetKerning(str[i], str[i + 1]);
+		}
+		
+		public int GetWidth(string str)
+		{
+			Contract.Requires<ObjectDisposedException>(!IsDisposed);
+			if (str == null)
+				return 0;
+			var width = 0;
+			for (var i = 0; i < str.Length; i++)
+				width += GetAdvance(str, i);
+			return width;
+		}
+
 
 		internal TextureBuffer TextureBuffer
 		{
@@ -135,11 +158,24 @@ namespace GRaff
 			}
 		}
 
+		public FontCharacter GetCharacter(char c)
+		{
+			return _characters[c];
+		}
+
 		public bool TryGetCharacter(char c, out FontCharacter fontCharacter)
 		{
 			return _characters.TryGetValue(c, out fontCharacter);
 		}
 
-
+		public int GetKerning(char first, char second)
+		{
+			if (!EnableKerning) return 0;
+			int kerning;
+			if (_kerning.TryGetValue(new Tuple<char, char>(first, second), out kerning))
+				return kerning;
+			else
+				return 0;
+		}
 	}
 }

@@ -39,16 +39,15 @@ namespace GRaff
 		public static void FillCircle(Color col1, Color col2, Point location, double radius) => Draw.CurrentSurface.FillCircle(col1, col2, (GraphicsPoint)location, radius);
 		public static void FillCircle(Color col1, Color col2, double x, double y, double radius) => Draw.CurrentSurface.FillCircle(col1, col2, new GraphicsPoint(x, y), radius);
 
-		public static void Ellipse(Color color, double x, double y, double width, double height) => CurrentSurface.DrawEllipse(color, new GraphicsPoint(x, y), width, height);
+		public static void Ellipse(Color color, double x, double y, double xRadius, double yRadius) => CurrentSurface.DrawEllipse(color, new GraphicsPoint(x - xRadius, y - yRadius), 2 * xRadius, 2 * yRadius);
 		public static void Ellipse(Color color, Point location, Vector size) => CurrentSurface.DrawEllipse(color, (GraphicsPoint)location, size.X, size.Y);
 		public static void Ellipse(Color color, Rectangle rectangle) => CurrentSurface.DrawEllipse(color, (GraphicsPoint)rectangle.TopLeft, rectangle.Width, rectangle.Height);
-		public static void FillEllipse(Color color, double x, double y, double width, double height) => CurrentSurface.FillEllipse(color, color, new GraphicsPoint(x, y), width, height);
+		public static void FillEllipse(Color color, double x, double y, double xRadius, double yRadius) => CurrentSurface.FillEllipse(color, color, new GraphicsPoint(x - xRadius, y - yRadius), 2 * xRadius, 2 * yRadius);
 		public static void FillEllipse(Color color, Point location, Vector size) => CurrentSurface.FillEllipse(color, color, (GraphicsPoint)location, size.X, size.Y);
 		public static void FillEllipse(Color color, Rectangle rectangle) => CurrentSurface.FillEllipse(color, color, (GraphicsPoint)rectangle.TopLeft, rectangle.Width, rectangle.Height);
-		public static void FillEllipse(Color innerColor, Color outerColor, double x, double y, double width, double height) => CurrentSurface.FillEllipse(innerColor, outerColor, new GraphicsPoint(x, y), width, height);
+		public static void FillEllipse(Color innerColor, Color outerColor, double x, double y, double xRadius, double yRadius) => CurrentSurface.FillEllipse(innerColor, outerColor, new GraphicsPoint(x - xRadius, y - yRadius), 2 * xRadius, 2 * yRadius);
 		public static void FillEllipse(Color innerColor, Color outerColor, Point location, Vector size) => CurrentSurface.FillEllipse(innerColor, outerColor, (GraphicsPoint)location, size.X, size.Y);
 		public static void FillEllipse(Color innerColor, Color outerColor, Rectangle rectangle) => CurrentSurface.FillEllipse(innerColor, outerColor, (GraphicsPoint)rectangle.TopLeft, rectangle.Width, rectangle.Height);
-
 
 		public static void Triangle(Color color, double x1, double y1, double x2, double y2, double x3, double y3) => Draw.CurrentSurface.DrawTriangle(color, color, color, new GraphicsPoint(x1, y1), new GraphicsPoint(x2, y2), new GraphicsPoint(x3, y3));
 		public static void Triangle(Color color, Point p1, Point p2, Point p3) => Draw.CurrentSurface.DrawTriangle(color, color, color, (GraphicsPoint)p1, (GraphicsPoint)p2, (GraphicsPoint)p3);

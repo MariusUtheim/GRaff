@@ -38,7 +38,10 @@ namespace GRaff.Graphics.Text
 			return mapped.OrderBy(i => i.Index).Select(i => new IntRectangle(i.X, i.Y, i.Width, i.Height)).ToArray();
 		}
 
-		public static IEnumerable<IntRectangle> PackRectangles(IEnumerable<IntVector> sizes, double cutoffFrequency, int maxIterations, Func<int, int, double> cost)
+		public static IEnumerable<IntRectangle> Pack(IEnumerable<IntVector> sizes)
+			=> Pack(sizes, 1, Int32.MaxValue, (w, h) => w * w + h * h);
+
+		public static IEnumerable<IntRectangle> Pack(IEnumerable<IntVector> sizes, double cutoffFrequency, int maxIterations, Func<int, int, double> cost)
 		{
 			var configuration = new RectanglePacker().Mapping(sizes.Indexed((i, sz) => new IndexSize(i, sz.X, sz.Y)), cutoffFrequency, maxIterations, r => cost(r.Width, r.Height));
             return configuration.MappedImages.Select(i => new IntRectangle(i.X, i.Y, i.Width, i.Height));

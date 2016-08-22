@@ -77,6 +77,21 @@ namespace GRaff
 			{
 				throw new NotImplementedException();
 			}
+
+			public static void Rectangles(Color color, params Rectangle[] rects)
+			{
+				Contract.Requires<ArgumentNullException>(rects != null);
+				var vertices = new GraphicsPoint[4 * rects.Length];
+				for (var i = 0; i < rects.Length; i++)
+				{
+					vertices[4 * i] = new GraphicsPoint(rects[i].Left, rects[i].Top);
+					vertices[4 * i + 1] = new GraphicsPoint(rects[i].Right, rects[i].Top);
+					vertices[4 * i + 2] = new GraphicsPoint(rects[i].Right, rects[i].Bottom);
+					vertices[4 * i + 3] = new GraphicsPoint(rects[i].Left, rects[i].Bottom);
+				}
+				CurrentSurface.DrawPrimitive(vertices, Enumerable.Repeat(color, vertices.Length).ToArray(), PrimitiveType.Quads);
+
+			}
 		}
     }
 #endif
