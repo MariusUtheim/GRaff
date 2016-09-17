@@ -38,8 +38,19 @@ namespace GRaff
 			return new Sprite(new AnimationStrip(TextureBuffer.Load(path), imageCount), null, origin, maskShape);
 		}
 
+		public static Sprite Load(string path, IntVector imageCounts, Vector? origin = null, MaskShape maskShape = null)
+		{
+			Contract.Requires<ArgumentOutOfRangeException>(imageCounts.X >= 1 && imageCounts.Y >= 1);
+			return new Sprite(new AnimationStrip(TextureBuffer.Load(path), imageCounts), null, origin, maskShape);
+		}
+
 		public static IAsyncOperation<Sprite> LoadAsync(string path, int imageCount = 1, Vector? origin = null, MaskShape maskShape = null)
 			=> TextureBuffer.LoadAsync(path).Then(buffer => new Sprite(new AnimationStrip(buffer, imageCount), null, origin, maskShape));
+
+		public static IAsyncOperation<Sprite> LoadAsync(string path, IntVector imageCounts, Vector? origin = null, MaskShape maskShape = null)
+			=> TextureBuffer.LoadAsync(path).Then(buffer => new Sprite(new AnimationStrip(buffer, imageCounts), null, origin, maskShape));
+
+
 
 		public AnimationStrip AnimationStrip { get; }
 

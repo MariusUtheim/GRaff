@@ -44,9 +44,6 @@ namespace GRaff
 
 		public AnimationStrip(TextureBuffer strip, int imageCount, Tuple<int, double>[] frameDurations)
 		{
-			//Contract.Requires<ArgumentNullException>(strip != null);
-			//Contract.Requires<ArgumentOutOfRangeException>(Contract.ForAll(frameDurations, f => f != null && f.Item1 < imageCount && f.Item2 > 0));
-
 			double dw = 1.0 / imageCount;
 			_frames = Enumerable.Range(0, imageCount)
 								.Select(i => strip.Subtexture(new Rectangle(i * dw, 0, dw, 1.0)))
@@ -57,7 +54,6 @@ namespace GRaff
 
 		public AnimationStrip(TextureBuffer strip, int imageCount)
 		{
-			//Contract.Requires<ArgumentNullException>(strip != null);
 			Contract.Requires<ArgumentOutOfRangeException>(imageCount >= 1);
 
 			double dw = 1.0 / imageCount;
@@ -66,6 +62,33 @@ namespace GRaff
 								.ToArray();
 			_indices = Enumerable.Range(0, imageCount).ToArray();
 			_durations = Enumerable.Repeat(1.0, imageCount).ToArray();
+		}
+
+		public AnimationStrip(TextureBuffer strip, IntVector imageCounts)
+		{
+			Contract.Requires<ArgumentOutOfRangeException>(imageCounts.X >= 1 && imageCounts.Y >= 1);
+
+			int c = imageCounts.X, r = imageCounts.Y; ;
+			double dw = 1.0 / c, dh = 1.0 / r;
+			_frames = Enumerable.Range(0, c * r)
+								.Select(i => strip.Subtexture(new Rectangle((i % c) * dw, (i / c) * dh, dw, dh)))
+								.ToArray();
+			_indices = Enumerable.Range(0, c * r).ToArray();
+			_durations = Enumerable.Repeat(1.0, c * r).ToArray();
+		}
+
+
+		public AnimationStrip(TextureBuffer strip, IntVector imageCounts, Tuple<int, double>[] frameDurations)
+		{
+			Contract.Requires<ArgumentOutOfRangeException>(imageCounts.X >= 1 && imageCounts.Y >= 1);
+
+			int c = imageCounts.X, r = imageCounts.Y; ;
+			double dw = 1.0 / c, dh = 1.0 / r;
+			_frames = Enumerable.Range(0, c * r)
+								.Select(i => strip.Subtexture(new Rectangle((i % c) * dw, (i / c) * dh, dw, dh)))
+								.ToArray();
+			_indices = frameDurations.Select(f => f.Item1).ToArray();
+			_durations = frameDurations.Select(f => f.Item2).ToArray();
 		}
 
 		[ContractInvariantMethod]

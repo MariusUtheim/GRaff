@@ -6,10 +6,12 @@ using System.Threading.Tasks;
 
 namespace GRaff.GraphicTest
 {
-	[Test]
+	[Test(Order = -1)]
 	class TransformTest : GameElement
 	{
 		Sprite sprite = new Sprite(TextureBuffers.Giraffe.Texture);
+		Sprite fourSprites = new Sprite(new AnimationStrip(TextureBuffers.Giraffe, new IntVector(2, 2)), origin: Vector.Zero);
+
 
 		AffineMatrix Identity => new AffineMatrix().Translate(200, 200);
 		AffineMatrix HFlip => AffineMatrix.Scaling(GMath.Sin(Time.LoopCount / 60.0), 1).Translate(500, 200);
@@ -21,6 +23,7 @@ namespace GRaff.GraphicTest
 
 		public override void OnDraw()
 		{
+			Draw.Sprite(fourSprites, Time.LoopCount / 30, 0, 0);
 			Draw.Sprite(sprite, 0, Identity);
 			Draw.Sprite(sprite, 0, HFlip);
 			Draw.Sprite(sprite, 0, VFlip);

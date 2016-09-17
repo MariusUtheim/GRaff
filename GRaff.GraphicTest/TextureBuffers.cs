@@ -9,7 +9,7 @@ namespace GRaff.GraphicTest
 	static class TextureBuffers
 	{
 		public static TextureBuffer Giraffe = TextureBuffer.Load(@"C:\test\Giraffe.jpg");
-		public static TextureBuffer Animation = TextureBuffer.Load(@"C:\test\Animation.png");
+		//public static TextureBuffer Animation = TextureBuffer.Load(@"C:\test\Animation.png");
 		public static TextureBuffer Star = TextureBuffer.Load(@"C:\test\particle.png");
 
 		public static void LoadAll()

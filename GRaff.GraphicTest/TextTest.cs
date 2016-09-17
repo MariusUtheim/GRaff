@@ -9,7 +9,7 @@ using GRaff.Graphics.Text;
 
 namespace GRaff.GraphicTest
 {
-	[Test(Order = -1)]
+	[Test]
 	class TextTest : GameElement, IKeyPressListener
 	{
 		private const string lipsum = "AVWA TA TO LT EV\nLorem ipsum dolor sit amet, consectetur adipiscing elit.\nPhasellus rutrum nibh sed nulla dapibus, sit amet tempor nulla feugiat.";
