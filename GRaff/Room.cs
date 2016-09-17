@@ -41,8 +41,6 @@ namespace GRaff
 		public IntVector Size => new IntVector(Width, Height);
 		public Point Center => new Point(Width / 2.0, Height / 2.0);
 
-		public Background Background { get; private set; }
-
 		public virtual void OnKeyPressed(Key key) { }
 
 		public virtual void OnEnter() { }
@@ -63,7 +61,6 @@ namespace GRaff
 			Current = this;
 			View.FocusRegion = new IntRectangle(0, 0, Width, Height);
 
-			Instance.Create(Background);
 			OnEnter();
 			Enter?.Invoke(this, new EventArgs());
 		}

@@ -25,17 +25,6 @@ namespace GRaff
 			_renderSystem.SetColors(UsageHint.StaticDraw, Colors.White, Colors.White, Colors.White, Colors.White);
 		}
 
-	/*	internal static void Initialize()
-		{
-			Default = Instance.Create(new Background { ClearColor = Colors.LightGray });
-		}
-
-		/// <summary>
-		/// Gets the GRaff.Background that was initialized at the beginning of the game.
-		/// </summary>
-		/// <remarks>This is a background with no sprite and a clear color set to Color.LightGray.</remarks>
-		public static Background Default { get; private set; }
-*/
 		/// <summary>
 		/// Gets or sets the background clear color. If set to null, the background won't draw a color.
 		/// </summary>
