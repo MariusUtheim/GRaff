@@ -74,7 +74,7 @@ namespace GRaff
 			{
 				if (Sprite == null)
 					throw new InvalidOperationException(String.Format("The {0}.{1} has no sprite.", "GRaff", "Image"));
-				return Sprite.Width * Transform.XScale;
+				return Sprite.Width * GMath.Abs(Transform.XScale);
 			}
 		}
 
@@ -88,7 +88,7 @@ namespace GRaff
 			{
 				if (Sprite == null)
 					throw new InvalidOperationException(String.Format("The {0}.{1} has no sprite.", "GRaff", "Image"));
-				return Sprite.Height * Transform.YScale;
+				return Sprite.Height * GMath.Abs(Transform.YScale);
 			}
 		}
 
