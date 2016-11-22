@@ -44,7 +44,7 @@ namespace GRaff.GraphicTest
 
 		public TweenTest()
 		{
-			Room.Current.Background.Color = null;
+			TestController.Background.Color = null;
 		}
 
 		public override void OnDraw()

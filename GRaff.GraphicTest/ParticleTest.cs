@@ -41,7 +41,7 @@ namespace GRaff.GraphicTest
 
 		public ParticleTest()
 		{
-			Room.Current.Background.Color = Colors.Black;
+			TestController.Background.Color = Colors.Black;
 			starSystem = Instance.Create(new ParticleSystem(_createStarType()));
 			pentagonSystem = Instance.Create(new ParticleSystem(_createPentagonType()));
 

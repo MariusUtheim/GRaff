@@ -24,7 +24,11 @@ namespace GRaff.GraphicTest
 
 			_testIndex = 0;
 			_initiateTest(_tests[0]);
+
+			Background = Instance.Create(new Background { Color = Colors.LightGray });
 		}
+
+		public static Background Background { get; private set; }
 
 		private void _initiateTest(Type test)
 		{

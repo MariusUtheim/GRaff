@@ -9,19 +9,23 @@ namespace GRaff.GraphicTest
 	[Test]
 	class BackgroundTest : GameElement, IKeyPressListener
 	{
+		private Background background;
 
 		public BackgroundTest()
 		{
-			Room.Current.Background.Color = Colors.LightGray;
-			Room.Current.Background.Buffer = TextureBuffers.Giraffe;
-			Room.Current.Background.IsTiled = true;
-			Room.Current.Background.HSpeed = -1;
-			Room.Current.Background.VSpeed = -1.1;
+			background = Instance.Create(new Background
+			{
+				Color = Colors.LightGray,
+				Buffer = TextureBuffers.Giraffe,
+				IsTiled = true,
+				HSpeed = -1,
+				VSpeed = -1.1,
+			});
 		}
 
 		public override void OnDestroy()
 		{
-			Room.Current.Background.Buffer = null;
+			background.Buffer = null;
 		}
 
 		public void OnKeyPress(Key key)
@@ -29,15 +33,15 @@ namespace GRaff.GraphicTest
 			switch (key)
 			{
 				case Key.Number1:
-					Room.Current.Background.Velocity = Vector.Zero;
-					Room.Current.Background.Offset = Vector.Zero;
-					Room.Current.Background.IsTiled = false;
+					background.Velocity = Vector.Zero;
+					background.Offset = Vector.Zero;
+					background.IsTiled = false;
 					break;
 
 				case Key.Number2:
-					Room.Current.Background.HSpeed = -1;
-					Room.Current.Background.VSpeed = -1.1;
-					Room.Current.Background.IsTiled = true;
+					background.HSpeed = -1;
+					background.VSpeed = -1.1;
+					background.IsTiled = true;
 					break;
 			}
 		}
