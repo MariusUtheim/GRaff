@@ -48,7 +48,9 @@ namespace GRaff
 			if (a.Degrees > 180)
 			{
 				Array.Reverse(_pts);
-				a = -a;
+				previous = Edge(-1).Direction;
+				next = Edge(0).Direction;
+				a = next.Direction - previous.Direction;
 			}
 			sum += a.Degrees;
 

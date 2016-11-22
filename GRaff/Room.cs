@@ -17,8 +17,6 @@ namespace GRaff
 			Contract.Requires<ArgumentOutOfRangeException>(width > 0 && height > 0);
 			this.Width = width;
 			this.Height = height;
-//			Window.Size = this.Size;
-			this.Background = new Background();
 		}
 
 		public static Room Current { get; private set; }
