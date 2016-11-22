@@ -113,8 +113,7 @@ namespace GRaff
 		{
 
 			GlobalEvent.OnBeginStep();
-			foreach (var instance in Instance<GameObject>.All)
-				instance.OnBeginStep();
+			Instance<GameObject>.Do(instance => instance.OnBeginStep());
 
 			Async.HandleEvents();
 
@@ -125,9 +124,8 @@ namespace GRaff
 			GlobalEvent.OnStep();
 
 			_detectCollisions();
-			
-			foreach (var instance in Instance<GameObject>.All)
-				instance.OnEndStep();
+
+			Instance<GameObject>.Do(instance => instance.OnEndStep());
 			GlobalEvent.OnEndStep();
 
 			if (Instance.NeedsSort)
@@ -136,13 +134,13 @@ namespace GRaff
 
 		private static void _detectCollisions()
 		{
-			foreach (var gen in Instance<GameObject>.All.Where(obj => obj is ICollisionListener))
+			foreach (var gen in Instance<GameObject>.Where(obj => obj is ICollisionListener))
 			{
 				var interfaces = gen.GetType().GetInterfaces().Where(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(ICollisionListener<>));
 				foreach (var collisionInterface in interfaces)
 				{
 					var arg = collisionInterface.GetGenericArguments().First();
-					foreach (var other in Instance<GameObject>.All.Where(i => i.GetType() == arg || arg.IsAssignableFrom(i.GetType())))
+					foreach (var other in Instance<GameObject>.Where(i => i.GetType() == arg || arg.IsAssignableFrom(i.GetType())))
 					{
 						if (gen.Intersects(other))
 							collisionInterface.GetMethods().First().Invoke(gen, new object[] { other });
@@ -203,15 +201,15 @@ namespace GRaff
 
 
 			foreach (var button in Mouse.Down)
-				foreach (var instance in Instance<GameObject>.All.Where(obj => obj is IMouseListener && obj.Mask.ContainsPoint(Mouse.Location)))
+				foreach (var instance in Instance<GameObject>.Where(obj => obj is IMouseListener && obj.Mask.ContainsPoint(Mouse.Location)))
 					(instance as IMouseListener).OnMouse(button);
 
 			foreach (var button in Mouse.Pressed)
-				foreach (var instance in Instance<GameObject>.All.Where(obj => obj is IMousePressListener && obj.Mask.ContainsPoint(Mouse.Location)))
+				foreach (var instance in Instance<GameObject>.Where(obj => obj is IMousePressListener && obj.Mask.ContainsPoint(Mouse.Location)))
 					(instance as IMousePressListener).OnMousePress(button);
 
 			foreach (var button in Mouse.Released)
-				foreach (var instance in Instance<GameObject>.All.Where(obj => obj is IMouseReleaseListener && obj.Mask.ContainsPoint(Mouse.Location)))
+				foreach (var instance in Instance<GameObject>.Where(obj => obj is IMouseReleaseListener && obj.Mask.ContainsPoint(Mouse.Location)))
 					(instance as IMouseReleaseListener).OnMouseRelease(button);
 
 
@@ -248,7 +246,7 @@ namespace GRaff
 		{
 			GlobalEvent.OnDrawBackground();
 
-			foreach (var instance in Instance<IVisible>.All.Where(element => element.IsVisible))
+			foreach (var instance in Instance<IVisible>.Where(element => element.IsVisible))
 				instance.OnDraw();
 
 			GlobalEvent.OnDrawForeground();

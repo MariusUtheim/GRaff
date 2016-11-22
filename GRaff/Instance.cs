@@ -176,10 +176,13 @@ namespace GRaff
 		/// <summary>
 		/// Returns all instances of the specified type.
 		/// </summary>
-		public static IEnumerable<T> All
-		{
-			get { return Instance.All.OfType<T>(); }
-		}
+		public static IEnumerable<T> Enumerate() => Instance.All.OfType<T>();
+
+		public static bool Any() => Enumerate().Any();
+		public static bool Any(Func<T, bool> predicate) => Enumerate().Any(predicate);
+		public static bool All(Func<T, bool> predicate) => Enumerate().All(predicate);
+		public static IEnumerable<T> Where(Func<T, bool> predicate) => Enumerate().Where(predicate);
+		public static IEnumerable<T> Where(Func<T, int, bool> predicate) => Enumerate().Where(predicate);
 
 		/// <summary>
 		/// Performs the action to each instance of the specified type.
@@ -187,30 +190,16 @@ namespace GRaff
 		/// <param name="action">The action to perform</param>
 		public static void Do(Action<T> action)
 		{
-			foreach (var obj in All)
+			foreach (var obj in Enumerate())
 				action.Invoke(obj);
 		}
 
 		/// <summary>
 		/// Returns one instance of the specified type.
 		/// </summary>
-		public static T First
-		{
-			get
-			{
-				return All.First();
-			}
-		}
-
-		/// <summary>
-		/// Filters all instances of the specified type based on a predicate.
-		/// </summary>
-		/// <param name="predicate"></param>
-		/// <returns></returns>
-		public static IEnumerable<T> Where(Func<T, bool> predicate)
-		{
-			Contract.Requires<ArgumentNullException>(predicate != null);
-			return All.Where(predicate);
-		}
-	}
+		public static T First() => Enumerate().First();
+		public static T First(Func<T, bool> predicate) => Enumerate().First(predicate);
+        public static T Single() => Enumerate().Single();
+		public static T Single(Func<T, bool> predicate) => Enumerate().Single(predicate);
+    }
 }
