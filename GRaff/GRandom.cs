@@ -188,15 +188,32 @@ namespace GRaff
 		/// </summary>
 		/// <typeparam name="T">The type of elements in the array.</typeparam>
 		/// <param name="array">The array to be shuffled.</param>
-		public static void Shuffle<T>(ref T[] array) { lock (_rnd) _rnd.Shuffle(ref array); }
+		public static void ShuffleInPlace<T>(T[] array) { lock (_rnd) _rnd.ShuffleInPlace(array); }
+
+		/// <summary>
+		/// Randomizes the order of a range of elements in the specified array.
+		/// </summary>
+		/// <typeparam name="T">The type of elements in the array.</typeparam>
+		/// <param name="array">The array to be shuffled.</param>
+		/// <param name="index">The starting index of the range to shuffle.</param>
+		/// <param name="end">The last index of the range to shuffle, exclusive.</param>
+		public static void ShuffleInPlace<T>(T[] array, int index, int end) { lock (_rnd) _rnd.ShuffleInPlace(array, index, end); }
 
 		/// <summary>
 		/// Creates a new array containing the elements of the specified array in a random order.
 		/// </summary>
 		/// <typeparam name="T">The type of elements in the array.</typeparam>
-		/// <param name="array">The array the elements will be selected from.</param>
+		/// <param name="enumerable">The array the elements will be selected from.</param>
 		/// <returns>The randomized array.</returns>
-		public static T[] Shuffle<T>(T[] array) { lock (_rnd) return _rnd.Shuffle(array); }
+		public static IEnumerable<T> Shuffle<T>(IEnumerable<T> enumerable) { lock (_rnd) return _rnd.Shuffle(enumerable); }
+
+		/// <summary>
+		/// Returns the numbers from the specified range in a randomized order.
+		/// </summary>
+		/// <param name="start">The first integer in the range to be generated.</param>
+		/// <param name="count">The number of integers to be generated.</param>
+		/// <returns>the numbers from the range in a randomized order.</returns>
+		public static IEnumerable<int> Range(int start, int count) { lock (_rnd) return _rnd.Range(start, count); }
 	}
 
 }

@@ -313,20 +313,33 @@ namespace GRaff
 			Contract.Requires<ArgumentNullException>(rnd != null);
 			return (Color)(rnd.Next(0x1000000));
 		}
-		
+
 		/// <summary>
 		/// Randomizes the order of the elements in the specified array.
 		/// </summary>
-		/// <param name="rnd">The System.Random to generate the numbers.</param>
+		/// <param name="rnd">The System.Random to generate the numbers for the shuffling.</param>
 		/// <typeparam name="T">The type of elements in the array.</typeparam>
 		/// <param name="array">The array to be shuffled.</param>
-		public static void Shuffle<T>(this Random rnd, ref T[] array)
+		public static void ShuffleInPlace<T>(this Random rnd, T[] array)
+		{
+			rnd.ShuffleInPlace(array, 0, array.Length);
+		}
+
+		/// <summary>
+		/// Randomizes the order of a range of elements in the specified array.
+		/// </summary>
+		/// <typeparam name="T">The type of elements in the array.</typeparam>
+		/// <param name="array">The array to be shuffled.</param>
+		/// <param name="index">The starting index of the range to shuffle.</param>
+		/// <param name="end">The last index of the range to shuffle, exclusive.</param>
+		public static void ShuffleInPlace<T>(this Random rnd, T[] array, int index, int end)
 		{
 			Contract.Requires<ArgumentNullException>(rnd != null);
+			Contract.Requires<ArgumentOutOfRangeException>(array == null || (index < 0 && index <= end && end <= array.Length));
 			if (array == null)
 				return;
 
-			for (int i = 1; i < array.Length; i++)
+			for (int i = index + 1; i < end; i++)
 			{
 				var randomIndex = rnd.Next(i + 1);
 				
@@ -336,6 +349,8 @@ namespace GRaff
 			}
 		}
 
+
+
 		/// <summary>
 		/// Creates a new array containing the elements of the specified array in a random order.
 		/// </summary>
@@ -343,13 +358,28 @@ namespace GRaff
 		/// <typeparam name="T">The type of elements in the array.</typeparam>
 		/// <param name="array">The array the elements will be selected from.</param>
 		/// <returns>The randomized array.</returns>
-		public static T[] Shuffle<T>(this Random rnd, T[] array)
+		public static IEnumerable<T> Shuffle<T>(this Random rnd, IEnumerable<T> array)
 		{
 			Contract.Requires<ArgumentNullException>(rnd != null);
-			Contract.Requires<ArgumentNullException>(array != null);
-			var result = (T[])array.Clone();
-			Shuffle(rnd, ref result);
+			if (array == null)
+				return Enumerable.Empty<T>();
+
+			var result = array.ToArray();
+			ShuffleInPlace(rnd, result);
 			return result;
+		}
+
+		/// <summary>
+		/// Returns the numbers from the specified range in a randomized order.
+		/// </summary>
+		/// <param name="rnd">The System.Random to generate the numbers.</param>
+		/// <param name="start">The first integer in the range to be generated.</param>
+		/// <param name="count">The number of integers to be generated.</param>
+		/// <returns>the numbers from the range in a randomized order.</returns>
+		public static IEnumerable<int> Range(this Random rnd, int start, int count)
+		{
+			Contract.Requires<ArgumentNullException>(rnd != null);
+			return rnd.Shuffle(Enumerable.Range(start, count));
 		}
 
 		#endregion

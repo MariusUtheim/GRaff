@@ -33,7 +33,7 @@ namespace GRaff.UnitTesting
 		public void RBTree_Add()
 		{
 			var collection = new RedBlackTree();
-			var indices = GRandom.Shuffle(Enumerable.Range(0, 100).ToArray());
+			var indices = GRandom.Range(0, 100).ToArray();
 			var elements = indices.Select(i => new TestElement(i)).ToList();
 
 			for (int i = 0; i < elements.Count; i++)
@@ -78,7 +78,7 @@ namespace GRaff.UnitTesting
 		public void RBTree_Enumerate()
 		{
 			var collection = new RedBlackTree();
-			var indices = GRandom.Shuffle(Enumerable.Range(0, 100).ToArray());
+			var indices = GRandom.Range(0, 100).ToArray();
 			var elements = indices.Select(i => new TestElement(i)).ToList();
 
 			foreach (var element in elements)
