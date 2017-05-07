@@ -176,7 +176,7 @@ namespace GRaff
 		public static double Gaussian(this Random rnd)
 		{
 			Contract.Requires<ArgumentNullException>(rnd != null);
-			return GMath.Sqrt(-2 * GMath.Log(rnd.NextDouble()));
+			return GMath.Sqrt(-2 * GMath.Log(1.0 - rnd.NextDouble())); // This ensures the number will be in the range (0, 1], so that the logarithm is well-defined
 		}
 
 		/// <summary>
@@ -335,7 +335,7 @@ namespace GRaff
 		public static void ShuffleInPlace<T>(this Random rnd, T[] array, int index, int end)
 		{
 			Contract.Requires<ArgumentNullException>(rnd != null);
-			Contract.Requires<ArgumentOutOfRangeException>(array == null || (index < 0 && index <= end && end <= array.Length));
+			Contract.Requires<ArgumentOutOfRangeException>(array == null || (index >= 0 && index <= end && index < array.Length && end <= array.Length));
 			if (array == null)
 				return;
 

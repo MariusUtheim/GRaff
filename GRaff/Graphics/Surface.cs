@@ -136,7 +136,7 @@ namespace GRaff.Graphics
 
 		public void DrawTriangle(Color col1, Color col2, Color col3, GraphicsPoint p1, GraphicsPoint p2, GraphicsPoint p3)
 		{
-			Render(new[] { p1, p2, p3 }, new[] { col1, col2, col3 }, PrimitiveType.LineStrip);
+			Render(new[] { p1, p2, p3, p1 }, new[] { col1, col2, col3, col1 }, PrimitiveType.LineStrip);
 		}
 
 		public void FillTriangle(Color col1, Color col2, Color col3, GraphicsPoint p1, GraphicsPoint p2, GraphicsPoint p3)

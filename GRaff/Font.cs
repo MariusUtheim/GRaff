@@ -17,7 +17,7 @@ namespace GRaff
 		private readonly Dictionary<char, FontCharacter> _characters = new Dictionary<char, FontCharacter>();
 		private readonly Dictionary<Tuple<char, char>, int> _kerning = new Dictionary<Tuple<char, char>, int>();
 
-		public IReadOnlyCollection<char> ASCIICharacters { get; } = Array.AsReadOnly("\n !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~".ToArray());
+		public static IReadOnlyCollection<char> ASCIICharacters { get; } = Array.AsReadOnly("\n !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~".ToArray());
 
 		public Font(TextureBuffer buffer, FontFile fontData)
 		{
@@ -74,6 +74,11 @@ namespace GRaff
 		{
 			Contract.Ensures(Contract.Result<Font>() != null);
 			return LoadAsync(bitmapFile, fontDataFile).Wait();
+		}
+
+		public static Font LoadTruetype(string font, int size, IEnumerable<char> charSet)
+		{
+			return FontLoader.LoadTrueType(new System.IO.FileInfo(font), size, new HashSet<char>(charSet));
 		}
 
 		public bool EnableKerning { get; set; } = true;
