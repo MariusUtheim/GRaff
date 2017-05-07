@@ -58,21 +58,17 @@ namespace GRaff
 	/// <typeparam name="T">The type of GameObject.</typeparam>
 	public static class Instance<T> where T : IGameElement
 	{
+		private static bool _isAbstract;
 		private static Func<T> _parameterlessConstructor;
 		private static Func<Point, T> _locationConstructor;
 		private static Func<double, double, T> _xyConstructor;
 
 		static Instance()
 		{
-			if (typeof(T).IsSubclassOf(typeof(GameObject)))
-				initializeAsObject();
-			else
-				initializeAsElement();
-		}
-
-		static void initializeAsObject()
-		{
 			var type = typeof(T);
+
+			_isAbstract = type.IsAbstract;
+
 			var constructors = type.GetConstructors();
 			var parameterTypes = constructors.Select(c => c.GetParameters().Select(p => p.ParameterType)).ToArray();
 
@@ -110,14 +106,6 @@ namespace GRaff
 			}
 		}
 
-		static void initializeAsElement()
-		{
-			var type = typeof(T);
-			var constructor = type.GetConstructors().FirstOrDefault(c => c.GetParameters().Length == 0);
-			if (constructor != null)
-				_parameterlessConstructor = () => (T)constructor.Invoke(new object[0]);
-		}
-
 		/// <summary>
 		/// Creates a new instance of TGameObject.
 		/// </summary>
@@ -130,8 +118,10 @@ namespace GRaff
 		/// </remarks>
 		public static T Create()
 		{
-			if (_parameterlessConstructor == null)
-				throw new InvalidOperationException(string.Format("Unable to create instances through {0}: Type {1} must specify a parameterless constructor, a constructor taking a GRaff.Point structure or a constructor taking two System.Double structures.", typeof(Instance<T>).Name, typeof(T).Name));
+			if (_isAbstract)
+				throw new InvalidOperationException($"Unable to create instances of the abstract type {nameof(T)}");
+            if (_parameterlessConstructor == null)
+				throw new InvalidOperationException($"Unable to create instances through {nameof(Instance<T>)}: Type {nameof(T)} must specify a parameterless constructor, a constructor taking a GRaff.Point structure or a constructor taking two System.Double structures.");
 			return Instance.Create(_parameterlessConstructor());
 		}
 
@@ -149,7 +139,7 @@ namespace GRaff
 		public static T Create(Point location)
 		{
 			if (_parameterlessConstructor == null)
-				throw new InvalidOperationException(string.Format("Unable to create instances through {0}: Type {1} must specify a parameterless constructor, a constructor taking a GRaff.Point structure or a constructor taking two System.Double structures.", typeof(Instance<T>).Name, typeof(T).Name));
+				throw new InvalidOperationException($"Unable to create instances through {nameof(Instance<T>)}: Type {nameof(T)} must specify a parameterless constructor, a constructor taking a GRaff.Point structure or a constructor taking two System.Double structures.");
 			return Instance.Create(_locationConstructor(location));
 		}
 
@@ -171,7 +161,7 @@ namespace GRaff
 			return Instance.Create(_xyConstructor(x, y));
 		}
 
-
+		public static T _ => Enumerate().FirstOrDefault();
 
 		/// <summary>
 		/// Returns all instances of the specified type.
@@ -194,11 +184,33 @@ namespace GRaff
 				action.Invoke(obj);
 		}
 
+		public static bool DoOnce(Action<T> action)
+		{
+			foreach (var obj in Enumerate())
+			{
+				action.Invoke(obj);
+				return true;
+			}
+			return false;
+		}
+
+		public static bool DoOnceIf(Func<T, bool> predicate, Action<T> action)
+		{
+			foreach (var obj in Where(predicate))
+			{
+				action.Invoke(obj);
+				return true;
+			}
+			return false;
+		}
+
 		/// <summary>
 		/// Returns one instance of the specified type.
 		/// </summary>
 		public static T First() => Enumerate().First();
 		public static T First(Func<T, bool> predicate) => Enumerate().First(predicate);
+		public static T FirstOrDefault() => Enumerate().FirstOrDefault();
+		public static T FirstOrDefault(Func<T, bool> predicate) => Enumerate().FirstOrDefault(predicate);
         public static T Single() => Enumerate().Single();
 		public static T Single(Func<T, bool> predicate) => Enumerate().Single(predicate);
     }
