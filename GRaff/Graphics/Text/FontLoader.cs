@@ -13,6 +13,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
+using Microsoft.Win32;
 using SharpFont;
 using SysFont = System.Drawing.Font;
 
@@ -389,6 +390,19 @@ namespace GRaff.Graphics.Text
 			GetTextMetrics(f.ToHfont(), out tm);
 
 			Console.WriteLine(tm);
+		}
+
+		private static RegistryKey fontsKey => Registry.LocalMachine.OpenSubKey("Software\\Microsoft\\Windows NT\\CurrentVersion\\Fonts");
+
+		public static IEnumerable<String> GetTruetypeNames()
+		{
+			return fontsKey.GetValueNames();
+		}
+
+		public static string GetTruetypeFile(string fontFamilyName)
+		{
+			return (string)(fontsKey.GetValue(fontFamilyName) 
+						 ?? fontsKey.GetValue(fontFamilyName + " (TrueType)"));
 		}
 	}
 }

@@ -18,9 +18,11 @@ namespace GRaff.Graphics.Text
 		{
 			var lib = new Library();
 			var face = new Face(lib, file.FullName);
+			
 			face.SetPixelSizes((uint)size, 0);
 
 			var glyphs = charSet.Select(c => makeFontChar(face, c)).ToArray();
+#warning This one is too expensive
 			var rects = RectanglePacker.Map(glyphs.Select(glyph => new IntVector(glyph.Width, glyph.Height)).ToArray()).ToArray();
 
 			var bmp = new Bitmap(rects.Max(r => r.Right), rects.Max(r => r.Bottom));
@@ -56,7 +58,8 @@ namespace GRaff.Graphics.Text
 			}
 
 			face.LoadChar('\n', LoadFlags.Default, LoadTarget.Normal);
-			return new Font(buffer, new FontFile { Chars = chars.ToList(), Common = new FontCommon { LineHeight = face.Glyph.Metrics.VerticalAdvance.ToInt32() }, Info = null, Kernings = null, Pages = null });
+			return new Font(buffer, new FontFile { Chars = chars.ToList(), Common = new FontCommon { LineHeight = face.Glyph.Metrics.VerticalAdvance.ToInt32() },
+							Info = null, Kernings = new List<FontKerning>(), Pages = new List<FontPage>() });
 		}
 
 		/*

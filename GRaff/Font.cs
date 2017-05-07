@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
+using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -76,9 +77,31 @@ namespace GRaff
 			return LoadAsync(bitmapFile, fontDataFile).Wait();
 		}
 
-		public static Font LoadTruetype(string font, int size, IEnumerable<char> charSet)
+		public static Font LoadTruetype(string fontFamily, int size, IEnumerable<char> charSet, FontOptions options = FontOptions.None)
 		{
-			return FontLoader.LoadTrueType(new System.IO.FileInfo(font), size, new HashSet<char>(charSet));
+			if ((options & FontOptions.Bold) == FontOptions.Bold)
+				fontFamily += " Bold";
+			if ((options & FontOptions.Italic) == FontOptions.Italic)
+				fontFamily += " Italic";
+
+			fontFamily += " (TrueType)";
+
+			//if (Path.GetExtension(font).Equals(".ttf", StringComparison.InvariantCultureIgnoreCase))
+			//{
+			//	if (File.Exists(font))
+			//		fontFileName = font;
+			//	else
+			//		fontFileName = Path.Combine(@"C:\Windows\Fonts\", font);
+			//}
+			//else
+			//	fontFileName = Path.Combine(@"C:\Windows\Fonts\", FontLoader.GetTruetypeFile(font));
+
+			var	fontFileName = Path.Combine(@"C:\Windows\Fonts\", FontLoader.GetTruetypeFile(fontFamily));
+
+			if (!File.Exists(fontFileName))
+				throw new FileNotFoundException();
+
+			return FontLoader.LoadTrueType(new FileInfo(fontFileName), size, new HashSet<char>(charSet));
 		}
 
 		public bool EnableKerning { get; set; } = true;

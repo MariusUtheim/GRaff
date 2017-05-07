@@ -122,6 +122,7 @@
     <Compile Include="Forms\OpenFileDialog.cs" />
     <Compile Include="Forms\Quad.cs" />
     <Compile Include="Graphics\Quadrilateral.cs" />
+    <Compile Include="Graphics\Text\FontOptions.cs" />
     <Compile Include="Graphics\Text\Glyph.cs" />
     <Compile Include="Graphics\Text\RectPacker\Canvas.cs" />
     <Compile Include="Graphics\Text\RectPacker\CanvasStats.cs" />
@@ -314,6 +315,7 @@
     <Compile Include="Graphics\Surface.cs" />
     <Compile Include="Synchronization\operations\ParallelOperator.cs" />
     <Compile Include="Graphics\Texture.cs" />
+    <Compile Include="Synchronization\TweeningFunctions.cs" />
     <Compile Include="TextureBuffer.cs" />
     <Compile Include="Time.cs" />
     <Compile Include="Transform.cs" />

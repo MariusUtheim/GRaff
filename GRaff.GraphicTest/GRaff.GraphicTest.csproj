@@ -48,6 +48,7 @@
     <Compile Include="ParticleTest.cs" />
     <Compile Include="RectsPackingTest.cs" />
     <Compile Include="SoundTest.cs" />
+    <Compile Include="TrueTypeTest.cs" />
     <Compile Include="VectorGraphicsTest.cs" />
     <Compile Include="Marker.cs" />
     <Compile Include="Program.cs" />
