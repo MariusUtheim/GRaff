@@ -11,16 +11,19 @@ namespace GRaff.GraphicTest
 	[Test(Order = -1)]
     class TrueTypeTest : GameElement
 	{
-		private Font _font;
+		private Font _font = null;
 
 		public TrueTypeTest()
 		{
-			_font = Font.LoadTruetype("arial", 24, Font.ASCIICharacters, FontOptions.Italic | FontOptions.Bold);
+			//_font = Font.LoadTrueType("Papyrus", 24, Font.ASCIICharacters);
+			Font.LoadTrueTypeAsync("Papyrus", 24, Font.ASCIICharacters)
+				.ThenQueue(font => _font = font);
 		}
 
 		public override void OnDraw()
 		{
-			Draw.Text("Lorem Ipsum Dolor Sit Amet", _font, FontAlignment.Center, Colors.Black, Room.Current.Center);
+			if (_font != null)
+				Draw.Text("Lorem Ipsum dolor sit amet", _font, FontAlignment.Center, Colors.Black, Room.Current.Center);
 		}
 	}
 }

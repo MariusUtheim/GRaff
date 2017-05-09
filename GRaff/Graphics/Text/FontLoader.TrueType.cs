@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.Drawing.Text;
 using System.IO;
 using System.Linq;
+using GRaff.Synchronization;
 using SharpFont;
 using SysColor = System.Drawing.Color;
 using SysGraphics = System.Drawing.Graphics;
@@ -11,55 +13,85 @@ using SysRectangle = System.Drawing.Rectangle;
 
 namespace GRaff.Graphics.Text
 {
-    static partial class FontLoader
+    internal static partial class FontLoader
     {
-#warning Something is wrong with the alignment
-		public static Font LoadTrueType(FileInfo file, int size, ISet<char> charSet)
+#warning Something is wrong with the alignment	
+	
+		public static IAsyncOperation<Font> LoadTrueTypeAsync(FileInfo file, int size, ISet<char> charSet, bool suppressKerning)
 		{
-			var lib = new Library();
-			var face = new Face(lib, file.FullName);
-			
-			face.SetPixelSizes((uint)size, 0);
+			Glyph[] glyphs = null;
+			Bitmap bmp = null;
+			BitmapData bmpData = null;
+			IntRectangle[] rects = null;
+			Face face = null;
 
-			var glyphs = charSet.Select(c => makeFontChar(face, c)).ToArray();
+			return Async.RunParallel(() =>
+			{
+				var lib = new Library();
+				face = new Face(lib, file.FullName);
+
+				face.SetPixelSizes((uint)size, 0);
+
+				glyphs = charSet.Select(c => makeFontChar(face, c)).ToArray();
+				Console.WriteLine("Generated glyphs");
+
+				Console.WriteLine("Packing rects...");
 #warning This one is too expensive
-			var rects = RectanglePacker.Map(glyphs.Select(glyph => new IntVector(glyph.Width, glyph.Height)).ToArray()).ToArray();
+				rects = RectanglePacker.Map(glyphs.Select(glyph => new IntVector(glyph.Width, glyph.Height)).ToArray()).ToArray();
+				//var x = 0;
+				//rects = glyphs.Select(glyph =>
+				//	{
+				//		var r = new IntRectangle(x, 0, glyph.Width, glyph.Height);
+				//		x += glyph.Width + 1;
+				//		return r;
+				//	}).ToArray();
+				Console.WriteLine("Rects packed.");
+				Console.WriteLine("Moving on...");
+				bmp = new Bitmap(rects.Max(r => r.Right), rects.Max(r => r.Bottom));
+				var g = SysGraphics.FromImage(bmp);
+				g.Clear(SysColor.Transparent);
 
-			var bmp = new Bitmap(rects.Max(r => r.Right), rects.Max(r => r.Bottom));
-			var g = SysGraphics.FromImage(bmp);
-			g.Clear(SysColor.Transparent);
-
-			for (var i = 0; i < glyphs.Length; i++)
-			{
-				g.DrawImage(glyphs[i].Image, (float)rects[i].Left, (float)rects[i].Top);
-			}
-
-			var bmpData = bmp.LockBits(new SysRectangle(0, 0, bmp.Width, bmp.Height), System.Drawing.Imaging.ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
-			var buffer = new TextureBuffer(bmpData.Width, bmpData.Height, bmpData.Scan0);
-			bmp.UnlockBits(bmpData);
-
-
-			var chars = new FontChar[glyphs.Length];
-			for (var i = 0; i < glyphs.Length; i++)
-			{
-				chars[i] = new FontChar
+				for (var i = 0; i < glyphs.Length; i++)
 				{
-					Id = glyphs[i].Character,
-					Channel = 1,
-					Page = 0,
-					X = rects[i].Left,
-					Y = rects[i].Top,
-					Width = glyphs[i].Width,
-					Height = glyphs[i].Height,
-					XOffset = glyphs[i].XOffset,
-					YOffset = glyphs[i].YOffset,
-					XAdvance = glyphs[i].XAdvance
-				};
-			}
+					g.DrawImage(glyphs[i].Image, (float)rects[i].Left, (float)rects[i].Top);
+				}
 
-			face.LoadChar('\n', LoadFlags.Default, LoadTarget.Normal);
-			return new Font(buffer, new FontFile { Chars = chars.ToList(), Common = new FontCommon { LineHeight = face.Glyph.Metrics.VerticalAdvance.ToInt32() },
-							Info = null, Kernings = new List<FontKerning>(), Pages = new List<FontPage>() });
+				bmpData = bmp.LockBits(new SysRectangle(0, 0, bmp.Width, bmp.Height), System.Drawing.Imaging.ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+
+			}).ThenQueue(() =>
+			{
+				var buffer = new TextureBuffer(bmpData.Width, bmpData.Height, bmpData.Scan0);
+				bmp.UnlockBits(bmpData);
+
+				var chars = new FontChar[glyphs.Length];
+				for (var i = 0; i < glyphs.Length; i++)
+				{
+					chars[i] = new FontChar
+					{
+						Id = glyphs[i].Character,
+						Channel = 1,
+						Page = 0,
+						X = rects[i].Left,
+						Y = rects[i].Top,
+						Width = glyphs[i].Width,
+						Height = glyphs[i].Height,
+						XOffset = glyphs[i].XOffset,
+						YOffset = glyphs[i].YOffset,
+						XAdvance = glyphs[i].XAdvance
+					};
+				}
+
+				face.LoadChar('\n', LoadFlags.Default, LoadTarget.Normal);
+
+				return new Font(buffer, new FontFile
+				{
+					Chars = chars.ToList(),
+					Common = new FontCommon { LineHeight = face.Glyph.Metrics.VerticalAdvance.ToInt32() },
+					Info = null,
+					Kernings = suppressKerning ? new List<FontKerning>() : makeKernings(face, charSet),
+					Pages = new List<FontPage>()
+				});
+			});
 		}
 
 		/*
@@ -133,8 +165,20 @@ namespace GRaff.Graphics.Text
 			};
 		}
 
-		public static IEnumerable<string> GetFontNames()
-			=> new InstalledFontCollection().Families.Select(f => f.Name);
+		private static List<FontKerning> makeKernings(Face face, ISet<char> charSet)
+		{
+			if (!face.HasKerning)
+				return new List<FontKerning>();
+
+			var kernings =
+				from left in charSet
+				from right in charSet
+				let k = face.GetKerning(face.GetCharIndex(left), face.GetCharIndex(right), KerningMode.Default).X.ToInt32()
+				where k != 0
+				select new FontKerning { First = left, Second = right, Amount = k };
+
+			return kernings.ToList();
+		}
 
 
 

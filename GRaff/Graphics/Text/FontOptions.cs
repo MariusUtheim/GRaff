@@ -10,6 +10,7 @@ namespace GRaff.Graphics.Text
 	{
 		None = 0,
 		Bold = 0x01,
-		Italic = 0x02
+		Italic = 0x02,
+		IgnoreKerning = 0x04
 	}
 }

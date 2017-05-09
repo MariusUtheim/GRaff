@@ -358,10 +358,14 @@ namespace GRaff.Graphics.Text
 			get;
 			set;
 		}
+
+		public override string ToString()
+		{
+			return $"{{FontKerning First={(char)First} Second={(char)Second} Amount={Amount}";
+        }
 	}
 
-#warning Implement kerning
-	public partial class FontLoader
+	internal partial class FontLoader
 	{
 		private static XmlSerializer deserializer = new XmlSerializer(typeof(FontFile));
 
@@ -404,5 +408,10 @@ namespace GRaff.Graphics.Text
 			return (string)(fontsKey.GetValue(fontFamilyName) 
 						 ?? fontsKey.GetValue(fontFamilyName + " (TrueType)"));
 		}
+
+		public static IEnumerable<string> GetFontNames()
+			=> new InstalledFontCollection().Families.Select(f => f.Name);
+
+
 	}
 }
