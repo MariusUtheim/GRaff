@@ -112,7 +112,7 @@ namespace GRaff
 				using (var bitmapStream = new MemoryStream(buffer))
 					return new Bitmap(bitmapStream);
 			})
-			.Then(bitmap =>
+			.ThenQueue(bitmap =>
 			{
 				var textureData = bitmap.LockBits(new System.Drawing.Rectangle(0, 0, bitmap.Width, bitmap.Height),
 												  ImageLockMode.ReadOnly,

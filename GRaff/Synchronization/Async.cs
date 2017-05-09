@@ -38,22 +38,22 @@ namespace GRaff.Synchronization
 
 		public static IAsyncOperation Run(Action action)
 		{
-			return new AsyncOperation().Then(action);
+			return new AsyncOperation().ThenQueue(action);
 		}
 
 		public static IAsyncOperation Run<TIn>(TIn capturedValue, Action<TIn> action)
 		{
-			return new AsyncOperation<TIn>(capturedValue).Then(action);
+			return new AsyncOperation<TIn>(capturedValue).ThenQueue(action);
 		}
 
 		public static IAsyncOperation<TPass> Run<TPass>(Func<TPass> action)
 		{
-			return new AsyncOperation().Then(action);
+			return new AsyncOperation().ThenQueue(action);
 		}
 
 		public static IAsyncOperation<TPass> Run<TIn, TPass>(TIn capturedValue, Func<TIn, TPass> action)
 		{
-			return new AsyncOperation<TIn>(capturedValue).Then(action);
+			return new AsyncOperation<TIn>(capturedValue).ThenQueue(action);
 		}
 
 		public static IAsyncOperation RunAsync(Func<Task> action)
@@ -64,6 +64,16 @@ namespace GRaff.Synchronization
 		public static IAsyncOperation<TPass> RunAsync<TPass>(Func<Task<TPass>> action)
 		{
 			return new AsyncOperation().ThenAsync(action);
+		}
+
+		public static IAsyncOperation RunParallel(Action action)
+		{
+			return new AsyncOperation().ThenParallel(action);
+		}
+
+		public static IAsyncOperation<TPass> RunParallel<TPass>(Func<TPass> action)
+		{
+			return new AsyncOperation().ThenParallel(action);
 		}
 
 		public static IAsyncOperation Fail<TException>(TException ex) where TException : Exception

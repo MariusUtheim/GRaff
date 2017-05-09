@@ -37,14 +37,14 @@ namespace GRaff.Synchronization
 			return continuation;
 		}
 
-		public IAsyncOperation Then(Action<TPass> action)
+		public IAsyncOperation ThenQueue(Action<TPass> action)
 		{
 			var continuation = new AsyncOperation(this, new SerialOperator(obj => { action((TPass)obj); return null; }));
 			Then(continuation);
 			return continuation;
 		}
 
-		public IAsyncOperation<TNext> Then<TNext>(Func<TPass, TNext> action)
+		public IAsyncOperation<TNext> ThenQueue<TNext>(Func<TPass, TNext> action)
 		{
 			var continuation = new AsyncOperation<TNext>(this, new SerialOperator(obj => action((TPass)obj)));
 			Then(continuation);
@@ -67,14 +67,28 @@ namespace GRaff.Synchronization
 
 		public IAsyncOperation ThenAsync(Func<TPass, Task> action)
 		{
-			var continuation = new AsyncOperation(this, new ParallelOperator(async obj => { await action((TPass)obj); return default(object); }));
+			var continuation = new AsyncOperation(this, new TaskOperator(async obj => { await action((TPass)obj); return default(object); }));
 			Then(continuation);
 			return continuation;
 		}
 
 		public IAsyncOperation<TNext> ThenAsync<TNext>(Func<TPass, Task<TNext>> action)
 		{
-			var continuation = new AsyncOperation<TNext>(this, new ParallelOperator(async obj => await action((TPass)obj)));
+			var continuation = new AsyncOperation<TNext>(this, new TaskOperator(async obj => await action((TPass)obj)));
+			Then(continuation);
+			return continuation;
+		}
+
+		public IAsyncOperation ThenParallel(Action<TPass> action)
+		{
+			var continuation = new AsyncOperation(this, new ParallelOperator(obj => { action((TPass)obj); return null; }));
+			Then(continuation);
+			return continuation;
+		}
+
+		public IAsyncOperation<TNext> ThenParallel<TNext>(Func<TPass, TNext> action)
+		{
+			var continuation = new AsyncOperation<TNext>(this, new ParallelOperator(obj => action((TPass)obj)));
 			Then(continuation);
 			return continuation;
 		}

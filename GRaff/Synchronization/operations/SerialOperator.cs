@@ -55,9 +55,6 @@ namespace GRaff.Synchronization
 			_actionHandle.Resolve();
 		}
 
-		public void GetResult()
-		{
-			Debug.Assert(_result != null);
-		}
+
 	}
 }

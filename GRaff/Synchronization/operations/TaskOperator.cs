@@ -7,14 +7,14 @@ using System.Threading.Tasks;
 
 namespace GRaff.Synchronization
 {
-	internal class ParallelOperator : IAsyncOperator
+	internal class TaskOperator : IAsyncOperator
 	{
 		private Task<AsyncOperationResult> _task;
 		private readonly Func<object, Task<object>> _action;
 		private readonly CancellationTokenSource _cancellation = new CancellationTokenSource();
 		private int _awaitsResolution = 1;
 
-		public ParallelOperator(Func<object, Task<object>> action)
+		public TaskOperator(Func<object, Task<object>> action)
 		{
 			_action = action;
 		}

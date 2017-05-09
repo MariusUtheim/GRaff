@@ -104,13 +104,13 @@ namespace GRaff
 		public static IAsyncOperation<SoundBuffer> LoadAsync(string fileName)
 		{
 			return Async.RunAsync(() => SoundFileLoader.LoadAsync(fileName))
-						.Then(soundFile => new SoundBuffer(soundFile.Bitrate, soundFile.Channels, soundFile.Frequency, soundFile.Buffer));
+						.ThenQueue(soundFile => new SoundBuffer(soundFile.Bitrate, soundFile.Channels, soundFile.Frequency, soundFile.Buffer));
 		}
 
 		public static IAsyncOperation<SoundBuffer> LoadWithOffsetAsync(string fileName, double offset)
 		{
 			return Async.RunAsync(() => SoundFileLoader.LoadAsync(fileName))
-						.Then(soundFile => new SoundBuffer(soundFile.Bitrate, soundFile.Channels, soundFile.Frequency, soundFile.Buffer, offset));
+						.ThenQueue(soundFile => new SoundBuffer(soundFile.Bitrate, soundFile.Channels, soundFile.Frequency, soundFile.Buffer, offset));
 		}
 
 		public bool IsDisposed { get; private set; }

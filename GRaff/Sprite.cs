@@ -45,10 +45,10 @@ namespace GRaff
 		}
 
 		public static IAsyncOperation<Sprite> LoadAsync(string path, int imageCount = 1, Vector? origin = null, MaskShape maskShape = null)
-			=> TextureBuffer.LoadAsync(path).Then(buffer => new Sprite(new AnimationStrip(buffer, imageCount), null, origin, maskShape));
+			=> TextureBuffer.LoadAsync(path).ThenQueue(buffer => new Sprite(new AnimationStrip(buffer, imageCount), null, origin, maskShape));
 
 		public static IAsyncOperation<Sprite> LoadAsync(string path, IntVector imageCounts, Vector? origin = null, MaskShape maskShape = null)
-			=> TextureBuffer.LoadAsync(path).Then(buffer => new Sprite(new AnimationStrip(buffer, imageCounts), null, origin, maskShape));
+			=> TextureBuffer.LoadAsync(path).ThenQueue(buffer => new Sprite(new AnimationStrip(buffer, imageCounts), null, origin, maskShape));
 
 
 

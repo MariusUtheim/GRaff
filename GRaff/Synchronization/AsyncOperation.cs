@@ -228,6 +228,7 @@ namespace GRaff.Synchronization
 				_continuations.Enqueue(continuation);
 		}
 
+		// When the operation is done, run the specified IAsyncOperation
 		public IAsyncOperation ThenRun(Func<IAsyncOperation> action)
 		{
 			var continuation = new AsyncOperation(this, new InvokerOperator(obj => action()));
@@ -242,6 +243,7 @@ namespace GRaff.Synchronization
 			return continuation;
 		}
 
+		// When the operation is done, execute the next action immediately
 		public IAsyncOperation ThenWait(Action action)
 		{
 			var continuation = new AsyncOperation(this, new ImmediateOperator(obj => { action(); return null; }));
@@ -256,14 +258,15 @@ namespace GRaff.Synchronization
 			return continuation;
 		}
 
-		public IAsyncOperation Then(Action action)
+		// When the operation is done, queue the specified Action for the next Async event
+		public IAsyncOperation ThenQueue(Action action)
 		{
 			var continuation = new AsyncOperation(this, new SerialOperator(obj => { action(); return null; }));
 			Then(continuation);
 			return continuation;
 		}
 
-		public IAsyncOperation<TNext> Then<TNext>(Func<TNext> action)
+		public IAsyncOperation<TNext> ThenQueue<TNext>(Func<TNext> action)
 		{
 			Contract.Ensures(Contract.Result<IAsyncOperation<TNext>>() != null);
 			var continuation = new AsyncOperation<TNext>(this, new SerialOperator(obj => action()));
@@ -271,17 +274,32 @@ namespace GRaff.Synchronization
 			return continuation;
 		}
 
-
+		// When the operation is done, start the specified Task
 		public IAsyncOperation ThenAsync(Func<Task> action)
 		{
-			var continuation = new AsyncOperation(this, new ParallelOperator(async obj => { await action(); return default(object); }));
+			var continuation = new AsyncOperation(this, new TaskOperator(async obj => { await action(); return default(object); }));
 			Then(continuation);
 			return continuation;
 		}
 
 		public IAsyncOperation<TNext> ThenAsync<TNext>(Func<Task<TNext>> action)
 		{
-			var continuation = new AsyncOperation<TNext>(this, new ParallelOperator(async obj => await action()));
+			var continuation = new AsyncOperation<TNext>(this, new TaskOperator(async obj => await action()));
+			Then(continuation);
+			return continuation;
+		}
+
+		// When the operation is done, perform the specified Action on a parallel thread
+		public IAsyncOperation ThenParallel(Action action)
+		{
+			var continuation = new AsyncOperation(this, new ParallelOperator(obj => { action(); return null; }));
+			Then(continuation);
+			return continuation;
+		}
+
+		public IAsyncOperation<TNext> ThenParallel<TNext>(Func<TNext> action)
+		{
+			var continuation = new AsyncOperation<TNext>(this, new ParallelOperator(obj => action()));
 			Then(continuation);
 			return continuation;
 		}

@@ -30,7 +30,7 @@ namespace GRaff.GraphicTest
 			else if (key == Key.U)
 			{
 				instance?.Pause();
-				Async.Delay(1).Then(() => instance.Play());
+				Async.Delay(1).ThenQueue(() => instance.Play());
 			}
 			else if (key == Key.S)
 			{
