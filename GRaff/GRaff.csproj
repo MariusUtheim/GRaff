@@ -127,6 +127,7 @@
     <Compile Include="Graphics\Text\RectPacker\Canvas.cs" />
     <Compile Include="Graphics\Text\RectPacker\CanvasStats.cs" />
     <Compile Include="Graphics\Text\RectPacker\DynamicTwoDimensionalArray.cs" />
+    <Compile Include="Graphics\Text\Serialization classes.cs" />
     <Compile Include="Graphics\Text\TextRenderer.cs" />
     <Compile Include="Pathfinding\Heap.cs" />
     <Compile Include="Pathfinding\DiagonalGrid.cs" />
@@ -234,7 +235,6 @@
     <Compile Include="Particles\TexturedParticleRenderer.cs" />
     <Compile Include="Randomness\ConstantDistribution.cs" />
     <Compile Include="SoundBuffer.cs" />
-    <Compile Include="AssetBatch.cs" />
     <Compile Include="Randomness\DiscreteDistribution.cs" />
     <Compile Include="Randomness\IDistribution.cs" />
     <Compile Include="Randomness\NormalDistribution2D.cs" />
@@ -350,7 +350,7 @@
     <Compile Include="Draw.Primitive.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Graphics\Text\FontLoader.TrueType.cs" />
+    <Compile Include="Graphics\Text\TrueTypeLoader.cs" />
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

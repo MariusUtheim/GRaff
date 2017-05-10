@@ -19,7 +19,8 @@ namespace GRaff.GraphicTest
 			GlobalEvent.ExitOnEscape = true;
 			TextureBuffers.LoadAll();
 
-			Instance<TestController>.Create();
+			var testController = new TestController();
+			Instance.Create(testController);
 		}
 	}
 }

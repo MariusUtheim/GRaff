@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
+using System.Drawing.Text;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -19,6 +20,8 @@ namespace GRaff
 		private readonly Dictionary<Tuple<char, char>, int> _kerning = new Dictionary<Tuple<char, char>, int>();
 
 		public static IReadOnlyCollection<char> ASCIICharacters { get; } = Array.AsReadOnly("\n !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~".ToArray());
+		public static IEnumerable<string> GetFontFamilies() => new InstalledFontCollection().Families.Select(f => f.Name);
+
 
 		public Font(TextureBuffer buffer, FontFile fontData)
 		{
@@ -28,9 +31,19 @@ namespace GRaff
 
 			Height = fontData.Common.LineHeight;
 
-			foreach (var kerning in fontData.Kernings)
-				_kerning.Add(new Tuple<char, char>((char)kerning.Left, (char)kerning.Right), kerning.Amount);
+			if (fontData.Kernings?.Any() ?? false)
+			{
+				HasKerning = true;
+				foreach (var kerning in fontData.Kernings)
+					_kerning.Add(new Tuple<char, char>((char)kerning.Left, (char)kerning.Right), kerning.Amount);
+			}
+			else
+				HasKerning = false;
 		}
+
+
+	
+
 
 		public bool IsDisposed { get; private set; }
 
@@ -92,16 +105,16 @@ namespace GRaff
 
 			fontFamily += " (TrueType)";
 
-			var fontFileName = Path.Combine(@"C:\Windows\Fonts\", FontLoader.GetTrueTypeFile(fontFamily));
+			var fontFileName = Path.Combine(@"C:\Windows\Fonts\", TrueTypeLoader.GetTrueTypeFile(fontFamily));
 
 			if (!File.Exists(fontFileName))
 				throw new FileNotFoundException();
 
-			return FontLoader.LoadTrueTypeAsync(new FileInfo(fontFileName), size, new HashSet<char>(charSet), (options & FontOptions.IgnoreKerning) == FontOptions.IgnoreKerning);
+			return TrueTypeLoader.LoadTrueTypeAsync(new FileInfo(fontFileName), size, new HashSet<char>(charSet), (options & FontOptions.IgnoreKerning) == FontOptions.IgnoreKerning);
 
 		}
 
-		public bool EnableKerning { get; set; } = true;
+		public bool HasKerning { get; private set; }
 
 		public int Height { get; }
 		
@@ -195,7 +208,7 @@ namespace GRaff
 
 		public int GetKerning(char first, char second)
 		{
-			if (!EnableKerning) return 0;
+			if (!HasKerning) return 0;
 			int kerning;
 			if (_kerning.TryGetValue(new Tuple<char, char>(first, second), out kerning))
 				return kerning;

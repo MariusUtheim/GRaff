@@ -6,6 +6,7 @@ using System.Drawing.Text;
 using System.IO;
 using System.Linq;
 using GRaff.Synchronization;
+using Microsoft.Win32;
 using SharpFont;
 using SysColor = System.Drawing.Color;
 using SysGraphics = System.Drawing.Graphics;
@@ -13,7 +14,7 @@ using SysRectangle = System.Drawing.Rectangle;
 
 namespace GRaff.Graphics.Text
 {
-    internal static partial class FontLoader
+    internal static class TrueTypeLoader
     {
 #warning Something is wrong with the alignment	
 	
@@ -33,19 +34,16 @@ namespace GRaff.Graphics.Text
 				face.SetPixelSizes((uint)size, 0);
 
 				glyphs = charSet.Select(c => makeFontChar(face, c)).ToArray();
-				Console.WriteLine("Generated glyphs");
 
-				Console.WriteLine("Packing rects...");
-#warning Make a rectangular texture instead
+				#warning Make a rectangular texture instead
 				var x = 0;
 				rects = glyphs.Select(glyph =>
 					{
-						var r = new IntRectangle(x, 0, glyph.Width, glyph.Height);
+						var r = new IntRectangle(x, 0, glyph.Width + 1, glyph.Height + 1);
 						x += glyph.Width + 1;
 						return r;
 					}).ToArray();
-				Console.WriteLine("Rects packed.");
-				Console.WriteLine("Moving on...");
+
 				bmp = new Bitmap(rects.Max(r => r.Right), rects.Max(r => r.Bottom));
 				var g = SysGraphics.FromImage(bmp);
 				g.Clear(SysColor.Transparent);
@@ -179,7 +177,14 @@ namespace GRaff.Graphics.Text
 			return kernings.ToList();
 		}
 
+		private static RegistryKey fontsKey => Registry.LocalMachine.OpenSubKey("Software\\Microsoft\\Windows NT\\CurrentVersion\\Fonts");
+		
 
+		internal static string GetTrueTypeFile(string fontFamilyName)
+		{
+			return (string)(fontsKey.GetValue(fontFamilyName)
+						 ?? fontsKey.GetValue(fontFamilyName + " (TrueType)"));
+		}
 
 	}
 }

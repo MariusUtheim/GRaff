@@ -12,7 +12,6 @@ namespace GRaff.Particles
 		private readonly List<IParticleBehavior> _behaviors = new List<IParticleBehavior>();
 		private readonly IParticleRenderer _renderer;
 
-#warning Need some better Sprite logic
 		public ParticleType(Sprite sprite, int lifetime, double animationSpeed = 1.0)
 		{
 			Contract.Requires<ArgumentNullException>(sprite != null);
