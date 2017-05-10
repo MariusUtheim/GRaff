@@ -36,15 +36,14 @@ namespace GRaff.Graphics.Text
 				Console.WriteLine("Generated glyphs");
 
 				Console.WriteLine("Packing rects...");
-#warning This one is too expensive
-				rects = RectanglePacker.Map(glyphs.Select(glyph => new IntVector(glyph.Width, glyph.Height)).ToArray()).ToArray();
-				//var x = 0;
-				//rects = glyphs.Select(glyph =>
-				//	{
-				//		var r = new IntRectangle(x, 0, glyph.Width, glyph.Height);
-				//		x += glyph.Width + 1;
-				//		return r;
-				//	}).ToArray();
+#warning Make a rectangular texture instead
+				var x = 0;
+				rects = glyphs.Select(glyph =>
+					{
+						var r = new IntRectangle(x, 0, glyph.Width, glyph.Height);
+						x += glyph.Width + 1;
+						return r;
+					}).ToArray();
 				Console.WriteLine("Rects packed.");
 				Console.WriteLine("Moving on...");
 				bmp = new Bitmap(rects.Max(r => r.Right), rects.Max(r => r.Bottom));
@@ -175,7 +174,7 @@ namespace GRaff.Graphics.Text
 				from right in charSet
 				let k = face.GetKerning(face.GetCharIndex(left), face.GetCharIndex(right), KerningMode.Default).X.ToInt32()
 				where k != 0
-				select new FontKerning { First = left, Second = right, Amount = k };
+				select new FontKerning { Left = left, Right = right, Amount = k };
 
 			return kernings.ToList();
 		}

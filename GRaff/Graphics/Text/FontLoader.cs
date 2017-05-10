@@ -339,14 +339,14 @@ namespace GRaff.Graphics.Text
 	public class FontKerning
 	{
 		[XmlAttribute("first")]
-		public int First
+		public int Left
 		{
 			get;
 			set;
 		}
 
 		[XmlAttribute("second")]
-		public int Second
+		public int Right
 		{
 			get;
 			set;
@@ -361,7 +361,7 @@ namespace GRaff.Graphics.Text
 
 		public override string ToString()
 		{
-			return $"{{FontKerning First={(char)First} Second={(char)Second} Amount={Amount}";
+			return $"{{FontKerning {nameof(Left)}={(char)Left} {nameof(Right)}={(char)Right} {nameof(Amount)}={Amount}}}";
         }
 	}
 
@@ -398,12 +398,13 @@ namespace GRaff.Graphics.Text
 
 		private static RegistryKey fontsKey => Registry.LocalMachine.OpenSubKey("Software\\Microsoft\\Windows NT\\CurrentVersion\\Fonts");
 
-		public static IEnumerable<String> GetTruetypeNames()
+		public static IEnumerable<string> GetTrueTypeNames()
 		{
+#warning Select just the name without Bold/Italic/(TrueType)
 			return fontsKey.GetValueNames();
 		}
 
-		public static string GetTruetypeFile(string fontFamilyName)
+		public static string GetTrueTypeFile(string fontFamilyName)
 		{
 			return (string)(fontsKey.GetValue(fontFamilyName) 
 						 ?? fontsKey.GetValue(fontFamilyName + " (TrueType)"));

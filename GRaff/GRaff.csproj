@@ -127,7 +127,6 @@
     <Compile Include="Graphics\Text\RectPacker\Canvas.cs" />
     <Compile Include="Graphics\Text\RectPacker\CanvasStats.cs" />
     <Compile Include="Graphics\Text\RectPacker\DynamicTwoDimensionalArray.cs" />
-    <Compile Include="Graphics\Text\RectPacker\RectanglePacker.cs" />
     <Compile Include="Graphics\Text\TextRenderer.cs" />
     <Compile Include="Pathfinding\Heap.cs" />
     <Compile Include="Pathfinding\DiagonalGrid.cs" />

@@ -29,7 +29,7 @@ namespace GRaff
 			Height = fontData.Common.LineHeight;
 
 			foreach (var kerning in fontData.Kernings)
-				_kerning.Add(new Tuple<char, char>((char)kerning.First, (char)kerning.Second), kerning.Amount);
+				_kerning.Add(new Tuple<char, char>((char)kerning.Left, (char)kerning.Right), kerning.Amount);
 		}
 
 		public bool IsDisposed { get; private set; }
@@ -63,7 +63,7 @@ namespace GRaff
 		public static IAsyncOperation<Font> LoadAsync(string bitmapFile, string fontDataFile)
 		{
 			return TextureBuffer.LoadAsync(bitmapFile)
-				.Then(textureBuffer =>
+				.ThenQueue(textureBuffer =>
 				{
 					var fontData = FontLoader.Load(fontDataFile);
 					return new Font(textureBuffer, fontData);
@@ -77,7 +77,13 @@ namespace GRaff
 			return LoadAsync(bitmapFile, fontDataFile).Wait();
 		}
 
-		public static Font LoadTruetype(string fontFamily, int size, IEnumerable<char> charSet, FontOptions options = FontOptions.None)
+		public static Font LoadTrueType(string fontFamily, int size, IEnumerable<char> charSet, FontOptions options = FontOptions.None)
+		{
+#warning Threading still gives overhead
+			return LoadTrueTypeAsync(fontFamily, size, charSet, options).Wait();
+		}
+
+		public static IAsyncOperation<Font> LoadTrueTypeAsync(string fontFamily, int size, IEnumerable<char> charSet, FontOptions options = FontOptions.None)
 		{
 			if ((options & FontOptions.Bold) == FontOptions.Bold)
 				fontFamily += " Bold";
@@ -86,22 +92,13 @@ namespace GRaff
 
 			fontFamily += " (TrueType)";
 
-			//if (Path.GetExtension(font).Equals(".ttf", StringComparison.InvariantCultureIgnoreCase))
-			//{
-			//	if (File.Exists(font))
-			//		fontFileName = font;
-			//	else
-			//		fontFileName = Path.Combine(@"C:\Windows\Fonts\", font);
-			//}
-			//else
-			//	fontFileName = Path.Combine(@"C:\Windows\Fonts\", FontLoader.GetTruetypeFile(font));
-
-			var	fontFileName = Path.Combine(@"C:\Windows\Fonts\", FontLoader.GetTruetypeFile(fontFamily));
+			var fontFileName = Path.Combine(@"C:\Windows\Fonts\", FontLoader.GetTrueTypeFile(fontFamily));
 
 			if (!File.Exists(fontFileName))
 				throw new FileNotFoundException();
 
-			return FontLoader.LoadTrueType(new FileInfo(fontFileName), size, new HashSet<char>(charSet));
+			return FontLoader.LoadTrueTypeAsync(new FileInfo(fontFileName), size, new HashSet<char>(charSet), (options & FontOptions.IgnoreKerning) == FontOptions.IgnoreKerning);
+
 		}
 
 		public bool EnableKerning { get; set; } = true;
@@ -204,6 +201,17 @@ namespace GRaff
 				return kerning;
 			else
 				return 0;
+		}
+
+		/// <summary>
+		/// Renders the specified text to a new GRaff.TextureBuffer, 
+		/// making it far more efficient to draw.
+		/// </summary>
+		/// <param name="text">The text to be rendered</param>
+		/// <returns>a new GRaff.TextureBuffer containing the text rendered in this font.</returns>
+		public TextureBuffer RenderText(string text)
+		{
+			throw new NotImplementedException();
 		}
 	}
 }

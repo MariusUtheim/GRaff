@@ -11,19 +11,23 @@ namespace GRaff.GraphicTest
 	[Test(Order = -1)]
     class TrueTypeTest : GameElement
 	{
-		private Font _font = null;
+		private Font _fontKerning = null, _fontNonKerning = null;
 
 		public TrueTypeTest()
 		{
 			//_font = Font.LoadTrueType("Papyrus", 24, Font.ASCIICharacters);
-			Font.LoadTrueTypeAsync("Papyrus", 24, Font.ASCIICharacters)
-				.ThenQueue(font => _font = font);
+			Font.LoadTrueTypeAsync("Times New Roman", 24, Font.ASCIICharacters)
+				.ThenQueue(font => _fontKerning = font);
+			Font.LoadTrueTypeAsync("Times New Roman", 24, Font.ASCIICharacters, FontOptions.IgnoreKerning)
+				.ThenQueue(font => _fontNonKerning = font);
 		}
 
 		public override void OnDraw()
 		{
-			if (_font != null)
-				Draw.Text("Lorem Ipsum dolor sit amet", _font, FontAlignment.Center, Colors.Black, Room.Current.Center);
+			if (_fontKerning != null)
+				Draw.Text("This text is with kerning AW WA AWA", _fontKerning, FontAlignment.Center, Colors.Black, Room.Current.Center);
+			if (_fontNonKerning != null)
+				Draw.Text("This text is without kerning AW WA AWA", _fontNonKerning, FontAlignment.Center, Colors.Black, Room.Current.Center + new Vector(0, 36));
 		}
 	}
 }
