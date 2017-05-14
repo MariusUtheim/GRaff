@@ -17,11 +17,14 @@ namespace GRaff.ProjectTemplate
 		}
 
 		/// <summary>
-		/// Initialize yoru game here.
+		/// Initialize your game here.
 		/// </summary>
 		static void gameStart()
 		{
+			GlobalEvent.ExitOnEscape = true;
+			Instance.Create(new Background { Color = Colors.LightGray });
 
+			// Create more objects
 		}
 	}
 }
