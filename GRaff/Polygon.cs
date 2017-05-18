@@ -245,7 +245,7 @@ namespace GRaff
 		public static Polygon operator -(Polygon left, Vector right)
 			=> new Polygon(left._pts.Select(p => p - right).ToArray(), Unit._);
 
-		public static Polygon operator *(AffineMatrix left, Polygon right)
+		public static Polygon operator *(Matrix left, Polygon right)
 			=> new Polygon(right._pts.Select(p => left * p).ToArray(), Unit._);
 	}
 }

@@ -82,10 +82,10 @@ namespace GRaff
 		/// Gets an GRaff.AffineMatrix representing this GRaff.Transform.
 		/// </summary>
 		/// <returns>A GRaff.AffineMatrix representing the transformation.</returns>
-		public AffineMatrix GetMatrix()
+		public Matrix GetMatrix()
 		{
 			double c = GMath.Cos(Rotation), s = GMath.Sin(Rotation);
-			return new AffineMatrix(
+			return new Matrix(
 				XScale * (c - s * YShear), YScale * (-s + c * XShear), X,
 				XScale * (s + c * YShear), YScale * (c + s * XShear), Y
 			);
@@ -152,7 +152,7 @@ namespace GRaff
 
 		public Triangle Triangle(Point v1, Point v2, Point v3)
 		{
-			AffineMatrix T = GetMatrix();
+			Matrix T = GetMatrix();
 			return new Triangle(T * v1, T * v2, T * v3);
 		}
 
@@ -168,7 +168,7 @@ namespace GRaff
 		/// <returns>A GRaff.Point[] containing the resulting vertices of the transformed rectangle.</returns>
 		public Point[] Rectangle(Rectangle rect)
 		{
-			AffineMatrix T = GetMatrix();
+			Matrix T = GetMatrix();
 			return new Point[] {
 				T * rect.TopLeft,
 				T * rect.TopRight,
@@ -186,7 +186,7 @@ namespace GRaff
 		{
 			if (polygon == null)
 				return null;
-			AffineMatrix T = GetMatrix();
+			Matrix T = GetMatrix();
 			return new GRaff.Polygon(polygon.Vertices.Select(v => T * v).ToArray());
 		}
 	}

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using GRaff.Graphics;
+using GRaff.Synchronization;
 using OpenTK;
 #if OpenGL4
 using OpenTK.Graphics.OpenGL4;
@@ -11,6 +12,7 @@ using OpenTK.Graphics.ES30;
 
 namespace GRaff
 {
+#warning Review class
 	/// <summary>
 	/// Defines which part of the room is being drawn to the screen.
 	/// </summary>
@@ -51,6 +53,15 @@ namespace GRaff
 			Height *= region.Height / size.Y;
 		}
 
+		public static void SetTransformation(Transform t)
+		{
+			X = t.X;
+			Y = t.Y;
+			Width = t.XScale;
+			Height = t.YScale;
+			Rotation = t.Rotation;
+		}
+
 		/// <summary>
 		/// Gets or sets the rotation of the view. The view is rotated around the center of the view.
 		/// </summary>
@@ -69,21 +80,24 @@ namespace GRaff
 		/// Gets a Matrix that represents a transformation from points in view to the region [-1, 1] x [-1, 1] used by OpenGL.
 		/// </summary>
 		/// <returns></returns>
-		public static AffineMatrix GetMatrix()
+		public static Matrix GetMatrix()
 		{
 			double w = 2.0 / Width, h = -2.0 / Height, c = GMath.Cos(Rotation), s = -GMath.Sin(Rotation);
-			return new AffineMatrix(w * c, w * s, -w * (c * X + s * Y), -h * s, h * c, h * (s * X - c * Y));
+			return new Matrix(w * c, w * s, -w * (c * X + s * Y), -h * s, h * c, h * (s * X - c * Y));
 			// Result is given by Scale(w, h) * Rotate(t) * Translate(-X, -Y)
 		}
 
-		public static void Refresh()
-		{
-			LoadMatrix(ShaderProgram.GetCurrentId());
-		}
-
+#warning Change to LoadMatrix(ShaderProgram)
 		internal static void LoadMatrix(int programId)
 		{
+			if (programId == 0)
+				return;
+
 			var tr = GetMatrix();
+
+			var err = GL.GetError();
+			if (err != ErrorCode.NoError)
+				throw new Exception();
 
 			var projectionMatrix = new Matrix4(
 				(float)tr.M00, (float)tr.M10, 0, 0,
@@ -95,6 +109,10 @@ namespace GRaff
 			int matrixLocation;
 			matrixLocation = GL.GetUniformLocation(programId, "GRaff_ViewMatrix");
 			GL.UniformMatrix4(matrixLocation, false, ref projectionMatrix);
+
+			if ((err = GL.GetError()) != ErrorCode.NoError)
+				throw new Exception();
+
 		}
 
 
@@ -151,6 +169,56 @@ namespace GRaff
 				Point tl = new Point(pts.Min(p => p.X), pts.Min(p => p.Y)), br = new Point(pts.Max(p => p.X), pts.Max(p => p.Y));
                 return new Rectangle(tl, br - tl);
 			}
+		}
+
+		private class ViewContext : IDisposable
+		{
+			private double _prevX, _prevY, _prevW, _prevH;
+			private Angle _prevR;
+			private bool _isDisposed = false;
+
+			public ViewContext(double x, double y, double width, double height, Angle rotation)
+			{
+				this._prevX = View.X;
+				this._prevY = View.Y;
+				this._prevW = View.Width;
+				this._prevH = View.Height;
+				this._prevR = View.Rotation;
+				View.X = x;
+				View.Y = y;
+				View.Width = width;
+				View.Height = height;
+				View.Rotation = rotation;
+				View.LoadMatrix(ShaderProgram.GetCurrentId());
+			}
+
+			~ViewContext()
+			{
+				Async.ThrowException(new InvalidOperationException($"A context returned from {nameof(GRaff.View.UseView)} was garbage collected before Dispose was called."));
+			}
+
+			public void Dispose()
+			{
+				if (!_isDisposed)
+				{
+					GC.SuppressFinalize(this);
+					_isDisposed = true;
+					View.X = _prevX;
+					View.Y = _prevY;
+					View.Width = _prevW;
+					View.Height = _prevH;
+					View.Rotation = _prevR;
+					View.LoadMatrix(ShaderProgram.GetCurrentId());
+				}
+				else
+					throw new ObjectDisposedException(nameof(ViewContext));
+			}
+
+		}
+
+		public static IDisposable UseView(double x, double y, double width, double height, Angle rotation = default(Angle))
+		{
+			return new ViewContext(x, y, width, height, rotation);
 		}
 	}
 }

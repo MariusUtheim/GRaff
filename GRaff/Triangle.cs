@@ -51,15 +51,7 @@ namespace GRaff
 		public static Triangle operator -(Triangle left, Vector right)
 			=> new Triangle(left.V1 - right, left.V2 - right, left.V3 - right);
 
-
-		public static Triangle operator *(LinearMatrix left, Triangle right)
-		{
-			Contract.Requires<ArgumentNullException>(left != null);
-			return new Triangle(left * right.V1, left * right.V2, left * right.V3);
-		}
-
-
-		public static Triangle operator *(AffineMatrix left, Triangle right)
+		public static Triangle operator *(Matrix left, Triangle right)
 		{
 			Contract.Requires<ArgumentNullException>(left != null);
 			return new Triangle(left* right.V1, left* right.V2, left* right.V3);

@@ -13,7 +13,7 @@ namespace GRaff.Particles
 		public Particle(double x, double y, int lifetime)
 		{
 			Location = new Point(x, y);
-			TransformationMatrix = new LinearMatrix();
+			TransformationMatrix = new Matrix();
 			Blend = Colors.White;
 			TotalLifetime = lifetime;
 		}
@@ -22,7 +22,7 @@ namespace GRaff.Particles
 
 		public Vector Velocity { get; set; }
 
-		public LinearMatrix TransformationMatrix { get; set; }
+		public Matrix TransformationMatrix { get; set; }
 
 		public Color Blend { get; set; }
 

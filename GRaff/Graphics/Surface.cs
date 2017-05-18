@@ -256,7 +256,7 @@ namespace GRaff.Graphics
 			RenderTextured(sprite.SubImage(subimage), new[] { new GraphicsPoint(left, top), new GraphicsPoint(right, top), new GraphicsPoint(right, bottom), new GraphicsPoint(left, bottom) }, white4);
 		}
 
-		public void DrawSprite(Sprite sprite, int subimage, Color blend, AffineMatrix transform)
+		public void DrawSprite(Sprite sprite, int subimage, Color blend, Matrix transform)
 		{
 			Contract.Requires<ArgumentNullException>(sprite != null && transform != null);
 			var vertices = new[] {
@@ -272,7 +272,7 @@ namespace GRaff.Graphics
 		public void DrawImage(Image image)
 		{
 			Contract.Requires<ArgumentNullException>(image != null);
-			AffineMatrix t = image.Transform.GetMatrix();
+			Matrix t = image.Transform.GetMatrix();
 			RenderTextured(image.CurrentTexture, new[] {
 					t * new GraphicsPoint(-image.Sprite.XOrigin, -image.Sprite.YOrigin),
 					t * new GraphicsPoint( image.Sprite.Width - image.Sprite.XOrigin, -image.Sprite.YOrigin),
@@ -282,7 +282,7 @@ namespace GRaff.Graphics
 
 		}
 
-		public void DrawText(TextRenderer renderer, Color color, string text, AffineMatrix transform)
+		public void DrawText(TextRenderer renderer, Color color, string text, Matrix transform)
 		{
 			Contract.Requires<ArgumentNullException>(renderer != null && transform != null);
 

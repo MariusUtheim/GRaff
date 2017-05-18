@@ -42,7 +42,7 @@ namespace GRaff.Graphics
 		public coord Xt => _x;
 		public coord Yt => _y;
 
-		public static GraphicsPoint operator *(AffineMatrix m, GraphicsPoint p)
+		public static GraphicsPoint operator *(Matrix m, GraphicsPoint p)
 			=> m == null ? GraphicsPoint.Zero : new GraphicsPoint(m.M00 * p.X + m.M01 * p.Y + m.M02, m.M10 * p.X + m.M11 * p.Y + m.M12);
 
 
