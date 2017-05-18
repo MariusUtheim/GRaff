@@ -5,13 +5,13 @@ namespace GRaff.Graphics
 {
 	public sealed class ShaderProgramContext : IDisposable
 	{
-		private int _previous;
+		private ShaderProgram _previous;
 		private bool _isDisposed = false;
 
 		public ShaderProgramContext(ShaderProgram program)
 		{
 			Contract.Requires<ArgumentNullException>(program != null);
-			_previous = ShaderProgram.GetCurrentId();
+			_previous = ShaderProgram.Current;
 			program.SetCurrent();
 		}
 
@@ -20,7 +20,7 @@ namespace GRaff.Graphics
 			if (!_isDisposed)
 			{
 				_isDisposed = true;
-				ShaderProgram.SetCurrent(_previous);
+				_previous.SetCurrent();
 			}
 		}
 

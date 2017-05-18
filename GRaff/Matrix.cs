@@ -8,6 +8,7 @@ namespace GRaff
 	/// </summary>
 	public sealed class Matrix : ICloneable, IEquatable<Matrix>
 	{
+
 		/// <summary>
 		/// Initializes a new instance of the GRaff.Matrix class as an identity matrix.
 		/// </summary>
@@ -33,6 +34,9 @@ namespace GRaff
 			this.M11 = m11;
 			this.M12 = m12;
 		}
+
+		public static Matrix Identity { get; } = new Matrix();
+
 
 		/// <summary>
 		/// Creates a GRaff.Matrix representing a scaling transformation.

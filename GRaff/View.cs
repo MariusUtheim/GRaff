@@ -87,17 +87,17 @@ namespace GRaff
 			// Result is given by Scale(w, h) * Rotate(t) * Translate(-X, -Y)
 		}
 
-#warning Change to LoadMatrix(ShaderProgram)
-		internal static void LoadMatrix(int programId)
+		internal static void LoadMatrix(ShaderProgram program)
 		{
-			if (programId == 0)
+#warning Change this
+			LoadMatrix(GetMatrix(), program);
+		}
+
+		internal static void LoadMatrix(Matrix tr, ShaderProgram program)
+		{
+			if (program == null)
 				return;
 
-			var tr = GetMatrix();
-
-			var err = GL.GetError();
-			if (err != ErrorCode.NoError)
-				throw new Exception();
 
 			var projectionMatrix = new Matrix4(
 				(float)tr.M00, (float)tr.M10, 0, 0,
@@ -107,22 +107,13 @@ namespace GRaff
 			);
 
 			int matrixLocation;
-			matrixLocation = GL.GetUniformLocation(programId, "GRaff_ViewMatrix");
+			matrixLocation = GL.GetUniformLocation(program.Id, "GRaff_ViewMatrix");
 			GL.UniformMatrix4(matrixLocation, false, ref projectionMatrix);
 
-			if ((err = GL.GetError()) != ErrorCode.NoError)
+			var err = GL.GetError();
+			if (err != ErrorCode.NoError)
 				throw new Exception();
 
-		}
-
-
-		/// <summary>
-		/// Gets a factor representing the actual horizontal zoom of the view.
-		/// A factor of 1.0 means the view is not zoomed; larger values indicates the view is zoomed in.
-		/// </summary>
-		public static double HZoom
-		{
-			get { return Width / Room.Current.Width; }
 		}
 		
 		public static Point ScreenToRoom(double x, double y)
@@ -135,15 +126,6 @@ namespace GRaff
 		{
 			var p = GetMatrix() * new Point(x, y);
 			return new Point((p.X + 1.0) / 2.0 * Window.Width, (p.Y - 1.0) / 2.0 * -Window.Height);
-		}
-
-		/// <summary>
-		/// Gets a factor representing the actual vertical zoom of the view.
-		/// A factor of 1.0 means the view is not zoomed; larger values indicates the view is zoomed in.
-		/// </summary>
-		public static double VZoom
-		{
-			get { return Height / Room.Current.Height; }
 		}
 
 		/// <summary>
@@ -189,7 +171,8 @@ namespace GRaff
 				View.Width = width;
 				View.Height = height;
 				View.Rotation = rotation;
-				View.LoadMatrix(ShaderProgram.GetCurrentId());
+				View.LoadMatrix(ShaderProgram.CurrentColored);
+				View.LoadMatrix(ShaderProgram.CurrentTextured);
 			}
 
 			~ViewContext()
@@ -208,7 +191,8 @@ namespace GRaff
 					View.Width = _prevW;
 					View.Height = _prevH;
 					View.Rotation = _prevR;
-					View.LoadMatrix(ShaderProgram.GetCurrentId());
+					View.LoadMatrix(ShaderProgram.CurrentColored);
+					View.LoadMatrix(ShaderProgram.CurrentTextured);
 				}
 				else
 					throw new ObjectDisposedException(nameof(ViewContext));

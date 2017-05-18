@@ -12,6 +12,7 @@ using coords = System.Single;
 
 namespace GRaff.Graphics
 {
+#warning Review class
 	public class ShaderProgram : IDisposable
 	{
 		public const string ShaderVersion = "400 core";
@@ -44,17 +45,15 @@ namespace GRaff.Graphics
 				GL.DetachShader(Id, shader.Id);
 		}
 
+		public static ShaderProgram Current { get; private set; }
+
 		public void SetCurrent()
 		{
-			SetCurrent(Id);
+			Current = this;
+			GL.UseProgram(Id);
+			View.LoadMatrix(this);
 		}
-
-		public static void SetCurrent(int id)
-		{
-			GL.UseProgram(id);
-			View.LoadMatrix(id);
-		}
-
+		
 		public static int GetCurrentId()
 		{
 			return GL.GetInteger(GetPName.CurrentProgram);
@@ -78,7 +77,7 @@ namespace GRaff.Graphics
 				location = GL.GetUniformLocation(Id, "GRaff_RoomHeight");
 				GL.Uniform1(location, Room.Current.Height);
 
-				View.LoadMatrix(Id);
+				View.LoadMatrix(this);
 			}
 			finally
 			{

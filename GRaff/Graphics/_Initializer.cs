@@ -21,6 +21,9 @@ namespace GRaff.Graphics
 				ShaderProgram.CurrentColored.UpdateUniformValues();
 				ShaderProgram.CurrentTextured.UpdateUniformValues();
 
+				Framebuffer.ExpectedViewWidth = Window.Width;
+				Framebuffer.ExpectedViewHeight = Window.Height;
+
 #if DEBUG
 				GlobalEvent.EndStep += () =>
 				{

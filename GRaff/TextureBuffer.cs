@@ -27,11 +27,6 @@ namespace GRaff
 	#warning Review class
 	public sealed class TextureBuffer : IDisposable
 	{
-
-		internal TextureBuffer(int width, int height)
-			: this(width, height, IntPtr.Zero)
-		{ }
-
 		public TextureBuffer(int width, int height, IntPtr data)
 		{
 			Contract.Requires<ArgumentOutOfRangeException>(width > 0 && height > 0);
