@@ -20,8 +20,8 @@ namespace GRaff.Graphics
 
 		public static ShaderProgram DefaultColored = new ShaderProgram(Shader.DefaultColoredVertexShader, Shader.DefaultColoredFragmentShader);
 		public static ShaderProgram DefaultTextured = new ShaderProgram(Shader.DefaultTexturedVertexShader, Shader.DefaultTexturedFragmentShader);
-		public static ShaderProgram CurrentColored = DefaultColored;
-		public static ShaderProgram CurrentTextured = DefaultTextured;
+		public static ShaderProgram CurrentColored;
+		public static ShaderProgram CurrentTextured;
 
 		public ShaderProgram(params Shader[] shaders)
 		{
@@ -46,12 +46,13 @@ namespace GRaff.Graphics
 
 		public void SetCurrent()
 		{
-			GL.UseProgram(Id);
+			SetCurrent(Id);
 		}
 
 		public static void SetCurrent(int id)
 		{
 			GL.UseProgram(id);
+			View.LoadMatrix(id);
 		}
 
 		public static int GetCurrentId()

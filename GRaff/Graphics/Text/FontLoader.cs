@@ -37,18 +37,6 @@ namespace GRaff.Graphics.Text
 		}
 		[DllImport("Gdi32.dll")]
 		private static extern bool GetTextMetrics(IntPtr hdc, out TEXTMETRIC tm);
-
-		public static void TextMetrics()
-		{
-			var f = new SysFont("Arial", 12);
-			TEXTMETRIC tm;
-			GetTextMetrics(f.ToHfont(), out tm);
-
-			Console.WriteLine(tm);
-		}
-
-
-
-
+		
 	}
 }

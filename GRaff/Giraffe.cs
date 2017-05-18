@@ -71,17 +71,17 @@ namespace GRaff
 			Window.Load += (sender, e) => {
 				Async.MainThreadDispatcher = System.Windows.Threading.Dispatcher.CurrentDispatcher;
 				Draw.CurrentSurface = new Surface(windowWidth, windowHeight);
-				Graphics._Initializer.Initialize();
-				Audio._Initializer.Initialize();
-				Window.VSync = VSyncMode.On;
 
 				var initialRoom = new Room(windowWidth, windowHeight);
 				initialRoom._Enter();
-			//	Background.Initialize();
 
+				Graphics._Initializer.Initialize();
+				Audio._Initializer.Initialize();
+				Window.VSync = VSyncMode.On;
 				IsRunning = true; 
-
+				
 				/// ANY DEVELOPER LOGIC MAY COME AFTER THIS POINT
+
 				if (gameStart != null)
 					gameStart();
 			};
@@ -128,8 +128,7 @@ namespace GRaff
 			Instance<GameObject>.Do(instance => instance.OnEndStep());
 			GlobalEvent.OnEndStep();
 
-			if (Instance.NeedsSort)
-				Instance.Sort();
+			Instance.Sort();
 		}
 
 		private static void _detectCollisions()

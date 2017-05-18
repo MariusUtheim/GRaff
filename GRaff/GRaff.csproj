@@ -121,6 +121,7 @@
     <Compile Include="Forms\MouseEventArgs.cs" />
     <Compile Include="Forms\OpenFileDialog.cs" />
     <Compile Include="Forms\Quad.cs" />
+    <Compile Include="Graphics\Framebuffer.cs" />
     <Compile Include="Graphics\Quadrilateral.cs" />
     <Compile Include="Graphics\Text\FontOptions.cs" />
     <Compile Include="Graphics\Text\Glyph.cs" />
@@ -186,7 +187,6 @@
     <Compile Include="Graphics\ShaderProgramContext.cs" />
     <Compile Include="Graphics\Shaders\CausticShader.cs" />
     <Compile Include="IAsset.cs" />
-    <Compile Include="LinearMatrix.cs" />
     <Compile Include="MatrixException.cs" />
     <Compile Include="Particles\FrictionProperty.cs" />
     <Compile Include="Particles\GravityProperty.cs" />
@@ -291,7 +291,7 @@
     <Compile Include="Line.cs" />
     <Compile Include="Mask.cs" />
     <Compile Include="MaskShape.cs" />
-    <Compile Include="AffineMatrix.cs" />
+    <Compile Include="Matrix.cs" />
     <Compile Include="Mouse.cs" />
     <Compile Include="MouseButton.cs" />
     <Compile Include="MovingObject.cs" />

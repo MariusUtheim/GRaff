@@ -50,7 +50,7 @@ namespace GRaff.Graphics
 			uniform highp sampler2D tex;
 
 			void main () {
-				gl_FragColor = texture(tex, pass_TexCoord).bgra * pass_Color;
+				gl_FragColor = texture(tex, pass_TexCoord).rgba * pass_Color;
 			}");
 
 	}

@@ -15,13 +15,21 @@ namespace GRaff.Graphics
 			{
 				ColorMap.BlendMode = BlendMode.AlphaBlend;
 				GL.Enable(EnableCap.Blend);
+				GL.Clear(ClearBufferMask.ColorBufferBit);
+				ShaderProgram.CurrentColored = ShaderProgram.DefaultColored;
+				ShaderProgram.CurrentTextured = ShaderProgram.DefaultTextured;
+				ShaderProgram.CurrentColored.UpdateUniformValues();
+				ShaderProgram.CurrentTextured.UpdateUniformValues();
+
+#if DEBUG
 				GlobalEvent.EndStep += () =>
 				{
 					var err = GL.GetError();
 					if (err != ErrorCode.NoError)
 						throw new Exception($"A GL error occurred: {Enum.GetName(err.GetType(), err)}");
 				};
-            }
+#endif
+			}
 			catch (TypeInitializationException ex)
 			{
 				var innerException = ex.InnerException;

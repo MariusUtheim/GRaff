@@ -8,7 +8,7 @@ using GRaff.Graphics.Text;
 
 namespace GRaff.GraphicTest
 {
-	[Test(Order = -1)]
+	[Test]
     class TrueTypeTest : GameElement
 	{
 		private static Font _fontKerning = null, _fontNonKerning = null;

@@ -26,7 +26,6 @@ namespace GRaff
 			this.Volume = volume;
 			this.Pitch = pitch;
 
-
 			if (looping)
 			{
 				if (introBufferId == null)
@@ -71,7 +70,7 @@ namespace GRaff
 				{
 					if (Giraffe.IsRunning)
 						AL.DeleteSource(sid);
-					Console.WriteLine("Source deleted: " + sid.ToString());
+					Console.WriteLine("[SourceInstance] Source deleted: " + sid.ToString());
 				});
 
 				IsDisposed = true;
@@ -92,7 +91,7 @@ namespace GRaff
 				AL.GetSource(_sid, ALSourceb.Looping, out value);
 				return value;
 			}
-			set
+			private set
 			{
 				AL.Source(_sid, ALSourceb.Looping, value);
 			}
@@ -158,7 +157,6 @@ namespace GRaff
 		{
 			Contract.Requires<ObjectDisposedException>(IsStopped || !IsDisposed);
 			AL.SourceStop(_sid);
-			this.Destroy();
 		}
 
 		/// <summary>
@@ -219,6 +217,12 @@ namespace GRaff
 					Looping = true;
 				}
 			}
+		}
+
+		public override void OnDestroy()
+		{
+			if (!IsStopped)
+				Stop();
 		}
 	}
 }

@@ -16,8 +16,11 @@ namespace GRaff
 
 		internal static void Sort()
 		{
-			_elements.Sort();
-			NeedsSort = false;
+			if (NeedsSort)
+			{
+				_elements.Sort();
+				NeedsSort = false;
+			}
 		}
 
 		public static TGameElement Create<TGameElement>(TGameElement instance) where TGameElement : IGameElement

@@ -15,7 +15,6 @@ namespace GRaff.GraphicTest
 
 		public TextureBufferTest()
 		{
-			TestController.Background.Color = Colors.LightGray;
 		}
 
 		public override void OnDraw()

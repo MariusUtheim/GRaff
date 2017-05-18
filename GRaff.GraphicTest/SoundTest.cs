@@ -7,7 +7,7 @@ using GRaff.Synchronization;
 
 namespace GRaff.GraphicTest
 {
-	[Test(Order = 0)]
+	[Test]
 	class SoundTest : GameElement, IKeyPressListener
 	{
 		SoundBuffer buffer = SoundBuffer.Load(@"C:\test\test.wav");

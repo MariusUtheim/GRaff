@@ -32,7 +32,6 @@ namespace GRaff.Audio
 			string header;
 			using (var stream = fileInfo.OpenRead())
 			{
-				Console.WriteLine(stream.Length);
 				if (stream.Length < 4)
 					throw new FileFormatException("Invalid file format. Only .wav and .ogg are supported.");
 				byte[] headerData = new byte[8];
