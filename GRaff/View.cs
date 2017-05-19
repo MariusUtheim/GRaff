@@ -86,31 +86,36 @@ namespace GRaff
 			return new Matrix(w * c, w * s, -w * (c * X + s * Y), -h * s, h * c, h * (s * X - c * Y));
 			// Result is given by Scale(w, h) * Rotate(t) * Translate(-X, -Y)
 		}
-
-		internal static void LoadMatrix(ShaderProgram program)
+		
+		internal static void LoadMatrixToProgram()
 		{
-#warning Change this
-			LoadMatrix(GetMatrix(), program);
-		}
-
-		internal static void LoadMatrix(Matrix tr, ShaderProgram program)
-		{
-			if (program == null)
+			if (ShaderProgram.Current == null)
 				return;
+
+			var tr = GetMatrix();
+
+			var err = GL.GetError();
+			if (err != ErrorCode.NoError)
+				throw new Exception();
 
 
 			var projectionMatrix = new Matrix4(
-				(float)tr.M00, (float)tr.M10, 0, 0,
-				(float)tr.M01, (float)tr.M11, 0, 0,
+				(float)tr.M00, (float)tr.M01, 0, (float)tr.M02,
+				(float)tr.M10, (float)tr.M11, 0, (float)tr.M12,
 							0,			   0, 1, 0,
-				(float)tr.M02, (float)tr.M12, 0, 1
+							0,			   0, 0, 1
 			);
 
 			int matrixLocation;
-			matrixLocation = GL.GetUniformLocation(program.Id, "GRaff_ViewMatrix");
-			GL.UniformMatrix4(matrixLocation, false, ref projectionMatrix);
+			matrixLocation = GL.GetUniformLocation(ShaderProgram.Current.Id, "GRaff_ViewMatrix");
+			err = GL.GetError();
+			if (err != ErrorCode.NoError)
+				throw new Exception();
 
-			var err = GL.GetError();
+
+			GL.UniformMatrix4(matrixLocation, true, ref projectionMatrix);
+			
+			err = GL.GetError();
 			if (err != ErrorCode.NoError)
 				throw new Exception();
 
@@ -171,8 +176,7 @@ namespace GRaff
 				View.Width = width;
 				View.Height = height;
 				View.Rotation = rotation;
-				View.LoadMatrix(ShaderProgram.CurrentColored);
-				View.LoadMatrix(ShaderProgram.CurrentTextured);
+				View.LoadMatrixToProgram();
 			}
 
 			~ViewContext()
@@ -191,8 +195,7 @@ namespace GRaff
 					View.Width = _prevW;
 					View.Height = _prevH;
 					View.Rotation = _prevR;
-					View.LoadMatrix(ShaderProgram.CurrentColored);
-					View.LoadMatrix(ShaderProgram.CurrentTextured);
+					View.LoadMatrixToProgram();
 				}
 				else
 					throw new ObjectDisposedException(nameof(ViewContext));

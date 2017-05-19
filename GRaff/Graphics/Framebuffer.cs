@@ -9,6 +9,7 @@ using OpenTK.Graphics.OpenGL4;
 
 namespace GRaff.Graphics
 {
+#warning Needs cleaning
 	public sealed class Framebuffer : IDisposable
 	{
 		private int _id;
@@ -50,8 +51,6 @@ namespace GRaff.Graphics
 						throw new Exception();
 				});
 
-				Buffer.Dispose();
-				
 				_isDisposed = true;
 			}
 		}
@@ -80,7 +79,8 @@ namespace GRaff.Graphics
 				this._previous = Framebuffer.CurrentTarget;
 				GL.BindFramebuffer(FramebufferTarget.Framebuffer, current._id);
 
-				_viewContext = View.UseView(ExpectedViewWidth / 2, ExpectedViewHeight / 2, ExpectedViewWidth, -ExpectedViewHeight);
+				if (setView)
+					_viewContext = View.UseView(ExpectedViewWidth / 2, ExpectedViewHeight / 2, ExpectedViewWidth, -ExpectedViewHeight);
 			}
 
 			~FramebufferBindContext()

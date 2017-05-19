@@ -9,6 +9,7 @@ using GRaff.Graphics.Text;
 
 namespace GRaff.GraphicTest
 {
+	[Test]
 	class TextAlignmentTest : GameElement
 	{
 		private const string lipsum = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus rutrum nibh sed nulla dapibus, sit amet tempor nulla feugiat.";
@@ -18,10 +19,8 @@ namespace GRaff.GraphicTest
 
 		public TextAlignmentTest()
 		{
-			_render = new TextRenderer(font, width: 300);
+			_render = new TextRenderer(font, lineWidth: 300);
 			_render.Alignment = FontAlignment.Center;
-			
-			var multiline = _render.MultilineFormat(lipsum);
 		}
 
 		public override void OnStep()

@@ -7,22 +7,18 @@ using System.Text.RegularExpressions;
 
 namespace GRaff.Graphics.Text
 {
+#warning Needs cleaning
 	public sealed class TextRenderer
 	{
 		private static readonly Regex NewlineRegex = new Regex("\r\n|\n");
+		private static readonly Regex WhitespaceRegex = new Regex(" ");
 		
-		public TextRenderer(Font font, FontAlignment alignment = FontAlignment.TopLeft, int width = Int32.MaxValue)
-			: this(font, alignment, width, font.Height)
-		{
-			Contract.Requires<ArgumentNullException>(font != null);
-		}
-
-		public TextRenderer(Font font, FontAlignment alignment, int width, double lineSeparation)
+		public TextRenderer(Font font, FontAlignment alignment = FontAlignment.TopLeft, int? lineWidth = null, double lineSeparation = 0)
 		{
 			Contract.Requires<ArgumentNullException>(font != null);
 			this.Font = font;
 			this.Alignment = alignment;
-			this.Width = width;
+			this.LineWidth = lineWidth;
 			this.LineSeparation = lineSeparation;
 		}
 
@@ -39,63 +35,79 @@ namespace GRaff.Graphics.Text
 
 		public Font Font { get; set; }
 
-		public int Width { get; set; }
+		public int? LineWidth { get; set; }
 
 		public double LineSeparation { get; set; }
 
 		public FontAlignment Alignment { get; set; } = FontAlignment.TopLeft;
 
-		private string _multilineFormat(string text)
+		private IEnumerable<string> _breakString(string text)
 		{
 			Contract.Assume(text != null);
-			var words = text.Split(' ');
-			var multilineFormat = new StringBuilder(text.Length);
-			var currentLine = new StringBuilder(words[0]);
-			var currentLineLength = GetWidth(words[0]);
-			var lengthOfSpace = GetWidth(" ");
+			if (LineWidth == null)
+			{
+				yield return text;
+				yield break;
+			}
 
-			var lengths = words.Select(word => GetWidth(word));
+			var words = WhitespaceRegex.Split(text);
+			var lengthOfSpace = Font.GetWidth(" ");
+
+			var currentLine = new StringBuilder(words[0]);
+			var currentLineLength = Font.GetWidth(words[0]);
+
+			var lengths = words.Select(word => Font.GetWidth(word));
 
 			for (var i = 1; i < words.Length; i++)
 			{
-				var wordLength = GetWidth(words[i]);
-				if (currentLineLength + wordLength < Width)
+				var wordLength = Font.GetWidth(words[i]);
+				if (LineWidth == null || currentLineLength + wordLength < LineWidth)
 				{
 					currentLine.Append(" " + words[i]);
 					currentLineLength += lengthOfSpace + wordLength;
 				}
 				else
 				{
-					multilineFormat.AppendLine(currentLine.ToString());
+					yield return currentLine.ToString();
 
 					currentLine = new StringBuilder(words[i]);
 					currentLineLength = wordLength;
 				}
 			}
 
-			multilineFormat.AppendLine(currentLine.ToString());
+			yield return currentLine.ToString().TrimEnd(Environment.NewLine.ToCharArray());
 
-			var result = multilineFormat.ToString().TrimEnd(Environment.NewLine.ToCharArray());
-			return result;
+//			multilineFormat.AppendLine(currentLine.ToString());
+//
+//			var result = multilineFormat.ToString().TrimEnd(Environment.NewLine.ToCharArray());
+//			return result;
 		}
 
-		public string MultilineFormat(string text)
-		{
-			return text == null ? "" : String.Concat(Regex.Split(text, Environment.NewLine).Select(str => _multilineFormat(str)));
-		}
+		//public string MultilineFormat(string text)
+		//{
+		//	if (text == null)
+		//		return "";
+		//	else
+		//	{
+		//		var split = NewlineRegex.Split(text).Select(_multilineFormat);
+		//		return String.Join("\n", split);
+		//	}
+		//}
 
 		public string[] LineSplit(string text)
 		{
-			return text == null ? new string[0] : NewlineRegex.Split(text).Select(str => _multilineFormat(str)).SelectMany(str => NewlineRegex.Split(str)).ToArray();
+			return text == null ? new string[0] : NewlineRegex.Split(text).SelectMany(_breakString).ToArray();
 		}
 
 		public string Truncate(string text)
 		{
 			if (text == null)
 				return "";
+			if (LineWidth == null)
+				return text;
 
 			var ellipsisWidth = Font.GetWidth("...");
-			var lowerBound = Width - ellipsisWidth;
+			var lowerBound = LineWidth - ellipsisWidth;
 			var offset = 0;
 
 			for (var i = 0; i < text.Length; i++)
@@ -106,7 +118,7 @@ namespace GRaff.Graphics.Text
 				var nextWidth = Font.GetWidth(text[i]);
 				var advance = Font.GetAdvance(text, i);
 
-				if (offset + nextWidth > Width)
+				if (offset + nextWidth > LineWidth)
 					return text.Substring(0, i) + "...";
 
 				if (offset + advance >= lowerBound)
@@ -115,7 +127,7 @@ namespace GRaff.Graphics.Text
 					for (var j = i + 1; j < text.Length; j++)
 					{
 						nextWidth = Font.GetWidth(text[j]);
-						if (offset + nextWidth > Width)
+						if (offset + nextWidth > LineWidth)
 							return text.Substring(0, i) + "...";
 						offset += Font.GetAdvance(text, j);
                     }
@@ -130,9 +142,50 @@ namespace GRaff.Graphics.Text
 
 		public int GetWidth(string text)
 		{
-			return Font.GetWidth(text);
+			return LineSplit(text).Select(Font.GetWidth).Max();
 		}
 
+		public double GetHeight(string text)
+		{
+			var n = LineSplit(text).Length;
+			return n * Font.Height + (n - 1) * LineSeparation;
+		}
+
+		private static Point _getOrigin(FontAlignment alignment, double width, double height)
+		{
+			double x, y;
+
+			switch (alignment & FontAlignment.Horizontal)
+			{
+				case FontAlignment.Left: x = 0; break;
+				case FontAlignment.Center: x = width / 2; break;
+				case FontAlignment.Right: x = width; break;
+				default: x = 0; break;
+			}
+
+			switch (alignment & FontAlignment.Vertical)
+			{
+				case FontAlignment.Top: y = 0; break;
+				case FontAlignment.Center: y = height / 2; break;
+				case FontAlignment.Bottom: y = height; break;
+				default: y = 0; break;
+			}
+
+			return new Point(x, y);
+		}
+
+		public TextureBuffer Render(string text)
+		{
+			var width = GetWidth(text);
+			var height = (int)GMath.Ceiling(GetHeight(text));
+
+			using (var buffer = new Framebuffer(width, height))
+			using (buffer.Bind())
+			{
+				Draw.Text(text, this, Colors.White, _getOrigin(Alignment, width, height));
+				return buffer.Buffer;
+			}
+		}
 
 
 		internal string[] RenderCoords(string text, out GraphicsPoint[] quadCoords)
@@ -148,8 +201,8 @@ namespace GRaff.Graphics.Text
 			switch (Alignment & FontAlignment.Vertical)
 			{
 				case FontAlignment.Top: y0 = 0; break;
-				case FontAlignment.Center: y0 = -(LineSeparation * (lines.Length - 1) + Font.Height) / 2; break;
-				case FontAlignment.Bottom: y0 = -(LineSeparation * (lines.Length - 1) + Font.Height); break;
+				case FontAlignment.Center: y0 = -((Font.Height + LineSeparation) * (lines.Length - 1) + Font.Height) / 2; break;
+				case FontAlignment.Bottom: y0 = -((Font.Height + LineSeparation) * (lines.Length - 1) + Font.Height); break;
 			}
 
 			var coordIndex = 0;
@@ -164,7 +217,7 @@ namespace GRaff.Graphics.Text
 				}
 
 				var x = x0;
-				var y = y0 + l * LineSeparation;
+				var y = y0 + l * (Font.Height + LineSeparation);
 				for (var i = 0; i < lines[l].Length; i++)
 				{
 					FontCharacter c;

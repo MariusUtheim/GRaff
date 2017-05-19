@@ -289,8 +289,6 @@ namespace GRaff.Graphics
 			if (text == null)
 				return;
 
-			text = renderer.MultilineFormat(text);
-
 			GraphicsPoint[] vertices;
 			GraphicsPoint[] texCoords;
 

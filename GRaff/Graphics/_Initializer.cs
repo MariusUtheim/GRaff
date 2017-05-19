@@ -16,6 +16,7 @@ namespace GRaff.Graphics
 				ColorMap.BlendMode = BlendMode.AlphaBlend;
 				GL.Enable(EnableCap.Blend);
 				GL.Clear(ClearBufferMask.ColorBufferBit);
+
 				ShaderProgram.CurrentColored = ShaderProgram.DefaultColored;
 				ShaderProgram.CurrentTextured = ShaderProgram.DefaultTextured;
 				ShaderProgram.CurrentColored.UpdateUniformValues();

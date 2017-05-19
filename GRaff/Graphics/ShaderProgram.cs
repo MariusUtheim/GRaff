@@ -45,13 +45,17 @@ namespace GRaff.Graphics
 				GL.DetachShader(Id, shader.Id);
 		}
 
-		public static ShaderProgram Current { get; private set; }
+		private static ShaderProgram _current;
+		public static ShaderProgram Current
+		{
+			get { return _current; }
+			private set { _current = value; GL.UseProgram(_current.Id); }
+		}
 
 		public void SetCurrent()
 		{
 			Current = this;
-			GL.UseProgram(Id);
-			View.LoadMatrix(this);
+			View.LoadMatrixToProgram();
 		}
 		
 		public static int GetCurrentId()
@@ -59,30 +63,19 @@ namespace GRaff.Graphics
 			return GL.GetInteger(GetPName.CurrentProgram);
 		}
 
+		private void _setUniform(string location, double value)
+		{
+			var ptr = GL.GetUniformLocation(Id, location);
+			if (ptr >= 0)
+				GL.Uniform1(ptr, value);
+		}
+
 		public void UpdateUniformValues()
 		{
-			int currentProgram = GL.GetInteger(GetPName.CurrentProgram);
-			try
-			{
-				int location;
-
-				SetCurrent();
-
-				location = GL.GetUniformLocation(Id, "GRaff_LoopCount");
-				GL.Uniform1(location, Time.LoopCount);
-
-				location = GL.GetUniformLocation(Id, "GRaff_RoomWidth");
-				GL.Uniform1(location, Room.Current.Width);
-
-				location = GL.GetUniformLocation(Id, "GRaff_RoomHeight");
-				GL.Uniform1(location, Room.Current.Height);
-
-				View.LoadMatrix(this);
-			}
-			finally
-			{
-				GL.UseProgram(currentProgram);
-			}
+			SetCurrent();
+			_setUniform("GRaff_LoopCount", Time.LoopCount);
+			_setUniform("GRaff_RoomWidth", Room.Current.Width);
+			_setUniform("GRaff_RoomHeight", Room.Current.Height);
 		}
 
 		protected void SetUniform(string name, int value)
