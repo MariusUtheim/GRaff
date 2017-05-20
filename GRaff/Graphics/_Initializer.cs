@@ -28,9 +28,7 @@ namespace GRaff.Graphics
 #if DEBUG
 				GlobalEvent.EndStep += () =>
 				{
-					var err = GL.GetError();
-					if (err != ErrorCode.NoError)
-						throw new Exception($"A GL error occurred: {Enum.GetName(err.GetType(), err)}");
+					GLError.Check();
 				};
 #endif
 			}

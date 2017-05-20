@@ -46,9 +46,7 @@ namespace GRaff.Graphics
 				{
 					if (Giraffe.IsRunning)
 						GL.DeleteFramebuffer(id);
-					var err = GL.GetError();
-					if (err != ErrorCode.NoError)
-						throw new Exception();
+					GLError.Check();
 				});
 
 				_isDisposed = true;

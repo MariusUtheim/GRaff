@@ -36,9 +36,7 @@ namespace GRaff
 			GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Linear);
 			GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
 
-			var err = GL.GetError();
-			if (err != ErrorCode.NoError)
-				throw new Exception(Enum.GetName(typeof(ErrorCode), err));
+			GLError.Check();
 		}
 
 		unsafe public TextureBuffer(Color[,] colors)
@@ -58,10 +56,7 @@ namespace GRaff
 					handle.Free();
 			}
 
-			var err = GL.GetError();
-			if (err != ErrorCode.NoError)
-				throw new Exception(Enum.GetName(typeof(ErrorCode), err));
-
+			GLError.Check();
 		}
 
 		public TextureBuffer(int width, int height, IntPtr data)
@@ -100,9 +95,7 @@ namespace GRaff
 				{
 					if (Giraffe.IsRunning)
 						GL.DeleteTexture(id);
-					var err = GL.GetError();
-					if (err != ErrorCode.NoError)
-						throw new Exception();
+					GLError.Check();
 				});
 				IsDisposed = true;
 			}

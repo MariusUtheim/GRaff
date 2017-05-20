@@ -122,6 +122,7 @@
     <Compile Include="Forms\OpenFileDialog.cs" />
     <Compile Include="Forms\Quad.cs" />
     <Compile Include="Graphics\Framebuffer.cs" />
+    <Compile Include="Graphics\GLError.cs" />
     <Compile Include="Graphics\Quadrilateral.cs" />
     <Compile Include="Graphics\Text\FontOptions.cs" />
     <Compile Include="Graphics\Text\Glyph.cs" />

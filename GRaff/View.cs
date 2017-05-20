@@ -94,10 +94,7 @@ namespace GRaff
 
 			var tr = GetMatrix();
 
-			var err = GL.GetError();
-			if (err != ErrorCode.NoError)
-				throw new Exception();
-
+			GLError.Check();
 
 			var projectionMatrix = new Matrix4(
 				(float)tr.M00, (float)tr.M01, 0, (float)tr.M02,
@@ -108,16 +105,12 @@ namespace GRaff
 
 			int matrixLocation;
 			matrixLocation = GL.GetUniformLocation(ShaderProgram.Current.Id, "GRaff_ViewMatrix");
-			err = GL.GetError();
-			if (err != ErrorCode.NoError)
-				throw new Exception();
 
+			GLError.Check();
 
 			GL.UniformMatrix4(matrixLocation, true, ref projectionMatrix);
-			
-			err = GL.GetError();
-			if (err != ErrorCode.NoError)
-				throw new Exception();
+
+			GLError.Check();
 
 		}
 		
