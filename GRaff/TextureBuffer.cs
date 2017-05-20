@@ -1,10 +1,9 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Diagnostics.Contracts;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
-using System.Threading.Tasks;
+using System.Runtime.InteropServices;
 using GRaff.Graphics;
 using GRaff.Synchronization;
 #if OpenGL4
@@ -24,33 +23,52 @@ namespace GRaff
 	/// <remarks>
 	/// The following file types are supported: BMP, GIF, EXIF, JPG, PNG and TIFF
 	/// </remarks>
-	#warning Review class
+#warning Review class
 	public sealed class TextureBuffer : IDisposable
 	{
-		public TextureBuffer(int width, int height, IntPtr data)
+		private TextureBuffer(int width, int height)
 		{
-			Contract.Requires<ArgumentOutOfRangeException>(width > 0 && height > 0);
-
 			Id = GL.GenTexture();
 			Width = width;
 			Height = height;
-#if OpenGL4
+
 			GL.BindTexture(TextureTarget.Texture2D, Id);
 			GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Linear);
 			GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
-			GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, width, height, 0, GLPixelFormat.Bgra, PixelType.UnsignedByte, data);
-#else
-			GL.BindTexture(TextureTarget.Texture2D, Id);
-			GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
-			GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.LinearMipmapLinear);
-			GL.TexImage2D(TextureTarget2d.Texture2D, 0, TextureComponentCount.Rgba, Width, Height, 0, GLPixelFormat.Rgba, PixelType.UnsignedByte, textureData.Scan0);
-			GL.GenerateMipmap(TextureTarget.Texture2D);
-#endif
-
 
 			var err = GL.GetError();
 			if (err != ErrorCode.NoError)
 				throw new Exception(Enum.GetName(typeof(ErrorCode), err));
+		}
+
+		unsafe public TextureBuffer(Color[,] colors)
+			: this(colors.GetLength(1), colors.GetLength(0))
+		{
+			Contract.Requires<ArgumentNullException>(colors != null);
+
+			var handle = GCHandle.Alloc(colors, GCHandleType.Pinned);
+			try
+			{
+				var data = handle.AddrOfPinnedObject();
+				GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, Width, Height, 0, GLPixelFormat.Rgba, PixelType.UnsignedByte, data);
+			}
+			finally
+			{
+				if (handle.IsAllocated)
+					handle.Free();
+			}
+
+			var err = GL.GetError();
+			if (err != ErrorCode.NoError)
+				throw new Exception(Enum.GetName(typeof(ErrorCode), err));
+
+		}
+
+		public TextureBuffer(int width, int height, IntPtr data)
+			: this(width, height)
+		{
+			Contract.Requires<ArgumentOutOfRangeException>(width > 0 && height > 0);
+			GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, width, height, 0, GLPixelFormat.Bgra, PixelType.UnsignedByte, data);
 		}
 
 		[ContractInvariantMethod]
@@ -82,7 +100,6 @@ namespace GRaff
 				{
 					if (Giraffe.IsRunning)
 						GL.DeleteTexture(id);
-					Console.WriteLine($"[TextureBuffer] Disposed Id={Id}");
 					var err = GL.GetError();
 					if (err != ErrorCode.NoError)
 						throw new Exception();

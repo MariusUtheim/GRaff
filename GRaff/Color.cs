@@ -86,11 +86,13 @@ namespace GRaff
 		public Color Inverse => new Color(A, 255 - R, 255 - G, 255 - B);
 
 
+		public static Color Merge(Color c1, Color c2, double amount) => c1.Merge(c2, amount);
+
 		/// <summary>
 		/// Finds the weighted average of the two GRaff.Color structures, calculating the average of each channel separately.
 		/// </summary>
 		/// <param name="c">The GRaff.Color to merge with.</param>
-		/// <param name="amount">A parameter specifying the weights of the two colors. If it is 0, this GRaff.Color is unchange, and if this is 1, c is returned.</param>
+		/// <param name="amount">A parameter specifying the weights of the two colors. If it is 0, this GRaff.Color is unchanged, and if this is 1, c is returned.</param>
 		/// <returns>The weighted average of the two colors.</returns>
 		public Color Merge(Color c, double amount)
 		{
