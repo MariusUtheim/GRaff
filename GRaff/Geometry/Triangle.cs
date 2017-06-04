@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GRaff.Geometry
+namespace GRaff
 {
 	public struct Triangle : IEquatable<Triangle>
 	{

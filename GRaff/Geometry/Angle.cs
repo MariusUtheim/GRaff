@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GRaff.Geometry
+namespace GRaff
 {
 	/// <summary>
 	/// Represents an angle, that can be specified in angles or degrees.

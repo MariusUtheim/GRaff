@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace GRaff.Geometry
+namespace GRaff
 {
 	/// <summary>
 	/// Represents a two dimensional vector.

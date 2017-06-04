@@ -5,8 +5,8 @@ using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Text;
 
-namespace GRaff.Geometry
-{
+namespace GRaff
+{ 
 	/// <summary>
 	/// Specifies a positively-oriented convex polygon.
 	/// </summary>

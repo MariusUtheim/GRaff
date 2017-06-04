@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Diagnostics.Contracts;
 
-namespace GRaff.Geometry
+namespace GRaff
 {
 	/// <summary>
 	/// Represents the matrix of an affine transformation.
