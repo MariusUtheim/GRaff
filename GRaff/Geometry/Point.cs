@@ -4,7 +4,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 
-namespace GRaff
+namespace GRaff.Geometry
 {
 	/// <summary>
 	/// Represents a point in space.

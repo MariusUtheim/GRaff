@@ -159,7 +159,7 @@
     <Compile Include="Randomness\Statistics.cs" />
     <Compile Include="RedBlackTree.cs" />
     <Compile Include="Synchronization\Alarm.cs" />
-    <Compile Include="Angle.cs" />
+    <Compile Include="Geometry\Angle.cs" />
     <Compile Include="AnimationStrip.cs" />
     <Compile Include="Synchronization\Async.Aggregate.cs" />
     <Compile Include="Synchronization\Async.cs" />
@@ -169,7 +169,6 @@
     <Compile Include="Font.cs" />
     <Compile Include="FontAlignment.cs" />
     <Compile Include="Graphics\Text\FontInfo.cs" />
-    <Compile Include="GMath.SystemMathOverloads.cs" />
     <Compile Include="GRaffExtensions.cs" />
     <Compile Include="Graphics\Text\FontLoader.cs" />
     <Compile Include="Graphics\Lighting\LightObstacle.cs" />
@@ -181,7 +180,7 @@
     <Compile Include="Graphics\ShaderProgramContext.cs" />
     <Compile Include="Graphics\Shaders\CausticShader.cs" />
     <Compile Include="IAsset.cs" />
-    <Compile Include="MatrixException.cs" />
+    <Compile Include="Geometry\MatrixException.cs" />
     <Compile Include="Particles\FrictionProperty.cs" />
     <Compile Include="Particles\GravityProperty.cs" />
     <Compile Include="Particles\AccelerationBehavior.cs" />
@@ -277,14 +276,14 @@
     <Compile Include="Image.cs" />
     <Compile Include="IMouseListener.cs" />
     <Compile Include="Instance.cs" />
-    <Compile Include="IntRectangle.cs" />
-    <Compile Include="IntVector.cs" />
+    <Compile Include="Geometry\IntRectangle.cs" />
+    <Compile Include="Geometry\IntVector.cs" />
     <Compile Include="Key.cs" />
     <Compile Include="Keyboard.cs" />
-    <Compile Include="Line.cs" />
+    <Compile Include="Geometry\Line.cs" />
     <Compile Include="Mask.cs" />
     <Compile Include="MaskShape.cs" />
-    <Compile Include="Matrix.cs" />
+    <Compile Include="Geometry\Matrix.cs" />
     <Compile Include="Mouse.cs" />
     <Compile Include="MouseButton.cs" />
     <Compile Include="MovingObject.cs" />
@@ -294,10 +293,10 @@
     <Compile Include="Particles\Particle.cs" />
     <Compile Include="Particles\ParticleSystem.cs" />
     <Compile Include="Particles\ParticleType.cs" />
-    <Compile Include="Point.cs" />
-    <Compile Include="Polygon.cs" />
+    <Compile Include="Geometry\Point.cs" />
+    <Compile Include="Geometry\Polygon.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Rectangle.cs" />
+    <Compile Include="Geometry\Rectangle.cs" />
     <Compile Include="Room.cs" />
     <Compile Include="Graphics\ShaderException.cs" />
     <Compile Include="Graphics\ShaderProgram.cs" />
@@ -313,9 +312,9 @@
     <Compile Include="Time.cs" />
     <Compile Include="Transform.cs" />
     <Compile Include="Synchronization\Tween.cs" />
-    <Compile Include="Triangle.cs" />
+    <Compile Include="Geometry\Triangle.cs" />
     <Compile Include="Unit.cs" />
-    <Compile Include="Vector.cs" />
+    <Compile Include="Geometry\Vector.cs" />
     <Compile Include="View.cs" />
     <Compile Include="Window.cs" />
   </ItemGroup>
@@ -346,9 +345,7 @@
     <Compile Include="Graphics\Text\TrueTypeLoader.cs" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Geometry\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>

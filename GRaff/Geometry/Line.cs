@@ -1,7 +1,7 @@
 ﻿using System;
 
 
-namespace GRaff
+namespace GRaff.Geometry
 {
 	/// <summary>
 	/// Represents a directed line segment between two points.

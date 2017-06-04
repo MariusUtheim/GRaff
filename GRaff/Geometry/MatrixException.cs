@@ -1,7 +1,7 @@
 using System;
 using System.Runtime.Serialization;
 
-namespace GRaff
+namespace GRaff.Geometry
 {
 	[Serializable]
 	public class MatrixException : ArithmeticException

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace GRaff
+namespace GRaff.Geometry
 {
 	/// <summary>
 	/// Represents a rectangle with real coordinates.
