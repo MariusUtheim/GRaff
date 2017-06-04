@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics.Contracts;
+using GRaff.Geometry;
 
 namespace GRaff
 {

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics.Contracts;
+using GRaff.Geometry;
 
 namespace GRaff
 {
@@ -16,10 +17,14 @@ namespace GRaff
 		public static double Abs(double value) => Math.Abs(value);
 		public static decimal Abs(decimal value) => Math.Abs(value);
 
-		public static Angle Atan(double d) => Angle.Rad(Math.Atan(d));
-		public static Angle Atan2(double y, double x) => Angle.Rad(Math.Atan2(y, x));
+        public static Angle Acos(double d) => Angle.Rad(Math.Acos(d));
+        public static Angle Asin(double d) => Angle.Rad(Math.Asin(d));
 
-		public static long BigMul(int a, int b) => Math.BigMul(a, b);
+        public static Angle Atan(double d) => Angle.Rad(Math.Atan(d));
+		public static Angle Atan2(double y, double x) => Angle.Rad(Math.Atan2(y, x));
+        public static Angle Atan2(Vector v) => Angle.Rad(Math.Atan2(v.Y, v.X));
+
+        public static long BigMul(int a, int b) => Math.BigMul(a, b);
 
 		public static double Ceiling(double d)
 		{
