@@ -32,7 +32,6 @@ namespace GRaff
 
 		public static double Cos(double d) => Math.Cos(d);
 		public static double Cos(Angle a) => Math.Cos(a.Radians);
-		public static Complex Cos(Complex c) => new Complex(Cos(c.Real) * Cosh(c.Imaginary), -Sin(c.Real) * Sinh(c.Imaginary));
 
 		public static double Cosh(double d) => Math.Cosh(d);
 		public static double Cosh(Angle a) => Math.Cosh(a.Radians);

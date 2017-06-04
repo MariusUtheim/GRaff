@@ -19,8 +19,6 @@ namespace GRaff
 		/// <summary>A default resolution for discerning the value of two numbers</summary>
 		internal const double DefaultDelta = 1e-9;
 
-		public static readonly Complex I = new Complex(0, 1);
-
 		public static double Frac(double x) => (x >= 0) ? x - Floor(x) : x - Ceiling(x);
 
 		public static int HashCombine(params int[] values)

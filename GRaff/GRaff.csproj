@@ -11,11 +11,12 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>GRaff</RootNamespace>
     <AssemblyName>GRaff</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <CodeContractsAssemblyMode>1</CodeContractsAssemblyMode>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -91,7 +92,8 @@
     <UseVSHostingProcess>false</UseVSHostingProcess>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="OpenTK">
+    <Reference Include="OpenTK, Version=1.1.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\..\Library\OpenTK\1.1\Binaries\OpenTK\Release\OpenTK.dll</HintPath>
     </Reference>
     <Reference Include="SharpFont, Version=3.0.1.200, Culture=neutral, PublicKeyToken=48add4c483071cdf, processorArchitecture=MSIL">
@@ -102,6 +104,9 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ValueTuple, Version=4.0.1.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.ValueTuple.4.3.1\lib\netstandard1.0\System.ValueTuple.dll</HintPath>
+    </Reference>
     <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
@@ -153,18 +158,6 @@
     <Compile Include="Pathfinding\Vertex.cs" />
     <Compile Include="Randomness\Statistics.cs" />
     <Compile Include="RedBlackTree.cs" />
-    <Compile Include="Synchronization2\Alarm.cs" />
-    <Compile Include="Synchronization2\Async.HandleEvents.cs" />
-    <Compile Include="Synchronization2\Async.Aggregation.cs" />
-    <Compile Include="Synchronization2\Async.cs" />
-    <Compile Include="Synchronization2\AsyncException.cs" />
-    <Compile Include="Synchronization2\AsyncOperation.cs" />
-    <Compile Include="Synchronization2\AsyncOperationExtensions.cs" />
-    <Compile Include="Synchronization2\AsyncOperationRejectedEventArgs.cs" />
-    <Compile Include="Synchronization2\CatchContext.cs" />
-    <Compile Include="Synchronization2\Coroutine.cs" />
-    <Compile Include="Synchronization2\Deferred.cs" />
-    <Compile Include="Synchronization2\Tween.cs" />
     <Compile Include="Synchronization\Alarm.cs" />
     <Compile Include="Angle.cs" />
     <Compile Include="AnimationStrip.cs" />
@@ -264,7 +257,6 @@
     <Compile Include="Graphics\BlendEquation.cs" />
     <Compile Include="Graphics\BlendMode.cs" />
     <Compile Include="Graphics\ColorMap.cs" />
-    <Compile Include="Complex.cs" />
     <Compile Include="Draw.cs" />
     <Compile Include="Graphics\Text\FontCharacter.cs" />
     <Compile Include="Graphics\GLExtensions.cs" />
@@ -353,6 +345,9 @@
   <ItemGroup>
     <Compile Include="Graphics\Text\TrueTypeLoader.cs" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Geometry\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
