@@ -163,5 +163,13 @@ namespace GRaff
 		public static explicit operator IntVector(Vector v) 
 			=> new IntVector((int)v.X, (int)v.Y);
 
+        public static implicit operator IntVector((int x, int y) p)
+            => new IntVector(p.x, p.y);
+
+        public void Deconstruct(out int x, out int y)
+        {
+            x = this.X;
+            y = this.Y;
+        }
 	}
 }

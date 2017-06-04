@@ -185,5 +185,15 @@ namespace GRaff
 		/// <returns>The GRaff.Vector that results from the conversion.</returns>
 		public static explicit operator Vector(Point p) 
 			=> new Vector(p.X, p.Y);
+
+
+        public static implicit operator Point((double x, double y) p)
+            => new Point(p.x, p.y);
+
+        public void Deconstruct(out double x, out double y)
+        {
+            x = X;
+            y = Y;
+        }
 	}
 }
