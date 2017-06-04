@@ -160,7 +160,7 @@
     <Compile Include="RedBlackTree.cs" />
     <Compile Include="Synchronization\Alarm.cs" />
     <Compile Include="Geometry\Angle.cs" />
-    <Compile Include="AnimationStrip.cs" />
+    <Compile Include="Graphics\AnimationStrip.cs" />
     <Compile Include="Synchronization\Async.Aggregate.cs" />
     <Compile Include="Synchronization\Async.cs" />
     <Compile Include="Synchronization\AsyncOperationElement.cs" />
