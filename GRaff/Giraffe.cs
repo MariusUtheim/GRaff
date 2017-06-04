@@ -55,6 +55,7 @@ namespace GRaff
 			Window.MouseMove += (sender, e) => { Mouse.WindowX = e.X; Mouse.WindowY = e.Y;  };
 			Window.MouseDown += (sender, e) => { Mouse.Press((MouseButton)e.Button); };
 			Window.MouseUp += (sender, e) => { Mouse.Release((MouseButton)e.Button); };
+            Window.MouseWheel += (sender, e) => { Mouse.Wheel(e.ValuePrecise, e.DeltaPrecise); };
 
             Window.RenderFrame += (sender, e) => {
 
@@ -102,7 +103,7 @@ namespace GRaff
 		/// <summary>
 		/// Performs a game loop. This includes the following phases, in order:
 		/// - Begin step
-		/// - Synchronization
+		/// - Handle queued asynchronous actions
 		/// - Keyboard, key press, key release
 		/// - Mouse, mouse press, mouse release
 		/// - Step
@@ -211,6 +212,10 @@ namespace GRaff
 				foreach (var instance in Instance<GameObject>.Where(obj => obj is IMouseReleaseListener && obj.Mask.ContainsPoint(Mouse.Location)))
 					(instance as IMouseReleaseListener).OnMouseRelease(button);
 
+            if (Mouse.WheelDelta != 0)
+                foreach (var instance in Instance<GameObject>.Where(obj => obj is IMouseWheelListener && obj.Mask.ContainsPoint(Mouse.Location)))
+                    (instance as IMouseWheelListener).OnMouseWheel(Mouse.WheelDelta);
+
 
 			foreach (var button in Mouse.Down)
 			{
@@ -226,13 +231,19 @@ namespace GRaff
 				GlobalEvent.OnMousePressed(button);
 			}
 
-
 			foreach (var button in Mouse.Released)
 			{
 				foreach (var instance in Instance.All.Where(obj => obj is IGlobalMouseReleaseListener))
 					(instance as IGlobalMouseReleaseListener).OnGlobalMouseRelease(button);
 				GlobalEvent.OnMouseReleased(button);
 			}
+
+            if (Mouse.WheelDelta != 0)
+            {
+                foreach (var instance in Instance.All.Where(obj => obj is IGlobalMouseWheelListener))
+                    (instance as IGlobalMouseWheelListener).OnGlobalMouseWheel(Mouse.WheelDelta);
+                GlobalEvent.OnMouseWheel(Mouse.WheelDelta);
+            }
 
 			Keyboard.Update();
 			Mouse.Update();

@@ -44,6 +44,19 @@ namespace GRaff
 		void OnMouseRelease(MouseButton button);
 	}
 
+    /// <summary>
+    /// Defines an action that is performed whenever the mouse wheel is moved while hovering over the instance.
+    /// Only subclasses of the GRaff.GameObject class can listen to this event, as GRaff.GameElement does not define a collision mask.
+    /// </summary>
+    public interface IMouseWheelListener
+    {
+        /// <summary>
+        /// An action that is performed when the mouse wheel is moved while hovering over the instance.
+        /// </summary>
+        /// <param name="delta">The change in value for the wheel.</param>
+        void OnMouseWheel(double delta);
+    }
+
 	/// <summary>
 	/// Defines an action that is performed each step while a mouse button is being held down.
 	/// </summary>
@@ -79,4 +92,17 @@ namespace GRaff
 		/// <param name="button">The mouse button that was released.</param>
 		void OnGlobalMouseRelease(MouseButton button);
 	}
+
+    /// <summary>
+    /// Defines an action that is performed whenever the mouse wheel is moved.
+    /// </summary>
+    public interface IGlobalMouseWheelListener
+    {
+        /// <summary>
+        /// An action that is performed when the mouse wheel is moved.
+        /// </summary>
+        /// <param name="delta">The change in value for the wheel.</param>
+        void OnGlobalMouseWheel(double delta);
+    }
+
 }

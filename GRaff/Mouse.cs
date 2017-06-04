@@ -25,6 +25,7 @@ namespace GRaff
 			YPrevious = Y;
 			for (int i = 0; i < _buttonCount; i++)
 				_pressed[i] = _released[i] = false;
+            WheelDelta = 0;
 		}
 
 		/// <summary>
@@ -52,22 +53,31 @@ namespace GRaff
 				_released[(int)button] = true;
 			}
 		}
+
+        internal static void Wheel(float value, float delta)
+        {
+
+        }
 	
 		/// <summary>
 		/// Gets the x-coordinate of the previous position of the cursor in the room. This value might be non-integer if the View is scaled.
 		/// </summary>
-		public static double XPrevious
-		{
-			get; private set;
-		}
+		public static double XPrevious { get; private set; }
 
 		/// <summary>
 		/// Gets the y-coordinate of the previous position of the cursor in the room. This value might be non-integer if the View is scaled.
 		/// </summary>
-		public static double YPrevious
-		{
-			get; private set;
-		}
+		public static double YPrevious { get; private set; }
+
+        /// <summary>
+        /// Gets the current value of the mouse wheel.
+        /// </summary>
+        public static double WheelValue { get; private set; }
+
+        /// <summary>
+        /// Gets the change in the mouse wheel value from the last step.
+        /// </summary>
+        public static double WheelDelta { get; private set; }
 
 		/// <summary>
 		/// Gets the previous location of the cursor in the room. The coordinates might be non-integer if the View is scaled.
