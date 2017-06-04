@@ -52,11 +52,11 @@ namespace GRaff
 
 			Window.KeyDown += (sender, e) => { Keyboard.Press((Key)e.Key); };
 			Window.KeyUp += (sender, e) => { Keyboard.Release((Key)e.Key); };
-			Window.Mouse.Move += (sender, e) => { Mouse.WindowX = e.X; Mouse.WindowY = e.Y;  };
-			Window.Mouse.ButtonDown += (sender, e) => { Mouse.Press((MouseButton)e.Button); };
-			Window.Mouse.ButtonUp += (sender, e) => { Mouse.Release((MouseButton)e.Button); };
+			Window.MouseMove += (sender, e) => { Mouse.WindowX = e.X; Mouse.WindowY = e.Y;  };
+			Window.MouseDown += (sender, e) => { Mouse.Press((MouseButton)e.Button); };
+			Window.MouseUp += (sender, e) => { Mouse.Release((MouseButton)e.Button); };
 
-			Window.RenderFrame += (sender, e) => {
+            Window.RenderFrame += (sender, e) => {
 
 				GL.Clear(ClearBufferMask.ColorBufferBit);
 

@@ -14,6 +14,7 @@ using GLPrimitiveType = OpenTK.Graphics.ES30.PrimitiveType;
 using coord = System.Single;
 #endif
 
+#warning TODO: Review class. In particular, optimize with graphics shader, optimize monocolored primitives
 namespace GRaff.Graphics
 {
 	public sealed class Surface
@@ -108,6 +109,7 @@ namespace GRaff.Graphics
 		public void Clear(Color color)
 		{
 			GL.ClearColor(color.ToOpenGLColor());
+            GL.Clear(ClearBufferMask.ColorBufferBit);
 		}
 
 		internal void DrawPrimitive(GraphicsPoint[] vertices, Color[] colors, PrimitiveType type)

@@ -23,8 +23,10 @@ namespace GRaff.GraphicTest
 
 				using (_framebuffer.Bind())
 				{
+                    Draw.Clear(Colors.Red);
+
 					Draw.Texture(giraffe, 0, 0);
-#warning Clear red
+
 					Draw.FillTriangle(Colors.Black.Transparent(0), Colors.Black, Colors.Black, 0, 0, 0, 10, 10, 0);
 					Draw.FillTriangle(Colors.Black.Transparent(0), Colors.Black, Colors.Black, w, 0, w, 10, w - 10, 0);
 					Draw.FillTriangle(Colors.Black.Transparent(0), Colors.Black, Colors.Black, 0, h, 0, h - 10, 10, h);
