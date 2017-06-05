@@ -56,7 +56,8 @@ namespace GRaff
 
         internal static void Wheel(float value, float delta)
         {
-
+            WheelValue = value;
+            WheelDelta = delta;
         }
 	
 		/// <summary>
