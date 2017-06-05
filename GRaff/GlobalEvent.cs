@@ -23,11 +23,11 @@ namespace GRaff
 
 		internal static void OnBeginStep() => BeginStep?.Invoke();
 
-		internal static void OnStep() => Step.Invoke();
+		internal static void OnStep() => Step?.Invoke();
 
 		internal static void OnEndStep() => EndStep?.Invoke();
 
-		internal static void OnKey(Key key) => Key.Invoke(key);
+		internal static void OnKey(Key key) => Key?.Invoke(key);
 
 		internal static void OnKeyPressed(Key key) => KeyPressed?.Invoke(key);
 

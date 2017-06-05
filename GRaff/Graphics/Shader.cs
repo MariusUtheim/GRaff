@@ -11,7 +11,7 @@ namespace GRaff.Graphics
 {
 	public partial class Shader : IDisposable
 	{
-		public const string Version = "400 core";
+		public const string Version = "420 core";
 		public const string Header = "#version " + Version + @"
 ";
         private bool _disposed;
@@ -22,7 +22,9 @@ namespace GRaff.Graphics
 			GL.ShaderSource(Id, source);
 			GL.CompileShader(Id);
 
-			string msg;
+            GLError.Check();
+
+            string msg;
 			if ((msg = GL.GetShaderInfoLog(Id)) != "")
 				throw new ShaderException("Compiling a GRaff.Shader caused a message: " + msg);
 		}

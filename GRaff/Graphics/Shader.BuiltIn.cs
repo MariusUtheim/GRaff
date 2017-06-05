@@ -5,7 +5,7 @@ namespace GRaff.Graphics
 	public partial class Shader
     {
 
-		public static Shader DefaultColoredVertexShader = new Shader(true,
+        public static Shader DefaultColoredVertexShader = new Shader(true,
 				Header + @"
 				in highp vec2 in_Position;
 				in highp vec4 in_Color;
@@ -38,19 +38,21 @@ namespace GRaff.Graphics
 		public static Shader DefaultColoredFragmentShader = new Shader(false,
 			Header + @"
 			in highp vec4 pass_Color;
+            out highp vec4 out_FragColor; 
 			
 			void main () {
-				gl_FragColor = pass_Color;
+				out_FragColor = pass_Color;
 			}");
 
 		public static Shader DefaultTexturedFragmentShader = new Shader(false,
 			Header + @"
 			in lowp vec4 pass_Color;
 			in highp vec2 pass_TexCoord;
+            out highp vec4 out_FragColor;
 			uniform highp sampler2D tex;
 
 			void main () {
-				gl_FragColor = texture(tex, pass_TexCoord).rgba * pass_Color;
+				out_FragColor = texture(tex, pass_TexCoord).rgba * pass_Color;
 			}");
 
 	}

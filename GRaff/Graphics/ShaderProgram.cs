@@ -15,8 +15,6 @@ namespace GRaff.Graphics
 #warning Review class
 	public class ShaderProgram : IDisposable
 	{
-		public const string ShaderVersion = "400 core";
-
 		private bool _disposed = false;
 
 		public static ShaderProgram DefaultColored = new ShaderProgram(Shader.DefaultColoredVertexShader, Shader.DefaultColoredFragmentShader);
@@ -41,7 +39,9 @@ namespace GRaff.Graphics
 			GL.BindAttribLocation(Id, 1, "in_Color");
 			GL.BindAttribLocation(Id, 2, "in_TexCoord");
 
-			foreach (var shader in shaders)
+            GL.BindFragDataLocation(Id, 0, "out_FragColor");
+            
+            foreach (var shader in shaders)
 				GL.DetachShader(Id, shader.Id);
 		}
 
