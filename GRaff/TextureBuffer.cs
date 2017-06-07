@@ -36,10 +36,10 @@ namespace GRaff
 			GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Linear);
 			GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
 
-			GLError.Check();
-		}
+            _Graphics.ErrorCheck();
+        }
 
-		unsafe public TextureBuffer(Color[,] colors)
+        unsafe public TextureBuffer(Color[,] colors)
 			: this(colors.GetLength(1), colors.GetLength(0))
 		{
 			Contract.Requires<ArgumentNullException>(colors != null);
@@ -56,10 +56,10 @@ namespace GRaff
 					handle.Free();
 			}
 
-			GLError.Check();
-		}
+            _Graphics.ErrorCheck();
+        }
 
-		public TextureBuffer(int width, int height, IntPtr data)
+        public TextureBuffer(int width, int height, IntPtr data)
 			: this(width, height)
 		{
 			Contract.Requires<ArgumentOutOfRangeException>(width > 0 && height > 0);
@@ -95,8 +95,8 @@ namespace GRaff
 				{
 					if (Giraffe.IsRunning)
 						GL.DeleteTexture(id);
-					GLError.Check();
-				});
+                    _Graphics.ErrorCheck();
+                });
 				IsDisposed = true;
 			}
 		}

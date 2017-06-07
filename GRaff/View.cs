@@ -94,9 +94,7 @@ namespace GRaff
 
 			var tr = GetMatrix();
 
-			GLError.Check();
-
-			var projectionMatrix = new Matrix4(
+            var projectionMatrix = new Matrix4(
 				(float)tr.M00, (float)tr.M01, 0, (float)tr.M02,
 				(float)tr.M10, (float)tr.M11, 0, (float)tr.M12,
 							0,			   0, 1, 0,
@@ -105,16 +103,12 @@ namespace GRaff
 
 			int matrixLocation;
 			matrixLocation = GL.GetUniformLocation(ShaderProgram.Current.Id, "GRaff_ViewMatrix");
+            GL.UniformMatrix4(matrixLocation, true, ref projectionMatrix);
 
-			GLError.Check();
+            _Graphics.ErrorCheck();
+        }
 
-			GL.UniformMatrix4(matrixLocation, true, ref projectionMatrix);
-
-			GLError.Check();
-
-		}
-		
-		public static Point ScreenToRoom(double x, double y)
+        public static Point ScreenToRoom(double x, double y)
 		{
 			return GetMatrix().Inverse * new Point(2.0 * x / Window.Width - 1.0, -2.0 * y / Window.Height + 1.0);
 			//return GetMatrix() * new Point(

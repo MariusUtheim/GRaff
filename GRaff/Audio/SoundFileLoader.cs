@@ -25,6 +25,7 @@ namespace GRaff.Audio
 			public readonly byte[] Buffer;
 		}
 
+
 		public static SoundFile Load(string fileName)
 		{
 			var fileInfo = new FileInfo(fileName);
@@ -35,7 +36,7 @@ namespace GRaff.Audio
 				if (stream.Length < 4)
 					throw new FileFormatException("Invalid file format. Only .wav and .ogg are supported.");
 				byte[] headerData = new byte[8];
-				stream.ReadAsync(headerData, 0, 8);
+				stream.Read(headerData, 0, 8);
 				header = new string(headerData.Select(b => (char)b).ToArray());
 			}
 
@@ -54,6 +55,7 @@ namespace GRaff.Audio
 				throw new FileFormatException($"Invalid file header '{header}'. Only .wav and .ogg is supported.");
 
 		}
+
 
 		public static async Task<SoundFile> LoadAsync(string fileName)
 		{
@@ -76,6 +78,7 @@ namespace GRaff.Audio
 			else
 				throw new FileFormatException("Invalid file format. Only .wav and .ogg is supported.");
 		}
+
 
 		private static async Task<SoundFile> LoadWaveAsync(FileInfo fileInfo)
 		{
@@ -109,6 +112,7 @@ namespace GRaff.Audio
 			}
 		}
 
+
 		private static SoundFile LoadWave(FileInfo fileInfo)
 		{
 			using (var stream = fileInfo.OpenRead())
@@ -138,7 +142,7 @@ namespace GRaff.Audio
 			}
 		}
 
-		private static string toString(byte[] array)
+		private static string _toString(byte[] array)
 		{
 			return new string(array.Select(b => (char)b).ToArray());
 		}

@@ -22,10 +22,10 @@ namespace GRaff.Graphics
 			GL.ShaderSource(Id, source);
 			GL.CompileShader(Id);
 
-            GLError.Check();
+            _Graphics.ErrorCheck();
 
-            string msg;
-			if ((msg = GL.GetShaderInfoLog(Id)) != "")
+            var msg = GL.GetShaderInfoLog(Id);
+            if (msg != "")
 				throw new ShaderException("Compiling a GRaff.Shader caused a message: " + msg);
 		}
 

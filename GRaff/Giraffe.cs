@@ -76,8 +76,8 @@ namespace GRaff
 				var initialRoom = new Room(windowWidth, windowHeight);
 				initialRoom._Enter();
 
-				Graphics._Initializer.Initialize();
-				Audio._Initializer.Initialize();
+				Graphics._Graphics.Initialize();
+				Audio._Audio.Initialize();
 				Window.VSync = VSyncMode.On;
 				IsRunning = true; 
 				

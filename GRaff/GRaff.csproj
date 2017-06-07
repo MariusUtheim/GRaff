@@ -117,6 +117,7 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Contract.cs" />
     <Compile Include="Forms\Button.cs" />
     <Compile Include="Forms\DisplayObject.cs" />
     <Compile Include="Forms\DisplayObject.EventHandling.cs" />
@@ -127,7 +128,6 @@
     <Compile Include="Forms\OpenFileDialog.cs" />
     <Compile Include="Forms\Quad.cs" />
     <Compile Include="Graphics\Framebuffer.cs" />
-    <Compile Include="Graphics\GLError.cs" />
     <Compile Include="Graphics\Quadrilateral.cs" />
     <Compile Include="Graphics\Text\FontOptions.cs" />
     <Compile Include="Graphics\Text\Glyph.cs" />
@@ -217,12 +217,12 @@
     <Compile Include="Audio\OggVorbisDecoder\VorbisInfo.cs" />
     <Compile Include="Audio\SoundFileLoader.cs" />
     <Compile Include="Audio\WaveFile.cs" />
-    <Compile Include="Audio\_Initializer.cs" />
+    <Compile Include="Audio\_Audio.cs" />
     <Compile Include="Graphics\BlendingFactor.cs" />
     <Compile Include="Graphics\ColoredRenderSystem.cs" />
     <Compile Include="Graphics\Context.cs" />
     <Compile Include="Graphics\Scissor.cs" />
-    <Compile Include="Graphics\_Initializer.cs" />
+    <Compile Include="Graphics\_Graphics.cs" />
     <Compile Include="Particles\ColoredParticleRenderer.cs" />
     <Compile Include="Particles\IParticleRenderer.cs" />
     <Compile Include="Particles\TexturedParticleRenderer.cs" />
@@ -343,7 +343,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Graphics\Text\TrueTypeLoader.cs" />
-    <None Include="packages.config" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

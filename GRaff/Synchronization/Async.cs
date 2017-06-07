@@ -41,7 +41,8 @@ namespace GRaff.Synchronization
 			return new AsyncOperation().ThenQueue(action);
 		}
 
-		public static IAsyncOperation Run<TIn>(TIn capturedValue, Action<TIn> action)
+#warning Change to Async.Capture(capturedValue).Then___(action)
+        public static IAsyncOperation Run<TIn>(TIn capturedValue, Action<TIn> action)
 		{
 			return new AsyncOperation<TIn>(capturedValue).ThenQueue(action);
 		}
