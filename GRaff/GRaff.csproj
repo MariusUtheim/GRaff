@@ -118,15 +118,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Contract.cs" />
-    <Compile Include="Forms\Button.cs" />
-    <Compile Include="Forms\DisplayObject.cs" />
-    <Compile Include="Forms\DisplayObject.EventHandling.cs" />
-    <Compile Include="Forms\Form.cs" />
-    <Compile Include="Forms\FormEventArgs.cs" />
-    <Compile Include="Forms\MessageBox.cs" />
-    <Compile Include="Forms\MouseEventArgs.cs" />
-    <Compile Include="Forms\OpenFileDialog.cs" />
-    <Compile Include="Forms\Quad.cs" />
     <Compile Include="Graphics\Framebuffer.cs" />
     <Compile Include="Graphics\Quadrilateral.cs" />
     <Compile Include="Graphics\Text\FontOptions.cs" />
