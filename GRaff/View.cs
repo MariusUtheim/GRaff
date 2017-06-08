@@ -168,7 +168,7 @@ namespace GRaff
 
 			~ViewContext()
 			{
-				Async.ThrowException(new InvalidOperationException($"A context returned from {nameof(GRaff.View.UseView)} was garbage collected before Dispose was called."));
+				Async.Throw(new ObjectDisposedIncorrectlyException($"A context returned from {nameof(GRaff.View.UseView)} was garbage collected before Dispose was called."));
 			}
 
 			public void Dispose()

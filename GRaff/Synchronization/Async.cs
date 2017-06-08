@@ -82,7 +82,7 @@ namespace GRaff.Synchronization
 			return new AsyncOperation(AsyncOperationResult.Failure(ex));
 		}
 
-		public static void ThrowException(Exception ex)
+		public static void Throw(Exception ex)
 		{
 			_exceptions.Add(ex);
 		}

@@ -31,7 +31,7 @@ namespace GRaff.Graphics
 
 			~ScissorContext()
 			{
-				Async.ThrowException(new InvalidOperationException("A context returned from GRaff.Graphics.Scissor.Context was garbage collected before Dispose was called."));
+				Async.Throw(new ObjectDisposedIncorrectlyException("A context returned from GRaff.Graphics.Scissor.Context was garbage collected before Dispose was called."));
 			}
 
 			public void Dispose()

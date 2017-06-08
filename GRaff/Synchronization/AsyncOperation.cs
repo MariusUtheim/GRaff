@@ -52,7 +52,7 @@ namespace GRaff.Synchronization
 		~AsyncOperation()
 		{
 			if (!_hasPassedException && Result != null && !Result.IsSuccessful && _otherwiseClause == null && Giraffe.IsRunning)
-				Async.ThrowException(new AsyncException("An asynchronous operation threw an exception that was finalized before it was handled. See the inner exception for more details.", Result.Error));
+				Async.Throw(new ObjectDisposedIncorrectlyException("An asynchronous operation threw an exception that was finalized before it was handled. See the inner exception for more details.", Result.Error));
 		}
 
 		protected IAsyncOperator Operator { get; private set; }
@@ -112,11 +112,11 @@ namespace GRaff.Synchronization
 			else
 			{
 				State = AsyncOperationState.Failed;
-				AsyncOperation continuation;
-				while (_continuations.TryDequeue(out continuation))
-					continuation._complete(Result);
-				if (IsDone)
-					Async.ThrowException(reason);
+
+                while (_continuations.TryDequeue(out AsyncOperation continuation))
+                    continuation._complete(Result);
+                if (IsDone)
+					Async.Throw(reason);
 
 
 				lock (this)
