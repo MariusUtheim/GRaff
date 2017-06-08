@@ -205,9 +205,8 @@ namespace GRaff
 			=> new Point(v.X, v.Y);
 
 
-        public static implicit operator Vector((double x, double y) v)
-            => new Vector(v.x, v.y);
-
+        public static implicit operator Vector((double x, double y) v) => new Vector(v.x, v.y);
+        public static implicit operator (double x, double y)(Vector v) => (v.X, v.Y);
         public void Deconstruct(out double x, out double y)
         {
             x = this.X;
