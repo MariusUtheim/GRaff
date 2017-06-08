@@ -41,9 +41,7 @@ namespace GRaff.Audio
 			}
 
 			if (header.Substring(0, 4) != "RIFF" && header.Substring(0, 4) != "OggS")
-			{
 				throw new FileFormatException("Invalid file format. Only .wav and .ogg are supported.");
-			}
 			header = header.Substring(0, 4);
 
 			if (header == "RIFF")
@@ -51,7 +49,6 @@ namespace GRaff.Audio
 			else if (header == "OggS")
 				return LoadOgg(fileInfo);
 			else
-#warning This does happen sometimes when loading the same file over again
 				throw new FileFormatException($"Invalid file header '{header}'. Only .wav and .ogg is supported.");
 
 		}
@@ -140,11 +137,6 @@ namespace GRaff.Audio
 
 				return new SoundFile(file.bitrate, file.channels, (int)file.sampleRate, file.buffer);
 			}
-		}
-
-		private static string _toString(byte[] array)
-		{
-			return new string(array.Select(b => (char)b).ToArray());
 		}
 
 		private static async Task<SoundFile> LoadOggAsync(FileInfo fileInfo)

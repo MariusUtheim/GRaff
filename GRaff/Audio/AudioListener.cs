@@ -7,14 +7,13 @@ using OpenTK.Audio.OpenAL;
 
 namespace GRaff.Audio
 {
-	public static class Listener
+	public static class AudioListener
 	{
 		public static Point Location
 		{
 			get
 			{
-				float v1, v2, v3;
-				AL.GetListener(ALListener3f.Position, out v1, out v2, out v3);
+				AL.GetListener(ALListener3f.Position, out float v1, out float v2, out _);
 				return new Point(v1, v2);
 			}
 
@@ -29,8 +28,7 @@ namespace GRaff.Audio
 		{
 			get
 			{
-				float v1, v2, v3;
-				AL.GetListener(ALListener3f.Velocity, out v1, out v2, out v3);
+				AL.GetListener(ALListener3f.Velocity, out float v1, out float v2, out _);
 				if (v1 == 0 && v2 == 0)
 					return new Vector(0, _cachedDirection);
 				else
@@ -52,9 +50,8 @@ namespace GRaff.Audio
 		{
 			get
 			{
-				float v;
-				AL.GetListener(ALListenerf.Gain, out v);
-				return v;
+                AL.GetListener(ALListenerf.Gain, out float v);
+                return v;
 			}
 
 			set
@@ -89,14 +86,8 @@ namespace GRaff.Audio
 
 		public static double SpeedOfSound
 		{
-			get
-			{
-				return AL.Get(ALGetFloat.SpeedOfSound);
-			}
-			set
-			{
-				AL.SpeedOfSound((float)value);
-			}
+			get => AL.Get(ALGetFloat.SpeedOfSound);
+			set => AL.SpeedOfSound((float)value);
 		}
 	}
 }

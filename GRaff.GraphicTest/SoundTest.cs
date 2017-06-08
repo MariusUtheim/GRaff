@@ -24,8 +24,8 @@ namespace GRaff.GraphicTest
 		{
             if (key == Key.P)
             {
-                if (instance?.State == SoundState.Paused)
-                    instance.Resume();
+                if (instance?.Source.State == SoundState.Paused)
+                    instance.Source.Play();
                 else
                     instance = buffer.Play(false, volume: 3);
             }
@@ -34,7 +34,7 @@ namespace GRaff.GraphicTest
             else if (key == Key.O)
                 instance = bufferWithOffset.Play(true);
             else if (key == Key.U)
-                instance?.Pause();
+                instance?.Source.Pause();
             else if (key == Key.S)
             {
                 instance?.Destroy();
@@ -44,7 +44,7 @@ namespace GRaff.GraphicTest
 
         public override void OnStep()
         {
-            Window.Title = instance?.State.ToString() ?? "No sound is created";
+            Window.Title = instance?.Source.State.ToString() ?? "No sound is created";
         }
 
         public override void OnDraw()
