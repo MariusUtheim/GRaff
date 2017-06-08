@@ -1,9 +1,8 @@
-﻿using System;
+﻿
 
-
-namespace GRaff
+namespace GRaff.Graphics.Text
 {
-	public enum FontAlignment
+    public enum FontAlignment
 	{
 		Horizontal = 0x03,
 		Vertical = 0x30,

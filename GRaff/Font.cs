@@ -1,18 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics.Contracts;
 using System.Drawing.Text;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using GRaff.Graphics;
 using GRaff.Graphics.Text;
 using GRaff.Synchronization;
 
+
 namespace GRaff
 {
-	public class Font : IDisposable
+    public class Font : IDisposable
 	{
 		private static readonly Regex NewlinePattern = new Regex("\r\n|\n");
 

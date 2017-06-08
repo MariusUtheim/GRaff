@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Diagnostics.Contracts;
 using System.Linq;
-using GRaff.Graphics;
 using GRaff.Synchronization;
 
-namespace GRaff
+namespace GRaff.Graphics
 {
-	public sealed class Sprite
+    public sealed class Sprite
 	{
 		private readonly Vector? _origin;
 		private readonly MaskShape _maskShape;

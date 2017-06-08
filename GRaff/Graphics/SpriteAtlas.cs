@@ -10,7 +10,7 @@ using System.Xml.Serialization;
 using GRaff.Graphics;
 using GRaff.Synchronization;
 
-namespace GRaff
+namespace GRaff.Graphics
 {
 	public class SpriteAtlas
 	{
