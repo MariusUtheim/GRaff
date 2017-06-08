@@ -7,15 +7,17 @@ namespace GRaff
 	/// </summary>
 	public static class Time
 	{
-		/// <summary>
-		/// Indicates that a frame has occurred, for the purpose of calculations such as FPS.
-		/// </summary>
-		public static void Frame()
-		{
-			LoopCount++;
-			_updateFps();
-		}
-
+        private static int _previousLoopTick = -1;
+        internal static void Loop()
+        {
+            var time = Environment.TickCount;
+            if (_previousLoopTick == -1)
+                Delta = 0;
+            else
+                Delta = time - _previousLoopTick;
+            _previousLoopTick = time;
+            LoopCount++;
+        }
 
 		/// <summary>
 		/// Gets the number of steps that has occurred since the game started.
@@ -25,6 +27,12 @@ namespace GRaff
 			get;
 			private set;
 		}
+
+        /// <summary>
+        /// Gets the number of milliseconds since the previous step. If the game is running at full fps and a 
+        /// constant loop rate, this value should remain approximately constant. 
+        /// </summary>
+        public static int Delta { get; private set; }
 
 		/// <summary>
 		/// Gets the number of milliseconds since the computer started.
@@ -45,11 +53,11 @@ namespace GRaff
 		private static int _fps;
 		private static int _currentFps = 0;
 		private static double _fpsSeconds = 0;
-		private static int _previousTick;
-		private static void _updateFps()
+		private static int _previousFrameTick;
+		internal static void UpdateFps()
 		{
 			int tick = Environment.TickCount;
-			if (tick - _previousTick > 1000)
+			if (tick - _previousFrameTick > 1000)
 			{
 				_fps = 0;
 				_fpsSeconds = 0;
@@ -57,7 +65,7 @@ namespace GRaff
 			else
 			{
 				_currentFps++;
-				_fpsSeconds += (tick - _previousTick) / 1000.0;
+				_fpsSeconds += (tick - _previousFrameTick) / 1000.0;
 				if (_fpsSeconds > 1)
 				{
 					_fps = _currentFps;
@@ -66,7 +74,7 @@ namespace GRaff
 				}
 			}
 
-			_previousTick = tick;
+			_previousFrameTick = tick;
 		}
 
 		/// <summary>

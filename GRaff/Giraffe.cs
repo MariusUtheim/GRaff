@@ -110,6 +110,8 @@ namespace GRaff
         /// </summary>
         public static void Loop()
         {
+            Time.Loop();
+
             GlobalEvent.OnBeginStep();
             _do<GameObject>(obj => obj.OnBeginStep());
 
@@ -239,7 +241,7 @@ namespace GRaff
                 instance.OnDraw();
 
             GlobalEvent.OnDrawForeground();
-            Time.Frame();
+            Time.UpdateFps();
         }
 
         /// <summary>
