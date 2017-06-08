@@ -4,6 +4,8 @@ namespace GRaff
 {
 	public static class Colors
 	{
+        public static Color Invisible { get; } = new Color(0, 0, 0, 0);
+
 		public static Color Red { get; } = new Color(255, 0, 0);
 
 		public static Color Green { get; } = new Color(0, 255, 0);
