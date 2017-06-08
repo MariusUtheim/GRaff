@@ -30,8 +30,8 @@ namespace GRaff.Synchronization
 		{
 			return new AsyncOperation();
 		}
-
-		public static IAsyncOperation<TPass> Operation<TPass>(TPass value)
+        
+		public static IAsyncOperation<TPass> Capture<TPass>(TPass value)
 		{
 			return new AsyncOperation<TPass>(value);
 		}
@@ -40,23 +40,12 @@ namespace GRaff.Synchronization
 		{
 			return new AsyncOperation().ThenQueue(action);
 		}
-
-#warning Change to Async.Capture(capturedValue).Then___(action)
-        public static IAsyncOperation Run<TIn>(TIn capturedValue, Action<TIn> action)
-		{
-			return new AsyncOperation<TIn>(capturedValue).ThenQueue(action);
-		}
-
+        
 		public static IAsyncOperation<TPass> Run<TPass>(Func<TPass> action)
 		{
 			return new AsyncOperation().ThenQueue(action);
 		}
-
-		public static IAsyncOperation<TPass> Run<TIn, TPass>(TIn capturedValue, Func<TIn, TPass> action)
-		{
-			return new AsyncOperation<TIn>(capturedValue).ThenQueue(action);
-		}
-
+        
 		public static IAsyncOperation RunAsync(Func<Task> action)
 		{
 			return new AsyncOperation().ThenAsync(action);

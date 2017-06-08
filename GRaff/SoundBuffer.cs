@@ -152,7 +152,7 @@ namespace GRaff
         {
             if (!IsDisposed)
             {
-                Async.Run(new { Main = this.Id, Intro = this.IntroId }, ids =>
+                Async.Capture(new { Main = this.Id, Intro = this.IntroId }).ThenQueue(ids =>
                 {
                     if (Giraffe.IsRunning)
                     {

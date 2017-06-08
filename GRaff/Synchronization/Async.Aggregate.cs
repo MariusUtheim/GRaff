@@ -64,7 +64,7 @@ namespace GRaff.Synchronization
 		public static IAsyncOperation<int> Any(params IAsyncOperation[] operations)
 		{
 			if (operations == null || operations.Length == 0)
-				return Async.Operation(0);
+				return Async.Capture(0);
 
 			var deferred = new Deferred<int>();
 			var triggeredOperation = 0;

@@ -42,7 +42,7 @@ namespace GRaff.Graphics
 			if (!_isDisposed)
 			{
 				Console.WriteLine("[Framebuffer] Disposed");
-				Async.Run(_id, id =>
+				Async.Capture(_id).ThenQueue(id =>
 				{
 					if (Giraffe.IsRunning)
 						GL.DeleteFramebuffer(id);

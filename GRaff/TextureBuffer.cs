@@ -91,7 +91,7 @@ namespace GRaff
 		{
 			if (!IsDisposed)
 			{
-				Async.Run(Id, id =>
+				Async.Capture(Id).ThenQueue(id =>
 				{
 					if (Giraffe.IsRunning)
 						GL.DeleteTexture(id);
