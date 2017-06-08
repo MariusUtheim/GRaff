@@ -156,7 +156,6 @@
     <Compile Include="Graphics\AnimationStrip.cs" />
     <Compile Include="Synchronization\Async.Aggregate.cs" />
     <Compile Include="Synchronization\Async.cs" />
-    <Compile Include="Synchronization\AsyncOperationElement.cs" />
     <Compile Include="Synchronization\AsyncOperationRejectedEventArgs.cs" />
     <Compile Include="Synchronization\Coroutine.cs" />
     <Compile Include="Font.cs" />
