@@ -114,7 +114,7 @@ namespace GRaff
 
 		}
 
-		public bool HasKerning { get; private set; }
+		public bool HasKerning { get; }
 
 		public int Height { get; }
 		

@@ -8,10 +8,10 @@ using GRaff.Audio;
 
 namespace GRaff.GraphicTest
 {
-	[Test(Order = -1)]
+	[Test]
 	class SoundTest : GameElement, IKeyPressListener
 	{
-		SoundBuffer buffer = SoundBuffer.Load(@"C:\test\sound.wav");
+		SoundBuffer buffer = SoundBuffer.Load(@"C:\test\sound.ogg");
         SoundBuffer bufferWithOffset = null;// SoundBuffer.LoadWithOffset(@"C:\test\sound.wav", 1);
 		SoundElement instance;
 
@@ -56,14 +56,10 @@ namespace GRaff.GraphicTest
             }
         }
 
-        public override void OnDestroy()
+        protected override void OnDestroy()
 		{
-            if (_Audio.ClearError())
-            { }
             instance?.Destroy();
-            _Audio.ErrorCheck();
 			buffer.Dispose();
-            _Audio.ErrorCheck();
         //    bufferWithOffset?.Dispose();
 		}
 	}

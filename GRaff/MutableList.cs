@@ -7,28 +7,28 @@ using System.Threading.Tasks;
 namespace GRaff
 {
 	[System.Diagnostics.Contracts.ContractVerification(false)]
-	internal class GameElementDepthComparer : IComparer<IGameElement>
+	internal class GameElementDepthComparer : IComparer<GameElement>
 	{
 		public static readonly GameElementDepthComparer Instance = new GameElementDepthComparer();
 
 		private GameElementDepthComparer() { }
 
-		public int Compare(IGameElement x, IGameElement y)
+		public int Compare(GameElement x, GameElement y)
 		{
 			return -(x.Depth - y.Depth);
 		}
 	}
 
 	[System.Diagnostics.Contracts.ContractVerification(false)]
-	internal class InstanceList : MutableList<IGameElement>
+	internal class InstanceList : MutableList<GameElement>
 	{
-		public void Sort()
+#warning Change to use RBTree
+        public void Sort()
 		{
-		//	_list.Sort(GameElementDepthComparer.Instance);
 			_list = _list.OrderByDescending(instance => instance.Depth).ToList();
 		}
 
-		public override void Add(IGameElement item)
+		public override void Add(GameElement item)
 		{
 			_list.Add(item);
 			Sort();

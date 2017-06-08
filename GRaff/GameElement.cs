@@ -6,27 +6,10 @@ using System.Threading.Tasks;
 
 namespace GRaff
 {
-	public interface IDestroyListener : IGameElement
-	{
-		void OnDestroy();
-	}
-
-	public interface IGameElement
-	{
-		int Depth { get; }
-		void OnStep();
-	}
-
-	public interface IVisible : IGameElement
-	{
-		bool IsVisible { get; }
-		void OnDraw();
-	}
-
 	/// <summary>
 	/// Represents the most general game element that is automatically handled by the engine.
 	/// </summary>
-	public abstract class GameElement : IGameElement, IVisible, IDestroyListener
+	public abstract class GameElement
 	{
 		private int _depth;
 
@@ -46,12 +29,14 @@ namespace GRaff
 		/// </summary>
 		public bool IsVisible { get; set; } = true;
 
+        public bool Exists { get; internal set; }
+
 		public void Destroy()
 		{
-			Instance.Destroy(this);
+			Instance.Remove(this);
 		}
 
-		public virtual void OnDestroy() { }
+		protected virtual void OnDestroy() { }
 
 		/// <summary>
 		/// An action that is performed once every update loop.

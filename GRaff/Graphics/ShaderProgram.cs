@@ -74,8 +74,6 @@ namespace GRaff.Graphics
 		{
 			SetCurrent();
 			_setUniform("GRaff_LoopCount", Time.LoopCount);
-			_setUniform("GRaff_RoomWidth", Room.Current.Width);
-			_setUniform("GRaff_RoomHeight", Room.Current.Height);
 		}
 
 		protected void SetUniform(string name, int value)

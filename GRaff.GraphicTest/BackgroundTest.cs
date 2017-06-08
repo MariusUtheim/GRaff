@@ -23,7 +23,7 @@ namespace GRaff.GraphicTest
 			});
 		}
 
-		public override void OnDestroy()
+		protected override void OnDestroy()
 		{
 			background.Buffer = null;
 		}

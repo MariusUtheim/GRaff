@@ -47,7 +47,7 @@ namespace GRaff.GraphicTest
 
         }
 
-		public override void OnDestroy()
+		protected override void OnDestroy()
 		{
 			starSystem.Destroy();
 			pentagonSystem.Destroy();

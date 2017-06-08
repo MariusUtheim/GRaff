@@ -23,43 +23,47 @@ namespace GRaff
 			}
 		}
 
-		public static TGameElement Create<TGameElement>(TGameElement instance) where TGameElement : IGameElement
+		public static TGameElement Create<TGameElement>(TGameElement instance) where TGameElement : GameElement
 		{
-			_elements.Add(instance);
-			return instance;
+            if (!instance.Exists)
+            {
+                _elements.Add(instance);
+                instance.Exists = true;
+            }
+
+            return instance;
 		}
 
-		/// <summary>
-		/// Destroys the instance of this GRaff.GameObject, removing it from the game.
+        /// <summary>
+		/// Destroys the instance of this GRaff.GameElement, removing it from the game.
 		/// The instance will stop performing automatic actions such as Step and Draw,
 		/// but the C# object is not garbage collected while it is still being referenced.
 		/// </summary>
-		public static void Destroy(this IGameElement element)
+        /// <param name="element">The GRaff.GameElement to be destroyed.</param>
+        /// <returns>true if the element was destroyed; otherwise, e.g. if the element is already destroyed, returns false</returns>
+		public static bool Remove(this GameElement instance)
 		{
-			if (Remove(element))
-				(element as IDestroyListener)?.OnDestroy();
-		}
+            return _elements.Remove(instance);
+        }
 
-
-		internal static bool Remove(IGameElement instance)
-		{
-			return _elements.Remove(instance);
-		}
-
-		public static IEnumerable<IGameElement> All
+		public static IEnumerable<GameElement> All
 		{
             get
 			{
-				return _elements;
+                foreach (var element in _elements)
+                    yield return element;
 			}
 		}
+
+        public static IEnumerable<GameElement> Where(Func<GameElement, bool> predicate) => All.Where(predicate);
+        public static IEnumerable<T> OfType<T>() => All.OfType<T>();
     }
 
 	/// <summary>
 	/// Provides static methods to interact with the instances of a specific type.
 	/// </summary>
 	/// <typeparam name="T">The type of GameObject.</typeparam>
-	public static class Instance<T> where T : IGameElement
+	public static class Instance<T> where T : GameElement
 	{
 		private static bool _isAbstract;
 		private static Func<T> _parameterlessConstructor;
@@ -152,10 +156,11 @@ namespace GRaff
 		/// <param name="x">The first argument of the called constructor, or the x-coordinate where the TGameObject will be placed.</param>
 		/// <param name="y">The second argument of the called constructor, or the y-coordinate where the TGameObject will be placed.</param>
 		/// <returns>The created TGameObject</returns>
+        /// <remarks>
 		/// If TGameobject has a constructor accepting two System.Double structures, this constructor is called with (x, y).
-		/// Otherwise, f TGameObject has a constructor accepting a GRaff.Point, this constructor is called with a new GRaff.Point using the specified (x, y) coordinates.
+		/// Otherwise, if TGameObject has a constructor accepting a GRaff.Point, this constructor is called with a new GRaff.Point using the specified (x, y) coordinates.
 		/// Otherwise, if it has a parameterless constructor, this constructor is called; then the X property of the created object is set to x, and the Y property is set to y.
-		/// If TGameObject has none of these constructors, a System.InvalidOperationException is thrown when Instance´1 is used.</remarks>
+		/// If TGameObject has none of these constructors, a System.InvalidOperationException is thrown when Instance´1 is used.
 		/// </remarks>
 		public static T Create(double x, double y)
 		{

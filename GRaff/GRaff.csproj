@@ -197,7 +197,7 @@
     <Compile Include="Randomness\LinePointDistribution.cs" />
     <Compile Include="Randomness\VectorDistribution.cs" />
     <Compile Include="Audio\DistanceModel.cs" />
-    <Compile Include="Audio\Listener.cs" />
+    <Compile Include="Audio\AudioListener.cs" />
     <Compile Include="Audio\OggVorbisDecoder\AudioInfo.cs" />
     <Compile Include="Audio\OggVorbisDecoder\Externals.cs" />
     <Compile Include="Audio\OggVorbisDecoder\OggVorbisEncodedStream.cs" />

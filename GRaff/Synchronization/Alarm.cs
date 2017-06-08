@@ -37,7 +37,7 @@ namespace GRaff.Synchronization
 	/// <summary>
 	/// Ticks down every step, and fires an event when the tick reaches zero.
 	/// </summary>
-	public class Alarm : IGameElement
+	public class Alarm : GameElement
 	{
 		public event EventHandler<AlarmEventArgs> Callback;
 
@@ -80,8 +80,6 @@ namespace GRaff.Synchronization
 			Instance.Create(alarm);
 			return alarm;
 		}
-
-		public int Depth { get; set; }
 
 		/// <summary>
 		/// Gets or sets the initial count of this GRaff.Alarm. This will contain the value passed to GRaff.Alarm.Restart(int)
@@ -154,12 +152,12 @@ namespace GRaff.Synchronization
 				State = AlarmState.Paused;
 		}
 
-		/// <summary>
-		/// Reduces the countdown of this GRaff.Alarm if it is running, and fires the alarm event if countdown reaches zero.
-		/// </summary>
-		/// <remarks>This method cannot be overriden by subclasses of GRaff.Alarm.</remarks>
-		public void OnStep()
-		{
+        /// <summary>
+        /// Reduces the countdown of this GRaff.Alarm if it is running, and fires the alarm event if countdown reaches zero.
+        /// </summary>
+        /// <remarks>This method cannot be overriden by subclasses of GRaff.Alarm.</remarks>
+        public override void OnStep()
+        {
 			if (State == AlarmState.Running)
 			{
 				Count--;
