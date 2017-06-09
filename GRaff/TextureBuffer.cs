@@ -23,7 +23,6 @@ namespace GRaff
     /// <remarks>
     /// The following file types are supported: BMP, GIF, EXIF, JPG, PNG and TIFF
     /// </remarks>
-#warning Review class
     public sealed class TextureBuffer : IDisposable
 	{
 		private TextureBuffer(int width, int height)
@@ -93,9 +92,11 @@ namespace GRaff
 			{
 				Async.Capture(Id).ThenQueue(id =>
 				{
-					if (Giraffe.IsRunning)
-						GL.DeleteTexture(id);
-                    _Graphics.ErrorCheck();
+                    if (Giraffe.IsRunning)
+                    {
+                        GL.DeleteTexture(id);
+                        _Graphics.ErrorCheck();
+                    }
                 });
 				IsDisposed = true;
 			}
@@ -104,11 +105,34 @@ namespace GRaff
 		public static TextureBuffer Load(string path)
 		{
 			Contract.Ensures(Contract.Result<TextureBuffer>() != null);
-			return LoadAsync(path).Wait();
-		}
+
+            byte[] buffer = File.ReadAllBytes(path);
+            Bitmap bitmap;
+
+            using (var bitmapStream = new MemoryStream(buffer))
+            using (var sourceImage = new Bitmap(bitmapStream))
+            {
+                bitmap = new Bitmap(sourceImage.Width, sourceImage.Height, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+                using (var gr = System.Drawing.Graphics.FromImage(bitmap))
+                    gr.DrawImage(sourceImage, new System.Drawing.Rectangle(0, 0, sourceImage.Width, sourceImage.Height));
+            }
+
+            var textureData = bitmap.LockBits(new System.Drawing.Rectangle(0, 0, bitmap.Width, bitmap.Height),
+                                  ImageLockMode.ReadOnly,
+                                  bitmap.PixelFormat);
+            try
+            {
+                return new TextureBuffer(textureData.Width, textureData.Height, textureData.Scan0);
+            }
+            finally
+            {
+                bitmap.UnlockBits(textureData);
+            }
+        }
 
 		public static IAsyncOperation<TextureBuffer> LoadAsync(string path)
 		{
+            Contract.Ensures(Contract.Result<IAsyncOperation<TextureBuffer>>() != null);
 			return Async.RunAsync(async () =>
 			{
 				byte[] buffer;
@@ -122,24 +146,27 @@ namespace GRaff
 
 
 				using (var bitmapStream = new MemoryStream(buffer))
+				using (var sourceImage = new Bitmap(bitmapStream))
 				{
-
-					using (var sourceImage = new Bitmap(bitmapStream))
-					{
-						var bitmap = new Bitmap(sourceImage.Width, sourceImage.Height, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
-						using (var gr = System.Drawing.Graphics.FromImage(bitmap))
-							gr.DrawImage(sourceImage, new System.Drawing.Rectangle(0, 0, sourceImage.Width, sourceImage.Height));
-						return bitmap;
-                    }
-				}
+					var bitmap = new Bitmap(sourceImage.Width, sourceImage.Height, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+					using (var gr = System.Drawing.Graphics.FromImage(bitmap))
+						gr.DrawImage(sourceImage, new System.Drawing.Rectangle(0, 0, sourceImage.Width, sourceImage.Height));
+					return bitmap;
+                }
 			})
 			.ThenQueue(bitmap =>
 			{
 				var textureData = bitmap.LockBits(new System.Drawing.Rectangle(0, 0, bitmap.Width, bitmap.Height),
 												  ImageLockMode.ReadOnly,
 												  bitmap.PixelFormat);
-				
-				return new TextureBuffer(textureData.Width, textureData.Height, textureData.Scan0);
+                try
+                {
+                    return new TextureBuffer(textureData.Width, textureData.Height, textureData.Scan0);
+                }
+                finally
+                {
+                    bitmap.UnlockBits(textureData);
+                }
 			});
 		}
 
@@ -156,8 +183,10 @@ namespace GRaff
 		public Texture Subtexture(Rectangle region)
 			=> Texture.FromTexCoords(this, region);
 
-		public void Save(string path)
+
+        public void Save(string path)
 		{
+            throw new NotImplementedException();
 			var img = new Bitmap(Width, Height, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
 
 			var data = img.LockBits(new System.Drawing.Rectangle(0, 0, img.Width, img.Height), ImageLockMode.WriteOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);

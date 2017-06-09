@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Drawing.Text;
 using System.IO;
@@ -12,12 +13,40 @@ namespace GRaff
 {
     public class Font : IDisposable
 	{
-		private static readonly Regex NewlinePattern = new Regex("\r\n|\n");
+        private class ImmutableSet : ISet<char>
+        {
+            private HashSet<char> _backingSet;
+
+            public ImmutableSet(IEnumerable<char> chars) => _backingSet = new HashSet<char>(chars);
+
+            public int Count => _backingSet.Count;
+            public bool IsReadOnly => true;
+            public bool Add(char item) => throw new NotSupportedException();
+            public void Clear() => throw new NotSupportedException();
+            public bool Contains(char item) => _backingSet.Contains(item);
+            public void CopyTo(char[] array, int arrayIndex) => _backingSet.CopyTo(array, arrayIndex);
+            public void ExceptWith(IEnumerable<char> other) => throw new NotSupportedException();
+            public IEnumerator<char> GetEnumerator() => _backingSet.GetEnumerator();
+            public void IntersectWith(IEnumerable<char> other) => throw new NotSupportedException();
+            public bool IsProperSubsetOf(IEnumerable<char> other) => _backingSet.IsProperSubsetOf(other);
+            public bool IsProperSupersetOf(IEnumerable<char> other) => _backingSet.IsProperSupersetOf(other);
+            public bool IsSubsetOf(IEnumerable<char> other) => _backingSet.IsSubsetOf(other);
+            public bool IsSupersetOf(IEnumerable<char> other) => _backingSet.IsSupersetOf(other);
+            public bool Overlaps(IEnumerable<char> other) => _backingSet.Overlaps(other);
+            public bool Remove(char item) => throw new NotSupportedException();
+            public bool SetEquals(IEnumerable<char> other) => _backingSet.SetEquals(other);
+            public void SymmetricExceptWith(IEnumerable<char> other) => throw new NotSupportedException();
+            public void UnionWith(IEnumerable<char> other) => throw new NotSupportedException();
+            void ICollection<char>.Add(char item) => throw new NotSupportedException();
+            IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+        }
+
+        private static readonly Regex NewlinePattern = new Regex("\r\n|\n");
 
 		private readonly Dictionary<char, FontCharacter> _characters = new Dictionary<char, FontCharacter>();
 		private readonly Dictionary<Tuple<char, char>, int> _kerning = new Dictionary<Tuple<char, char>, int>();
 
-		public static IReadOnlyCollection<char> ASCIICharacters { get; } = Array.AsReadOnly("\n !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~".ToArray());
+		public static ISet<char> ASCIICharacters { get; } = new ImmutableSet("\n !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~");
 		public static IEnumerable<string> GetFontFamilies() => new InstalledFontCollection().Families.Select(f => f.Name);
 
 
@@ -38,10 +67,7 @@ namespace GRaff
 			else
 				HasKerning = false;
 		}
-
-
-	
-
+        
 
 		public bool IsDisposed { get; private set; }
 
@@ -88,28 +114,32 @@ namespace GRaff
 			return LoadAsync(bitmapFile, fontDataFile).Wait();
 		}
 
-		public static Font LoadTrueType(string fontFamily, int size, IEnumerable<char> charSet, FontOptions options = FontOptions.None)
+
+        private static FileInfo _getFontFileName(string fontFamily, FontOptions options)
+        {
+            if ((options & FontOptions.Bold) == FontOptions.Bold)
+                fontFamily += " Bold";
+            if ((options & FontOptions.Italic) == FontOptions.Italic)
+                fontFamily += " Italic";
+
+            fontFamily += " (TrueType)";
+
+            var fontFileName = Path.Combine(@"C:\Windows\Fonts\", TrueTypeLoader.GetTrueTypeFile(fontFamily));
+
+            if (!File.Exists(fontFileName))
+                throw new FileNotFoundException();
+
+            return new FileInfo(fontFileName);
+        }
+
+        public static Font LoadTrueType(string fontFamily, int size, ISet<char> charSet, FontOptions options = FontOptions.None)
 		{
-#warning Threading still gives overhead
-			return LoadTrueTypeAsync(fontFamily, size, charSet, options).Wait();
+            return TrueTypeLoader.LoadTrueType(_getFontFileName(fontFamily, options), size, charSet, (options & FontOptions.IgnoreKerning) == FontOptions.IgnoreKerning);
 		}
 
-		public static IAsyncOperation<Font> LoadTrueTypeAsync(string fontFamily, int size, IEnumerable<char> charSet, FontOptions options = FontOptions.None)
+		public static IAsyncOperation<Font> LoadTrueTypeAsync(string fontFamily, int size, ISet<char> charSet, FontOptions options = FontOptions.None)
 		{
-			if ((options & FontOptions.Bold) == FontOptions.Bold)
-				fontFamily += " Bold";
-			if ((options & FontOptions.Italic) == FontOptions.Italic)
-				fontFamily += " Italic";
-
-			fontFamily += " (TrueType)";
-
-			var fontFileName = Path.Combine(@"C:\Windows\Fonts\", TrueTypeLoader.GetTrueTypeFile(fontFamily));
-
-			if (!File.Exists(fontFileName))
-				throw new FileNotFoundException();
-
-			return TrueTypeLoader.LoadTrueTypeAsync(new FileInfo(fontFileName), size, new HashSet<char>(charSet), (options & FontOptions.IgnoreKerning) == FontOptions.IgnoreKerning);
-
+			return TrueTypeLoader.LoadTrueTypeAsync(_getFontFileName(fontFamily, options), size, charSet, (options & FontOptions.IgnoreKerning) == FontOptions.IgnoreKerning);
 		}
 
 		public bool HasKerning { get; }
@@ -119,41 +149,37 @@ namespace GRaff
 		public int GetWidth(char character)
 		{
 			Contract.Requires<ObjectDisposedException>(!IsDisposed);
-			FontCharacter c;
-			if (_characters.TryGetValue(character, out c))
-				return c.XAdvance;
-			else
-				return 0;
-		}
+            if (_characters.TryGetValue(character, out FontCharacter c))
+                return c.XAdvance;
+            else
+                return 0;
+        }
 
 		public IntVector GetSize(char character)
 		{
 			Contract.Requires<ObjectDisposedException>(!IsDisposed);
-			FontCharacter c;
-			if (_characters.TryGetValue(character, out c))
-				return new IntVector(c.Width, c.Height);
-			else
-				return IntVector.Zero;
-		}
+            if (_characters.TryGetValue(character, out FontCharacter c))
+                return new IntVector(c.Width, c.Height);
+            else
+                return IntVector.Zero;
+        }
 
 		public Vector GetOffset(char character)
 		{
 			Contract.Requires<ObjectDisposedException>(!IsDisposed);
-			FontCharacter c;
-			if (_characters.TryGetValue(character, out c))
-				return new Vector(c.XOffset, c.YOffset);
-			else
-				return Vector.Zero;
-		}
+            if (_characters.TryGetValue(character, out FontCharacter c))
+                return new Vector(c.XOffset, c.YOffset);
+            else
+                return Vector.Zero;
+        }
 		
 		private int GetAdvance(char character)
 		{
-			FontCharacter c;
-			if (_characters.TryGetValue(character, out c))
-				return c.XAdvance;
-			else
-				return 0;
-		}
+            if (_characters.TryGetValue(character, out FontCharacter c))
+                return c.XAdvance;
+            else
+                return 0;
+        }
 
 		/// <summary>
 		/// Returns the offset between the position of the character at the specified position in the string and the end of that character.

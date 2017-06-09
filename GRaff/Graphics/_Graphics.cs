@@ -36,10 +36,9 @@ namespace GRaff.Graphics
 			catch (TypeInitializationException ex)
 			{
 				var innerException = ex.InnerException;
-#warning TODO
-				throw innerException;
-			}
-		}
+                System.Runtime.ExceptionServices.ExceptionDispatchInfo.Capture(ex.InnerException).Throw();
+            }
+        }
 
         [Conditional("DEBUG")]
         public static void ErrorCheck()

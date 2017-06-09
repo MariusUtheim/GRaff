@@ -44,9 +44,11 @@ namespace GRaff.Graphics
 				Console.WriteLine("[Framebuffer] Disposed");
 				Async.Capture(_id).ThenQueue(id =>
 				{
-					if (Giraffe.IsRunning)
-						GL.DeleteFramebuffer(id);
-					_Graphics.ErrorCheck();
+                    if (Giraffe.IsRunning)
+                    {
+                        GL.DeleteFramebuffer(id);
+                        _Graphics.ErrorCheck();
+                    }
 				});
 
 				_isDisposed = true;
