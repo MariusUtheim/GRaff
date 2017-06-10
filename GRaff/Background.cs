@@ -108,10 +108,7 @@ namespace GRaff
 					_renderSystem.SetVertices(UsageHint.StreamDraw, left, top, right, top, right, bottom, left, bottom);
 					_renderSystem.SetTexCoords(UsageHint.StreamDraw, u0, v0, u1, v0, u1, v1, u0, v1);
 
-					Buffer.Bind();
-					ShaderProgram.CurrentTextured.SetCurrent();
-
-					_renderSystem.Render(PrimitiveType.Quads, 4);
+                    _renderSystem.Render(Buffer, PrimitiveType.Quads, 4);
 				}
 				else
 					Draw.Texture(Buffer.Texture, XOffset, YOffset);

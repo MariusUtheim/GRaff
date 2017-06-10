@@ -18,7 +18,7 @@ namespace GRaff.GraphicTest
 		public GraphTest()
 		{
 
-		}
+        }
 
 		public override void OnStep()
 		{
@@ -57,13 +57,14 @@ namespace GRaff.GraphicTest
 			foreach (var vertex in _graph.Vertices)
 				Draw.FillCircle(Colors.Red, vertex.Location, Radius);
 			if (_selectedVertex != null && !_drag)
-				Draw.Line(Colors.Black, _selectedVertex.Location, Mouse.Location);
+				Draw.Line(Colors.White, _selectedVertex.Location, Mouse.Location);
 			foreach (var edge in _graph.Edges)
-				Draw.Line(Colors.DarkRed, edge.Line);
+				Draw.Line(Colors.Red, edge.Line);
 
 			if (_fromVertex != null)
 			{
-				foreach (var e in _graph.MinimalSpanningTree(_fromVertex, Double.PositiveInfinity))
+#warning This doesn't actually work correctly
+                foreach (var e in _graph.MinimalSpanningTree(_fromVertex, Double.PositiveInfinity))
 				{
 					Draw.Line(Colors.Green, e.Line);
 				}

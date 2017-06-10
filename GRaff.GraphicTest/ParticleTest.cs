@@ -11,6 +11,7 @@ namespace GRaff.GraphicTest
 		ParticleSystem starSystem;
 		ParticleSystem pentagonSystem;
 		PointAttractionBehavior attractor = new PointAttractionBehavior(Mouse.Location, 1);
+        Background background;
 
 		ParticleType _createStarType()
 		{
@@ -41,14 +42,15 @@ namespace GRaff.GraphicTest
 
 		public ParticleTest()
 		{
-			TestController.Background.Color = Colors.Black;
+			background = Instance.Create(new Background { Color = Colors.Black });
+            background.Depth = 1000;
 			starSystem = Instance.Create(new ParticleSystem(_createStarType()));
 			pentagonSystem = Instance.Create(new ParticleSystem(_createPentagonType()));
-
         }
 
 		protected override void OnDestroy()
 		{
+            background.Destroy();
 			starSystem.Destroy();
 			pentagonSystem.Destroy();
 		}

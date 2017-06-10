@@ -47,66 +47,75 @@ namespace GRaff.Graphics
 			GL.VertexAttribPointer(2, 2, GraphicsPoint.PointerType, false, 0, 0);
 		}
 
+        //TODO// Copy to framebuffer
+
+        private void Render(GraphicsPoint[] vertices, Color color, PrimitiveType type)
+        {
+            Contract.Requires(vertices != null);
+            ShaderProgram.Current.SetUniform("GRaff_IsTextured", false);
+
+            GL.BindVertexArray(_vertexArray);
+            GL.BindBuffer(BufferTarget.ArrayBuffer, _vertexBuffer);
+            GL.BufferData(BufferTarget.ArrayBuffer, new IntPtr(vertices.Length * sizeofPoint), vertices, BufferUsageHint.StreamDraw);
+
+            GL.DisableVertexAttribArray(1);
+            GL.VertexAttrib4N(1, color.R, color.G, color.B, color.A);
+
+            GL.DisableVertexAttribArray(2);
+            
+            GL.DrawArrays((GLPrimitiveType)type, 0, vertices.Length);
+        }
+
+        private void Render(GraphicsPoint[] vertices, Color[] colors, PrimitiveType type)
+        {
+            Contract.Requires(vertices != null && colors != null);
+            Contract.Requires(vertices.Length == colors.Length);
+
+            ShaderProgram.Current.SetUniform("GRaff_IsTextured", false);
+
+            GL.BindVertexArray(_vertexArray);
+            
+            GL.BindBuffer(BufferTarget.ArrayBuffer, _vertexBuffer);
+            GL.BufferData(BufferTarget.ArrayBuffer, new IntPtr(vertices.Length * sizeofPoint), vertices, BufferUsageHint.StreamDraw);
+
+            GL.EnableVertexAttribArray(1);
+            GL.BindBuffer(BufferTarget.ArrayBuffer, _colorBuffer);
+            GL.BufferData(BufferTarget.ArrayBuffer, new IntPtr(vertices.Length * sizeofColor), colors, BufferUsageHint.StreamDraw);
+
+            GL.DisableVertexAttribArray(2);
+
+            GL.DrawArrays((GLPrimitiveType)type, 0, vertices.Length);
+        }
+
+        internal void RenderTextured(Texture texture, GraphicsPoint[] vertices, Color[] colors)
+        {
+            Contract.Requires(texture != null && vertices != null && colors != null);
+            Contract.Requires(vertices.Length == colors.Length);
+
+            ShaderProgram.Current.SetUniform("GRaff_IsTextured", true);
+
+            GL.BindVertexArray(_vertexArray);
+            texture.Bind();
+
+            GL.BindBuffer(BufferTarget.ArrayBuffer, _vertexBuffer);
+            GL.BufferData(BufferTarget.ArrayBuffer, new IntPtr(vertices.Length * sizeofPoint), vertices, BufferUsageHint.StreamDraw);
+
+            GL.EnableVertexAttribArray(1);
+            GL.BindBuffer(BufferTarget.ArrayBuffer, _colorBuffer);
+            GL.BufferData(BufferTarget.ArrayBuffer, new IntPtr(vertices.Length * sizeofColor), colors, BufferUsageHint.StreamDraw);
+
+            GL.EnableVertexAttribArray(2);
+            GL.BindBuffer(BufferTarget.ArrayBuffer, _textureBuffer);
+            GL.BufferData(BufferTarget.ArrayBuffer, new IntPtr(vertices.Length * sizeofPoint), texture.QuadCoords, BufferUsageHint.StreamDraw);
+
+            GL.DrawArrays(GLPrimitiveType.Quads, 0, vertices.Length);
+        }
 
 
-#region To be implemented
 
-
-		public void Blit(Surface dest, IntRectangle srcRect, IntRectangle destRect)
-		{
-			throw new NotImplementedException();
-		}
-
-		public int Width
-		{
-			get { throw new NotImplementedException(); }
-		}
-
-		public int Height
-		{
-			get { throw new NotImplementedException(); }
-		}
-
-		public IntVector Size
-		{
-			get { return new IntVector(Width, Height); }
-		}
-
-#endregion
-
-#region Drawing functions
-
-		private void Render(GraphicsPoint[] vertices, Color[] colors, PrimitiveType type)
-		{
-			Contract.Requires(vertices != null && colors != null);
-			Contract.Requires(vertices.Length == colors.Length);
-			ShaderProgram.CurrentColored.SetCurrent();
-			GL.BindVertexArray(_vertexArray);
-			GL.BindBuffer(BufferTarget.ArrayBuffer, _vertexBuffer);
-			GL.BufferData(BufferTarget.ArrayBuffer, new IntPtr(vertices.Length * sizeofPoint), vertices, BufferUsageHint.StreamDraw);
-			GL.BindBuffer(BufferTarget.ArrayBuffer, _colorBuffer);
-			GL.BufferData(BufferTarget.ArrayBuffer, new IntPtr(vertices.Length * sizeofColor), colors, BufferUsageHint.StreamDraw);
-			GL.DrawArrays((GLPrimitiveType)type, 0, vertices.Length);
-		}
-
-		internal void RenderTextured(Texture texture, GraphicsPoint[] vertices, Color[] colors)
-		{
-			Contract.Requires(texture != null && vertices != null && colors != null);
-			Contract.Requires(vertices.Length == colors.Length);
-			GL.BindVertexArray(_vertexArray);
-			texture.Bind();
-
-			ShaderProgram.CurrentTextured.SetCurrent();
-			GL.BindBuffer(BufferTarget.ArrayBuffer, _vertexBuffer);
-			GL.BufferData(BufferTarget.ArrayBuffer, new IntPtr(vertices.Length * sizeofPoint), vertices, BufferUsageHint.StreamDraw);
-			GL.BindBuffer(BufferTarget.ArrayBuffer, _colorBuffer);
-			GL.BufferData(BufferTarget.ArrayBuffer, new IntPtr(vertices.Length * sizeofColor), colors, BufferUsageHint.StreamDraw);
-			GL.BindBuffer(BufferTarget.ArrayBuffer, _textureBuffer);
-			GL.BufferData(BufferTarget.ArrayBuffer, new IntPtr(vertices.Length * sizeofPoint), texture.QuadCoords, BufferUsageHint.StreamDraw);
-			GL.DrawArrays(GLPrimitiveType.Quads, 0, vertices.Length);
-		}
-
-		public void Clear(Color color)
+        #region Drawing functions
+        
+        public void Clear(Color color)
 		{
 			GL.ClearColor(color.ToOpenGLColor());
             GL.Clear(ClearBufferMask.ColorBufferBit);
@@ -165,7 +174,7 @@ namespace GRaff.Graphics
 		public void FillRectangle(Color col1, Color col2, Color col3, Color col4, double x, double y, double w, double h)
 		{
 			Render(new[] { new GraphicsPoint(x, y), new GraphicsPoint(x + w, y), new GraphicsPoint(x, y + h), new GraphicsPoint(x + w, y + h) },
-				   new[] { col1, col2, col4, col3 }, PrimitiveType.TriangleStrip);
+                   new[] { col1, col2, col4, col3 }, PrimitiveType.TriangleStrip);
 		}
 
 		public void DrawCircle(Color color, GraphicsPoint center, double radius)
@@ -312,7 +321,7 @@ namespace GRaff.Graphics
 			GL.BindVertexArray(_vertexArray);
 			GL.BindTexture(TextureTarget.Texture2D, renderer.Font.TextureBuffer.Id);
 
-			ShaderProgram.CurrentTextured.SetCurrent();
+			ShaderProgram.Current.SetUniform("GRaff_IsTextured", true);
 
 			GL.BindBuffer(BufferTarget.ArrayBuffer, _vertexBuffer);
 			GL.BufferData(BufferTarget.ArrayBuffer, new IntPtr(vertices.Length * sizeofPoint), vertices, BufferUsageHint.StreamDraw);

@@ -18,12 +18,9 @@ namespace GRaff.Graphics
 				GL.Enable(EnableCap.Blend);
 				GL.Clear(ClearBufferMask.ColorBufferBit);
 
-				ShaderProgram.CurrentColored = ShaderProgram.DefaultColored;
-				ShaderProgram.CurrentTextured = ShaderProgram.DefaultTextured;
-				ShaderProgram.CurrentColored.UpdateUniformValues();
-				ShaderProgram.CurrentTextured.UpdateUniformValues();
+                ShaderProgram.Default.SetCurrent();
 
-				Framebuffer.ExpectedViewWidth = Window.Width;
+                Framebuffer.ExpectedViewWidth = Window.Width;
 				Framebuffer.ExpectedViewHeight = Window.Height;
 
 #if DEBUG

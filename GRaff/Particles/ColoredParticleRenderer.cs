@@ -34,8 +34,8 @@ namespace GRaff.Particles
 		public void Render(IEnumerable<Particle> particles)
 		{
 			int count = particles.Count();
-			GraphicsPoint[] vertices = new GraphicsPoint[_polygonVertices.Length * count];
-			Color[] colors = new Color[_polygonVertices.Length * count];
+			var vertices = new GraphicsPoint[_polygonVertices.Length * count];
+			var colors = new Color[_polygonVertices.Length * count];
 
 			Parallel.ForEach(particles, (particle, loopState, index) =>
 			{
@@ -49,10 +49,7 @@ namespace GRaff.Particles
 
 			_renderSystem.SetVertices(UsageHint.StreamDraw, vertices);
 			_renderSystem.SetColors(UsageHint.StreamDraw, colors);
-
-			ShaderProgram.CurrentColored.SetCurrent();
-			_renderSystem.Render(PrimitiveType.Triangles, vertices.Length);
-
+            _renderSystem.Render(PrimitiveType.Triangles);
 		}
 	}
 }

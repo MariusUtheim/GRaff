@@ -24,11 +24,7 @@ namespace GRaff.GraphicTest
 
 			_testIndex = 0;
 			_initiateTest(_tests[0]);
-
-			Background = Instance.Create(new Background { Color = Colors.LightGray });
 		}
-
-		public static Background Background { get; private set; }
 
 		private void _initiateTest(Type test)
 		{
@@ -42,11 +38,11 @@ namespace GRaff.GraphicTest
 
 		public void OnKeyPress(Key key)
 		{
-			if (key == Key.Right)
-				_testIndex = (_testIndex + 1) % _tests.Length;
-			else if (key == Key.Left)
-				_testIndex = (_testIndex - 1 + _tests.Length) % _tests.Length;
-			else return;
+            if (key == Key.Right)
+                _testIndex = (_testIndex + 1) % _tests.Length;
+            else if (key == Key.Left)
+                _testIndex = (_testIndex - 1 + _tests.Length) % _tests.Length;
+            else return;
 			_initiateTest(_tests[_testIndex]);
 		}
 	}

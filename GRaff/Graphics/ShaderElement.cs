@@ -26,7 +26,7 @@ namespace GRaff.Graphics
 		{
 			using (var fragmentShader = new Shader(false, source))
 			{
-				program = new ShaderProgram(Shader.DefaultColoredVertexShader, fragmentShader);
+				program = new ShaderProgram(Shader.DefaultVertexShader, fragmentShader);
 
 			}
 		}
@@ -65,8 +65,6 @@ namespace GRaff.Graphics
 		{
 			using (new ShaderProgramContext(program))
 			{
-				program.UpdateUniformValues();
-
 				while (_intUniforms.Count > 0)
 				{
 					var uniform = _intUniforms.Dequeue();
@@ -85,7 +83,7 @@ namespace GRaff.Graphics
 				foreach (var uniform in _automaticFloatUniforms)
 					GL.Uniform1(GL.GetUniformLocation(program.Id, uniform.Key), uniform.Value());
 
-				_renderSystem.Render(PrimitiveType.Quads, 4);
+				_renderSystem.Render(PrimitiveType.Quads);
 
 			}
 		}

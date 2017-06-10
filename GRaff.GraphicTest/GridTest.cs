@@ -23,7 +23,6 @@ namespace GRaff.GraphicTest
 
 		public GridTest()
 		{
-			TestController.Background.Color = Colors.Black;
 			var blocked = new bool[width, height];
 			for (var x = 0; x < width; x++)
 				for (var y = 0; y < height; y++)

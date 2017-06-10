@@ -17,10 +17,12 @@ namespace GRaff.Graphics
 	{
 		private bool _disposed = false;
 
-		public static ShaderProgram DefaultColored = new ShaderProgram(Shader.DefaultColoredVertexShader, Shader.DefaultColoredFragmentShader);
-		public static ShaderProgram DefaultTextured = new ShaderProgram(Shader.DefaultTexturedVertexShader, Shader.DefaultTexturedFragmentShader);
-		public static ShaderProgram CurrentColored;
-		public static ShaderProgram CurrentTextured;
+        public static readonly ShaderProgram Default = new ShaderProgram(Shader.DefaultVertexShader, Shader.DefaultFragmentShader);
+
+		//public static ShaderProgram DefaultColored = new ShaderProgram(Shader.DefaultColoredVertexShader, Shader.DefaultColoredFragmentShader);
+		//public static ShaderProgram DefaultTextured = new ShaderProgram(Shader.DefaultTexturedVertexShader, Shader.DefaultTexturedFragmentShader);
+		//public static ShaderProgram CurrentColored;
+		//public static ShaderProgram CurrentTextured;
 
 		public ShaderProgram(params Shader[] shaders)
 		{
@@ -63,33 +65,21 @@ namespace GRaff.Graphics
 			return GL.GetInteger(GetPName.CurrentProgram);
 		}
 
-		private void _setUniform(string location, double value)
+        public void SetUniform(string name, bool value)
+        {
+            GL.Uniform1(GL.GetUniformLocation(Id, name), value ? 1 : 0);
+        }
+
+		public void SetUniform(string name, int value)
 		{
-			var ptr = GL.GetUniformLocation(Id, location);
-			if (ptr >= 0)
-				GL.Uniform1(ptr, value);
+            GL.Uniform1(GL.GetUniformLocation(Id, name), value);
+            _Graphics.ErrorCheck();
 		}
-
-		public void UpdateUniformValues()
-		{
-			SetCurrent();
-			_setUniform("GRaff_LoopCount", Time.LoopCount);
-		}
-
-		protected void SetUniform(string name, int value)
-		{
-			GL.Uniform1(GL.GetUniformLocation(Id, name), value);
-		}
-
-		protected void SetUniform(string name, uint value)
-		{
-			GL.Uniform1(GL.GetUniformLocation(Id, name), value);
-		}
-
-
-		protected void SetUniform(string name, double value)
+        
+        public void SetUniform(string name, double value)
 		{
 			GL.Uniform1(GL.GetUniformLocation(Id, name), (coords)value);
+            _Graphics.ErrorCheck();
 		}
 
 		public int Id { get; private set; }

@@ -59,11 +59,6 @@ namespace GRaff
 
             Window.RenderFrame += (sender, e) => {
 
-                GL.Clear(ClearBufferMask.ColorBufferBit);
-
-                ShaderProgram.CurrentColored.UpdateUniformValues();
-                ShaderProgram.CurrentTextured.UpdateUniformValues();
-
                 Giraffe.Redraw();
 
                 Window.SwapBuffers();
@@ -119,7 +114,7 @@ namespace GRaff
 
             _handleInput();
 
-            
+            _do(obj => obj.OnStep());
             GlobalEvent.OnStep();
 
             _detectCollisions();
@@ -158,14 +153,14 @@ namespace GRaff
         {
             //TODO// The ToList is used becuase instances might get destroyed, and then it seems the order is messed up. Is it possible to avoid ToList, using only lazy evaluation?
             //TODO// Cancellation on input events
-            foreach (var instance in Instance.Where(i => i is T))
+            foreach (var instance in Instance.Where(i => i is T).ToList())
                 if (instance.Exists)
                     action(instance as T);
         }
 
         private static void _doMouseClick<T>(Action<T> action) where T : class
         {
-            foreach (var instance in Instance.OfType<GameObject>().Where(obj => obj is T && obj.Mask.ContainsPoint(Mouse.Location)))
+            foreach (var instance in Instance.OfType<GameObject>().Where(obj => obj is T && obj.Mask.ContainsPoint(Mouse.Location)).ToList())
                 if (instance.Exists)
                     action(instance as T);
         }

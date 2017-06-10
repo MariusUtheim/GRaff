@@ -128,11 +128,21 @@ namespace GRaff.Graphics
 			GL.BufferData(BufferTarget.ArrayBuffer, new IntPtr(8 * sizeof(coord) * count), Enumerable.Repeat(defaultTriangleStripCoords, count).ToArray(), (BufferUsageHint)usage);
 		}
 
-		internal void Render(PrimitiveType type, int vertexCount)
+		internal void Render(TextureBuffer buffer, PrimitiveType type, int vertexCount)
 		{
 			Contract.Requires<ObjectDisposedException>(!IsDisposed);
-			GL.BindVertexArray(_array);
-			GL.DrawArrays((GLPrimitiveType)type, 0, vertexCount);
+
+            ShaderProgram.Current.SetUniform("GRaff_IsTextured", true);
+
+            buffer.Bind();
+            
+            GL.BindVertexArray(_array);
+
+            GL.EnableVertexAttribArray(1);
+            GL.EnableVertexAttribArray(2);
+
+            GL.BindBuffer(BufferTarget.ArrayBuffer, _texCoordBuffer);
+            GL.DrawArrays((GLPrimitiveType)type, 0, vertexCount);
 		}
 	}
 }

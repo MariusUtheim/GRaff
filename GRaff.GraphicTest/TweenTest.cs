@@ -42,11 +42,6 @@ namespace GRaff.GraphicTest
 		private TweeningFunction f = functions[Key.Number1];
 		private Color _color = Colors.DarkRed;
 
-		public TweenTest()
-		{
-			TestController.Background.Color = null;
-		}
-
 		public override void OnDraw()
 		{
 			Draw.FillCircle(_color, Location, 8);

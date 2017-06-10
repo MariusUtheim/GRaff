@@ -59,10 +59,8 @@ namespace GRaff.Particles
 			_renderSystem.SetVertices(UsageHint.StreamDraw, vertices);
 			_renderSystem.SetColors(UsageHint.StreamDraw, colors);
 			_renderSystem.SetTexCoords(UsageHint.StreamDraw, texCoords);
-
-			ShaderProgram.CurrentTextured.SetCurrent();
-			Sprite.SubImage(_frame).Buffer.Bind();
-			_renderSystem.Render(PrimitiveType.Quads, vertices.Length);
+            
+            _renderSystem.Render(Sprite.SubImage(_frame).Buffer, PrimitiveType.Quads, vertices.Length);
 
 			_frame += -_animationSpeed;
 		}

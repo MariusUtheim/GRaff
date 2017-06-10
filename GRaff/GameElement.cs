@@ -33,7 +33,8 @@ namespace GRaff
 
 		public void Destroy()
 		{
-			Instance.Remove(this);
+            if (Instance.Remove(this))
+                OnDestroy();
 		}
 
 		protected virtual void OnDestroy() { }

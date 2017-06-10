@@ -56,6 +56,7 @@ namespace GRaff
 		{
 			Current = this;
 			View.FocusRegion = new IntRectangle(0, 0, Width, Height);
+            View.LoadMatrixToProgram();
 
 			OnEnter();
 			Enter?.Invoke(this, new EventArgs());
