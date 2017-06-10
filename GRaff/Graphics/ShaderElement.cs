@@ -16,7 +16,7 @@ namespace GRaff.Graphics
 	public class ShaderElement : GameElement
 	{
 		private ShaderProgram program;
-		private ColoredRenderSystem _renderSystem = new ColoredRenderSystem();
+		private RenderSystem _renderSystem = new RenderSystem();
 		private Queue<KeyValuePair<string, int>> _intUniforms = new Queue<KeyValuePair<string, int>>();
 		private Queue<KeyValuePair<string, coords>> _floatUniforms = new Queue<KeyValuePair<string, coords>>();
 		private List<KeyValuePair<string, Func<int>>> _automaticIntUniforms = new List<KeyValuePair<string, Func<int>>>();

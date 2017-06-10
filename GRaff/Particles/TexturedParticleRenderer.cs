@@ -10,7 +10,7 @@ namespace GRaff.Particles
 {
 	internal class TexturedParticleRenderer : IParticleRenderer
 	{
-		private readonly TexturedRenderSystem _renderSystem = new TexturedRenderSystem();
+		private readonly RenderSystem _renderSystem = new RenderSystem();
 		private readonly double _animationSpeed;
 		private double _frame = 0;
 
@@ -60,7 +60,7 @@ namespace GRaff.Particles
 			_renderSystem.SetColors(UsageHint.StreamDraw, colors);
 			_renderSystem.SetTexCoords(UsageHint.StreamDraw, texCoords);
             
-            _renderSystem.Render(Sprite.SubImage(_frame).Buffer, PrimitiveType.Quads, vertices.Length);
+            _renderSystem.Render(Sprite.SubImage(_frame).Buffer, PrimitiveType.Quads);
 
 			_frame += -_animationSpeed;
 		}

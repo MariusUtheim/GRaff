@@ -13,7 +13,7 @@ namespace GRaff
 	/// </summary>
 	public sealed class Background : GameElement
 	{
-		private readonly TexturedRenderSystem _renderSystem;
+		private readonly RenderSystem _renderSystem;
 
 		/// <summary>
 		/// Creates a new instance of the GRaff.Background class with no sprite or color.
@@ -21,7 +21,7 @@ namespace GRaff
 		public Background()
 		{
 			Depth = Int32.MaxValue;
-			_renderSystem = new TexturedRenderSystem();
+			_renderSystem = new RenderSystem();
 			_renderSystem.SetColors(UsageHint.StaticDraw, Colors.White, Colors.White, Colors.White, Colors.White);
 		}
 
@@ -108,7 +108,7 @@ namespace GRaff
 					_renderSystem.SetVertices(UsageHint.StreamDraw, left, top, right, top, right, bottom, left, bottom);
 					_renderSystem.SetTexCoords(UsageHint.StreamDraw, u0, v0, u1, v0, u1, v1, u0, v1);
 
-                    _renderSystem.Render(Buffer, PrimitiveType.Quads, 4);
+                    _renderSystem.Render(Buffer, PrimitiveType.Quads);
 				}
 				else
 					Draw.Texture(Buffer.Texture, XOffset, YOffset);

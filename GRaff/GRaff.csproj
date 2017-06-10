@@ -163,9 +163,6 @@
     <Compile Include="Graphics\Text\FontInfo.cs" />
     <Compile Include="GRaffExtensions.cs" />
     <Compile Include="Graphics\Text\FontLoader.cs" />
-    <Compile Include="Graphics\Lighting\LightObstacle.cs" />
-    <Compile Include="Graphics\Lighting\LightSource.cs" />
-    <Compile Include="Graphics\Lighting\WallSystem.cs" />
     <Compile Include="Graphics\GraphicsPoint.cs" />
     <Compile Include="Graphics\Shader.cs" />
     <Compile Include="Graphics\ShaderElement.cs" />
@@ -210,7 +207,6 @@
     <Compile Include="Audio\WaveFile.cs" />
     <Compile Include="Audio\_Audio.cs" />
     <Compile Include="Graphics\BlendingFactor.cs" />
-    <Compile Include="Graphics\ColoredRenderSystem.cs" />
     <Compile Include="Graphics\Context.cs" />
     <Compile Include="Graphics\Scissor.cs" />
     <Compile Include="Graphics\_Graphics.cs" />
@@ -257,7 +253,7 @@
     <Compile Include="GameElement.cs" />
     <Compile Include="GameObject.cs" />
     <Compile Include="GlobalEvent.cs" />
-    <Compile Include="Graphics\TexturedRenderSystem.cs" />
+    <Compile Include="Graphics\RenderSystem.cs" />
     <Compile Include="GMath.cs" />
     <Compile Include="GMath.FromSystemMath.cs" />
     <Compile Include="GRandom.cs" />

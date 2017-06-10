@@ -13,14 +13,14 @@ namespace GRaff.Particles
 		protected readonly LinkedList<Particle> particles = new LinkedList<Particle>();
 
 		// Hiding this from subclasses 
-		private readonly TexturedRenderSystem _renderSystem;
+		private readonly RenderSystem _renderSystem;
 
 		public int Count { get { return particles.Count; } }
 
 		public ParticleSystem(ParticleType type)
 		{
 			Contract.Requires<ArgumentNullException>(type != null);
-			_renderSystem = new TexturedRenderSystem();
+			_renderSystem = new RenderSystem();
 			this.ParticleType = type;
 		}
 		

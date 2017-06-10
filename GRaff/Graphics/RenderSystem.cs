@@ -14,15 +14,16 @@ using coord = System.Single;
 
 namespace GRaff.Graphics
 {
-	internal class TexturedRenderSystem : IDisposable
+	internal class RenderSystem : IDisposable
 	{
 		private readonly int _array;
 		private readonly int _vertexBuffer, _colorBuffer, _texCoordBuffer;
+        private int _vertexCount;
 
 		private static Quadrilateral defaultQuadCoords = new Quadrilateral(0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f);
 		private static Quadrilateral defaultTriangleStripCoords = new Quadrilateral(0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f);
 
-		public TexturedRenderSystem()
+		public RenderSystem()
 		{
 			_array = GL.GenVertexArray();
 			GL.BindVertexArray(_array);
@@ -43,7 +44,7 @@ namespace GRaff.Graphics
 			GL.VertexAttribPointer(2, 2, GraphicsPoint.PointerType, false, 0, 0);
 		}
 
-		~TexturedRenderSystem()
+		~RenderSystem()
 		{
 			Dispose(false);
 		}
@@ -78,14 +79,17 @@ namespace GRaff.Graphics
 			Contract.Requires<ArgumentNullException>(vertices != null);
 			GL.BindBuffer(BufferTarget.ArrayBuffer, _vertexBuffer);
 			GL.BufferData(BufferTarget.ArrayBuffer, new IntPtr(2 * sizeof(coord) * vertices.Length), vertices, (BufferUsageHint)usage);
+            _vertexCount = vertices.Length;
 		}
 
 		public void SetVertices(UsageHint usage, params coord[] vertices)
 		{
 			Contract.Requires<ObjectDisposedException>(!IsDisposed);
 			Contract.Requires<ArgumentNullException>(vertices != null);
+            Contract.Requires<ArgumentException>(vertices.Length % 2 == 0);
 			GL.BindBuffer(BufferTarget.ArrayBuffer, _vertexBuffer);
 			GL.BufferData(BufferTarget.ArrayBuffer, new IntPtr(sizeof(coord) * vertices.Length), vertices, (BufferUsageHint)usage);
+            _vertexCount = vertices.Length / 2;
 		}
 
 		public void SetColors(UsageHint usage, params Color[] colors)
@@ -93,8 +97,17 @@ namespace GRaff.Graphics
 			Contract.Requires<ObjectDisposedException>(!IsDisposed);
 			Contract.Requires<ArgumentNullException>(colors != null);
 			GL.BindBuffer(BufferTarget.ArrayBuffer, _colorBuffer);
+            GL.EnableVertexAttribArray(1);
 			GL.BufferData(BufferTarget.ArrayBuffer, new IntPtr(4 * colors.Length), colors, (BufferUsageHint)usage);
 		}
+        
+        public void SetColor(UsageHint usage, Color color)
+        {
+            Contract.Requires<ObjectDisposedException>(!IsDisposed);
+            GL.BindBuffer(BufferTarget.ArrayBuffer, _colorBuffer);
+            GL.DisableVertexAttribArray(1);
+            GL.VertexAttrib4N(1, color.R, color.G, color.B, color.A);
+        }
 
 		public void SetTexCoords(UsageHint usage, params GraphicsPoint[] texCoords)
 		{
@@ -128,21 +141,30 @@ namespace GRaff.Graphics
 			GL.BufferData(BufferTarget.ArrayBuffer, new IntPtr(8 * sizeof(coord) * count), Enumerable.Repeat(defaultTriangleStripCoords, count).ToArray(), (BufferUsageHint)usage);
 		}
 
-		internal void Render(TextureBuffer buffer, PrimitiveType type, int vertexCount)
+        internal void Render(PrimitiveType type)
+        {
+            Contract.Requires<ObjectDisposedException>(!IsDisposed);
+
+            ShaderProgram.Current.SetUniform("GRaff_IsTextured", false);
+
+            GL.BindVertexArray(_array);
+            GL.DisableVertexAttribArray(2);
+
+            GL.DrawArrays((GLPrimitiveType)type, 0, _vertexCount);
+        }
+
+		internal void Render(TextureBuffer buffer, PrimitiveType type)
 		{
 			Contract.Requires<ObjectDisposedException>(!IsDisposed);
 
             ShaderProgram.Current.SetUniform("GRaff_IsTextured", true);
 
+            GL.BindVertexArray(_array);
+            GL.EnableVertexAttribArray(2);
             buffer.Bind();
             
-            GL.BindVertexArray(_array);
-
-            GL.EnableVertexAttribArray(1);
-            GL.EnableVertexAttribArray(2);
-
             GL.BindBuffer(BufferTarget.ArrayBuffer, _texCoordBuffer);
-            GL.DrawArrays((GLPrimitiveType)type, 0, vertexCount);
+            GL.DrawArrays((GLPrimitiveType)type, 0, _vertexCount);
 		}
 	}
 }

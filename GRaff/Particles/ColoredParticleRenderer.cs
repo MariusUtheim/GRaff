@@ -11,7 +11,7 @@ namespace GRaff.Particles
 	{
 		private readonly GraphicsPoint[] _polygonVertices;
 		private readonly int _verticesPerParticle;
-		private readonly ColoredRenderSystem _renderSystem;
+		private readonly RenderSystem _renderSystem;
 
 		public ColoredParticleRenderer(Polygon polygon)
 		{
@@ -28,7 +28,7 @@ namespace GRaff.Particles
 				_polygonVertices[c++] = (GraphicsPoint)polygon.Vertex(i);
 			}
 
-			_renderSystem = new ColoredRenderSystem();
+			_renderSystem = new RenderSystem();
 		}
 
 		public void Render(IEnumerable<Particle> particles)
