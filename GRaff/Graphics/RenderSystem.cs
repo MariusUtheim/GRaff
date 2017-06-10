@@ -14,7 +14,7 @@ using coord = System.Single;
 
 namespace GRaff.Graphics
 {
-	internal class RenderSystem : IDisposable
+	public class RenderSystem : IDisposable
 	{
 		private readonly int _array;
 		private readonly int _vertexBuffer, _colorBuffer, _texCoordBuffer;
@@ -148,7 +148,7 @@ namespace GRaff.Graphics
 			GL.BufferData(BufferTarget.ArrayBuffer, new IntPtr(8 * sizeof(coord) * count), Enumerable.Repeat(defaultTriangleStripCoords, count).ToArray(), (BufferUsageHint)usage);
 		}
 
-        internal void Render(PrimitiveType type)
+        public void Render(PrimitiveType type)
         {
             Contract.Requires<ObjectDisposedException>(!IsDisposed);
 
@@ -160,7 +160,7 @@ namespace GRaff.Graphics
             GL.DrawArrays((GLPrimitiveType)type, 0, _vertexCount);
         }
 
-		internal void Render(TextureBuffer buffer, PrimitiveType type)
+		public void Render(TextureBuffer buffer, PrimitiveType type)
 		{
 			Contract.Requires<ObjectDisposedException>(!IsDisposed);
 

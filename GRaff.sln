@@ -11,11 +11,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GRaff.XmlAssets", "GRaff.Xm
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GRaff.UnitTesting", "GRaff.UnitTesting\GRaff.UnitTesting.csproj", "{6EC500EE-F34A-48A5-96E5-C013EC53705A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FormsTest", "FormsTest\FormsTest.csproj", "{459D51B3-89E5-47DF-B0C7-E3232E827971}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GRaff.GraphicTest", "GRaff.GraphicTest\GRaff.GraphicTest.csproj", "{FD4FF50D-C554-4946-A639-AAC11BD5D2B1}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GRaff.ProjectTemplate", "GRaff.ProjectTemplate\GRaff.ProjectTemplate.csproj", "{7F78D99F-9940-4A10-95F1-AFE0D7CD4ED7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GRaff.Extensions", "GRaff.Extensions\GRaff.Extensions.csproj", "{9FB060E1-9B82-4361-9590-06023AB42A91}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -50,13 +50,6 @@ Global
 		{6EC500EE-F34A-48A5-96E5-C013EC53705A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6EC500EE-F34A-48A5-96E5-C013EC53705A}.Test|Any CPU.ActiveCfg = Test|Any CPU
 		{6EC500EE-F34A-48A5-96E5-C013EC53705A}.Test|Any CPU.Build.0 = Test|Any CPU
-		{459D51B3-89E5-47DF-B0C7-E3232E827971}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{459D51B3-89E5-47DF-B0C7-E3232E827971}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{459D51B3-89E5-47DF-B0C7-E3232E827971}.Publish|Any CPU.ActiveCfg = Release|Any CPU
-		{459D51B3-89E5-47DF-B0C7-E3232E827971}.Publish|Any CPU.Build.0 = Release|Any CPU
-		{459D51B3-89E5-47DF-B0C7-E3232E827971}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{459D51B3-89E5-47DF-B0C7-E3232E827971}.Test|Any CPU.ActiveCfg = Release|Any CPU
-		{459D51B3-89E5-47DF-B0C7-E3232E827971}.Test|Any CPU.Build.0 = Release|Any CPU
 		{FD4FF50D-C554-4946-A639-AAC11BD5D2B1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{FD4FF50D-C554-4946-A639-AAC11BD5D2B1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FD4FF50D-C554-4946-A639-AAC11BD5D2B1}.Publish|Any CPU.ActiveCfg = Release|Any CPU
@@ -70,6 +63,14 @@ Global
 		{7F78D99F-9940-4A10-95F1-AFE0D7CD4ED7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7F78D99F-9940-4A10-95F1-AFE0D7CD4ED7}.Test|Any CPU.ActiveCfg = Release|Any CPU
 		{7F78D99F-9940-4A10-95F1-AFE0D7CD4ED7}.Test|Any CPU.Build.0 = Release|Any CPU
+		{9FB060E1-9B82-4361-9590-06023AB42A91}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9FB060E1-9B82-4361-9590-06023AB42A91}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9FB060E1-9B82-4361-9590-06023AB42A91}.Publish|Any CPU.ActiveCfg = Release|Any CPU
+		{9FB060E1-9B82-4361-9590-06023AB42A91}.Publish|Any CPU.Build.0 = Release|Any CPU
+		{9FB060E1-9B82-4361-9590-06023AB42A91}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9FB060E1-9B82-4361-9590-06023AB42A91}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9FB060E1-9B82-4361-9590-06023AB42A91}.Test|Any CPU.ActiveCfg = Release|Any CPU
+		{9FB060E1-9B82-4361-9590-06023AB42A91}.Test|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

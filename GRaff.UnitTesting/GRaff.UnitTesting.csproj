@@ -78,6 +78,10 @@
     <Compile Include="GridTest.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\GRaff.Extensions\GRaff.Extensions.csproj">
+      <Project>{9fb060e1-9b82-4361-9590-06023ab42a91}</Project>
+      <Name>GRaff.Extensions</Name>
+    </ProjectReference>
     <ProjectReference Include="..\GRaff\GRaff.csproj">
       <Project>{64447cf0-9d21-4b49-b12b-7830bee354c7}</Project>
       <Name>GRaff</Name>

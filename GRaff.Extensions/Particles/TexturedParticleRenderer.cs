@@ -49,9 +49,11 @@ namespace GRaff.Particles
 				vertices[index + 3] = (GraphicsPoint)(particle.TransformationMatrix * bl + particle.Location);
 				colors[index] = colors[index + 1] = colors[index + 2] = colors[index + 3] = particle.Blend;
 
-				var baseCoords = Sprite.SubImage(_frame).QuadCoords;
-				for (var i = 0; i < 4; i++)
-					texCoords[index + i] = baseCoords[i];
+                var texture = Sprite.SubImage(_frame);
+                texCoords[index] = texture.TopLeft;
+                texCoords[index + 1] = texture.TopRight;
+                texCoords[index + 2] = texture.BottomRight;
+                texCoords[index + 3] = texture.BottomLeft;
 			});
 
 			

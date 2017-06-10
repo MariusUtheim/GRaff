@@ -1,16 +1,9 @@
 ﻿using System;
 using System.Linq;
 using System.Threading;
-using GRaff.Graphics;
-using GRaff.Particles;
 using GRaff.Synchronization;
 using OpenTK;
 using OpenTK.Graphics;
-#if OpenGL4
-using OpenTK.Graphics.OpenGL4;
-#else
-using OpenTK.Graphics.ES30;
-#endif
 
 namespace GRaff
 {

@@ -8,8 +8,19 @@ using System.Linq;
 namespace GRaff.Pathfinding
 {
 	public static partial class GraphExtensions
-	{		
-		private class VertexLengthMetric<TVertex, TEdge> : IComparable<VertexLengthMetric<TVertex, TEdge>>
+	{
+        internal static IEnumerable<T> TakeWhilePrevious<T>(this IEnumerable<T> enumerable, Func<T, bool> predicate)
+        {
+            foreach (var v in enumerable)
+            {
+                yield return v;
+                if (!predicate(v))
+                    yield break;
+            }
+        }
+
+
+        private class VertexLengthMetric<TVertex, TEdge> : IComparable<VertexLengthMetric<TVertex, TEdge>>
 			where TVertex : IVertex<TVertex, TEdge> where TEdge : IEdge<TVertex, TEdge>
 		{
 			public readonly double CurrentDistance, DistanceRemaining, BeautifulDistance;

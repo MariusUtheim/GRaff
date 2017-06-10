@@ -11,15 +11,6 @@ namespace GRaff
 {
 	public static class GRaffExtensions
 	{
-		internal static IEnumerable<T> TakeWhilePrevious<T>(this IEnumerable<T> enumerable, Func<T, bool> predicate)
-		{
-			foreach (var v in enumerable)
-			{
-				yield return v;
-				if (!predicate(v))
-					yield break;
-			}
-		}
 
         internal static IEnumerable<TOut> SelectMany<TIn, TOut>(this IEnumerable<TIn> enumerable, Func<TIn, ValueTuple<TOut, TOut>> map)
         {
