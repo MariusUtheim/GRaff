@@ -33,7 +33,7 @@ namespace GRaff.GraphicTest
 
 		public override void OnStep()
 		{
-			Window.Title = $"GridTest - FPS: {Time.FPS}";
+			Window.Title = $"GridTest - FPS: {Time.Fps}";
 			if (Time.LoopCount % 5 == 0)
 				n++;
         }

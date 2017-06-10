@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics.Contracts;
+using System.Linq;
 #if OpenGL4
 using OpenTK.Graphics.OpenGL4;
 #else
@@ -21,7 +22,7 @@ namespace GRaff.Graphics
 			};
 		}
 
-		public static GraphicsPoint[] ToTriangleStrip(this Polygon polygon)
+		public static GraphicsPoint[] Tesselate(this Polygon polygon)
 		{
 			Contract.Requires<ArgumentNullException>(polygon != null);
 			var result = new GraphicsPoint[polygon.Length];
@@ -29,6 +30,9 @@ namespace GRaff.Graphics
 				result[i] = (GraphicsPoint)polygon.Vertex(i * sign);
 			return result;
 		}
+
+        public static GraphicsPoint[] Outline(this Polygon polygon)
+            => polygon.Vertices.Select(v => (GraphicsPoint)v).ToArray();
 
 		public static void Bind(this TextureBuffer texture)
 		{

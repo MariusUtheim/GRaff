@@ -52,7 +52,7 @@ namespace GRaff.GraphicTest
             if (instance != null)
             {
                 var loc = instance.Completion * Room.Current.Width;
-                Draw.Line(Colors.DarkGreen, loc, 0, loc, Room.Current.Height);
+                Draw.Line(Colors.DarkGreen, (loc, 0), (loc, Room.Current.Height));
             }
         }
 

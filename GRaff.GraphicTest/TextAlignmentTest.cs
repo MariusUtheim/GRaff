@@ -9,7 +9,7 @@ using GRaff.Graphics.Text;
 
 namespace GRaff.GraphicTest
 {
-	[Test]
+	//[Test]
 	class TextAlignmentTest : GameElement
 	{
 		private const string lipsum = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus rutrum nibh sed nulla dapibus, sit amet tempor nulla feugiat.";
@@ -42,8 +42,8 @@ namespace GRaff.GraphicTest
 			Draw.Clear(Colors.White);
 			Draw.Text(_render.Alignment.ToString(), _render, Colors.DarkGray, Mouse.Location);
 
-			Draw.Line(Colors.Black, 0, Room.Current.Center.Y, Room.Current.Width, Room.Current.Center.Y);
-			Draw.Line(Colors.Black, Room.Current.Center.X, 0, Room.Current.Center.X, Room.Current.Height);
+			Draw.Line(Colors.Black, (0, Room.Current.Center.Y), (Room.Current.Width, Room.Current.Center.Y));
+			Draw.Line(Colors.Black, (Room.Current.Center.X, 0), (Room.Current.Center.X, Room.Current.Height));
 			//_render.Draw(lipsum, Colors.White, Room.Current.Center);
 
 			//Draw.Rectangle(Colors.Black, 10, 50, 300, _font.Height);

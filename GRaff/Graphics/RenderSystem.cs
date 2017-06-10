@@ -73,6 +73,8 @@ namespace GRaff.Graphics
 
 		public bool IsDisposed { get; private set; }
 
+
+        public void SetVertices(params GraphicsPoint[] vertices) => SetVertices(UsageHint.StreamDraw, vertices);
 		public void SetVertices(UsageHint usage, params GraphicsPoint[] vertices)
 		{
 			Contract.Requires<ObjectDisposedException>(!IsDisposed);
@@ -82,6 +84,7 @@ namespace GRaff.Graphics
             _vertexCount = vertices.Length;
 		}
 
+        public void SetVertices(params coord[] vertices) => SetVertices(UsageHint.StreamDraw, vertices);
 		public void SetVertices(UsageHint usage, params coord[] vertices)
 		{
 			Contract.Requires<ObjectDisposedException>(!IsDisposed);
@@ -92,7 +95,9 @@ namespace GRaff.Graphics
             _vertexCount = vertices.Length / 2;
 		}
 
-		public void SetColors(UsageHint usage, params Color[] colors)
+
+        public void SetColors(Color[] colors) => SetColors(UsageHint.StreamDraw, colors);
+		public void SetColors(UsageHint usage, Color[] colors)
 		{
 			Contract.Requires<ObjectDisposedException>(!IsDisposed);
 			Contract.Requires<ArgumentNullException>(colors != null);
@@ -100,7 +105,8 @@ namespace GRaff.Graphics
             GL.EnableVertexAttribArray(1);
 			GL.BufferData(BufferTarget.ArrayBuffer, new IntPtr(4 * colors.Length), colors, (BufferUsageHint)usage);
 		}
-        
+
+        public void SetColor(Color color) => SetColor(UsageHint.StreamDraw, color);
         public void SetColor(UsageHint usage, Color color)
         {
             Contract.Requires<ObjectDisposedException>(!IsDisposed);
@@ -109,6 +115,7 @@ namespace GRaff.Graphics
             GL.VertexAttrib4N(1, color.R, color.G, color.B, color.A);
         }
 
+        public void SetTexCoords(GraphicsPoint[] texCoords) => SetTexCoords(UsageHint.StreamDraw, texCoords);
 		public void SetTexCoords(UsageHint usage, params GraphicsPoint[] texCoords)
 		{
 			Contract.Requires<ObjectDisposedException>(!IsDisposed);
@@ -117,7 +124,7 @@ namespace GRaff.Graphics
 			GL.BufferData(BufferTarget.ArrayBuffer, new IntPtr(2 * sizeof(coord) * texCoords.Length), texCoords, (BufferUsageHint)usage);
 		}
 
-		public void SetTexCoords(UsageHint usage, params coord[] texCoords)
+		public void SetTexCoords(UsageHint usage, coord[] texCoords)
 		{
 			Contract.Requires<ObjectDisposedException>(!IsDisposed);
 			Contract.Requires<ArgumentNullException>(texCoords != null);

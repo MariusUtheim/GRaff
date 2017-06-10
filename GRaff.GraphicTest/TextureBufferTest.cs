@@ -24,9 +24,9 @@ namespace GRaff.GraphicTest
 		public override void OnDraw()
 		{
 			Draw.Clear(Colors.LightGray);
-			Draw.Texture(texture, 0, 0);
-			Draw.Sprite(sprite, Time.LoopCount / 20, 0.25 * texture.Width, 1.5 * texture.Height);
-			Draw.Texture(customTexture.Texture, texture.Width, 1);
+			Draw.Texture(texture, (0, 0));
+			Draw.Sprite(sprite, Time.LoopCount / 20, (0.25 * texture.Width, 1.5 * texture.Height));
+			Draw.Texture(customTexture.Texture, (texture.Width, 1));
 		}
 	}
 }

@@ -25,14 +25,14 @@ namespace GRaff.GraphicTest
 				{
                     Draw.Clear(Colors.Red);
 
-					Draw.Texture(giraffe, 0, 0);
+					Draw.Texture(giraffe, (0, 0));
 
-					Draw.FillTriangle(Colors.Black.Transparent(0), Colors.Black, Colors.Black, 0, 0, 0, 10, 10, 0);
-					Draw.FillTriangle(Colors.Black.Transparent(0), Colors.Black, Colors.Black, w, 0, w, 10, w - 10, 0);
-					Draw.FillTriangle(Colors.Black.Transparent(0), Colors.Black, Colors.Black, 0, h, 0, h - 10, 10, h);
-					Draw.FillTriangle(Colors.Black.Transparent(0), Colors.Black, Colors.Black, w, h, w, h - 10, w - 10, h);
+					Draw.FillTriangle(Colors.Black.Transparent(0), Colors.Black, Colors.Black, (0, 0), (0, 10), (10, 0));
+					Draw.FillTriangle(Colors.Black.Transparent(0), Colors.Black, Colors.Black, (w, 0), (w, 10), (w - 10, 0));
+					Draw.FillTriangle(Colors.Black.Transparent(0), Colors.Black, Colors.Black, (0, h), (0, h - 10), (10, h));
+					Draw.FillTriangle(Colors.Black.Transparent(0), Colors.Black, Colors.Black, (w, h), (w, h - 10), (w - 10, h));
 
-					Draw.Line(Colors.Black, 0, h, w, 0);
+					Draw.Line(Colors.Black, (0, h), (w, 0));
 				}
 			}
 
@@ -41,9 +41,9 @@ namespace GRaff.GraphicTest
 
 		public override void OnDraw()
 		{
-			Draw.Texture(_framebuffer?.Buffer.Texture, 0, 0);
-			Draw.Rectangle(Colors.Black, 0, 0, w, h);
-			Draw.Texture(giraffe, w, 0);
+			Draw.Texture(_framebuffer?.Buffer.Texture, (0, 0));
+			Draw.Rectangle(Colors.Black, ((0, 0), (w, h)));
+			Draw.Texture(giraffe, (w, 0));
 		}
 
 		public void OnKeyPress(Key key)

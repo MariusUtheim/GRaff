@@ -38,10 +38,10 @@ namespace GRaff.GraphicTest
 
 		public override void OnDraw()
 		{
-			Draw.Sprite(sprite, Time.LoopCount / 2, 0, 0);
-			Draw.Sprite(sprite, Time.LoopCount / 4, sprite.Width, 0);
-			Draw.Sprite(sprite, Time.LoopCount / 8, 2 * sprite.Width, 0);
-			Draw.Sprite(pausedSprite, Time.LoopCount / 2, 0, sprite.Height);
+			Draw.Sprite(sprite, Time.LoopCount / 2, (0, 0));
+			Draw.Sprite(sprite, Time.LoopCount / 4, (sprite.Width, 0));
+			Draw.Sprite(sprite, Time.LoopCount / 8, (2 * sprite.Width, 0));
+			Draw.Sprite(pausedSprite, Time.LoopCount / 2, (0, sprite.Height));
 		}
 	}
 }

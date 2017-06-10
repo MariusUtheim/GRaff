@@ -225,20 +225,18 @@ namespace GRaff
 			return _characters[c];
 		}
 
-		public bool TryGetCharacter(char c, out FontCharacter fontCharacter)
-		{
-			return _characters.TryGetValue(c, out fontCharacter);
-		}
+        public bool HasCharacter(char c) => _characters.ContainsKey(c);
+
+		public bool TryGetCharacter(char c, out FontCharacter fontCharacter) => _characters.TryGetValue(c, out fontCharacter);
 
 		public int GetKerning(char first, char second)
 		{
 			if (!HasKerning) return 0;
-			int kerning;
-			if (_kerning.TryGetValue(new Tuple<char, char>(first, second), out kerning))
-				return kerning;
-			else
-				return 0;
-		}
+            if (_kerning.TryGetValue(new Tuple<char, char>(first, second), out int kerning))
+                return kerning;
+            else
+                return 0;
+        }
 
 		/// <summary>
 		/// Renders the specified text to a new GRaff.TextureBuffer, 

@@ -80,6 +80,6 @@ namespace GRaff
 		/// <summary>
 		/// Gets the numer of frames per second at which the game is actually running.
 		/// </summary>
-		public static int FPS { get { return _fps; } }
+		public static int Fps { get { return _fps; } }
 	}
 }

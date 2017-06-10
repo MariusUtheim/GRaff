@@ -37,9 +37,9 @@ namespace GRaff
 		}
 
 		private double _index;
-		public int Index
+		public double Index
 		{ 
-			get { return (int)_index; }
+			get { return _index; }
 			set { _index = value % Count; }
 		}
 

@@ -57,7 +57,7 @@ namespace GRaff.GraphicTest
 
 		public override void OnStep()
 		{
-			Window.Title = $"Particle count: {starSystem.Count.ToString()}\t-\tFPS: {Time.FPS}";
+			Window.Title = $"Particle count: {starSystem.Count.ToString()}\t-\tFPS: {Time.Fps}";
 			attractor.Location = Mouse.Location;
         }
 

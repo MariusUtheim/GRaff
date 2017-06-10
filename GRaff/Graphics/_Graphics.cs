@@ -14,9 +14,10 @@ namespace GRaff.Graphics
 		{
 			try
 			{
+                Draw.Device = new RenderDevice();
+
 				ColorMap.BlendMode = BlendMode.AlphaBlend;
 				GL.Enable(EnableCap.Blend);
-				GL.Clear(ClearBufferMask.ColorBufferBit);
 
                 ShaderProgram.Default.SetCurrent();
 

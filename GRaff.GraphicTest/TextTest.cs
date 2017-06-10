@@ -4,7 +4,7 @@ using GRaff.Graphics;
 
 namespace GRaff.GraphicTest
 {
-	[Test]
+	//[Test]
 	class TextTest : GameElement
 	{
 		private const string lipsum = "Lorem ipsum dolor sit amet, consectetur adipiscing elit.\nPhasellus rutrum nibh sed nulla dapibus, sit amet tempor nulla feugiat.";
@@ -25,15 +25,15 @@ namespace GRaff.GraphicTest
 		{
 			Draw.Clear(Colors.LightGray);
 
-			Draw.Text("Hello, world!", _render, Colors.Black, 10, 10);
+			Draw.Text("Hello, world!", _render, Colors.Black, (10, 10));
 
-			Draw.Rectangle(Colors.Black, 10, 50, 300, _font.Height);
-			Draw.Text(_render.Truncate(lipsum), _render, Colors.Black, 10, 50);
+			Draw.Rectangle(Colors.Black, ((10, 50), (300, _font.Height)));
+			Draw.Text(_render.Truncate(lipsum), _render, Colors.Black, (10, 50));
 
-			Draw.Text($"Line one\nLine two{Environment.NewLine}Line three", _render, Colors.Black, 10, 90);
+			Draw.Text($"Line one\nLine two{Environment.NewLine}Line three", _render, Colors.Black, (10, 90));
 
-			Draw.Rectangle(Colors.Black, 350, 10, 300, 300);
-			Draw.Text(lipsum, _render, Colors.Black, 350, 10);
+			Draw.Rectangle(Colors.Black, ((350, 10), (300, 300)));
+			Draw.Text(lipsum, _render, Colors.Black, (350, 10));
 
 			if (_renderedSprite != null)
 				Draw.Sprite(_renderedSprite, 0, Colors.Blue, new Transform

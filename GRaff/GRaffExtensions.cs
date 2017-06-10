@@ -11,24 +11,6 @@ namespace GRaff
 {
 	public static class GRaffExtensions
 	{
-		internal static T ArgMin<T, TValue>(this IEnumerable<T> enumerable, Func<T, TValue> selector) where TValue : IComparable<TValue>
-		{
-			var min = enumerable.First();
-			var value = selector(min);
-			foreach (var v in enumerable.Skip(1))
-			{
-				var currentValue = selector(v);
-				if (currentValue.CompareTo(value) < 0)
-				{
-					min = v;
-					value = currentValue;
-				}
-			}
-
-			return min;
-		}
-        
-
 		internal static IEnumerable<T> TakeWhilePrevious<T>(this IEnumerable<T> enumerable, Func<T, bool> predicate)
 		{
 			foreach (var v in enumerable)
@@ -39,14 +21,35 @@ namespace GRaff
 			}
 		}
 
-		#region Random functions
-		
-		/// <summary>
-		/// Returns true or false with equal probability.
-		/// </summary>
-		/// <param name="rnd">The System.Random to generate the boolean value.</param>
-		/// <returns>A boolean value.</returns>
-		public static bool Boolean(this Random rnd)
+        internal static IEnumerable<TOut> SelectMany<TIn, TOut>(this IEnumerable<TIn> enumerable, Func<TIn, ValueTuple<TOut, TOut>> map)
+        {
+            foreach (var v in enumerable)
+            {
+                var w = map(v);
+                yield return w.Item1;
+                yield return w.Item2;
+            }
+        }
+
+        internal static IEnumerable<TOut> SelectMany<TIn, TOut>(this IEnumerable<TIn> enumerable, Func<TIn, ValueTuple<TOut, TOut, TOut>> map)
+        {
+            foreach (var v in enumerable)
+            {
+                var w = map(v);
+                yield return w.Item1;
+                yield return w.Item2;
+                yield return w.Item3;
+            }
+        }
+
+        #region Random functions
+
+        /// <summary>
+        /// Returns true or false with equal probability.
+        /// </summary>
+        /// <param name="rnd">The System.Random to generate the boolean value.</param>
+        /// <returns>A boolean value.</returns>
+        public static bool Boolean(this Random rnd)
 		{
 			Contract.Requires<ArgumentNullException>(rnd != null);
 			return rnd.Next() % 2 == 0;

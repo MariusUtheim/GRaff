@@ -188,12 +188,16 @@ namespace GRaff.Graphics.Text
 		}
 
 
-		internal string[] RenderCoords(string text, out GraphicsPoint[] quadCoords)
+		internal (GraphicsPoint[] vertices, GraphicsPoint[] texCoords) RenderCoords(string text)
 		{
 			var lines = LineSplit(text);
-			var length = lines.Sum(line => line.Length);
+			var length = lines.SelectMany(str => str.ToCharArray())
+                              .Where(c => Font.HasCharacter(c))
+                              .Count();
+            double tXScale = 1.0 / Font.Buffer.Width, tYScale = 1.0 / Font.Buffer.Height;
 
-			var coords = new GraphicsPoint[4 * length];
+            var vertices = new GraphicsPoint[4 * length];
+            var texCoords = new GraphicsPoint[4 * length];
 
 			var x0 = 0.0;
 			var y0 = 0.0;
@@ -220,52 +224,26 @@ namespace GRaff.Graphics.Text
 				var y = y0 + l * (Font.Height + LineSeparation);
 				for (var i = 0; i < lines[l].Length; i++)
 				{
-					FontCharacter c;
-					if (Font.TryGetCharacter(lines[l][i], out c))
-					{
-						coords[coordIndex] = new GraphicsPoint(x + c.XOffset, y + c.YOffset);
-						coords[coordIndex + 1] = new GraphicsPoint(x + c.XOffset + c.Width, y + c.YOffset);
-						coords[coordIndex + 2] = new GraphicsPoint(x + c.XOffset + c.Width, y + c.YOffset + c.Height);
-						coords[coordIndex + 3] = new GraphicsPoint(x + c.XOffset, y + c.YOffset + c.Height);
-						x += c.XAdvance;
-						if (i < lines[l].Length - 1)
-							x += Font.GetKerning(lines[l][i], lines[l][i + 1]);
-					}
-					coordIndex += 4;
+                    if (Font.TryGetCharacter(lines[l][i], out FontCharacter c))
+                    {
+                        vertices[coordIndex] = new GraphicsPoint(x + c.XOffset, y + c.YOffset);
+                        vertices[coordIndex + 1] = new GraphicsPoint(x + c.XOffset + c.Width, y + c.YOffset);
+                        vertices[coordIndex + 2] = new GraphicsPoint(x + c.XOffset + c.Width, y + c.YOffset + c.Height);
+                        vertices[coordIndex + 3] = new GraphicsPoint(x + c.XOffset, y + c.YOffset + c.Height);
+                        x += c.XAdvance;
+                        if (i < lines[l].Length - 1)
+                            x += Font.GetKerning(lines[l][i], lines[l][i + 1]);
+
+                        texCoords[coordIndex] = new GraphicsPoint(tXScale * c.X, tYScale * c.Y);
+                        texCoords[coordIndex + 1] = new GraphicsPoint(tXScale * (c.X + c.Width), tYScale * c.Y);
+                        texCoords[coordIndex + 2] = new GraphicsPoint(tXScale * (c.X + c.Width), tYScale * (c.Y + c.Height));
+                        texCoords[coordIndex + 3] = new GraphicsPoint(tXScale * c.X, tYScale * (c.Y + c.Height));
+                    }
+                    coordIndex += 4;
 				}
 			}
 
-			quadCoords = coords;
-			return lines;
-		}
-
-		internal void RenderTexCoords(string str, int offset, ref GraphicsPoint[] texCoords)
-		{
-			double tXScale = 1.0 / Font.Buffer.Width, tYScale = 1.0 / Font.Buffer.Height;
-
-			for (var i = 0; i < str.Length; i++)
-			{
-				if (str[i] == '\n')
-					continue;
-
-				var index = 4 * (i + offset);
-
-				FontCharacter character;
-				if (Font.TryGetCharacter(str[i], out character))
-				{
-					texCoords[index] = new GraphicsPoint(tXScale * character.X, tYScale * character.Y);
-					texCoords[index + 1] = new GraphicsPoint(tXScale * (character.X + character.Width), tYScale * character.Y);
-					texCoords[index + 2] = new GraphicsPoint(tXScale * (character.X + character.Width), tYScale * (character.Y + character.Height));
-					texCoords[index + 3] = new GraphicsPoint(tXScale * character.X, tYScale * (character.Y + character.Height));
-				}
-				else
-				{
-					texCoords[index] = GraphicsPoint.Zero;
-					texCoords[index + 1] = GraphicsPoint.Zero;
-					texCoords[index + 2] = GraphicsPoint.Zero;
-					texCoords[index + 3] = GraphicsPoint.Zero;
-				}
-			}
+            return (vertices, texCoords);
 		}
 
 	}

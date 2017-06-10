@@ -24,7 +24,7 @@ namespace GRaff.GraphicTest
 
 		public override void OnDraw()
 		{
-			Draw.Sprite(fourSprites, Time.LoopCount / 30, 0, 0);
+			Draw.Sprite(fourSprites, Time.LoopCount / 30, (0, 0));
 			Draw.Sprite(sprite, 0, Identity);
 			Draw.Sprite(sprite, 0, HFlip);
 			Draw.Sprite(sprite, 0, VFlip);

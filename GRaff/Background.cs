@@ -22,7 +22,7 @@ namespace GRaff
 		{
 			Depth = Int32.MaxValue;
 			_renderSystem = new RenderSystem();
-			_renderSystem.SetColors(UsageHint.StaticDraw, Colors.White, Colors.White, Colors.White, Colors.White);
+			_renderSystem.SetColor(UsageHint.StaticDraw, Colors.White);
 		}
 
 		/// <summary>
@@ -106,12 +106,12 @@ namespace GRaff
 					coords left = (coords)viewBox.Left, right = (coords)viewBox.Right, top = (coords)viewBox.Top, bottom = (coords)viewBox.Bottom;
 
 					_renderSystem.SetVertices(UsageHint.StreamDraw, left, top, right, top, right, bottom, left, bottom);
-					_renderSystem.SetTexCoords(UsageHint.StreamDraw, u0, v0, u1, v0, u1, v1, u0, v1);
+					_renderSystem.SetTexCoords(UsageHint.StreamDraw, new[] { u0, v0, u1, v0, u1, v1, u0, v1 });
 
                     _renderSystem.Render(Buffer, PrimitiveType.Quads);
 				}
 				else
-					Draw.Texture(Buffer.Texture, XOffset, YOffset);
+					Draw.Texture(Buffer.Texture, (XOffset, YOffset));
 			}
 		}
 	}

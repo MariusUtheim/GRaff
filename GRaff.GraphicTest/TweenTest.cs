@@ -45,7 +45,7 @@ namespace GRaff.GraphicTest
 		public override void OnDraw()
 		{
 			Draw.FillCircle(_color, Location, 8);
-			Draw.Line(Colors.White, Room.Current.Center.X, 0, Room.Current.Center.X, Room.Current.Height);
+			Draw.Line(Colors.White, (Room.Current.Center.X, 0), (Room.Current.Center.X, Room.Current.Height));
 		}
 
 		public void OnGlobalMouse(MouseButton button)

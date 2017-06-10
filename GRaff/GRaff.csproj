@@ -117,6 +117,7 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Graphics\IRenderDevice.cs" />
     <Compile Include="ObjectDisposedIncorrectlyException.cs" />
     <Compile Include="Audio\SoundSource.cs" />
     <Compile Include="Contract.cs" />
@@ -290,7 +291,7 @@
     <Compile Include="Audio\SoundElement.cs" />
     <Compile Include="Audio\SoundState.cs" />
     <Compile Include="Graphics\Sprite.cs" />
-    <Compile Include="Graphics\Surface.cs" />
+    <Compile Include="Graphics\RenderDevice.cs" />
     <Compile Include="Synchronization\operations\TaskOperator.cs" />
     <Compile Include="Graphics\Texture.cs" />
     <Compile Include="Synchronization\ParallelOperator.cs" />
