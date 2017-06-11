@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Diagnostics.Contracts;
 using GRaff.Synchronization;
-using GRaff.Graphics.Shaders;
 #if OpenGL4
 using OpenTK.Graphics.OpenGL4;
 using coords = System.Double;
@@ -14,7 +12,7 @@ using coords = System.Single;
 namespace GRaff.Graphics
 {
 #warning Review class
-	public class ShaderProgram : IDisposable
+    public class ShaderProgram : IDisposable
 	{
 		private bool _disposed = false;
 
@@ -23,11 +21,6 @@ namespace GRaff.Graphics
         public static ShaderProgram BlackWhite { get; } = new ShaderProgram(VertexShader.Default, FragmentShader.BlackWhite);
 
         public static ShaderProgram Sepia { get; } = new ShaderProgram(VertexShader.Default, FragmentShader.Sepia);
-
-		//public static ShaderProgram DefaultColored = new ShaderProgram(Shader.DefaultColoredVertexShader, Shader.DefaultColoredFragmentShader);
-		//public static ShaderProgram DefaultTextured = new ShaderProgram(Shader.DefaultTexturedVertexShader, Shader.DefaultTexturedFragmentShader);
-		//public static ShaderProgram CurrentColored;
-		//public static ShaderProgram CurrentTextured;
 
 		public ShaderProgram(VertexShader vertexShader, FragmentShader fragmentShader)
 		{
@@ -72,22 +65,34 @@ namespace GRaff.Graphics
 
         public void SetUniform(string name, bool value)
         {
-            GL.Uniform1(GL.GetUniformLocation(Id, name), value ? 1 : 0);
+            var location = GL.GetUniformLocation(Id, name);
+            if (location < 0)
+                _Graphics.ClearError();
+            else
+            {
+                GL.Uniform1(location, value ? 1 : 0);
+                _Graphics.ErrorCheck();
+            }
         }
 
-		public void SetUniform(string name, int value)
+        public void SetUniform(string name, int value)
 		{
-            GL.Uniform1(GL.GetUniformLocation(Id, name), value);
+            var location = GL.GetUniformLocation(Id, name);
+            GL.Uniform1(location, value);
             _Graphics.ErrorCheck();
 		}
         
         public void SetUniform(string name, double value)
 		{
-			GL.Uniform1(GL.GetUniformLocation(Id, name), (coords)value);
+            var location = GL.GetUniformLocation(Id, name);
+            _Graphics.ErrorCheck();
+            GL.Uniform1(location, (float)value);
             _Graphics.ErrorCheck();
 		}
 
 		public int Id { get; private set; }
+
+        public IDisposable Use() => new ShaderProgramContext(this);
 
 		~ShaderProgram()
 		{
@@ -116,5 +121,35 @@ namespace GRaff.Graphics
 			GC.SuppressFinalize(this);
 		}
 
-	}
+
+        private class ShaderProgramContext : IDisposable
+        {
+            private ShaderProgram _previous;
+            private bool _isDisposed = false;
+
+            public ShaderProgramContext(ShaderProgram program)
+            {
+                this._previous = ShaderProgram.Current;
+                program.SetCurrent();
+            }
+
+            ~ShaderProgramContext()
+            {
+                Async.Throw(new ObjectDisposedIncorrectlyException("A context returned from GRaff.ShaderProgram.Use was garbage collected before Dispose was called."));
+            }
+
+            public void Dispose()
+            {
+                if (!_isDisposed)
+                {
+                    GC.SuppressFinalize(this);
+                    _isDisposed = true;
+                    _previous.SetCurrent();
+                }
+                else
+                    throw new ObjectDisposedException("ShaderProgram");
+            }
+        }
+
+    }
 }

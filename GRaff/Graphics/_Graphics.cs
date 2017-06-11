@@ -10,32 +10,24 @@ namespace GRaff.Graphics
 {
 	internal static class _Graphics
 	{
-		public static void Initialize()
-		{
-			try
-			{
-                Draw.Device = new RenderDevice();
+        public static void Initialize()
+        {
+            Draw.Device = new RenderDevice();
 
-				ColorMap.BlendMode = BlendMode.AlphaBlend;
-				GL.Enable(EnableCap.Blend);
+            ColorMap.BlendMode = BlendMode.AlphaBlend;
+            GL.Enable(EnableCap.Blend);
 
-                ShaderProgram.Default.SetCurrent();
+            ShaderProgram.Default.SetCurrent();
 
-                Framebuffer.ExpectedViewWidth = Window.Width;
-				Framebuffer.ExpectedViewHeight = Window.Height;
+            Framebuffer.ExpectedViewWidth = Window.Width;
+            Framebuffer.ExpectedViewHeight = Window.Height;
 
 #if DEBUG
-				GlobalEvent.EndStep += () =>
-				{
-					_Graphics.ErrorCheck();
-				};
+            GlobalEvent.EndStep += () =>
+            {
+                _Graphics.ErrorCheck();
+            };
 #endif
-			}
-			catch (TypeInitializationException ex)
-			{
-				var innerException = ex.InnerException;
-                System.Runtime.ExceptionServices.ExceptionDispatchInfo.Capture(ex.InnerException).Throw();
-            }
         }
 
         [Conditional("DEBUG")]
@@ -44,6 +36,11 @@ namespace GRaff.Graphics
             var err = GL.GetError();
             if (err != ErrorCode.NoError)
                 throw new Exception($"An OpenGL operation threw an exception with error code {Enum.GetName(typeof(ErrorCode), err)}");
+        }
+
+        public static bool ClearError()
+        {
+            return (GL.GetError() != ErrorCode.NoError);
         }
     }
 }

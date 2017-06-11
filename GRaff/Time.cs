@@ -22,7 +22,7 @@ namespace GRaff
 		/// <summary>
 		/// Gets the number of steps that has occurred since the game started.
 		/// </summary>
-		public static int LoopCount
+		public static double LoopCount
 		{
 			get;
 			private set;

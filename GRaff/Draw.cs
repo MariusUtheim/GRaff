@@ -92,12 +92,12 @@ namespace GRaff
 
         public static void FillEllipse(Color innerColor, Color outerColor, Rectangle rectangle) => _drawFan((GraphicsPoint)rectangle.Center, GRaff.Polygon.Ellipse(rectangle).Outline(), innerColor, outerColor);
 
-
-        public static void Texture(Texture texture, Point location)
-		{
-			if (texture != null)
-				Device.DrawTexture(texture, 0, 0, Colors.White, Matrix.Translation(location));
-		}
+        public static void Texture(Texture texture, Color blend, Point location)
+        {
+            if (texture != null)
+                Device.DrawTexture(texture, 0, 0, blend, Matrix.Translation(location));
+        }
+        public static void Texture(Texture texture, Point location) => Texture(texture, Colors.White, location);
 
         public static void Sprite(Sprite sprite, double imageIndex, Color blend, Matrix transform)
         {

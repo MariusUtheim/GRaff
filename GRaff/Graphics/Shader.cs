@@ -18,10 +18,10 @@ namespace GRaff.Graphics
 
         private bool _disposed;
 
-		protected Shader(ShaderType type, string source)
+		protected Shader(ShaderType type, params string[] source)
 		{
 			Id = GL.CreateShader(type);
-			GL.ShaderSource(Id, source);
+			GL.ShaderSource(Id, source.Length, source, (int[])null);
 			GL.CompileShader(Id);
 
             _Graphics.ErrorCheck();

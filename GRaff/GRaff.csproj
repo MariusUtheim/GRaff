@@ -146,7 +146,6 @@
     <Compile Include="Graphics\GraphicsPoint.cs" />
     <Compile Include="Graphics\Shader.cs" />
     <Compile Include="Graphics\ShaderProgramContext.cs" />
-    <Compile Include="Graphics\Shaders\CausticShader.cs" />
     <Compile Include="Geometry\MatrixException.cs" />
     <Compile Include="Audio\DistanceModel.cs" />
     <Compile Include="Audio\AudioListener.cs" />
