@@ -20,6 +20,7 @@ namespace GRaff.GraphicTest
 			_tests = types
 				.Where(t => t.GetCustomAttribute<TestAttribute>() != null)
 				.OrderBy(t => t.GetCustomAttribute<TestAttribute>().Order)
+                .ThenBy(t => t.Name)
 				.ToArray();
 
 			_testIndex = 0;

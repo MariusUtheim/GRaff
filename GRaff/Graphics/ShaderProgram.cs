@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics.Contracts;
 using GRaff.Synchronization;
+using GRaff.Graphics.Shaders;
 #if OpenGL4
 using OpenTK.Graphics.OpenGL4;
 using coords = System.Double;
@@ -17,20 +18,24 @@ namespace GRaff.Graphics
 	{
 		private bool _disposed = false;
 
-        public static readonly ShaderProgram Default = new ShaderProgram(Shader.DefaultVertexShader, Shader.DefaultFragmentShader);
+        public static ShaderProgram Default { get; } = new ShaderProgram(VertexShader.Default, FragmentShader.Default);
+
+        public static ShaderProgram BlackWhite { get; } = new ShaderProgram(VertexShader.Default, FragmentShader.BlackWhite);
+
+        public static ShaderProgram Sepia { get; } = new ShaderProgram(VertexShader.Default, FragmentShader.Sepia);
 
 		//public static ShaderProgram DefaultColored = new ShaderProgram(Shader.DefaultColoredVertexShader, Shader.DefaultColoredFragmentShader);
 		//public static ShaderProgram DefaultTextured = new ShaderProgram(Shader.DefaultTexturedVertexShader, Shader.DefaultTexturedFragmentShader);
 		//public static ShaderProgram CurrentColored;
 		//public static ShaderProgram CurrentTextured;
 
-		public ShaderProgram(params Shader[] shaders)
+		public ShaderProgram(VertexShader vertexShader, FragmentShader fragmentShader)
 		{
-			Contract.Requires<ArgumentNullException>(shaders != null);
+			Contract.Requires<ArgumentNullException>(vertexShader != null && fragmentShader != null);
 			Id = GL.CreateProgram();
-
-			foreach (var shader in shaders)
-				GL.AttachShader(Id, shader.Id);
+            
+			GL.AttachShader(Id, vertexShader.Id);
+            GL.AttachShader(Id, fragmentShader.Id);
 
 			GL.LinkProgram(Id);
 			string log;
@@ -42,12 +47,12 @@ namespace GRaff.Graphics
 			GL.BindAttribLocation(Id, 2, "in_TexCoord");
 
             GL.BindFragDataLocation(Id, 0, "out_FragColor");
-            
-            foreach (var shader in shaders)
-				GL.DetachShader(Id, shader.Id);
-		}
 
-		private static ShaderProgram _current;
+            GL.DetachShader(Id, vertexShader.Id);
+            GL.DetachShader(Id, fragmentShader.Id);
+        }
+
+        private static ShaderProgram _current;
 		public static ShaderProgram Current
 		{
 			get { return _current; }
