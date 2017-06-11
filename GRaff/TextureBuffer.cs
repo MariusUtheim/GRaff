@@ -109,7 +109,7 @@ namespace GRaff
             byte[] buffer = File.ReadAllBytes(path);
             Bitmap bitmap;
 
-            using (var bitmapStream = new MemoryStream(buffer))
+            var bitmapStream = new MemoryStream(buffer);
             using (var sourceImage = new Bitmap(bitmapStream))
             {
                 bitmap = new Bitmap(sourceImage.Width, sourceImage.Height, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
@@ -145,7 +145,7 @@ namespace GRaff
 				}
 
 
-				using (var bitmapStream = new MemoryStream(buffer))
+                var bitmapStream = new MemoryStream(buffer);
 				using (var sourceImage = new Bitmap(bitmapStream))
 				{
 					var bitmap = new Bitmap(sourceImage.Width, sourceImage.Height, System.Drawing.Imaging.PixelFormat.Format32bppArgb);

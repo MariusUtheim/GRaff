@@ -112,7 +112,8 @@ namespace GRaff.Audio
 
 		private static SoundFile LoadWave(FileInfo fileInfo)
 		{
-			using (var stream = fileInfo.OpenRead())
+            var stream = fileInfo.OpenRead();
+
 			using (var reader = new BinaryReader(stream))
 			{
 				var file = new WaveFile();

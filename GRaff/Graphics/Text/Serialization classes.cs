@@ -117,7 +117,9 @@ namespace GRaff.Graphics.Text
 			set;
 		}
 
+        [NonSerialized]
 		private IntRectangle _Padding;
+
 		[XmlAttribute("padding")]
 		public string Padding
 		{
@@ -133,7 +135,9 @@ namespace GRaff.Graphics.Text
 			}
 		}
 
+        [NonSerialized]
 		private IntVector _Spacing;
+
 		[XmlAttribute("spacing")]
 		public string Spacing
 		{
