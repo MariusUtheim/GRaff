@@ -20,7 +20,7 @@ namespace GRaff.Graphics.Shaders
         #region Source
         private static FragmentShader _causticFragmentShader =
             new FragmentShader(
-                Shader.Header + @"
+                Shader.GRaff_Header + @"
                 #define TAU 6.28318530718
                 #define MAX_ITER 5
 

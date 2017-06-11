@@ -9,12 +9,13 @@ namespace GRaff.Graphics
 {
     public class VertexShader : Shader
     {
-        public VertexShader(string source)
+        public VertexShader(params string[] source)
             : base(ShaderType.VertexShader, source) { }
 
         public static VertexShader Default { get; }
             = new VertexShader(
-                Header + @"
+                GRaff_Header,
+                @"
 		        in highp vec2 in_Position;
 		        in lowp vec4 in_Color;
 		        in highp vec2 in_TexCoord;

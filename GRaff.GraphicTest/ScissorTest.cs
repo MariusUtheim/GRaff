@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace GRaff.GraphicTest
 {
-    [Test(Order = -1)]
+    [Test]
     class ScissorTest : GameElement, IGlobalMousePressListener, IGlobalMouseReleaseListener
     {
         private bool _drawMode = true;

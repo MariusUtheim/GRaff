@@ -113,7 +113,8 @@
     <Compile Include="Randomness\Statistics.cs" />
     <Compile Include="Randomness\TrueRandom.cs" />
     <Compile Include="Randomness\VectorDistribution.cs" />
-    <Compile Include="Shaders\CausticShader.cs" />
+    <Compile Include="Shaders\CausticShaderProgram.cs" />
+    <Compile Include="Shaders\LightShaderProgram.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

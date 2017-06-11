@@ -39,6 +39,8 @@ namespace GRaff
 		public IntVector Size => new IntVector(Width, Height);
 		public Point Center => new Point(Width / 2.0, Height / 2.0);
 
+        public IntRectangle ClientRectangle => new IntRectangle(0, 0, Width, Height);
+
 		public virtual void OnEnter() { }
 
 		public virtual void OnLeave() { }

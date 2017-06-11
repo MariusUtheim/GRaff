@@ -12,7 +12,7 @@ namespace GRaff.Graphics
 	public abstract class Shader : IDisposable
 	{
 		public const string Version = "420 core";
-		public const string Header = "#version " + Version + @"
+		public const string GRaff_Header = "#version " + Version + @"
 ";
 
 

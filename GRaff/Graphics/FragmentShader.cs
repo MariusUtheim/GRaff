@@ -24,11 +24,13 @@ vec4 GRaff_GetFragColor(void) {
     else
         return GRaff_Color;
 }";
+        
 
 
         public static FragmentShader Default { get; }
             = new FragmentShader(
-                Header + @"
+                GRaff_Header,
+                @"
                 out highp vec4 out_FragColor;
 
                 vec4 GRaff_GetFragColor(void);
@@ -40,7 +42,8 @@ vec4 GRaff_GetFragColor(void) {
 
         public static FragmentShader BlackWhite { get; }
             = new FragmentShader(
-                Header + @"
+                GRaff_Header,
+                @"
                 out highp vec4 out_FragColor;
                 
                 vec4 GRaff_GetFragColor(void);
@@ -54,7 +57,8 @@ vec4 GRaff_GetFragColor(void) {
 
         public static FragmentShader Sepia { get; }
             = new FragmentShader(
-                Header + @"
+                GRaff_Header,
+                @"
                 out highp vec4 out_FragColor;
 
                 vec4 GRaff_GetFragColor(void);

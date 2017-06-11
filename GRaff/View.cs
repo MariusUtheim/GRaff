@@ -147,13 +147,6 @@ namespace GRaff
 
 		public static IDisposable UseView(double x, double y, double width, double height, Angle rotation = default(Angle))
 		{
-            /*
-             * 				this._prevX = View.X;
-				this._prevY = View.Y;
-				this._prevW = View.Width;
-				this._prevH = View.Height;
-				this._prevR = View.Rotation;
-*/
             return UseContext.CreateAt($"{typeof(View).FullName}.{nameof(UseView)}",
                 (x: View.X, y: View.Y, width: View.Width, height: View.Height, rotation: View.Rotation),
                 () => { View.X = x; View.Y = y; View.Width = width; View.Height = height; View.Rotation = rotation; View.LoadMatrixToProgram(); },
