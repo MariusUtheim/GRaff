@@ -131,7 +131,29 @@ namespace GRaff.Graphics
             _renderSystem.Render(texture.Buffer, PrimitiveType.Quads);
         }
 
-		public void DrawText(TextRenderer renderer, Color color, string text, Matrix transform)
+        public void DrawTexture(TextureBuffer buffer, GraphicsPoint[] vertices, Color blend, GraphicsPoint[] texCoords, PrimitiveType type)
+        {
+            Contract.Requires<ArgumentNullException>(buffer != null && vertices != null && texCoords != null);
+            Contract.Requires<ObjectDisposedException>(!buffer.IsDisposed);
+
+            _renderSystem.SetVertices(vertices);
+            _renderSystem.SetColor(blend);
+            _renderSystem.SetTexCoords(texCoords);
+            _renderSystem.Render(buffer, type);
+        }
+
+
+        public void DrawTexture(TextureBuffer buffer, GraphicsPoint[] vertices, Color[] colors, GraphicsPoint[] texCoords, PrimitiveType type)
+        {
+            Contract.Requires<ArgumentNullException>(buffer != null && vertices != null && texCoords != null);
+            Contract.Requires<ObjectDisposedException>(!buffer.IsDisposed);
+
+            _renderSystem.SetVertices(vertices);
+            _renderSystem.SetColors(colors);
+            _renderSystem.SetTexCoords(texCoords);
+            _renderSystem.Render(buffer, type);
+        }
+        public void DrawText(TextRenderer renderer, Color color, string text, Matrix transform)
 		{
 			Contract.Requires<ArgumentNullException>(renderer != null && transform != null);
 
@@ -148,6 +170,5 @@ namespace GRaff.Graphics
             _renderSystem.SetTexCoords(texCoords);
             _renderSystem.Render(renderer.Font.Buffer, PrimitiveType.Quads);
 		}
-
-	}
+    }
 }

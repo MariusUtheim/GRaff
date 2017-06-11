@@ -7,8 +7,8 @@ using GRaff.Graphics;
 
 namespace GRaff.GraphicTest
 {
-	[Test]
-	class AnimationTest : GameElement
+#warning [Test]
+    class AnimationTest : GameElement
 	{
 		Sprite sprite = new Sprite(new AnimationStrip(TextureBuffers.Giraffe, 20), origin: new Vector(0, 0));
 		Sprite pausedSprite = new Sprite(new AnimationStrip(TextureBuffers.Giraffe, 20, new ValueTuple<int, double>[] {

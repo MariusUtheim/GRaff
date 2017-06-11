@@ -17,6 +17,9 @@ namespace GRaff.Graphics
 
         void DrawTexture(Texture texture, double xOrigin, double yOrigin, Color blend, Matrix transform);
 
+        void DrawTexture(TextureBuffer buffer, GraphicsPoint[] vertices, Color blend, GraphicsPoint[] texCoords, PrimitiveType type);
+        void DrawTexture(TextureBuffer buffer, GraphicsPoint[] vertices, Color[] colors, GraphicsPoint[] texCoords, PrimitiveType type);
+
         void DrawText(TextRenderer renderer, Color color, string text, Matrix transform);
 
     }

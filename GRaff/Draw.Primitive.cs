@@ -58,6 +58,16 @@ namespace GRaff
 				Device.Draw(vertices, color, PrimitiveType.Quads);
 
 			}
-		}
+
+            public static void CustomTextured(PrimitiveType primitiveType, TextureBuffer buffer, Color blend, params (GraphicsPoint vertex, GraphicsPoint texCoord)[] vertices)
+            {
+                Device.DrawTexture(buffer, vertices.Select(v => v.vertex).ToArray(), blend, vertices.Select(v => v.texCoord).ToArray(), primitiveType);
+            }
+
+            public static void CustomTextured(PrimitiveType primitiveType, TextureBuffer buffer, params (GraphicsPoint vertex, Color color, GraphicsPoint texCoord)[] vertices)
+            {
+                Device.DrawTexture(buffer, vertices.Select(v => v.vertex).ToArray(), vertices.Select(v => v.color).ToArray(), vertices.Select(v => v.texCoord).ToArray(), primitiveType);
+            }
+        }
     }
 }

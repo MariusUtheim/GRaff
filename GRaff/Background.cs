@@ -1,5 +1,6 @@
 ﻿using System;
 using GRaff.Graphics;
+using GRaff.Synchronization;
 #if OpenGL4
 using coords = System.Double;
 #else
@@ -13,7 +14,7 @@ namespace GRaff
 	/// </summary>
 	public sealed class Background : GameElement
 	{
-		private readonly RenderSystem _renderSystem;
+		//private readonly RenderSystem _renderSystem;
 
 		/// <summary>
 		/// Creates a new instance of the GRaff.Background class with no sprite or color.
@@ -21,8 +22,8 @@ namespace GRaff
 		public Background()
 		{
 			Depth = Int32.MaxValue;
-			_renderSystem = new RenderSystem();
-			_renderSystem.SetColor(UsageHint.StaticDraw, Colors.White);
+		//	_renderSystem = new RenderSystem();
+		//	_renderSystem.SetColor(UsageHint.StaticDraw, Colors.White);
 		}
 
 		/// <summary>
@@ -105,10 +106,14 @@ namespace GRaff
 
 					coords left = (coords)viewBox.Left, right = (coords)viewBox.Right, top = (coords)viewBox.Top, bottom = (coords)viewBox.Bottom;
 
-					_renderSystem.SetVertices(UsageHint.StreamDraw, left, top, right, top, right, bottom, left, bottom);
-					_renderSystem.SetTexCoords(UsageHint.StreamDraw, new[] { u0, v0, u1, v0, u1, v1, u0, v1 });
-
-                    _renderSystem.Render(Buffer, PrimitiveType.Quads);
+                    Draw.Primitive.CustomTextured(PrimitiveType.Quads, Buffer, Colors.White, new[]
+                    {
+                        (new GraphicsPoint(left, top), new GraphicsPoint(u0, v0)),
+                        (new GraphicsPoint(right, top), new GraphicsPoint(u1, v0)),
+                        (new GraphicsPoint(right, bottom), new GraphicsPoint(u1, v1)),
+                        (new GraphicsPoint(left, bottom), new GraphicsPoint(u0, v1))
+                    });
+                    
 				}
 				else
 					Draw.Texture(Buffer.Texture, (XOffset, YOffset));
