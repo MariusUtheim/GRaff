@@ -19,7 +19,6 @@ namespace GRaff
 		/// <param name="height">The height of the rectangle.</param>
 		public Rectangle(double x, double y, double width, double height)
 			: this()
-#warning What to do if width/height are negative? 
         {
 			Left = x;
 			Top = y;
@@ -190,7 +189,7 @@ namespace GRaff
 			=> new Rectangle(r.TopLeft - v, r.Size);
 
 
-        public static implicit operator Rectangle((Point p, Vector v) r) => new Rectangle(r.p, r.v);
-        public static implicit operator (Point p, Vector v)(Rectangle r) => (r.TopLeft, r.Size);
+        public static implicit operator Rectangle((Point location, Vector size) r) => new Rectangle(r.location, r.size);
+        public static implicit operator (Point location, Vector size) (Rectangle r) => (r.TopLeft, r.Size);
 	}
 }

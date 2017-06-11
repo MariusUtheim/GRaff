@@ -204,5 +204,10 @@ namespace GRaff
 		/// <returns>The GRaff.IntRectangle that results from the conversion.</returns>
 		public static explicit operator IntRectangle(Rectangle r)
 			=> new IntRectangle((int)r.Left, (int)r.Top, (int)r.Width, (int)r.Height);
-	}
+
+        public static implicit operator IntRectangle((IntVector location, IntVector size) r) => new IntRectangle(r.location, r.size);
+
+        public static implicit operator (IntVector location, IntVector size) (IntRectangle r) => (r.TopLeft, r.Size);
+
+    }
 }

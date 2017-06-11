@@ -37,15 +37,15 @@ namespace GRaff
         public static void Run(int windowWidth, int windowHeight, double fps, Action gameStart)
         {
             Time.StartTime = Time.MachineTime;
-            Window = new GameWindow(windowWidth, windowHeight, GraphicsMode.Default, "Giraffe", GameWindowFlags.Default, DisplayDevice.Default);
-            Window.WindowBorder = WindowBorder.Fixed;
+            Window = new GameWindow(windowWidth, windowHeight, GraphicsMode.Default, "Giraffe", GameWindowFlags.FixedWindow, DisplayDevice.Default);
+            GRaff.Window.DisplayScale = new Vector(Window.Width / (double)windowWidth, Window.Height / (double)windowHeight);
 
             Window.UpdateFrame += (sender, e) => Giraffe.Loop();
             Window.Closing += (sender, e) => IsRunning = false;
 
             Window.KeyDown += (sender, e) => { Keyboard.Press((Key)e.Key); };
             Window.KeyUp += (sender, e) => { Keyboard.Release((Key)e.Key); };
-            Window.MouseMove += (sender, e) => { Mouse.WindowX = e.X; Mouse.WindowY = e.Y; };
+            Window.MouseMove += (sender, e) => { Mouse.WindowX = (int)(e.X / GRaff.Window.DisplayScale.X); Mouse.WindowY = (int)(e.Y / GRaff.Window.DisplayScale.Y); };
             Window.MouseDown += (sender, e) => { Mouse.Press((MouseButton)e.Button); };
             Window.MouseUp += (sender, e) => { Mouse.Release((MouseButton)e.Button); };
             Window.MouseWheel += (sender, e) => { Mouse.Wheel(e.ValuePrecise, e.DeltaPrecise); };

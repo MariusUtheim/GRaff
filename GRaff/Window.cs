@@ -1,28 +1,25 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using OpenTK;
+using System.Drawing;
+using OpenTK; 
 
 namespace GRaff
 {
-	/// <summary>
-	/// Provides methods for dealing with the game window.
-	/// </summary>
-	public static class Window
+    /// <summary>
+    /// Provides methods for dealing with the game window.
+    /// </summary>
+    public static class Window
 	{
 		/// <summary>
 		/// Gets or sets the width of the game window.
 		/// </summary>
 		public static int Width
 		{
-			get { return Giraffe.Window.Width; }
+			get { return (int)(Giraffe.Window.ClientSize.Width / DisplayScale.X); }
 			set
 			{
 				if (value <= 0)
 					throw new ArgumentOutOfRangeException("value", "Value must be greater than 0");
-				Giraffe.Window.Width = value; 
+				Giraffe.Window.ClientSize = new Size((int)(value * DisplayScale.X), Giraffe.Window.ClientSize.Height); 
 			}
 		}
 
@@ -31,12 +28,12 @@ namespace GRaff
 		/// </summary>
 		public static int Height
 		{
-			get { return Giraffe.Window.Height; }
+			get { return (int)(Giraffe.Window.ClientSize.Height / DisplayScale.Y); }
 			set
 			{
 				if (value <= 0)
 					throw new ArgumentOutOfRangeException("value", "Must be greater than 0");
-				Giraffe.Window.Height = value;
+				Giraffe.Window.ClientSize = new Size(Giraffe.Window.ClientSize.Width, (int)(value * DisplayScale.Y));
 			}
 		}
 
@@ -48,6 +45,8 @@ namespace GRaff
 			get { return new IntVector(Width, Height); }
 			set { Width = value.X; Height = value.Y; }
 		}
+
+        public static Vector DisplayScale { get; internal set; }
 
 		/// <summary>
 		/// Gets or sets whether the window border should be visible.
