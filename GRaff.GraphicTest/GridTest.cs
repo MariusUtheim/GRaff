@@ -38,78 +38,79 @@ namespace GRaff.GraphicTest
 				n++;
         }
 
-		static Point mapToScreen(IntVector p) => new Point(x0 + dx * p.X, y0 + dy * p.Y);
-		static IntVector mapToGrid(Point p) => new IntVector((int)((p.X - x0) / dx + 0.5), (int)((p.Y - y0) / dy + 0.5));
-		static Point snapToGrid(Point p) => mapToScreen(mapToGrid(p));
+		static Point _mapToScreen(IntVector p) => new Point(x0 + dx * p.X, y0 + dy * p.Y);
+		static IntVector _mapToGrid(Point p) => new IntVector((int)((p.X - x0) / dx + 0.5), (int)((p.Y - y0) / dy + 0.5));
+		static Point _snapToGrid(Point p) => _mapToScreen(_mapToGrid(p));
 
-		private void drawShortestPath()
+		private void _drawShortestPath()
 		{
 			if (_from != null)
-				Draw.FillCircle(Colors.Red.Transparent(0.5), mapToScreen(_from.Location), 7);
+				Draw.FillCircle(Colors.Red.Transparent(0.5), _mapToScreen(_from.Location), 7);
 			if (_to != null)
-				Draw.FillCircle(Colors.Blue.Transparent(0.5), mapToScreen(_to.Location), 7);
+				Draw.FillCircle(Colors.Blue.Transparent(0.5), _mapToScreen(_to.Location), 7);
 			if (_from != null && _to != null)
 			{
 				var path = _grid.ShortestPath(_from, _to);
 				if (path != null)
-					Draw.Primitive.Lines(Colors.Red, path.Edges.Select(e => new Line(mapToScreen(e.From.Location), mapToScreen(e.To.Location))).ToArray());
+					Draw.Primitive.Lines(Colors.Red, path.Edges.Select(e => new Line(_mapToScreen(e.From.Location), _mapToScreen(e.To.Location))).ToArray());
 			}
 		}
 
-		private void drawSpanningTree()
+		private void _drawSpanningTree()
 		{
 			if (_to != null)
-				Draw.FillCircle(Colors.Blue.Transparent(0.5), mapToScreen(_to.Location), 7);
+				Draw.FillCircle(Colors.Blue.Transparent(0.5), _mapToScreen(_to.Location), 7);
 			if (_from != null)
 			{
-				Draw.FillCircle(Colors.Red.Transparent(0.5), mapToScreen(_from.Location), 7);
+				Draw.FillCircle(Colors.Red.Transparent(0.5), _mapToScreen(_from.Location), 7);
 				var edges = _grid.MinimalSpanningTree(_from);
-				Draw.Primitive.Lines(Colors.Red, edges.Take(n).Select(e => new Line(mapToScreen(e.From.Location), mapToScreen(e.To.Location))).ToArray());
+				Draw.Primitive.Lines(Colors.Red, edges.Take(n).Select(e => new Line(_mapToScreen(e.From.Location), _mapToScreen(e.To.Location))).ToArray());
 			}
 		}
 
-		private void drawHeuristicSpanningTree()
+		private void _drawHeuristicSpanningTree()
 		{
 			if (_from != null)
-				Draw.FillCircle(Colors.Red.Transparent(0.9), mapToScreen(_from.Location), 7);
+				Draw.FillCircle(Colors.Red.Transparent(0.9), _mapToScreen(_from.Location), 7);
 			if (_to != null)
-				Draw.FillCircle(Colors.Blue.Transparent(0.9), mapToScreen(_to.Location), 7);
+				Draw.FillCircle(Colors.Blue.Transparent(0.9), _mapToScreen(_to.Location), 7);
 			if (_from != null && _to != null)
 			{
-				Draw.FillCircle(Colors.Red.Transparent(0.5), mapToScreen(_from.Location), 7);
+				Draw.FillCircle(Colors.Red.Transparent(0.5), _mapToScreen(_from.Location), 7);
 				var edges = _grid.MinimalSpanningTree(_from, h => h.HeuristicDistance(_to));
 				Draw.Primitive.Lines(Colors.Red, edges.Take(n)
 													  .TakeWhilePrevious(e => e.To != _to)
-													  .Select(e => new Line(mapToScreen(e.From.Location), mapToScreen(e.To.Location))).ToArray());
+													  .Select(e => new Line(_mapToScreen(e.From.Location), _mapToScreen(e.To.Location))).ToArray());
 			}
 		}
 
-		public void drawBeautifulTree()
+		public void _drawBeautifulTree()
 		{
 			if (_from != null)
-				Draw.FillCircle(Colors.Red.Transparent(0.9), mapToScreen(_from.Location), 7);
+				Draw.FillCircle(Colors.Red.Transparent(0.9), _mapToScreen(_from.Location), 7);
 			if (_to != null)
-				Draw.FillCircle(Colors.Blue.Transparent(0.9), mapToScreen(_to.Location), 7);
+				Draw.FillCircle(Colors.Blue.Transparent(0.9), _mapToScreen(_to.Location), 7);
 			if (_from != null && _to != null)
 			{
-				Draw.FillCircle(Colors.Red.Transparent(0.5), mapToScreen(_from.Location), 7);
+				Draw.FillCircle(Colors.Red.Transparent(0.5), _mapToScreen(_from.Location), 7);
 				var edges = _grid.MinimalSpanningTree(_from, h => h.HeuristicDistance(_to), b => b.EuclideanDistance(_to), Double.PositiveInfinity);
 				Draw.Primitive.Lines(Colors.Red, edges.Take(n)
 													  .TakeWhilePrevious(e => e.To != _to)
-													  .Select(e => new Line(mapToScreen(e.From.Location), mapToScreen(e.To.Location))).ToArray());
+													  .Select(e => new Line(_mapToScreen(e.From.Location), _mapToScreen(e.To.Location))).ToArray());
 			}
 		}
 
 		public override void OnDraw()
 		{
-			Draw.Primitive.Lines(Colors.White, _grid.Edges.Select(e => new Line(mapToScreen(e.From.Location), mapToScreen(e.To.Location))).ToArray());
-			Draw.FillRectangle(Colors.White.Transparent(0.8), snapToGrid(Mouse.Location) - size/2, size);
+            Draw.Clear(Colors.LightGray);
+			Draw.Primitive.Lines(Colors.White, _grid.Edges.Select(e => new Line(_mapToScreen(e.From.Location), _mapToScreen(e.To.Location))).ToArray());
+			Draw.FillRectangle(Colors.White.Transparent(0.8), _snapToGrid(Mouse.Location) - size/2, size);
 			switch (mode)
 			{
-				case 1: drawShortestPath(); break;
-				case 2: drawSpanningTree(); break;
-				case 3: drawHeuristicSpanningTree(); break;
-				case 4: drawBeautifulTree(); break;
+				case 1: _drawShortestPath(); break;
+				case 2: _drawSpanningTree(); break;
+				case 3: _drawHeuristicSpanningTree(); break;
+				case 4: _drawBeautifulTree(); break;
 			}
 		}
 
@@ -117,11 +118,11 @@ namespace GRaff.GraphicTest
 		{
 			if (button == MouseButton.Left)
 			{
-				_from = _grid[mapToGrid(Mouse.Location)];
+				_from = _grid[_mapToGrid(Mouse.Location)];
 			}
 			else if (button == MouseButton.Right)
 			{
-				_to = _grid[mapToGrid(Mouse.Location)];
+				_to = _grid[_mapToGrid(Mouse.Location)];
 			}
 		}
 

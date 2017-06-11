@@ -28,7 +28,7 @@ namespace GRaff
             public static void Points(Color color, params Point[] vertices) => Custom(PrimitiveType.Points, color, vertices);
 
             public static void Lines(Color color, params Line[] lines) 
-                => Custom(PrimitiveType.Points, color, lines.SelectMany(l => (l.Origin, l.Destination)));
+                => Custom(PrimitiveType.Lines, color, lines.SelectMany(l => (l.Origin, l.Destination)));
 
             public static void LineStrip(Color color, params Point[] vertices) => Custom(PrimitiveType.LineStrip, color, vertices);
 

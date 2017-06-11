@@ -16,7 +16,7 @@ namespace GRaff.GraphicTest
             Console.WriteLine("[Background Test]");
 			background = Instance.Create(new Background
 			{
-				Color = Colors.Red,
+				Color = Colors.Bisque,
 				Buffer = TextureBuffers.Giraffe,
 				IsTiled = true
 			});

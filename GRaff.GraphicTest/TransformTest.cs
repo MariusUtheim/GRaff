@@ -12,8 +12,7 @@ namespace GRaff.GraphicTest
 	{
 		Sprite sprite = new Sprite(TextureBuffers.Giraffe.Texture);
 		Sprite fourSprites = new Sprite(new AnimationStrip(TextureBuffers.Giraffe, new IntVector(2, 2)), origin: Vector.Zero);
-
-
+        
 		Matrix Identity => new Matrix().Translate(200, 200);
 		Matrix HFlip => Matrix.Scaling(GMath.Sin(Time.LoopCount / 60.0), 1).Translate(500, 200);
 		Matrix VFlip => Matrix.Scaling(1, GMath.Cos(Time.LoopCount / 60.0)).Translate(800, 200);
@@ -24,6 +23,7 @@ namespace GRaff.GraphicTest
 
 		public override void OnDraw()
 		{
+            Draw.Clear(Colors.LightGray);
 			Draw.Sprite(fourSprites, Time.LoopCount / 30, (0, 0));
 			Draw.Sprite(sprite, 0, Identity);
 			Draw.Sprite(sprite, 0, HFlip);

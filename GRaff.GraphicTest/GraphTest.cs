@@ -15,11 +15,6 @@ namespace GRaff.GraphicTest
 		private SpatialVertex _selectedVertex, _fromVertex, _toVertex;
 		private bool _drag;
 
-		public GraphTest()
-		{
-
-        }
-
 		public override void OnStep()
 		{
 			if (_selectedVertex == null)
@@ -50,6 +45,7 @@ namespace GRaff.GraphicTest
 
 		public override void OnDraw()
 		{
+            Draw.Clear(Colors.Black);
 			if (_fromVertex != null)
 				Draw.FillCircle(Colors.ForestGreen, _fromVertex.Location, Radius + 2);
 			if (_toVertex != null)

@@ -12,20 +12,18 @@ namespace GRaff.GraphicTest
 	class FramebufferTest : GameElement, IKeyPressListener
 	{
 		Framebuffer _framebuffer;
-		Texture giraffe = TextureBuffers.Giraffe.Texture;
-		int w = 500, h = 500;
+		Texture _giraffe = TextureBuffers.Giraffe.Texture;
+        int w = 500, h = 500;
 
 		public FramebufferTest()
 		{
-			if (_framebuffer == null)
-			{
 				_framebuffer = new Framebuffer(w, h);
 
 				using (_framebuffer.Bind())
 				{
                     Draw.Clear(Colors.Red);
 
-					Draw.Texture(giraffe, (0, 0));
+					Draw.Texture(_giraffe, (0, 0));
 
 					Draw.FillTriangle(Colors.Black.Transparent(0), Colors.Black, Colors.Black, (0, 0), (0, 10), (10, 0));
 					Draw.FillTriangle(Colors.Black.Transparent(0), Colors.Black, Colors.Black, (w, 0), (w, 10), (w - 10, 0));
@@ -34,16 +32,14 @@ namespace GRaff.GraphicTest
 
 					Draw.Line(Colors.Black, (0, h), (w, 0));
 				}
-			}
-
 		}
 
 
 		public override void OnDraw()
 		{
+            Draw.Clear(Colors.LightGray);
 			Draw.Texture(_framebuffer?.Buffer.Texture, (0, 0));
 			Draw.Rectangle(Colors.Black, ((0, 0), (w, h)));
-			Draw.Texture(giraffe, (w, 0));
 		}
 
 		public void OnKeyPress(Key key)

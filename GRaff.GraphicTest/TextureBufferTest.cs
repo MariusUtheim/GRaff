@@ -7,7 +7,6 @@ namespace GRaff.GraphicTest
 	class TextureBufferTest : GameElement
 	{
 		Texture texture = TextureBuffers.Giraffe.Texture;
-		Sprite sprite = new Sprite(new AnimationStrip(TextureBuffers.Giraffe, 2));
 		TextureBuffer customTexture;
 
 		public TextureBufferTest()
@@ -25,7 +24,6 @@ namespace GRaff.GraphicTest
 		{
 			Draw.Clear(Colors.LightGray);
 			Draw.Texture(texture, (0, 0));
-			Draw.Sprite(sprite, Time.LoopCount / 20, (0.25 * texture.Width, 1.5 * texture.Height));
 			Draw.Texture(customTexture.Texture, (texture.Width, 1));
 		}
 	}

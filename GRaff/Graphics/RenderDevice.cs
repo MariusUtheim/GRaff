@@ -121,9 +121,9 @@ namespace GRaff.Graphics
 
             _renderSystem.SetVertices(new[] {
                 transform * new GraphicsPoint(-xOrigin, -yOrigin),
-                transform * new GraphicsPoint(xOrigin, -yOrigin),
-                transform * new GraphicsPoint(xOrigin, yOrigin),
-                transform * new GraphicsPoint(-xOrigin, yOrigin),
+                transform * new GraphicsPoint(texture.Width - xOrigin, -yOrigin),
+                transform * new GraphicsPoint(texture.Width - xOrigin, texture.Height - yOrigin),
+                transform * new GraphicsPoint(-xOrigin, texture.Height - yOrigin),
             });
             _renderSystem.SetColor(blend);
             

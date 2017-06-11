@@ -10,13 +10,18 @@ namespace GRaff.GraphicTest
 	[Test]
 	class TweenTest : GameObject, IGlobalMouseListener, IKeyPressListener
 	{
+        public TweenTest()
+        {
+            OnKeyPress(Key.Number1);
+        }
+
 		private static Dictionary<Key, TweeningFunction> functions = new Dictionary<Key, TweeningFunction>
 		{
             { Key.Number1, Tween.Linear },
             { Key.Number2, Tween.Quadratic },
 			{ Key.Number3, Tween.Cubic },
-			{ Key.Number4, Tween.Quartic },
-			{ Key.Number5, Tween.Quintic },
+			{ Key.Number4, Tween.Cubic.InOut() },
+			{ Key.Number5, Tween.Cubic.OutIn() },
 			{ Key.Number6, Tween.Sine },
 			{ Key.Number7, Tween.Circle },
 			{ Key.Number8, Tween.Bounce(3) },
@@ -29,8 +34,8 @@ namespace GRaff.GraphicTest
 			{ Key.Number1, "Linear" },
 			{ Key.Number2, "Quadratic" },
 			{ Key.Number3, "Cubic" },
-			{ Key.Number4, "Quartic" },
-			{ Key.Number5, "Quintic" },
+			{ Key.Number4, "Cubic InOut" },
+			{ Key.Number5, "Cubic OutIn" },
 			{ Key.Number6, "Sine" },
 			{ Key.Number7, "Circle" },
 			{ Key.Number8, "Bounce" },
@@ -38,21 +43,23 @@ namespace GRaff.GraphicTest
 			{ Key.Number0, "Elastic" }
 		};
 
-		private static Marker marker { get; set; }
+		private static Marker _marker { get; set; }
 		private TweeningFunction f = functions[Key.Number1];
 		private Color _color = Colors.DarkRed;
 
 		public override void OnDraw()
 		{
+            Draw.Clear(Colors.LightGray);
 			Draw.FillCircle(_color, Location, 8);
-			Draw.Line(Colors.White, (Room.Current.Center.X, 0), (Room.Current.Center.X, Room.Current.Height));
+			Draw.Line(Colors.Black, (Room.Current.Center.X, 0), (Room.Current.Center.X, Room.Current.Height));
+            Draw.Line(Colors.Black, (0, Room.Current.Center.Y), (Room.Current.Width, Room.Current.Center.Y));
 		}
 
 		public void OnGlobalMouse(MouseButton button)
 		{
 			_color = Colors.Red;
 
-			marker = Instance<Marker>.Create(new Point(GRandom.Integer(Room.Current.Width), GRandom.Integer(Room.Current.Height)));
+			_marker = Instance<Marker>.Create(new Point(GRandom.Integer(Room.Current.Width), GRandom.Integer(Room.Current.Height)));
 
 			if (button == MouseButton.Left)
 				Tween.Animate(90, f, () => this.Location, Mouse.Location, () => _color = Colors.DarkRed);
@@ -64,7 +71,7 @@ namespace GRaff.GraphicTest
 		{
 			if (functions.ContainsKey(key))
 			{
-				Window.Title = functionNames[key];
+				Window.Title = $"TweenTest - Fps: {Time.Fps} - {functionNames[key]}";
 				f = functions[key];
 			}
 		}

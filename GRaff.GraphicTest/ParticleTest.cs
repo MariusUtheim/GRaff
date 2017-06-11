@@ -43,7 +43,6 @@ namespace GRaff.GraphicTest
 		public ParticleTest()
 		{
 			background = Instance.Create(new Background { Color = Colors.Black });
-            background.Depth = 1000;
 			starSystem = Instance.Create(new ParticleSystem(_createStarType()));
 			pentagonSystem = Instance.Create(new ParticleSystem(_createPentagonType()));
         }
