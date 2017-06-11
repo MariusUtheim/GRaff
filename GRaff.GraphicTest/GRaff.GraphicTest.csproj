@@ -47,7 +47,6 @@
   <ItemGroup>
     <Compile Include="AnimationTest.cs" />
     <Compile Include="BackgroundTest.cs" />
-    <Compile Include="ColorShaderTest.cs" />
     <Compile Include="FramebufferTest.cs" />
     <Compile Include="GraphTest.cs" />
     <Compile Include="GridTest.cs" />
@@ -56,7 +55,7 @@
     <Compile Include="ScissorTest.cs" />
     <Compile Include="SoundPositionTest.cs" />
     <Compile Include="SoundTest.cs" />
-    <Compile Include="SpecialShadersTest.cs" />
+    <Compile Include="ShadersTest.cs" />
     <Compile Include="TrueTypeTest.cs" />
     <Compile Include="VectorGraphicsTest.cs" />
     <Compile Include="Marker.cs" />

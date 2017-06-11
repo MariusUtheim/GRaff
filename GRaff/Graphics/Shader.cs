@@ -14,8 +14,7 @@ namespace GRaff.Graphics
 		public const string Version = "420 core";
 		public const string GRaff_Header = "#version " + Version + @"
 ";
-
-
+        
         private bool _disposed;
 
 		protected Shader(ShaderType type, params string[] source)

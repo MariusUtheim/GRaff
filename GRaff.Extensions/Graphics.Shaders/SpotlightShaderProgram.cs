@@ -4,37 +4,36 @@ using OpenTK.Graphics.OpenGL4;
 
 namespace GRaff.Graphics.Shaders
 {
-    public class LightShaderProgram : ShaderProgram
+    public class SpotlightShaderProgram : ShaderProgram
     {
         #region Source
+        public static string SpotlightShaderSource { get; } =
+@"
+layout(origin_upper_left) in vec4 gl_FragCoord;
+out vec4 out_FragColor;
+uniform highp vec2 origin;
+uniform highp vec2 scale;
+uniform highp float innerRadius;
+uniform highp float outerRadius;
+void main() {
+	vec2 uv = (gl_FragCoord.xy - origin);
+    double d = clamp((length(uv) - innerRadius) / (outerRadius - innerRadius), 0.0, 1.0);
+    vec4 c = GRaff_GetFragColor();
+    out_FragColor = vec4((1 - d) * c.rgb, 1);
+}";
+        #endregion
+
+
         private static readonly FragmentShader _fragmentShader =
             new FragmentShader(
                 FragmentShader.GRaff_Header,
-                @"
-                layout(origin_upper_left) in vec4 gl_FragCoord;
-                out vec4 out_FragColor;
-
-                uniform highp vec2 origin;
-			    uniform highp vec2 scale;
-                uniform highp float innerRadius;
-                uniform highp float outerRadius;
-
-                vec4 GRaff_GetFragColor(void);
-
-                void main() {
-			    	vec2 uv = (gl_FragCoord.xy - origin);
-                    double d = clamp((length(uv) - innerRadius) / (outerRadius - innerRadius), 0.0, 1.0);
-                    vec4 c = GRaff_GetFragColor();
-
-                    out_FragColor = vec4((1 - d) * c.rgb, 1);
-                }",
-                FragmentShader.GRaff_GetFragColor
+                FragmentShader.GRaff_GetFragColor,
+                SpotlightShaderSource
             );
-        #endregion
 
         private int _offsetLoc, _scaleLoc, _innerRadiusLoc, _outerRadiusLoc;
 
-        public LightShaderProgram(double innerRadius, double outerRadius)
+        public SpotlightShaderProgram(double innerRadius, double outerRadius)
             : base(VertexShader.Default, _fragmentShader)
         {
             _offsetLoc = GL.GetUniformLocation(Id, "origin");

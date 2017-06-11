@@ -19,11 +19,6 @@ namespace GRaff.GraphicTest
             Scissor.Region = ((0, 0), Window.Size);
         }
 
-        public override void OnStep()
-        {
-            Window.Title = $"In room: {Mouse.Location} - In window: {Mouse.WindowLocation}";
-        }
-
         private Rectangle _dragRectangle => (_mouseClickLocation, Mouse.Location - _mouseClickLocation);
 
         protected override void OnDestroy()

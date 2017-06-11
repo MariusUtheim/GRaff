@@ -14,52 +14,49 @@ namespace GRaff.Graphics.Shaders
 {
     public class CausticShaderProgram : ShaderProgram
 	{
-		private const double DefaultIntensity = 0.35;
-		private static readonly Color DefaultColor = Colors.White;
-
         #region Source
+        public static string CausticShaderSource { get; } =
+@"
+#define TAU 6.28318530718
+#define MAX_ITER 5
+layout(origin_upper_left) in vec4 gl_FragCoord;
+out vec4 out_FragColor;
+
+uniform highp float phase;
+uniform highp vec2 offset;
+uniform highp vec2 scale;
+uniform highp float intensity;
+
+void main() {
+	vec2 uv = (gl_FragCoord.xy - offset) / scale;
+    
+    vec2 p = mod(uv*TAU, TAU)-250.0;
+    
+	vec2 i = vec2(p);
+	float c = 1.0;
+    float inten = intensity / 200;                    
+
+	for (int n = 0; n < MAX_ITER; n++) 
+	{
+		float t = phase * 0.007 * (1.0 - (3.5 / float(n+1)));
+		i = p + vec2(cos(t - i.x) + sin(t + i.y), sin(t - i.y) + cos(t + i.x));
+		c += 1.0/length(vec2(p.x / (sin(i.x+t)/inten),p.y / (cos(i.y+t)/inten)));
+	}
+	c /= float(MAX_ITER);
+	c = 1.17-pow(c, 1.4);
+	vec3 color = vec3(pow(abs(c), 8.0));
+
+    vec4 inputColor = GRaff_GetFragColor();
+	out_FragColor = vec4(clamp(color * inputColor.rgb, 0.0, 1.0), inputColor.a);
+}";
+        #endregion
+
         private static FragmentShader _causticFragmentShader =
             new FragmentShader(
-                Shader.GRaff_Header + @"
-                #define TAU 6.28318530718
-                #define MAX_ITER 5
-
-                layout(origin_upper_left) in vec4 gl_FragCoord;
-                out vec4 out_FragColor;
-                
-			    uniform highp float phase;
-			    uniform highp vec2 offset;
-			    uniform highp vec2 scale;
-			    uniform highp float intensity;
-
-                vec4 GRaff_GetFragColor(void);
-
-			    void main() 
-			    {
-			    	vec2 uv = (gl_FragCoord.xy - offset) / scale;
-                    
-                    vec2 p = mod(uv*TAU, TAU)-250.0;
-	                
-			    	vec2 i = vec2(p);
-			    	float c = 1.0;
-                    float inten = intensity / 200;                    
-
-			    	for (int n = 0; n < MAX_ITER; n++) 
-			    	{
-			    		float t = phase * 0.007 * (1.0 - (3.5 / float(n+1)));
-			    		i = p + vec2(cos(t - i.x) + sin(t + i.y), sin(t - i.y) + cos(t + i.x));
-			    		c += 1.0/length(vec2(p.x / (sin(i.x+t)/inten),p.y / (cos(i.y+t)/inten)));
-			    	}
-			    	c /= float(MAX_ITER);
-			    	c = 1.17-pow(c, 1.4);
-			    	vec3 color = vec3(pow(abs(c), 8.0));
-
-                    vec4 inputColor = GRaff_GetFragColor();
-			    	out_FragColor = vec4(clamp(color * inputColor.rgb, 0.0, 1.0), inputColor.a);
-			    }
-                ", FragmentShader.GRaff_GetFragColor
+                Shader.GRaff_Header,
+                FragmentShader.GRaff_GetFragColor,
+                CausticShaderSource
             );
-        #endregion
 
         private int _phaseLoc, _offsetLoc, _scaleLoc, _intensityLoc;
         

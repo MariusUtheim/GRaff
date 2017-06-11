@@ -18,10 +18,6 @@ namespace GRaff.Graphics
 
         public static ShaderProgram Default { get; } = new ShaderProgram(VertexShader.Default, FragmentShader.Default);
 
-        public static ShaderProgram BlackWhite { get; } = new ShaderProgram(VertexShader.Default, FragmentShader.BlackWhite);
-
-        public static ShaderProgram Sepia { get; } = new ShaderProgram(VertexShader.Default, FragmentShader.Sepia);
-
 		public ShaderProgram(VertexShader vertexShader, FragmentShader fragmentShader)
 		{
 			Contract.Requires<ArgumentNullException>(vertexShader != null && fragmentShader != null);
