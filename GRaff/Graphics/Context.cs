@@ -10,7 +10,7 @@ namespace GRaff.Graphics
 	public static class Context
 	{
 
-		public static bool IsAlive
+		public static bool IsActive
 		{
 			get { return GraphicsContext.CurrentContext != null; }
 		}

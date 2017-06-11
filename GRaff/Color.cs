@@ -30,6 +30,9 @@ namespace GRaff
 			_b = b;
 		}
 
+        public Color(byte r, byte g, byte b)
+            : this(255, r, g, b) { }
+
 		/// <summary>
 		/// Gets the value of the red channel of this GRaff.Color.
 		/// </summary>
@@ -50,29 +53,40 @@ namespace GRaff
 		/// </summary>
 		public byte A => _a;
 
-		/// <summary>
-		/// Initializes a new instance of the GRaff.Color class, using the specified ARGB values.
-		/// </summary>
-		/// <param name="a">The alpha channel.</param>
-		/// <param name="r">The red channel.</param>
-		/// <param name="g">The green channel.</param>
-		/// <param name="b">The blue channel.</param>
-		public Color(int a, int r, int g, int b) : this((byte)a, (byte)r, (byte)g, (byte)b) { }
+        public static Color Rgb(int r, int g, int b) => new Color(255, (byte)r, (byte)g, (byte)b);
 
-		/// <summary>
-		/// Initializes a new instance of the GRaff.Color class, using the specified RGB values and an alpha value of 255.
-		/// </summary>
-		/// <param name="r">The red channel.</param>
-		/// <param name="g">The green channel.</param>
-		/// <param name="b">The blue channel.</param>
-		public Color(byte r, byte g, byte b) : this((byte)255, r, g, b) { }
+        public static Color Rgb(int a, int r, int g, int b) => new Color((byte)a, (byte)r, (byte)g, (byte)b);
 
-		/// <summary>
-		/// Initializes a new instance of the GRaff.Color class, using the specified ARGB value in a 32-bit format.
-		/// Colors can also be implicitly converted from ints.
-		/// </summary>
-		/// <param name="argb">The ARGB value of the created color.</param>
-		public Color(uint argb) : this((byte)(argb >> 24), (byte)(argb >> 16), (byte)(argb >> 8), (byte)argb) { }
+        public static Color Rgb(double a, double r, double g, double b) => new Color((byte)(255 * a), (byte)(255 * r), (byte)(255 * g), (byte)(255 * b));
+
+        public static Color Rgb(uint argb) => new Color((byte)(argb >> 24), (byte)(argb >> 16), (byte)(argb >> 8), (byte)argb);
+
+        public static Color Gray(byte intensity) => new Color((byte)255, intensity, intensity, intensity);
+        public static Color Gray(double intensity) => Gray((byte)(255 * intensity));
+
+        public static Color Hsv(int a, Angle h, double s, double v)
+        {
+            var H = h.Degrees / 60;
+            s = GMath.Median(0, s, 1);
+            v = GMath.Median(0, v, 1);
+            var C = v * s;
+            var X = C * (1 - GMath.Abs(H % 2 - 1));
+            var m = v - C;
+
+            double R, G, B;
+            switch ((int)H)
+            {
+                case 0: R = C; G = X; B = 0; break;
+                case 1: R = X; G = C; B = 0; break;
+                case 2: R = 0; G = C; B = X; break;
+                case 3: R = 0; G = X; B = C; break;
+                case 4: R = X; G = 0; B = C; break;
+                default: R = C; G = 0; B = X; break;
+            }
+
+            return Rgb(a, (int)(255 * (R + m)), (int)(255 * (G + m)), (int)(255 * (B + m)));
+        }
+        public static Color Hsv(Angle h, double s, double v) => Hsv(255, h, s, v);
 
 
 		/// <summary>
@@ -83,9 +97,8 @@ namespace GRaff
 		/// <summary>
 		/// Gets the inverse of this GRaff.Color. The alpha channel is unchanged while the other channels are inverted.
 		/// </summary>
-		public Color Inverse => new Color(A, 255 - R, 255 - G, 255 - B);
-
-
+		public Color Inverse => new Color(A, (byte)(255 - R), (byte)(255 - G), (byte)(255 - B));
+        
 		public static Color Merge(Color c1, Color c2, double amount) => c1.Merge(c2, amount);
 
 		/// <summary>
@@ -97,7 +110,7 @@ namespace GRaff
 		public Color Merge(Color c, double amount)
 		{
 			double b = 1 - amount;
-			return new Color((int)(A * b + c.A * amount), (int)(R * b + c.R * amount), (int)(G * b + c.G * amount), (int)(B * b + c.B * amount));
+			return new Color((byte)(A * b + c.A * amount), (byte)(R * b + c.R * amount), (byte)(G * b + c.G * amount), (byte)(B * b + c.B * amount));
 		}
 
 		/// <summary>
@@ -166,13 +179,13 @@ namespace GRaff
 		/// </summary>
 		/// <param name="rgb">The System.Int32 to be converted.</param>
 		/// <returns>The GRaff.Color resulting from the conversion.</returns>
-		public static implicit operator Color(int rgb) => new Color(0xFF000000 | (uint)rgb);
+		public static implicit operator Color(int rgb) => Color.Rgb(0xFF000000 | (uint)rgb);
 
 		/// <summary>
 		/// Converts the specified unsigned integer in an ARGB format to a GRaff.Color.
 		/// </summary>
 		/// <param name="argb">The System.Uint32 to be converted.</param>
 		/// <returns>The GRaff.Color resulting from the conversion.</returns>
-		public static implicit operator Color(uint argb) => new Color(argb);
+		public static implicit operator Color(uint argb) => Color.Rgb(argb);
 	}
 }

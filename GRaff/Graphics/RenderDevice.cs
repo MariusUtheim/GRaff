@@ -1,21 +1,16 @@
 ﻿using System;
 using System.Linq;
-using System.Runtime.InteropServices;
-using System.Threading.Tasks;
-using System.Diagnostics.Contracts;
 using GRaff.Graphics.Text;
 #if OpenGL4
 using OpenTK.Graphics.OpenGL4;
-using GLPrimitiveType = OpenTK.Graphics.OpenGL4.PrimitiveType;
 #else
 using OpenTK.Graphics.ES30;
 using GLPrimitiveType = OpenTK.Graphics.ES30.PrimitiveType;
 #endif
 
-#warning TODO: Review class. In particular, optimize with graphics shader, optimize monocolored primitives
 namespace GRaff.Graphics
 {
-	internal class RenderDevice : IRenderDevice
+    internal class RenderDevice : IRenderDevice
 	{
 		private readonly RenderSystem _renderSystem = new RenderSystem();
 
@@ -118,6 +113,7 @@ namespace GRaff.Graphics
         public void DrawTexture(Texture texture, double xOrigin, double yOrigin, Color blend, Matrix transform)
         {
 			Contract.Requires<ArgumentNullException>(texture != null && transform != null);
+            Contract.Requires<ObjectDisposedException>(!texture.Buffer.IsDisposed);
 
             _renderSystem.SetVertices(new[] {
                 transform * new GraphicsPoint(-xOrigin, -yOrigin),
@@ -141,8 +137,7 @@ namespace GRaff.Graphics
             _renderSystem.SetTexCoords(texCoords);
             _renderSystem.Render(buffer, type);
         }
-
-
+        
         public void DrawTexture(TextureBuffer buffer, GraphicsPoint[] vertices, Color[] colors, GraphicsPoint[] texCoords, PrimitiveType type)
         {
             Contract.Requires<ArgumentNullException>(buffer != null && vertices != null && texCoords != null);
@@ -153,9 +148,11 @@ namespace GRaff.Graphics
             _renderSystem.SetTexCoords(texCoords);
             _renderSystem.Render(buffer, type);
         }
+
         public void DrawText(TextRenderer renderer, Color color, string text, Matrix transform)
 		{
 			Contract.Requires<ArgumentNullException>(renderer != null && transform != null);
+            Contract.Requires<ObjectDisposedException>(!renderer.Font.IsDisposed);
 
 			if (text == null)
 				return;

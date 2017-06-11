@@ -12,7 +12,7 @@ namespace GRaff.Graphics
 		{
 			Contract.Requires<ArgumentNullException>(program != null);
 			_previous = ShaderProgram.Current;
-			program.SetCurrent();
+			program.Bind();
 		}
 
 		void Dispose(bool disposing)
@@ -20,7 +20,7 @@ namespace GRaff.Graphics
 			if (!_isDisposed)
 			{
 				_isDisposed = true;
-				_previous.SetCurrent();
+				_previous.Bind();
 			}
 		}
 

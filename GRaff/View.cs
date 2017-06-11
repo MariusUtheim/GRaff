@@ -145,54 +145,20 @@ namespace GRaff
 			}
 		}
 
-		private class ViewContext : IDisposable
+		public static IDisposable UseView(double x, double y, double width, double height, Angle rotation = default(Angle))
 		{
-			private double _prevX, _prevY, _prevW, _prevH;
-			private Angle _prevR;
-			private bool _isDisposed = false;
-
-			public ViewContext(double x, double y, double width, double height, Angle rotation)
-			{
-				this._prevX = View.X;
+            /*
+             * 				this._prevX = View.X;
 				this._prevY = View.Y;
 				this._prevW = View.Width;
 				this._prevH = View.Height;
 				this._prevR = View.Rotation;
-				View.X = x;
-				View.Y = y;
-				View.Width = width;
-				View.Height = height;
-				View.Rotation = rotation;
-				View.LoadMatrixToProgram();
-			}
-
-			~ViewContext()
-			{
-				Async.Throw(new ObjectDisposedIncorrectlyException($"A context returned from {nameof(GRaff.View.UseView)} was garbage collected before Dispose was called."));
-			}
-
-			public void Dispose()
-			{
-				if (!_isDisposed)
-				{
-					GC.SuppressFinalize(this);
-					_isDisposed = true;
-					View.X = _prevX;
-					View.Y = _prevY;
-					View.Width = _prevW;
-					View.Height = _prevH;
-					View.Rotation = _prevR;
-					View.LoadMatrixToProgram();
-				}
-				else
-					throw new ObjectDisposedException(nameof(ViewContext));
-			}
-
-		}
-
-		public static IDisposable UseView(double x, double y, double width, double height, Angle rotation = default(Angle))
-		{
-			return new ViewContext(x, y, width, height, rotation);
+*/
+            return UseContext.CreateAt($"{typeof(View).FullName}.{nameof(UseView)}",
+                (x: View.X, y: View.Y, width: View.Width, height: View.Height, rotation: View.Rotation),
+                () => { View.X = x; View.Y = y; View.Width = width; View.Height = height; View.Rotation = rotation; View.LoadMatrixToProgram(); },
+                p => { View.X = p.x; View.Y = p.y; View.Width = p.width; View.Height = p.height; View.Rotation = p.rotation; View.LoadMatrixToProgram(); }
+            );
 		}
 	}
 }

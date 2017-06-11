@@ -11,7 +11,7 @@ using coords = System.Single;
 
 namespace GRaff.Graphics
 {
-#warning Review class
+
     public class ShaderProgram : IDisposable
 	{
 		private bool _disposed = false;
@@ -45,6 +45,7 @@ namespace GRaff.Graphics
             GL.DetachShader(Id, fragmentShader.Id);
         }
 
+
         private static ShaderProgram _current;
 		public static ShaderProgram Current
 		{
@@ -52,62 +53,80 @@ namespace GRaff.Graphics
 			private set { _current = value; GL.UseProgram(_current.Id); }
 		}
 
-		public void SetCurrent()
+        public int Id { get; }
+
+        public void Bind()
 		{
 			Current = this;
 			View.LoadMatrixToProgram();
 		}
-		
-		public static int GetCurrentId()
-		{
-			return GL.GetInteger(GetPName.CurrentProgram);
-		}
 
-        public void SetUniform(string name, bool value)
+        public IDisposable Use()
         {
-            var location = GL.GetUniformLocation(Id, name);
-            if (location < 0)
-                _Graphics.ClearError();
-            else
-            {
-                GL.Uniform1(location, value ? 1 : 0);
-                _Graphics.ErrorCheck();
-            }
+            return UseContext.CreateAt(
+                $"{typeof(ShaderProgram).FullName}.{nameof(Use)}",
+                ShaderProgram.Current,
+                () => this.Bind(),
+                previous => previous.Bind()
+                );
         }
 
-        public void SetUniform(string name, int value)
-		{
-            var location = GL.GetUniformLocation(Id, name);
-            GL.Uniform1(location, value);
-            _Graphics.ErrorCheck();
-		}
+
+        private bool _tryGetLocation(string name, out int location)
+        {
+            location = GL.GetUniformLocation(Id, name);
+            if (location < 0)
+            {
+                _Graphics.ClearError();
+                return false;
+            }
+            else
+                return true;
+        }
         
-        public void SetUniform(string name, double value)
+        internal protected void SetUniform(string name, bool value)
+        {
+            if (_tryGetLocation(name, out int location))
+                GL.ProgramUniform1(Id, location, value ? 1 : 0);
+        }
+
+        internal protected void SetUniform(string name, int value)
 		{
-            var location = GL.GetUniformLocation(Id, name);
-            _Graphics.ErrorCheck();
-            GL.Uniform1(location, (float)value);
-            _Graphics.ErrorCheck();
+            if (_tryGetLocation(name, out int location))
+                GL.ProgramUniform1(Id, location, value);
 		}
 
-		public int Id { get; private set; }
+        internal protected void SetUniform(string name, double value)
+		{
+            if (_tryGetLocation(name, out int location))
+                GL.ProgramUniform1(Id, location, value);
+        }
 
-        public IDisposable Use() => new ShaderProgramContext(this);
+        internal protected void SetUniform(string name, (double v1, double v2) values)
+        {
+            if (_tryGetLocation(name, out int location))
+                GL.ProgramUniform2(Id, location, (float)values.v1, (float)values.v2);
+        }
+        
 
-		~ShaderProgram()
+        #region IDisposable support
+
+        ~ShaderProgram()
 		{
 			Dispose(false);
 		}
 
-		private void Dispose(bool disposing)
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        private void Dispose(bool disposing)
 		{
 			if (!_disposed)
 			{
-				if (disposing)
-				{
-				}
-
-				if (Context.IsAlive)
+				if (Context.IsActive)
 					GL.DeleteProgram(Id);
 				else
 					Async.Run(() => GL.DeleteProgram(Id));
@@ -115,41 +134,7 @@ namespace GRaff.Graphics
 			}
 		}
 
-		public void Dispose()
-		{
-			Dispose(true);
-			GC.SuppressFinalize(this);
-		}
-
-
-        private class ShaderProgramContext : IDisposable
-        {
-            private ShaderProgram _previous;
-            private bool _isDisposed = false;
-
-            public ShaderProgramContext(ShaderProgram program)
-            {
-                this._previous = ShaderProgram.Current;
-                program.SetCurrent();
-            }
-
-            ~ShaderProgramContext()
-            {
-                Async.Throw(new ObjectDisposedIncorrectlyException("A context returned from GRaff.ShaderProgram.Use was garbage collected before Dispose was called."));
-            }
-
-            public void Dispose()
-            {
-                if (!_isDisposed)
-                {
-                    GC.SuppressFinalize(this);
-                    _isDisposed = true;
-                    _previous.SetCurrent();
-                }
-                else
-                    throw new ObjectDisposedException("ShaderProgram");
-            }
-        }
+        #endregion
 
     }
 }

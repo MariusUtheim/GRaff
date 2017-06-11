@@ -99,6 +99,7 @@ namespace GRaff.Graphics
         public void SetColors(Color[] colors) => SetColors(UsageHint.StreamDraw, colors);
 		public void SetColors(UsageHint usage, Color[] colors)
 		{
+            //TODO// Select colors for each primitive? (e.g. when drawing PrimitiveType.Triangles, allow colors.Length == vertices.Length / 3)
 			Contract.Requires<ObjectDisposedException>(!IsDisposed);
 			Contract.Requires<ArgumentNullException>(colors != null);
 			GL.BindBuffer(BufferTarget.ArrayBuffer, _colorBuffer);

@@ -17,10 +17,10 @@ namespace GRaff.Graphics
             ColorMap.BlendMode = BlendMode.AlphaBlend;
             GL.Enable(EnableCap.Blend);
 
-            ShaderProgram.Default.SetCurrent();
+            ShaderProgram.Default.Bind();
 
-            Framebuffer.ExpectedViewWidth = Window.Width;
-            Framebuffer.ExpectedViewHeight = Window.Height;
+            Framebuffer.ExpectedViewWidth = (int)(Window.Width * Window.DisplayScale.X);
+            Framebuffer.ExpectedViewHeight = (int)(Window.Height * Window.DisplayScale.Y);
 
 #if DEBUG
             GlobalEvent.EndStep += () =>

@@ -9,109 +9,94 @@ using OpenTK.Graphics.OpenGL4;
 
 namespace GRaff.Graphics
 {
-#warning Needs cleaning
 	public sealed class Framebuffer : IDisposable
 	{
-		private int _id;
 		internal static int ExpectedViewWidth, ExpectedViewHeight;
 
 		public Framebuffer(int width, int height)
 		{
-			_id = GL.GenFramebuffer();
+			Id = GL.GenFramebuffer();
 			Buffer = new TextureBuffer(width, height, IntPtr.Zero);
-			
-			using (new FramebufferBindContext(this, false))
-			{
-				Buffer.Bind();
-				GL.FramebufferTexture(FramebufferTarget.Framebuffer, FramebufferAttachment.ColorAttachment0, Buffer.Id, 0);
-				GL.DrawBuffer(DrawBufferMode.ColorAttachment0);
 
-				if (GL.CheckFramebufferStatus(FramebufferTarget.Framebuffer) != FramebufferErrorCode.FramebufferComplete)
-					throw new Exception("Unhandled exception in framebuffer");
-			}
+            var previous = Current;
 
+            try
+            {
+                GL.BindFramebuffer(FramebufferTarget.Framebuffer, Id);
+                GL.FramebufferTexture(FramebufferTarget.Framebuffer, FramebufferAttachment.ColorAttachment0, Buffer.Id, 0);
+                GL.DrawBuffer(DrawBufferMode.ColorAttachment0);
+                if (GL.CheckFramebufferStatus(FramebufferTarget.Framebuffer) != FramebufferErrorCode.FramebufferComplete)
+                    throw new InvalidOperationException("Unhandled exception in framebuffer");
+            }
+            finally
+            {
+                GL.BindFramebuffer(FramebufferTarget.Framebuffer, previous?.Id ?? 0);
+            }
+            
 		}
 
-		public static Framebuffer CurrentTarget { get; private set; }
+		public static Framebuffer Current { get; private set; }
 
-		#region IDisposable Support
-		private bool _isDisposed = false; // To detect redundant calls
+        public static void BindDefault()
+        {
+            GL.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
+        }
 
-		private void Dispose(bool disposing)
-		{
-			if (!_isDisposed)
-			{
-				Console.WriteLine("[Framebuffer] Disposed");
-				Async.Capture(_id).ThenQueue(id =>
-				{
+        public int Id { get; }
+
+        public TextureBuffer Buffer { get; private set; }
+
+        public IDisposable Use()
+        {
+            return UseContext.CreateAt($"{typeof(Framebuffer).FullName}.{nameof(Use)}",
+                (frameBuffer: Framebuffer.Current, viewContext: View.UseView(ExpectedViewWidth / 2, ExpectedViewHeight / 2, ExpectedViewWidth, -ExpectedViewHeight)),
+                () => GL.BindFramebuffer(FramebufferTarget.Framebuffer, this.Id),
+                previous =>
+                {
+                    GL.BindFramebuffer(FramebufferTarget.Framebuffer, previous.frameBuffer?.Id ?? 0);
+                    previous.viewContext.Dispose();
+                });
+        }
+
+        public void Bind()
+        {
+            GL.BindFramebuffer(FramebufferTarget.Framebuffer, Id);
+        }
+
+        //TODO// Blitting
+
+        #region IDisposable Support
+        private bool _isDisposed = false;
+
+        private void Dispose(bool disposing)
+        {
+            if (!_isDisposed)
+            {
+                Async.Capture(Id).ThenQueue(id =>
+                {
                     if (Giraffe.IsRunning)
                     {
                         GL.DeleteFramebuffer(id);
                         _Graphics.ErrorCheck();
                     }
-				});
+                });
 
-				_isDisposed = true;
-			}
-		}
-
-		~Framebuffer()
-		{
-			Dispose(false);
-		}
-
-		public void Dispose()
-		{
-			Dispose(true);
-			GC.SuppressFinalize(this);
-		}
-		#endregion
-
-
-		private class FramebufferBindContext : IDisposable
-		{
-			private Framebuffer _previous;
-			private bool _isDisposed = false;
-			private IDisposable _viewContext;
-
-			public FramebufferBindContext(Framebuffer current, bool setView)
-			{
-				this._previous = Framebuffer.CurrentTarget;
-				GL.BindFramebuffer(FramebufferTarget.Framebuffer, current._id);
-
-				if (setView)
-					_viewContext = View.UseView(ExpectedViewWidth / 2, ExpectedViewHeight / 2, ExpectedViewWidth, -ExpectedViewHeight);
-			}
-
-			~FramebufferBindContext()
-			{
-				Async.Throw(new ObjectDisposedIncorrectlyException($"A context returned from {nameof(GRaff.Graphics.Framebuffer.Bind)} was garbage collected before Dispose was called."));
+                _isDisposed = true;
             }
+        }
 
-			public void Dispose()
-			{
-				if (!_isDisposed)
-				{
-					GC.SuppressFinalize(this);
-					_isDisposed = true;
-					GL.BindFramebuffer(FramebufferTarget.Framebuffer, _previous?._id ?? 0);
+        ~Framebuffer()
+        {
+            Dispose(false);
+        }
 
-					if (_previous != null)
-						GL.DrawBuffer(DrawBufferMode.Back);
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+        #endregion
 
-					_viewContext?.Dispose();
-				}
-				else
-					throw new ObjectDisposedException(nameof(Framebuffer));
-			}
 
-		}
-		
-		public IDisposable Bind()
-		{
-			return new FramebufferBindContext(this, true);
-		}
-
-		public TextureBuffer Buffer { get; private set; }
-	}
+    }
 }

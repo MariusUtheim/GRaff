@@ -18,7 +18,7 @@ namespace GRaff.UnitTesting
 			Assert.AreEqual(expected.Argb, 0x80102030);
 			
 			Assert.AreEqual(expected, new Color(128, 16, 32, 48));
-			Assert.AreEqual(expected, new Color(0x80102030));
+			Assert.AreEqual(expected, Color.Rgb(0x80102030));
 		}
 
 		[TestMethod]
@@ -26,11 +26,11 @@ namespace GRaff.UnitTesting
 		{
 			Color expected, actual;
 
-			actual = new Color(0xFF102030).Transparent(128);
+			actual = Color.Rgb(0xFF102030).Transparent(128);
 			expected = 0x80102030;
 			Assert.AreEqual<Color>(expected, actual);
 
-			actual = new Color(0xFF102030).Transparent(0.5);
+			actual = Color.Rgb(0xFF102030).Transparent(0.5);
 			expected = 0x80102030;
 			Assert.AreEqual<Color>(expected, actual);
 		}
@@ -38,10 +38,10 @@ namespace GRaff.UnitTesting
 		[TestMethod]
 		public void Color_OverridesFromSystemObject()
 		{
-			Color color = new Color(0xFF102030);
+			Color color = Color.Rgb(0xFF102030);
 
 			Assert.AreEqual("Color=0xFF102030", color.ToString());
-			Assert.AreEqual(true, color.Equals(new Color(0xFF102030)));
+			Assert.AreEqual(true, color.Equals(Color.Rgb(0xFF102030)));
 			unchecked
 			{
 				Assert.AreEqual((int)0xFF102030, color.GetHashCode());
@@ -51,10 +51,10 @@ namespace GRaff.UnitTesting
 		[TestMethod]
 		public void Color_Operators()
 		{
-			Color expected = new Color(0xFF102030);
+			Color expected = Color.Rgb(0xFF102030);
 
-			Assert.IsTrue(expected == new Color(0xFF102030));
-			Assert.IsTrue(expected != new Color(0x00000000));
+			Assert.IsTrue(expected == Color.Rgb(0xFF102030));
+			Assert.IsTrue(expected != Color.Rgb(0x00000000));
 			Assert.IsTrue(expected == (Color)0xFF102030);
 		}
 	}

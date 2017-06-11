@@ -13,7 +13,6 @@ namespace GRaff.GraphicTest
 
 		public BackgroundTest()
 		{
-            Console.WriteLine("[Background Test]");
 			background = Instance.Create(new Background
 			{
 				Color = Colors.Bisque,

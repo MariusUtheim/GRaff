@@ -8,34 +8,6 @@ namespace GRaff.Graphics
 {
 	public sealed class BlendMode
 	{
-		private class BlendModeContext : IDisposable
-		{
-			private readonly BlendMode _previous;
-			private bool _isDisposed = false;
-
-			public BlendModeContext(BlendMode mode)
-			{
-				_previous = ColorMap.BlendMode;
-				ColorMap.BlendMode = mode;
-			}
-			
-			~BlendModeContext()
-			{
-				throw new InvalidOperationException("A context returned from GRaff.Graphics.Scissor.Use was garbage collected before Dispose was called.");
-			}
-
-			public void Dispose()
-			{
-				if (!_isDisposed)
-				{
-					GC.SuppressFinalize(this);
-					_isDisposed = true;
-					ColorMap.BlendMode = _previous;
-				}
-				else
-					throw new InvalidOperationException("Object was already disposed");
-			}
-		}
 
 		public BlendMode(BlendEquation equation, BlendingFactor sourceFactor, BlendingFactor destinationFactor)
 		{
@@ -46,7 +18,12 @@ namespace GRaff.Graphics
 
 		public static IDisposable Use(BlendMode mode)
 		{
-			return new BlendModeContext(mode);
+            return UseContext.CreateAt(
+                $"{typeof(BlendMode).FullName}.{nameof(Use)}",
+                ColorMap.BlendMode,
+                () => ColorMap.BlendMode = mode,
+                previous => ColorMap.BlendMode = previous
+            );
 		}
 
 		public static BlendMode AlphaBlend { get { return new BlendMode(BlendEquation.Add, BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha); } }

@@ -47,7 +47,7 @@ namespace GRaff.Graphics
 				{
 				}
 
-				if (Context.IsAlive)
+				if (Context.IsActive)
 					GL.DeleteShader(Id);
 				else
 					Async.Run(() => GL.DeleteShader(Id));

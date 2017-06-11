@@ -8,7 +8,6 @@ using GRaff.Graphics;
 
 namespace GRaff
 {
-#warning More?
 	public static partial class Draw
     {
 		public static class Primitive
@@ -29,20 +28,34 @@ namespace GRaff
 
             public static void Lines(Color color, params Line[] lines) 
                 => Custom(PrimitiveType.Lines, color, lines.SelectMany(l => (l.Origin, l.Destination)));
+            
 
             public static void LineStrip(Color color, params Point[] vertices) => Custom(PrimitiveType.LineStrip, color, vertices);
 
             public static void Triangles(Color color, params Triangle[] triangles)
                 => Custom(PrimitiveType.Triangles, color, triangles.SelectMany(t => (t.V1, t.V2, t.V3)));
 
-			public static void TriangleStrip(Color color, Point origin, Point v1, Point v2, params Point[] verts)
+			public static void TriangleStrip(Color color, params Point[] vertices)
 			{
-				Contract.Requires<ArgumentNullException>(verts != null);
-				var vertices = new GraphicsPoint[3 + verts.Length];
-				for (var i = 0; i < verts.Length; i++)
-					vertices[i + 3] = (GraphicsPoint)verts[i];
-				Device.Draw(vertices, color, PrimitiveType.Triangles);
+				Contract.Requires<ArgumentNullException>(vertices != null);
+                Contract.Requires<ArgumentException>(vertices.Length >= 3);
+				var v = new GraphicsPoint[3 + vertices.Length];
+				for (var i = 0; i < vertices.Length; i++)
+					v[i + 3] = (GraphicsPoint)vertices[i];
+				Device.Draw(v, color, PrimitiveType.TriangleStrip);
 			}
+
+            public static void TriangleFan(Color color, Point origin, params Point[] vertices)
+            {
+                Contract.Requires<ArgumentNullException>(vertices != null);
+                Contract.Requires<ArgumentException>(vertices.Length >= 2);
+
+                var v = new GraphicsPoint[1 + vertices.Length];
+                for (var i = 0; i < vertices.Length; i++)
+                    v[i + 1] = (GraphicsPoint)vertices[i];
+
+                Device.Draw(v, color, PrimitiveType.TriangleFan);
+            }
             
 			public static void Rectangles(Color color, params Rectangle[] rects)
 			{
@@ -55,10 +68,11 @@ namespace GRaff
 					vertices[4 * i + 2] = new GraphicsPoint(rects[i].Right, rects[i].Bottom);
 					vertices[4 * i + 3] = new GraphicsPoint(rects[i].Left, rects[i].Bottom);
 				}
-				Device.Draw(vertices, color, PrimitiveType.Quads);
-
+                Device.Draw(vertices, color, PrimitiveType.Quads);
 			}
 
+            public static void Polygon(Color color, params Point[] vertices) => Custom(PrimitiveType.Polygon, color, vertices);
+            
             public static void CustomTextured(PrimitiveType primitiveType, TextureBuffer buffer, Color blend, params (GraphicsPoint vertex, GraphicsPoint texCoord)[] vertices)
             {
                 Device.DrawTexture(buffer, vertices.Select(v => v.vertex).ToArray(), blend, vertices.Select(v => v.texCoord).ToArray(), primitiveType);

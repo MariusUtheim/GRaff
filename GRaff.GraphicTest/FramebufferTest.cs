@@ -9,7 +9,7 @@ using GRaff.Synchronization;
 namespace GRaff.GraphicTest
 {
 	[Test]
-	class FramebufferTest : GameElement, IKeyPressListener
+	class FramebufferTest : GameElement
 	{
 		Framebuffer _framebuffer;
 		Texture _giraffe = TextureBuffers.Giraffe.Texture;
@@ -19,7 +19,7 @@ namespace GRaff.GraphicTest
 		{
 				_framebuffer = new Framebuffer(w, h);
 
-				using (_framebuffer.Bind())
+				using (_framebuffer.Use())
 				{
                     Draw.Clear(Colors.Red);
 
@@ -41,14 +41,5 @@ namespace GRaff.GraphicTest
 			Draw.Texture(_framebuffer?.Buffer.Texture, (0, 0));
 			Draw.Rectangle(Colors.Black, ((0, 0), (w, h)));
 		}
-
-		public void OnKeyPress(Key key)
-		{
-			if (_framebuffer != null)
-			{
-				_framebuffer.Dispose();
-				_framebuffer = null;
-			}
-		}
-	}
+    }
 }

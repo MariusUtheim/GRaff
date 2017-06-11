@@ -180,7 +180,7 @@ namespace GRaff.Graphics.Text
 			var height = (int)GMath.Ceiling(GetHeight(text));
 
 			using (var buffer = new Framebuffer(width, height))
-			using (buffer.Bind())
+			using (buffer.Use())
 			{
 				Draw.Text(text, this, Colors.White, _getOrigin(Alignment, width, height));
 				return buffer.Buffer;

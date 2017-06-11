@@ -5,6 +5,9 @@ namespace GRaff.Graphics
 {
     public interface IRenderDevice
     {
+        //TODO// Single-array rendering (v1, c1, v2, c2, ...)
+        //TODO// Primitive rendering (v11, v12, v13, c1, v21, v22, v23, c2, ...)
+
         void Clear(Color color);
 
         void Draw(GraphicsPoint[] vertices, Color[] colors, PrimitiveType type);

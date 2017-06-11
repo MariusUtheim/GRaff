@@ -239,6 +239,7 @@
     <Compile Include="Geometry\Triangle.cs" />
     <Compile Include="Unit.cs" />
     <Compile Include="Geometry\Vector.cs" />
+    <Compile Include="UseContext.cs" />
     <Compile Include="View.cs" />
     <Compile Include="Window.cs" />
   </ItemGroup>
