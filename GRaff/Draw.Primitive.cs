@@ -60,15 +60,15 @@ namespace GRaff
 			public static void Rectangles(Color color, params Rectangle[] rects)
 			{
 				Contract.Requires<ArgumentNullException>(rects != null);
-				var vertices = new GraphicsPoint[4 * rects.Length];
+				var vertices = new GraphicsPoint[6 * rects.Length];
 				for (var i = 0; i < rects.Length; i++)
 				{
-					vertices[4 * i] = new GraphicsPoint(rects[i].Left, rects[i].Top);
-					vertices[4 * i + 1] = new GraphicsPoint(rects[i].Right, rects[i].Top);
-					vertices[4 * i + 2] = new GraphicsPoint(rects[i].Right, rects[i].Bottom);
-					vertices[4 * i + 3] = new GraphicsPoint(rects[i].Left, rects[i].Bottom);
+					vertices[6 * i] = new GraphicsPoint(rects[i].Left, rects[i].Top);
+					vertices[6 * i + 1] = vertices[6 * i + 3] = new GraphicsPoint(rects[i].Right, rects[i].Top);
+					vertices[6 * i + 2] = vertices[6 * i + 4] = new GraphicsPoint(rects[i].Right, rects[i].Bottom);
+					vertices[6 * i + 5] = new GraphicsPoint(rects[i].Left, rects[i].Bottom);
 				}
-                Device.Draw(vertices, color, PrimitiveType.Quads);
+                Device.Draw(vertices, color, PrimitiveType.Triangles);
 			}
 
             public static void Polygon(Color color, params Point[] vertices) => Custom(PrimitiveType.Polygon, color, vertices);

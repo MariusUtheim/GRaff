@@ -11,23 +11,23 @@ namespace GRaff.Graphics
 {
 	public abstract class Shader : IDisposable
 	{
-		public const string Version = "420 core";
-		public const string GRaff_Header = "#version " + Version + @"
-";
+        public static string Version { get; } = GL.GetString(StringName.ShadingLanguageVersion).Replace(".", "");
+        public static string GRaff_Header { get; } = "#version " + Version + Environment.NewLine;
         
         private bool _disposed;
 
 		protected Shader(ShaderType type, params string[] source)
 		{
+            var src = String.Concat(source);
 			Id = GL.CreateShader(type);
-			GL.ShaderSource(Id, source.Length, source, (int[])null);
+			GL.ShaderSource(Id, src);
 			GL.CompileShader(Id);
-
-            _Graphics.ErrorCheck();
 
             var msg = GL.GetShaderInfoLog(Id);
             if (msg != "")
 				throw new ShaderException("Compiling a GRaff.Shader caused a message: " + msg);
+
+			_Graphics.ErrorCheck();
 		}
 
 		public int Id { get; private set; }

@@ -196,8 +196,8 @@ namespace GRaff.Graphics.Text
                               .Count();
             double tXScale = 1.0 / Font.Buffer.Width, tYScale = 1.0 / Font.Buffer.Height;
 
-            var vertices = new GraphicsPoint[4 * length];
-            var texCoords = new GraphicsPoint[4 * length];
+            var vertices = new GraphicsPoint[6 * length];
+            var texCoords = new GraphicsPoint[6 * length];
 
 			var x0 = 0.0;
 			var y0 = 0.0;
@@ -209,7 +209,7 @@ namespace GRaff.Graphics.Text
 				case FontAlignment.Bottom: y0 = -((Font.Height + LineSeparation) * (lines.Length - 1) + Font.Height); break;
 			}
 
-			var coordIndex = 0;
+			var idx = 0;
 			for (var l = 0; l < lines.Length; l++)
 			{
 				var lineWidth = Font.GetWidth(lines[l]);
@@ -226,20 +226,20 @@ namespace GRaff.Graphics.Text
 				{
                     if (Font.TryGetCharacter(lines[l][i], out FontCharacter c))
                     {
-                        vertices[coordIndex] = new GraphicsPoint(x + c.XOffset, y + c.YOffset);
-                        vertices[coordIndex + 1] = new GraphicsPoint(x + c.XOffset + c.Width, y + c.YOffset);
-                        vertices[coordIndex + 2] = new GraphicsPoint(x + c.XOffset + c.Width, y + c.YOffset + c.Height);
-                        vertices[coordIndex + 3] = new GraphicsPoint(x + c.XOffset, y + c.YOffset + c.Height);
+                        vertices[idx] = new GraphicsPoint(x + c.XOffset, y + c.YOffset);
+                        vertices[idx + 1] = vertices[6 * idx + 3] = new GraphicsPoint(x + c.XOffset + c.Width, y + c.YOffset);
+                        vertices[idx + 2] = vertices[6 * idx + 4] = new GraphicsPoint(x + c.XOffset + c.Width, y + c.YOffset + c.Height);
+                        vertices[idx + 5] = new GraphicsPoint(x + c.XOffset, y + c.YOffset + c.Height);
                         x += c.XAdvance;
                         if (i < lines[l].Length - 1)
                             x += Font.GetKerning(lines[l][i], lines[l][i + 1]);
 
-                        texCoords[coordIndex] = new GraphicsPoint(tXScale * c.X, tYScale * c.Y);
-                        texCoords[coordIndex + 1] = new GraphicsPoint(tXScale * (c.X + c.Width), tYScale * c.Y);
-                        texCoords[coordIndex + 2] = new GraphicsPoint(tXScale * (c.X + c.Width), tYScale * (c.Y + c.Height));
-                        texCoords[coordIndex + 3] = new GraphicsPoint(tXScale * c.X, tYScale * (c.Y + c.Height));
+                        texCoords[idx] = new GraphicsPoint(tXScale * c.X, tYScale * c.Y);
+                        texCoords[idx + 1] = texCoords[idx + 3] = new GraphicsPoint(tXScale * (c.X + c.Width), tYScale * c.Y);
+                        texCoords[idx + 2] = texCoords[idx + 4] = new GraphicsPoint(tXScale * (c.X + c.Width), tYScale * (c.Y + c.Height));
+                        texCoords[idx + 5] = new GraphicsPoint(tXScale * c.X, tYScale * (c.Y + c.Height));
                     }
-                    coordIndex += 4;
+                    idx += 6;
 				}
 			}
 

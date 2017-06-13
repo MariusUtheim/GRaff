@@ -5,15 +5,17 @@ using GRaff.Randomness;
 
 namespace GRaff.GraphicTest
 {
-	[Test]
+	[Test(Order = -1)]
 	class ParticleTest : GameElement, IGlobalMouseListener
 	{
 		ParticleSystem starSystem;
-		ParticleSystem pentagonSystem;
-		PointAttractionBehavior attractor = new PointAttractionBehavior(Mouse.Location, 1);
+        ParticleSystem pentagonSystem;
+		static PointAttractionBehavior attractor = new PointAttractionBehavior(Mouse.Location, 1);
+        static ParticleType starType = _createStarType();
+        static ParticleType pentagonType = _createPentagonType();
         Background background;
 
-		ParticleType _createStarType()
+		static ParticleType _createStarType()
 		{
 			var type = new ParticleType(new Sprite(TextureBuffers.Star.Texture), 75);
 			type.AddBehaviors(new IParticleBehavior[] {
@@ -26,7 +28,7 @@ namespace GRaff.GraphicTest
 			return type;
 		}
 
-		ParticleType _createPentagonType()
+		static ParticleType _createPentagonType()
 		{
 			var type = new ParticleType(Polygon.Regular(5, 25), 75);
 			type.BlendMode = BlendMode.Additive;
@@ -43,8 +45,8 @@ namespace GRaff.GraphicTest
 		public ParticleTest()
 		{
 			background = Instance.Create(new Background { Color = Colors.Black });
-			starSystem = Instance.Create(new ParticleSystem(_createStarType()));
-			pentagonSystem = Instance.Create(new ParticleSystem(_createPentagonType()));
+            starSystem = Instance.Create(new ParticleSystem(starType));
+            pentagonSystem = Instance.Create(new ParticleSystem(pentagonType));
         }
 
 		protected override void OnDestroy()
@@ -56,7 +58,7 @@ namespace GRaff.GraphicTest
 
 		public override void OnStep()
 		{
-			Window.Title = $"Particle count: {starSystem.Count.ToString()}\t-\tFPS: {Time.Fps}";
+			//Window.Title = $"Particle count: {starSystem.Count.ToString()}\t-\tFPS: {Time.Fps}";
 			attractor.Location = Mouse.Location;
         }
 

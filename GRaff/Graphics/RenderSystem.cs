@@ -82,6 +82,7 @@ namespace GRaff.Graphics
 			GL.BindBuffer(BufferTarget.ArrayBuffer, _vertexBuffer);
 			GL.BufferData(BufferTarget.ArrayBuffer, new IntPtr(2 * sizeof(coord) * vertices.Length), vertices, (BufferUsageHint)usage);
             _vertexCount = vertices.Length;
+            _Graphics.ErrorCheck();
 		}
 
         public void SetVertices(params coord[] vertices) => SetVertices(UsageHint.StreamDraw, vertices);
@@ -93,6 +94,7 @@ namespace GRaff.Graphics
 			GL.BindBuffer(BufferTarget.ArrayBuffer, _vertexBuffer);
 			GL.BufferData(BufferTarget.ArrayBuffer, new IntPtr(sizeof(coord) * vertices.Length), vertices, (BufferUsageHint)usage);
             _vertexCount = vertices.Length / 2;
+            _Graphics.ErrorCheck();
 		}
 
 
@@ -105,15 +107,16 @@ namespace GRaff.Graphics
 			GL.BindBuffer(BufferTarget.ArrayBuffer, _colorBuffer);
             GL.EnableVertexAttribArray(1);
 			GL.BufferData(BufferTarget.ArrayBuffer, new IntPtr(4 * colors.Length), colors, (BufferUsageHint)usage);
+            _Graphics.ErrorCheck();
 		}
 
-        public void SetColor(Color color) => SetColor(UsageHint.StreamDraw, color);
-        public void SetColor(UsageHint usage, Color color)
+        public void SetColor(Color color)
         {
             Contract.Requires<ObjectDisposedException>(!IsDisposed);
-            GL.BindBuffer(BufferTarget.ArrayBuffer, _colorBuffer);
+            GL.BindVertexArray(_array);
             GL.DisableVertexAttribArray(1);
             GL.VertexAttrib4N(1, color.R, color.G, color.B, color.A);
+            _Graphics.ErrorCheck();
         }
 
         public void SetTexCoords(GraphicsPoint[] texCoords) => SetTexCoords(UsageHint.StreamDraw, texCoords);
@@ -121,8 +124,9 @@ namespace GRaff.Graphics
 		{
 			Contract.Requires<ObjectDisposedException>(!IsDisposed);
 			Contract.Requires<ArgumentNullException>(texCoords != null);
-			GL.BindBuffer(BufferTarget.ArrayBuffer, _texCoordBuffer);
+  			GL.BindBuffer(BufferTarget.ArrayBuffer, _texCoordBuffer);
 			GL.BufferData(BufferTarget.ArrayBuffer, new IntPtr(2 * sizeof(coord) * texCoords.Length), texCoords, (BufferUsageHint)usage);
+            _Graphics.ErrorCheck();
 		}
 
 		public void SetTexCoords(UsageHint usage, coord[] texCoords)
@@ -131,6 +135,7 @@ namespace GRaff.Graphics
 			Contract.Requires<ArgumentNullException>(texCoords != null);
 			GL.BindBuffer(BufferTarget.ArrayBuffer, _texCoordBuffer);
 			GL.BufferData(BufferTarget.ArrayBuffer, new IntPtr(sizeof(coord) * texCoords.Length), texCoords, (BufferUsageHint)usage);
+            _Graphics.ErrorCheck();
 		}
 
 		public void QuadTexCoords(UsageHint usage, int count)
@@ -139,6 +144,7 @@ namespace GRaff.Graphics
 			Contract.Requires<ArgumentOutOfRangeException>(count >= 0);
 			GL.BindBuffer(BufferTarget.ArrayBuffer, _texCoordBuffer);
 			GL.BufferData(BufferTarget.ArrayBuffer, new IntPtr(8 * sizeof(coord) * count), Enumerable.Repeat(defaultQuadCoords, count).ToArray(), (BufferUsageHint)usage);
+            _Graphics.ErrorCheck();
 		}
 
 		public void TriangleStripCoords(UsageHint usage, int count)
@@ -147,6 +153,7 @@ namespace GRaff.Graphics
 			Contract.Requires<ArgumentOutOfRangeException>(count >= 0);
 			GL.BindBuffer(BufferTarget.ArrayBuffer, _texCoordBuffer);
 			GL.BufferData(BufferTarget.ArrayBuffer, new IntPtr(8 * sizeof(coord) * count), Enumerable.Repeat(defaultTriangleStripCoords, count).ToArray(), (BufferUsageHint)usage);
+            _Graphics.ErrorCheck();
 		}
 
         public void Render(PrimitiveType type)
@@ -156,9 +163,8 @@ namespace GRaff.Graphics
             ShaderProgram.Current.SetUniform("GRaff_IsTextured", false);
 
             GL.BindVertexArray(_array);
-            GL.DisableVertexAttribArray(2);
-
             GL.DrawArrays((GLPrimitiveType)type, 0, _vertexCount);
+            _Graphics.ErrorCheck();
         }
 
 		public void Render(TextureBuffer buffer, PrimitiveType type)
@@ -167,12 +173,13 @@ namespace GRaff.Graphics
 
             ShaderProgram.Current.SetUniform("GRaff_IsTextured", true);
 
-            GL.BindVertexArray(_array);
-            GL.EnableVertexAttribArray(2);
             buffer.Bind();
-            
-            GL.BindBuffer(BufferTarget.ArrayBuffer, _texCoordBuffer);
-            GL.DrawArrays((GLPrimitiveType)type, 0, _vertexCount);
+
+            _Graphics.ErrorCheck();
+
+			GL.BindVertexArray(_array);
+			GL.DrawArrays((GLPrimitiveType)type, 0, _vertexCount);
+            _Graphics.ErrorCheck();
 		}
 	}
 }

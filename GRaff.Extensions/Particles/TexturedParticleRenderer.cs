@@ -25,14 +25,11 @@ namespace GRaff.Particles
 
 		public void Render(IEnumerable<Particle> particles)
 		{
-			if (particles == null) return;
+			if (particles == null || !particles.Any()) return;
 			int count = particles.Count();
-			GraphicsPoint[] vertices = new GraphicsPoint[4 * count];
-			Color[] colors = new Color[4 * count];
-			GraphicsPoint[] texCoords = new GraphicsPoint[4 * count];
-
-#warning
-			//throw new NotImplementedException();
+			GraphicsPoint[] vertices = new GraphicsPoint[6 * count];
+            //TODO// Allow more advanced blending
+			GraphicsPoint[] texCoords = new GraphicsPoint[6 * count];
 
 			GraphicsPoint
 				tl = new GraphicsPoint(-Sprite.XOrigin, -Sprite.YOrigin),
@@ -42,27 +39,25 @@ namespace GRaff.Particles
 
 			Parallel.ForEach(particles, (particle, loopState, index) =>
 			{
-				index *= 4;
+				index *= 6;
 				vertices[index] = (GraphicsPoint)(particle.TransformationMatrix * tl + particle.Location);
-				vertices[index + 1] = (GraphicsPoint)(particle.TransformationMatrix * tr + particle.Location);
-				vertices[index + 2] = (GraphicsPoint)(particle.TransformationMatrix * br + particle.Location);
-				vertices[index + 3] = (GraphicsPoint)(particle.TransformationMatrix * bl + particle.Location);
-				colors[index] = colors[index + 1] = colors[index + 2] = colors[index + 3] = particle.Blend;
-
+				vertices[index + 1] = vertices[index + 3] = (GraphicsPoint)(particle.TransformationMatrix * tr + particle.Location);
+				vertices[index + 2] = vertices[index + 4] = (GraphicsPoint)(particle.TransformationMatrix * bl + particle.Location);
+                vertices[index + 5] = (GraphicsPoint)(particle.TransformationMatrix * br + particle.Location);
+				
                 var texture = Sprite.SubImage(_frame);
                 texCoords[index] = texture.TopLeft;
-                texCoords[index + 1] = texture.TopRight;
-                texCoords[index + 2] = texture.BottomRight;
-                texCoords[index + 3] = texture.BottomLeft;
+                texCoords[index + 1] = texCoords[index + 3] = texture.TopRight;
+                texCoords[index + 2] = texCoords[index + 4] = texture.BottomLeft;
+                texCoords[index + 5] = texture.BottomRight;
 			});
 
 			
-
-			_renderSystem.SetVertices(UsageHint.StreamDraw, vertices);
-			_renderSystem.SetColors(UsageHint.StreamDraw, colors);
-			_renderSystem.SetTexCoords(UsageHint.StreamDraw, texCoords);
+			_renderSystem.SetVertices(vertices);
+			_renderSystem.SetColor(Colors.White);
+			_renderSystem.SetTexCoords(texCoords);
             
-            _renderSystem.Render(Sprite.SubImage(_frame).Buffer, PrimitiveType.Quads);
+            _renderSystem.Render(Sprite.SubImage(_frame).Buffer, PrimitiveType.Triangles);
 
 			_frame += -_animationSpeed;
 		}

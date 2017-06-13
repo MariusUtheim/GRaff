@@ -3,7 +3,7 @@
 
 namespace GRaff.GraphicTest
 {
-	[Test]
+	//[Test]
     class TrueTypeTest : GameElement
 	{
 		private static Font _fontKerning = null, _fontNonKerning = null;

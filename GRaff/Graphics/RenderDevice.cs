@@ -118,13 +118,13 @@ namespace GRaff.Graphics
             _renderSystem.SetVertices(new[] {
                 transform * new GraphicsPoint(-xOrigin, -yOrigin),
                 transform * new GraphicsPoint(texture.Width - xOrigin, -yOrigin),
-                transform * new GraphicsPoint(texture.Width - xOrigin, texture.Height - yOrigin),
                 transform * new GraphicsPoint(-xOrigin, texture.Height - yOrigin),
+				transform * new GraphicsPoint(texture.Width - xOrigin, texture.Height - yOrigin),
             });
             _renderSystem.SetColor(blend);
             
-            _renderSystem.SetTexCoords(UsageHint.StreamDraw, texture.QuadCoords);
-            _renderSystem.Render(texture.Buffer, PrimitiveType.Quads);
+            _renderSystem.SetTexCoords(UsageHint.StreamDraw, texture.StripCoords);
+            _renderSystem.Render(texture.Buffer, PrimitiveType.TriangleStrip);
         }
 
         public void DrawTexture(TextureBuffer buffer, GraphicsPoint[] vertices, Color blend, GraphicsPoint[] texCoords, PrimitiveType type)
@@ -165,7 +165,7 @@ namespace GRaff.Graphics
             _renderSystem.SetVertices(vertices);
             _renderSystem.SetColor(color);
             _renderSystem.SetTexCoords(texCoords);
-            _renderSystem.Render(renderer.Font.Buffer, PrimitiveType.Quads);
+            _renderSystem.Render(renderer.Font.Buffer, PrimitiveType.Triangles);
 		}
     }
 }

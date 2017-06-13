@@ -44,6 +44,8 @@ namespace GRaff.Graphics
 		}
 
 		internal GraphicsPoint[] QuadCoords { get; }
+
+        internal GraphicsPoint[] StripCoords => new[] { TopLeft, TopRight, BottomLeft, BottomRight };
 		
 		public TextureBuffer Buffer { get; }
 

@@ -33,6 +33,7 @@ namespace GRaff.Particles
 
 		public void Render(IEnumerable<Particle> particles)
 		{
+            if (particles == null || !particles.Any()) return;
 			int count = particles.Count();
 			var vertices = new GraphicsPoint[_polygonVertices.Length * count];
 			var colors = new Color[_polygonVertices.Length * count];

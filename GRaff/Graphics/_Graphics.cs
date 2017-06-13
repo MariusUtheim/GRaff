@@ -35,7 +35,7 @@ namespace GRaff.Graphics
         {
             var err = GL.GetError();
             if (err != ErrorCode.NoError)
-                throw new Exception($"An OpenGL operation threw an exception with error code {Enum.GetName(typeof(ErrorCode), err)}");
+               throw new Exception($"An OpenGL operation threw an exception with error code {Enum.GetName(typeof(ErrorCode), err)}");
         }
 
         public static bool ClearError()

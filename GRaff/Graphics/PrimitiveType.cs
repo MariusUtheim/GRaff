@@ -43,11 +43,11 @@ namespace GRaff.Graphics
 		//
 		// Summary:
 		//     Original was GL_QUADS = 0x0007
-		Quads,
+//		Quads,
 		//
 		// Summary:
 		//     Original was GL_QUAD_STRIP = 0x0008
-		QuadStrip,
+//		QuadStrip,
 		//
 		// Summary:
 		//     Original was GL_POLYGON = 0x0009

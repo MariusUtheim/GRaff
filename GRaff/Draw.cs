@@ -58,7 +58,8 @@ namespace GRaff
         {
             (var x, var y) = location;
             (var w, var h) = size;
-            Device.Draw(new[] { new GraphicsPoint(x, y), new GraphicsPoint(x + w, y), new GraphicsPoint(x + w, y + h), new GraphicsPoint(x, y + h), new GraphicsPoint(x, y + h) }, color, PrimitiveType.Quads);
+            Device.Draw(new[] { new GraphicsPoint(x, y), new GraphicsPoint(x + w, y), new GraphicsPoint(x, y + h), new GraphicsPoint(x + w, y + h) },
+                        color, PrimitiveType.TriangleStrip);
         }
         public static void FillRectangle(Color color, Rectangle rectangle) => FillRectangle(color, rectangle.TopLeft, rectangle.Size);
 
@@ -66,8 +67,8 @@ namespace GRaff
         {
             var (x, y) = location;
             var (w, h) = size;
-            Device.Draw(new[] { new GraphicsPoint(x, y), new GraphicsPoint(x + w, y), new GraphicsPoint(x + w, y + h), new GraphicsPoint(x, y + h) },
-                        new[] { col1, col2, col3, col4 }, PrimitiveType.Quads);
+            Device.Draw(new[] { new GraphicsPoint(x, y), new GraphicsPoint(x + w, y), new GraphicsPoint(x, y + h), new GraphicsPoint(x + w, y + h) },
+                        new[] { col1, col2, col3, col4 }, PrimitiveType.TriangleStrip);
         }
         public static void FillRectangle(Color col1, Color col2, Color col3, Color col4, Rectangle rectangle) => FillRectangle(col1, col2, col3, col4, rectangle.TopLeft, rectangle.Size);
 

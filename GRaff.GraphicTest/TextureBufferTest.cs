@@ -3,7 +3,7 @@
 
 namespace GRaff.GraphicTest
 {
-	[Test]
+	[Test(Order = 1)]
 	class TextureBufferTest : GameElement
 	{
 		Texture texture = TextureBuffers.Giraffe.Texture;
