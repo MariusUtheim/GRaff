@@ -160,7 +160,9 @@ namespace GRaff.Graphics
         {
             Contract.Requires<ObjectDisposedException>(!IsDisposed);
 
-            ShaderProgram.Current.SetUniform("GRaff_IsTextured", false);
+            var loc = GL.GetUniformLocation(ShaderProgram.Current.Id, "GRaff_IsTextured");
+            if (loc >= 0)
+                GL.ProgramUniform1(ShaderProgram.Current.Id, loc, 0);
 
             GL.BindVertexArray(_array);
             GL.DrawArrays((GLPrimitiveType)type, 0, _vertexCount);
@@ -171,9 +173,11 @@ namespace GRaff.Graphics
 		{
 			Contract.Requires<ObjectDisposedException>(!IsDisposed);
 
-            ShaderProgram.Current.SetUniform("GRaff_IsTextured", true);
+			var loc = GL.GetUniformLocation(ShaderProgram.Current.Id, "GRaff_IsTextured");
+			if (loc >= 0)
+				GL.ProgramUniform1(ShaderProgram.Current.Id, loc, 1);
 
-            buffer.Bind();
+			buffer.Bind();
 
             _Graphics.ErrorCheck();
 

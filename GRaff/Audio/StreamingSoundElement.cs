@@ -1,10 +1,15 @@
 ﻿using System;
+using System.IO;
+
 namespace GRaff.Audio
 {
-    public class StreamingSoundElement
+    public class StreamingSoundElement : SoundElement
     {
-        public StreamingSoundElement()
+        private Stream _dataStream;
+
+        public StreamingSoundElement(string fileName)
         {
+            
         }
     }
 }

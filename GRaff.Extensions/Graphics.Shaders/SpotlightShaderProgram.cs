@@ -16,7 +16,7 @@ uniform highp vec2 scale;
 uniform highp float innerRadius;
 uniform highp float outerRadius;
 void main() {
-	vec2 uv = (gl_FragCoord.xy - origin);
+	vec2 uv = (gl_FragCoord.xy - origin) / scale;
     double d = clamp((length(uv) - innerRadius) / (outerRadius - innerRadius), 0.0, 1.0);
     vec4 c = GRaff_GetFragColor();
     out_FragColor = vec4((1 - d) * c.rgb, 1);
@@ -26,76 +26,48 @@ void main() {
 
         private static readonly FragmentShader _fragmentShader =
             new FragmentShader(
-                FragmentShader.GRaff_Header,
+                Shader.GRaff_Header,
                 FragmentShader.GRaff_GetFragColor,
                 SpotlightShaderSource
             );
 
-        private int _offsetLoc, _scaleLoc, _innerRadiusLoc, _outerRadiusLoc;
+        private ShaderUniformLocation _origin, _scale, _innerRadius, _outerRadius;
 
         public SpotlightShaderProgram(double innerRadius, double outerRadius)
             : base(VertexShader.Default, _fragmentShader)
         {
-            _offsetLoc = GL.GetUniformLocation(Id, "origin");
-            _scaleLoc = GL.GetUniformLocation(Id, "scale");
-            _innerRadiusLoc = GL.GetUniformLocation(Id, "innerRadius");
+			_origin = UniformLocation("origin");
+			_scale = UniformLocation("scale");
+            Scale = (1, 1);
+            _innerRadius = UniformLocation("innerRadius");
             InnerRadius = innerRadius;
-            _outerRadiusLoc = GL.GetUniformLocation(Id, "outerRadius");
+            _outerRadius = UniformLocation("outerRadius");
             OuterRadius = outerRadius;
+
         }
 
         public Point Origin
         {
-            get
-            {
-                var coords = new float[2];
-                GL.GetUniform(Id, _offsetLoc, coords);
-                return new Point(coords[0], coords[1]);
-            }
-            set
-            {
-                GL.ProgramUniform2(Id, _offsetLoc, (float)value.X, (float)value.Y);
-            }
+            get => GetUniformVec2(_origin);
+            set => SetUniformVec2(_origin, value);
         }
 
         public Vector Scale
         {
-            get
-            {
-                var coords = new double[2];
-                GL.GetUniform(Id, _scaleLoc, coords);
-                return new Vector(coords[0], coords[1]);
-            }
-            set
-            {
-                GL.ProgramUniform2(Id, _scaleLoc, (float)value.X, (float)value.Y);
-            }
+            get => GetUniformVec2(_scale);
+            set => SetUniformVec2(_scale, value);
         }
 
         public double InnerRadius
         {
-            get
-            {
-                GL.GetUniform(Id, _innerRadiusLoc, out float value);
-                return value;
-            }
-            set
-            {
-                GL.ProgramUniform1(Id, _innerRadiusLoc, (float)value);
-            }
+            get => GetUniformFloat(_innerRadius);
+            set => SetUniformFloat(_innerRadius, (float)value);
         }
 
         public double OuterRadius
         {
-            get
-            {
-                GL.GetUniform(Id, _outerRadiusLoc, out float value);
-                return value;
-            }
-            set
-            {
-                GL.ProgramUniform1(Id, _outerRadiusLoc, (float)value);
-            }
+            get => GetUniformFloat(_outerRadius);
+            set => SetUniformFloat(_outerRadius, (float)value);
         }
 
     }
