@@ -154,7 +154,6 @@
     <Compile Include="Audio\OggVorbisDecoder\OggVorbisFileStream.cs" />
     <Compile Include="Audio\OggVorbisDecoder\OggVorbisMemoryStream.cs" />
     <Compile Include="Audio\OggVorbisDecoder\VorbisInfo.cs" />
-    <Compile Include="Audio\SoundFileLoader.cs" />
     <Compile Include="Audio\WaveFile.cs" />
     <Compile Include="Audio\_Audio.cs" />
     <Compile Include="Graphics\BlendingFactor.cs" />
@@ -240,6 +239,10 @@
     <Compile Include="View.cs" />
     <Compile Include="Window.cs" />
     <Compile Include="Contract.cs" />
+    <Compile Include="Graphics\ShaderUniformLocation.cs" />
+    <Compile Include="Audio\SimpleSoundElement.cs" />
+    <Compile Include="Audio\StreamingSoundElement.cs" />
+    <Compile Include="Audio\AudioStream.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="External\libogg.dll">

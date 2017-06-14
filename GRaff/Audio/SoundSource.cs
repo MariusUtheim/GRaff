@@ -1,10 +1,7 @@
 ﻿using GRaff.Synchronization;
 using OpenTK.Audio.OpenAL;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace GRaff.Audio
 {
@@ -24,10 +21,14 @@ namespace GRaff.Audio
 
         public void Dispose()
         {
-            Contract.Requires<ObjectDisposedException>(!IsDisposed);
+            _notDisposed();
 
             Buffer = null;
+
+            _Audio.ClearError();
+
             AL.DeleteSource(Id);
+            _Audio.ErrorCheck();
             _id = -1;
 
             IsDisposed = true;
@@ -48,7 +49,7 @@ namespace GRaff.Audio
         
         private void _notDisposed()
         {
-            Contract.Requires<ObjectDisposedException>(!IsDisposed);
+            Contract.Requires<ObjectDisposedException>(!IsDisposed, nameof(SoundSource));
         }
 
         public double X
@@ -156,18 +157,18 @@ namespace GRaff.Audio
             }
         }
 
-        public double SecondsOffset
+        public TimeSpan Offset
         {
             get
             {
                 _notDisposed();
                 AL.GetSource(Id, ALSourcef.SecOffset, out float value);
-                return value;
+                return TimeSpan.FromSeconds(value);
             }
             set
             {
                 _notDisposed();
-                AL.Source(Id, ALSourcef.SecOffset, (float)value);
+                AL.Source(Id, ALSourcef.SecOffset, (float)value.Seconds);
             }
         }
 
@@ -205,8 +206,10 @@ namespace GRaff.Audio
         {
             get
             {
-                _notDisposed();
-                return (SoundState)AL.GetSourceState(Id);
+                if (IsDisposed)
+                    return SoundState.Disposed;
+                else
+                    return (SoundState)AL.GetSourceState(Id);
             }
         }
 
@@ -216,10 +219,17 @@ namespace GRaff.Audio
             get => _buffer;
             set
             {
-                Contract.Requires<InvalidOperationException>(!value.IsDisposed);
+                Contract.Requires<InvalidOperationException>(value == null || !value.IsDisposed);
                 _notDisposed();
                 _buffer = value;
-                AL.Source(Id, ALSourcei.Buffer, value?.Id ?? 0);
+                if (value == null)
+                {
+                    Stop();
+                    AL.Source(Id, ALSourcei.Buffer, 0);
+                }
+                else
+                    AL.Source(Id, ALSourcei.Buffer, value?.Id ?? 0);
+                _Audio.ErrorCheck();
             }
         }
 
@@ -228,25 +238,29 @@ namespace GRaff.Audio
         {
             _notDisposed();
             AL.SourcePlay(Id);
-        }
+			_Audio.ErrorCheck();
+		}
 
         public void Pause()
         {
             _notDisposed();
             AL.SourcePause(Id);
-        }
+			_Audio.ErrorCheck();
+		}
 
         public void Stop()
         {
             _notDisposed();
             AL.SourceStop(Id);
-        }
+			_Audio.ErrorCheck();
+		}
 
         public void Rewind()
         {
             _notDisposed();
             AL.SourceRewind(Id);
-        }
+			_Audio.ErrorCheck();
+		}
 
 
     }

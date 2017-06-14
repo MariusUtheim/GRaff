@@ -5,7 +5,7 @@ using GRaff.Randomness;
 
 namespace GRaff.GraphicTest
 {
-	[Test(Order = -1)]
+	[Test]
 	class ParticleTest : GameElement, IGlobalMouseListener
 	{
 		ParticleSystem starSystem;

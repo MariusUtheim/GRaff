@@ -8,39 +8,52 @@ using GRaff.Audio;
 
 namespace GRaff.GraphicTest
 {
-	[Test]
+	[Test(Order = -1)]
 	class SoundTest : GameElement, IKeyPressListener
 	{
-		SoundBuffer buffer = SoundBuffer.Load(@"C:\test\sound.ogg");
+        SoundBuffer buffer;
         SoundBuffer bufferWithOffset = null;// SoundBuffer.LoadWithOffset(@"C:\test\sound.wav", 1);
 		SoundElement instance;
 
 		public SoundTest()
 		{
-			//bufferWithOffset = new SoundBuffer(buffer, 0.5);
+            SoundBuffer.LoadAsync(@"Assets/Panacea.wav").ThenWait(b => this.buffer = b);
 		}
 
 		public void OnKeyPress(Key key)
 		{
-            if (key == Key.P)
+            switch (key)
             {
-                if (instance?.Source.State == SoundState.Paused)
-                    instance.Source.Play();
-                else
-                    instance = buffer.Play(false, volume: 3);
+                case Key.P:
+                    if (instance?.Source.State == SoundState.Paused)
+                        instance.Source.Play();
+                    else
+                        instance = buffer.Play(false, volume: 3);
+                    break;
+
+                case Key.N:
+                    buffer.Play(true);
+                    break;
+
+                case Key.O:
+                    instance = bufferWithOffset.Play(true);
+                    break;
+
+                case Key.U:
+                    instance?.Source.Pause();
+                    break;
+
+                case Key.S:
+                    if (Keyboard.IsDown(Key.ShiftLeft))
+                        buffer.StopAll();
+                    else
+                    {
+                        instance?.Destroy();
+                        instance = null;
+                    }
+                    break;
             }
-            else if (key == Key.L)
-                instance = buffer.Play(true);
-            else if (key == Key.O)
-                instance = bufferWithOffset.Play(true);
-            else if (key == Key.U)
-                instance?.Source.Pause();
-            else if (key == Key.S)
-            {
-                instance?.Destroy();
-                instance = null;
-            }
-		}
+        }
 
         public override void OnStep()
         {
@@ -49,17 +62,18 @@ namespace GRaff.GraphicTest
 
         public override void OnDraw()
         {
-            if (instance != null)
+            Draw.Clear(Colors.Black);
+            if (instance != null && !instance.Source.IsDisposed)
             {
-                var loc = instance.Completion * Room.Current.Width;
-                Draw.Line(Colors.DarkGreen, (loc, 0), (loc, Room.Current.Height));
+                var completion = instance.Source.Offset.Seconds / instance.Source.Buffer.Duration.Seconds;
+                var loc = completion * Room.Current.Width;
+                Draw.Line(Colors.DarkGreen, (loc, 0.0), (loc, Room.Current.Height));
             }
         }
 
         protected override void OnDestroy()
 		{
-            instance?.Destroy();
-			buffer.Dispose();
+        	buffer.Dispose();
         //    bufferWithOffset?.Dispose();
 		}
 	}
