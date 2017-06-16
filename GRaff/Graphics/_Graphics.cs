@@ -14,7 +14,7 @@ namespace GRaff.Graphics
         {
             Draw.Device = new RenderDevice();
 
-            ColorMap.BlendMode = BlendMode.AlphaBlend;
+            BlendMode.Current = BlendMode.AlphaBlend;
             GL.Enable(EnableCap.Blend);
 
             ShaderProgram.Default.Bind();

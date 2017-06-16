@@ -180,7 +180,6 @@
     <Compile Include="Colors.cs" />
     <Compile Include="Graphics\BlendEquation.cs" />
     <Compile Include="Graphics\BlendMode.cs" />
-    <Compile Include="Graphics\ColorMap.cs" />
     <Compile Include="Draw.cs" />
     <Compile Include="Graphics\Text\FontCharacter.cs" />
     <Compile Include="Graphics\GLExtensions.cs" />

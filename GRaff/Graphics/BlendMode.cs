@@ -1,12 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+#if OpenGL4
+using OpenTK.Graphics.OpenGL4;
+#else
+using OpenTK.Graphics.ES30;
+#endif
+
 
 namespace GRaff.Graphics
 {
-	public sealed class BlendMode
+    public sealed class BlendMode
 	{
 
 		public BlendMode(BlendEquation equation, BlendingFactor sourceFactor, BlendingFactor destinationFactor)
@@ -16,13 +18,13 @@ namespace GRaff.Graphics
 			this.DestinationFactor = destinationFactor;
 		}
 
-		public static IDisposable Use(BlendMode mode)
+		public IDisposable Use()
 		{
             return UseContext.CreateAt(
                 $"{typeof(BlendMode).FullName}.{nameof(Use)}",
-                ColorMap.BlendMode,
-                () => ColorMap.BlendMode = mode,
-                previous => ColorMap.BlendMode = previous
+                Current,
+                () => Current = this,
+                previous => Current = previous
             );
 		}
 
@@ -33,6 +35,25 @@ namespace GRaff.Graphics
 		public static BlendMode Subtractive { get { return new BlendMode(BlendEquation.ReverseSubtract, BlendingFactor.SrcAlpha, BlendingFactor.DstAlpha); } }
 
 		public static BlendMode Max { get { return new BlendMode(BlendEquation.Max, BlendingFactor.SrcAlpha, BlendingFactor.DstAlpha); } }
+
+
+		public static BlendMode Current
+		{
+			get
+			{
+
+				return new BlendMode((BlendEquation)GL.GetInteger(GetPName.BlendEquationRgb), (BlendingFactor)GL.GetInteger(GetPName.BlendSrc), (BlendingFactor)GL.GetInteger(GetPName.BlendDst));
+			}
+
+			set
+			{
+				Contract.Requires<ArgumentNullException>(value != null);
+				GL.BlendFunc((BlendingFactorSrc)value.SourceFactor, (BlendingFactorDest)value.DestinationFactor);
+				GL.BlendEquation((BlendEquationMode)value.Equation);
+			}
+		}
+
+        
 
 		public BlendingFactor DestinationFactor { get; private set; }
 
