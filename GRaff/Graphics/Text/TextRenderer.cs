@@ -182,7 +182,7 @@ namespace GRaff.Graphics.Text
 			using (var buffer = new Framebuffer(width, height))
 			using (buffer.Use())
 			{
-				Draw.Text(text, this, Colors.White, _getOrigin(Alignment, width, height));
+				Draw.Text(text, this, _getOrigin(Alignment, width, height), Colors.White);
 				return buffer.Buffer;
 			}
 		}

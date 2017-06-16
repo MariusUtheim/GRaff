@@ -25,15 +25,15 @@ namespace GRaff.GraphicTest
 		{
 			Draw.Clear(Colors.LightGray);
 
-			Draw.Text("Hello, world!", _render, Colors.Black, (10, 10));
+			Draw.Text("Hello, world!", _render, (10, 10), Colors.Black);
 
 			Draw.Rectangle(((10, 50), (300, _font.Height)), Colors.Black);
-			Draw.Text(_render.Truncate(lipsum), _render, Colors.Black, (10, 50));
+			Draw.Text(_render.Truncate(lipsum), _render, (10, 50), Colors.Black);
 
-			Draw.Text($"Line one\nLine two{Environment.NewLine}Line three", _render, Colors.Black, (10, 90));
+			Draw.Text($"Line one\nLine two{Environment.NewLine}Line three", _render, (10, 90), Colors.Black);
 
 			Draw.Rectangle(((350, 10), (300, 300)), Colors.Black);
-			Draw.Text(lipsum, _render, Colors.Black, (350, 10));
+			Draw.Text(lipsum, _render, (350, 10), Colors.Black);
 
 			if (_renderedSprite != null)
 				Draw.Sprite(_renderedSprite, 0, new Transform

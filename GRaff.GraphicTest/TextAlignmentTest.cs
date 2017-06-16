@@ -40,7 +40,7 @@ namespace GRaff.GraphicTest
 		public override void OnDraw()
 		{
 			Draw.Clear(Colors.White);
-			Draw.Text(_render.Alignment.ToString(), _render, Colors.DarkGray, Mouse.Location);
+			Draw.Text(_render.Alignment.ToString(), _render, Mouse.Location, Colors.DarkGray);
 
 			Draw.Line((0, Room.Current.Center.Y), (Room.Current.Width, Room.Current.Center.Y), Colors.Black);
 			Draw.Line((Room.Current.Center.X, 0), (Room.Current.Center.X, Room.Current.Height), Colors.Black);
@@ -49,15 +49,15 @@ namespace GRaff.GraphicTest
 			//Draw.Rectangle(Colors.Black, 10, 50, 300, _font.Height);
 			//Draw.Text(_render.Truncate(lipsum), _render, Colors.Black, 10, 50);
 
-			Draw.Text("Top Left", font, FontAlignment.TopLeft, Colors.Black, 0, 0);
-			Draw.Text("Top", font, FontAlignment.Top, Colors.Black, Room.Current.Center.X, 0);
-			Draw.Text("Top Right",  font, FontAlignment.TopRight, Colors.Black, Room.Current.Width, 0);
-			Draw.Text("Left", font, FontAlignment.Left, Colors.Black, 0, Room.Current.Center.Y);
-			Draw.Text("Center", font, FontAlignment.Center, Colors.Black, Room.Current.Center);
-			Draw.Text("Right", font, FontAlignment.Right, Colors.Black, Room.Current.Width, Room.Current.Center.Y);
-			Draw.Text("Bottom Left", font, FontAlignment.BottomLeft, Colors.Black, 0, Room.Current.Height);
-			Draw.Text("Bottom", font, FontAlignment.Bottom, Colors.Black, Room.Current.Center.X, Room.Current.Height);
-			Draw.Text("Bottom Right", font, FontAlignment.BottomRight, Colors.Black, Room.Current.Width, Room.Current.Height);
+            Draw.Text("Top Left", font, FontAlignment.TopLeft, (0, 0), Colors.Black);
+            Draw.Text("Top", font, FontAlignment.Top, (Room.Current.Center.X, 0), Colors.Black);
+            Draw.Text("Top Right",  font, FontAlignment.TopRight, (Room.Current.Width, 0), Colors.Black);
+            Draw.Text("Left", font, FontAlignment.Left, (0, Room.Current.Center.Y), Colors.Black);
+			Draw.Text("Center", font, FontAlignment.Center, Room.Current.Center, Colors.Black);
+            Draw.Text("Right", font, FontAlignment.Right, (Room.Current.Width, Room.Current.Center.Y), Colors.Black);
+            Draw.Text("Bottom Left", font, FontAlignment.BottomLeft, (0, Room.Current.Height), Colors.Black);
+            Draw.Text("Bottom", font, FontAlignment.Bottom, (Room.Current.Center.X, Room.Current.Height), Colors.Black);
+            Draw.Text("Bottom Right", font, FontAlignment.BottomRight, (Room.Current.Width, Room.Current.Height), Colors.Black);
 		}
 
 	}

@@ -20,9 +20,9 @@ namespace GRaff.GraphicTest
 		public override void OnDraw()
 		{
 			if (_fontKerning != null)
-				Draw.Text("AWA LTL Lorem ipsum dolor sit amet", _fontKerning, FontAlignment.Center, Colors.Black, Room.Current.Center);
+				Draw.Text("AWA LTL Lorem ipsum dolor sit amet", _fontKerning, FontAlignment.Center, Room.Current.Center, Colors.Black);
 			if (_fontNonKerning != null)
-				Draw.Text("AWA LTL Lorem ipsum dolor sit amet", _fontNonKerning, FontAlignment.Center, Colors.Black, Room.Current.Center + new Vector(0, 36));
+				Draw.Text("AWA LTL Lorem ipsum dolor sit amet", _fontNonKerning, FontAlignment.Center, Room.Current.Center + new Vector(0, 36), Colors.Black);
 		}
 	}
 }

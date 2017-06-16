@@ -197,20 +197,20 @@ namespace GRaff
         public static void Triangles(IEnumerable<(Triangle triangle, Color color)> primitives)
         => Primitive(PrimitiveType.Triangles, primitives.SelectMany(p => (((GraphicsPoint)p.triangle.V1, p.color), ((GraphicsPoint)p.triangle.V2, p.color), ((GraphicsPoint)p.triangle.V3, p.color))).ToArray());
 
-		public static void Text(string text, TextRenderer renderer, Color color, Matrix transform)
+
+		public static void Text(string text, TextRenderer renderer, Matrix transform, Color color)
 		{
 			Contract.Requires<ArgumentNullException>(renderer != null && transform != null);
 			Device.DrawText(renderer, color, text, transform);
 		}
-		public static void Text(string text, TextRenderer renderer, Color color, Point location) => Text(text, renderer, color, Matrix.Translation(location));
-		public static void Text(string text, TextRenderer renderer, Color color, Transform transform)
+		public static void Text(string text, TextRenderer renderer, Point location, Color color) => Text(text, renderer, Matrix.Translation(location), color);
+		public static void Text(string text, TextRenderer renderer, Transform transform, Color color)
 		{
 			Contract.Requires<ArgumentNullException>(renderer != null && transform != null);
-			Text(text, renderer, color, transform.GetMatrix());
+			Text(text, renderer, transform.GetMatrix(), color);
 		}
-		public static void Text(string text, Font font, Color color, Point location) => Text(text, new TextRenderer(font), color, Matrix.Translation(location));
-		public static void Text(string text, Font font, FontAlignment alignment, Color color, double x, double y) => Text(text, new TextRenderer(font, alignment), color, Matrix.Translation(x, y));
-		public static void Text(string text, Font font, FontAlignment alignment, Color color, Point location) => Text(text, new TextRenderer(font, alignment), color, Matrix.Translation(location.X, location.Y));
+		public static void Text(string text, Font font, Point location, Color color) => Text(text, new TextRenderer(font), Matrix.Translation(location), color);
+		public static void Text(string text, Font font, FontAlignment alignment, Point location, Color color) => Text(text, new TextRenderer(font, alignment), Matrix.Translation(location.X, location.Y), color);
 
 		//public static void Text(string text, Font font, Color color, double x, double y) => CurrentSurface.DrawText(font, )
 
