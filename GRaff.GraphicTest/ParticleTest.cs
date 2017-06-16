@@ -5,7 +5,7 @@ using GRaff.Randomness;
 
 namespace GRaff.GraphicTest
 {
-	[Test]
+    [Test]
 	class ParticleTest : GameElement, IGlobalMouseListener
 	{
 		ParticleSystem starSystem;
@@ -64,9 +64,9 @@ namespace GRaff.GraphicTest
 
 		public void OnGlobalMouse(MouseButton button)
 		{
-			if (button == MouseButton.Left)
-				starSystem.Create(Mouse.Location, 1);
-			else
+		//	if (button == MouseButton.Left)
+		//		starSystem.Create(Mouse.Location, 1);
+		//	else
 				pentagonSystem.Create(Mouse.Location, 1);
 		}
 

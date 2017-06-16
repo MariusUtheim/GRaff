@@ -16,7 +16,7 @@ namespace GRaff.Audio
             using (var stream = File.OpenRead(path))
                 if (stream.Read(headerBuffer, 0, 4) < 4)
                     throw new FileFormatException("Invalid file format. Only .wav and .ogg are supported.");
-
+            
             var header = new String(headerBuffer.Select(b => (char)b).ToArray());
 
             if (header == "RIFF")

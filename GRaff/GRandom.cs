@@ -31,6 +31,8 @@ namespace GRaff
 		/// <returns>A boolean value.</returns>
 		public static bool Boolean() { lock (_rnd) return _rnd.Boolean(); }
 
+        public static byte Byte() { lock (_rnd) return _rnd.Byte(); }
+
 		/// <summary>
 		/// Returns a nonnegative random number.
 		/// </summary>

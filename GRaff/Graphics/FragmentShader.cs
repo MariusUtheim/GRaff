@@ -18,12 +18,15 @@ in highp vec4 GRaff_Color;
 in highp vec2 GRaff_TexCoord;
 uniform highp sampler2D GRaff_Texture;
 uniform bool GRaff_IsTextured;
-vec4 GRaff_GetFragColor(void) {
+vec4 GRaff_GetFragColor(sampler2D tex, vec2 texCoord, vec4 baseColor) {
     if (GRaff_IsTextured)
-        return texture(GRaff_Texture, GRaff_TexCoord).rgba * GRaff_Color;
+        return texture(tex, texCoord).rgba * baseColor;
     else
-        return GRaff_Color;
+        return baseColor;
 }
+vec4 GRaff_GetFragColor(void) { return GRaff_GetFragColor(GRaff_Texture, GRaff_TexCoord, GRaff_Color); }
+vec4 GRaff_GetFragColor(vec2 texCoord) { return GRaff_GetFragColor(GRaff_Texture, texCoord, GRaff_Color); }
+
 ";
         
         public static FragmentShader Default { get; }

@@ -28,7 +28,7 @@ namespace GRaff.Graphics
             GL.Clear(ClearBufferMask.ColorBufferBit);
 		}
 
-		public void Draw(GraphicsPoint[] vertices, Color[] colors, PrimitiveType type)
+		public void Draw(PrimitiveType type, GraphicsPoint[] vertices, Color[] colors)
 		{
 			Contract.Requires(vertices != null && colors != null);
 			Contract.Requires(vertices.Length == colors.Length);
@@ -37,12 +37,17 @@ namespace GRaff.Graphics
             _renderSystem.Render(type);
 		}
 
-        public void Draw(GraphicsPoint[] vertices, Color color, PrimitiveType type)
+        public void Draw(PrimitiveType type, GraphicsPoint[] vertices, Color color)
         {
             Contract.Requires(vertices != null);
             _renderSystem.SetVertices(vertices);
             _renderSystem.SetColor(color);
             _renderSystem.Render(type);
+        }
+
+        public void Draw(PrimitiveType type, (GraphicsPoint vertex, Color color)[] primitive)
+        {
+            Draw(type, primitive.Select(p => p.vertex).ToArray(), primitive.Select(p => p.color).ToArray());
         }
         
 
@@ -57,7 +62,7 @@ namespace GRaff.Graphics
         {
             if (hRadius == 0 && vRadius == 0)
             {
-                Draw(new[] { center }, innerColor, PrimitiveType.Points);
+                Draw(PrimitiveType.Points, new[] { center }, innerColor);
                 return;
             }
             var ellipse = Polygon.Ellipse(center, hRadius, vRadius);
@@ -110,7 +115,7 @@ namespace GRaff.Graphics
         }
 
 
-        public void DrawTexture(Texture texture, double xOrigin, double yOrigin, Color blend, Matrix transform)
+        public void DrawTexture(Texture texture, double xOrigin, double yOrigin, Matrix transform, Color blend)
         {
 			Contract.Requires<ArgumentNullException>(texture != null && transform != null);
             Contract.Requires<ObjectDisposedException>(!texture.Buffer.IsDisposed);
@@ -127,7 +132,7 @@ namespace GRaff.Graphics
             _renderSystem.Render(texture.Buffer, PrimitiveType.TriangleStrip);
         }
 
-        public void DrawTexture(TextureBuffer buffer, GraphicsPoint[] vertices, Color blend, GraphicsPoint[] texCoords, PrimitiveType type)
+        public void DrawTexture(TextureBuffer buffer, PrimitiveType type, GraphicsPoint[] vertices, Color blend, GraphicsPoint[] texCoords)
         {
             Contract.Requires<ArgumentNullException>(buffer != null && vertices != null && texCoords != null);
             Contract.Requires<ObjectDisposedException>(!buffer.IsDisposed);
@@ -137,8 +142,8 @@ namespace GRaff.Graphics
             _renderSystem.SetTexCoords(texCoords);
             _renderSystem.Render(buffer, type);
         }
-        
-        public void DrawTexture(TextureBuffer buffer, GraphicsPoint[] vertices, Color[] colors, GraphicsPoint[] texCoords, PrimitiveType type)
+
+        public void DrawTexture(TextureBuffer buffer, PrimitiveType type, GraphicsPoint[] vertices, Color[] colors, GraphicsPoint[] texCoords)
         {
             Contract.Requires<ArgumentNullException>(buffer != null && vertices != null && texCoords != null);
             Contract.Requires<ObjectDisposedException>(!buffer.IsDisposed);
@@ -148,6 +153,13 @@ namespace GRaff.Graphics
             _renderSystem.SetTexCoords(texCoords);
             _renderSystem.Render(buffer, type);
         }
+
+        public void DrawTexture(TextureBuffer buffer, PrimitiveType type, (GraphicsPoint vertex, Color color, GraphicsPoint texCoord)[] primitive)
+        {
+            throw new NotImplementedException();
+        }
+
+
 
         public void DrawText(TextRenderer renderer, Color color, string text, Matrix transform)
 		{

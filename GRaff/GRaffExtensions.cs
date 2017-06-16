@@ -46,6 +46,14 @@ namespace GRaff
 			return rnd.Next() % 2 == 0;
 		}
 
+        public static byte Byte(this Random rnd)
+        {
+            Contract.Requires<ArgumentNullException>(rnd != null);
+            var buffer = new byte[1];
+            rnd.NextBytes(buffer);
+            return buffer[0];
+        }
+
 		/// <summary>
 		/// Returns a nonnegative random number.
 		/// </summary>

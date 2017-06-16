@@ -8,7 +8,7 @@ namespace GRaff.Audio
         public SimpleSoundElement(SoundBuffer buffer, bool looping, double volume, double pitch, Point location)
         {
             this.Buffer = buffer;
-            Source.Looping = looping;
+            Source.IsLooping = looping;
 
             Source.Volume = volume;
             Source.Pitch = pitch;
@@ -18,6 +18,13 @@ namespace GRaff.Audio
         }
 
         public SoundBuffer Buffer { get; }
+
+
+		public override void OnStep()
+		{
+			if (Source.State == SoundState.Stopped)
+			    this.Destroy();
+		}
 
         protected override void OnDestroy()
         {

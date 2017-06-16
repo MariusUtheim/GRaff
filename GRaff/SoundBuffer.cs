@@ -15,14 +15,13 @@ namespace GRaff
         private readonly MutableList<SoundElement> _instances = new MutableList<SoundElement>();
         private readonly ALFormat _format;
 
-        #region Loading
-        private SoundBuffer(int bitrate, int channels, int frequency, byte[] buffer)
+        public SoundBuffer(int bitrate, int channels, int frequency, byte[] buffer, int? length = null)
         {
             Contract.Requires<ArgumentOutOfRangeException>(bitrate == 8 || bitrate == 16);
             Contract.Requires<ArgumentOutOfRangeException>(channels == 1 || channels == 2);
             Contract.Requires<ArgumentOutOfRangeException>(frequency > 0);
             Contract.Requires<ArgumentNullException>(buffer != null);
-            Contract.Requires<ArgumentException>(buffer.Length > 0);
+			Contract.Requires<ArgumentException>(buffer.Length > 0);
 
             Id = AL.GenBuffer();
 
@@ -41,9 +40,9 @@ namespace GRaff
             }
 
             _Audio.ErrorCheck();
-        
 
-            AL.BufferData(Id, _format, buffer, buffer.Length, Frequency);
+            AL.BufferData(Id, _format, _buffer, length ?? _buffer.Length, Frequency);
+
             _Audio.ErrorCheck();
         }
 
@@ -57,7 +56,6 @@ namespace GRaff
                 return new SoundBuffer(stream.Bitrate, stream.Channels, stream.Frequency, buffer);
             }
         }
-
 
         public static IAsyncOperation<SoundBuffer> LoadAsync(string path)
         {
@@ -74,13 +72,12 @@ namespace GRaff
 
         public static SoundElement Stream(string fileName)
         {
-            return new StreamingSoundElement(fileName);
+            return Instance.Create(new StreamingSoundElement(fileName, true));
         }
-
-        #endregion
 
         public int Id { get; }
 
+#warning The user can keep track of the buffer
         private byte[] _buffer;
         public IReadOnlyList<byte> Buffer => Array.AsReadOnly(_buffer);
 

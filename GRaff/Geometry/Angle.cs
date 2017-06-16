@@ -47,7 +47,7 @@ namespace GRaff
 		/// <param name="radians">The angle, in radians.</param>
 		/// <returns>the created GRaff.Angle</returns>
 		public static Angle Rad(double radians) 
-			=> new Angle(GMath.RoundULong((radians * radToData) % ulong.MaxValue));
+            => new Angle(GMath.RoundULong(GMath.Remainder((radians * radToData), ulong.MaxValue)));
 
 		/// <summary>
 		/// Creates a GRaff.Angle with a value specified in degrees.
@@ -55,7 +55,7 @@ namespace GRaff
 		/// <param name="degrees">The angle, in degrees</param>
 		/// <returns>the created GRaff.Angle</returns>
 		public static Angle Deg(double degrees) 
-			=> new Angle(GMath.RoundULong((degrees * degToData) % ulong.MaxValue));
+            => new Angle(GMath.RoundULong(GMath.Remainder((degrees * degToData), ulong.MaxValue)));
 
 		
 		/// <summary>

@@ -16,13 +16,6 @@ namespace GRaff.Audio
 
         public SoundSource Source { get; }
 
-
-        public override void OnStep()
-        {
-            if (Source.State == SoundState.Stopped)
-                this.Destroy();
-        }
-
         protected override void OnDestroy()
         {
             if (!Source.IsDisposed)

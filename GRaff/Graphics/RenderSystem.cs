@@ -162,9 +162,11 @@ namespace GRaff.Graphics
 
             var loc = GL.GetUniformLocation(ShaderProgram.Current.Id, "GRaff_IsTextured");
             if (loc >= 0)
-                GL.ProgramUniform1(ShaderProgram.Current.Id, loc, 0);
+                GL.Uniform1(loc, 0);
+            _Graphics.ErrorCheck();
 
             GL.BindVertexArray(_array);
+            GL.DisableVertexAttribArray(2);
             GL.DrawArrays((GLPrimitiveType)type, 0, _vertexCount);
             _Graphics.ErrorCheck();
         }
@@ -182,6 +184,7 @@ namespace GRaff.Graphics
             _Graphics.ErrorCheck();
 
 			GL.BindVertexArray(_array);
+            GL.EnableVertexAttribArray(2);
 			GL.DrawArrays((GLPrimitiveType)type, 0, _vertexCount);
             _Graphics.ErrorCheck();
 		}

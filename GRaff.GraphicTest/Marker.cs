@@ -6,7 +6,7 @@
 
 		public override void OnDraw()
 		{
-			Draw.FillCircle(Colors.White, Location, t);
+			Draw.FillCircle(Location, t, Colors.White);
 			if (--t == 0)
 				Destroy();
 		}

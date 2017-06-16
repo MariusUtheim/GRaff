@@ -1,17 +1,18 @@
 ﻿using GRaff.Synchronization;
 using OpenTK.Audio.OpenAL;
 using System;
-
+using System.Linq;
+using System.Collections.Generic;
 
 namespace GRaff.Audio
 {
     public class SoundSource : IDisposable
     {
+        private Queue<SoundBuffer> _queuedBuffers;
 
         public SoundSource()
         {
             _id = AL.GenSource();
-            var s = AL.GetSourceType(Id);
         }
 
         ~SoundSource()
@@ -64,6 +65,39 @@ namespace GRaff.Audio
             set => Location = (Location.X, value);
         }
 
+        public void QueueBuffers(params SoundBuffer[] buffers)
+        {
+            Contract.Requires<ArgumentNullException>(buffers != null);
+
+            if (_queuedBuffers == null)
+                _queuedBuffers = new Queue<SoundBuffer>();
+
+            AL.SourceQueueBuffers(_id, buffers.Length, buffers.Select(b => b.Id).ToArray());
+			_Audio.ErrorCheck();
+
+            foreach (var buffer in buffers)
+                _queuedBuffers.Enqueue(buffer);
+
+            if (!IsStreaming)
+            { }
+        }
+
+        public IEnumerable<SoundBuffer> UnqueueBuffers()
+        {
+            AL.GetSource(_id, ALGetSourcei.BuffersProcessed, out int buffersProcessed);
+            if (buffersProcessed == 0)
+                return Enumerable.Empty<SoundBuffer>();
+
+            var unqueuedBuffers = AL.SourceUnqueueBuffers(_id, buffersProcessed);
+            _Audio.ErrorCheck();
+
+            var buffers = new SoundBuffer[buffersProcessed];
+            for (var i = 0; i < buffers.Length; i++)
+                buffers[i] = _queuedBuffers.Dequeue();
+
+            return buffers;
+        }
+
         public Point Location
         {
             get
@@ -94,7 +128,7 @@ namespace GRaff.Audio
             }
         }
 
-        public bool Looping
+        public bool IsLooping
         {
             get
             {
@@ -212,6 +246,25 @@ namespace GRaff.Audio
                     return (SoundState)AL.GetSourceState(Id);
             }
         }
+
+        public bool IsStatic
+        {
+            get
+            {
+                AL.GetSource(_id, ALGetSourcei.SourceType, out int value);
+                return value == (int)ALSourceType.Static;
+            }
+        }
+
+        public bool IsStreaming
+        {
+            get
+            {
+                AL.GetSource(_id, ALGetSourcei.SourceType, out int value);
+                return value == (int)ALSourceType.Streaming;
+            }
+        }
+                  
 
         private SoundBuffer _buffer;
         public SoundBuffer Buffer

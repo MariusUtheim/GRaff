@@ -106,12 +106,12 @@ namespace GRaff
 
 					coords left = (coords)viewBox.Left, right = (coords)viewBox.Right, top = (coords)viewBox.Top, bottom = (coords)viewBox.Bottom;
 
-                    Draw.Primitive.CustomTextured(PrimitiveType.TriangleStrip, Buffer, Colors.White, new[]
+                    Draw.Primitive(PrimitiveType.TriangleStrip, Buffer, new[]
                     {
-                        (new GraphicsPoint(left, top), new GraphicsPoint(u0, v0)),
-                        (new GraphicsPoint(right, top), new GraphicsPoint(u1, v0)),
-						(new GraphicsPoint(left, bottom), new GraphicsPoint(u0, v1)),
-                        (new GraphicsPoint(right, bottom), new GraphicsPoint(u1, v1)),
+                        (new Point(left, top), new Point(u0, v0)),
+                        (new Point(right, top), new Point(u1, v0)),
+						(new Point(left, bottom), new Point(u0, v1)),
+                        (new Point(right, bottom), new Point(u1, v1)),
                     });
                     
 				}

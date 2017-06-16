@@ -119,6 +119,10 @@
     <Compile Include="Graphics.Shaders\CausticShaderProgram.cs" />
     <Compile Include="Graphics.Shaders\ColorMatrixShaderProgram.cs" />
     <Compile Include="Graphics.Shaders\SpotlightShaderProgram.cs" />
+    <Compile Include="Graphics.Shaders\SoundVisualizerShaderProgram.cs" />
+    <Compile Include="Audio.Effects\WaveGenerator.cs" />
+    <Compile Include="Audio.Effects\AudioFilter.cs" />
+    <Compile Include="Graphics.Shaders\WaveShiftShaderProgram.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -128,6 +132,9 @@
       <Project>{64447cf0-9d21-4b49-b12b-7830bee354c7}</Project>
       <Name>GRaff</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Audio.Effects\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

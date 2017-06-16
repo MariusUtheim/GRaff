@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using GRaff.Synchronization;
 using GRaff.Audio;
+using System.Diagnostics;
+using GRaff.Audio.Effects;
 
 namespace GRaff.GraphicTest
 {
@@ -17,7 +19,9 @@ namespace GRaff.GraphicTest
 
 		public SoundTest()
 		{
-            SoundBuffer.LoadAsync(@"Assets/Panacea.wav").ThenWait(b => this.buffer = b);
+            //instance = SoundBuffer.Stream(@"Assets/Panacea.wav");
+            //buffer = SoundBuffer.Load(@"Assets/PanaceaLong.wav");
+            buffer = WaveGenerator.Generate(WaveGenerator.Binary(440), TimeSpan.FromSeconds(1));
 		}
 
 		public void OnKeyPress(Key key)
@@ -28,7 +32,7 @@ namespace GRaff.GraphicTest
                     if (instance?.Source.State == SoundState.Paused)
                         instance.Source.Play();
                     else
-                        instance = buffer.Play(false, volume: 3);
+                        instance = buffer.Play(false, volume: 0.5, pitch: 1);
                     break;
 
                 case Key.N:
@@ -65,15 +69,17 @@ namespace GRaff.GraphicTest
             Draw.Clear(Colors.Black);
             if (instance != null && !instance.Source.IsDisposed)
             {
-                var completion = instance.Source.Offset.Seconds / instance.Source.Buffer.Duration.Seconds;
-                var loc = completion * Room.Current.Width;
-                Draw.Line(Colors.DarkGreen, (loc, 0.0), (loc, Room.Current.Height));
+                //var completion = instance.Source.Offset.Seconds / instance.Source.Buffer.Duration.Seconds;
+                //var loc = completion * Room.Current.Width;
+                //Draw.Line(Colors.DarkGreen, (loc, 0.0), (loc, Room.Current.Height));
             }
         }
 
         protected override void OnDestroy()
 		{
         	buffer.Dispose();
+            if (instance?.Exists ?? false)
+                instance.Destroy();
         //    bufferWithOffset?.Dispose();
 		}
 	}
