@@ -195,7 +195,7 @@ namespace GRaff
             => Primitive(PrimitiveType.Triangles, triangles.SelectMany(t => ((GraphicsPoint)t.V1, (GraphicsPoint)t.V2, (GraphicsPoint)t.V3)).ToArray(), color);
 
         public static void Triangles(IEnumerable<(Triangle triangle, Color color)> primitives)
-        => Primitive(PrimitiveType.Triangles, primitives.SelectMany(p => (((GraphicsPoint)p.triangle.V1, p.color), ((GraphicsPoint)p.triangle.V2, p.color), ((GraphicsPoint)p.triangle.V3, p.color))).ToArray());
+            => Primitive(PrimitiveType.Triangles, primitives.SelectMany(p => (((GraphicsPoint)p.triangle.V1, p.color), ((GraphicsPoint)p.triangle.V2, p.color), ((GraphicsPoint)p.triangle.V3, p.color))).ToArray());
 
 
 		public static void Text(string text, TextRenderer renderer, Matrix transform, Color color)

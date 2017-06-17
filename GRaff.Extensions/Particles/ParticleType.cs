@@ -70,15 +70,11 @@ namespace GRaff.Particles
 
 		internal void Render(IEnumerable<Particle> particles)
 		{
-			if (BlendMode == null || BlendMode == ColorMap.BlendMode)
+			if (BlendMode == null || BlendMode == BlendMode.Current)
 				_renderer.Render(particles);
 			else
-			{
-				var previousBlend = ColorMap.BlendMode;
-				ColorMap.BlendMode = this.BlendMode;
-				_renderer.Render(particles);
-				ColorMap.BlendMode = previousBlend;
-			}
+                using (BlendMode.Use())
+				    _renderer.Render(particles);
 		}
 	}
 }
