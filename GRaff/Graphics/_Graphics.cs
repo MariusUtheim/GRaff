@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using OpenTK.Graphics;
 #if OpenGL4
 using OpenTK.Graphics.OpenGL4;
 #else
@@ -10,6 +11,11 @@ namespace GRaff.Graphics
 {
 	internal static class _Graphics
 	{
+		public static bool IsContextActive
+		{
+			get { return GraphicsContext.CurrentContext != null; }
+		}
+
         public static void Initialize()
         {
             Draw.Device = new RenderDevice();

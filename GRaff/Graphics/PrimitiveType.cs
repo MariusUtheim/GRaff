@@ -12,10 +12,11 @@ namespace GRaff.Graphics
 	//     functions
 	public enum PrimitiveType
 	{
-		//
-		// Summary:
-		//     Original was GL_POINTS = 0x0000
-		Points,
+#warning Ensure that all modes are actually supported
+        //
+        // Summary:
+        //     Original was GL_POINTS = 0x0000
+        Points,
 		//
 		// Summary:
 		//     Original was GL_LINES = 0x0001
