@@ -188,7 +188,7 @@
     <Compile Include="GameElement.cs" />
     <Compile Include="GameObject.cs" />
     <Compile Include="GlobalEvent.cs" />
-    <Compile Include="Graphics\RenderSystem.cs" />
+    <Compile Include="Graphics\SerialRenderSystem.cs" />
     <Compile Include="GMath.cs" />
     <Compile Include="GMath.FromSystemMath.cs" />
     <Compile Include="GRandom.cs" />
@@ -240,6 +240,7 @@
     <Compile Include="Audio\SimpleSoundElement.cs" />
     <Compile Include="Audio\StreamingSoundElement.cs" />
     <Compile Include="Audio\AudioStream.cs" />
+    <Compile Include="Graphics\InterleavedRenderSystem.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="External\libogg.dll">

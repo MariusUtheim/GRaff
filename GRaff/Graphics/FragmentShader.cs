@@ -26,20 +26,20 @@ vec4 GRaff_GetFragColor(sampler2D tex, vec2 texCoord, vec4 baseColor) {
 }
 vec4 GRaff_GetFragColor(void) { return GRaff_GetFragColor(GRaff_Texture, GRaff_TexCoord, GRaff_Color); }
 vec4 GRaff_GetFragColor(vec2 texCoord) { return GRaff_GetFragColor(GRaff_Texture, texCoord, GRaff_Color); }
-
+vec4 GRaff_GetFragColor(vec4 baseColor) { return GRaff_GetFragColor(GRaff_Texture, GRaff_TexCoord, baseColor); }
 ";
         
         public static FragmentShader Default { get; }
             = new FragmentShader(
                 GRaff_Header,
                 GRaff_GetFragColor,
-                @"
-                out highp vec4 out_FragColor;
+@"
+out highp vec4 out_FragColor;
 
-                void main() {
-                    out_FragColor = GRaff_GetFragColor();
-			    }
-                ");
+void main() {
+    out_FragColor = GRaff_GetFragColor();
+}
+");
 
     }
 }

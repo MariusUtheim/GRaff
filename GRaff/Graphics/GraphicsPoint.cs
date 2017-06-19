@@ -18,11 +18,13 @@ namespace GRaff.Graphics
 	{
 		public static GraphicsPoint Zero { get; } = new GraphicsPoint();
 #if OpenGL4
-		internal static OpenTK.Graphics.OpenGL4.VertexAttribPointerType PointerType = OpenTK.Graphics.OpenGL4.VertexAttribPointerType.Double;
+		internal static readonly OpenTK.Graphics.OpenGL4.VertexAttribPointerType PointerType = OpenTK.Graphics.OpenGL4.VertexAttribPointerType.Double;
 #else
 		internal static OpenTK.Graphics.ES30.VertexAttribPointerType PointerType = OpenTK.Graphics.ES30.VertexAttribPointerType.Float;
 #endif
-		private readonly coord _x, _y;
+		internal static readonly int Size = Marshal.SizeOf(typeof(GraphicsPoint));
+
+        private readonly coord _x, _y;
 
 		public GraphicsPoint(float x, float y)
 		{

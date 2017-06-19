@@ -10,7 +10,7 @@ namespace GRaff.Particles
 {
 	internal class TexturedParticleRenderer : IParticleRenderer
 	{
-		private readonly RenderSystem _renderSystem = new RenderSystem();
+		private readonly SerialRenderSystem _renderSystem = new SerialRenderSystem();
 		private readonly double _animationSpeed;
 		private double _frame = 0;
 

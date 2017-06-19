@@ -156,7 +156,7 @@ namespace GRaff.Graphics
 		{
 			if (!_disposed)
 			{
-				if (Context.IsActive)
+				if (_Graphics.IsContextActive)
 					GL.DeleteProgram(Id);
 				else
 					Async.Run(() => GL.DeleteProgram(Id));

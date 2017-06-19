@@ -12,7 +12,9 @@ namespace GRaff.Graphics
 {
     internal class RenderDevice : IRenderDevice
 	{
-		private readonly RenderSystem _renderSystem = new RenderSystem();
+		private readonly SerialRenderSystem _renderSystem = new SerialRenderSystem();
+        private readonly InterleavedRenderSystem _interleaved = new InterleavedRenderSystem();
+
 
 		public RenderDevice()
 		{
@@ -47,7 +49,8 @@ namespace GRaff.Graphics
 
         public void Draw(PrimitiveType type, (GraphicsPoint vertex, Color color)[] primitive)
         {
-            Draw(type, primitive.Select(p => p.vertex).ToArray(), primitive.Select(p => p.color).ToArray());
+            _interleaved.SetPrimitive(primitive);
+            _interleaved.Render(type);
         }
         
 
@@ -152,11 +155,6 @@ namespace GRaff.Graphics
             _renderSystem.SetColors(colors);
             _renderSystem.SetTexCoords(texCoords);
             _renderSystem.Render(buffer, type);
-        }
-
-        public void DrawTexture(TextureBuffer buffer, PrimitiveType type, (GraphicsPoint vertex, Color color, GraphicsPoint texCoord)[] primitive)
-        {
-            throw new NotImplementedException();
         }
 
 

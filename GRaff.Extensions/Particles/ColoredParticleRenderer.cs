@@ -11,7 +11,7 @@ namespace GRaff.Particles
 	{
 		private readonly GraphicsPoint[] _polygonVertices;
 		private readonly int _verticesPerParticle;
-		private readonly RenderSystem _renderSystem = new RenderSystem();
+		private readonly SerialRenderSystem _renderSystem = new SerialRenderSystem();
 
 		public ColoredParticleRenderer(Polygon polygon)
 		{

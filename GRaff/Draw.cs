@@ -180,10 +180,10 @@ namespace GRaff
             Device.DrawTexture(buffer, primitiveType, vertices.Select(v => (GraphicsPoint)v.vertex).ToArray(), Colors.White, vertices.Select(v => (GraphicsPoint)v.texCoord).ToArray());
 		}
 
-		public static void Primitive(PrimitiveType primitiveType, TextureBuffer buffer, (GraphicsPoint vertex, Color color, GraphicsPoint texCoord)[] primitive)
-		{
-            Device.DrawTexture(buffer, primitiveType, primitive);
-		}
+//TODO//		public static void Primitive(PrimitiveType primitiveType, TextureBuffer buffer, (GraphicsPoint vertex, Color color, GraphicsPoint texCoord)[] primitive)
+//		{
+//            Device.DrawTexture(buffer, primitiveType, primitive);
+//		}
 
         public static void Lines(IEnumerable<Line> lines, Color color)
             => Primitive(PrimitiveType.Lines, lines.SelectMany(l => ((GraphicsPoint)l.Origin, (GraphicsPoint)l.Destination)).ToArray(), color);
