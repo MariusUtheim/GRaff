@@ -10,8 +10,8 @@ namespace GRaff.GraphicTest
 #warning [Test]
     class AnimationTest : GameElement
 	{
-		Sprite sprite = new Sprite(new AnimationStrip(TextureBuffers.Giraffe, 20), origin: new Vector(0, 0));
-		Sprite pausedSprite = new Sprite(new AnimationStrip(TextureBuffers.Giraffe, 20, new ValueTuple<int, double>[] {
+		Sprite sprite = new Sprite(new AnimationStrip(Textures.Giraffe, 20), origin: new Vector(0, 0));
+		Sprite pausedSprite = new Sprite(new AnimationStrip(Textures.Giraffe, 20, new ValueTuple<int, double>[] {
 			(0, 4),
 			(1, 3),
 			(2, 2),

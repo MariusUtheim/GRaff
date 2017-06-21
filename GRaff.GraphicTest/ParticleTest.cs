@@ -17,7 +17,7 @@ namespace GRaff.GraphicTest
 
 		static ParticleType _createStarType()
 		{
-			var type = new ParticleType(new Sprite(TextureBuffers.Star.Texture), 75);
+			var type = new ParticleType(new Sprite(Textures.Star.SubTexture), 75);
 			type.AddBehaviors(new IParticleBehavior[] {
 				new RotationBehavior(),
 				new RotatingBehavior(Angle.Deg(3)),

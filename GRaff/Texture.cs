@@ -23,9 +23,9 @@ namespace GRaff
     /// <remarks>
     /// The following file types are supported: BMP, GIF, EXIF, JPG, PNG and TIFF
     /// </remarks>
-    public sealed class TextureBuffer : IDisposable
+    public sealed class Texture : IDisposable
 	{
-		private TextureBuffer(int width, int height)
+		private Texture(int width, int height)
 		{
 			Id = GL.GenTexture();
 			Width = width;
@@ -38,10 +38,11 @@ namespace GRaff
             _Graphics.ErrorCheck();
         }
 
-        unsafe public TextureBuffer(Color[,] colors)
+        public Texture(Color[,] colors)
 			: this(colors.GetLength(1), colors.GetLength(0))
 		{
 			Contract.Requires<ArgumentNullException>(colors != null);
+
 
 			var handle = GCHandle.Alloc(colors, GCHandleType.Pinned);
 			try
@@ -58,7 +59,7 @@ namespace GRaff
             _Graphics.ErrorCheck();
         }
 
-        public TextureBuffer(int width, int height, IntPtr data)
+        public Texture(int width, int height, IntPtr data)
 			: this(width, height)
 		{
 			Contract.Requires<ArgumentOutOfRangeException>(width > 0 && height > 0);
@@ -70,12 +71,12 @@ namespace GRaff
 		{
 			Contract.Invariant(Width > 0);
 			Contract.Invariant(Height > 0);
-			Contract.Invariant(Texture != null);
+			Contract.Invariant(SubTexture != null);
 		}
 
 		public bool IsDisposed { get; private set; }
 
-		~TextureBuffer()
+		~Texture()
 		{
 			Dispose(false);
 		}
@@ -102,9 +103,9 @@ namespace GRaff
 			}
 		}
 
-		public static TextureBuffer Load(string path)
+		public static Texture Load(string path)
 		{
-			Contract.Ensures(Contract.Result<TextureBuffer>() != null);
+			Contract.Ensures(Contract.Result<Texture>() != null);
 
             byte[] buffer = File.ReadAllBytes(path);
             Bitmap bitmap;
@@ -122,7 +123,7 @@ namespace GRaff
                                   bitmap.PixelFormat);
             try
             {
-                return new TextureBuffer(textureData.Width, textureData.Height, textureData.Scan0);
+                return new Texture(textureData.Width, textureData.Height, textureData.Scan0);
             }
             finally
             {
@@ -130,9 +131,9 @@ namespace GRaff
             }
         }
 
-		public static IAsyncOperation<TextureBuffer> LoadAsync(string path)
+		public static IAsyncOperation<Texture> LoadAsync(string path)
 		{
-            Contract.Ensures(Contract.Result<IAsyncOperation<TextureBuffer>>() != null);
+            Contract.Ensures(Contract.Result<IAsyncOperation<Texture>>() != null);
 			return Async.RunAsync(async () =>
 			{
 				byte[] buffer;
@@ -161,7 +162,7 @@ namespace GRaff
 												  bitmap.PixelFormat);
                 try
                 {
-                    return new TextureBuffer(textureData.Width, textureData.Height, textureData.Scan0);
+                    return new Texture(textureData.Width, textureData.Height, textureData.Scan0);
                 }
                 finally
                 {
@@ -172,16 +173,16 @@ namespace GRaff
 
 		public int Id { get; private set; }
 
-		private Texture _texture = null;
-		public Texture Texture => _texture ?? (_texture = new Texture(this, new GraphicsPoint(0, 0), new GraphicsPoint(1, 0), new GraphicsPoint(0, 1), new GraphicsPoint(1, 1)));
+		private SubTexture _texture = null;
+		public SubTexture SubTexture => _texture ?? (_texture = new SubTexture(this, new GraphicsPoint(0, 0), new GraphicsPoint(1, 0), new GraphicsPoint(0, 1), new GraphicsPoint(1, 1)));
 
 
 		public int Width { get;}
 
 		public int Height { get; }
 
-		public Texture Subtexture(Rectangle region)
-			=> Texture.FromTexCoords(this, region);
+		public SubTexture Subtexture(Rectangle region)
+			=> SubTexture.FromTexCoords(this, region);
 
 
         public void Save(string path)

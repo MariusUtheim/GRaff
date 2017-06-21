@@ -34,16 +34,16 @@ namespace GRaff.Graphics
         public static GraphicsPoint[] Outline(this Polygon polygon)
             => polygon.Vertices.Select(v => (GraphicsPoint)v).ToArray();
 
-		public static void Bind(this TextureBuffer texture)
+		public static void Bind(this Texture texture)
 		{
 			Contract.Requires<ArgumentNullException>(texture != null);
 			GL.BindTexture(TextureTarget.Texture2D, texture.Id);
 		}
 
-		public static void Bind(this Texture texture)
+		public static void Bind(this SubTexture texture)
 		{
 			Contract.Requires<ArgumentNullException>(texture != null);
-			GL.BindTexture(TextureTarget.Texture2D, texture.Buffer.Id);
+			GL.BindTexture(TextureTarget.Texture2D, texture.Texture.Id);
 		}
 	}
 }

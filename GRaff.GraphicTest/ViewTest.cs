@@ -22,7 +22,7 @@ namespace GRaff.GraphicTest
 
 			Draw.Line((0, 0), (Room.Current.Width, Room.Current.Height), Colors.Black);
 
-			var tx = TextureBuffers.Giraffe.Texture;
+			var tx = Textures.Giraffe.SubTexture;
 			using (View.UseView(0, 0, tx.Width, tx.Height))
 				Draw.Texture(tx, (0, 0));
 		}

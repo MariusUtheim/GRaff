@@ -120,9 +120,10 @@
     <Compile Include="Graphics.Shaders\ColorMatrixShaderProgram.cs" />
     <Compile Include="Graphics.Shaders\SpotlightShaderProgram.cs" />
     <Compile Include="Graphics.Shaders\SoundVisualizerShaderProgram.cs" />
-    <Compile Include="Audio.Effects\WaveGenerator.cs" />
-    <Compile Include="Audio.Effects\AudioFilter.cs" />
+    <Compile Include="Effects\WaveGenerator.cs" />
+    <Compile Include="Effects\AudioFilter.cs" />
     <Compile Include="Graphics.Shaders\WaveShiftShaderProgram.cs" />
+    <Compile Include="Effects\TextureGenerator.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -134,7 +135,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Audio.Effects\" />
+    <Folder Include="Effects\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

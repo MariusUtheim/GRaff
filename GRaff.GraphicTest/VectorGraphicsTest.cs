@@ -34,13 +34,13 @@ namespace GRaff.GraphicTest
                               Color.Rgb(255, 0, 0), Color.Rgb(0, 255, 0), Color.Rgb(0, 0, 255));
             
             Draw.Primitive(PrimitiveType.TriangleFan, new[] {
-                (new GraphicsPoint(650, 50), Colors.White),
-				(new GraphicsPoint(650, 50) + new Vector(30, Angle.Deg(0)), Color.Hsv(Angle.Deg(0), 1, 1)),
-			    (new GraphicsPoint(650, 50) + new Vector(30, Angle.Deg(60)), Color.Hsv(Angle.Deg(60), 1, 1)),
-				(new GraphicsPoint(650, 50) + new Vector(30, Angle.Deg(120)), Color.Hsv(Angle.Deg(120), 1, 1)),
-				(new GraphicsPoint(650, 50) + new Vector(30, Angle.Deg(180)), Color.Hsv(Angle.Deg(180), 1, 1)),
-				(new GraphicsPoint(650, 50) + new Vector(30, Angle.Deg(240)), Color.Hsv(Angle.Deg(240), 1, 1)),
-				(new GraphicsPoint(650, 50) + new Vector(30, Angle.Deg(300)), Color.Hsv(Angle.Deg(300), 1, 1)),
+                (new GraphicsPoint(650, 50), Colors.Gray),
+				(new GraphicsPoint(650, 50) + new Vector(30, Angle.Deg(0)), Color.Hsv(Angle.Deg(0), 1, 0.9)),
+			    (new GraphicsPoint(650, 50) + new Vector(30, Angle.Deg(60)), Color.Hsv(Angle.Deg(60), 0.75, 0.75)),
+				(new GraphicsPoint(650, 50) + new Vector(30, Angle.Deg(120)), Color.Hsv(Angle.Deg(120), 1, 0.9)),
+				(new GraphicsPoint(650, 50) + new Vector(30, Angle.Deg(180)), Color.Hsv(Angle.Deg(180), 0.75, 0.75)),
+				(new GraphicsPoint(650, 50) + new Vector(30, Angle.Deg(240)), Color.Hsv(Angle.Deg(240), 1, 0.9)),
+				(new GraphicsPoint(650, 50) + new Vector(30, Angle.Deg(300)), Color.Hsv(Angle.Deg(300), 0.75, 0.75)),
 				(new GraphicsPoint(650, 50) + new Vector(30, Angle.Deg(0)), Color.Hsv(Angle.Deg(0), 1, 1)),
 				});
 

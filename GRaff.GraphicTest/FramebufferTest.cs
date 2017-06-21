@@ -12,7 +12,7 @@ namespace GRaff.GraphicTest
 	class FramebufferTest : GameElement
 	{
 		Framebuffer _framebuffer;
-		Texture _giraffe = TextureBuffers.Giraffe.Texture;
+		SubTexture _giraffe = Textures.Giraffe.SubTexture;
         int w = 500, h = 500;
 
 		public FramebufferTest()
@@ -38,7 +38,7 @@ namespace GRaff.GraphicTest
 		public override void OnDraw()
 		{
             Draw.Clear(Colors.LightGray);
-			Draw.Texture(_framebuffer?.Buffer.Texture, (0, 0));
+			Draw.Texture(_framebuffer?.Texture.SubTexture, (0, 0));
 			Draw.Rectangle(((0, 0), (w, h)), Colors.Black);
 		}
     }

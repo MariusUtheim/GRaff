@@ -10,8 +10,8 @@ namespace GRaff.GraphicTest
 	[Test]
 	class TransformTest : GameElement
 	{
-		Sprite sprite = new Sprite(TextureBuffers.Giraffe.Texture);
-		Sprite fourSprites = new Sprite(new AnimationStrip(TextureBuffers.Giraffe, new IntVector(2, 2)), origin: Vector.Zero);
+		Sprite sprite = new Sprite(Textures.Giraffe.SubTexture);
+		Sprite fourSprites = new Sprite(new AnimationStrip(Textures.Giraffe, new IntVector(2, 2)), origin: Vector.Zero);
         
 		Matrix Identity => new Matrix().Translate(200, 200);
 		Matrix HFlip => Matrix.Scaling(GMath.Sin(Time.LoopCount / 60.0), 1).Translate(500, 200);

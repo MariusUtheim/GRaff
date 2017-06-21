@@ -50,9 +50,9 @@ namespace GRaff
 		public static IEnumerable<string> GetFontFamilies() => new InstalledFontCollection().Families.Select(f => f.Name);
 
 
-		public Font(TextureBuffer buffer, FontFile fontData)
+		public Font(Texture texture, FontFile fontData)
 		{
-			Buffer = buffer;
+			Texture = texture;
 			foreach (var c in fontData.Chars)
 				_characters.Add((char)c.Id, new FontCharacter(c));
 
@@ -88,18 +88,18 @@ namespace GRaff
 			{
 				if (disposing)
 				{
-					if (!Buffer.IsDisposed)
-						Buffer.Dispose();
-					Buffer = null;
+					if (!Texture.IsDisposed)
+                        Texture.Dispose();
+					Texture = null;
 				}
 			}
 		}
 
-		public TextureBuffer Buffer { get; private set; }
+        public Texture Texture { get; private set; }
 
 		public static IAsyncOperation<Font> LoadAsync(string bitmapFile, string fontDataFile)
 		{
-			return TextureBuffer.LoadAsync(bitmapFile)
+			return Texture.LoadAsync(bitmapFile)
 				.ThenQueue(textureBuffer =>
 				{
 					var fontData = FontLoader.Load(fontDataFile);
@@ -211,12 +211,12 @@ namespace GRaff
 		}
 
 
-		internal TextureBuffer TextureBuffer
+		internal Texture TextureBuffer
 		{
 			get
 			{
 				Contract.Requires<ObjectDisposedException>(!IsDisposed);
-				return Buffer;
+				return Texture;
 			}
 		}
 
@@ -238,13 +238,7 @@ namespace GRaff
                 return 0;
         }
 
-		/// <summary>
-		/// Renders the specified text to a new GRaff.TextureBuffer, 
-		/// making it far more efficient to draw.
-		/// </summary>
-		/// <param name="text">The text to be rendered</param>
-		/// <returns>a new GRaff.TextureBuffer containing the text rendered in this font.</returns>
-		public TextureBuffer RenderText(string text)
+		public Texture RenderText(string text)
 		{
 			throw new NotImplementedException();
 		}

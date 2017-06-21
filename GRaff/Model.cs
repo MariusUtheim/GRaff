@@ -4,11 +4,11 @@ using GRaff.Graphics;
 
 namespace GRaff
 {
-	public sealed class Image
+	public sealed class Model
 	{
 		private readonly GameObject _parent;
 
-		internal Image(GameObject parent)
+		internal Model(GameObject parent)
 		{
 			Contract.Requires<ArgumentNullException>(parent != null);
 			this._parent = parent;
@@ -96,7 +96,7 @@ namespace GRaff
 		/// Gets the current texture of this GRaff.Image.
 		/// </summary>
 		/// <exception cref="System.InvalidOperationException">GRaff.Image.Sprite is set to null.</exception>
-		public Texture CurrentTexture
+		public SubTexture CurrentTexture
 		{
 			get
 			{

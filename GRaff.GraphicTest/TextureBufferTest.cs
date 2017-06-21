@@ -1,30 +1,31 @@
 ﻿using GRaff.Graphics;
-
+using GRaff.Effects;
 
 namespace GRaff.GraphicTest
 {
-	[Test]
+    [Test]
 	class TextureBufferTest : GameElement
 	{
-		Texture texture = TextureBuffers.Giraffe.Texture;
-		TextureBuffer customTexture;
+		private SubTexture _texture = Textures.Giraffe.SubTexture;
+		private Texture _chessboard, _mono, _linear, _sinusoidal;
 
-		public TextureBufferTest()
-		{
-			var data = new Color[100, 200];
+        public TextureBufferTest()
+        {
+            _chessboard = TextureGenerator.Generate(TextureGenerator.Chessboard(Colors.LightSlateGray, Colors.Black, (4, 4)), (80, 110));
+            _mono = TextureGenerator.Generate(TextureGenerator.Monocolored(Colors.LightPink), (80, 110));
+            _linear = TextureGenerator.Generate(TextureGenerator.Linear(Colors.MediumPurple, Colors.Blue, Colors.Red, Colors.ForestGreen), (80, 110));
+            _sinusoidal = TextureGenerator.Generate(TextureGenerator.Sinusoidal(Colors.Purple, Colors.Blue, Colors.Red, Colors.ForestGreen), (80, 110));
+        }
 
-			for (var x = 0; x < 100; x++)
-				for (var y = 0; y < 200; y++)
-					data[x, y] = Color.Merge(Colors.Blue.Transparent((x + y) / 300.0), Colors.Red, (x + y) / 300.0);
-
-			customTexture = new TextureBuffer(data);
-		}
-
+		
 		public override void OnDraw()
 		{
 			Draw.Clear(Colors.LightGray);
-			Draw.Texture(texture, (0, 0));
-			Draw.Texture(customTexture.Texture, (texture.Width, 1));
+			Draw.Texture(_texture, (0, 0));
+			Draw.Texture(_chessboard.SubTexture, (10, _texture.Height + 10));
+            Draw.Texture(_mono.SubTexture, (110, _texture.Height + 10));
+            Draw.Texture(_linear.SubTexture, (210, _texture.Height + 10));
+            Draw.Texture(_sinusoidal.SubTexture, (310, _texture.Height + 10));
 		}
 	}
 }

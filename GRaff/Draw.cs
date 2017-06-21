@@ -107,27 +107,27 @@ namespace GRaff
 
         public static void FillEllipse(Rectangle rectangle, Color innerColor, Color outerColor) => _drawFan((GraphicsPoint)rectangle.Center, GRaff.Polygon.Ellipse(rectangle).Outline(), innerColor, outerColor);
 
-        public static void Texture(Texture texture, Point location, Color blend)
+        public static void Texture(SubTexture texture, Point location, Color blend)
         {
             if (texture != null)
                 Device.DrawTexture(texture, 0, 0, Matrix.Translation(location), blend);
         }
-        public static void Texture(Texture texture, Point location) => Texture(texture, location, Colors.White);
+        public static void Texture(SubTexture texture, Point location) => Texture(texture, location, Colors.White);
 
-        public static void Texture(Texture texture, Rectangle rect, Color blend)
+        public static void Texture(SubTexture texture, Rectangle rect, Color blend)
         {
             if (texture != null)
                 Device.DrawTexture(texture, 0, 0, new Matrix(rect.Width / texture.Width, 0, rect.Left, 0, rect.Height / texture.Height, rect.Top), blend);
         }
-        public static void Texture(Texture texture, Rectangle rect) => Texture(texture, rect, Colors.White);
+        public static void Texture(SubTexture texture, Rectangle rect) => Texture(texture, rect, Colors.White);
 
-        public static void Texture(Texture texture, Rectangle rect, Color c1, Color c2, Color c3, Color c4)
+        public static void Texture(SubTexture texture, Rectangle rect, Color c1, Color c2, Color c3, Color c4)
         {
             if (texture != null)
             {
                 var pts = new[] { (GraphicsPoint)rect.TopLeft, (GraphicsPoint)rect.TopRight, (GraphicsPoint)rect.BottomLeft, (GraphicsPoint)rect.BottomRight };
                 var cols = new[] { c1, c2, c4, c3 };
-                Device.DrawTexture(texture.Buffer, PrimitiveType.TriangleStrip, pts, cols, texture.StripCoords);
+                Device.DrawTexture(texture.Texture, PrimitiveType.TriangleStrip, pts, cols, texture.StripCoords);
             }
                                    
         }
@@ -142,10 +142,10 @@ namespace GRaff
         public static void Sprite(Sprite sprite, double imageIndex, Point location) => Sprite(sprite, imageIndex, Matrix.Translation(location), Colors.White);
         public static void Sprite(Sprite sprite, int imageIndex, Transform transform) => Sprite(sprite, imageIndex, transform.GetMatrix(), Colors.White);
         public static void Sprite(Sprite sprite, int imageIndex, Transform transform, Color blend) => Sprite(sprite, imageIndex, transform.GetMatrix(), blend);
-        public static void Image(Image image)
+        public static void Model(Model model)
         {
-            if (image != null)
-                Sprite(image.Sprite, image.Index, image.Transform.GetMatrix(), image.Blend);
+            if (model != null)
+                Sprite(model.Sprite, model.Index, model.Transform.GetMatrix(), model.Blend);
         }
 
         public static void Polygon(Polygon polygon, Color color)
@@ -175,7 +175,7 @@ namespace GRaff
             Device.Draw(primitiveType, primitive);
 		}
 
-		public static void Primitive(PrimitiveType primitiveType, TextureBuffer buffer, params (Point vertex, Point texCoord)[] vertices)
+		public static void Primitive(PrimitiveType primitiveType, Texture buffer, params (Point vertex, Point texCoord)[] vertices)
 		{
             Device.DrawTexture(buffer, primitiveType, vertices.Select(v => (GraphicsPoint)v.vertex).ToArray(), Colors.White, vertices.Select(v => (GraphicsPoint)v.texCoord).ToArray());
 		}

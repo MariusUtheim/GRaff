@@ -9,16 +9,16 @@ using coord = System.Single;
 
 namespace GRaff.Graphics
 {
-	public sealed class Texture
+	public sealed class SubTexture
 	{
-		internal Texture(TextureBuffer buffer, GraphicsPoint topLeft, GraphicsPoint topRight, GraphicsPoint bottomLeft, GraphicsPoint bottomRight)
+		internal SubTexture(Texture buffer, GraphicsPoint topLeft, GraphicsPoint topRight, GraphicsPoint bottomLeft, GraphicsPoint bottomRight)
 		{
 			Contract.Requires<ArgumentNullException>(buffer != null);
 			QuadCoords = new[] { topLeft, topRight, bottomRight, bottomLeft };
-			Buffer = buffer;
+			Texture = buffer;
 		}
 
-		public Texture(TextureBuffer buffer, Rectangle region)
+		public SubTexture(Texture buffer, Rectangle region)
 			: this(buffer,
 				  new GraphicsPoint(region.Left / buffer.Width, region.Top / buffer.Height), 
 				  new GraphicsPoint(region.Right / buffer.Width, region.Top / buffer.Height),
@@ -28,11 +28,11 @@ namespace GRaff.Graphics
 			Contract.Requires<ArgumentNullException>(buffer != null);
 		}
 
-		public static Texture FromTexCoords(TextureBuffer buffer, Rectangle texCoords)
+		public static SubTexture FromTexCoords(Texture buffer, Rectangle texCoords)
 		{
 			Contract.Requires<ArgumentNullException>(buffer != null);
-			Contract.Ensures(Contract.Result<Texture>() != null);
-			return new Texture(buffer, (GraphicsPoint)texCoords.TopLeft, (GraphicsPoint)texCoords.TopRight, (GraphicsPoint)texCoords.BottomLeft, (GraphicsPoint)texCoords.BottomRight);
+			Contract.Ensures(Contract.Result<SubTexture>() != null);
+			return new SubTexture(buffer, (GraphicsPoint)texCoords.TopLeft, (GraphicsPoint)texCoords.TopRight, (GraphicsPoint)texCoords.BottomLeft, (GraphicsPoint)texCoords.BottomRight);
 		}
 
 		[ContractInvariantMethod]
@@ -40,14 +40,14 @@ namespace GRaff.Graphics
 		{
 			Contract.Invariant(QuadCoords != null);
 			Contract.Invariant(QuadCoords.Length == 4);
-			Contract.Invariant(Buffer != null);
+			Contract.Invariant(Texture != null);
 		}
 
 		internal GraphicsPoint[] QuadCoords { get; }
 
         internal GraphicsPoint[] StripCoords => new[] { TopLeft, TopRight, BottomLeft, BottomRight };
 		
-		public TextureBuffer Buffer { get; }
+		public Texture Texture { get; }
 
 		public GraphicsPoint TopLeft => QuadCoords[0];
 		
@@ -57,14 +57,14 @@ namespace GRaff.Graphics
 
 		public GraphicsPoint BottomLeft => QuadCoords[3];
 
-		public double Width => (0.5 * (TopLeft + BottomLeft) - 0.5 * (TopRight + BottomRight)).Magnitude * Buffer.Width;
+		public double Width => (0.5 * (TopLeft + BottomLeft) - 0.5 * (TopRight + BottomRight)).Magnitude * Texture.Width;
 
-		public double Height => (0.5 * (Point)(TopLeft + TopRight) - 0.5 * (Point)(BottomLeft + BottomRight)).Magnitude * Buffer.Height;
+		public double Height => (0.5 * (Point)(TopLeft + TopRight) - 0.5 * (Point)(BottomLeft + BottomRight)).Magnitude * Texture.Height;
 
 		public Vector Size => new Vector(Width, Height);
 
-		internal coord PixelWidth => Buffer.Width * (BottomRight.Xt - TopLeft.Xt);
+		internal coord PixelWidth => Texture.Width * (BottomRight.Xt - TopLeft.Xt);
 
-		internal coord PixelHeight => Buffer.Height * (BottomRight.Yt - TopLeft.Yt);
+		internal coord PixelHeight => Texture.Height * (BottomRight.Yt - TopLeft.Yt);
 	}
 }

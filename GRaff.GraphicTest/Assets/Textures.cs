@@ -7,16 +7,16 @@ using System.Threading.Tasks;
 
 namespace GRaff.GraphicTest
 {
-	static class TextureBuffers
+	static class Textures
 	{
-		public static TextureBuffer Giraffe;
+		public static Texture Giraffe;
         //public static TextureBuffer Animation = TextureBuffer.Load(@"C:\test\Animation.png");
-        public static TextureBuffer Star;
+        public static Texture Star;
 
 		public static void LoadAll()
 		{
-            Giraffe = TextureBuffer.Load(@"Assets/Giraffe.jpg");
-			Star = TextureBuffer.Load(@"Assets/Particle.png");
+            Giraffe = Texture.Load(@"Assets/Giraffe.jpg");
+			Star = Texture.Load(@"Assets/Particle.png");
 		}
 	}
 }

@@ -118,10 +118,10 @@ namespace GRaff.Graphics
         }
 
 
-        public void DrawTexture(Texture texture, double xOrigin, double yOrigin, Matrix transform, Color blend)
+        public void DrawTexture(SubTexture texture, double xOrigin, double yOrigin, Matrix transform, Color blend)
         {
 			Contract.Requires<ArgumentNullException>(texture != null && transform != null);
-            Contract.Requires<ObjectDisposedException>(!texture.Buffer.IsDisposed);
+            Contract.Requires<ObjectDisposedException>(!texture.Texture.IsDisposed);
 
             _renderSystem.SetVertices(new[] {
                 transform * new GraphicsPoint(-xOrigin, -yOrigin),
@@ -132,10 +132,10 @@ namespace GRaff.Graphics
             _renderSystem.SetColor(blend);
             
             _renderSystem.SetTexCoords(UsageHint.StreamDraw, texture.StripCoords);
-            _renderSystem.Render(texture.Buffer, PrimitiveType.TriangleStrip);
+            _renderSystem.Render(texture.Texture, PrimitiveType.TriangleStrip);
         }
 
-        public void DrawTexture(TextureBuffer buffer, PrimitiveType type, GraphicsPoint[] vertices, Color blend, GraphicsPoint[] texCoords)
+        public void DrawTexture(Texture buffer, PrimitiveType type, GraphicsPoint[] vertices, Color blend, GraphicsPoint[] texCoords)
         {
             Contract.Requires<ArgumentNullException>(buffer != null && vertices != null && texCoords != null);
             Contract.Requires<ObjectDisposedException>(!buffer.IsDisposed);
@@ -146,7 +146,7 @@ namespace GRaff.Graphics
             _renderSystem.Render(buffer, type);
         }
 
-        public void DrawTexture(TextureBuffer buffer, PrimitiveType type, GraphicsPoint[] vertices, Color[] colors, GraphicsPoint[] texCoords)
+        public void DrawTexture(Texture buffer, PrimitiveType type, GraphicsPoint[] vertices, Color[] colors, GraphicsPoint[] texCoords)
         {
             Contract.Requires<ArgumentNullException>(buffer != null && vertices != null && texCoords != null);
             Contract.Requires<ObjectDisposedException>(!buffer.IsDisposed);
@@ -175,7 +175,7 @@ namespace GRaff.Graphics
             _renderSystem.SetVertices(vertices);
             _renderSystem.SetColor(color);
             _renderSystem.SetTexCoords(texCoords);
-            _renderSystem.Render(renderer.Font.Buffer, PrimitiveType.Triangles);
+            _renderSystem.Render(renderer.Font.Texture, PrimitiveType.Triangles);
 		}
     }
 }

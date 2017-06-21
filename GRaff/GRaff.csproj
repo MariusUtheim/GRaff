@@ -195,7 +195,7 @@
     <Compile Include="IAnimationEndListener.cs" />
     <Compile Include="ICollisionListener.cs" />
     <Compile Include="IKeyListener.cs" />
-    <Compile Include="Image.cs" />
+    <Compile Include="Model.cs" />
     <Compile Include="IMouseListener.cs" />
     <Compile Include="Instance.cs" />
     <Compile Include="Geometry\IntRectangle.cs" />
@@ -222,10 +222,10 @@
     <Compile Include="Graphics\Sprite.cs" />
     <Compile Include="Graphics\RenderDevice.cs" />
     <Compile Include="Synchronization\operations\TaskOperator.cs" />
-    <Compile Include="Graphics\Texture.cs" />
+    <Compile Include="Graphics\SubTexture.cs" />
     <Compile Include="Synchronization\ParallelOperator.cs" />
     <Compile Include="Synchronization\TweeningFunctions.cs" />
-    <Compile Include="TextureBuffer.cs" />
+    <Compile Include="Texture.cs" />
     <Compile Include="Time.cs" />
     <Compile Include="Transform.cs" />
     <Compile Include="Synchronization\Tween.cs" />

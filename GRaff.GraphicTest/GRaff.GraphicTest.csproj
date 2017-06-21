@@ -68,9 +68,8 @@
     <Compile Include="TransformTest.cs" />
     <Compile Include="TweenTest.cs" />
     <Compile Include="ViewTest.cs" />
-    <Compile Include="Assets\TextureBuffers.cs" />
+    <Compile Include="Assets\Textures.cs" />
     <Compile Include="SoundShaderTest.cs" />
-    <Compile Include="Sandbox.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

@@ -57,7 +57,7 @@ namespace GRaff.Particles
 			_renderSystem.SetColor(Colors.White);
 			_renderSystem.SetTexCoords(texCoords);
             
-            _renderSystem.Render(Sprite.SubImage(_frame).Buffer, PrimitiveType.Triangles);
+            _renderSystem.Render(Sprite.SubImage(_frame).Texture, PrimitiveType.Triangles);
 
 			_frame += -_animationSpeed;
 		}

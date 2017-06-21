@@ -171,7 +171,7 @@ namespace GRaff.Graphics
             _Graphics.ErrorCheck();
         }
 
-		public void Render(TextureBuffer buffer, PrimitiveType type)
+		public void Render(Texture buffer, PrimitiveType type)
 		{
 			Contract.Requires<ObjectDisposedException>(!IsDisposed);
 

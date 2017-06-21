@@ -174,7 +174,7 @@ namespace GRaff.Graphics.Text
 			return new Point(x, y);
 		}
 
-		public TextureBuffer Render(string text)
+		public Texture Render(string text)
 		{
 			var width = GetWidth(text);
 			var height = (int)GMath.Ceiling(GetHeight(text));
@@ -183,7 +183,7 @@ namespace GRaff.Graphics.Text
 			using (buffer.Use())
 			{
 				Draw.Text(text, this, _getOrigin(Alignment, width, height), Colors.White);
-				return buffer.Buffer;
+				return buffer.Texture;
 			}
 		}
 
@@ -194,7 +194,7 @@ namespace GRaff.Graphics.Text
 			var length = lines.SelectMany(str => str.ToCharArray())
                               .Where(c => Font.HasCharacter(c))
                               .Count();
-            double tXScale = 1.0 / Font.Buffer.Width, tYScale = 1.0 / Font.Buffer.Height;
+            double tXScale = 1.0 / Font.Texture.Width, tYScale = 1.0 / Font.Texture.Height;
 
             var vertices = new GraphicsPoint[6 * length];
             var texCoords = new GraphicsPoint[6 * length];

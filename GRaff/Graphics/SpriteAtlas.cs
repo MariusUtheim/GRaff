@@ -14,8 +14,8 @@ namespace GRaff.Graphics
 {
 	public class SpriteAtlas
 	{
-		[XmlType]
-		public class SubTexture
+        [XmlType("SubTexture")]
+		public class SubTextureData
 		{
 			[XmlAttribute]
 			public string name;
@@ -33,7 +33,7 @@ namespace GRaff.Graphics
 		public class TextureAtlas
 		{
 			[XmlElement]
-			public SubTexture[] SubTexture;
+			public SubTextureData[] SubTexture;
 			
 			[XmlAttribute]
 			public string imagePath;
@@ -41,20 +41,20 @@ namespace GRaff.Graphics
 
 		private static readonly XmlSerializer serializer = new XmlSerializer(typeof(TextureAtlas));
 
-		private Dictionary<string, Texture> _subTextures;
+		private Dictionary<string, Graphics.SubTexture> _subTextures;
 
-		public SpriteAtlas(TextureBuffer buffer, string xml)
+		public SpriteAtlas(Texture buffer, string xml)
 			: this(buffer, new MemoryStream(Encoding.UTF8.GetBytes(xml)))
 		{ }
 
-		public SpriteAtlas(TextureBuffer buffer, Stream xmlStream)
+		public SpriteAtlas(Texture buffer, Stream xmlStream)
 		{
 			var atlasData = (TextureAtlas)serializer.Deserialize(xmlStream);
 
-			_subTextures = new Dictionary<string, Texture>(atlasData.SubTexture.Length);
+            _subTextures = new Dictionary<string, Graphics.SubTexture>(atlasData.SubTexture.Length);
 			foreach (var sx in atlasData.SubTexture)
 			{
-				var texture = new Texture(buffer, new Rectangle(sx.x, sx.y, sx.width, sx.height));
+				var texture = new Graphics.SubTexture(buffer, new Rectangle(sx.x, sx.y, sx.width, sx.height));
 				_subTextures.Add(sx.name, texture);
 			}
 		}
@@ -70,7 +70,7 @@ namespace GRaff.Graphics
 				else
 					xmlPath = texturePath.Substring(0, index) + ".xml";
 			}
-			var texture = TextureBuffer.Load(texturePath);
+			var texture = Texture.Load(texturePath);
 			var xml = File.ReadAllText(xmlPath);
 			return new SpriteAtlas(texture, xml);
 		}
@@ -86,7 +86,7 @@ namespace GRaff.Graphics
 					xmlPath = texturePath.Substring(0, index) + ".xml";
 			}
 			return
-						TextureBuffer.LoadAsync(texturePath)
+						Texture.LoadAsync(texturePath)
 				.ThenAsync(async buffer =>
 				{
 					var xml = await Task.Run(() => File.ReadAllText(xmlPath));
@@ -94,11 +94,11 @@ namespace GRaff.Graphics
 				});
 		}
 
-		public TextureBuffer Buffer { get; private set; }
+		public Texture Texture { get; private set; }
 
-		public Texture Texture(string subtextureName) => _subTextures[subtextureName];
+		public SubTexture SubTexture(string subtextureName) => _subTextures[subtextureName];
 
-		public Texture this[string subtextureName] => _subTextures[subtextureName];
+		public SubTexture this[string subtextureName] => _subTextures[subtextureName];
 
 		public AnimationStrip AnimationStrip(string prefix)
 		{

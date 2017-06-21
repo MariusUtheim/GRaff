@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 using GRaff.Synchronization;
 using GRaff.Audio;
 using System.Diagnostics;
-using GRaff.Audio.Effects;
+using GRaff.Effects;
 
 namespace GRaff.GraphicTest
 {
-	[Test(Order = -1)]
+	[Test]
 	class SoundTest : GameElement, IKeyPressListener
 	{
         SoundBuffer buffer;
@@ -20,8 +20,8 @@ namespace GRaff.GraphicTest
 		public SoundTest()
 		{
             //instance = SoundBuffer.Stream(@"Assets/Panacea.wav");
-            //buffer = SoundBuffer.Load(@"Assets/PanaceaLong.wav");
-            buffer = WaveGenerator.Generate(WaveGenerator.Binary(440), TimeSpan.FromSeconds(1));
+            buffer = SoundBuffer.Load(@"Assets/PanaceaLong.wav");
+            //buffer = WaveGenerator.Generate(WaveGenerator.Binary(440), TimeSpan.FromSeconds(1));
 		}
 
 		public void OnKeyPress(Key key)

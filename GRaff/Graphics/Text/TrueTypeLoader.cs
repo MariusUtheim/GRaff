@@ -34,7 +34,7 @@ namespace GRaff.Graphics.Text
                 g.DrawImage(glyphs[i].Image, rects[i].Left, rects[i].Top);
 
             var bmpData = bmp.LockBits(new SysRectangle(0, 0, bmp.Width, bmp.Height), ImageLockMode.ReadOnly, PixelFormat.Format32bppArgb);
-            var buffer = new TextureBuffer(bmpData.Width, bmpData.Height, bmpData.Scan0);
+            var buffer = new Texture(bmpData.Width, bmpData.Height, bmpData.Scan0);
             bmp.UnlockBits(bmpData);
 
             var chars = new FontChar[glyphs.Length];
@@ -97,7 +97,7 @@ namespace GRaff.Graphics.Text
 			}).ThenQueue(() =>
 			{
 				bmpData = bmp.LockBits(new SysRectangle(0, 0, bmp.Width, bmp.Height), ImageLockMode.ReadOnly, PixelFormat.Format32bppArgb);
-				var buffer = new TextureBuffer(bmpData.Width, bmpData.Height, bmpData.Scan0);
+				var buffer = new Texture(bmpData.Width, bmpData.Height, bmpData.Scan0);
 				bmp.UnlockBits(bmpData);
 
 				var chars = new FontChar[glyphs.Length];

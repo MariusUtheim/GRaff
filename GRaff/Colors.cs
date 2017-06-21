@@ -22,7 +22,7 @@ namespace GRaff
 
 		public static Color Yellow { get; } = new Color(255, 255, 0);
 
-		public static Color Lime { get; } = new Color(0, 255, 0);
+		public static Color Lime { get; } = new Color(191, 255, 0);
 
 		public static Color Aqua { get; } = new Color(0, 255, 255);
 

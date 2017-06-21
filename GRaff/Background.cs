@@ -34,7 +34,7 @@ namespace GRaff
 		/// <summary>
 		/// Gets or sets the sprite for this GRaff.Background.
 		/// </summary>
-		public TextureBuffer Buffer { get; set; }
+		public Texture Texture { get; set; }
 
 		/// <summary>
 		/// Gets or sets whether this GRaff.Background should draw its sprite tiled.
@@ -96,17 +96,17 @@ namespace GRaff
 			if (Color != null)
 				Draw.Clear(Color.Value);
 
-			if (Buffer != null)
+			if (Texture != null)
 			{
 				if (IsTiled)
 				{
 					var viewBox = View.BoundingBox;
-					coords u0 = -(coords)(XOffset + viewBox.Left) / Buffer.Width, v0 = -(coords)((YOffset + viewBox.Top) / Buffer.Height);
-					coords u1 = (coords)(u0 + viewBox.Width / Buffer.Width), v1 = (coords)(v0 + viewBox.Height / Buffer.Height);
+					coords u0 = -(coords)(XOffset + viewBox.Left) / Texture.Width, v0 = -(coords)((YOffset + viewBox.Top) / Texture.Height);
+					coords u1 = (coords)(u0 + viewBox.Width / Texture.Width), v1 = (coords)(v0 + viewBox.Height / Texture.Height);
 
 					coords left = (coords)viewBox.Left, right = (coords)viewBox.Right, top = (coords)viewBox.Top, bottom = (coords)viewBox.Bottom;
 
-                    Draw.Primitive(PrimitiveType.TriangleStrip, Buffer, new[]
+                    Draw.Primitive(PrimitiveType.TriangleStrip, Texture, new[]
                     {
                         (new Point(left, top), new Point(u0, v0)),
                         (new Point(right, top), new Point(u1, v0)),
@@ -116,7 +116,7 @@ namespace GRaff
                     
 				}
 				else
-					Draw.Texture(Buffer.Texture, (XOffset, YOffset));
+					Draw.Texture(Texture.SubTexture, (XOffset, YOffset));
 			}
 		}
 	}

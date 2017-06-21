@@ -25,7 +25,7 @@ namespace GRaff
 			Transform = new Transform();
 			X = x;
 			Y = y;
-			Image = new Image(this);
+			Model = new Model(this);
 			Mask = new Mask(this);
 		}
 
@@ -40,7 +40,7 @@ namespace GRaff
 		private void invariants()
 		{
 			Contract.Invariant(Transform != null);
-			Contract.Invariant(Image != null);
+			Contract.Invariant(Model != null);
 			Contract.Invariant(Mask != null);
 		}
 
@@ -72,13 +72,13 @@ namespace GRaff
 		}
 
 
-		public Image Image { get; private set; }
+		public Model Model { get; private set; }
 
 
 		public Sprite Sprite
 		{
-			get { return Image.Sprite; }
-			set { Image.Sprite = value; }
+			get { return Model.Sprite; }
+			set { Model.Sprite = value; }
 		}
 
 		public Transform Transform { get; private set; }
@@ -113,10 +113,10 @@ namespace GRaff
 		/// </summary>
 		public override void OnDraw()
 		{
-			if (Image.Sprite != null)
+			if (Model.Sprite != null)
 			{
-				Draw.Image(Image);
-				if (Image.Animate())
+				Draw.Model(Model);
+				if (Model.Animate())
 					(this as IAnimationEndListener)?.AnimationEnd();
 			}
 		}

@@ -17,7 +17,7 @@ namespace GRaff.GraphicTest
 		static void gameStart()
 		{
 			GlobalEvent.ExitOnEscape = true;
-			TextureBuffers.LoadAll();
+			Textures.LoadAll();
 
 			Instance<TestController>.Create();
 		}
