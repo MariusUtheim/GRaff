@@ -118,6 +118,9 @@ namespace GRaff
 
         private static FileInfo _getFontFileName(string fontFamily, FontOptions options)
         {
+            if (File.Exists(fontFamily))
+                return new FileInfo(fontFamily);
+
             if ((options & FontOptions.Bold) == FontOptions.Bold)
                 fontFamily += " Bold";
             if ((options & FontOptions.Italic) == FontOptions.Italic)

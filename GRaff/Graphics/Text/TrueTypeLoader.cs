@@ -22,10 +22,11 @@ namespace GRaff.Graphics.Text
             var face = new Face(lib, file.FullName);
 
             face.SetPixelSizes((uint)size, 0);
+            
 
             var glyphs = charSet.Select(c => _makeFontChar(face, c)).ToArray();
             var rects = _genRects(glyphs);
-
+            
             var bmp = new Bitmap(rects.Max(r => r.Right), rects.Max(r => r.Bottom));
             var g = SysGraphics.FromImage(bmp);
             g.Clear(SysColor.Transparent);
@@ -136,8 +137,11 @@ namespace GRaff.Graphics.Text
 		private static Glyph _makeFontChar(Face face, char c)
 		{
 			face.LoadChar(c, LoadFlags.Default, LoadTarget.Normal);
-			face.Glyph.RenderGlyph(RenderMode.Light);
-			var bmp = (face.Glyph.Bitmap.Width == 0) ? new Bitmap(1, 1) : face.Glyph.Bitmap.ToGdipBitmap();
+            face.Glyph.RenderGlyph(RenderMode.Normal);
+
+            //TODO// Render everything manually instead of first converting to Bitmap
+#warning We don't always get the colors right
+            var bmp = (face.Glyph.Bitmap.Width == 0) ? new Bitmap(1, 1) : face.Glyph.Bitmap.ToGdipBitmap();
 			
 			return new Glyph
 			{
@@ -178,8 +182,8 @@ namespace GRaff.Graphics.Text
             }).ToArray();
         }
 
-
-		private static RegistryKey _fontsKey => Registry.LocalMachine.OpenSubKey("Software\\Microsoft\\Windows NT\\CurrentVersion\\Fonts");
+#warning Clean up
+        private static RegistryKey _fontsKey => Registry.LocalMachine.OpenSubKey("Software\\Microsoft\\Windows NT\\CurrentVersion\\Fonts");
 		
 
 		internal static string GetTrueTypeFile(string fontFamilyName)
