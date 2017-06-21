@@ -187,13 +187,15 @@ namespace GRaff
 
         public void Save(string path)
 		{
-            throw new NotImplementedException();
-			var img = new Bitmap(Width, Height, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+            var img = new Bitmap(Width, Height, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
 
-			var data = img.LockBits(new System.Drawing.Rectangle(0, 0, img.Width, img.Height), ImageLockMode.WriteOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
-			var dataSize = new IntPtr(System.Runtime.InteropServices.Marshal.SizeOf(typeof(Color)) * Width * Height);
-            GL.GetBufferSubData(BufferTarget.TextureBuffer, IntPtr.Zero, dataSize, data.Scan0);
-			img.UnlockBits(data);
+			var imgData = img.LockBits(new System.Drawing.Rectangle(0, 0, img.Width, img.Height), ImageLockMode.WriteOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+			var dataSize = new IntPtr(Marshal.SizeOf(typeof(Color)) * Width * Height);
+
+            GL.BindTexture(TextureTarget.Texture2D, Id);
+            GL.GetTexImage(TextureTarget.Texture2D, 0, GLPixelFormat.Bgra, PixelType.UnsignedByte, imgData.Scan0);
+
+			img.UnlockBits(imgData);
 			
 			img.Save(path);
 		}
