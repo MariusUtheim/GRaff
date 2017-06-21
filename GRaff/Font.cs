@@ -5,6 +5,7 @@ using System.Drawing.Text;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using GRaff.Graphics;
 using GRaff.Graphics.Text;
 using GRaff.Synchronization;
 
@@ -12,7 +13,7 @@ using GRaff.Synchronization;
 namespace GRaff
 {
     public class Font : IDisposable
-	{
+    {
         private class ImmutableSet : ISet<char>
         {
             private HashSet<char> _backingSet;
@@ -43,76 +44,76 @@ namespace GRaff
 
         private static readonly Regex NewlinePattern = new Regex("\r\n|\n");
 
-		private readonly Dictionary<char, FontCharacter> _characters = new Dictionary<char, FontCharacter>();
-		private readonly Dictionary<Tuple<char, char>, int> _kerning = new Dictionary<Tuple<char, char>, int>();
+        private readonly Dictionary<char, FontCharacter> _characters = new Dictionary<char, FontCharacter>();
+        private readonly Dictionary<Tuple<char, char>, int> _kerning = new Dictionary<Tuple<char, char>, int>();
 
-		public static ISet<char> ASCIICharacters { get; } = new ImmutableSet("\n !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~");
-		public static IEnumerable<string> GetFontFamilies() => new InstalledFontCollection().Families.Select(f => f.Name);
+        public static ISet<char> ASCIICharacters { get; } = new ImmutableSet("\n !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~");
+        public static IEnumerable<string> GetFontFamilies() => new InstalledFontCollection().Families.Select(f => f.Name);
 
 
-		public Font(Texture texture, FontFile fontData)
-		{
-			Texture = texture;
-			foreach (var c in fontData.Chars)
-				_characters.Add((char)c.Id, new FontCharacter(c));
+        public Font(Texture texture, FontFile fontData)
+        {
+            Texture = texture;
+            foreach (var c in fontData.Chars)
+                _characters.Add((char)c.Id, new FontCharacter(c));
 
-			Height = fontData.Common.LineHeight;
+            Height = fontData.Common.LineHeight;
 
-			if (fontData.Kernings?.Any() ?? false)
-			{
-				HasKerning = true;
-				foreach (var kerning in fontData.Kernings)
-					_kerning.Add(new Tuple<char, char>((char)kerning.Left, (char)kerning.Right), kerning.Amount);
-			}
-			else
-				HasKerning = false;
-		}
-        
+            if (fontData.Kernings?.Any() ?? false)
+            {
+                HasKerning = true;
+                foreach (var kerning in fontData.Kernings)
+                    _kerning.Add(new Tuple<char, char>((char)kerning.Left, (char)kerning.Right), kerning.Amount);
+            }
+            else
+                HasKerning = false;
+        }
 
-		public bool IsDisposed { get; private set; }
 
-		~Font()
-		{
-			Dispose(false);
-		}
+        public bool IsDisposed { get; private set; }
 
-		public void Dispose()
-		{
-			Dispose(true);
-			GC.SuppressFinalize(this);
-		}
+        ~Font()
+        {
+            Dispose(false);
+        }
 
-		private void Dispose(bool disposing)
-		{
-			if (!IsDisposed)
-			{
-				if (disposing)
-				{
-					if (!Texture.IsDisposed)
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        private void Dispose(bool disposing)
+        {
+            if (!IsDisposed)
+            {
+                if (disposing)
+                {
+                    if (!Texture.IsDisposed)
                         Texture.Dispose();
-					Texture = null;
-				}
-			}
-		}
+                    Texture = null;
+                }
+            }
+        }
 
         public Texture Texture { get; private set; }
 
-		public static IAsyncOperation<Font> LoadAsync(string bitmapFile, string fontDataFile)
-		{
-			return Texture.LoadAsync(bitmapFile)
-				.ThenQueue(textureBuffer =>
-				{
-					var fontData = FontLoader.Load(fontDataFile);
-					return new Font(textureBuffer, fontData);
-				});
-		}
+        public static IAsyncOperation<Font> LoadAsync(string bitmapFile, string fontDataFile)
+        {
+            return Texture.LoadAsync(bitmapFile)
+                .ThenQueue(textureBuffer =>
+                {
+                    var fontData = FontLoader.Load(fontDataFile);
+                    return new Font(textureBuffer, fontData);
+                });
+        }
 
 
-		public static Font Load(string bitmapFile, string fontDataFile)
-		{
-			Contract.Ensures(Contract.Result<Font>() != null);
-			return LoadAsync(bitmapFile, fontDataFile).Wait();
-		}
+        public static Font Load(string bitmapFile, string fontDataFile)
+        {
+            Contract.Ensures(Contract.Result<Font>() != null);
+            return LoadAsync(bitmapFile, fontDataFile).Wait();
+        }
 
 
         private static FileInfo _getFontFileName(string fontFamily, FontOptions options)
@@ -122,9 +123,22 @@ namespace GRaff
             if ((options & FontOptions.Italic) == FontOptions.Italic)
                 fontFamily += " Italic";
 
-            fontFamily += " (TrueType)";
+            string fontFileName;
+            switch (Environment.OSVersion.Platform)
+            {
+                case PlatformID.Win32Windows:
+                    fontFileName = Path.Combine(@"C:\Windows\Fonts\", TrueTypeLoader.GetTrueTypeFile(fontFamily));
+                    break;
 
-            var fontFileName = Path.Combine(@"C:\Windows\Fonts\", TrueTypeLoader.GetTrueTypeFile(fontFamily));
+                case PlatformID.Unix:
+                case PlatformID.MacOSX:
+                    fontFileName = Path.Combine("/Library/Fonts/", fontFamily + ".ttf");
+                    break;
+
+                default:
+                    throw new NotSupportedException("TrueType loading is not supported on OS version " + Environment.OSVersion.Platform.ToString());
+            }
+
 
             if (!File.Exists(fontFileName))
                 throw new FileNotFoundException();
@@ -240,7 +254,16 @@ namespace GRaff
 
 		public Texture RenderText(string text)
 		{
-			throw new NotImplementedException();
+#warning Not tested
+            Contract.Requires<ArgumentNullException>(text != null);
+            var width = GetWidth(text);
+            var height = Height;
+            var buffer = new Framebuffer(width, height);
+            using (buffer.Use())
+            {
+                Draw.Text(text, this, (0, 0), Colors.White);
+                return buffer.Texture;
+            }
 		}
 	}
 }

@@ -227,17 +227,17 @@ namespace GRaff.Graphics.Text
                     if (Font.TryGetCharacter(lines[l][i], out FontCharacter c))
                     {
                         vertices[idx] = new GraphicsPoint(x + c.XOffset, y + c.YOffset);
-                        vertices[idx + 1] = vertices[6 * idx + 3] = new GraphicsPoint(x + c.XOffset + c.Width, y + c.YOffset);
-                        vertices[idx + 2] = vertices[6 * idx + 4] = new GraphicsPoint(x + c.XOffset + c.Width, y + c.YOffset + c.Height);
-                        vertices[idx + 5] = new GraphicsPoint(x + c.XOffset, y + c.YOffset + c.Height);
+                        vertices[idx + 1] = vertices[idx + 3] = new GraphicsPoint(x + c.XOffset + c.Width, y + c.YOffset);
+                        vertices[idx + 2] = vertices[idx + 4] = new GraphicsPoint(x + c.XOffset, y + c.YOffset + c.Height);
+                        vertices[idx + 5] = new GraphicsPoint(x + c.XOffset + c.Width, y + c.YOffset + c.Height);
                         x += c.XAdvance;
                         if (i < lines[l].Length - 1)
                             x += Font.GetKerning(lines[l][i], lines[l][i + 1]);
 
                         texCoords[idx] = new GraphicsPoint(tXScale * c.X, tYScale * c.Y);
                         texCoords[idx + 1] = texCoords[idx + 3] = new GraphicsPoint(tXScale * (c.X + c.Width), tYScale * c.Y);
-                        texCoords[idx + 2] = texCoords[idx + 4] = new GraphicsPoint(tXScale * (c.X + c.Width), tYScale * (c.Y + c.Height));
-                        texCoords[idx + 5] = new GraphicsPoint(tXScale * c.X, tYScale * (c.Y + c.Height));
+                        texCoords[idx + 2] = texCoords[idx + 4] = new GraphicsPoint(tXScale * c.X, tYScale * (c.Y + c.Height));
+                        texCoords[idx + 5] = new GraphicsPoint(tXScale * (c.X + c.Width), tYScale * (c.Y + c.Height));
                     }
                     idx += 6;
 				}

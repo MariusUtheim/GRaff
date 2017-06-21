@@ -135,7 +135,6 @@ namespace GRaff.Graphics.Text
 
 		private static Glyph _makeFontChar(Face face, char c)
 		{
-			//var gIdx = face.GetCharIndex(c);
 			face.LoadChar(c, LoadFlags.Default, LoadTarget.Normal);
 			face.Glyph.RenderGlyph(RenderMode.Light);
 			var bmp = (face.Glyph.Bitmap.Width == 0) ? new Bitmap(1, 1) : face.Glyph.Bitmap.ToGdipBitmap();
@@ -147,8 +146,8 @@ namespace GRaff.Graphics.Text
 				XOffset = face.Glyph.BitmapLeft,
 				YOffset = face.Glyph.LinearVerticalAdvance.ToInt32() - face.Glyph.BitmapTop,
 				XAdvance = face.Glyph.Advance.X.ToInt32(),
-				Width = bmp.Width,
-				Height = bmp.Height
+				Width = bmp.Width + 1,
+				Height = bmp.Height + 1
 			};
 		}
 
@@ -169,8 +168,7 @@ namespace GRaff.Graphics.Text
 
         private static IntRectangle[] _genRects(IEnumerable<Glyph> glyphs)
         {
-#warning Make a rectangular texture instead
-#warning Something gets cut off?
+            //TODO// Back a bit more efficiently
             var x = 0;
             return glyphs.Select(glyph =>
             {

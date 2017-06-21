@@ -3,7 +3,7 @@
 
 namespace GRaff.GraphicTest
 {
-	//[Test]
+    [Test(Order = -1)]
     class TrueTypeTest : GameElement
 	{
 		private static Font _fontKerning = null, _fontNonKerning = null;
@@ -19,10 +19,11 @@ namespace GRaff.GraphicTest
 
 		public override void OnDraw()
 		{
+            Draw.Clear(Colors.ForestGreen);
 			if (_fontKerning != null)
-				Draw.Text("AWA LTL Lorem ipsum dolor sit amet", _fontKerning, FontAlignment.Center, Room.Current.Center, Colors.Black);
+				Draw.Text("AW This text uses kerning WA", _fontKerning, FontAlignment.Center, Room.Current.Center, Colors.Black);
 			if (_fontNonKerning != null)
-				Draw.Text("AWA LTL Lorem ipsum dolor sit amet", _fontNonKerning, FontAlignment.Center, Room.Current.Center + new Vector(0, 36), Colors.Black);
+				Draw.Text("AW This text doesn't use kerning WA", _fontNonKerning, FontAlignment.Center, Room.Current.Center + new Vector(0, 36), Colors.Black);
 		}
 	}
 }
