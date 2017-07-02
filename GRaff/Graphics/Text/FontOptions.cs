@@ -6,11 +6,12 @@ using System.Threading.Tasks;
 
 namespace GRaff.Graphics.Text
 {
-	public enum FontOptions
-	{
-		None = 0,
-		Bold = 0x01,
-		Italic = 0x02,
-		IgnoreKerning = 0x04
-	}
+    [Flags]
+    public enum FontOptions
+    {
+        None = 0b0000,
+        Bold = 0b0001,
+        Italic = 0b0010,
+        IgnoreKerning = 0b0100,
+    }
 }

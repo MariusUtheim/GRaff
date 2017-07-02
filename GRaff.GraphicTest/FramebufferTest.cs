@@ -12,7 +12,7 @@ namespace GRaff.GraphicTest
 	class FramebufferTest : GameElement
 	{
 		Framebuffer _framebuffer;
-		Texture _giraffe = TextureBuffers.Giraffe.Texture;
+		SubTexture _giraffe = Textures.Giraffe.SubTexture;
         int w = 500, h = 500;
 
 		public FramebufferTest()
@@ -25,12 +25,12 @@ namespace GRaff.GraphicTest
 
 					Draw.Texture(_giraffe, (0, 0));
 
-					Draw.FillTriangle(Colors.Black.Transparent(0), Colors.Black, Colors.Black, (0, 0), (0, 10), (10, 0));
-					Draw.FillTriangle(Colors.Black.Transparent(0), Colors.Black, Colors.Black, (w, 0), (w, 10), (w - 10, 0));
-					Draw.FillTriangle(Colors.Black.Transparent(0), Colors.Black, Colors.Black, (0, h), (0, h - 10), (10, h));
-					Draw.FillTriangle(Colors.Black.Transparent(0), Colors.Black, Colors.Black, (w, h), (w, h - 10), (w - 10, h));
+					Draw.FillTriangle((0, 0), (0, 10), (10, 0), Colors.Black.Transparent(0), Colors.Black, Colors.Black);
+					Draw.FillTriangle((w, 0), (w, 10), (w - 10, 0), Colors.Black.Transparent(0), Colors.Black, Colors.Black);
+					Draw.FillTriangle((0, h), (0, h - 10), (10, h), Colors.Black.Transparent(0), Colors.Black, Colors.Black);
+					Draw.FillTriangle((w, h), (w, h - 10), (w - 10, h), Colors.Black.Transparent(0), Colors.Black, Colors.Black);
 
-					Draw.Line(Colors.Black, (0, h), (w, 0));
+					Draw.Line((0, h), (w, 0), Colors.Black);
 				}
 		}
 
@@ -38,8 +38,8 @@ namespace GRaff.GraphicTest
 		public override void OnDraw()
 		{
             Draw.Clear(Colors.LightGray);
-			Draw.Texture(_framebuffer?.Buffer.Texture, (0, 0));
-			Draw.Rectangle(Colors.Black, ((0, 0), (w, h)));
+			Draw.Texture(_framebuffer?.Texture.SubTexture, (0, 0));
+			Draw.Rectangle(((0, 0), (w, h)), Colors.Black);
 		}
     }
 }

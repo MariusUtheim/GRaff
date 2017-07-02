@@ -10,6 +10,7 @@ namespace GRaff.Audio
         Initial = 4113,
         Playing = 4114,
         Paused = 4115,
-        Stopped = 4116
+        Stopped = 4116,
+        Disposed = 4117
     }
 }

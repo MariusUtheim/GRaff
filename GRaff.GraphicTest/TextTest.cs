@@ -17,7 +17,7 @@ namespace GRaff.GraphicTest
 			_render = new TextRenderer(_font, lineWidth: 300);
 			_render.Alignment = FontAlignment.TopLeft;
 			
-			_renderedSprite = new Sprite(_render.Render(lipsum).Texture);
+			_renderedSprite = new Sprite(_render.Render(lipsum).SubTexture);
 		}
 
 
@@ -25,18 +25,18 @@ namespace GRaff.GraphicTest
 		{
 			Draw.Clear(Colors.LightGray);
 
-			Draw.Text("Hello, world!", _render, Colors.Black, (10, 10));
+			Draw.Text("Hello, world!", _render, (10, 10), Colors.Black);
 
-			Draw.Rectangle(Colors.Black, ((10, 50), (300, _font.Height)));
-			Draw.Text(_render.Truncate(lipsum), _render, Colors.Black, (10, 50));
+			Draw.Rectangle(((10, 50), (300, _font.Height)), Colors.Black);
+			Draw.Text(_render.Truncate(lipsum), _render, (10, 50), Colors.Black);
 
-			Draw.Text($"Line one\nLine two{Environment.NewLine}Line three", _render, Colors.Black, (10, 90));
+			Draw.Text($"Line one\nLine two{Environment.NewLine}Line three", _render, (10, 90), Colors.Black);
 
-			Draw.Rectangle(Colors.Black, ((350, 10), (300, 300)));
-			Draw.Text(lipsum, _render, Colors.Black, (350, 10));
+			Draw.Rectangle(((350, 10), (300, 300)), Colors.Black);
+			Draw.Text(lipsum, _render, (350, 10), Colors.Black);
 
 			if (_renderedSprite != null)
-				Draw.Sprite(_renderedSprite, 0, Colors.Blue, new Transform
+				Draw.Sprite(_renderedSprite, 0, new Transform
 				{
 					X = Room.Current.Center.X,
 					Y = Room.Current.Center.Y + 100,
@@ -45,7 +45,7 @@ namespace GRaff.GraphicTest
 					YShear = 0.2 * GMath.Cos(Time.LoopCount / 11.0 / GMath.Pi),
 					XScale = 1 + 0.2 * GMath.Sin(Time.LoopCount / 10.0 / GMath.Phi),
 					YScale = 1 + 0.2 * GMath.Sin(Time.LoopCount / 7.0 / GMath.Phi)
-				});
+				}, Colors.Blue);
 
 		}
 	}

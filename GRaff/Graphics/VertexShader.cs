@@ -12,23 +12,26 @@ namespace GRaff.Graphics
         public VertexShader(params string[] source)
             : base(ShaderType.VertexShader, source) { }
 
+        private const string GRaff_DefaultSource =
+@"
+in highp vec2 in_Position;
+in lowp vec4 in_Color;
+in highp vec2 in_TexCoord;
+out lowp vec4 GRaff_Color;
+out highp vec2 GRaff_TexCoord;
+
+uniform highp mat4 GRaff_ViewMatrix;
+
+void main(void) {
+    gl_Position = GRaff_ViewMatrix * vec4(in_Position.x, in_Position.y, 0.0, 1.0);
+    GRaff_Color = in_Color;
+    GRaff_TexCoord = in_TexCoord;
+}";            
+
         public static VertexShader Default { get; }
             = new VertexShader(
                 GRaff_Header,
-                @"
-		        in highp vec2 in_Position;
-		        in lowp vec4 in_Color;
-		        in highp vec2 in_TexCoord;
-		        out lowp vec4 GRaff_Color;
-		        out highp vec2 GRaff_TexCoord;
-
-		        uniform highp mat4 GRaff_ViewMatrix;
-
-		        void main(void) {
-		        	gl_Position = GRaff_ViewMatrix * vec4(in_Position.x, in_Position.y, 0.0, 1.0);
-		        	GRaff_Color = in_Color;
-		        	GRaff_TexCoord = in_TexCoord;
-		        }");
+                GRaff_DefaultSource);
     }
     
 }

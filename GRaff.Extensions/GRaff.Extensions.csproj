@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -48,6 +48,9 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
+    <Reference Include="OpenTK">
+      <HintPath>..\..\..\Documents\Libraries\OpenTK\Binaries\OpenTK\Release\OpenTK.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Particles\AccelerationBehavior.cs" />
@@ -116,6 +119,11 @@
     <Compile Include="Graphics.Shaders\CausticShaderProgram.cs" />
     <Compile Include="Graphics.Shaders\ColorMatrixShaderProgram.cs" />
     <Compile Include="Graphics.Shaders\SpotlightShaderProgram.cs" />
+    <Compile Include="Graphics.Shaders\SoundVisualizerShaderProgram.cs" />
+    <Compile Include="Effects\WaveGenerator.cs" />
+    <Compile Include="Effects\AudioFilter.cs" />
+    <Compile Include="Graphics.Shaders\WaveShiftShaderProgram.cs" />
+    <Compile Include="Effects\TextureGenerator.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -125,6 +133,9 @@
       <Project>{64447cf0-9d21-4b49-b12b-7830bee354c7}</Project>
       <Name>GRaff</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Effects\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

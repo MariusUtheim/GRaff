@@ -37,7 +37,7 @@ namespace GRaff
         public static void Run(int windowWidth, int windowHeight, double fps, Action gameStart)
         {
             Time.StartTime = Time.MachineTime;
-            Window = new GameWindow(windowWidth, windowHeight, GraphicsMode.Default, "Giraffe", GameWindowFlags.FixedWindow, DisplayDevice.Default);
+            Window = new GameWindow(windowWidth, windowHeight, GraphicsMode.Default, "Giraffe", GameWindowFlags.FixedWindow, DisplayDevice.Default, 4, 2, GraphicsContextFlags.ForwardCompatible);
             GRaff.Window.DisplayScale = new Vector(Window.Width / (double)windowWidth, Window.Height / (double)windowHeight);
 
             Window.UpdateFrame += (sender, e) => Giraffe.Loop();

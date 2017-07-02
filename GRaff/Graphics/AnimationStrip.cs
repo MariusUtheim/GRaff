@@ -8,11 +8,11 @@ namespace GRaff.Graphics
 {
 	public sealed class AnimationStrip
 	{
-		private readonly Texture[] _frames;
+		private readonly SubTexture[] _frames;
 		private readonly int[] _indices;
 		private readonly double[] _durations;
 
-		public AnimationStrip(IEnumerable<Texture> frames)
+		public AnimationStrip(IEnumerable<SubTexture> frames)
 		{
 			Contract.Requires<ArgumentNullException>(frames != null);
 			Contract.Requires<ArgumentException>(frames.Count() > 0);
@@ -23,7 +23,7 @@ namespace GRaff.Graphics
 			_durations = Enumerable.Repeat(1.0, _frames.Length).ToArray();
 		}
 
-		public AnimationStrip(params Texture[] frames)
+		public AnimationStrip(params SubTexture[] frames)
 			: this(frames.AsEnumerable())
 		{
 			Contract.Requires<ArgumentNullException>(frames != null);
@@ -31,7 +31,7 @@ namespace GRaff.Graphics
 			Contract.Requires<ArgumentException>(Contract.ForAll(frames, frame => frame != null));
 		}
 
-		public AnimationStrip(IEnumerable<Texture> frames, IEnumerable<(int index, double duration)> frameDurations)
+		public AnimationStrip(IEnumerable<SubTexture> frames, IEnumerable<(int index, double duration)> frameDurations)
 		{
 			Contract.Requires<ArgumentNullException>(frames != null && frameDurations != null);
 			Contract.Requires<ArgumentException>(frames.Count() > 0 && frameDurations.Count() > 0);
@@ -41,7 +41,7 @@ namespace GRaff.Graphics
 			_durations = frameDurations.Select(f => f.duration).ToArray();
 		}
 
-		public AnimationStrip(TextureBuffer strip, int imageCount, IEnumerable<(int index, double duration)> frameDurations)
+		public AnimationStrip(Texture strip, int imageCount, IEnumerable<(int index, double duration)> frameDurations)
 		{
 			double dw = 1.0 / imageCount;
 			_frames = Enumerable.Range(0, imageCount)
@@ -51,7 +51,7 @@ namespace GRaff.Graphics
 			_durations = frameDurations.Select(f => f.duration).ToArray();
 		}
 
-		public AnimationStrip(TextureBuffer strip, int imageCount)
+		public AnimationStrip(Texture strip, int imageCount)
 		{
 			Contract.Requires<ArgumentOutOfRangeException>(imageCount >= 1);
 
@@ -63,7 +63,7 @@ namespace GRaff.Graphics
 			_durations = Enumerable.Repeat(1.0, imageCount).ToArray();
 		}
 
-		public AnimationStrip(TextureBuffer strip, IntVector imageCounts)
+		public AnimationStrip(Texture strip, IntVector imageCounts)
 		{
 			Contract.Requires<ArgumentOutOfRangeException>(imageCounts.X >= 1 && imageCounts.Y >= 1);
 
@@ -77,7 +77,7 @@ namespace GRaff.Graphics
 		}
 
 
-		public AnimationStrip(TextureBuffer strip, IntVector imageCounts, IEnumerable<(int index, double duration)> frameDurations)
+		public AnimationStrip(Texture strip, IntVector imageCounts, IEnumerable<(int index, double duration)> frameDurations)
 		{
 			Contract.Requires<ArgumentOutOfRangeException>(imageCounts.X >= 1 && imageCounts.Y >= 1);
 
@@ -108,7 +108,7 @@ namespace GRaff.Graphics
 
 		public AnimationStrip InOut()
 		{
-			var frames = new Texture[2 * _frames.Length];
+			var frames = new SubTexture[2 * _frames.Length];
 			
 			for (int i = 0; i < _frames.Length; i++)
 			{
@@ -123,15 +123,15 @@ namespace GRaff.Graphics
 
 		public int ImageCount => _indices.Length;
 
-		public Texture Frame(int index)
+		public SubTexture Frame(int index)
 		{
-			Contract.Ensures(Contract.Result<Texture>() != null);
+			Contract.Ensures(Contract.Result<SubTexture>() != null);
 			return _frames[GMath.Remainder(index, _frames.Length)];
 		}
 
-		public Texture SubImage(double dt)
+		public SubTexture SubImage(double dt)
 		{
-			Contract.Ensures(Contract.Result<Texture>() != null);
+			Contract.Ensures(Contract.Result<SubTexture>() != null);
 			dt = GMath.Remainder(dt, Duration);
 			for (int i = 0; i < _indices.Length; i++)
 			{

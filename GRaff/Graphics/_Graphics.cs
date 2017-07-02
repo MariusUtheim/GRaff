@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using OpenTK.Graphics;
 #if OpenGL4
 using OpenTK.Graphics.OpenGL4;
 #else
@@ -10,11 +11,16 @@ namespace GRaff.Graphics
 {
 	internal static class _Graphics
 	{
+		public static bool IsContextActive
+		{
+			get { return GraphicsContext.CurrentContext != null; }
+		}
+
         public static void Initialize()
         {
             Draw.Device = new RenderDevice();
 
-            ColorMap.BlendMode = BlendMode.AlphaBlend;
+            BlendMode.Current = BlendMode.AlphaBlend;
             GL.Enable(EnableCap.Blend);
 
             ShaderProgram.Default.Bind();
@@ -35,7 +41,7 @@ namespace GRaff.Graphics
         {
             var err = GL.GetError();
             if (err != ErrorCode.NoError)
-                throw new Exception($"An OpenGL operation threw an exception with error code {Enum.GetName(typeof(ErrorCode), err)}");
+               throw new Exception($"An OpenGL operation threw an exception with error code {Enum.GetName(typeof(ErrorCode), err)}");
         }
 
         public static bool ClearError()

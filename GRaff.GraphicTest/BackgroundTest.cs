@@ -16,7 +16,7 @@ namespace GRaff.GraphicTest
 			background = Instance.Create(new Background
 			{
 				Color = Colors.Bisque,
-				Buffer = TextureBuffers.Giraffe,
+				Texture = Textures.Giraffe,
 				IsTiled = true
 			});
             Window.Title = "BackgroundTest - Tiled background";
@@ -24,7 +24,7 @@ namespace GRaff.GraphicTest
 
 		protected override void OnDestroy()
 		{
-			background.Buffer = null;
+			background.Texture = null;
 		}
 
 		public void OnKeyPress(Key key)
@@ -35,7 +35,7 @@ namespace GRaff.GraphicTest
 					background.Velocity = Vector.Zero;
 					background.Offset = Vector.Zero;
 					background.IsTiled = true;
-                    background.Buffer = TextureBuffers.Giraffe;
+                    background.Texture = Textures.Giraffe;
                     Window.Title = "BackgroundTest - Tiled background";
 					break;
 
@@ -43,7 +43,7 @@ namespace GRaff.GraphicTest
                     background.Velocity = Vector.Zero;
                     background.Offset = Vector.Zero;
                     background.IsTiled = false;
-                    background.Buffer = TextureBuffers.Giraffe;
+                    background.Texture = Textures.Giraffe;
                     Window.Title = "BackgroundTest - Static background";
                     break;
 
@@ -51,13 +51,13 @@ namespace GRaff.GraphicTest
 					background.HSpeed = -1;
 					background.VSpeed = -1.1;
 					background.IsTiled = true;
-                    background.Buffer = TextureBuffers.Giraffe;
+                    background.Texture = Textures.Giraffe;
                     Window.Title = "BackgroundTest - Moving background";
 					break;
 
                 case Key.Number4:
                     background.Velocity = Vector.Zero;
-                    background.Buffer = null;
+                    background.Texture = null;
                     Window.Title = "BackgroundTest - Colored";
                     break;
 			}

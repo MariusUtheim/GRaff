@@ -15,14 +15,13 @@ namespace GRaff
         private readonly MutableList<SoundElement> _instances = new MutableList<SoundElement>();
         private readonly ALFormat _format;
 
-        #region Loading
-        private SoundBuffer(int bitrate, int channels, int frequency, byte[] buffer, Unit sentinel)
+        public SoundBuffer(int bitrate, int channels, int frequency, byte[] buffer, int? length = null)
         {
             Contract.Requires<ArgumentOutOfRangeException>(bitrate == 8 || bitrate == 16);
             Contract.Requires<ArgumentOutOfRangeException>(channels == 1 || channels == 2);
             Contract.Requires<ArgumentOutOfRangeException>(frequency > 0);
             Contract.Requires<ArgumentNullException>(buffer != null);
-            Contract.Requires<ArgumentException>(buffer.Length > 0);
+			Contract.Requires<ArgumentException>(buffer.Length > 0);
 
             Id = AL.GenBuffer();
 
@@ -41,91 +40,52 @@ namespace GRaff
             }
 
             _Audio.ErrorCheck();
+
+            AL.BufferData(Id, _format, _buffer, length ?? _buffer.Length, Frequency);
+
+            _Audio.ErrorCheck();
         }
 
 
-        public SoundBuffer(int bitrate, int channels, int frequency, byte[] buffer, double offset)
-            : this(bitrate, channels, frequency, buffer, Unit._)
+        public static SoundBuffer Load(string path)
         {
-
-            var bytesPerSample = bitrate * channels / 8;
-            var offsetBytes = (int)(offset * frequency * bytesPerSample);
-            offsetBytes -= offsetBytes % bytesPerSample;
-
-            IntroId = AL.GenBuffer();
-
-            unsafe
+            using (var stream = new AudioStream(path))
             {
-                fixed (byte* p = buffer)
-                {
-                    AL.BufferData(IntroId.Value, _format, new IntPtr(p), offsetBytes, Frequency);
-                    AL.BufferData(Id, _format, new IntPtr(p + offsetBytes), buffer.Length - offsetBytes, Frequency);
-                }
+                var buffer = new byte[stream.Length];
+                stream.Read(buffer, 0, (int)stream.Length);
+                return new SoundBuffer(stream.Bitrate, stream.Channels, stream.Frequency, buffer);
             }
-
-            _Audio.ErrorCheck();
         }
 
-
-        public SoundBuffer(int bitrate, int channels, int frequency, byte[] buffer)
-            : this(bitrate, channels, frequency, buffer, Unit._)
+        public static IAsyncOperation<SoundBuffer> LoadAsync(string path)
         {
-            AL.BufferData(Id, _format, buffer, buffer.Length, Frequency);
-            _Audio.ErrorCheck();
+            return Async.RunAsync(async () =>
+            {
+                using (var stream = new AudioStream(path))
+                {
+                    var buffer = new byte[stream.Length];
+                    await stream.ReadAsync(buffer, 0, (int)stream.Length);
+                    return (bitrate: stream.Bitrate, channels: stream.Channels, frequency: stream.Frequency, buffer: buffer);
+                }
+            }).ThenQueue(soundFile => new SoundBuffer(soundFile.bitrate, soundFile.channels, soundFile.frequency, soundFile.buffer));
         }
 
-
-        public SoundBuffer(SoundBuffer baseBuffer, double offset)
-            : this(baseBuffer.Bitrate, baseBuffer.Channels, baseBuffer.Frequency, baseBuffer._buffer, offset)
+        public static SoundElement Stream(string fileName)
         {
-            Contract.Requires<ArgumentNullException>(baseBuffer != null);
-            Contract.Requires<ObjectDisposedException>(!baseBuffer.IsDisposed);
-            Contract.Requires<ArgumentOutOfRangeException>(offset > 0);
+            return Instance.Create(new StreamingSoundElement(fileName, true));
         }
-
-
-
-        public static SoundBuffer Load(string fileName)
-        {
-            var soundFile = SoundFileLoader.Load(fileName);
-            return new SoundBuffer(soundFile.Bitrate, soundFile.Channels, soundFile.Frequency, soundFile.Buffer);
-        }
-
-
-        public static SoundBuffer LoadWithOffset(string fileName, double offset)
-        {
-            var soundFile = SoundFileLoader.Load(fileName);
-            return new SoundBuffer(soundFile.Bitrate, soundFile.Channels, soundFile.Frequency, soundFile.Buffer, offset);
-        }
-
-
-        public static IAsyncOperation<SoundBuffer> LoadAsync(string fileName)
-        {
-            return Async.RunAsync(() => SoundFileLoader.LoadAsync(fileName))
-                        .ThenQueue(soundFile => new SoundBuffer(soundFile.Bitrate, soundFile.Channels, soundFile.Frequency, soundFile.Buffer));
-        }
-
-
-        public static IAsyncOperation<SoundBuffer> LoadWithOffsetAsync(string fileName, double offset)
-        {
-            return Async.RunAsync(() => SoundFileLoader.LoadAsync(fileName))
-                        .ThenQueue(soundFile => new SoundBuffer(soundFile.Bitrate, soundFile.Channels, soundFile.Frequency, soundFile.Buffer, offset));
-        }
-
-        #endregion
 
         public int Id { get; }
 
-        public int? IntroId { get; }
-
+#warning The user can keep track of the buffer
         private byte[] _buffer;
-        public IReadOnlyCollection<byte> Buffer => Array.AsReadOnly(_buffer);
+        public IReadOnlyList<byte> Buffer => Array.AsReadOnly(_buffer);
 
         public int Bitrate { get; }
 
         public int Channels { get; }
 
-        public double Duration => _buffer.Length * 8.0 / (double)(Bitrate * Channels * Frequency);
+        public TimeSpan Duration => TimeSpan.FromSeconds(_buffer.Length * 8.0 / (double)(Bitrate * Channels * Frequency));
 
         public int Frequency { get; }
 
@@ -152,31 +112,18 @@ namespace GRaff
         {
             if (!IsDisposed)
             {
-                Async.Capture(new { Main = this.Id, Intro = this.IntroId }).ThenQueue(ids =>
+                Async.Capture(Id).ThenQueue(id =>
                 {
                     if (Giraffe.IsRunning)
                     {
                         _Audio.ClearError();
                         foreach (var instance in _instances)
                             instance.Destroy();
-                        //var instances = _instances.Where(i => !i._isDisposed).ToArray();
-                        //if (instances.Count() != _instances.Count)
-                        //{ }
-                        //for (var i = 0; i < instances.Length; i++)
-                        //    instances[i].Destroy();
 
                         _Audio.ClearError();
 
-                        AL.DeleteBuffer(ids.Main);
-#warning
-                        //if (ids.Intro.HasValue)
-                        //	AL.DeleteBuffer(ids.Intro.Value);
-                        try { _Audio.ErrorCheck(); }
-                        catch
-                        {
-                            throw;
-                        }
-
+                        AL.DeleteBuffer(id);
+                        _Audio.ErrorCheck();
 
                         if (disposing)
                             _buffer = null;
@@ -199,7 +146,7 @@ namespace GRaff
             Contract.Requires<ArgumentOutOfRangeException>(volume >= 0 && pitch > 0);
             Contract.Ensures(Contract.Result<SoundElement>() != null);
 
-            var instance = Instance.Create(new SoundElement(this, IntroId, Id, looping, volume, pitch, location));
+            var instance = Instance.Create(new SimpleSoundElement(this, looping, volume, pitch, location));
             if (playing)
                 instance.Source.Play();
 
@@ -228,9 +175,8 @@ namespace GRaff
 
         public void StopAll()
 		{
-            throw new NotImplementedException();
-			//foreach (var instance in _instances)
-			//	instance.Stop();
+            foreach (var instance in _instances)
+				instance.Destroy();
 		}
 
 
@@ -243,7 +189,6 @@ namespace GRaff
             Contract.Invariant(Bitrate == 8 || Bitrate == 16);
             Contract.Invariant(Channels == 1 || Channels == 2);
             Contract.Invariant(Frequency > 0);
-            Contract.Invariant(Duration > 0);
         }
     }
 }

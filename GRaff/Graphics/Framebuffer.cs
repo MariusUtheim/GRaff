@@ -16,14 +16,14 @@ namespace GRaff.Graphics
 		public Framebuffer(int width, int height)
 		{
 			Id = GL.GenFramebuffer();
-			Buffer = new TextureBuffer(width, height, IntPtr.Zero);
+			Texture = new Texture(width, height, IntPtr.Zero);
 
             var previous = Current;
 
             try
             {
                 GL.BindFramebuffer(FramebufferTarget.Framebuffer, Id);
-                GL.FramebufferTexture(FramebufferTarget.Framebuffer, FramebufferAttachment.ColorAttachment0, Buffer.Id, 0);
+                GL.FramebufferTexture(FramebufferTarget.Framebuffer, FramebufferAttachment.ColorAttachment0, Texture.Id, 0);
                 GL.DrawBuffer(DrawBufferMode.ColorAttachment0);
                 if (GL.CheckFramebufferStatus(FramebufferTarget.Framebuffer) != FramebufferErrorCode.FramebufferComplete)
                     throw new InvalidOperationException("Unhandled exception in framebuffer");
@@ -44,7 +44,7 @@ namespace GRaff.Graphics
 
         public int Id { get; }
 
-        public TextureBuffer Buffer { get; private set; }
+        public Texture Texture { get; private set; }
 
         public IDisposable Use()
         {

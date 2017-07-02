@@ -19,10 +19,10 @@ namespace GRaff.Graphics
 			this._maskShape = maskShape ?? MaskShape.Automatic;
 		}
 
-		public Sprite(Texture texture, Vector? size = null, Vector? origin = null, MaskShape maskShape = null)
+		public Sprite(SubTexture texture, Vector? size = null, Vector? origin = null, MaskShape maskShape = null)
 		{
 			if (texture == null)
-				this.AnimationStrip = new AnimationStrip(Enumerable.Empty<Texture>());
+				this.AnimationStrip = new AnimationStrip(Enumerable.Empty<SubTexture>());
 			else
 				this.AnimationStrip = new AnimationStrip(texture);
 			this.Size = size ?? texture.Size;
@@ -33,20 +33,20 @@ namespace GRaff.Graphics
 		public static Sprite Load(string path, int imageCount = 1, Vector? origin = null, MaskShape maskShape = null)
 		{
 			Contract.Requires<ArgumentOutOfRangeException>(imageCount >= 1);
-			return new Sprite(new AnimationStrip(TextureBuffer.Load(path), imageCount), null, origin, maskShape);
+			return new Sprite(new AnimationStrip(Texture.Load(path), imageCount), null, origin, maskShape);
 		}
 
 		public static Sprite Load(string path, IntVector imageCounts, Vector? origin = null, MaskShape maskShape = null)
 		{
 			Contract.Requires<ArgumentOutOfRangeException>(imageCounts.X >= 1 && imageCounts.Y >= 1);
-			return new Sprite(new AnimationStrip(TextureBuffer.Load(path), imageCounts), null, origin, maskShape);
+			return new Sprite(new AnimationStrip(Texture.Load(path), imageCounts), null, origin, maskShape);
 		}
 
 		public static IAsyncOperation<Sprite> LoadAsync(string path, int imageCount = 1, Vector? origin = null, MaskShape maskShape = null)
-			=> TextureBuffer.LoadAsync(path).ThenQueue(buffer => new Sprite(new AnimationStrip(buffer, imageCount), null, origin, maskShape));
+			=> Texture.LoadAsync(path).ThenQueue(buffer => new Sprite(new AnimationStrip(buffer, imageCount), null, origin, maskShape));
 
 		public static IAsyncOperation<Sprite> LoadAsync(string path, IntVector imageCounts, Vector? origin = null, MaskShape maskShape = null)
-			=> TextureBuffer.LoadAsync(path).ThenQueue(buffer => new Sprite(new AnimationStrip(buffer, imageCounts), null, origin, maskShape));
+			=> Texture.LoadAsync(path).ThenQueue(buffer => new Sprite(new AnimationStrip(buffer, imageCounts), null, origin, maskShape));
 
 
 
@@ -71,7 +71,7 @@ namespace GRaff.Graphics
 		public MaskShape MaskShape
 			=> _maskShape == MaskShape.Automatic ? MaskShape.Rectangle(Width, Height) : _maskShape;
 
-		public Texture SubImage(double dt)
+		public SubTexture SubImage(double dt)
 			=> AnimationStrip.SubImage(dt);
 	}
 }

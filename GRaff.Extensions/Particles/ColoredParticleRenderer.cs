@@ -11,11 +11,11 @@ namespace GRaff.Particles
 	{
 		private readonly GraphicsPoint[] _polygonVertices;
 		private readonly int _verticesPerParticle;
-		private readonly RenderSystem _renderSystem;
+		private readonly SerialRenderSystem _renderSystem = new SerialRenderSystem();
 
 		public ColoredParticleRenderer(Polygon polygon)
 		{
-			if (polygon.Length < 3) throw new ArgumentException("The polygon must have at least three vertices.", "polygon");
+            if (polygon.Length < 3) throw new ArgumentException("The polygon must have at least three vertices.", nameof(polygon));
 			_verticesPerParticle = 3 + (polygon.Length - 3) * 3;	// First three vertices contribute one triangle; each remaining vertex contributes one triangle
 			_polygonVertices = new GraphicsPoint[_verticesPerParticle];
 			_polygonVertices[0] = (GraphicsPoint)polygon.Vertex(0);
@@ -27,12 +27,11 @@ namespace GRaff.Particles
 				_polygonVertices[c++] = (GraphicsPoint)polygon.Vertex(i - 1);
 				_polygonVertices[c++] = (GraphicsPoint)polygon.Vertex(i);
 			}
-
-			_renderSystem = new RenderSystem();
 		}
 
 		public void Render(IEnumerable<Particle> particles)
 		{
+            if (particles == null || !particles.Any()) return;
 			int count = particles.Count();
 			var vertices = new GraphicsPoint[_polygonVertices.Length * count];
 			var colors = new Color[_polygonVertices.Length * count];
@@ -47,8 +46,8 @@ namespace GRaff.Particles
 				}
 			});
 
-			_renderSystem.SetVertices(UsageHint.StreamDraw, vertices);
-			_renderSystem.SetColors(UsageHint.StreamDraw, colors);
+			_renderSystem.SetVertices(vertices);
+			_renderSystem.SetColors(colors);
             _renderSystem.Render(PrimitiveType.Triangles);
 		}
 	}

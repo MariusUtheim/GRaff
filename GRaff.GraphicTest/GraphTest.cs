@@ -47,22 +47,22 @@ namespace GRaff.GraphicTest
 		{
             Draw.Clear(Colors.Black);
 			if (_fromVertex != null)
-				Draw.FillCircle(Colors.ForestGreen, _fromVertex.Location, Radius + 2);
+				Draw.FillCircle(_fromVertex.Location, Radius + 2, Colors.ForestGreen);
 			if (_toVertex != null)
-				Draw.FillCircle(Colors.Black, _toVertex.Location, Radius + 2);
+				Draw.FillCircle(_toVertex.Location, Radius + 2, Colors.Black);
 			foreach (var vertex in _graph.Vertices)
-				Draw.FillCircle(Colors.Red, vertex.Location, Radius);
+				Draw.FillCircle(vertex.Location, Radius, Colors.Red);
 			if (_selectedVertex != null && !_drag)
-				Draw.Line(Colors.White, _selectedVertex.Location, Mouse.Location);
+				Draw.Line(_selectedVertex.Location, Mouse.Location, Colors.White);
 			foreach (var edge in _graph.Edges)
-				Draw.Line(Colors.Red, edge.Line);
+				Draw.Line(edge.Line, Colors.Red);
 
 			if (_fromVertex != null)
 			{
 #warning This doesn't actually work correctly
                 foreach (var e in _graph.MinimalSpanningTree(_fromVertex, Double.PositiveInfinity))
 				{
-					Draw.Line(Colors.Green, e.Line);
+					Draw.Line(e.Line, Colors.Green);
 				}
 			}
 		}

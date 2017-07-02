@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="..\packages\SharpFont.3.1.0\build\SharpFont.props" Condition="Exists('..\packages\SharpFont.3.1.0\build\SharpFont.props')" />
+  <Import Project="..\packages\SharpFont.4.0.1\build\SharpFont.props" Condition="Exists('..\packages\SharpFont.4.0.1\build\SharpFont.props')" />
   <Import Project="..\packages\SharpFont.Dependencies.2.6\build\SharpFont.Dependencies.props" Condition="Exists('..\packages\SharpFont.Dependencies.2.6\build\SharpFont.Dependencies.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -92,14 +92,6 @@
     <UseVSHostingProcess>false</UseVSHostingProcess>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="OpenTK, Version=1.1.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\Library\OpenTK\1.1\Binaries\OpenTK\Release\OpenTK.dll</HintPath>
-    </Reference>
-    <Reference Include="SharpFont, Version=3.0.1.200, Culture=neutral, PublicKeyToken=48add4c483071cdf, processorArchitecture=MSIL">
-      <HintPath>..\packages\SharpFont.3.1.0\lib\net20\SharpFont.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
@@ -114,13 +106,18 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
     <Reference Include="WindowsBase" />
+    <Reference Include="SharpFont">
+      <HintPath>..\packages\SharpFont.4.0.1\lib\net45\SharpFont.dll</HintPath>
+    </Reference>
+    <Reference Include="OpenTK">
+      <HintPath>..\..\..\Documents\Libraries\OpenTK\Binaries\OpenTK\Release\OpenTK.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Graphics\IRenderDevice.cs" />
     <Compile Include="Graphics\VertexShader.cs" />
     <Compile Include="ObjectDisposedIncorrectlyException.cs" />
     <Compile Include="Audio\SoundSource.cs" />
-    <Compile Include="Contract.cs" />
     <Compile Include="Graphics\Framebuffer.cs" />
     <Compile Include="Graphics\Quadrilateral.cs" />
     <Compile Include="Graphics\Text\FontOptions.cs" />
@@ -145,7 +142,6 @@
     <Compile Include="Graphics\Text\FontLoader.cs" />
     <Compile Include="Graphics\GraphicsPoint.cs" />
     <Compile Include="Graphics\Shader.cs" />
-    <Compile Include="Graphics\ShaderProgramContext.cs" />
     <Compile Include="Geometry\MatrixException.cs" />
     <Compile Include="Audio\DistanceModel.cs" />
     <Compile Include="Audio\AudioListener.cs" />
@@ -157,11 +153,9 @@
     <Compile Include="Audio\OggVorbisDecoder\OggVorbisFileStream.cs" />
     <Compile Include="Audio\OggVorbisDecoder\OggVorbisMemoryStream.cs" />
     <Compile Include="Audio\OggVorbisDecoder\VorbisInfo.cs" />
-    <Compile Include="Audio\SoundFileLoader.cs" />
     <Compile Include="Audio\WaveFile.cs" />
     <Compile Include="Audio\_Audio.cs" />
     <Compile Include="Graphics\BlendingFactor.cs" />
-    <Compile Include="Graphics\Context.cs" />
     <Compile Include="Graphics\Scissor.cs" />
     <Compile Include="Graphics\_Graphics.cs" />
     <Compile Include="SoundBuffer.cs" />
@@ -184,7 +178,6 @@
     <Compile Include="Colors.cs" />
     <Compile Include="Graphics\BlendEquation.cs" />
     <Compile Include="Graphics\BlendMode.cs" />
-    <Compile Include="Graphics\ColorMap.cs" />
     <Compile Include="Draw.cs" />
     <Compile Include="Graphics\Text\FontCharacter.cs" />
     <Compile Include="Graphics\GLExtensions.cs" />
@@ -195,14 +188,14 @@
     <Compile Include="GameElement.cs" />
     <Compile Include="GameObject.cs" />
     <Compile Include="GlobalEvent.cs" />
-    <Compile Include="Graphics\RenderSystem.cs" />
+    <Compile Include="Graphics\SerialRenderSystem.cs" />
     <Compile Include="GMath.cs" />
     <Compile Include="GMath.FromSystemMath.cs" />
     <Compile Include="GRandom.cs" />
     <Compile Include="IAnimationEndListener.cs" />
     <Compile Include="ICollisionListener.cs" />
     <Compile Include="IKeyListener.cs" />
-    <Compile Include="Image.cs" />
+    <Compile Include="Model.cs" />
     <Compile Include="IMouseListener.cs" />
     <Compile Include="Instance.cs" />
     <Compile Include="Geometry\IntRectangle.cs" />
@@ -229,10 +222,10 @@
     <Compile Include="Graphics\Sprite.cs" />
     <Compile Include="Graphics\RenderDevice.cs" />
     <Compile Include="Synchronization\operations\TaskOperator.cs" />
-    <Compile Include="Graphics\Texture.cs" />
+    <Compile Include="Graphics\SubTexture.cs" />
     <Compile Include="Synchronization\ParallelOperator.cs" />
     <Compile Include="Synchronization\TweeningFunctions.cs" />
-    <Compile Include="TextureBuffer.cs" />
+    <Compile Include="Texture.cs" />
     <Compile Include="Time.cs" />
     <Compile Include="Transform.cs" />
     <Compile Include="Synchronization\Tween.cs" />
@@ -242,6 +235,12 @@
     <Compile Include="UseContext.cs" />
     <Compile Include="View.cs" />
     <Compile Include="Window.cs" />
+    <Compile Include="Contract.cs" />
+    <Compile Include="Graphics\ShaderUniformLocation.cs" />
+    <Compile Include="Audio\SimpleSoundElement.cs" />
+    <Compile Include="Audio\StreamingSoundElement.cs" />
+    <Compile Include="Audio\AudioStream.cs" />
+    <Compile Include="Graphics\InterleavedRenderSystem.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="External\libogg.dll">
@@ -261,9 +260,6 @@
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Draw.Primitive.cs" />
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="Graphics\Text\TrueTypeLoader.cs" />
     <None Include="packages.config">
       <SubType>Designer</SubType>
@@ -275,18 +271,4 @@
     <PostBuildEvent>
     </PostBuildEvent>
   </PropertyGroup>
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
-    <PropertyGroup>
-      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
-    </PropertyGroup>
-    <Error Condition="!Exists('..\packages\SharpFont.Dependencies.2.6\build\SharpFont.Dependencies.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\SharpFont.Dependencies.2.6\build\SharpFont.Dependencies.props'))" />
-    <Error Condition="!Exists('..\packages\SharpFont.3.1.0\build\SharpFont.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\SharpFont.3.1.0\build\SharpFont.props'))" />
-  </Target>
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
 </Project>

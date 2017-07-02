@@ -27,10 +27,7 @@ namespace GRaff.Graphics
             GL.AttachShader(Id, fragmentShader.Id);
 
 			GL.LinkProgram(Id);
-			string log;
-			if ((log = GL.GetProgramInfoLog(Id)) != "")
-				throw new ShaderException("Linking a GRaff.ShaderProgram caused a message: " + log);
-
+			
 			GL.BindAttribLocation(Id, 0, "in_Position");
 			GL.BindAttribLocation(Id, 1, "in_Color");
 			GL.BindAttribLocation(Id, 2, "in_TexCoord");
@@ -39,7 +36,12 @@ namespace GRaff.Graphics
 
             GL.DetachShader(Id, vertexShader.Id);
             GL.DetachShader(Id, fragmentShader.Id);
-        }
+
+			string log;
+			if ((log = GL.GetProgramInfoLog(Id)) != "")
+				throw new ShaderException("Linking a GRaff.ShaderProgram caused a message: " + log);
+
+		}
 
 
         private static ShaderProgram _current;
@@ -67,43 +69,75 @@ namespace GRaff.Graphics
                 );
         }
 
+        #region Uniforms access
 
-        private bool _tryGetLocation(string name, out int location)
+        private void _verifyLocation(ShaderUniformLocation location)
         {
-            location = GL.GetUniformLocation(Id, name);
-            if (location < 0)
-            {
-                _Graphics.ClearError();
-                return false;
-            }
-            else
-                return true;
-        }
-        
-        internal protected void SetUniform(string name, bool value)
-        {
-            if (_tryGetLocation(name, out int location))
-                GL.ProgramUniform1(Id, location, value ? 1 : 0);
+            Contract.Requires<InvalidOperationException>(location.Program == this);
         }
 
-        internal protected void SetUniform(string name, int value)
+        protected ShaderUniformLocation UniformLocation(string name) => new ShaderUniformLocation(this, name);
+
+        protected int GetUniformInt(ShaderUniformLocation location)
+        {
+            _verifyLocation(location);
+            GL.GetUniform(Id, location.Location, out int value);
+            return value;
+        }
+
+		protected float GetUniformFloat(ShaderUniformLocation location)
 		{
-            if (_tryGetLocation(name, out int location))
-                GL.ProgramUniform1(Id, location, value);
+			_verifyLocation(location);
+			GL.GetUniform(Id, location.Location, out float value);
+			return value;
 		}
 
-        internal protected void SetUniform(string name, double value)
-		{
-            if (_tryGetLocation(name, out int location))
-                GL.ProgramUniform1(Id, location, value);
+        protected double GetUniformDouble(ShaderUniformLocation location)
+        {
+            _verifyLocation(location);
+            GL.GetUniform(Id, location.Location, out double value);
+            return value;
         }
 
-        internal protected void SetUniform(string name, (double v1, double v2) values)
+        protected (float x, float y) GetUniformVec2(ShaderUniformLocation location)
         {
-            if (_tryGetLocation(name, out int location))
-                GL.ProgramUniform2(Id, location, (float)values.v1, (float)values.v2);
+            _verifyLocation(location);
+            var values = new float[2];
+            GL.GetUniform(Id, location.Location, values);
+            return (x: values[0], y: values[1]);
         }
-        
+
+        protected void SetUniformInt(ShaderUniformLocation location, int value)
+        {
+            _verifyLocation(location);
+            GL.ProgramUniform1(Id, location.Location, value);
+        }
+
+        protected void SetUniformFloat(ShaderUniformLocation location, float value)
+        {
+            _verifyLocation(location);
+            GL.ProgramUniform1(Id, location.Location, value);
+        }
+
+        protected void SetUniformDouble(ShaderUniformLocation location, double value)
+        {
+            _verifyLocation(location);
+            GL.ProgramUniform1(Id, location.Location, value);
+        }
+
+        protected void SetUniformVec2(ShaderUniformLocation location, (float x, float y) value)
+        {
+            _verifyLocation(location);
+            GL.ProgramUniform2(Id, location.Location, value.x, value.y);
+        }
+        protected void SetUniformVec2(ShaderUniformLocation location, (double x, double y) value)
+        {
+            _verifyLocation(location);
+            GL.ProgramUniform2(Id, location.Location, (float)value.x, (float)value.y);
+        }
+
+        #endregion
+
 
         #region IDisposable support
 
@@ -122,7 +156,7 @@ namespace GRaff.Graphics
 		{
 			if (!_disposed)
 			{
-				if (Context.IsActive)
+				if (_Graphics.IsContextActive)
 					GL.DeleteProgram(Id);
 				else
 					Async.Run(() => GL.DeleteProgram(Id));

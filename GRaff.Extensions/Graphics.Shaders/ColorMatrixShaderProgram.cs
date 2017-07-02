@@ -24,10 +24,10 @@ void main(void) {
 }
 ";
 
-        private int _colorMatrixLoc;
+		public static FragmentShader ColorMatrixFragmentShader { get; }
+		    = new FragmentShader(Shader.GRaff_Header, FragmentShader.GRaff_GetFragColor, ColorMatrixShaderSource);
 
-        public static FragmentShader ColorMatrixFragmentShader { get; }
-            = new FragmentShader(Shader.GRaff_Header, FragmentShader.GRaff_GetFragColor, ColorMatrixShaderSource);
+		private int _colorMatrixLoc;
 
         public ColorMatrixShaderProgram(double m00, double m01, double m02, double m10, double m11, double m12, double m20, double m21, double m22)
             : base(VertexShader.Default, ColorMatrixFragmentShader)

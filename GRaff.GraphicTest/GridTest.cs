@@ -45,66 +45,64 @@ namespace GRaff.GraphicTest
 		private void _drawShortestPath()
 		{
 			if (_from != null)
-				Draw.FillCircle(Colors.Red.Transparent(0.5), _mapToScreen(_from.Location), 7);
+				Draw.FillCircle(_mapToScreen(_from.Location), 7, Colors.Red.Transparent(0.5));
 			if (_to != null)
-				Draw.FillCircle(Colors.Blue.Transparent(0.5), _mapToScreen(_to.Location), 7);
+				Draw.FillCircle(_mapToScreen(_to.Location), 7, Colors.Blue.Transparent(0.5));
 			if (_from != null && _to != null)
 			{
 				var path = _grid.ShortestPath(_from, _to);
 				if (path != null)
-					Draw.Primitive.Lines(Colors.Red, path.Edges.Select(e => new Line(_mapToScreen(e.From.Location), _mapToScreen(e.To.Location))).ToArray());
+					Draw.Lines(path.Edges.Select(e => new Line(_mapToScreen(e.From.Location), _mapToScreen(e.To.Location))).ToArray(), Colors.Red);
 			}
 		}
 
 		private void _drawSpanningTree()
 		{
 			if (_to != null)
-				Draw.FillCircle(Colors.Blue.Transparent(0.5), _mapToScreen(_to.Location), 7);
+				Draw.FillCircle(_mapToScreen(_to.Location), 7, Colors.Blue.Transparent(0.5));
 			if (_from != null)
 			{
-				Draw.FillCircle(Colors.Red.Transparent(0.5), _mapToScreen(_from.Location), 7);
+				Draw.FillCircle(_mapToScreen(_from.Location), 7, Colors.Red.Transparent(0.5));
 				var edges = _grid.MinimalSpanningTree(_from);
-				Draw.Primitive.Lines(Colors.Red, edges.Take(n).Select(e => new Line(_mapToScreen(e.From.Location), _mapToScreen(e.To.Location))).ToArray());
+				Draw.Lines(edges.Take(n).Select(e => new Line(_mapToScreen(e.From.Location), _mapToScreen(e.To.Location))).ToArray(), Colors.Red);
 			}
 		}
 
 		private void _drawHeuristicSpanningTree()
 		{
 			if (_from != null)
-				Draw.FillCircle(Colors.Red.Transparent(0.9), _mapToScreen(_from.Location), 7);
+				Draw.FillCircle(_mapToScreen(_from.Location), 7, Colors.Red.Transparent(0.9));
 			if (_to != null)
-				Draw.FillCircle(Colors.Blue.Transparent(0.9), _mapToScreen(_to.Location), 7);
+				Draw.FillCircle(_mapToScreen(_to.Location), 7, Colors.Blue.Transparent(0.9));
 			if (_from != null && _to != null)
 			{
-				Draw.FillCircle(Colors.Red.Transparent(0.5), _mapToScreen(_from.Location), 7);
+				Draw.FillCircle(_mapToScreen(_from.Location), 7, Colors.Red.Transparent(0.5));
 				var edges = _grid.MinimalSpanningTree(_from, h => h.HeuristicDistance(_to));
-				Draw.Primitive.Lines(Colors.Red, edges.Take(n)
-													  .TakeWhilePrevious(e => e.To != _to)
-													  .Select(e => new Line(_mapToScreen(e.From.Location), _mapToScreen(e.To.Location))).ToArray());
+				Draw.Lines(edges.Take(n).TakeWhilePrevious(e => e.To != _to)
+										.Select(e => new Line(_mapToScreen(e.From.Location), _mapToScreen(e.To.Location))), Colors.Red);
 			}
 		}
 
 		public void _drawBeautifulTree()
 		{
 			if (_from != null)
-				Draw.FillCircle(Colors.Red.Transparent(0.9), _mapToScreen(_from.Location), 7);
+				Draw.FillCircle(_mapToScreen(_from.Location), 7, Colors.Red.Transparent(0.9));
 			if (_to != null)
-				Draw.FillCircle(Colors.Blue.Transparent(0.9), _mapToScreen(_to.Location), 7);
+				Draw.FillCircle( _mapToScreen(_to.Location), 7, Colors.Blue.Transparent(0.9));
 			if (_from != null && _to != null)
 			{
-				Draw.FillCircle(Colors.Red.Transparent(0.5), _mapToScreen(_from.Location), 7);
+				Draw.FillCircle(_mapToScreen(_from.Location), 7, Colors.Red.Transparent(0.5));
 				var edges = _grid.MinimalSpanningTree(_from, h => h.HeuristicDistance(_to), b => b.EuclideanDistance(_to), Double.PositiveInfinity);
-				Draw.Primitive.Lines(Colors.Red, edges.Take(n)
-													  .TakeWhilePrevious(e => e.To != _to)
-													  .Select(e => new Line(_mapToScreen(e.From.Location), _mapToScreen(e.To.Location))).ToArray());
+				Draw.Lines(edges.Take(n).TakeWhilePrevious(e => e.To != _to)
+										.Select(e => new Line(_mapToScreen(e.From.Location), _mapToScreen(e.To.Location))), Colors.Red);
 			}
 		}
 
 		public override void OnDraw()
 		{
             Draw.Clear(Colors.LightGray);
-			Draw.Primitive.Lines(Colors.White, _grid.Edges.Select(e => new Line(_mapToScreen(e.From.Location), _mapToScreen(e.To.Location))).ToArray());
-			Draw.FillRectangle(Colors.White.Transparent(0.8), _snapToGrid(Mouse.Location) - size/2, size);
+			Draw.Lines(_grid.Edges.Select(e => new Line(_mapToScreen(e.From.Location), _mapToScreen(e.To.Location))), Colors.White);
+            Draw.FillRectangle(_snapToGrid(Mouse.Location) - size/2, size, Colors.White.Transparent(0.8));
 			switch (mode)
 			{
 				case 1: _drawShortestPath(); break;

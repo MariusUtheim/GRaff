@@ -22,7 +22,7 @@ namespace GRaff.GraphicTest
         {
             for (int count = 0, expansion = _expansion; count < 3 && expansion > 0; count++, expansion -= _radiusDifference)
             {
-                Draw.FillCircle(Colors.Invisible, Colors.White.Transparent(1 - expansion / _maxRadius), Location, expansion);
+                Draw.FillCircle(Location, expansion, Colors.Invisible, Colors.White.Transparent(1 - expansion / _maxRadius));
             }
         }
 

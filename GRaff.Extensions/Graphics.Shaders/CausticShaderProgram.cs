@@ -58,15 +58,15 @@ void main() {
                 CausticShaderSource
             );
 
-        private int _phaseLoc, _offsetLoc, _scaleLoc, _intensityLoc;
+        private ShaderUniformLocation _phase, _offset, _scale, _intensity;
         
 		public CausticShaderProgram(Rectangle region, double intensity = 1)
 			: base(VertexShader.Default, _causticFragmentShader)
 		{
-            _phaseLoc = GL.GetUniformLocation(Id, "phase");
-            _offsetLoc = GL.GetUniformLocation(Id, "offset");
-            _scaleLoc = GL.GetUniformLocation(Id, "scale");
-            _intensityLoc = GL.GetUniformLocation(Id, "intensity");
+            _phase = UniformLocation("phase");
+            _offset = UniformLocation("offset");
+            _scale = UniformLocation("scale");
+            _intensity = UniformLocation("intensity");
 
             this.Intensity = intensity;
             this.Region = region;
@@ -75,57 +75,27 @@ void main() {
 
         public double Phase
         {
-            get
-            {
-                GL.GetUniform(Id, _phaseLoc, out float value);
-                return value;
-            }
-            set
-            {
-                GL.ProgramUniform1(Id, _phaseLoc, (float)value);
-            }
+            get => GetUniformFloat(_phase);
+            set => SetUniformFloat(_phase, (float)value);
         }
 
         public double Intensity
         {
-            get
-            {
-                GL.GetUniform(Id, _intensityLoc, out float value);
-                return value;
-            }
-            set
-            {
-                GL.ProgramUniform1(Id, _intensityLoc, (float)value);
-            }
+            get => GetUniformFloat(_intensity);
+            set => SetUniformFloat(_intensity, (float)value);
         }
 
 
         public Point Offset
         {
-            get
-            {
-                var coords = new double[2];
-                GL.GetUniform(Id, _offsetLoc, coords);
-                return new Point(coords[0], coords[1]);
-            }
-            set
-            {
-                GL.ProgramUniform2(Id, _offsetLoc, (float)value.X, (float)value.Y);
-            }
+            get => GetUniformVec2(_offset);
+            set => SetUniformVec2(_offset, value);
         }
 
         public Vector Scale
         {
-            get
-            {
-                var coords = new double[2];
-                GL.GetUniform(Id, _scaleLoc, coords);
-                return new Vector(coords[0], coords[1]);
-            }
-            set
-            {
-                GL.ProgramUniform2(Id, _scaleLoc, (float)value.X, (float)value.Y);
-            }
+            get => GetUniformVec2(_scale);
+            set => SetUniformVec2(_scale, value);
         }
         
         public Rectangle Region

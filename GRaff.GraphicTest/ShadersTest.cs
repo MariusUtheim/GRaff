@@ -15,8 +15,9 @@ namespace GRaff.GraphicTest
         private ColorMatrixShaderProgram sepiaShader = new ColorMatrixShaderProgram(0.393, 0.349, 0.272, 0.769, 0.686, 0.534, 0.189, 0.168, 0.131);
         private CausticShaderProgram causticShader = new CausticShaderProgram(new Rectangle(0, 0, 500, 500));
         private SpotlightShaderProgram lightShader = new SpotlightShaderProgram(200, 300);
+        private WaveShiftShaderProgram waveShader = new WaveShiftShaderProgram((10, 0), (0, 0.01));
         private ShaderProgram _currentProgram;
-        
+       
         public ShadersTest()
         {
             _setShader(ShaderProgram.Default, "Default");
@@ -26,16 +27,17 @@ namespace GRaff.GraphicTest
         {
             lightShader.Origin = (Mouse.WindowX * Window.DisplayScale.X, Mouse.WindowY * Window.DisplayScale.Y);
             causticShader.Phase = Time.LoopCount;
+            waveShader.Phase = Time.LoopCount / 30.0;
+            waveShader.WavePolarization = (Mouse.Location - Room.Current.Center) / 2000;
 
             using (_currentProgram.Use())
             {
-                Draw.FillRectangle(Colors.Black, Room.Current.ClientRectangle);
-                Draw.FillTriangle(Colors.Blue, (200, 50), (400, 300), (100, 400));
-                Draw.FillRectangle(Colors.ForestGreen, (100, 500), (400, 400 / GMath.Phi));
-                Draw.Texture(TextureBuffers.Giraffe.Texture, (500, 0));
+                Draw.FillRectangle(Room.Current.ClientRectangle, Colors.Black);
+                Draw.FillTriangle((200, 50), (400, 300), (100, 400), Colors.Blue);
+                Draw.FillRectangle((100, 500), (400, 400 / GMath.Phi), Colors.ForestGreen);
+                Draw.Texture(Textures.Giraffe.SubTexture, (500, 0));
             }
-            
-        }
+		}
 
         private void _setShader(ShaderProgram program, string name)
         {
@@ -52,6 +54,7 @@ namespace GRaff.GraphicTest
                 case Key.Number3: _setShader(sepiaShader, "Sepia"); break;
                 case Key.Number4: _setShader(causticShader, "Caustic"); break;
                 case Key.Number5: _setShader(lightShader, "Spotlight"); break;
+                case Key.Number6: _setShader(waveShader, "Waves"); break;
             }
         }
     }
