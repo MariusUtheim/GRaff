@@ -158,3 +158,6 @@ $RECYCLE.BIN/
 TestGame/
 FormsTest/
 Documentation.pdf
+*._
+*.json
+*.sqlite
