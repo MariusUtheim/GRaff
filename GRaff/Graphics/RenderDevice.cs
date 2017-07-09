@@ -32,8 +32,8 @@ namespace GRaff.Graphics
 
 		public void Draw(PrimitiveType type, GraphicsPoint[] vertices, Color[] colors)
 		{
-			Contract.Requires(vertices != null && colors != null);
-			Contract.Requires(vertices.Length == colors.Length);
+			Contract.Requires<ArgumentNullException>(vertices != null && colors != null);
+			Contract.Requires<ArgumentException>(vertices.Length == colors.Length);
             _renderSystem.SetVertices(vertices);
             _renderSystem.SetColors(colors);
             _renderSystem.Render(type);
@@ -41,7 +41,7 @@ namespace GRaff.Graphics
 
         public void Draw(PrimitiveType type, GraphicsPoint[] vertices, Color color)
         {
-            Contract.Requires(vertices != null);
+            Contract.Requires<ArgumentNullException>(vertices != null);
             _renderSystem.SetVertices(vertices);
             _renderSystem.SetColor(color);
             _renderSystem.Render(type);

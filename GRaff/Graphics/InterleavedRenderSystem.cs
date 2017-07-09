@@ -61,6 +61,7 @@ namespace GRaff.Graphics
                 }
             });
             IsDisposed = true;
+            GC.SuppressFinalize(this);
         }
 
 

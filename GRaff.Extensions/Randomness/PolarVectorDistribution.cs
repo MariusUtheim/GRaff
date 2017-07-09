@@ -13,8 +13,8 @@ namespace GRaff.Randomness
 
 		public PolarVectorDistribution(IDistribution<double> magnitudeDistribution, IDistribution<Angle> directionDistribution)
 		{
-			Contract.Requires(magnitudeDistribution != null);
-			Contract.Requires(directionDistribution != null);
+			Contract.Requires<ArgumentNullException>(magnitudeDistribution != null);
+			Contract.Requires<ArgumentNullException>(directionDistribution != null);
 			this._magnitudeDistribution = magnitudeDistribution;
 			this._directionDistribution = directionDistribution;
 		}
@@ -24,7 +24,7 @@ namespace GRaff.Randomness
 			get { return _magnitudeDistribution; }
 			set
 			{
-				Contract.Requires(value != null);
+				Contract.Requires<ArgumentNullException>(value != null);
 				_magnitudeDistribution = value;
 			}
 		}
@@ -34,7 +34,7 @@ namespace GRaff.Randomness
 			get { return _directionDistribution; }
 			set
 			{
-				Contract.Requires(value != null);
+				Contract.Requires<ArgumentNullException>(value != null);
 				_directionDistribution = value;
 			}
 		}

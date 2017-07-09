@@ -32,11 +32,11 @@ namespace GRaff.Randomness
 		/// <returns>A System.Threading.Tasks.Task that upon completion will result in an array of n true random integers.</returns>
 		public static async Task<int[]> IntegersAsync(int n, int min, int max, bool replacement)
 		{
-			Contract.Requires(n >= 1 && n <= 1e4);
-			Contract.Requires(min >= -1e9 && min <= 1e9);
-			Contract.Requires(max >= -1e9 && max <= 1e9);
-			Contract.Requires(max > min);
-			Contract.Requires(replacement || (n > max - min));
+			Contract.Requires<ArgumentOutOfRangeException>(n >= 1 && n <= 1e4);
+			Contract.Requires<ArgumentOutOfRangeException>(min >= -1e9 && min <= 1e9);
+			Contract.Requires<ArgumentOutOfRangeException>(max >= -1e9 && max <= 1e9);
+			Contract.Requires<ArgumentOutOfRangeException>(max > min);
+			Contract.Requires<ArgumentOutOfRangeException>(replacement || (n > max - min));
 
 			var requestData = _buildRequest("generateIntegers", new Dictionary<string, object>
 			{
@@ -62,9 +62,9 @@ namespace GRaff.Randomness
 		/// <returns>A System.Threading.Tasks.Task that upon completion will result in an array of n true random decimals in the range [0, 1).</returns>
 		public static async Task<decimal[]> Decimals(int n, int decimalPlaces, bool replacement)
 		{
-			Contract.Requires(n >= 1 && n <= 1e4);
-			Contract.Requires(decimalPlaces >= 1 && decimalPlaces <= 14);
-			Contract.Requires(replacement || (n <= Math.Pow(10, decimalPlaces)));
+			Contract.Requires<ArgumentOutOfRangeException>(n >= 1 && n <= 1e4);
+			Contract.Requires<ArgumentOutOfRangeException>(decimalPlaces >= 1 && decimalPlaces <= 14);
+			Contract.Requires<ArgumentOutOfRangeException>(replacement || (n <= Math.Pow(10, decimalPlaces)));
 
 			var requestData = _buildRequest("generateDecimalFractions", new Dictionary<string, object>
 			{
@@ -90,9 +90,9 @@ namespace GRaff.Randomness
 		/// <returns>A System.Threading.Tasks.Task that upon completion will result in an array of true random normally distributed values.</returns>
 		public static async Task<decimal[]> Gaussians(int n, double mean, double standardDeviation, int significantDigits)
 		{
-			Contract.Requires(n >= 1 && n <= 1e4);
-			Contract.Requires(mean >= -1e6 && mean <= 1e6);
-			Contract.Requires(significantDigits >= 2 && significantDigits <= 20);
+			Contract.Requires<ArgumentOutOfRangeException>(n >= 1 && n <= 1e4);
+			Contract.Requires<ArgumentOutOfRangeException>(mean >= -1e6 && mean <= 1e6);
+			Contract.Requires<ArgumentOutOfRangeException>(significantDigits >= 2 && significantDigits <= 20);
 
 			var requestData = _buildRequest("generateGaussians", new Dictionary<string, object>
 			{
@@ -119,10 +119,10 @@ namespace GRaff.Randomness
 		/// <returns>A System.Threading.Tasks.Task that upon completion will result in an array of true random strings.</returns>
 		public static async Task<string[]> Strings(int n, int length, string characters, bool replacement)
 		{
-			Contract.Requires(n >= 1 && n <= 1e4);
-			Contract.Requires(length >= 1 && length <= 20);
-			Contract.Requires(!String.IsNullOrEmpty(characters));
-			Contract.Requires(characters.Length <= 80);
+			Contract.Requires<ArgumentOutOfRangeException>(n >= 1 && n <= 1e4);
+			Contract.Requires<ArgumentOutOfRangeException>(length >= 1 && length <= 20);
+			Contract.Requires<ArgumentException>(!String.IsNullOrEmpty(characters));
+			Contract.Requires<ArgumentOutOfRangeException>(characters.Length <= 80);
 			//Contract.Requires(replacement || (n <= GMath.Pow(length, characters.Length)));
 
 			var requestData = _buildRequest("generateStrings", new Dictionary<string, object>
@@ -216,7 +216,7 @@ namespace GRaff.Randomness
 
 		private static string _buildRequest(string method, Dictionary<string, object> args)
 		{
-			Contract.Requires(args != null);
+			Contract.Requires<ArgumentNullException>(args != null);
 			StringBuilder str = new StringBuilder();
 			str.Append("{\"jsonrpc\":\"2.0\",");
 			str.AppendFormat("\"method\":\"{0}\",", method);

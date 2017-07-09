@@ -21,7 +21,7 @@ namespace GRaff.Particles
 	{
 		public void AttachTo(Particle particle)
 		{
-			Contract.Requires(particle != null);
+			Contract.Requires<ArgumentNullException>(particle != null);
 		}
 	}
 }

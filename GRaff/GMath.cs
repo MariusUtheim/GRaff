@@ -138,7 +138,7 @@ namespace GRaff
 
 		public static int Remainder(int x, int q)
 		{
-			Contract.Requires(q != 0);
+			Contract.Requires<DivideByZeroException>(q != 0);
 			return ((x % q) + q) % q;
 		}
 

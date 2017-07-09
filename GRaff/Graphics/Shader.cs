@@ -11,7 +11,7 @@ namespace GRaff.Graphics
 {
 	public abstract class Shader : IDisposable
 	{
-        public static string Version { get; } = GL.GetString(StringName.ShadingLanguageVersion).Replace(".", "");
+        public static string Version { get; } = "450";// GL.GetString(StringName.ShadingLanguageVersion).Replace(".", "");
         public static string GRaff_Header { get; } = "#version " + Version + Environment.NewLine;
         
         private bool _disposed;

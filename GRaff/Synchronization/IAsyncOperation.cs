@@ -93,7 +93,7 @@ namespace GRaff.Synchronization
 
 		public IAsyncOperation Catch<TException>(Action<TException> handler) where TException : Exception
 		{
-			Contract.Requires(handler != null);
+			Contract.Requires<ArgumentNullException>(handler != null);
 			Contract.Ensures(Contract.Result<IAsyncOperation>() != null);
 			return default(IAsyncOperation);
 		}
@@ -110,56 +110,56 @@ namespace GRaff.Synchronization
 
 		public IAsyncOperation ThenQueue(Action action)
 		{
-			Contract.Requires(action != null);
+			Contract.Requires<ArgumentNullException>(action != null);
 			Contract.Ensures(Contract.Result<IAsyncOperation>() != null);
 			return default(IAsyncOperation);
 		}
 
 		public IAsyncOperation<TNext> ThenQueue<TNext>(Func<TNext> action)
 		{
-			Contract.Requires(action != null);
+			Contract.Requires<ArgumentNullException>(action != null);
 			Contract.Ensures(Contract.Result<IAsyncOperation<TNext>>() != null);
 			return default(IAsyncOperation<TNext>);
 		}
 
 		public IAsyncOperation ThenAsync(Func<Task> action)
 		{
-			Contract.Requires(action != null);
+			Contract.Requires<ArgumentNullException>(action != null);
 			Contract.Ensures(Contract.Result<IAsyncOperation>() != null);
 			return default(IAsyncOperation);
 		}
 
 		public IAsyncOperation<TNext> ThenAsync<TNext>(Func<Task<TNext>> action)
 		{
-			Contract.Requires(action != null);
+			Contract.Requires<ArgumentNullException>(action != null);
 			Contract.Ensures(Contract.Result<IAsyncOperation<TNext>>() != null);
 			return default(IAsyncOperation<TNext>);
 		}
 
 		public IAsyncOperation ThenRun(Func<IAsyncOperation> action)
 		{
-			Contract.Requires(action != null);
+			Contract.Requires<ArgumentNullException>(action != null);
 			Contract.Ensures(Contract.Result<IAsyncOperation>() != null);
 			return default(IAsyncOperation);
 		}
 
 		public IAsyncOperation<TNext> ThenRun<TNext>(Func<IAsyncOperation<TNext>> action)
 		{
-			Contract.Requires(action != null);
+			Contract.Requires<ArgumentNullException>(action != null);
 			Contract.Ensures(Contract.Result<IAsyncOperation<TNext>>() != null);
 			return default(IAsyncOperation<TNext>);
 		}
 
 		public IAsyncOperation ThenWait(Action action)
 		{
-			Contract.Requires(action != null);
+			Contract.Requires<ArgumentNullException>(action != null);
 			Contract.Ensures(Contract.Result<IAsyncOperation>() != null);
 			return default(IAsyncOperation);
 		}
 
 		public IAsyncOperation<TNext> ThenWait<TNext>(Func<TNext> action)
 		{
-			Contract.Requires(action != null);
+			Contract.Requires<ArgumentNullException>(action != null);
 			Contract.Ensures(Contract.Result<IAsyncOperation<TNext>>() != null);
 			return default(IAsyncOperation<TNext>);
 		}
@@ -170,14 +170,14 @@ namespace GRaff.Synchronization
 
 		public IAsyncOperation ThenParallel(Action action)
 		{
-			Contract.Requires(action != null);
+			Contract.Requires<ArgumentNullException>(action != null);
 			Contract.Ensures(Contract.Result<IAsyncOperation>() != null);
 			return default(IAsyncOperation);
 		}
 
 		public IAsyncOperation<TNext> ThenParallel<TNext>(Func<TNext> action)
 		{
-			Contract.Requires(action != null);
+			Contract.Requires<ArgumentNullException>(action != null);
 			Contract.Ensures(Contract.Result<IAsyncOperation<TNext>>() != null);
 			return default(IAsyncOperation<TNext>);
 		}

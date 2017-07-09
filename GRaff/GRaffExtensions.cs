@@ -277,8 +277,8 @@ namespace GRaff
 		/// <exception cref="System.ArgumentOutOfRangeException">if nDice is less than 0, or if nSides is less than or equal to zero.</exception>
 		public static int Roll(this Random rnd, int dice, int sides)
 		{
-			Contract.Requires(dice >= 0);
-			Contract.Requires(sides >= 1);
+			Contract.Requires<ArgumentOutOfRangeException>(dice >= 0);
+			Contract.Requires<ArgumentOutOfRangeException>(sides >= 1);
 
 			if (dice == 0)
 				return 0;

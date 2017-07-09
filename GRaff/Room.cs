@@ -23,7 +23,7 @@ namespace GRaff
 
 		public static void Goto(Room room)
 		{
-			Contract.Requires(room != null);
+			Contract.Requires<ArgumentNullException>(room != null);
 			Current?._Leave();
 			Current = room;
 			room._Enter();

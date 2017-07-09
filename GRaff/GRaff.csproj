@@ -114,6 +114,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Contract.cs" />
     <Compile Include="Graphics\IRenderDevice.cs" />
     <Compile Include="Graphics\VertexShader.cs" />
     <Compile Include="ObjectDisposedIncorrectlyException.cs" />
@@ -235,7 +236,6 @@
     <Compile Include="UseContext.cs" />
     <Compile Include="View.cs" />
     <Compile Include="Window.cs" />
-    <Compile Include="Contract.cs" />
     <Compile Include="Graphics\ShaderUniformLocation.cs" />
     <Compile Include="Audio\SimpleSoundElement.cs" />
     <Compile Include="Audio\StreamingSoundElement.cs" />

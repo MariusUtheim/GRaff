@@ -115,7 +115,7 @@ namespace GRaff
             return LoadAsync(bitmapFile, fontDataFile).Wait();
         }
 
-
+#warning Do this better
         private static FileInfo _getFontFileName(string fontFamily, FontOptions options)
         {
             if (File.Exists(fontFamily))
@@ -130,6 +130,7 @@ namespace GRaff
             switch (Environment.OSVersion.Platform)
             {
                 case PlatformID.Win32Windows:
+                case PlatformID.Win32NT:
                     fontFileName = Path.Combine(@"C:\Windows\Fonts\", TrueTypeLoader.GetTrueTypeFile(fontFamily));
                     break;
 
