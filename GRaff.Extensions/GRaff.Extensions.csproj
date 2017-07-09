@@ -146,14 +146,10 @@
       <Name>GRaff</Name>
     </ProjectReference>
   </ItemGroup>
-<<<<<<< HEAD
-  <ItemGroup />
-=======
   <ItemGroup>
     <Folder Include="Effects\" />
     <Folder Include="Platformer\" />
     <Folder Include="Panels\" />
   </ItemGroup>
->>>>>>> bff2e1a... Views and Panels
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

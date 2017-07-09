@@ -56,27 +56,11 @@ namespace GRaff.GraphicTest
                 case Key.Number1: _setShader(ShaderProgram.Default, "Default"); break;
                 case Key.Number2: _setShader(blackWhiteShader, "Black/White"); break;
                 case Key.Number3: _setShader(sepiaShader, "Sepia"); break;
-<<<<<<< HEAD
                 case Key.Number4: _setShader(inverse, "Inverse"); break;
                 case Key.Number5: _setShader(causticShader, "Caustic"); break;
                 case Key.Number6: _setShader(lightShader, "Spotlight"); break;
                 case Key.Number7: _setShader(waveShader, "Waves"); break;
-=======
-                case Key.Number4: _setShader(causticShader, "Caustic"); break;
-                case Key.Number5: _setShader(lightShader, "Spotlight"); break;
-                case Key.Number6: _setShader(waveShader, "Waves"); break;
-                case Key.Number7:
 
-                    using (var buffer = new Framebuffer(Textures.Giraffe.Size))
-                    {
-                        using (_currentProgram.Use())
-                        using (buffer.Use())
-                            Draw.Texture(Textures.Giraffe, (0, 0));
-                        buffer.Texture.Save("/Developer/Test/output.jpg");
-                    }
-
-                    break;
->>>>>>> bff2e1a... Views and Panels
             }
         }
     }
