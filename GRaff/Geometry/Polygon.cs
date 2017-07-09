@@ -227,7 +227,7 @@ namespace GRaff
 			foreach (Line l in Edges)
 			{
 				Vector n = l.LeftNormal;
-				if (otherVertices.All(pt => n.DotProduct(pt - l.Origin) > 0))
+				if (otherVertices.All(pt => n.DotProduct(pt - l.Origin) >= 0))
 					return false;
 			}
 

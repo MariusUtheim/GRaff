@@ -107,6 +107,14 @@ namespace GRaff
 
         public static void FillEllipse(Rectangle rectangle, Color innerColor, Color outerColor) => _drawFan((GraphicsPoint)rectangle.Center, GRaff.Polygon.Ellipse(rectangle).Outline(), innerColor, outerColor);
 
+        public static void Texture(Texture texture, Point location, Color blend)
+        {
+            if (texture != null)
+                Device.DrawTexture(texture.SubTexture(), 0, 0, Matrix.Translation(location), blend);
+        }
+        public static void Texture(Texture texture, Point location)
+            => Texture(texture, location, Colors.White);
+
         public static void Texture(SubTexture texture, Point location, Color blend)
         {
             if (texture != null)
@@ -177,10 +185,13 @@ namespace GRaff
             Device.Draw(primitiveType, primitive);
 		}
 
-		public static void Primitive(PrimitiveType primitiveType, Texture buffer, params (Point vertex, Point texCoord)[] vertices)
-		{
-            Device.DrawTexture(buffer, primitiveType, vertices.Select(v => (GraphicsPoint)v.vertex).ToArray(), Colors.White, vertices.Select(v => (GraphicsPoint)v.texCoord).ToArray());
-		}
+    
+        public static void Primitive(PrimitiveType primitiveType, Texture buffer, (Point vertex, Point texCoord)[] vertices, Color color)
+        {
+            Device.DrawTexture(buffer, primitiveType, vertices.Select(v => (GraphicsPoint)v.vertex).ToArray(), color, vertices.Select(v => (GraphicsPoint)v.texCoord).ToArray());
+        }
+        public static void Primitive(PrimitiveType primitiveType, Texture buffer, params (Point vertex, Point texCoord)[] vertices)
+        => Primitive(primitiveType, buffer, vertices, Colors.White);
 
 //TODO//		public static void Primitive(PrimitiveType primitiveType, TextureBuffer buffer, (GraphicsPoint vertex, Color color, GraphicsPoint texCoord)[] primitive)
 //		{

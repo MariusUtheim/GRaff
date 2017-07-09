@@ -136,7 +136,12 @@ namespace GRaff
 
                 case PlatformID.Unix:
                 case PlatformID.MacOSX:
-                    fontFileName = Path.Combine("/Library/Fonts/", fontFamily + ".ttf");
+                    var basePath = Path.Combine("/Library/Fonts/", fontFamily);
+                    if (File.Exists(basePath + ".ttf"))
+                        fontFileName = basePath + ".ttf";
+                    else
+                        fontFileName = basePath + ".ttc";
+                    
                     break;
 
                 default:

@@ -33,7 +33,7 @@ namespace GRaff.GraphicTest
             using (View.DrawTo(new Point(150, 50)).Use())
                 Draw.FillCircle(Point.Zero, 5, Colors.Red);
 
-			var tx = Textures.Giraffe.SubTexture;
+			var tx = Textures.Giraffe;
             using (View.Rectangle(0, 0, tx.Width, tx.Height).Use())
                 Draw.Texture(tx, (0, 0), Colors.White.Transparent(0.2));
 		}

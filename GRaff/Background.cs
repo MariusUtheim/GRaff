@@ -116,7 +116,7 @@ namespace GRaff
                     
 				}
 				else
-					Draw.Texture(Texture.SubTexture, (XOffset, YOffset));
+                    Draw.Texture(Texture, (XOffset, YOffset));
 			}
 		}
 	}

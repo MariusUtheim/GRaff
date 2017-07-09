@@ -9,12 +9,7 @@ namespace GRaff.Panels
 
         public Node() { }
 
-        public Node(Rectangle region)
-        {
-            Region = region;
-        }
-
-        public Rectangle Region { get; set; }
+        public virtual Rectangle Region { get; set; }
 
 
         public Point Location
@@ -43,8 +38,9 @@ namespace GRaff.Panels
             {
                 if (value == _parent)
                     return;
-                _parent.RemoveChild(this);
-                value?.AddChildLast(this);
+                OnParentChanging(value);
+                _parent?._children.Remove(this);
+                value?._children.AddLast(this);
             }
         }
 
@@ -53,14 +49,14 @@ namespace GRaff.Panels
         public IEnumerable<Node> Children => _children.ToList();
 
 
-        public virtual void OnChangeParent(Node parent) { }
+        public virtual void OnParentChanging(Node parent) { }
 
 		public TNode AddChildLast<TNode>(TNode element) where TNode : Node
 		{
             Contract.Requires<ArgumentNullException>(element != null);
 			if (element._parent != this)
 			{
-                element.OnChangeParent(this);
+                element.OnParentChanging(this);
 				element._parent?._children.Remove(element);
 				element._parent = this;
 				_children.AddLast(element);
@@ -73,7 +69,7 @@ namespace GRaff.Panels
 			Contract.Requires<ArgumentNullException>(element != null);
 			if (element._parent != this)
 			{
-                element.OnChangeParent(this);
+                element.OnParentChanging(this);
 				element._parent?._children.Remove(element);
 				element._parent = this;
                 _children.AddFirst(element);

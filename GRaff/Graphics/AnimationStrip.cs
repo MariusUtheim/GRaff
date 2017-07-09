@@ -45,7 +45,7 @@ namespace GRaff.Graphics
 		{
 			double dw = 1.0 / imageCount;
 			_frames = Enumerable.Range(0, imageCount)
-								.Select(i => strip.Subtexture(new Rectangle(i * dw, 0, dw, 1.0)))
+								.Select(i => strip.SubTexture(new Rectangle(i * dw, 0, dw, 1.0)))
 								.ToArray();
 			_indices = frameDurations.Select(f => f.index).ToArray();
 			_durations = frameDurations.Select(f => f.duration).ToArray();
@@ -57,7 +57,7 @@ namespace GRaff.Graphics
 
 			double dw = 1.0 / imageCount;
 			_frames = Enumerable.Range(0, imageCount)
-								.Select(i => strip.Subtexture(new Rectangle(i * dw, 0, dw, 1.0)))	
+								.Select(i => strip.SubTexture(new Rectangle(i * dw, 0, dw, 1.0)))	
 								.ToArray();
 			_indices = Enumerable.Range(0, imageCount).ToArray();
 			_durations = Enumerable.Repeat(1.0, imageCount).ToArray();
@@ -70,7 +70,7 @@ namespace GRaff.Graphics
 			int c = imageCounts.X, r = imageCounts.Y; ;
 			double dw = 1.0 / c, dh = 1.0 / r;
 			_frames = Enumerable.Range(0, c * r)
-								.Select(i => strip.Subtexture(new Rectangle((i % c) * dw, (i / c) * dh, dw, dh)))
+								.Select(i => strip.SubTexture(new Rectangle((i % c) * dw, (i / c) * dh, dw, dh)))
 								.ToArray();
 			_indices = Enumerable.Range(0, c * r).ToArray();
 			_durations = Enumerable.Repeat(1.0, c * r).ToArray();
@@ -84,7 +84,7 @@ namespace GRaff.Graphics
 			int c = imageCounts.X, r = imageCounts.Y; ;
 			double dw = 1.0 / c, dh = 1.0 / r;
 			_frames = Enumerable.Range(0, c * r)
-								.Select(i => strip.Subtexture(new Rectangle((i % c) * dw, (i / c) * dh, dw, dh)))
+								.Select(i => strip.SubTexture(new Rectangle((i % c) * dw, (i / c) * dh, dw, dh)))
 								.ToArray();
 			_indices = frameDurations.Select(f => f.index).ToArray();
 			_durations = frameDurations.Select(f => f.duration).ToArray();

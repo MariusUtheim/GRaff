@@ -17,7 +17,7 @@ namespace GRaff.GraphicTest
 			_render = new TextRenderer(_font, lineWidth: 300);
 			_render.Alignment = FontAlignment.TopLeft;
 			
-			_renderedSprite = new Sprite(_render.Render(lipsum).SubTexture);
+            _renderedSprite = new Sprite(_render.Render(lipsum).SubTexture());
 		}
 
 

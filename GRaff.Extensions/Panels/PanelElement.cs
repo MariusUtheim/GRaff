@@ -13,16 +13,10 @@ namespace GRaff.Panels
         }
 
         public PanelElement(Rectangle region)
-            : this(new Node(region)) { }
+            : this(new Node { Region = region }) { }
 
 
         public Node Root { get; }
-
-        public TNode AddChildFirst<TNode>(TNode child) where TNode : Node => Root.AddChildFirst(child);
-
-        public TNode AddChildLast<TNode>(TNode child) where TNode : Node => Root.AddChildLast(child);
-
-        public void RemoveChild(Node child) => Root.RemoveChild(child);
 
         public void OnGlobalMouse(MouseButton button)
         {

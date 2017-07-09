@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace GRaff.GraphicTest
 {
-    [Test]
+    [Test(Order = -1000)]
     class ShadersTest : GameElement, IKeyPressListener
     {
         private ColorMatrixShaderProgram blackWhiteShader = new ColorMatrixShaderProgram(0.333, 0.333, 0.333, 0.333, 0.333, 0.333, 0.333, 0.333, 0.333);
@@ -39,7 +39,7 @@ namespace GRaff.GraphicTest
                 Draw.FillRectangle(Room.Current.ClientRectangle, Colors.Black);
                 Draw.FillTriangle((200, 50), (400, 300), (100, 400), Colors.Blue);
                 Draw.FillRectangle((100, 500), (400, 400 / GMath.Phi), Colors.ForestGreen);
-                Draw.Texture(Textures.Giraffe.SubTexture, (500, 0));
+                Draw.Texture(Textures.Giraffe, (500, 0));
             }
 		}
 
@@ -71,7 +71,7 @@ namespace GRaff.GraphicTest
                     {
                         using (_currentProgram.Use())
                         using (buffer.Use())
-                            Draw.Texture(Textures.Giraffe.SubTexture, (0, 0));
+                            Draw.Texture(Textures.Giraffe, (0, 0));
                         buffer.Texture.Save("/Developer/Test/output.jpg");
                     }
 

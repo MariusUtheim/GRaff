@@ -6,7 +6,7 @@ namespace GRaff.GraphicTest
     [Test]
 	class TextureBufferTest : GameElement
 	{
-		private SubTexture _texture = Textures.Giraffe.SubTexture;
+		private Texture _texture = Textures.Giraffe;
 		private Texture _chessboard, _mono, _linear, _sinusoidal;
 
         public TextureBufferTest()
@@ -22,10 +22,10 @@ namespace GRaff.GraphicTest
 		{
 			Draw.Clear(Colors.LightGray);
 			Draw.Texture(_texture, (0, 0));
-			Draw.Texture(_chessboard.SubTexture, (10, _texture.Height + 10));
-            Draw.Texture(_mono.SubTexture, (110, _texture.Height + 10));
-            Draw.Texture(_linear.SubTexture, (210, _texture.Height + 10));
-            Draw.Texture(_sinusoidal.SubTexture, (310, _texture.Height + 10));
+			Draw.Texture(_chessboard, (10, _texture.Height + 10));
+            Draw.Texture(_mono, (110, _texture.Height + 10));
+            Draw.Texture(_linear, (210, _texture.Height + 10));
+            Draw.Texture(_sinusoidal, (310, _texture.Height + 10));
 		}
 	}
 }

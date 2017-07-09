@@ -2,7 +2,7 @@
 
 namespace GRaff.Panels
 {
-    public class MouseEventArgs : PropagatingEventArgs
+    public class MouseEventArgs : EventArgs
     {
         public MouseEventArgs(MouseButton button, Point location, double wheelDelta)
         {

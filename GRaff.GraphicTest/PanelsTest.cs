@@ -4,7 +4,7 @@ using GRaff.Panels;
 
 namespace GRaff.GraphicTest
 {
-    [Test]
+    [Test(Order = -1)]
     public class PanelsTest : GameElement
     {
         class Block : DraggableNode, IPanelMousePressListener
@@ -33,20 +33,20 @@ namespace GRaff.GraphicTest
               //  Color = Colors.White;
               //  Tween.Animate(30, Tween.Linear, () => Color, originalColor);
                 Drag(e.Location);
-                e.CancelPropagation();
+               
             }
         }
 
-        PanelElement _root;
+        PanelElement _rootElement;
 
         public PanelsTest()
         {
-            _root = Instance.Create(new PanelElement(new Rectangle(100, 100, 200, 120)));
+            _rootElement = Instance.Create(new PanelElement(new Rectangle(100, 100, 200, 120)));
 
-            var block = _root.AddChildLast(new Block(new Rectangle(20, 20, 100, 100), Colors.Red));
+            var block = _rootElement.Root.AddChildLast(new Block(new Rectangle(20, 20, 100, 100), Colors.Red));
             block.AddChildLast(new Block(new Rectangle(10, 10, 40, 30), Colors.Blue));
 
-            _root.AddChildLast(new Block(new Rectangle(0, 0, 45, 40), Colors.Lime));
+            _rootElement.Root.AddChildLast(new Block(new Rectangle(0, 0, 45, 40), Colors.Lime));
 
             Depth = 1000;
         }
@@ -59,12 +59,12 @@ namespace GRaff.GraphicTest
         public override void OnDraw()
         {
             Draw.Clear(Colors.Gray);
-            Draw.Rectangle(_root.Root.Region, Colors.Black);
+            Draw.Rectangle(_rootElement.Root.Region, Colors.Black);
         }
 
         protected override void OnDestroy()
         {
-            _root.Destroy();
+            _rootElement.Destroy();
         }
     }
 }

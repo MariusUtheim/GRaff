@@ -41,9 +41,13 @@ namespace GRaff
 
         public IntRectangle ClientRectangle => new IntRectangle(0, 0, Width, Height);
 
-		public virtual void OnEnter() { }
+        public virtual void OnBeginStep() { }
 
-		public virtual void OnLeave() { }
+        public virtual void OnEndStep() { }
+
+        public virtual void OnEnter() { Enter?.Invoke(this, new EventArgs()); }
+
+        public virtual void OnLeave() { Leave?.Invoke(this, new EventArgs()); }
 
 		public virtual void OnDrawBackground() { }
 
@@ -53,7 +57,6 @@ namespace GRaff
 		internal void _Leave()
 		{
 			OnLeave();
-			Leave?.Invoke(this, new EventArgs());
 
 			foreach (var instance in Instance.All)
 				Instance.Remove(instance);
@@ -66,7 +69,6 @@ namespace GRaff
             View.UpdateGLToRoomMatrix();
 
 			OnEnter();
-			Enter?.Invoke(this, new EventArgs());
 		}
 
 	}

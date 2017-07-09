@@ -71,7 +71,6 @@ namespace GRaff
 		{
 			Contract.Invariant(Width > 0);
 			Contract.Invariant(Height > 0);
-			Contract.Invariant(SubTexture != null);
 		}
 
 		public bool IsDisposed { get; private set; }
@@ -173,8 +172,9 @@ namespace GRaff
 
 		public int Id { get; private set; }
 
-		private SubTexture _texture = null;
-		public SubTexture SubTexture => _texture ?? (_texture = new SubTexture(this, new GraphicsPoint(0, 0), new GraphicsPoint(1, 0), new GraphicsPoint(0, 1), new GraphicsPoint(1, 1)));
+#warning Handle this better
+        private SubTexture _texture = null;
+        public SubTexture SubTexture() => _texture ?? (_texture = new SubTexture(this, new GraphicsPoint(0, 0), new GraphicsPoint(1, 0), new GraphicsPoint(0, 1), new GraphicsPoint(1, 1)));
 
 
 		public int Width { get;}
@@ -183,8 +183,8 @@ namespace GRaff
 
         public IntVector Size => (Width, Height);
 
-		public SubTexture Subtexture(Rectangle region)
-			=> SubTexture.FromTexCoords(this, region);
+		public SubTexture SubTexture(Rectangle region)
+            => GRaff.Graphics.SubTexture.FromTexCoords(this, region);
 
 
         public void Save(string path)
@@ -198,8 +198,15 @@ namespace GRaff
             GL.GetTexImage(TextureTarget.Texture2D, 0, GLPixelFormat.Bgra, PixelType.UnsignedByte, imgData.Scan0);
 
 			img.UnlockBits(imgData);
-			
-			img.Save(path);
+
+            //img.Save(path);
+            using (var m = new MemoryStream())
+            {
+				img.Save(m, ImageFormat.Png);
+                var i = Image.FromStream(m);
+                i.Save(path);
+            }
+             
 		}
 	}
 

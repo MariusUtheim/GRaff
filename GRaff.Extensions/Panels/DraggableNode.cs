@@ -9,6 +9,8 @@ namespace GRaff.Panels
             GlobalEvent.EndStep += _globalEndStep;
         }
 
+        protected DraggableNode() { }
+
         private static void _globalEndStep()
         {
             if (DragNode == null)
@@ -23,7 +25,7 @@ namespace GRaff.Panels
                 DragNode.OnDrop();
                 DragNode = null;
             }
-                
+
         }
 
 
@@ -46,5 +48,7 @@ namespace GRaff.Panels
             DragOrigin = origin;
             OnBeginDrag();
         }
+
+        public void Drag() => Drag(ToParent(Mouse.Location));
     }
 }

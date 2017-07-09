@@ -24,7 +24,7 @@ namespace GRaff.GraphicTest
 		public override void OnDraw()
 		{
             Draw.Clear(Colors.ForestGreen);
-            Draw.Texture(_rendered.SubTexture, (0, 0), Colors.Red, Colors.Purple, Colors.Blue, Colors.Lime);
+            Draw.Texture(_rendered.SubTexture(), (0, 0), Colors.Red, Colors.Purple, Colors.Blue, Colors.Lime);
 
 			if (_fontKerning != null)
 				Draw.Text("AW This text uses kerning WA", _fontKerning, FontAlignment.Center, Room.Current.Center);

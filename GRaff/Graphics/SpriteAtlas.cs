@@ -41,24 +41,44 @@ namespace GRaff.Graphics
 
 		private static readonly XmlSerializer serializer = new XmlSerializer(typeof(TextureAtlas));
 
-		private Dictionary<string, Graphics.SubTexture> _subTextures;
+        private Dictionary<string, IntRectangle> _subTextures;
 
 		public SpriteAtlas(Texture buffer, string xml)
 			: this(buffer, new MemoryStream(Encoding.UTF8.GetBytes(xml)))
 		{ }
 
-		public SpriteAtlas(Texture buffer, Stream xmlStream)
+        public SpriteAtlas(Texture texture, Stream xmlStream)
 		{
 			var atlasData = (TextureAtlas)serializer.Deserialize(xmlStream);
 
-            _subTextures = new Dictionary<string, Graphics.SubTexture>(atlasData.SubTexture.Length);
+            this.Texture = texture;
+            _subTextures = new Dictionary<string, IntRectangle>(atlasData.SubTexture.Length);
 			foreach (var sx in atlasData.SubTexture)
 			{
-				var texture = new Graphics.SubTexture(buffer, new Rectangle(sx.x, sx.y, sx.width, sx.height));
-				_subTextures.Add(sx.name, texture);
+                var region = new IntRectangle((int)sx.x, (int)sx.y, (int)sx.width, (int)sx.height);
+                _subTextures.Add(sx.name, region);
 			}
 		}
 
+        public SpriteAtlas(params (Texture texture, string name)[] textureMappings)
+        {
+            IntVector bounds;
+            var rects = RectanglePacker.Pack(textureMappings.Select(tm => tm.texture.Size), out bounds);
+
+            _subTextures = new Dictionary<string, IntRectangle>(textureMappings.Length);
+
+            var framebuffer = new Framebuffer(bounds);
+            using (framebuffer.Use())
+            {
+                for (var i = 0; i < textureMappings.Length; i++)
+                {
+                    Draw.Texture(textureMappings[i].texture.SubTexture(), rects[i].TopLeft);
+                    _subTextures.Add(textureMappings[i].name, rects[i]);
+                }
+            }
+
+            this.Texture = framebuffer.Texture;
+        }
 
 		public static SpriteAtlas Load(string texturePath, string xmlPath = null)
 		{
@@ -96,16 +116,17 @@ namespace GRaff.Graphics
 
 		public Texture Texture { get; private set; }
 
-		public SubTexture SubTexture(string subtextureName) => _subTextures[subtextureName];
+        public SubTexture SubTexture(string subtextureName) => Texture.SubTexture(_subTextures[subtextureName]);
 
-		public SubTexture this[string subtextureName] => _subTextures[subtextureName];
+        public SubTexture this[string subtextureName] => Texture.SubTexture(_subTextures[subtextureName]);
 
 		public AnimationStrip AnimationStrip(string prefix)
 		{
 			var textures = _subTextures.Keys.Where(key => key.StartsWith(prefix)).OrderBy(s => s).Select(key => _subTextures[key]).ToArray();
 			if (textures.Length == 0)
 				throw new InvalidOperationException($"Did not find any subtextures with the prefix '{prefix}'.");
-			return new AnimationStrip(textures);
+            throw new NotImplementedException();
+            //return new AnimationStrip(textures);
 		}
 
 

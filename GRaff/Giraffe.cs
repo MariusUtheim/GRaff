@@ -99,6 +99,7 @@ namespace GRaff
             Time.Loop();
 
             GlobalEvent.OnBeginStep();
+            Room.Current.OnBeginStep();
             _do<GameObject>(obj => obj.OnBeginStep());
 
             Async.HandleEvents();
@@ -111,6 +112,7 @@ namespace GRaff
             _detectCollisions();
 
             Instance<GameObject>.Do(instance => instance.OnEndStep());
+            Room.Current.OnEndStep();
             GlobalEvent.OnEndStep();
 
             Instance.Sort();
