@@ -74,6 +74,8 @@ namespace GRaff
 		public double DotProduct(Vector other)
 			=> X * other.X + Y * other.Y;
 
+        public Vector Component(Angle direction)
+            => new Vector(X * GMath.Cos(direction) + Y * GMath.Sin(direction), direction);
 
 		/// <summary>
 		/// Converts this GRaff.Vector to a human-readable string.

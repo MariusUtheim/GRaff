@@ -70,6 +70,8 @@
     <Compile Include="ViewTest.cs" />
     <Compile Include="Assets\Textures.cs" />
     <Compile Include="SoundShaderTest.cs" />
+    <Compile Include="PlatformTest.cs" />
+    <Compile Include="PanelsTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -84,9 +86,6 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Assets\PanaceaLong.wav">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Assets\Senja.jpg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>

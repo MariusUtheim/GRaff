@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -125,6 +125,17 @@
     <Compile Include="Effects\AudioFilter.cs" />
     <Compile Include="Graphics.Shaders\WaveShiftShaderProgram.cs" />
     <Compile Include="Effects\TextureGenerator.cs" />
+    <Compile Include="Platformer\PlatformObject.cs" />
+    <Compile Include="Platformer\Block.cs" />
+    <Compile Include="Platformer\MotionState.cs" />
+    <Compile Include="Platformer\TileMap.cs" />
+    <Compile Include="Platformer\Tile.cs" />
+    <Compile Include="Platformer\TileObserver.cs" />
+    <Compile Include="Panels\Node.cs" />
+    <Compile Include="Panels\PanelElement.cs" />
+    <Compile Include="Panels\MouseEventArgs.cs" />
+    <Compile Include="Panels\IPanelMouseListener.cs" />
+    <Compile Include="Panels\DraggableNode.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -135,6 +146,14 @@
       <Name>GRaff</Name>
     </ProjectReference>
   </ItemGroup>
+<<<<<<< HEAD
   <ItemGroup />
+=======
+  <ItemGroup>
+    <Folder Include="Effects\" />
+    <Folder Include="Platformer\" />
+    <Folder Include="Panels\" />
+  </ItemGroup>
+>>>>>>> bff2e1a... Views and Panels
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -53,7 +53,6 @@ namespace GRaff
             Window.RenderFrame += (sender, e) => {
 
                 Giraffe.Redraw();
-
                 Window.SwapBuffers();
             };
 
@@ -218,15 +217,22 @@ namespace GRaff
         }
 
         /// <summary>
-        /// Repaints the screen.
+        /// Repaints the screen. This performs the following actions in order:
+        /// - GlobalEvent.DrawBackground events are raised
+        /// - OnDrawBackground is called for the current room
+        /// - OnDraw is called for each object, sorted according to Depth descending
+        /// - OnDrawForeground is called for the current room
+        /// - GlobalEvent.DrawForeground events are raised
         /// </summary>
         public static void Redraw()
         {
             GlobalEvent.OnDrawBackground();
+            Room.Current.OnDrawBackground();
 
             foreach (var instance in Instance.All.Where(element => element.IsVisible))
                 instance.OnDraw();
 
+            Room.Current.OnDrawForeground();
             GlobalEvent.OnDrawForeground();
             Time.UpdateFps();
         }

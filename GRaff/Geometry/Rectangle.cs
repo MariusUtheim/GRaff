@@ -127,7 +127,7 @@ namespace GRaff
 		/// </summary>
 		/// <param name="pt">The GRaff.PointD to test.</param>
 		/// <returns>true if this GRaff.Rectangle contains pt.</returns>
-		public bool ContainsPoint(Point pt)
+		public bool Contains(Point pt)
 			=> pt.X >= this.Left && pt.Y >= this.Top && pt.X < this.Right && pt.Y < this.Bottom;
 
 		/// <summary>

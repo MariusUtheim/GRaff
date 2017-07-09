@@ -181,6 +181,8 @@ namespace GRaff
 
 		public int Height { get; }
 
+        public IntVector Size => (Width, Height);
+
 		public SubTexture Subtexture(Rectangle region)
 			=> SubTexture.FromTexCoords(this, region);
 

@@ -68,7 +68,7 @@ namespace GRaff
 		public Point Location
 		{
 			get { return new Point(Transform.X, Transform.Y); }
-			set { Transform.X = value.X; Transform.Y = value.Y; }
+			set { Transform.Location = value; }
 		}
 
 

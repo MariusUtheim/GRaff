@@ -85,10 +85,12 @@ namespace GRaff
 			return new Matrix(1, 0, dx, 0, 1, dy);
 		}
 
-        public static Matrix Translation(Point d)
+        public static Matrix Translation(Point p) => Translation((Vector)p);
+
+        public static Matrix Translation(Vector v)
         {
             Contract.Ensures(Contract.Result<Matrix>() != null);
-            return new Matrix(1, 0, d.X, 0, 1, d.Y);
+            return new Matrix(1, 0, v.X, 0, 1, v.Y);
         }
 
 		public static Matrix Mapping(Triangle src, Triangle dst)

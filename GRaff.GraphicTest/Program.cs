@@ -21,5 +21,6 @@ namespace GRaff.GraphicTest
 
 			Instance<TestController>.Create();
 		}
+
 	}
 }

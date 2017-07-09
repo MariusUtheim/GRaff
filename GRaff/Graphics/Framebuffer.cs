@@ -12,6 +12,10 @@ namespace GRaff.Graphics
 	public sealed class Framebuffer : IDisposable
 	{
 		internal static int ExpectedViewWidth, ExpectedViewHeight;
+        internal static IntVector ExpectedViewSize => (ExpectedViewWidth, ExpectedViewHeight);
+
+        public Framebuffer(IntVector size)
+            : this(size.X, size.Y) { }
 
 		public Framebuffer(int width, int height)
 		{
@@ -49,7 +53,7 @@ namespace GRaff.Graphics
         public IDisposable Use()
         {
             return UseContext.CreateAt($"{typeof(Framebuffer).FullName}.{nameof(Use)}",
-                (frameBuffer: Framebuffer.Current, viewContext: View.UseView(ExpectedViewWidth / 2, ExpectedViewHeight / 2, ExpectedViewWidth, -ExpectedViewHeight)),
+                                       (frameBuffer: Framebuffer.Current, viewContext: View.Rectangle((Point.Zero, ExpectedViewSize)).Use()),
                 () => GL.BindFramebuffer(FramebufferTarget.Framebuffer, this.Id),
                 previous =>
                 {

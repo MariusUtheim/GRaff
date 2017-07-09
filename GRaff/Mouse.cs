@@ -112,7 +112,7 @@ namespace GRaff
 		/// </summary>
 		public static Point Location
 		{
-			get { return View.ScreenToRoom(WindowX, WindowY); }
+			get { return View.Current.ScreenToRoom(WindowLocation); }
 		}
 
 		/// <summary>

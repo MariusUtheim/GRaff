@@ -34,6 +34,9 @@ namespace GRaff
 		/// </summary>
 		public static Point Zero { get; } = new Point(0, 0);
 
+        public Point Project(Line line) => line.Origin + (this - line.Origin).Component(line.Direction.Direction);
+
+        public Point Confine(Rectangle region) => new Point(GMath.Median(region.Left, X, region.Right), GMath.Median(region.Top, Y, region.Bottom));
 
 		/// <summary>
 		/// Converts this GRaff.Point to a human-readable string, showing the value of the coordinates.
@@ -148,13 +151,14 @@ namespace GRaff
 			=> new Point(p.X - v.X, p.Y - v.Y);
 
 
-		/// <summary>
-		/// Scales the GRaff.Point by a specified scalar.
-		/// </summary>
-		/// <param name="p">The GRaff.Point to be scaled.</param>
-		/// <param name="d">The double to scale by.</param>
-		/// <returns>The scaled GRaff.Point.</returns>
-		public static Point operator *(Point p, double d) 
+
+        /// <summary>
+        /// Scales the GRaff.Point by a specified scalar.
+        /// </summary>
+        /// <param name="p">The GRaff.Point to be scaled.</param>
+        /// <param name="d">The double to scale by.</param>
+        /// <returns>The scaled GRaff.Point.</returns>
+        public static Point operator *(Point p, double d) 
 			=> new Point(p.X * d, p.Y * d);
 
 

@@ -100,7 +100,7 @@ namespace GRaff
 			{
 				if (IsTiled)
 				{
-					var viewBox = View.BoundingBox;
+					var viewBox = View.Current.BoundingBox;
 					coords u0 = -(coords)(XOffset + viewBox.Left) / Texture.Width, v0 = -(coords)((YOffset + viewBox.Top) / Texture.Height);
 					coords u1 = (coords)(u0 + viewBox.Width / Texture.Width), v1 = (coords)(v0 + viewBox.Height / Texture.Height);
 

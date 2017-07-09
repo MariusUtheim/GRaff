@@ -7,7 +7,7 @@ using GRaff.Synchronization;
 
 namespace GRaff.GraphicTest
 {
-	[Test]
+    [Test]
 	class TweenTest : GameObject, IGlobalMouseListener, IKeyPressListener
 	{
         public TweenTest()

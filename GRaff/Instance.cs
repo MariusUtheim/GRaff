@@ -41,7 +41,7 @@ namespace GRaff
 		/// </summary>
         /// <param name="element">The GRaff.GameElement to be destroyed.</param>
         /// <returns>true if the element was destroyed; otherwise, e.g. if the element is already destroyed, returns false</returns>
-		public static bool Remove(this GameElement instance)
+		public static bool Remove(GameElement instance)
 		{
             return _elements.Remove(instance);
         }

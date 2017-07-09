@@ -6,25 +6,36 @@ using System.Threading.Tasks;
 
 namespace GRaff.GraphicTest
 {
-	[Test]
+    [Test]
     class ViewTest : GameElement
 	{
 
+        public override void OnStep()
+        {
+            Window.Title = Mouse.Location.ToString();
+        }
+
 		public override void OnDraw()
 		{
-			Draw.Clear(Colors.LightGray);
+            using (View.Rectangle(new Rectangle(0, 0, 1, 1)).Use())
+                Draw.FillRectangle(new Rectangle(0, 0, 1, 1), Colors.Gray);
 
-			using (View.UseView(0, 0, 2, 2))
+            using (View.Rectangle(new Rectangle(-1, -1, 2, 2)).Use()) 
 				Draw.FillRectangle(((-0.2, -0.2), (0.4, 0.4)), Colors.Blue);
 
-			using (View.UseView(256, 256, 512, 512))
+            using (View.Centered((256, 256), (512, 512)).Use())
 				Draw.Circle((256, 256), 256, Colors.Black);
 
 			Draw.Line((0, 0), (Room.Current.Width, Room.Current.Height), Colors.Black);
+            Draw.FillCircle((0, 0), 10, Colors.Black);
+            Draw.FillCircle(Room.Current.Size, 10, Colors.White);
+
+            using (View.DrawTo(new Point(150, 50)).Use())
+                Draw.FillCircle(Point.Zero, 5, Colors.Red);
 
 			var tx = Textures.Giraffe.SubTexture;
-			using (View.UseView(0, 0, tx.Width, tx.Height))
-				Draw.Texture(tx, (0, 0));
+            using (View.Rectangle(0, 0, tx.Width, tx.Height).Use())
+                Draw.Texture(tx, (0, 0), Colors.White.Transparent(0.2));
 		}
 	}
 }

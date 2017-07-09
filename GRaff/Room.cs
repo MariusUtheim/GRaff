@@ -34,8 +34,8 @@ namespace GRaff
 			Goto(Activator.CreateInstance<TRoom>());
 		}
 
-		public int Width { get; private set; }
-		public int Height { get; private set; }
+		public int Width { get; }
+		public int Height { get; }
 		public IntVector Size => new IntVector(Width, Height);
 		public Point Center => new Point(Width / 2.0, Height / 2.0);
 
@@ -44,6 +44,11 @@ namespace GRaff
 		public virtual void OnEnter() { }
 
 		public virtual void OnLeave() { }
+
+		public virtual void OnDrawBackground() { }
+
+        public virtual void OnDrawForeground() { }
+
 
 		internal void _Leave()
 		{
@@ -57,8 +62,8 @@ namespace GRaff
 		internal void _Enter()
 		{
 			Current = this;
-			View.FocusRegion = new IntRectangle(0, 0, Width, Height);
-            View.LoadMatrixToProgram();
+            View.WholeRoom().Bind();
+            View.UpdateGLToRoomMatrix();
 
 			OnEnter();
 			Enter?.Invoke(this, new EventArgs());
