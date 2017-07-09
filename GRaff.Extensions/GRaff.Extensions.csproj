@@ -53,6 +53,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Graphics.Shaders\ColorMatrix.cs" />
     <Compile Include="Particles\AccelerationBehavior.cs" />
     <Compile Include="Particles\ColorBehavior.cs" />
     <Compile Include="Particles\ColoredParticleRenderer.cs" />
@@ -134,8 +135,6 @@
       <Name>GRaff</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Effects\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

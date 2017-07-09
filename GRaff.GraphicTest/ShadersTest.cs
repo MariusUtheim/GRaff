@@ -13,6 +13,8 @@ namespace GRaff.GraphicTest
     {
         private ColorMatrixShaderProgram blackWhiteShader = new ColorMatrixShaderProgram(0.333, 0.333, 0.333, 0.333, 0.333, 0.333, 0.333, 0.333, 0.333);
         private ColorMatrixShaderProgram sepiaShader = new ColorMatrixShaderProgram(0.393, 0.349, 0.272, 0.769, 0.686, 0.534, 0.189, 0.168, 0.131);
+        private ColorMatrixShaderProgram inverse = new ColorMatrixShaderProgram(-1, 0, 0, 1, 0, -1, 0, 1, 0, 0, -1, 1);
+
         private CausticShaderProgram causticShader = new CausticShaderProgram(new Rectangle(0, 0, 500, 500));
         private SpotlightShaderProgram lightShader = new SpotlightShaderProgram(200, 300);
         private WaveShiftShaderProgram waveShader = new WaveShiftShaderProgram((10, 0), (0, 0.01));
@@ -29,6 +31,8 @@ namespace GRaff.GraphicTest
             causticShader.Phase = Time.LoopCount;
             waveShader.Phase = Time.LoopCount / 30.0;
             waveShader.WavePolarization = (Mouse.Location - Room.Current.Center) / 2000;
+            var t = 0.333 * 0.5 * (1 + GMath.Sin(GMath.Tau * Time.LoopCount / 240.0));
+            blackWhiteShader.SetMatrix(new ColorMatrix(1 - 2 * t, t, t, 0, t, 1 - 2 * t, t, 0, t, t, 1 - 2 * t, 0));
 
             using (_currentProgram.Use())
             {
@@ -52,9 +56,10 @@ namespace GRaff.GraphicTest
                 case Key.Number1: _setShader(ShaderProgram.Default, "Default"); break;
                 case Key.Number2: _setShader(blackWhiteShader, "Black/White"); break;
                 case Key.Number3: _setShader(sepiaShader, "Sepia"); break;
-                case Key.Number4: _setShader(causticShader, "Caustic"); break;
-                case Key.Number5: _setShader(lightShader, "Spotlight"); break;
-                case Key.Number6: _setShader(waveShader, "Waves"); break;
+                case Key.Number4: _setShader(inverse, "Inverse"); break;
+                case Key.Number5: _setShader(causticShader, "Caustic"); break;
+                case Key.Number6: _setShader(lightShader, "Spotlight"); break;
+                case Key.Number7: _setShader(waveShader, "Waves"); break;
             }
         }
     }
