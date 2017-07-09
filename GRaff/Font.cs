@@ -118,20 +118,20 @@ namespace GRaff
 #warning Do this better
         private static FileInfo _getFontFileName(string fontFamily, FontOptions options)
         {
-            if (File.Exists(fontFamily))
-                return new FileInfo(fontFamily);
-
             if ((options & FontOptions.Bold) == FontOptions.Bold)
                 fontFamily += " Bold";
             if ((options & FontOptions.Italic) == FontOptions.Italic)
                 fontFamily += " Italic";
 
-            string fontFileName;
+            var fontFileName = TrueTypeLoader.GetTrueTypeFile(fontFamily);
+
+            if (fontFileName == null)
+                throw new IOException("The specified font name is not a valid font family, or the font family does not support the specified font options.");
+
             switch (Environment.OSVersion.Platform)
             {
-                case PlatformID.Win32Windows:
                 case PlatformID.Win32NT:
-                    fontFileName = Path.Combine(@"C:\Windows\Fonts\", TrueTypeLoader.GetTrueTypeFile(fontFamily));
+                    fontFileName = Path.Combine(@"C:\Windows\Fonts\", fontFileName);
                     break;
 
                 case PlatformID.Unix:
@@ -141,7 +141,6 @@ namespace GRaff
                         fontFileName = basePath + ".ttf";
                     else
                         fontFileName = basePath + ".ttc";
-                    
                     break;
 
                 default:
@@ -159,6 +158,18 @@ namespace GRaff
 		{
             return TrueTypeLoader.LoadTrueType(_getFontFileName(fontFamily, options), size, charSet, (options & FontOptions.IgnoreKerning) == FontOptions.IgnoreKerning);
 		}
+
+        /// <summary>
+        /// Loads a TrueType font from the specified file.
+        /// </summary>
+        /// <param name="fileName">The TrueType font file to load.</param>
+        /// <param name="size">The size of the loaded font.</param>
+        /// <param name="charSet">The character set to load.</param>
+        /// <returns></returns>
+        public static Font LoadTrueTypeFromFile(string fileName, int size, ISet<char> charSet)
+        {
+            return TrueTypeLoader.LoadTrueType(new FileInfo(fileName), size, charSet, true);
+        }
 
 		public static IAsyncOperation<Font> LoadTrueTypeAsync(string fontFamily, int size, ISet<char> charSet, FontOptions options = FontOptions.None)
 		{
