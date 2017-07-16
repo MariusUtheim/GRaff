@@ -31,11 +31,26 @@ namespace GRaff.Graphics.Text
             g.Clear(GdiColor.Transparent);
 
             for (var i = 0; i < glyphs.Length; i++)
-                g.DrawImage(glyphs[i].Image, rects[i].Left, rects[i].Top);
+                g.DrawImage(glyphs[i].Image, new GdiRectangle(rects[i].Left, rects[i].Top, rects[i].Width, rects[i].Height), new GdiRectangle(0, 0, glyphs[i].Width, glyphs[i].Height), GraphicsUnit.Pixel);
 
             var bmpData = bmp.LockBits(new GdiRectangle(0, 0, bmp.Width, bmp.Height), ImageLockMode.ReadOnly, PixelFormat.Format32bppArgb);
             var buffer = new Texture(bmpData.Width, bmpData.Height, bmpData.Scan0);
             bmp.UnlockBits(bmpData);
+
+            var b = buffer.ToColorArray();
+            for (var x = 0; x < buffer.Width; x++)
+                for (var y = 0; y < buffer.Height; y++)
+                    b[y, x] = new Color(255, 255, 255, b[y, x].A);
+            buffer = new Texture(b);
+
+
+
+            //var output = (Image)bmp.Clone();
+            //g = GdiGraphics.FromImage(output);
+            //for (var i = 0; i < glyphs.Length; i++)
+            //    g.DrawRectangle(Pens.Red, new GdiRectangle(rects[i].Left, rects[i].Top, rects[i].Width, rects[i].Height));
+            //output.Save("C:/test/chars/chars.png");
+
 
             var chars = new FontChar[glyphs.Length];
             for (var i = 0; i < glyphs.Length; i++)
@@ -141,44 +156,15 @@ namespace GRaff.Graphics.Text
 
 
             //TODO// Render everything manually instead of first converting to Bitmap
-#warning We don't always get the colors right
-            var src = (face.Glyph.Bitmap.Width == 0) ? new Bitmap(1, 1) : face.Glyph.Bitmap.ToGdipBitmap();
-
-            var attr = new ImageAttributes();
-            attr.SetColorMatrix(new System.Drawing.Imaging.ColorMatrix(new float[][] {
-                new float[] { 1, 0, 0, 0, 0 },
-                new float[] { 0, 1, 0, 0, 0 },
-                new float[] { 0, 0, 1, 0, 0 },
-                new float[] { 0, 0, 0, 1, 0 },
-                new float[] { 1, 1, 1, 0, 1 },
-            }));
-
-            var bmp = new Bitmap(src.Width, src.Height, PixelFormat.Format32bppArgb);
-            //GdiGraphics.FromImage(bmp).DrawImage(src, new GdiRectangle(0, 0, src.Width, src.Height));
-            GdiGraphics.FromImage(bmp).DrawImage(src, new GdiRectangle(0, 0, src.Width, src.Height), 0, 0, src.Width, src.Height, GraphicsUnit.Pixel, attr);
-
-            //attr.SetColorMatrix(new System.Drawing.Imaging.ColorMatrix(new float[][] {
-            //    new float[] { 0, 0, 0, 0, 0 },
-            //    new float[] { 0, 0, 0, 0, 0 },
-            //    new float[] { 0, 0, 0, 0, 0 },
-            //    new float[] { 0, 0, 0, 1, 0 },
-            //    new float[] { 1, 1, 1, 0, 0 },
-            //}));
-
-            //src = bmp;
-            //bmp = new Bitmap(src.Width, src.Height, PixelFormat.Format32bppArgb);
-            //GdiGraphics.FromImage(bmp).DrawImage(src, new GdiRectangle(0, 0, src.Width, src.Height), 0, 0, src.Width, src.Height, GraphicsUnit.Pixel, attr);
-
-            try { bmp.Save($@"C:/test/chars/{c}.png"); }
-            catch { }
+            var bmp = (face.Glyph.Bitmap.Width == 0) ? new Bitmap(1, 1) : face.Glyph.Bitmap.ToGdipBitmap();
 
 
             return new Glyph
 			{
 				Character = c,
 				Image = bmp,
-				XOffset = face.Glyph.BitmapLeft,
-				YOffset = face.Glyph.LinearVerticalAdvance.ToInt32() - face.Glyph.BitmapTop,
+				XOffset = face.Glyph.BitmapLeft ,
+				YOffset = face.Glyph.LinearVerticalAdvance.ToInt32() - face.Glyph.BitmapTop ,
 				XAdvance = face.Glyph.Advance.X.ToInt32(),
 				Width = bmp.Width + 1,
 				Height = bmp.Height + 1

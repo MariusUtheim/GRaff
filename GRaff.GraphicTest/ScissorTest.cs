@@ -28,7 +28,7 @@ namespace GRaff.GraphicTest
 
         public override void OnDraw()
         {
-            Draw.Clear(Color.Gray(0.5 * (1 + GMath.Sin(Time.LoopCount / 60))));
+            Draw.Clear(Color.FromGray(0.5 * (1 + GMath.Sin(Time.LoopCount / 60))));
 
             if (!_drawMode)
                 Draw.Rectangle(_dragRectangle, Colors.Red);

@@ -297,7 +297,7 @@ namespace GRaff
 		public static Color Color(this Random rnd)
 		{
 			Contract.Requires<ArgumentNullException>(rnd != null);
-			return (Color)(rnd.Next(0x1000000));
+			return (Color)((uint)rnd.Next(0x1000000));
 		}
 
 		/// <summary>

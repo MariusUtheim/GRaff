@@ -188,12 +188,23 @@ namespace GRaff
 
         public Color[,] ToColorArray()
         {
-            var colors = new Color[Width, Height];
+            var colors = new Color[Height, Width];
 
-            GL.GetTexImage
+            var handle = GCHandle.Alloc(colors, GCHandleType.Pinned);
+            try
+            {
+                var data = handle.AddrOfPinnedObject();
+                //GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, Width, Height, 0, GLPixelFormat.Rgba, PixelType.UnsignedByte, data);
+                GL.BindTexture(TextureTarget.Texture2D, Id);
+                GL.GetTexImage(TextureTarget.Texture2D, 0, GLPixelFormat.Rgba, PixelType.UnsignedByte, data);
+            }
+            finally
+            {
+                if (handle.IsAllocated)
+                    handle.Free();
+            }
 
-
-            throw new NotImplementedException();
+            return colors;
         }
 
 

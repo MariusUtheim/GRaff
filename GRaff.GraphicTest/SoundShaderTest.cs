@@ -34,10 +34,10 @@ namespace GRaff.GraphicTest
             Draw.Clear(Colors.Black);
             using (program.Use())
                 Draw.FillRectangle(Window.ClientRectangle,
-                                   Color.Hsv(Angle.Deg(Time.LoopCount * 1.2), 1, 1),
-                                   Color.Hsv(Angle.Deg(Time.LoopCount * 1.4 + 60), 1, 1),
-                                   Color.Hsv(Angle.Deg(Time.LoopCount * 0.8 + 120), 1, 1),
-                                   Color.Hsv(Angle.Deg(Time.LoopCount + 180), 1, 1));
+                                   Color.FromHsv(Angle.Deg(Time.LoopCount * 1.2), 1, 1),
+                                   Color.FromHsv(Angle.Deg(Time.LoopCount * 1.4 + 60), 1, 1),
+                                   Color.FromHsv(Angle.Deg(Time.LoopCount * 0.8 + 120), 1, 1),
+                                   Color.FromHsv(Angle.Deg(Time.LoopCount + 180), 1, 1));
         }
 
         protected override void OnDestroy()
