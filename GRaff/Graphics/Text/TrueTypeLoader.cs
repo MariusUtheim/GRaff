@@ -8,9 +8,9 @@ using System.Linq;
 using GRaff.Synchronization;
 using Microsoft.Win32;
 using SharpFont;
-using SysColor = System.Drawing.Color;
-using SysGraphics = System.Drawing.Graphics;
-using SysRectangle = System.Drawing.Rectangle;
+using GdiColor = System.Drawing.Color;
+using GdiGraphics = System.Drawing.Graphics;
+using GdiRectangle = System.Drawing.Rectangle;
 
 namespace GRaff.Graphics.Text
 {
@@ -23,18 +23,17 @@ namespace GRaff.Graphics.Text
 
             face.SetPixelSizes((uint)size, 0);
             
-
             var glyphs = charSet.Select(c => _makeFontChar(face, c)).ToArray();
             var rects = _genRects(glyphs);
             
             var bmp = new Bitmap(rects.Max(r => r.Right), rects.Max(r => r.Bottom));
-            var g = SysGraphics.FromImage(bmp);
-            g.Clear(SysColor.Transparent);
+            var g = GdiGraphics.FromImage(bmp);
+            g.Clear(GdiColor.Transparent);
 
             for (var i = 0; i < glyphs.Length; i++)
                 g.DrawImage(glyphs[i].Image, rects[i].Left, rects[i].Top);
 
-            var bmpData = bmp.LockBits(new SysRectangle(0, 0, bmp.Width, bmp.Height), ImageLockMode.ReadOnly, PixelFormat.Format32bppArgb);
+            var bmpData = bmp.LockBits(new GdiRectangle(0, 0, bmp.Width, bmp.Height), ImageLockMode.ReadOnly, PixelFormat.Format32bppArgb);
             var buffer = new Texture(bmpData.Width, bmpData.Height, bmpData.Scan0);
             bmp.UnlockBits(bmpData);
 
@@ -89,15 +88,15 @@ namespace GRaff.Graphics.Text
 				rects = _genRects(glyphs);
 
 				bmp = new Bitmap(rects.Max(r => r.Right), rects.Max(r => r.Bottom));
-				var g = SysGraphics.FromImage(bmp);
-				g.Clear(SysColor.Transparent);
+				var g = GdiGraphics.FromImage(bmp);
+				g.Clear(GdiColor.Transparent);
 
 				for (var i = 0; i < glyphs.Length; i++)
 					g.DrawImage(glyphs[i].Image, rects[i].Left, rects[i].Top);
 				
 			}).ThenQueue(() =>
 			{
-				bmpData = bmp.LockBits(new SysRectangle(0, 0, bmp.Width, bmp.Height), ImageLockMode.ReadOnly, PixelFormat.Format32bppArgb);
+				bmpData = bmp.LockBits(new GdiRectangle(0, 0, bmp.Width, bmp.Height), ImageLockMode.ReadOnly, PixelFormat.Format32bppArgb);
 				var buffer = new Texture(bmpData.Width, bmpData.Height, bmpData.Scan0);
 				bmp.UnlockBits(bmpData);
 
@@ -134,16 +133,47 @@ namespace GRaff.Graphics.Text
 
 
 
-		private static Glyph _makeFontChar(Face face, char c)
-		{
-			face.LoadChar(c, LoadFlags.Default, LoadTarget.Normal);
+        private static Glyph _makeFontChar(Face face, char c)
+        {
+            face.LoadChar(c, LoadFlags.Default, LoadTarget.Normal);
+
             face.Glyph.RenderGlyph(RenderMode.Normal);
+
 
             //TODO// Render everything manually instead of first converting to Bitmap
 #warning We don't always get the colors right
-            var bmp = (face.Glyph.Bitmap.Width == 0) ? new Bitmap(1, 1) : face.Glyph.Bitmap.ToGdipBitmap();
-			
-			return new Glyph
+            var src = (face.Glyph.Bitmap.Width == 0) ? new Bitmap(1, 1) : face.Glyph.Bitmap.ToGdipBitmap();
+
+            var attr = new ImageAttributes();
+            attr.SetColorMatrix(new System.Drawing.Imaging.ColorMatrix(new float[][] {
+                new float[] { 1, 0, 0, 0, 0 },
+                new float[] { 0, 1, 0, 0, 0 },
+                new float[] { 0, 0, 1, 0, 0 },
+                new float[] { 0, 0, 0, 1, 0 },
+                new float[] { 1, 1, 1, 0, 1 },
+            }));
+
+            var bmp = new Bitmap(src.Width, src.Height, PixelFormat.Format32bppArgb);
+            //GdiGraphics.FromImage(bmp).DrawImage(src, new GdiRectangle(0, 0, src.Width, src.Height));
+            GdiGraphics.FromImage(bmp).DrawImage(src, new GdiRectangle(0, 0, src.Width, src.Height), 0, 0, src.Width, src.Height, GraphicsUnit.Pixel, attr);
+
+            //attr.SetColorMatrix(new System.Drawing.Imaging.ColorMatrix(new float[][] {
+            //    new float[] { 0, 0, 0, 0, 0 },
+            //    new float[] { 0, 0, 0, 0, 0 },
+            //    new float[] { 0, 0, 0, 0, 0 },
+            //    new float[] { 0, 0, 0, 1, 0 },
+            //    new float[] { 1, 1, 1, 0, 0 },
+            //}));
+
+            //src = bmp;
+            //bmp = new Bitmap(src.Width, src.Height, PixelFormat.Format32bppArgb);
+            //GdiGraphics.FromImage(bmp).DrawImage(src, new GdiRectangle(0, 0, src.Width, src.Height), 0, 0, src.Width, src.Height, GraphicsUnit.Pixel, attr);
+
+            try { bmp.Save($@"C:/test/chars/{c}.png"); }
+            catch { }
+
+
+            return new Glyph
 			{
 				Character = c,
 				Image = bmp,

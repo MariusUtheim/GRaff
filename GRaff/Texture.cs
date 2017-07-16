@@ -186,6 +186,16 @@ namespace GRaff
 		public SubTexture SubTexture(Rectangle region)
             => GRaff.Graphics.SubTexture.FromTexCoords(this, region);
 
+        public Color[,] ToColorArray()
+        {
+            var colors = new Color[Width, Height];
+
+            GL.GetTexImage
+
+
+            throw new NotImplementedException();
+        }
+
 
         public void Save(string path)
 		{
