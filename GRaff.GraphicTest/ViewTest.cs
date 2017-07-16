@@ -26,9 +26,9 @@ namespace GRaff.GraphicTest
             using (View.Centered((256, 256), (512, 512)).Use())
 				Draw.Circle((256, 256), 256, Colors.Black);
 
-			Draw.Line((0, 0), (Room.Current.Width, Room.Current.Height), Colors.Black);
+			Draw.Line((0, 0), (Window.Width, Window.Height), Colors.Black);
             Draw.FillCircle((0, 0), 10, Colors.Black);
-            Draw.FillCircle(Room.Current.Size, 10, Colors.White);
+            Draw.FillCircle(Window.Size, 10, Colors.White);
 
             using (View.DrawTo(new Point(150, 50)).Use())
                 Draw.FillCircle(Point.Zero, 5, Colors.Red);

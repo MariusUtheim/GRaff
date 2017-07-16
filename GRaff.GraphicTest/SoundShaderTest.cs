@@ -17,15 +17,15 @@ namespace GRaff.GraphicTest
             sound = SoundBuffer.Load("Assets/PanaceaLong.wav");
             instance = sound.Play(true);
 
-            program = new SoundVisualizerShaderProgram(sound.Buffer.ToArray(), Room.Current.Size, Room.Current.Width);
-            program.Origin = Room.Current.Center + (0, 50);
+            program = new SoundVisualizerShaderProgram(sound.Buffer.ToArray(), Window.Size, Window.Width);
+            program.Origin = Window.Center + (0, 50);
          //   program.Orientation = Angle.Zero;
         }
 
         public override void OnStep()
         {
             program.Offset = instance.Source.ByteOffset / 2;
-            program.Origin = Room.Current.Center + new Vector(50 * GMath.Sin(Time.LoopCount / 2000.0), 50 + GMath.Cos(Time.LoopCount / 1740.0));
+            program.Origin = Window.Center + new Vector(50 * GMath.Sin(Time.LoopCount / 2000.0), 50 + GMath.Cos(Time.LoopCount / 1740.0));
             program.Orientation = Angle.Rad(-GMath.Sin(Time.LoopCount / 1000.0));
         }
 
@@ -33,7 +33,7 @@ namespace GRaff.GraphicTest
         {
             Draw.Clear(Colors.Black);
             using (program.Use())
-                Draw.FillRectangle(Room.Current.ClientRectangle,
+                Draw.FillRectangle(Window.ClientRectangle,
                                    Color.Hsv(Angle.Deg(Time.LoopCount * 1.2), 1, 1),
                                    Color.Hsv(Angle.Deg(Time.LoopCount * 1.4 + 60), 1, 1),
                                    Color.Hsv(Angle.Deg(Time.LoopCount * 0.8 + 120), 1, 1),

@@ -65,7 +65,7 @@ namespace GRaff
                 IsRunning = true;
 
                 /// ANY DEVELOPER LOGIC MAY COME AFTER THIS POINT
-                var initialRoom = new Room(windowWidth, windowHeight);
+                var initialRoom = new Room();
                 initialRoom._Enter();
 
                 gameStart?.Invoke();

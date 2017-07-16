@@ -5,7 +5,7 @@ namespace GRaff.Panels
 {
     public class PanelElement : GameElement, IGlobalMouseListener, IGlobalMousePressListener, IGlobalMouseReleaseListener, IGlobalMouseWheelListener
     {
-
+        //TODO// Mouse hovering (help a subelement know when it's being hovered)
         public PanelElement(Node root)
         {
             Contract.Requires<ArgumentNullException>(root != null);

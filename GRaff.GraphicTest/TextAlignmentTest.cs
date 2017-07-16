@@ -26,13 +26,13 @@ namespace GRaff.GraphicTest
 		public override void OnStep()
 		{
 			var alignment = FontAlignment.Center;
-			if (Mouse.X < Room.Current.Width / 3)
+			if (Mouse.X < Window.Width / 3)
 				alignment = FontAlignment.Left;
-			else if (Mouse.X > Room.Current.Width * 2 / 3)
+			else if (Mouse.X > Window.Width * 2 / 3)
 				alignment = FontAlignment.Right;
-			if (Mouse.Y < Room.Current.Height / 3)
+			if (Mouse.Y < Window.Height / 3)
 				alignment |= FontAlignment.Top;
-			else if (Mouse.Y > Room.Current.Height * 2 / 3)
+			else if (Mouse.Y > Window.Height * 2 / 3)
 				alignment |= FontAlignment.Bottom;
 			_render.Alignment = alignment;
 		}
@@ -42,22 +42,22 @@ namespace GRaff.GraphicTest
 			Draw.Clear(Colors.White);
 			Draw.Text(_render.Alignment.ToString(), _render, Mouse.Location, Colors.DarkGray);
 
-			Draw.Line((0, Room.Current.Center.Y), (Room.Current.Width, Room.Current.Center.Y), Colors.Black);
-			Draw.Line((Room.Current.Center.X, 0), (Room.Current.Center.X, Room.Current.Height), Colors.Black);
+			Draw.Line((0, Window.Center.Y), (Window.Width, Window.Center.Y), Colors.Black);
+			Draw.Line((Window.Center.X, 0), (Window.Center.X, Window.Height), Colors.Black);
 			//_render.Draw(lipsum, Colors.White, Room.Current.Center);
 
 			//Draw.Rectangle(Colors.Black, 10, 50, 300, _font.Height);
 			//Draw.Text(_render.Truncate(lipsum), _render, Colors.Black, 10, 50);
 
             Draw.Text("Top Left", font, FontAlignment.TopLeft, (0, 0), Colors.Black);
-            Draw.Text("Top", font, FontAlignment.Top, (Room.Current.Center.X, 0), Colors.Black);
-            Draw.Text("Top Right",  font, FontAlignment.TopRight, (Room.Current.Width, 0), Colors.Black);
-            Draw.Text("Left", font, FontAlignment.Left, (0, Room.Current.Center.Y), Colors.Black);
-			Draw.Text("Center", font, FontAlignment.Center, Room.Current.Center, Colors.Black);
-            Draw.Text("Right", font, FontAlignment.Right, (Room.Current.Width, Room.Current.Center.Y), Colors.Black);
-            Draw.Text("Bottom Left", font, FontAlignment.BottomLeft, (0, Room.Current.Height), Colors.Black);
-            Draw.Text("Bottom", font, FontAlignment.Bottom, (Room.Current.Center.X, Room.Current.Height), Colors.Black);
-            Draw.Text("Bottom Right", font, FontAlignment.BottomRight, (Room.Current.Width, Room.Current.Height), Colors.Black);
+            Draw.Text("Top", font, FontAlignment.Top, (Window.Center.X, 0), Colors.Black);
+            Draw.Text("Top Right",  font, FontAlignment.TopRight, (Window.Width, 0), Colors.Black);
+            Draw.Text("Left", font, FontAlignment.Left, (0, Window.Center.Y), Colors.Black);
+			Draw.Text("Center", font, FontAlignment.Center, Window.Center, Colors.Black);
+            Draw.Text("Right", font, FontAlignment.Right, (Window.Width, Window.Center.Y), Colors.Black);
+            Draw.Text("Bottom Left", font, FontAlignment.BottomLeft, (0, Window.Height), Colors.Black);
+            Draw.Text("Bottom", font, FontAlignment.Bottom, (Window.Center.X, Window.Height), Colors.Black);
+            Draw.Text("Bottom Right", font, FontAlignment.BottomRight, (Window.Width, Window.Height), Colors.Black);
 		}
 
 	}

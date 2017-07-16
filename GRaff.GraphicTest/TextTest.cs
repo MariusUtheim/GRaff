@@ -38,8 +38,8 @@ namespace GRaff.GraphicTest
 			if (_renderedSprite != null)
 				Draw.Sprite(_renderedSprite, 0, new Transform
 				{
-					X = Room.Current.Center.X,
-					Y = Room.Current.Center.Y + 100,
+					X = Window.Center.X,
+					Y = Window.Center.Y + 100,
 					Rotation = Angle.Deg(GMath.Sin(Time.LoopCount / 100.0)),
 					XShear = 0.1 * GMath.Sin(Time.LoopCount / 10.0 / GMath.E),
 					YShear = 0.2 * GMath.Cos(Time.LoopCount / 11.0 / GMath.Pi),

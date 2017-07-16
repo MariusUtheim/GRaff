@@ -51,15 +51,15 @@ namespace GRaff.GraphicTest
 		{
             Draw.Clear(Colors.LightGray);
 			Draw.FillCircle(Location, 8, _color);
-			Draw.Line((Room.Current.Center.X, 0), (Room.Current.Center.X, Room.Current.Height), Colors.Black);
-            Draw.Line((0, Room.Current.Center.Y), (Room.Current.Width, Room.Current.Center.Y), Colors.Black);
+			Draw.Line((Window.Center.X, 0), (Window.Center.X, Window.Height), Colors.Black);
+            Draw.Line((0, Window.Center.Y), (Window.Width, Window.Center.Y), Colors.Black);
 		}
 
 		public void OnGlobalMouse(MouseButton button)
 		{
 			_color = Colors.Red;
 
-			_marker = Instance<Marker>.Create(new Point(GRandom.Integer(Room.Current.Width), GRandom.Integer(Room.Current.Height)));
+			_marker = Instance<Marker>.Create(new Point(GRandom.Integer(Window.Width), GRandom.Integer(Window.Height)));
 
 			if (button == MouseButton.Left)
 				Tween.Animate(90, f, () => this.Location, Mouse.Location, () => _color = Colors.DarkRed);

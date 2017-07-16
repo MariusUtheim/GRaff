@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace GRaff.GraphicTest
 {
-    [Test(Order = -1000)]
+    [Test]
     class ShadersTest : GameElement, IKeyPressListener
     {
         private ColorMatrixShaderProgram blackWhiteShader = new ColorMatrixShaderProgram(0.333, 0.333, 0.333, 0.333, 0.333, 0.333, 0.333, 0.333, 0.333);
@@ -30,13 +30,13 @@ namespace GRaff.GraphicTest
             lightShader.Origin = (Mouse.WindowX * Window.DisplayScale.X, Mouse.WindowY * Window.DisplayScale.Y);
             causticShader.Phase = Time.LoopCount;
             waveShader.Phase = Time.LoopCount / 30.0;
-            waveShader.WavePolarization = (Mouse.Location - Room.Current.Center) / 2000;
+            waveShader.WavePolarization = (Mouse.WindowLocation - Window.Center) / 2000;
             var t = 0.333 * 0.5 * (1 + GMath.Sin(GMath.Tau * Time.LoopCount / 240.0));
             blackWhiteShader.SetMatrix(new ColorMatrix(1 - 2 * t, t, t, 0, t, 1 - 2 * t, t, 0, t, t, 1 - 2 * t, 0));
 
             using (_currentProgram.Use())
             {
-                Draw.FillRectangle(Room.Current.ClientRectangle, Colors.Black);
+                Draw.FillRectangle(Window.ClientRectangle, Colors.Black);
                 Draw.FillTriangle((200, 50), (400, 300), (100, 400), Colors.Blue);
                 Draw.FillRectangle((100, 500), (400, 400 / GMath.Phi), Colors.ForestGreen);
                 Draw.Texture(Textures.Giraffe, (500, 0));

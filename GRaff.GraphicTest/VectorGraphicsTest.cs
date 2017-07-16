@@ -8,7 +8,7 @@ using static GRaff.GMath;
 
 namespace GRaff.GraphicTest
 {
-    [Test]
+    [Test(Order = 1)]
 	class VectorGraphicsTest : GameElement
 	{
         private const double dx = 100;

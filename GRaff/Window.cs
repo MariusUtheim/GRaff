@@ -9,43 +9,6 @@ namespace GRaff
     /// </summary>
     public static class Window
 	{
-		/// <summary>
-		/// Gets or sets the width of the game window.
-		/// </summary>
-		public static int Width
-		{
-			get { return (int)(Giraffe.Window.ClientSize.Width / DisplayScale.X); }
-			set
-			{
-				if (value <= 0)
-					throw new ArgumentOutOfRangeException("value", "Value must be greater than 0");
-				Giraffe.Window.ClientSize = new Size((int)(value * DisplayScale.X), Giraffe.Window.ClientSize.Height); 
-			}
-		}
-
-		/// <summary>
-		/// Gets or sets the height of the game window.
-		/// </summary>
-		public static int Height
-		{
-			get { return (int)(Giraffe.Window.ClientSize.Height / DisplayScale.Y); }
-			set
-			{
-				if (value <= 0)
-					throw new ArgumentOutOfRangeException("value", "Must be greater than 0");
-				Giraffe.Window.ClientSize = new Size(Giraffe.Window.ClientSize.Width, (int)(value * DisplayScale.Y));
-			}
-		}
-
-		/// <summary>
-		/// Gets or sets the size of the game window.
-		/// </summary>
-		public static IntVector Size
-		{
-			get { return new IntVector(Width, Height); }
-			set { Width = value.X; Height = value.Y; }
-		}
-
         public static Vector DisplayScale { get; internal set; }
 
 		/// <summary>
@@ -53,8 +16,8 @@ namespace GRaff
 		/// </summary>
 		public static bool IsBorderVisible
 		{
-			get { return Giraffe.Window.WindowBorder == WindowBorder.Fixed; }
-			set { Giraffe.Window.WindowBorder = value ? WindowBorder.Fixed : WindowBorder.Hidden; }
+			get => Giraffe.Window.WindowBorder == WindowBorder.Fixed; 
+			set => Giraffe.Window.WindowBorder = value ? WindowBorder.Fixed : WindowBorder.Hidden; 
 		}
 
 		/// <summary>
@@ -62,45 +25,76 @@ namespace GRaff
 		/// </summary>
 		public static string Title
 		{
-			get { return Giraffe.Window.Title; }
-			set { Giraffe.Window.Title = value; }
+			get => Giraffe.Window.Title;
+			set => Giraffe.Window.Title = value;
 		}
 
 		public static bool IsFullscreen
 		{
-			get
-			{
-				return Giraffe.Window.WindowState == WindowState.Fullscreen;
-			}
-			set
-			{
-				Giraffe.Window.WindowState = WindowState.Fullscreen;
-			}
+			get => Giraffe.Window.WindowState == WindowState.Fullscreen;
+			set => Giraffe.Window.WindowState = WindowState.Fullscreen;
 		}
 
-		public static int X
-		{
-			get
-			{
-				return Giraffe.Window.X;
-			}
-			set
-			{
-				Giraffe.Window.X = value;
-			}
-		}
 
-		public static int Y
-		{
-			get
-			{
-				return Giraffe.Window.Y;
-			}
+        /// <summary>
+        /// Gets or sets the width of the game window.
+        /// </summary>
+        public static int Width
+        {
+            get => Size.X;
+            set => Size = (value, Height);
+        }
 
-			set
-			{
-				Giraffe.Window.Y = value;
-			}
-		}
-	}
+        /// <summary>
+        /// Gets or sets the height of the game window.
+        /// </summary>
+        public static int Height
+        {
+            get => Size.Y;
+            set => Size = (Width, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the size of the game window.
+        /// </summary>
+        public static IntVector Size
+        {
+            get
+            {
+                return new IntVector((int)(Giraffe.Window.ClientSize.Width / DisplayScale.X), (int)(Giraffe.Window.ClientSize.Height / DisplayScale.Y));
+            }
+            set
+            {
+                if (value.X <= 0 || value.Y <= 0)
+                    throw new ArgumentOutOfRangeException("value", "Both components must be greater than 0.");
+                Giraffe.Window.ClientSize = new Size(value.X, value.Y);
+                View.UpdateGLToRoomMatrix();
+            }
+        }
+
+
+
+        public static int X
+        {
+            get => Giraffe.Window.X;
+            set => Giraffe.Window.X = value;
+        }
+
+        public static int Y
+        {
+            get => Giraffe.Window.Y;
+            set => Giraffe.Window.Y = value;
+        }
+
+        public static IntVector Location
+        {
+            get => (X, Y);
+            set => (X, Y) = value;
+        }
+
+        public static Point Center => (Width / 2.0, Height / 2.0);
+
+        public static IntRectangle ClientRectangle => new IntRectangle(0, 0, Width, Height);
+
+    }
 }

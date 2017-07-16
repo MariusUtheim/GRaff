@@ -12,13 +12,6 @@ namespace GRaff
 		public event EventHandler Enter;
 		public event EventHandler Leave;
 
-		protected internal Room(int width, int height)
-		{
-			Contract.Requires<ArgumentOutOfRangeException>(width > 0 && height > 0);
-			this.Width = width;
-			this.Height = height;
-		}
-
 		public static Room Current { get; private set; }
 
 		public static void Goto(Room room)
@@ -33,14 +26,7 @@ namespace GRaff
 		{
 			Goto(Activator.CreateInstance<TRoom>());
 		}
-
-		public int Width { get; }
-		public int Height { get; }
-		public IntVector Size => new IntVector(Width, Height);
-		public Point Center => new Point(Width / 2.0, Height / 2.0);
-
-        public IntRectangle ClientRectangle => new IntRectangle(0, 0, Width, Height);
-
+        
         public virtual void OnBeginStep() { }
 
         public virtual void OnEndStep() { }
@@ -65,8 +51,7 @@ namespace GRaff
 		internal void _Enter()
 		{
 			Current = this;
-            View.WholeRoom().Bind();
-            View.UpdateGLToRoomMatrix();
+            View.FullWindow().Bind();
 
 			OnEnter();
 		}

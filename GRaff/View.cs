@@ -20,7 +20,7 @@ namespace GRaff
 	{
 #warning Define up direction
         private static readonly Triangle GLTriangle = new Triangle((-1, 1), (1, 1), (-1, -1));
-        private static Matrix GLToRoomMatrix;
+        private static Matrix GLToViewMatrix;
 
         public View(Matrix viewMatrix)
         {
@@ -31,10 +31,10 @@ namespace GRaff
 
         internal static void UpdateGLToRoomMatrix()
         {
-            GLToRoomMatrix = Matrix.Mapping(GLTriangle, new Triangle((0, 0), (Room.Current.Width, 0), (0, Room.Current.Height)));
+            GLToViewMatrix = Matrix.Mapping(GLTriangle, new Triangle((0, 0), (Window.Width, 0), (0, Window.Height)));
         }
 
-        public static View WholeRoom() => Rectangle(Room.Current.ClientRectangle);
+        public static View FullWindow() => Rectangle(Window.ClientRectangle);
 
         public static View Triangle(Triangle t) => new View(Matrix.Mapping(t, GLTriangle));
 
@@ -89,37 +89,20 @@ namespace GRaff
         }
 
 
-		/// <summary>
-		/// Gets or sets the y-coordinate of the center of the view in the room.
-		/// </summary>
-		public static double Y { get; set; }
-		/// <summary>
-        /// 
-		/// Gets or sets the width of the view in the room.
-		/// </summary>
-		public static double Width { get; set; }
-
-		/// <summary>
-		/// Gets or sets the height of the view in the room.
-		/// </summary>
-		public static double Height { get; set; }
-
-        public Point Center => ViewMatrix.Inverse * Point.Zero;
-
         /// <summary>
         /// Returns a Rectangle that is guaranteed to contain the whole view region. 
         /// </summary>
         /// <value>The bounding box.</value>
         public Rectangle BoundingBox => throw new NotImplementedException();
 
-        public Point ScreenToRoom(Point p)
+        public Point ScreenToView(Point p)
 		{
-            return GLToRoomMatrix * ViewMatrix * p;
+            return GLToViewMatrix * ViewMatrix * p;
   		}
-
-		public Point RoomToView(Point p)
+    
+		public Point ViewToScreen(Point p)
 		{
-            return ViewMatrix.Inverse * GLToRoomMatrix.Inverse * p;
+            return ViewMatrix.Inverse * GLToViewMatrix.Inverse * p;
 		}
 
 

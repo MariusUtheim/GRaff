@@ -110,9 +110,10 @@ namespace GRaff
 		/// <summary>
 		/// Gets the location of the cursor in the room. The coordinates might be non-integer if the View is scaled.
 		/// </summary>
+        #warning This is weird when using Views
 		public static Point Location
 		{
-			get { return View.Current.ScreenToRoom(WindowLocation); }
+			get { return View.Current.ScreenToView(WindowLocation); }
 		}
 
 		/// <summary>
