@@ -24,11 +24,6 @@ namespace GRaff
 			set { _depth = value; Instance.NeedsSort = true; }
 		}
 
-		/// <summary>
-		/// Gets or sets whether this GRaff.GameElement should be drawn. If set to false, OnDraw methods will not be called automatically.
-		/// </summary>
-		public bool IsVisible { get; set; } = true;
-
         public bool Exists { get; internal set; }
 
 		public void Destroy()
