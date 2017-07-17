@@ -136,6 +136,7 @@
     <Compile Include="Panels\MouseEventArgs.cs" />
     <Compile Include="Panels\IPanelMouseListener.cs" />
     <Compile Include="Panels\DraggableNode.cs" />
+    <Compile Include="Graphics.Shaders\ShockwaveShaderProgram.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
