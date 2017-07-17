@@ -1,6 +1,6 @@
 ﻿
 
-namespace GRaff.Graphics.Text
+namespace GRaff.Graphics
 {
     public enum Alignment
 	{

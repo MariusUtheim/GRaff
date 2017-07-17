@@ -1,4 +1,5 @@
-﻿using GRaff.Graphics.Text;
+﻿using GRaff.Graphics;
+using GRaff.Graphics.Text;
 
 
 namespace GRaff.GraphicTest
