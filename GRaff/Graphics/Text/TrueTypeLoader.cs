@@ -156,6 +156,7 @@ namespace GRaff.Graphics.Text
 
 
             //TODO// Render everything manually instead of first converting to Bitmap
+#warning Does this work with italics? 
             var bmp = (face.Glyph.Bitmap.Width == 0) ? new Bitmap(1, 1) : face.Glyph.Bitmap.ToGdipBitmap();
 
 

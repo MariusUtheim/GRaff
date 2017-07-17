@@ -220,7 +220,9 @@ namespace GRaff.Graphics.Text
 					case FontAlignment.Right: x0 = -lineWidth; break;
 				}
 
-				var x = x0;
+#warning What happens when the character is not found?
+
+                var x = x0;
 				var y = y0 + l * (Font.Height + LineSeparation);
 				for (var i = 0; i < lines[l].Length; i++)
 				{

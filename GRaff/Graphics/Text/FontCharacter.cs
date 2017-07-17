@@ -5,8 +5,9 @@ namespace GRaff
 {
 	public class FontCharacter
 	{
-		public FontCharacter(int x, int y, int width, int height, int xOffset, int yOffset, int xAdvance)
+		public FontCharacter(char c, int x, int y, int width, int height, int xOffset, int yOffset, int xAdvance)
 		{
+            this.Character = c;
 			this.X = x;
 			this.Y = y;
 			this.Width = width;
@@ -16,26 +17,33 @@ namespace GRaff
 			this.XAdvance = xAdvance;
 		}
 
-		public FontCharacter(FontChar c)
+		public FontCharacter(FontChar fontChar)
 		{
-			this.X = c.X;
-			this.Y = c.Y;
-			this.Width = c.Width;
-			this.Height = c.Height;
-			this.XOffset = c.XOffset;
-			this.YOffset = c.YOffset;
-			this.XAdvance = c.XAdvance;
+            this.Character = (char)fontChar.Id;
+            this.X = fontChar.X;
+			this.Y = fontChar.Y;
+			this.Width = fontChar.Width;
+			this.Height = fontChar.Height;
+			this.XOffset = fontChar.XOffset;
+			this.YOffset = fontChar.YOffset;
+			this.XAdvance = fontChar.XAdvance;
 		}
 
-		public int X { get; private set; }
-		public int Y { get; private set; }
+        public char Character { get; }
+		public int X { get; }
+		public int Y { get; }
 		public IntVector Location => new IntVector(X, Y);
-		public int Width { get; private set; }
-		public int Height { get; private set; }
+		public int Width { get; }
+		public int Height { get; }
 		public IntVector Size => new IntVector(Width, Height);
-		public int XOffset { get; private set; }
-		public int YOffset { get; private set; }
+		public int XOffset { get; }
+		public int YOffset { get; }
 		public IntVector Offset => new IntVector(XOffset, YOffset);
-		public int XAdvance { get; private set; }
-	}
+		public int XAdvance { get; }
+
+        public override string ToString()
+        {
+            return $"FontChar {Character}";
+        }
+    }
 }
