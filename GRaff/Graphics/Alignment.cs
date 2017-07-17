@@ -2,7 +2,7 @@
 
 namespace GRaff.Graphics.Text
 {
-    public enum FontAlignment
+    public enum Alignment
 	{
 		Horizontal = 0x03,
 		Vertical = 0x30,

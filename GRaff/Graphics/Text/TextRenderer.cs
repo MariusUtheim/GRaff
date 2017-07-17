@@ -13,7 +13,7 @@ namespace GRaff.Graphics.Text
 		private static readonly Regex NewlineRegex = new Regex("\r\n|\n");
 		private static readonly Regex WhitespaceRegex = new Regex(" ");
 		
-		public TextRenderer(Font font, FontAlignment alignment = FontAlignment.TopLeft, int? lineWidth = null, double lineSeparation = 0)
+		public TextRenderer(Font font, Alignment alignment = Alignment.TopLeft, int? lineWidth = null, double lineSeparation = 0)
 		{
 			Contract.Requires<ArgumentNullException>(font != null);
 			this.Font = font;
@@ -39,7 +39,7 @@ namespace GRaff.Graphics.Text
 
 		public double LineSeparation { get; set; }
 
-		public FontAlignment Alignment { get; set; } = FontAlignment.TopLeft;
+		public Alignment Alignment { get; set; } = Alignment.TopLeft;
 
 		private IEnumerable<string> _breakString(string text)
 		{
@@ -151,23 +151,23 @@ namespace GRaff.Graphics.Text
 			return n * Font.Height + (n - 1) * LineSeparation;
 		}
 
-		private static Point _getOrigin(FontAlignment alignment, double width, double height)
+		private static Point _getOrigin(Alignment alignment, double width, double height)
 		{
 			double x, y;
 
-			switch (alignment & FontAlignment.Horizontal)
+			switch (alignment & Alignment.Horizontal)
 			{
-				case FontAlignment.Left: x = 0; break;
-				case FontAlignment.Center: x = width / 2; break;
-				case FontAlignment.Right: x = width; break;
+				case Alignment.Left: x = 0; break;
+				case Alignment.Center: x = width / 2; break;
+				case Alignment.Right: x = width; break;
 				default: x = 0; break;
 			}
 
-			switch (alignment & FontAlignment.Vertical)
+			switch (alignment & Alignment.Vertical)
 			{
-				case FontAlignment.Top: y = 0; break;
-				case FontAlignment.Center: y = height / 2; break;
-				case FontAlignment.Bottom: y = height; break;
+				case Alignment.Top: y = 0; break;
+				case Alignment.Center: y = height / 2; break;
+				case Alignment.Bottom: y = height; break;
 				default: y = 0; break;
 			}
 
@@ -202,22 +202,22 @@ namespace GRaff.Graphics.Text
 			var x0 = 0.0;
 			var y0 = 0.0;
 			
-			switch (Alignment & FontAlignment.Vertical)
+			switch (Alignment & Alignment.Vertical)
 			{
-				case FontAlignment.Top: y0 = 0; break;
-				case FontAlignment.Center: y0 = -((Font.Height + LineSeparation) * (lines.Length - 1) + Font.Height) / 2; break;
-				case FontAlignment.Bottom: y0 = -((Font.Height + LineSeparation) * (lines.Length - 1) + Font.Height); break;
+				case Alignment.Top: y0 = 0; break;
+				case Alignment.Center: y0 = -((Font.Height + LineSeparation) * (lines.Length - 1) + Font.Height) / 2; break;
+				case Alignment.Bottom: y0 = -((Font.Height + LineSeparation) * (lines.Length - 1) + Font.Height); break;
 			}
 
 			var idx = 0;
 			for (var l = 0; l < lines.Length; l++)
 			{
 				var lineWidth = Font.GetWidth(lines[l]);
-				switch (Alignment & FontAlignment.Horizontal)
+				switch (Alignment & Alignment.Horizontal)
 				{
-					case FontAlignment.Left: x0 = 0; break;
-					case FontAlignment.Center: x0 = -lineWidth / 2f; break;
-					case FontAlignment.Right: x0 = -lineWidth; break;
+					case Alignment.Left: x0 = 0; break;
+					case Alignment.Center: x0 = -lineWidth / 2f; break;
+					case Alignment.Right: x0 = -lineWidth; break;
 				}
 
 #warning What happens when the character is not found?

@@ -225,8 +225,8 @@ namespace GRaff
 		}
         public static void Text(string text, Font font, Point location) => Text(text, font, location, Colors.Black);
 		public static void Text(string text, Font font, Point location, Color color) => Text(text, new TextRenderer(font), Matrix.Translation(location), color);
-        public static void Text(string text, Font font, FontAlignment alignment, Point location) => Text(text, new TextRenderer(font, alignment), Matrix.Translation(location), Colors.Black);
-		public static void Text(string text, Font font, FontAlignment alignment, Point location, Color color) => Text(text, new TextRenderer(font, alignment), Matrix.Translation(location), color);
+        public static void Text(string text, Font font, Alignment alignment, Point location) => Text(text, new TextRenderer(font, alignment), Matrix.Translation(location), Colors.Black);
+		public static void Text(string text, Font font, Alignment alignment, Point location, Color color) => Text(text, new TextRenderer(font, alignment), Matrix.Translation(location), color);
 
         //public static void Text(string text, Font font, Color color, double x, double y) => CurrentSurface.DrawText(font, )
 
