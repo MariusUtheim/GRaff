@@ -228,9 +228,9 @@ namespace GRaff
         public static void Text(string text, Font font, FontAlignment alignment, Point location) => Text(text, new TextRenderer(font, alignment), Matrix.Translation(location), Colors.Black);
 		public static void Text(string text, Font font, FontAlignment alignment, Point location, Color color) => Text(text, new TextRenderer(font, alignment), Matrix.Translation(location), color);
 
-		//public static void Text(string text, Font font, Color color, double x, double y) => CurrentSurface.DrawText(font, )
+        //public static void Text(string text, Font font, Color color, double x, double y) => CurrentSurface.DrawText(font, )
 
-		/*
+        /*
         public static void Text(string text, Font font, Color color, Transform transform) => CurrentSurface.DrawText(font, FontAlignment.TopLeft, color, text, transform);
         
         public static void Text(string text, Font font, FontAlignment alignment, Color color, double x, double y) => CurrentSurface.DrawText(font, alignment, color, text, new PointF(x, y));
@@ -241,6 +241,14 @@ namespace GRaff
         */
 
 
+        /// <summary>
+        /// Copies the current content of the screen, then draws that image back to the screen.
+        /// This can for example be used to add post-processing effects.
+        /// </summary>
+        public static void Redraw()
+        {
+            Device.Redraw();
+        }
 
     }
 }

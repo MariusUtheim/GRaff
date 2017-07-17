@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Runtime.InteropServices;
 using GRaff.Graphics.Text;
 #if OpenGL4
 using OpenTK.Graphics.OpenGL4;
@@ -131,7 +132,7 @@ namespace GRaff.Graphics
             });
             _renderSystem.SetColor(blend);
             
-            _renderSystem.SetTexCoords(UsageHint.StreamDraw, texture.StripCoords);
+            _renderSystem.SetTexCoords(texture.StripCoords);
             _renderSystem.Render(texture.Texture, PrimitiveType.TriangleStrip);
         }
 
@@ -177,5 +178,36 @@ namespace GRaff.Graphics
             _renderSystem.SetTexCoords(texCoords);
             _renderSystem.Render(renderer.Font.Texture, PrimitiveType.Triangles);
 		}
+
+
+        public void Redraw()
+        {
+            //TODO// Probably it should be possible to make this more efficient.
+            var pixels = new Color[Window.Height, Window.Width];
+            Texture texture;
+
+			var handle = GCHandle.Alloc(pixels, GCHandleType.Pinned);
+			try
+			{
+                var bufptr = handle.AddrOfPinnedObject();
+				GL.ReadPixels(0, 0, Window.Width, Window.Height, PixelFormat.Bgra, PixelType.UnsignedByte, bufptr);
+                texture = new Texture(Window.Width, Window.Height, bufptr);
+			}
+			finally
+			{
+				if (handle.IsAllocated)
+					handle.Free();
+			}
+
+            using (View.FullWindow().Use())
+            {
+                _renderSystem.SetVertices(new GraphicsPoint(0, 0), new GraphicsPoint(Window.Width, 0), new GraphicsPoint(0, Window.Height), new GraphicsPoint(Window.Width, Window.Height));
+                _renderSystem.SetColor(Colors.White);
+                _renderSystem.SetTexCoords(UsageHint.StreamDraw, new[] { 0.0, 1.0, 1.0, 1.0, 0.0, 0.0, 1.0, 0.0 });
+                _renderSystem.Render(texture, PrimitiveType.TriangleStrip);
+            }
+
+			texture.Dispose();
+        }
     }
 }
