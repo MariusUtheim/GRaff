@@ -207,7 +207,7 @@ namespace GRaff
 
 		
 		public bool Equals(Matrix other)
-			=> (!ReferenceEquals(other, null)) && (this - other)._magnitude <= GMath.MachineEpsilon;
+			=> !ReferenceEquals(other, null) && (this - other)._magnitude <= GMath.MachineEpsilon;
 
 		/// <summary>
 		/// Specifies whether this GRaff.Matrix contains the same elements as the specified System.Object.

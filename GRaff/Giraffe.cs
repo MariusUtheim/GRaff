@@ -230,6 +230,8 @@ namespace GRaff
         /// </summary>
         public static void Render()
         {
+            View.Validate();
+
             GlobalEvent.OnDrawBackground();
             Room.Current.OnDrawBackground();
 

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Linq;
 using GRaff.Graphics;
 using GRaff.Synchronization;
@@ -18,15 +19,18 @@ namespace GRaff
 	/// </summary>
 	public class View
 	{
-#warning Define up direction
+        //TODO// Define up direction
         private static readonly Triangle GLTriangle = new Triangle((-1, 1), (1, 1), (-1, -1));
         private static Matrix GLToViewMatrix;
+
+        private Transform _transform;
+        private bool _needsValidation = false;
 
         public View(Matrix viewMatrix)
         {
             Contract.Requires<ArgumentNullException>(viewMatrix != null);
             Contract.Requires<MatrixException>(viewMatrix.Determinant != 0);
-            this.ViewMatrix = viewMatrix;
+            this._transform = new Transform(viewMatrix);
         }
 
         internal static void UpdateGLToRoomMatrix()
@@ -53,17 +57,19 @@ namespace GRaff
             return new View(View.Current.ViewMatrix * Matrix.Translation(location));
         }
 
-        //public static View DrawTo(
-
-
-		public Matrix ViewMatrix { get; set; }
+        internal static void Validate()
+        {
+            if (Current._needsValidation)
+                LoadMatrixToProgram();
+        }
+                
 
 		internal static void LoadMatrixToProgram()
 		{
 			if (ShaderProgram.Current == null)
 				return;
 
-            var tr = Current.ViewMatrix;
+			var tr = Current.ViewMatrix;
 
 			var projectionMatrix = new Matrix4(
 				(float)tr.M00, (float)tr.M01, 0, (float)tr.M02,
@@ -76,18 +82,80 @@ namespace GRaff
 			matrixLocation = GL.GetUniformLocation(ShaderProgram.Current.Id, "GRaff_ViewMatrix");
 			GL.UniformMatrix4(matrixLocation, true, ref projectionMatrix);
 
+            Current._needsValidation = false;
 			_Graphics.ErrorCheck();
 		}
 
 
+
         public static View Current { get; private set; } = new View(new Matrix());
 
-        public void Bind()
+
+        private void _invalidate(object _)
         {
-            Current = this;
-            LoadMatrixToProgram();
+            _needsValidation = false;
         }
 
+
+		public Matrix ViewMatrix
+        {
+            get => _transform.GetMatrix();
+            set => _transform = new Transform(value);
+        }
+
+        public double X
+        {
+            get => _transform.X;
+            set => _invalidate(_transform.X = value);
+        }
+
+        public double Y
+        {
+            get => _transform.Y;
+            set => _invalidate(_transform.Y = value);
+        }
+
+        public Point Location
+        {
+            get => _transform.Location;
+            set => _invalidate(_transform.Location = value);
+        }
+
+        public Angle Rotation
+        {
+            get => _transform.Rotation;
+            set => _invalidate(_transform.Rotation = value);
+        }
+
+        public double XScale
+        {
+            get => _transform.XScale;
+            set => _invalidate(_transform.XScale = value);
+        }
+
+        public double YScale
+        {
+            get => _transform.YScale;
+            set => _invalidate(_transform.YScale = value);
+        }
+
+        public Vector Scale
+        {
+            get => _transform.Scale;
+            set => _invalidate(_transform.Scale = value);
+        }
+
+        public double XShear
+        {
+            get => _transform.XShear;
+            set => _invalidate(_transform.XShear = value);
+        }
+
+        public double YShear
+        {
+            get => _transform.YShear;
+            set => _invalidate(_transform.YShear = value);
+        }
 
         /// <summary>
         /// Returns a Rectangle that is guaranteed to contain the whole view region. 
@@ -95,7 +163,13 @@ namespace GRaff
         /// <value>The bounding box.</value>
         public Rectangle BoundingBox => throw new NotImplementedException();
 
-        public Point ScreenToView(Point p)
+		public void Bind()
+		{
+			Current = this;
+			LoadMatrixToProgram();
+		}
+
+		public Point ScreenToView(Point p)
 		{
             return GLToViewMatrix * ViewMatrix * p;
   		}

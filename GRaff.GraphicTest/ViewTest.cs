@@ -17,6 +17,7 @@ namespace GRaff.GraphicTest
 
 		public override void OnDraw()
 		{
+            
             using (View.Rectangle(new Rectangle(0, 0, 1, 1)).Use())
                 Draw.FillRectangle(new Rectangle(0, 0, 1, 1), Colors.Gray);
 
@@ -32,6 +33,7 @@ namespace GRaff.GraphicTest
 
             using (View.DrawTo(new Point(150, 50)).Use())
                 Draw.FillCircle(Point.Zero, 5, Colors.Red);
+            Draw.Point((150, 50), Colors.Black);
 
 			var tx = Textures.Giraffe;
             using (View.Rectangle(0, 0, tx.Width, tx.Height).Use())

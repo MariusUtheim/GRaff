@@ -92,7 +92,10 @@ namespace GRaff
 		/// </summary>
 		//public uint ToArgb => (uint)((A << 24) | (R << 16) | (G << 8) | B);
         public uint Rgba => (uint)((_r << 24) | (_g << 16) | (_b << 8) | _a);
-	
+
+        public int Rgb => (_r << 16) | (_g << 8) | _b;
+
+
 		/// <summary>
 		/// Gets the inverse of this GRaff.Color. The alpha channel is unchanged while the other channels are inverted.
 		/// </summary>
