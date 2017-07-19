@@ -9,9 +9,7 @@ namespace GRaff
 {
 	public class Room
 	{
-		public event EventHandler Enter;
-		public event EventHandler Leave;
-
+        
 		public static Room Current { get; private set; }
 
 		public static void Goto(Room room)
@@ -31,9 +29,9 @@ namespace GRaff
 
         public virtual void OnEndStep() { }
 
-        public virtual void OnEnter() { Enter?.Invoke(this, new EventArgs()); }
+        public virtual void OnEnter() { }
 
-        public virtual void OnLeave() { Leave?.Invoke(this, new EventArgs()); }
+        public virtual void OnLeave() { }
 
 		public virtual void OnDrawBackground() { }
 
