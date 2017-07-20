@@ -161,7 +161,15 @@ namespace GRaff
         /// Returns a Rectangle that is guaranteed to contain the whole view region. 
         /// </summary>
         /// <value>The bounding box.</value>
-        public Rectangle BoundingBox => throw new NotImplementedException();
+        public Rectangle BoundingBox
+        {
+            get
+            {
+                var pts = ScreenToView(Window.ClientRectangle).Vertices.ToArray();
+                double left = pts.Min(p => p.X), right = pts.Max(p => p.X), top = pts.Min(p => p.Y), bottom = pts.Max(p => p.Y);
+                return new Rectangle(left, top, right - left, bottom - top);
+            }
+        }
 
 		public void Bind()
 		{
@@ -169,15 +177,17 @@ namespace GRaff
 			LoadMatrixToProgram();
 		}
 
-		public Point ScreenToView(Point p)
-		{
-            return GLToViewMatrix * ViewMatrix * p;
-  		}
-    
-		public Point ViewToScreen(Point p)
-		{
-            return ViewMatrix.Inverse * GLToViewMatrix.Inverse * p;
-		}
+        public Point ScreenToView(Point point) => GLToViewMatrix * ViewMatrix * point;
+        public Line ScreenToView(Line line) => new Line(ScreenToView(line.Origin), ScreenToView(line.Destination));
+        public Triangle ScreenToView(Triangle tri) => new Triangle(ScreenToView(tri.V1), ScreenToView(tri.V2), ScreenToView(tri.V3));
+        public Polygon ScreenToView(Rectangle rect) => new Polygon(new[] { ScreenToView(rect.TopLeft), ScreenToView(rect.TopRight), ScreenToView(rect.BottomRight), ScreenToView(rect.BottomLeft) });
+        public Polygon ScreenToView(Polygon polygon) => new Polygon(polygon.Vertices.Select(ScreenToView));
+
+        public Point ViewToScreen(Point point) => ViewMatrix.Inverse * GLToViewMatrix.Inverse * point;
+        public Line ViewToScreen(Line line) => new Line(ViewToScreen(line.Origin), ViewToScreen(line.Destination));
+		public Triangle ViewToScreen(Triangle tri) => new Triangle(ViewToScreen(tri.V1), ViewToScreen(tri.V2), ViewToScreen(tri.V3));
+		public Polygon ViewToScreen(Rectangle rect) => new Polygon(new[] { ViewToScreen(rect.TopLeft), ViewToScreen(rect.TopRight), ViewToScreen(rect.BottomRight), ScreenToView(rect.BottomLeft) });
+		public Polygon ViewToScreen(Polygon polygon) => new Polygon(polygon.Vertices.Select(ViewToScreen));
 
 
 		public IDisposable Use()
