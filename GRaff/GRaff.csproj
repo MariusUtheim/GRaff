@@ -242,6 +242,7 @@
     <Compile Include="Graphics\InterleavedRenderSystem.cs" />
     <Compile Include="Graphics\RectanglePacker.cs" />
     <Compile Include="Graphics\Alignment.cs" />
+    <Compile Include="Graphics\TextureRepeatMode.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="External\libogg.dll">

@@ -182,32 +182,19 @@ namespace GRaff.Graphics
 
         public void Redraw()
         {
-            //TODO// Probably it should be possible to make this more efficient.
-            var pixels = new Color[Window.Height, Window.Width];
-            Texture texture;
-
-			var handle = GCHandle.Alloc(pixels, GCHandleType.Pinned);
-			try
-			{
-                var bufptr = handle.AddrOfPinnedObject();
-				GL.ReadPixels(0, 0, Window.Width, Window.Height, PixelFormat.Bgra, PixelType.UnsignedByte, bufptr);
-                texture = new Texture(Window.Width, Window.Height, bufptr);
-			}
-			finally
-			{
-				if (handle.IsAllocated)
-					handle.Free();
-			}
+            _Graphics.ErrorCheck();
+            var texture = Texture.FromScreen();
 
             using (View.FullWindow().Use())
             {
                 _renderSystem.SetVertices(new GraphicsPoint(0, 0), new GraphicsPoint(Window.Width, 0), new GraphicsPoint(0, Window.Height), new GraphicsPoint(Window.Width, Window.Height));
                 _renderSystem.SetColor(Colors.White);
-                _renderSystem.SetTexCoords(UsageHint.StreamDraw, new[] { 0.0, 1.0, 1.0, 1.0, 0.0, 0.0, 1.0, 0.0 });
+                _renderSystem.SetTexCoords(UsageHint.StreamDraw, new[] { 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 1.0, 1.0 });
                 _renderSystem.Render(texture, PrimitiveType.TriangleStrip);
             }
 
 			texture.Dispose();
+            _Graphics.ErrorCheck();
         }
     }
 }
