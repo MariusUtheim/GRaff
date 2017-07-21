@@ -48,6 +48,7 @@ namespace GRaff.Panels
         private LinkedList<Node> _children = new LinkedList<Node>();
         public IEnumerable<Node> Children => _children.ToList();
 
+        public bool IsMouseHovering { get; internal set; }
 
         public virtual void OnParentChanging(Node parent) { }
 
@@ -120,16 +121,18 @@ namespace GRaff.Panels
 
         public virtual void OnDraw() { }
 
+        public virtual void OnMouseHover(MouseEventArgs e) { }
+
         // Return whetner the event should propagate
         internal bool _MouseEvent<TInterface>(Action<TInterface, MouseEventArgs> action, MouseEventArgs e)
         {
             if (!Region.Contains(e.Location))
                 return true;
 
-            var nextE = new MouseEventArgs(e.Button, (Point)(e.Location - Region.TopLeft), e.WheelDelta);
             foreach (var child in _children.Reverse())
             {
-                if (!child._MouseEvent(action, nextE))
+				var nextE = new MouseEventArgs(e.Button, (Point)(e.Location - Region.TopLeft), e.WheelDelta);
+				if (!child._MouseEvent(action, nextE))
                     return false;
             }
 
@@ -139,8 +142,8 @@ namespace GRaff.Panels
                 if (e.IsHandled)
                     return false;
 			}
-            return true;
 
+            return true;
 		}
 
         internal void _Step()

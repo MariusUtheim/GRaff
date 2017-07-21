@@ -20,4 +20,16 @@ namespace GRaff.Panels
     {
         void OnMouseWheel(MouseEventArgs e);
     }
+
+    public interface IPanelBeginHoverListener
+    {
+        void OnBeginHover();
+    }
+
+    public interface IPanelEndHoverListener
+    {
+        void OnEndHover();
+    }
+
+    public interface IPanelHoverListener : IPanelBeginHoverListener, IPanelEndHoverListener { }
 }
