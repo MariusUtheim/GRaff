@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics.Contracts;
+using System.Linq;
 
 namespace GRaff
 {
@@ -65,7 +66,6 @@ namespace GRaff
 		public static double Max(double val1, double val2) => Math.Max(val1, val2);
 		public static decimal Max(decimal val1, decimal val2) => Math.Max(val1, val2);
 
-
 		public static byte Min(byte val1, byte val2) => Math.Min(val1, val2);
 		public static sbyte Min(sbyte val1, sbyte val2) => Math.Min(val1, val2);
 		public static short Min(short val1, short val2) => Math.Min(val1, val2);
@@ -78,8 +78,32 @@ namespace GRaff
 		public static double Min(double val1, double val2) => Math.Min(val1, val2);
 		public static decimal Min(decimal val1, decimal val2) => Math.Min(val1, val2);
 
+        public static byte Max(params byte[] vs) => vs.Max();
+        public static sbyte Max(params sbyte[] vs) => vs.Max();
+        public static short Max(params short[] vs) => vs.Max();
+        public static ushort Max(params ushort[] vs) => vs.Max();
+        public static int Max(params int[] vs) => vs.Max();
+        public static uint Max(params uint[] vs) => vs.Max();
+        public static long Max(params long[] vs) => vs.Max();
+        public static ulong Max(params ulong[] vs) => vs.Max();
+        public static float Max(params float[] vs) => vs.Max();
+        public static double Max(params double[] vs) => vs.Max();
+        public static decimal Max(params decimal[] vs) => vs.Max();
 
-		public static double Pow(double x, double y) => Math.Pow(x, y);
+        public static byte Min(params byte[] vs) => vs.Min();
+        public static sbyte Min(params sbyte[] vs) => vs.Min();
+        public static short Min(params short[] vs) => vs.Min();
+        public static ushort Min(params ushort[] vs) => vs.Min();
+        public static int Min(params int[] vs) => vs.Min();
+        public static uint Min(params uint[] vs) => vs.Min();
+        public static long Min(params long[] vs) => vs.Min();
+        public static ulong Min(params ulong[] vs) => vs.Min();
+        public static float Min(params float[] vs) => vs.Min();
+        public static double Min(params double[] vs) => vs.Min();
+        public static decimal Min(params decimal[] vs) => vs.Min();
+
+
+        public static double Pow(double x, double y) => Math.Pow(x, y);
 
 		public static double Round(double d) => Math.Round(d);
 		public static double Round(double d, int decimals) => Math.Round(d, decimals);
