@@ -21,7 +21,7 @@ namespace GRaff
 	{
         //TODO// Define up direction
         private static readonly Triangle GLTriangle = new Triangle((-1, 1), (1, 1), (-1, -1));
-        private static Matrix GLToViewMatrix;
+        private static Matrix GLToScreenMatrix;
 
         private Transform _transform;
         private bool _needsValidation = false;
@@ -33,9 +33,9 @@ namespace GRaff
             this._transform = new Transform(viewMatrix);
         }
 
-        internal static void UpdateGLToRoomMatrix()
+        internal static void UpdateGLToScreenMatrix()
         {
-            GLToViewMatrix = Matrix.Mapping(GLTriangle, new Triangle((0, 0), (Window.Width, 0), (0, Window.Height)));
+            GLToScreenMatrix = Matrix.Mapping(GLTriangle, new Triangle((0, 0), (Window.Width, 0), (0, Window.Height)));
         }
 
         public static View FullWindow() => Rectangle(Window.ClientRectangle);
@@ -52,10 +52,7 @@ namespace GRaff
 
         public static View Centered(Point location, Vector size) => Rectangle(new Rectangle((location - size / 2), size));
 
-        public static View DrawTo(Point location)
-        {
-            return new View(View.Current.ViewMatrix * Matrix.Translation(location));
-        }
+        public static View DrawTo(Point location) => new View(View.Current.ViewMatrix * Matrix.Translation(location));
 
         internal static void Validate()
         {
@@ -87,21 +84,21 @@ namespace GRaff
 		}
 
 
-
         public static View Current { get; private set; } = new View(new Matrix());
 
 
-        private void _invalidate(object _)
+
+        public Matrix ViewMatrix => _transform.GetMatrix();
+		public Matrix ViewToScreen => GLToScreenMatrix * ViewMatrix;
+		public Matrix ScreenToView => ViewMatrix.Inverse * GLToScreenMatrix.Inverse;
+
+
+		void _invalidate(object _)
         {
-            _needsValidation = false;
+            _needsValidation = true;
         }
 
 
-		public Matrix ViewMatrix
-        {
-            get => _transform.GetMatrix();
-            set => _transform = new Transform(value);
-        }
 
         public double X
         {
@@ -165,30 +162,18 @@ namespace GRaff
         {
             get
             {
-                var pts = ScreenToView(Window.ClientRectangle).Vertices.ToArray();
+                var pts = (ScreenToView * Window.ClientRectangle).Vertices.ToArray();
                 double left = pts.Min(p => p.X), right = pts.Max(p => p.X), top = pts.Min(p => p.Y), bottom = pts.Max(p => p.Y);
                 return new Rectangle(left, top, right - left, bottom - top);
             }
         }
+
 
 		public void Bind()
 		{
 			Current = this;
 			LoadMatrixToProgram();
 		}
-
-        public Point ScreenToView(Point point) => GLToViewMatrix * ViewMatrix * point;
-        public Line ScreenToView(Line line) => new Line(ScreenToView(line.Origin), ScreenToView(line.Destination));
-        public Triangle ScreenToView(Triangle tri) => new Triangle(ScreenToView(tri.V1), ScreenToView(tri.V2), ScreenToView(tri.V3));
-        public Polygon ScreenToView(Rectangle rect) => new Polygon(new[] { ScreenToView(rect.TopLeft), ScreenToView(rect.TopRight), ScreenToView(rect.BottomRight), ScreenToView(rect.BottomLeft) });
-        public Polygon ScreenToView(Polygon polygon) => new Polygon(polygon.Vertices.Select(ScreenToView));
-
-        public Point ViewToScreen(Point point) => ViewMatrix.Inverse * GLToViewMatrix.Inverse * point;
-        public Line ViewToScreen(Line line) => new Line(ViewToScreen(line.Origin), ViewToScreen(line.Destination));
-		public Triangle ViewToScreen(Triangle tri) => new Triangle(ViewToScreen(tri.V1), ViewToScreen(tri.V2), ViewToScreen(tri.V3));
-		public Polygon ViewToScreen(Rectangle rect) => new Polygon(new[] { ViewToScreen(rect.TopLeft), ViewToScreen(rect.TopRight), ViewToScreen(rect.BottomRight), ScreenToView(rect.BottomLeft) });
-		public Polygon ViewToScreen(Polygon polygon) => new Polygon(polygon.Vertices.Select(ViewToScreen));
-
 
 		public IDisposable Use()
 		{

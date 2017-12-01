@@ -250,5 +250,11 @@ namespace GRaff
             Device.Redraw();
         }
 
+        public static void Redraw(ShaderProgram program)
+        {
+            using (program.Use())
+                Device.Redraw();
+        }
+
     }
 }

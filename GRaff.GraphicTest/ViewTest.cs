@@ -7,12 +7,17 @@ using System.Threading.Tasks;
 namespace GRaff.GraphicTest
 {
     [Test]
-    class ViewTest : GameElement
+    class ViewTest : GameElement, IKeyListener
 	{
 
         public override void OnStep()
         {
-            Window.Title = Mouse.Location.ToString();
+            Window.Title = View.Current.Location.ToString();// Mouse.Location.ToString();
+        }
+
+        protected override void OnDestroy()
+        {
+            View.FullWindow().Bind();
         }
 
 		public override void OnDraw()
@@ -38,6 +43,20 @@ namespace GRaff.GraphicTest
 			var tx = Textures.Giraffe;
             using (View.Rectangle(0, 0, tx.Width, tx.Height).Use())
                 Draw.Texture(tx, (0, 0), Colors.White.Transparent(0.2));
+
+            Draw.FillCircle(Mouse.Location, 5, Colors.Lime);
 		}
-	}
+
+        public void OnKey(Key key)
+        {
+            switch (key)
+            {
+                case Key.A: View.Current.X -= 0.01; break;
+                case Key.D: View.Current.X += 0.01; break;
+                case Key.W: View.Current.Y -= 0.01; break;
+                case Key.S: View.Current.Y += 0.01; break;
+                case Key.R: View.Current.Location = Point.Zero; break;
+            }
+        }
+    }
 }

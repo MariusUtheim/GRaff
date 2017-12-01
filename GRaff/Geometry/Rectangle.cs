@@ -194,7 +194,10 @@ namespace GRaff
 			=> new Rectangle(r.TopLeft - v, r.Size);
 
 
+
         public static implicit operator Rectangle((Point location, Vector size) r) => new Rectangle(r.location, r.size);
         public static implicit operator (Point location, Vector size) (Rectangle r) => (r.TopLeft, r.Size);
+
+
 	}
 }

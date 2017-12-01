@@ -26,6 +26,7 @@ namespace GRaff
 			for (int i = 0; i < _buttonCount; i++)
 				_pressed[i] = _released[i] = false;
             WheelDelta = 0;
+            Location = View.Current.ScreenToView * (Point)WindowLocation;
 		}
 
 		/// <summary>
@@ -80,41 +81,26 @@ namespace GRaff
         /// </summary>
         public static double WheelDelta { get; private set; }
 
-		/// <summary>
-		/// Gets the previous location of the cursor in the room. The coordinates might be non-integer if the View is scaled.
-		/// </summary>
-		public static Point LocationPrevious
-		{
-			get
-			{
-				return new Point(XPrevious, YPrevious);
-			}
-		}
+        /// <summary>
+        /// Gets the previous location of the cursor in the room. The coordinates might be non-integer if the View is scaled.
+        /// </summary>
+        public static Point LocationPrevious => (XPrevious, YPrevious);
 
-		/// <summary>
-		/// Gets the x-coordinate of the cursor in the room. This value might be non-integer if the View is scaled.
-		/// </summary>
-		public static double X
-		{
-			get { return Location.X; }
-		}
+        /// <summary>
+        /// Gets the x-coordinate of the cursor in the room. This value might be non-integer if the View is scaled.
+        /// </summary>
+        public static double X => Location.X;
 
-		/// <summary>
-		/// Gets the y-coordinate of the cursor in the room. This value might be non-integer if the View is scaled.
-		/// </summary>
-		public static double Y
-		{
-			get { return Location.Y; }
-		}
+        /// <summary>
+        /// Gets the y-coordinate of the cursor in the room. This value might be non-integer if the View is scaled.
+        /// </summary>
+        public static double Y => Location.Y;
 
 		/// <summary>
 		/// Gets the location of the cursor in the room. The coordinates might be non-integer if the View is scaled.
 		/// </summary>
-        #warning This is weird when using Views
-		public static Point Location
-		{
-			get { return View.Current.ScreenToView(WindowLocation); }
-		}
+        #warning This is weird when changing views during drawing
+        public static Point Location { get; private set; }
 
 		/// <summary>
 		/// Gets the x-coordinate of the cursor relative to the game window.
@@ -131,8 +117,8 @@ namespace GRaff
 		/// </summary>
 		public static IntVector WindowLocation
 		{
-			get { return new IntVector(WindowX, WindowY); }
-			internal set { WindowX = value.X; WindowY = value.Y; }
+			get => (WindowX, WindowY);
+            internal set => (WindowX, WindowY) = value; 
 		}
 
 		/// <summary>

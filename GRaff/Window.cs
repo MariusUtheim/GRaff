@@ -68,7 +68,7 @@ namespace GRaff
                 if (value.X <= 0 || value.Y <= 0)
                     throw new ArgumentOutOfRangeException("value", "Both components must be greater than 0.");
                 Giraffe.Window.ClientSize = new Size(value.X, value.Y);
-                View.UpdateGLToRoomMatrix();
+                View.UpdateGLToScreenMatrix();
             }
         }
 
