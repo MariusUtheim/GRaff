@@ -172,7 +172,6 @@
     <Compile Include="Synchronization\operations\AsyncOperationState.cs" />
     <Compile Include="Synchronization\operations\AsyncOperationResult.cs" />
     <Compile Include="Synchronization\IAsyncOperation.cs" />
-    <Compile Include="Synchronization\CatchContext.cs" />
     <Compile Include="Background.cs" />
     <Compile Include="Color.cs" />
     <Compile Include="Colors.cs" />
@@ -243,6 +242,7 @@
     <Compile Include="Graphics\RectanglePacker.cs" />
     <Compile Include="Graphics\Alignment.cs" />
     <Compile Include="Graphics\TextureRepeatMode.cs" />
+    <Compile Include="Synchronization\CatchContext.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="External\libogg.dll">
