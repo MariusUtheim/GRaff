@@ -3,7 +3,7 @@ using GRaff.Effects;
 
 namespace GRaff.GraphicTest
 {
-    [Test(Order = -10000)]
+    [Test]
 	class TextureBufferTest : GameElement
 	{
 		private Texture _texture = Textures.Giraffe;
