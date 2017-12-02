@@ -28,5 +28,6 @@ namespace GRaff.Graphics
 
         void DrawText(TextRenderer renderer, Color color, string text, Matrix transform);
 
+        void Redraw();
     }
 }

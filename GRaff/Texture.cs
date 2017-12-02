@@ -170,12 +170,18 @@ namespace GRaff
 			});
 		}
 
+        public static Texture FromScreen()
+        {
+            using (var buffer = Framebuffer.CopyFromScreen())
+                return buffer.Texture;
+		}
+
+
 		public int Id { get; private set; }
 
 #warning Handle this better
         private SubTexture _texture = null;
         public SubTexture SubTexture() => _texture ?? (_texture = new SubTexture(this, new GraphicsPoint(0, 0), new GraphicsPoint(1, 0), new GraphicsPoint(0, 1), new GraphicsPoint(1, 1)));
-
 
 		public int Width { get;}
 
@@ -186,6 +192,24 @@ namespace GRaff
 		public SubTexture SubTexture(Rectangle region)
             => GRaff.Graphics.SubTexture.FromTexCoords(this, region);
 
+        public void SetWrapMode(TextureRepeatMode horizontal, TextureRepeatMode vertical)
+        {
+            GL.BindTexture(TextureTarget.Texture2D, Id);
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapR, (int)horizontal);
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int)vertical);
+        }
+
+		public void SetWrapMode(TextureRepeatMode mode)
+		{
+			SetWrapMode(mode, mode);
+		}
+
+		public void SetWrapMode(TextureRepeatMode horizontal, TextureRepeatMode vertical, Color borderColor)
+        {
+            SetWrapMode(horizontal, vertical);
+            GL.TexParameterI(TextureTarget.Texture2D, TextureParameterName.TextureBorderColor, new[] { borderColor.Rgba });
+        }
+
         public Color[,] ToColorArray()
         {
             var colors = new Color[Height, Width];
@@ -194,7 +218,6 @@ namespace GRaff
             try
             {
                 var data = handle.AddrOfPinnedObject();
-                //GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, Width, Height, 0, GLPixelFormat.Rgba, PixelType.UnsignedByte, data);
                 GL.BindTexture(TextureTarget.Texture2D, Id);
                 GL.GetTexImage(TextureTarget.Texture2D, 0, GLPixelFormat.Rgba, PixelType.UnsignedByte, data);
             }
@@ -220,13 +243,7 @@ namespace GRaff
 
 			img.UnlockBits(imgData);
 
-            //img.Save(path);
-            using (var m = new MemoryStream())
-            {
-				img.Save(m, ImageFormat.Png);
-                var i = Image.FromStream(m);
-                i.Save(path);
-            }
+            img.Save(path);
              
 		}
 	}

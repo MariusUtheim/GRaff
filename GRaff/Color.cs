@@ -55,6 +55,7 @@ namespace GRaff
 
         //public static Color FromRgb(int a, int r, int g, int b) => new Color((byte)a, (byte)r, (byte)g, (byte)b);
 
+        public static Color FromRgba(int r, int g, int b, int a) => new Color((byte)r, (byte)g, (byte)b, (byte)a);
         public static Color FromRgba(double r, double g, double b, double a) => new Color((byte)(255 * r), (byte)(255 * g), (byte)(255 * b), (byte)(255 * a));
 
         public static Color FromRgba(uint rgba) => new Color((byte)((rgba >> 24) & 0xFF), (byte)((rgba >> 16) & 0xFF), (byte)((rgba >> 8) & 0xFF), (byte)((rgba) & 0xFF));
@@ -62,7 +63,7 @@ namespace GRaff
         public static Color FromGray(byte intensity) => new Color(intensity, intensity, intensity, (byte)255);
         public static Color FromGray(double intensity) => FromGray((byte)(255 * intensity));
 
-        public static Color FromHsv(int a, Angle h, double s, double v)
+        public static Color FromHsv(Angle h, double s, double v, int a)
         {
             var H = h.Degrees / 60;
             s = GMath.Median(0, s, 1);
@@ -84,7 +85,7 @@ namespace GRaff
 
             return FromRgba((int)(255 * (R + m)), (int)(255 * (G + m)), (int)(255 * (B + m)), a);
         }
-        public static Color FromHsv(Angle h, double s, double v) => FromHsv(255, h, s, v);
+        public static Color FromHsv(Angle h, double s, double v) => FromHsv(h, s, v, 255);
 
 
 		///// <summary>
@@ -92,7 +93,10 @@ namespace GRaff
 		/// </summary>
 		//public uint ToArgb => (uint)((A << 24) | (R << 16) | (G << 8) | B);
         public uint Rgba => (uint)((_r << 24) | (_g << 16) | (_b << 8) | _a);
-	
+
+        public int Rgb => (_r << 16) | (_g << 8) | _b;
+
+
 		/// <summary>
 		/// Gets the inverse of this GRaff.Color. The alpha channel is unchanged while the other channels are inverted.
 		/// </summary>

@@ -5,7 +5,8 @@ namespace GRaff.Panels
 {
     public class PanelElement : GameElement, IGlobalMouseListener, IGlobalMousePressListener, IGlobalMouseReleaseListener, IGlobalMouseWheelListener
     {
-        //TODO// Mouse hovering (help a subelement know when it's being hovered)
+        private Node _hoverNode;
+
         public PanelElement(Node root)
         {
             Contract.Requires<ArgumentNullException>(root != null);
@@ -41,6 +42,25 @@ namespace GRaff.Panels
         public override void OnStep()
         {
             Root._Step();
+            Node newHover = null;
+            Root._MouseEvent((Node n, MouseEventArgs e) =>
+            {
+                n.OnMouseHover(e);
+                if (e.IsHandled)
+                {
+                    newHover = n;
+                    newHover.IsMouseHovering = true;
+                }
+            }, new MouseEventArgs(MouseButton.None, Mouse.Location, 0));
+
+            if (newHover != _hoverNode)
+            {
+                (_hoverNode as IPanelEndHoverListener)?.OnEndHover();
+                if (_hoverNode != null)
+                    _hoverNode.IsMouseHovering = false;
+                _hoverNode = newHover;
+                (newHover as IPanelBeginHoverListener)?.OnBeginHover();
+            }
         }
 
         public override void OnDraw()

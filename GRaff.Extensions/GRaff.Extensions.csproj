@@ -125,17 +125,12 @@
     <Compile Include="Effects\AudioFilter.cs" />
     <Compile Include="Graphics.Shaders\WaveShiftShaderProgram.cs" />
     <Compile Include="Effects\TextureGenerator.cs" />
-    <Compile Include="Platformer\PlatformObject.cs" />
-    <Compile Include="Platformer\Block.cs" />
-    <Compile Include="Platformer\MotionState.cs" />
-    <Compile Include="Platformer\TileMap.cs" />
-    <Compile Include="Platformer\Tile.cs" />
-    <Compile Include="Platformer\TileObserver.cs" />
     <Compile Include="Panels\Node.cs" />
     <Compile Include="Panels\PanelElement.cs" />
     <Compile Include="Panels\MouseEventArgs.cs" />
     <Compile Include="Panels\IPanelMouseListener.cs" />
     <Compile Include="Panels\DraggableNode.cs" />
+    <Compile Include="Graphics.Shaders\ShockwaveShaderProgram.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -148,7 +143,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Effects\" />
-    <Folder Include="Platformer\" />
     <Folder Include="Panels\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

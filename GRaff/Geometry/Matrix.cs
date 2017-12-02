@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics.Contracts;
+using System.Linq;
 
 namespace GRaff
 {
@@ -207,7 +208,7 @@ namespace GRaff
 
 		
 		public bool Equals(Matrix other)
-			=> (!ReferenceEquals(other, null)) && (this - other)._magnitude <= GMath.MachineEpsilon;
+			=> !ReferenceEquals(other, null) && (this - other)._magnitude <= GMath.MachineEpsilon;
 
 		/// <summary>
 		/// Specifies whether this GRaff.Matrix contains the same elements as the specified System.Object.
@@ -313,6 +314,12 @@ namespace GRaff
 			return new Matrix(left.M00 * right, left.M01 * right, left.M02 * right, left.M10 * right, left.M11 * right, left.M12 * right);
 		}
 
+        public static Matrix operator *(double left, Matrix right)
+        {
+            Contract.Requires<ArgumentNullException>(right != null);
+            return new Matrix(left * right.M00, left * right.M01, left * right.M02, left * right.M10, left * right.M11, left * right.M12);
+        }
+
 		public static Matrix operator /(Matrix left, double right)
 		{
 			Contract.Requires<ArgumentNullException>(left != null);
@@ -344,5 +351,29 @@ namespace GRaff
 			Contract.Requires<ArgumentNullException>(m != null);
 			return new Vector(m.M00 * v.X + m.M01 * v.Y, m.M10 * v.X + m.M11 * v.Y);
 		}
+
+
+
+        public static Line operator *(Matrix m, Line l)
+        {
+            Contract.Requires<ArgumentNullException>(m != null);
+            return new Line(m * l.Origin, m * l.Destination);
+        }
+
+
+		public static Triangle operator *(Matrix left, Triangle right)
+		{
+			Contract.Requires<ArgumentNullException>(left != null);
+			return new Triangle(left * right.V1, left * right.V2, left * right.V3);
+		}
+
+		public static Polygon operator *(Matrix m, Rectangle r)
+        {
+            Contract.Requires<ArgumentNullException>(m != null);
+            return new Polygon(new[] { m * r.TopLeft, m * r.TopRight, m * r.BottomRight, m * r.BottomLeft });
+        }
+
+		public static Polygon operator *(Matrix left, Polygon right)
+	        => new Polygon(right.Vertices.Select(p => left * p).ToArray(), Unit._);
 	}
 }

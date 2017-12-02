@@ -40,10 +40,5 @@ namespace GRaff.Graphics
 			GL.BindTexture(TextureTarget.Texture2D, texture.Id);
 		}
 
-		public static void Bind(this SubTexture texture)
-		{
-			Contract.Requires<ArgumentNullException>(texture != null);
-			GL.BindTexture(TextureTarget.Texture2D, texture.Texture.Id);
-		}
 	}
 }

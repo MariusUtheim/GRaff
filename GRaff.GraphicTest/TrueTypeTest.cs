@@ -1,4 +1,5 @@
-﻿using GRaff.Graphics.Text;
+﻿using GRaff.Graphics;
+using GRaff.Graphics.Text;
 
 
 namespace GRaff.GraphicTest
@@ -27,13 +28,13 @@ namespace GRaff.GraphicTest
             Draw.Texture(_rendered.SubTexture(), (0, 0), Colors.Red, Colors.Purple, Colors.Blue, Colors.Lime);
 
 			if (_fontKerning != null)
-				Draw.Text("AW This text uses kerning WA", _fontKerning, FontAlignment.Center, Window.Center);
+				Draw.Text("AW This text uses kerning WA", _fontKerning, Alignment.Center, Window.Center);
 			if (_fontNonKerning != null)
-				Draw.Text("AW This text doesn't use kerning WA", _fontNonKerning, FontAlignment.Center, Window.Center + new Vector(0, 36), Colors.Black);
+				Draw.Text("AW This text doesn't use kerning WA", _fontNonKerning, Alignment.Center, Window.Center + new Vector(0, 36), Colors.Black);
 
-            Draw.Text("Bold text", _fontBold, FontAlignment.Center, Window.Center + new Vector(0, 72), Colors.Red);
-            Draw.Text("Italic text", _fontItalic, FontAlignment.Center, Window.Center + new Vector(0, 108), Colors.Blue);
-            Draw.Text("Bold and italic text", _fontBoldItalic, FontAlignment.Center, Window.Center + new Vector(0, 144), Colors.Purple);
+            Draw.Text("Bold text", _fontBold, Alignment.Center, Window.Center + new Vector(0, 72), Colors.Red);
+            Draw.Text("Italic text", _fontItalic, Alignment.Center, Window.Center + new Vector(0, 108), Colors.Blue);
+            Draw.Text("Bold and italic text", _fontBoldItalic, Alignment.Center, Window.Center + new Vector(0, 144), Colors.Purple);
 
 		}
 	}

@@ -5,11 +5,8 @@ using System.Windows.Threading;
 
 namespace GRaff.Synchronization
 {
-#if PUBLISH
-	internal static class Async
-#else
+
 	public static partial class Async
-#endif
 	{
 		private static List<AsyncEventArgs> _queuedEvents = new List<AsyncEventArgs>();
 		private static List<Exception> _exceptions = new List<Exception>();

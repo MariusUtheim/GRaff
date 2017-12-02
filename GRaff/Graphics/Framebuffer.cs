@@ -46,6 +46,23 @@ namespace GRaff.Graphics
             GL.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
         }
 
+        public static Framebuffer CopyFromScreen()
+        {
+            var previous = Current;
+            var buffer = new Framebuffer(Window.Size);
+
+            GL.BindFramebuffer(FramebufferTarget.ReadFramebuffer, 0);
+            GL.BindFramebuffer(FramebufferTarget.DrawFramebuffer, buffer.Id);
+            GL.BlitFramebuffer(0, 0, Window.Width, Window.Height, 0, Window.Height, Window.Width, 0, ClearBufferMask.ColorBufferBit, BlitFramebufferFilter.Nearest);
+
+            if (previous == null)
+                BindDefault();
+            else
+                previous.Bind();
+            _Graphics.ErrorCheck();
+            return buffer;
+        }
+
         public int Id { get; }
 
         public Texture Texture { get; private set; }
@@ -65,6 +82,7 @@ namespace GRaff.Graphics
         public void Bind()
         {
             GL.BindFramebuffer(FramebufferTarget.Framebuffer, Id);
+            Current = this;
         }
 
         //TODO// Blitting

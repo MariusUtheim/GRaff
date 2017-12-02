@@ -25,6 +25,30 @@ namespace GRaff
 		{
 		}
 
+#warning Needs unit testing, and also extract rotation
+        public Transform(Matrix t)
+        {
+            X = t.M02;
+            Y = t.M12;
+            XScale = GMath.Sqrt(t.M00 * t.M00 + t.M01 * t.M01);
+            YScale = GMath.Sqrt(t.M10 * t.M10 + t.M11 * t.M11);
+            var rotationMatrix = new Matrix(t.M00 / XScale, t.M01 / XScale, 0, t.M10 / YScale, t.M11 / YScale, 0);
+
+            if (rotationMatrix.Determinant == -1)
+            {
+                rotationMatrix *= new Matrix(1, 0, 0, 0, -1, 0);
+                YScale = -YScale;
+            }
+
+            Contract.Requires(GetMatrix() * rotationMatrix == t);
+            Contract.Requires(rotationMatrix.Determinant == 1);
+
+            Rotation = GMath.Atan2(rotationMatrix.M10, rotationMatrix.M00);
+
+            Contract.Requires(GetMatrix() == t);
+			//throw new NotImplementedException();
+	    }
+
 		/// <summary>
 		/// Gets or sets the translation in the x-direction of this GRaff.Transform.
 		/// </summary>
@@ -40,8 +64,8 @@ namespace GRaff
 		/// </summary>
 		public Point Location
 		{
-			get { return new Point(X, Y); }
-			set { X = value.X; Y = value.Y; }
+            get => (X, Y);
+            set => (X, Y) = value;
 		}
 
 		/// <summary>

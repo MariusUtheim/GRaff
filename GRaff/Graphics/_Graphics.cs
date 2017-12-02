@@ -19,7 +19,7 @@ namespace GRaff.Graphics
         public static void Initialize()
         {
             Draw.Device = new RenderDevice();
-            View.UpdateGLToRoomMatrix();
+            View.UpdateGLToScreenMatrix();
 
             BlendMode.Current = BlendMode.AlphaBlend;
             GL.Enable(EnableCap.Blend);

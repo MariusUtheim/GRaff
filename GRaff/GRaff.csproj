@@ -137,7 +137,6 @@
     <Compile Include="Synchronization\AsyncOperationRejectedEventArgs.cs" />
     <Compile Include="Synchronization\Coroutine.cs" />
     <Compile Include="Font.cs" />
-    <Compile Include="Graphics\Text\FontAlignment.cs" />
     <Compile Include="Graphics\Text\FontInfo.cs" />
     <Compile Include="GRaffExtensions.cs" />
     <Compile Include="Graphics\Text\FontLoader.cs" />
@@ -173,7 +172,6 @@
     <Compile Include="Synchronization\operations\AsyncOperationState.cs" />
     <Compile Include="Synchronization\operations\AsyncOperationResult.cs" />
     <Compile Include="Synchronization\IAsyncOperation.cs" />
-    <Compile Include="Synchronization\CatchContext.cs" />
     <Compile Include="Background.cs" />
     <Compile Include="Color.cs" />
     <Compile Include="Colors.cs" />
@@ -242,6 +240,9 @@
     <Compile Include="Audio\AudioStream.cs" />
     <Compile Include="Graphics\InterleavedRenderSystem.cs" />
     <Compile Include="Graphics\RectanglePacker.cs" />
+    <Compile Include="Graphics\Alignment.cs" />
+    <Compile Include="Graphics\TextureRepeatMode.cs" />
+    <Compile Include="Synchronization\CatchContext.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="External\libogg.dll">

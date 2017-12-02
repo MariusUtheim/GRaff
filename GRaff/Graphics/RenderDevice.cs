@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Runtime.InteropServices;
 using GRaff.Graphics.Text;
 #if OpenGL4
 using OpenTK.Graphics.OpenGL4;
@@ -131,7 +132,7 @@ namespace GRaff.Graphics
             });
             _renderSystem.SetColor(blend);
             
-            _renderSystem.SetTexCoords(UsageHint.StreamDraw, texture.StripCoords);
+            _renderSystem.SetTexCoords(texture.StripCoords);
             _renderSystem.Render(texture.Texture, PrimitiveType.TriangleStrip);
         }
 
@@ -177,5 +178,23 @@ namespace GRaff.Graphics
             _renderSystem.SetTexCoords(texCoords);
             _renderSystem.Render(renderer.Font.Texture, PrimitiveType.Triangles);
 		}
+
+
+        public void Redraw()
+        {
+            _Graphics.ErrorCheck();
+            var texture = Texture.FromScreen();
+
+            using (View.FullWindow().Use())
+            {
+                _renderSystem.SetVertices(new GraphicsPoint(0, 0), new GraphicsPoint(Window.Width, 0), new GraphicsPoint(0, Window.Height), new GraphicsPoint(Window.Width, Window.Height));
+                _renderSystem.SetColor(Colors.White);
+                _renderSystem.SetTexCoords(UsageHint.StreamDraw, new[] { 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 1.0, 1.0 });
+                _renderSystem.Render(texture, PrimitiveType.TriangleStrip);
+            }
+
+			texture.Dispose();
+            _Graphics.ErrorCheck();
+        }
     }
 }

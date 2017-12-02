@@ -107,6 +107,14 @@ namespace GRaff.Graphics
             return (x: values[0], y: values[1]);
         }
 
+        protected Color GetUniformColor(ShaderUniformLocation location)
+        {
+            _verifyLocation(location);
+            var values = new int[4];
+            GL.GetUniform(Id, location.Location, values);
+            return Color.FromRgba(values[0], values[1], values[2], values[3]);
+        }
+
         protected void SetUniformInt(ShaderUniformLocation location, int value)
         {
             _verifyLocation(location);
@@ -134,6 +142,12 @@ namespace GRaff.Graphics
         {
             _verifyLocation(location);
             GL.ProgramUniform2(Id, location.Location, (float)value.x, (float)value.y);
+        }
+
+        protected void SetUniformColor(ShaderUniformLocation location, Color color)
+        {
+            _verifyLocation(location);
+            GL.ProgramUniform4(Id, location.Location, color.R / 255.0f, color.G / 255.0f, color.B / 255.0f, color.A / 255.0f);
         }
 
         #endregion

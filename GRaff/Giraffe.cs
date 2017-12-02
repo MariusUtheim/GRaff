@@ -52,7 +52,7 @@ namespace GRaff
 
             Window.RenderFrame += (sender, e) => {
 
-                Giraffe.Redraw();
+                Giraffe.Render();
                 Window.SwapBuffers();
             };
 
@@ -146,6 +146,8 @@ namespace GRaff
         {
             //TODO// The ToList is used becuase instances might get destroyed, and then it seems the order is messed up. Is it possible to avoid ToList, using only lazy evaluation?
             //TODO// Cancellation on input events
+            if (Room.Current is T)
+                action(Room.Current as T);
             foreach (var instance in Instance.Where(i => i is T).ToList())
                 if (instance.Exists)
                     action(instance as T);
@@ -226,8 +228,10 @@ namespace GRaff
         /// - OnDrawForeground is called for the current room
         /// - GlobalEvent.DrawForeground events are raised
         /// </summary>
-        public static void Redraw()
+        public static void Render()
         {
+            View.Validate();
+
             GlobalEvent.OnDrawBackground();
             Room.Current.OnDrawBackground();
 
