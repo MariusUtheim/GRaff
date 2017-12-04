@@ -1,14 +1,10 @@
-using GRaff.Graphics;
 using GRaff.Graphics.Shaders;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
+
 
 namespace GRaff.GraphicTest
 {
-    [Test(Order = -1)]
+    [Test]
     class ShadersTest : GameElement, IKeyPressListener, IGlobalMousePressListener
     {
         private ColorMatrixShaderProgram blackWhiteShader = new ColorMatrixShaderProgram(0.333, 0.333, 0.333, 0.333, 0.333, 0.333, 0.333, 0.333, 0.333);

@@ -5,7 +5,7 @@ using GRaff.Graphics.Shaders;
 
 namespace GRaff.GraphicTest
 {
-    [Test(Order = -1)]
+    [Test]
     public class SoundShaderTest : GameElement
     {
         private SoundVisualizerShaderProgram program;
