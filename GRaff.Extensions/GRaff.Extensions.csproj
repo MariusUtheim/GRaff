@@ -131,6 +131,7 @@
     <Compile Include="Panels\IPanelMouseListener.cs" />
     <Compile Include="Panels\DraggableNode.cs" />
     <Compile Include="Graphics.Shaders\ShockwaveShaderProgram.cs" />
+    <Compile Include="Randomness\IntegerPairDistribution.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
