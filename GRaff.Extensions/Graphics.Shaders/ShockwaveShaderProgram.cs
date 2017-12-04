@@ -13,7 +13,6 @@ uniform float amplitude;
 uniform float radius;
 uniform float width;
 uniform vec2 origin;
-uniform vec2 scale;
 
 float sqr(float x) { return x * x; }
 
@@ -35,49 +34,41 @@ void main(void) {
         public static FragmentShader ShockwaveFragmentShader { get; }
         = new FragmentShader(ShaderHints.Header, ShaderHints.GetFragColor, ShockwaveSource);
 
-        private ShaderUniformLocation _amplitude, _radius, _width, _origin, _scale;
+        private UniformFloat _amplitude, _radius, _width;
+        private UniformVec2 _origin;
 
-		public ShockwaveShaderProgram(double width, Vector scale)
+
+		public ShockwaveShaderProgram(double width)
             : base(VertexShader.Default, ShockwaveFragmentShader)
         {
-            _amplitude = UniformLocation("amplitude");
-            this.Amplitude = 0.01;
-            _radius = UniformLocation("radius");
-            _width = UniformLocation("width");
-            this.Width = width;
-            _origin = UniformLocation("origin");
-            _scale = UniformLocation("scale");
-            this.Scale = scale;
+            _amplitude = new UniformFloat(this, "amplitude", 0.01);
+            _radius = new UniformFloat(this, "radius");
+            _width = new UniformFloat(this, "width", width);
+            _origin = new UniformVec2(this, "origin");
         }
 
         public double Amplitude
         {
-            get => GetUniformFloat(_amplitude);
-            set => SetUniformFloat(_amplitude, (float)value);
+            get => _amplitude.Value;
+            set => _amplitude.Value = value;
         }
 
         public double Radius
         {
-            get => GetUniformFloat(_radius);
-            set => SetUniformFloat(_radius, (float)value);
+            get => _radius.Value;
+            set => _radius.Value = value;
         }
 
         public double Width
         {
-            get => GetUniformFloat(_width);
-            set => SetUniformFloat(_width, (float)value);
+            get => _width.Value;
+            set => _width.Value = value;
         }
 
         public Point Origin
         {
-            get => GetUniformVec2(_origin);
-            set => SetUniformVec2(_origin, value);
-        }
-
-        public Vector Scale
-        {
-            get => GetUniformVec2(_scale);
-            set => SetUniformVec2(_scale, value);
+            get => _origin.Value;
+            set => _origin.Value = value;
         }
     }
 }

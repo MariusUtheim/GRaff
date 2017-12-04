@@ -57,44 +57,43 @@ void main() {
                 CausticShaderSource
             );
 
-        private ShaderUniformLocation _phase, _offset, _scale, _intensity;
+        private UniformFloat _phase, _intensity;
+        private UniformVec2 _scale, _offset;
         
 		public CausticShaderProgram(Rectangle region, double intensity = 1)
 			: base(VertexShader.Default, _causticFragmentShader)
 		{
-            _phase = UniformLocation("phase");
-            _offset = UniformLocation("offset");
-            _scale = UniformLocation("scale");
-            _intensity = UniformLocation("intensity");
+            _phase = new UniformFloat(this, "phase");
+            _intensity = new UniformFloat(this, "intensity", intensity);
+            _offset = new UniformVec2(this, "offset", region.TopLeft);
+            _scale = new UniformVec2(this, "scale", region.Size);
 
-            this.Intensity = intensity;
-            this.Region = region;
             _Graphics.ErrorCheck();
 		}
 
         public double Phase
         {
-            get => GetUniformFloat(_phase);
-            set => SetUniformFloat(_phase, (float)value);
+            get => _phase.Value;
+            set => _phase.Value = value;
         }
 
         public double Intensity
         {
-            get => GetUniformFloat(_intensity);
-            set => SetUniformFloat(_intensity, (float)value);
+            get => _intensity.Value;
+            set => _intensity.Value = value;
         }
 
 
         public Point Offset
         {
-            get => GetUniformVec2(_offset);
-            set => SetUniformVec2(_offset, value);
+            get => _offset.Value;
+            set => _offset.Value = value;
         }
 
         public Vector Scale
         {
-            get => GetUniformVec2(_scale);
-            set => SetUniformVec2(_scale, value);
+            get => _scale.Value;
+            set => _scale.Value = value;
         }
         
         public Rectangle Region

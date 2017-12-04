@@ -3,9 +3,11 @@ using OpenTK.Graphics.OpenGL4;
 
 namespace GRaff.Graphics.Shaders
 {
-    public class ShaderUniformLocation
+    public class UniformVariable
     {
-        internal ShaderUniformLocation(ShaderProgram program, string name)
+        private bool _isVerified = false;
+
+        internal UniformVariable(ShaderProgram program, string name)
         {
             Name = name;
 			Program = program;
@@ -20,9 +22,9 @@ namespace GRaff.Graphics.Shaders
 
         public int Location { get; }
 
-        public void Require()
+        public void Verify()
         {
-            if (Location < 0)
+            if (!_isVerified && Location < 0)
             {
                 _Graphics.ErrorCheck();
                 throw new ArgumentException($"The uniform variable '{Name}' does not exist.");

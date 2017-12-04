@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace GRaff.GraphicTest
 {
-    [Test]
+    [Test(Order = -1)]
     class ShadersTest : GameElement, IKeyPressListener, IGlobalMousePressListener
     {
         private ColorMatrixShaderProgram blackWhiteShader = new ColorMatrixShaderProgram(0.333, 0.333, 0.333, 0.333, 0.333, 0.333, 0.333, 0.333, 0.333);
@@ -18,7 +18,7 @@ namespace GRaff.GraphicTest
         private CausticShaderProgram causticShader = new CausticShaderProgram(new Rectangle(0, 0, 500, 500));
         private SpotlightShaderProgram lightShader = new SpotlightShaderProgram(200, 300);
         private WaveShiftShaderProgram waveShader = new WaveShiftShaderProgram((10, 0), (0, 0.01));
-        private ShockwaveShaderProgram shockwaveShader = new ShockwaveShaderProgram(15, Window.Size);
+        private ShockwaveShaderProgram shockwaveShader = new ShockwaveShaderProgram(15);
         private double shockwaveShaderTimeOrigin = 0;
 
         private ShaderProgram _currentProgram;

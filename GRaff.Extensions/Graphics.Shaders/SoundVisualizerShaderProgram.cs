@@ -14,7 +14,6 @@ out vec4 out_FragColor;
 uniform highp vec2 origin;
 uniform highp vec2 scale;
 uniform highp float orientation;
-uniform highp float maxDist;
 uniform int offset;
 
 uniform highp samplerBuffer data;
@@ -51,7 +50,11 @@ void main(void) {
 }
 ";
 
-        private ShaderUniformLocation _origin, _scale, _orientation, _maxDist, _offset, _data;
+        private UniformFloat _orientation;
+        private UniformVec2 _origin, _scale;
+        private UniformInt32 _offset;
+        private UniformTexture _data;
+
         private SamplerBuffer _dataBuffer;
 
 
@@ -59,19 +62,15 @@ void main(void) {
             => new FragmentShader(ShaderHints.Header, ShaderHints.GetFragColor, SimplifiedSource);
 
 
-        public SoundVisualizerShaderProgram(byte[] data, Vector scale, double maxDistance)
+        public SoundVisualizerShaderProgram(byte[] data, Vector scale)
             : base(VertexShader.Default, _fragShader(data.Length))
         {
-            _origin = UniformLocation("origin");
-            _scale = UniformLocation("scale");
-            this.Scale = scale;
-            _orientation = UniformLocation("orientation");
-            _maxDist = UniformLocation("maxDist");
-            this.MaxDistance = maxDistance;
-            _offset = UniformLocation("offset");
-            _data = UniformLocation("data");
+            _origin = new UniformVec2(this, "origin");
+            _scale = new UniformVec2(this, "scale", scale);
+            _orientation = new UniformFloat(this, "orientation");
+            _offset = new UniformInt32(this, "offset");
+            _data = new UniformTexture(this, "data", 1);
 
-            SetUniformTexture(_data, 1);
             _dataBuffer = new SamplerBuffer(data);
             _dataBuffer.BindToLocation(1);
 
@@ -81,32 +80,26 @@ void main(void) {
 
         public Point Origin
         {
-            get => GetUniformVec2(_origin);
-            set => SetUniformVec2(_origin, value);
+            get => _origin.Value;
+            set => _origin.Value = value;
         }
 
         public Vector Scale
         {
-            get => GetUniformVec2(_scale);
-            set => SetUniformVec2(_scale, value);
+            get => _scale.Value;
+            set => _scale.Value = value;
         }
 
         public Angle Orientation
         {
-            get => Angle.Rad(GetUniformFloat(_orientation));
-            set => SetUniformFloat(_orientation, (float)value.Radians);
-        }
-
-        public double MaxDistance
-        {
-            get => GetUniformFloat(_maxDist);
-            set => SetUniformFloat(_maxDist, (float)value);
+            get => Angle.Rad(_orientation.Value);
+            set => _orientation.Value = (float)value.Radians;
         }
 
         public int Offset
         {
-            get => GetUniformInt(_offset);
-            set => SetUniformInt(_offset, value);
+            get => _offset.Value;
+            set => _offset.Value = value;
         }
     }
 }

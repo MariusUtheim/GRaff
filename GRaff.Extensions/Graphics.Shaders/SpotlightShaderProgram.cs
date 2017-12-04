@@ -36,50 +36,50 @@ void main() {
         private static readonly FragmentShader _fragmentShader =
             new FragmentShader(ShaderHints.Header, ShaderHints.GetFragColor, SpotlightShaderSource);
 
-        private ShaderUniformLocation _origin, _scale, _innerRadius, _outerRadius, _darknessColor;
+        private UniformVec2 _origin, _scale;
+        private UniformFloat _innerRadius, _outerRadius;
+        private UniformColor _darknessColor;
 
+       
         public SpotlightShaderProgram(double innerRadius, double outerRadius)
             : base(VertexShader.Default, _fragmentShader)
         {
-			_origin = UniformLocation("origin");
-			_scale = UniformLocation("scale");
+            _origin = new UniformVec2(this, "origin");
+			_scale = new UniformVec2(this, "scale");
             Scale = (1, 1);
-            _innerRadius = UniformLocation("innerRadius");
-            InnerRadius = innerRadius;
-            _outerRadius = UniformLocation("outerRadius");
-            OuterRadius = outerRadius;
-            _darknessColor = UniformLocation("darknessColor");
-            DarknessColor = Colors.Black;
+            _innerRadius = new UniformFloat(this, "innerRadius", innerRadius);
+            _outerRadius = new UniformFloat(this, "outerRadius", outerRadius);
+            _darknessColor = new UniformColor(this, "darknessColor", Colors.Black);
         }
 
         public Point Origin
         {
-            get => GetUniformVec2(_origin);
-            set => SetUniformVec2(_origin, value);
+            get => _origin.Value;
+            set => _origin.Value = value;
         }
 
         public Vector Scale
         {
-            get => GetUniformVec2(_scale);
-            set => SetUniformVec2(_scale, value);
+            get => _scale.Value;
+            set => _scale.Value = value;
         }
 
         public double InnerRadius
         {
-            get => GetUniformFloat(_innerRadius);
-            set => SetUniformFloat(_innerRadius, (float)value);
+            get => _innerRadius.Value;
+            set => _innerRadius.Value = value;
         }
 
         public double OuterRadius
         {
-            get => GetUniformFloat(_outerRadius);
-            set => SetUniformFloat(_outerRadius, (float)value);
+            get => _outerRadius.Value;
+            set => _outerRadius.Value = value;
         }
 
         public Color DarknessColor
         {
-            get => GetUniformColor(_darknessColor);
-            set => SetUniformColor(_darknessColor, value);
+            get => _darknessColor.Value;
+            set => _darknessColor.Value = value;
         }
 
     }

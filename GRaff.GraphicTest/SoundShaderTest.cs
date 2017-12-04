@@ -17,9 +17,8 @@ namespace GRaff.GraphicTest
             sound = SoundBuffer.Load("Assets/PanaceaLong.wav");
             instance = sound.Play(true);
 
-            program = new SoundVisualizerShaderProgram(sound.Buffer.ToArray(), Window.Size, Window.Width);
+            program = new SoundVisualizerShaderProgram(sound.Buffer.ToArray(), Window.Size);
             program.Origin = Window.Center + (0, 50);
-         //   program.Orientation = Angle.Zero;
         }
 
         public override void OnStep()

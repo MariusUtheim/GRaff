@@ -242,9 +242,15 @@
     <Compile Include="Graphics\Shaders\ShaderProgram.cs" />
     <Compile Include="Graphics\Shaders\ShaderException.cs" />
     <Compile Include="Graphics\Shaders\Shader.cs" />
-    <Compile Include="Graphics\Shaders\ShaderUniformLocation.cs" />
+    <Compile Include="Graphics\Shaders\UniformVariable.cs" />
     <Compile Include="Graphics\Shaders\FragmentShader.cs" />
     <Compile Include="Graphics\Shaders\SamplerBuffer.cs" />
+    <Compile Include="Graphics\Shaders\UniformInt32.cs" />
+    <Compile Include="Graphics\Shaders\UniformFloat.cs" />
+    <Compile Include="Graphics\Shaders\UniformDouble.cs" />
+    <Compile Include="Graphics\Shaders\UniformVec2.cs" />
+    <Compile Include="Graphics\Shaders\UniformColor.cs" />
+    <Compile Include="Graphics\Shaders\UniformTexture.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="External\libogg.dll">

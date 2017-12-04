@@ -26,34 +26,33 @@ void main(void) {
         public static FragmentShader WaveShiftFragmentShader { get; }
         = new FragmentShader(ShaderHints.Header, ShaderHints.GetFragColor, WaveShiftSource);
 
-        private ShaderUniformLocation _phase, _waveVector, _wavePolarization;
+        private UniformFloat _phase;
+        private UniformVec2 _waveVector, _wavePolarization;
 
 		public WaveShiftShaderProgram(Vector waveVector, Vector polarizationVector)
             : base(VertexShader.Default, WaveShiftFragmentShader)
         {
-            _phase = UniformLocation("phase");
-            _waveVector = UniformLocation("waveVector");
-            this.WaveVector = waveVector;
-            _wavePolarization = UniformLocation("wavePolarization");
-            this.WavePolarization = polarizationVector;
+            _phase = new UniformFloat(this, "phase");
+            _waveVector = new UniformVec2(this, "waveVector", waveVector);
+            _wavePolarization = new UniformVec2(this, "wavePolarization", polarizationVector);
         }
 
         public double Phase
         {
-            get => GetUniformFloat(_phase);
-            set => SetUniformFloat(_phase, (float)value);
+            get => _phase.Value;
+            set => _phase.Value = value;
         }
 
         public Vector WaveVector
         {
-            get => GetUniformVec2(_waveVector);
-            set => SetUniformVec2(_waveVector, value);
+            get => _waveVector.Value;
+            set => _waveVector.Value = value;
         }
 
         public Vector WavePolarization
         {
-            get => GetUniformVec2(_wavePolarization);
-            set => SetUniformVec2(_wavePolarization, value);
+            get => _wavePolarization.Value;
+            set => _wavePolarization.Value = value;
         }
     }
 }
