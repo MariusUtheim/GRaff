@@ -26,7 +26,7 @@ void main(void) {
 ";
 
 		public static FragmentShader ColorMatrixFragmentShader { get; }
-		    = new FragmentShader(Shader.GRaff_Header, FragmentShader.GRaff_GetFragColor, ColorMatrixShaderSource);
+            = new FragmentShader(ShaderHints.Header, ShaderHints.GetFragColor, ColorMatrixShaderSource);
 
 		private int _colorMatrixLoc, _vecLoc;
 

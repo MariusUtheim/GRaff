@@ -4,22 +4,23 @@ using System.Runtime.Serialization;
 namespace GRaff.Graphics
 {
 	[Serializable]
-	internal class ShaderException : Exception
+	public class ShaderException : Exception
 	{
-		public ShaderException()
-		{
-		}
 
-		public ShaderException(string message) : base(message)
-		{
-		}
+        public ShaderException(string message)
+            : base(message)
+        {
+        }
 
-		public ShaderException(string message, Exception innerException) : base(message, innerException)
+		public ShaderException(string message, string sourceCode) : base(message)
 		{
+            this.SourceCode = sourceCode;
 		}
 
 		protected ShaderException(SerializationInfo info, StreamingContext context) : base(info, context)
 		{
 		}
+
+        public string SourceCode { get; }
 	}
 }

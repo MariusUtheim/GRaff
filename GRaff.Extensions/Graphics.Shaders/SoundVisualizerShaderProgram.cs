@@ -51,15 +51,13 @@ void main(void) {
 }
 ";
 
-        private ShaderUniformLocation _origin, _scale, _orientation, _maxDist, _offset;
+        private ShaderUniformLocation _origin, _scale, _orientation, _maxDist, _offset, _data;
         private int _buffer, _texture;
+        private SamplerBuffer _dataBuffer;
 
 
         private static FragmentShader _fragShader(int dataLength)
-            => new FragmentShader(
-                Shader.GRaff_Header,
-                FragmentShader.GRaff_GetFragColor,
-            SimplifiedSource);
+            => new FragmentShader(ShaderHints.Header, ShaderHints.GetFragColor, SimplifiedSource);
 
 
         public SoundVisualizerShaderProgram(byte[] data, Vector scale, double maxDistance)
@@ -72,20 +70,11 @@ void main(void) {
             _maxDist = UniformLocation("maxDist");
             this.MaxDistance = maxDistance;
             _offset = UniformLocation("offset");
+            _data = UniformLocation("data");
 
-
-            GL.ProgramUniform1(Id, GL.GetUniformLocation(Id, "data"), 1);
-			GL.ActiveTexture(TextureUnit.Texture1);
-
-			this._buffer = GL.GenBuffer();
-			GL.BindBuffer(BufferTarget.TextureBuffer, _buffer);
-			GL.BufferData(BufferTarget.TextureBuffer, new IntPtr(data.Length), data, BufferUsageHint.StaticRead);
-
-			this._texture = GL.GenTexture();
-			GL.BindTexture(TextureTarget.TextureBuffer, _texture);
-            GL.TexBuffer(TextureBufferTarget.TextureBuffer, SizedInternalFormat.Rg8, _buffer);
-
-            GL.ActiveTexture(TextureUnit.Texture0);
+            SetUniformTexture(_data, 1);
+            _dataBuffer = new SamplerBuffer(data);
+            _dataBuffer.BindToLocation(1);
 
 			_Graphics.ErrorCheck();
 		}

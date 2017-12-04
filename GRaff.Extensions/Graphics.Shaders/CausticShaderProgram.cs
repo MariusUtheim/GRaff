@@ -19,7 +19,6 @@ namespace GRaff.Graphics.Shaders
 @"
 #define TAU 6.28318530718
 #define MAX_ITER 5
-layout(origin_upper_left) in vec4 gl_FragCoord;
 out vec4 out_FragColor;
 
 uniform highp float phase;
@@ -53,8 +52,8 @@ void main() {
 
         private static FragmentShader _causticFragmentShader =
             new FragmentShader(
-                Shader.GRaff_Header,
-                FragmentShader.GRaff_GetFragColor,
+                ShaderHints.Header,
+                ShaderHints.GetFragColor,
                 CausticShaderSource
             );
 

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace GRaff.GraphicTest
 {
-    [Test(Order = -100)]
+    [Test]
     class ShadersTest : GameElement, IKeyPressListener, IGlobalMousePressListener
     {
         private ColorMatrixShaderProgram blackWhiteShader = new ColorMatrixShaderProgram(0.333, 0.333, 0.333, 0.333, 0.333, 0.333, 0.333, 0.333, 0.333);

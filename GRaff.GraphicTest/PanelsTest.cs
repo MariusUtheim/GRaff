@@ -4,7 +4,7 @@ using GRaff.Panels;
 
 namespace GRaff.GraphicTest
 {
-    [Test(Order = -10)]
+    [Test]
     public class PanelsTest : GameElement
     {
         class Block : DraggableNode, IPanelMousePressListener

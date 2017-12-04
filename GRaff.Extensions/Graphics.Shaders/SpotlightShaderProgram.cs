@@ -34,11 +34,7 @@ void main() {
 
 
         private static readonly FragmentShader _fragmentShader =
-            new FragmentShader(
-                Shader.GRaff_Header,
-                FragmentShader.GRaff_GetFragColor,
-                SpotlightShaderSource
-            );
+            new FragmentShader(ShaderHints.Header, ShaderHints.GetFragColor, SpotlightShaderSource);
 
         private ShaderUniformLocation _origin, _scale, _innerRadius, _outerRadius, _darknessColor;
 

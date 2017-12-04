@@ -33,7 +33,7 @@ void main(void) {
 ";
 
         public static FragmentShader ShockwaveFragmentShader { get; }
-        = new FragmentShader(Shader.GRaff_Header, FragmentShader.GRaff_GetFragColor, ShockwaveSource);
+        = new FragmentShader(ShaderHints.Header, ShaderHints.GetFragColor, ShockwaveSource);
 
         private ShaderUniformLocation _amplitude, _radius, _width, _origin, _scale;
 

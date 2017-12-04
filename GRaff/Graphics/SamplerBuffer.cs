@@ -7,23 +7,34 @@ using OpenTK.Graphics.OpenGL4;
 
 namespace GRaff.Graphics
 {
-    class SamplerBuffer : IDisposable
+    public class SamplerBuffer : IDisposable
     {
         private int _bufferId, _textureId;
 
-        public SamplerBuffer(byte[] data)
+        public SamplerBuffer(byte[] data, UsageHint usageHint = UsageHint.StaticRead)
         {
-            GL.ActiveTexture(TextureUnit.Texture1);
-
             this._bufferId = GL.GenBuffer();
             GL.BindBuffer(BufferTarget.TextureBuffer, _bufferId);
-            GL.BufferData(BufferTarget.TextureBuffer, new IntPtr(data.Length), data, BufferUsageHint.StaticRead);
+            GL.BufferData(BufferTarget.TextureBuffer, new IntPtr(data.Length), data, (BufferUsageHint)usageHint);
 
             this._textureId = GL.GenTexture();
+        }
+
+        public void BindToLocation(int location)
+        {
+            GL.ActiveTexture(TextureUnit.Texture0 + location);
+
+            GL.BindBuffer(BufferTarget.TextureBuffer, _bufferId);
             GL.BindTexture(TextureTarget.TextureBuffer, _textureId);
-            GL.TexBuffer(TextureBufferTarget.TextureBuffer, SizedInternalFormat.Rg8, _bufferId);
+            GL.TexBuffer(TextureBufferTarget.TextureBuffer, SizedInternalFormat.R8, _bufferId);
 
             GL.ActiveTexture(TextureUnit.Texture0);
+        }
+
+        public void WriteData(byte[] data, UsageHint usageHint = UsageHint.DynamicRead)
+        {
+            GL.BindBuffer(BufferTarget.TextureBuffer, _bufferId);
+            GL.BufferData(BufferTarget.TextureBuffer, new IntPtr(data.Length), data, (BufferUsageHint)usageHint);
         }
 
         #region IDisposable Support

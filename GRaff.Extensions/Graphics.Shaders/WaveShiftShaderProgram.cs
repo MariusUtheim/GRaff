@@ -24,7 +24,7 @@ void main(void) {
 ";
 
         public static FragmentShader WaveShiftFragmentShader { get; }
-        = new FragmentShader(Shader.GRaff_Header, FragmentShader.GRaff_GetFragColor, WaveShiftSource);
+        = new FragmentShader(ShaderHints.Header, ShaderHints.GetFragColor, WaveShiftSource);
 
         private ShaderUniformLocation _phase, _waveVector, _wavePolarization;
 

@@ -150,6 +150,14 @@ namespace GRaff.Graphics
             GL.ProgramUniform4(Id, location.Location, color.R / 255.0f, color.G / 255.0f, color.B / 255.0f, color.A / 255.0f);
         }
 
+        protected void SetUniformTexture(ShaderUniformLocation location, int textureIndex)
+        {
+            _verifyLocation(location);
+            if (textureIndex < 0 || textureIndex >= 32)
+                throw new ArgumentOutOfRangeException(nameof(textureIndex));
+            GL.ProgramUniform1(Id, location.Location, textureIndex);
+        }
+
         #endregion
 
 

@@ -106,11 +106,11 @@ namespace GRaff
 		{
 			Contract.Ensures(Contract.Result<Texture>() != null);
 
-            byte[] buffer = File.ReadAllBytes(path);
+           // byte[] buffer = File.ReadAllBytes(path);
             Bitmap bitmap;
 
-            var bitmapStream = new MemoryStream(buffer);
-            using (var sourceImage = new Bitmap(bitmapStream))
+            //var bitmapStream = new MemoryStream(buffer);
+            using (var sourceImage = Image.FromFile(path))
             {
                 bitmap = new Bitmap(sourceImage.Width, sourceImage.Height, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
                 using (var gr = System.Drawing.Graphics.FromImage(bitmap))

@@ -243,6 +243,8 @@
     <Compile Include="Graphics\Alignment.cs" />
     <Compile Include="Graphics\TextureRepeatMode.cs" />
     <Compile Include="Synchronization\CatchContext.cs" />
+    <Compile Include="Graphics\SamplerBuffer.cs" />
+    <Compile Include="Graphics\ShaderHints.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="External\libogg.dll">
@@ -268,6 +270,9 @@
     </None>
   </ItemGroup>
   <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Graphics\Shaders\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>
