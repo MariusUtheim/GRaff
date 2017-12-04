@@ -2,7 +2,7 @@
 using System.Diagnostics;
 using System.Linq;
 using GRaff.Graphics;
-using GRaff.Synchronization;
+using GRaff.Graphics.Shaders;
 using OpenTK;
 #if OpenGL4
 using OpenTK.Graphics.OpenGL4;

@@ -52,7 +52,6 @@ void main(void) {
 ";
 
         private ShaderUniformLocation _origin, _scale, _orientation, _maxDist, _offset, _data;
-        private int _buffer, _texture;
         private SamplerBuffer _dataBuffer;
 
 

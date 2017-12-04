@@ -7,7 +7,7 @@ using OpenTK.Graphics.ES30;
 #endif
 
 
-namespace GRaff.Graphics
+namespace GRaff.Graphics.Shaders
 {
 	public abstract class Shader : IDisposable
 	{

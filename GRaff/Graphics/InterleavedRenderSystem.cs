@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using GRaff.Synchronization;
+using GRaff.Graphics.Shaders;
 using OpenTK.Graphics.OpenGL4;
 using GLPrimitiveType = OpenTK.Graphics.OpenGL4.PrimitiveType;
 

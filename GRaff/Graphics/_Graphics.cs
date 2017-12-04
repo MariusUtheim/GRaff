@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using OpenTK.Graphics;
+using GRaff.Graphics.Shaders;
 #if OpenGL4
 using OpenTK.Graphics.OpenGL4;
 #else

@@ -1,7 +1,7 @@
 ﻿using System;
 using OpenTK.Graphics.OpenGL4;
 
-namespace GRaff.Graphics
+namespace GRaff.Graphics.Shaders
 {
     public class ShaderHints
     {

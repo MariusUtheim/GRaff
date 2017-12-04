@@ -1,7 +1,7 @@
 using System;
 using System.Runtime.Serialization;
 
-namespace GRaff.Graphics
+namespace GRaff.Graphics.Shaders
 {
 	[Serializable]
 	public class ShaderException : Exception

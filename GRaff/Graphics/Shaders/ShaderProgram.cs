@@ -9,7 +9,7 @@ using coords = System.Single;
 #endif
 
 
-namespace GRaff.Graphics
+namespace GRaff.Graphics.Shaders
 {
 
     public class ShaderProgram : IDisposable

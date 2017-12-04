@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Diagnostics.Contracts;
-using GRaff.Graphics;
-using GRaff.Graphics.Text;
 using System.Linq;
 using System.Collections.Generic;
+using GRaff.Graphics;
+using GRaff.Graphics.Text;
+using GRaff.Graphics.Shaders;
 
 namespace GRaff
 {
