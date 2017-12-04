@@ -15,6 +15,14 @@ namespace GRaff.Graphics.Shaders
             this.Index = index;
         }
 
+
+        public static void Set(ShaderProgram program, string location, int value)
+            => new UniformTexture(program, location, value);
+
+        public static int Get(ShaderProgram program, string location)
+            => new UniformTexture(program, location).Index;
+
+
         public int Index
         {
             get

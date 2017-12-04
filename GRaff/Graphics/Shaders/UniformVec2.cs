@@ -15,6 +15,14 @@ namespace GRaff.Graphics.Shaders
             this.Value = value;
         }
 
+
+        public static void Set(ShaderProgram program, string location, (double v1, double v2) value)
+            => new UniformVec2(program, location, value);
+
+        public static (double v1, double v2) Get(ShaderProgram program, string location)
+            => new UniformVec2(program, location).Value;
+
+
         public (double v1, double v2) Value
         {
             get

@@ -15,6 +15,14 @@ namespace GRaff.Graphics.Shaders
             this.Value = value;
         }
 
+
+        public static void Set(ShaderProgram program, string location, int value)
+            => new UniformInt32(program, location, value);
+
+        public static int Get(ShaderProgram program, string location)
+            => new UniformInt32(program, location).Value;
+
+
         public int Value
         {
             get

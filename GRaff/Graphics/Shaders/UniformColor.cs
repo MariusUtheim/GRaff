@@ -15,6 +15,13 @@ namespace GRaff.Graphics.Shaders
             this.Value = value;
         }
 
+        public static void Set(ShaderProgram program, string location, Color value)
+            => new UniformColor(program, location, value);
+
+        public static Color Get(ShaderProgram program, string location)
+            => new UniformColor(program, location).Value;
+
+
         public Color Value
         {
             get
