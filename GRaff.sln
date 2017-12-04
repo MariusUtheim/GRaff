@@ -15,8 +15,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GRaff.ProjectTemplate", "GR
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GRaff.Extensions", "GRaff.Extensions\GRaff.Extensions.csproj", "{9FB060E1-9B82-4361-9590-06023AB42A91}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GLSandbox", "GLSandbox\GLSandbox.csproj", "{2CD6C837-1B28-479E-B171-57BA056166F7}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -65,14 +63,6 @@ Global
 		{9FB060E1-9B82-4361-9590-06023AB42A91}.Release|Any CPU.Build.0 = Release|Any CPU
 		{9FB060E1-9B82-4361-9590-06023AB42A91}.Test|Any CPU.ActiveCfg = Release|Any CPU
 		{9FB060E1-9B82-4361-9590-06023AB42A91}.Test|Any CPU.Build.0 = Release|Any CPU
-		{2CD6C837-1B28-479E-B171-57BA056166F7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2CD6C837-1B28-479E-B171-57BA056166F7}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2CD6C837-1B28-479E-B171-57BA056166F7}.Publish|Any CPU.ActiveCfg = Release|Any CPU
-		{2CD6C837-1B28-479E-B171-57BA056166F7}.Publish|Any CPU.Build.0 = Release|Any CPU
-		{2CD6C837-1B28-479E-B171-57BA056166F7}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2CD6C837-1B28-479E-B171-57BA056166F7}.Release|Any CPU.Build.0 = Release|Any CPU
-		{2CD6C837-1B28-479E-B171-57BA056166F7}.Test|Any CPU.ActiveCfg = Release|Any CPU
-		{2CD6C837-1B28-479E-B171-57BA056166F7}.Test|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
