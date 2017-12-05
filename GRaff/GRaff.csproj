@@ -251,6 +251,7 @@
     <Compile Include="Graphics\Shaders\UniformVec2.cs" />
     <Compile Include="Graphics\Shaders\UniformColor.cs" />
     <Compile Include="Graphics\Shaders\UniformTexture.cs" />
+    <Compile Include="TextureScaleFilter.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="External\libogg.dll">
