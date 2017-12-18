@@ -65,6 +65,15 @@ namespace GRaff
 		/// </summary>
 		public Vector RightNormal => new Vector(1, Direction.Direction + Angle.Deg(90));
 
+        public Vector Project(Vector v) =>
+                        (v.Magnitude == 0 || Direction.Magnitude == 0)
+                        ? Vector.Zero
+                        : new Vector(v.DotProduct(Direction) / Direction.Magnitude, Direction.Direction);
+
+        public Point Project(Point p) => Origin + Project(p - Origin);
+
+        public Line Project(Line l) => new Line(Project(l.Origin), Project(l.Direction));
+
 		/// <summary>
 		/// Converts this GRaff.Line to a human-readable string, indicating the location of the two endpoints.
 		/// </summary>
