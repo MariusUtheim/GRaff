@@ -9,9 +9,9 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>GRaff.GraphicTest</RootNamespace>
     <AssemblyName>GRaff.GraphicTest</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
+    <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -34,16 +34,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
+    <Reference Include="mscorlib" />
     <Reference Include="System.ValueTuple">
       <HintPath>..\packages\System.ValueTuple.4.4.0\lib\net461\System.ValueTuple.dll</HintPath>
     </Reference>
-    <Reference Include="mscorlib" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AnimationTest.cs" />
@@ -92,16 +86,6 @@
     </None>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\GRaff.Extensions\GRaff.Extensions.csproj">
-      <Project>{9fb060e1-9b82-4361-9590-06023ab42a91}</Project>
-      <Name>GRaff.Extensions</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\GRaff\GRaff.csproj">
-      <Project>{64447cf0-9d21-4b49-b12b-7830bee354c7}</Project>
-      <Name>GRaff</Name>
-    </ProjectReference>
-  </ItemGroup>
   <ItemGroup />
   <ItemGroup />
   <ItemGroup>
@@ -111,6 +95,16 @@
     <Content Include="Assets\Particle.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\GRaff\GRaff.csproj">
+      <Project>{64447CF0-9D21-4B49-B12B-7830BEE354C7}</Project>
+      <Name>GRaff</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\GRaff.Extensions\GRaff.Extensions.csproj">
+      <Project>{9FB060E1-9B82-4361-9590-06023AB42A91}</Project>
+      <Name>GRaff.Extensions</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
