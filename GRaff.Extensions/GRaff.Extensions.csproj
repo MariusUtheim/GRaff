@@ -119,6 +119,7 @@
     <Compile Include="Panels\DraggableNode.cs" />
     <Compile Include="Graphics.Shaders\ShockwaveShaderProgram.cs" />
     <Compile Include="Randomness\IntegerPairDistribution.cs" />
+    <Compile Include="Randomness\MonteCarloDistribution.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\GRaff\GRaff.csproj">
