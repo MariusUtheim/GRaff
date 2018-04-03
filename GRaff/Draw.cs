@@ -115,6 +115,8 @@ namespace GRaff
         }
         public static void Texture(Texture texture, Point location)
             => Texture(texture, location, Colors.White);
+        public static void Texture(Texture texture, Rectangle rect)
+        => Texture(texture.SubTexture(), rect);
 
         public static void Texture(SubTexture texture, Point location, Color blend)
         {
