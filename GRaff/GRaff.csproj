@@ -1,7 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="..\packages\SharpFont.4.0.1\build\SharpFont.props" Condition="Exists('..\packages\SharpFont.4.0.1\build\SharpFont.props')" />
-  <Import Project="..\packages\SharpFont.Dependencies.2.6\build\SharpFont.Dependencies.props" Condition="Exists('..\packages\SharpFont.Dependencies.2.6\build\SharpFont.Dependencies.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -103,9 +101,6 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
     <Reference Include="WindowsBase" />
-    <Reference Include="SharpFont">
-      <HintPath>..\packages\SharpFont.4.0.1\lib\net45\SharpFont.dll</HintPath>
-    </Reference>
     <Reference Include="mscorlib" />
     <Reference Include="OpenTK">
       <HintPath>..\packages\OpenTK.3.0.1\lib\net20\OpenTK.dll</HintPath>
@@ -122,11 +117,7 @@
     <Compile Include="Graphics\Framebuffer.cs" />
     <Compile Include="Graphics\Quadrilateral.cs" />
     <Compile Include="Graphics\Text\FontOptions.cs" />
-    <Compile Include="Graphics\Text\Glyph.cs" />
-    <Compile Include="Graphics\Text\RectPacker\Canvas.cs" />
-    <Compile Include="Graphics\Text\RectPacker\CanvasStats.cs" />
-    <Compile Include="Graphics\Text\RectPacker\DynamicTwoDimensionalArray.cs" />
-    <Compile Include="Graphics\Text\Serialization classes.cs" />
+    <Compile Include="Graphics\Text\FontFile.cs" />
     <Compile Include="Graphics\Text\TextRenderer.cs" />
     <Compile Include="RedBlackTree.cs" />
     <Compile Include="Synchronization\Alarm.cs" />
@@ -253,12 +244,14 @@
     <Compile Include="Graphics\Shaders\UniformColor.cs" />
     <Compile Include="Graphics\Shaders\UniformTexture.cs" />
     <Compile Include="TextureScaleFilter.cs" />
+    <Compile Include="Graphics\Text\FontKerning.cs" />
+    <Compile Include="Graphics\Text\FontPage.cs" />
+    <Compile Include="Graphics\Text\FontCommon.cs" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Graphics\Text\TrueTypeLoader.cs" />
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
