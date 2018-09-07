@@ -11,7 +11,7 @@ namespace GRaff.GraphicTest
 	{
 		static void Main(string[] args)
 		{
-			Giraffe.Run(1024, 768, gameStart);
+			Game.Run(1024, 768, gameStart);
 		}
 
 		static void gameStart()

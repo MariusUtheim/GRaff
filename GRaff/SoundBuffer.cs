@@ -114,7 +114,7 @@ namespace GRaff
             {
                 Async.Capture(Id).ThenQueue(id =>
                 {
-                    if (Giraffe.IsRunning)
+                    if (Game.IsRunning)
                     {
                         _Audio.ClearError();
                         foreach (var instance in _instances)

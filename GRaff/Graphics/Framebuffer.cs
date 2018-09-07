@@ -96,7 +96,7 @@ namespace GRaff.Graphics
             {
                 Async.Capture(Id).ThenQueue(id =>
                 {
-                    if (Giraffe.IsRunning)
+                    if (Game.IsRunning)
                     {
                         GL.DeleteFramebuffer(id);
                         _Graphics.ErrorCheck();

@@ -181,7 +181,7 @@
     <Compile Include="Graphics\GLExtensions.cs" />
     <Compile Include="Graphics\PrimitiveType.cs" />
     <Compile Include="Graphics\UsageHint.cs" />
-    <Compile Include="Giraffe.cs" />
+    <Compile Include="Game.cs" />
     <Compile Include="GameElement.cs" />
     <Compile Include="GameObject.cs" />
     <Compile Include="GlobalEvent.cs" />

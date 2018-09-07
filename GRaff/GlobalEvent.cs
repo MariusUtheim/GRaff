@@ -48,7 +48,7 @@ namespace GRaff
 		private static void _ExitOnEscape(Key key)
 		{
 			if (key == GRaff.Key.Escape)
-				Giraffe.Quit();
+				Game.Quit();
 		}
 
 		private static bool _willExitOnEscape = false;

@@ -51,7 +51,7 @@ namespace GRaff.Synchronization
 
 		~AsyncOperation()
 		{
-			if (!_hasPassedException && Result != null && !Result.IsSuccessful && _otherwiseClause == null && Giraffe.IsRunning)
+			if (!_hasPassedException && Result != null && !Result.IsSuccessful && _otherwiseClause == null && Game.IsRunning)
 				Async.Throw(new ObjectDisposedIncorrectlyException("An asynchronous operation threw an exception that was finalized before it was handled. See the inner exception for more details.", Result.Error));
 		}
 

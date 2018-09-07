@@ -92,7 +92,7 @@ namespace GRaff
 			{
 				Async.Capture(Id).ThenQueue(id =>
 				{
-                    if (Giraffe.IsRunning)
+                    if (Game.IsRunning)
                     {
                         GL.DeleteTexture(id);
                         _Graphics.ErrorCheck();

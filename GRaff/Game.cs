@@ -10,7 +10,7 @@ namespace GRaff
     /// <summary>
     /// A static class handling the overhead control of the game.
     /// </summary>
-    public static class Giraffe
+    public static class Game
     {
         /// <summary>
         /// The OpenTK.GameWindow instance.
@@ -40,7 +40,7 @@ namespace GRaff
             Window = new GameWindow(windowWidth, windowHeight, GraphicsMode.Default, "Giraffe", GameWindowFlags.FixedWindow, DisplayDevice.Default, 4, 2, GraphicsContextFlags.ForwardCompatible);
             GRaff.Window.DisplayScale = new Vector(Window.Width / (double)windowWidth, Window.Height / (double)windowHeight);
 
-            Window.UpdateFrame += (sender, e) => Giraffe.Loop();
+            Window.UpdateFrame += (sender, e) => Game.Loop();
             Window.Closing += (sender, e) => IsRunning = false;
 
             Window.KeyDown += (sender, e) => { Keyboard.Press((Key)e.Key); };
@@ -52,7 +52,7 @@ namespace GRaff
 
             Window.RenderFrame += (sender, e) => {
 
-                Giraffe.Render();
+                Game.Render();
                 Window.SwapBuffers();
             };
 
