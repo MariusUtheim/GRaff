@@ -33,12 +33,30 @@ namespace GRaff.Graphics.Text
 			return c == '\r' || c == '\n';
 		}
 
+        /// <summary>
+        /// Gets or sets the font.
+        /// </summary>
+        /// <value>The font.</value>
 		public Font Font { get; set; }
 
+        /// <summary>
+        /// Gets or sets the maximum width of the line. Lines longer than this
+		/// will be broken. If set to null, there is no limit.
+        /// </summary>
+        /// <value>The width of the line.</value>
 		public int? LineWidth { get; set; }
 
+        /// <summary>
+        /// Gets or sets the line separation. Each new line is offset by the
+		/// height of the font plus this value.
+        /// </summary>
+        /// <value>The line separation.</value>
 		public double LineSeparation { get; set; }
 
+        /// <summary>
+        /// Gets or sets the text alignment.
+        /// </summary>
+        /// <value>The text alignment.</value>
 		public Alignment Alignment { get; set; } = Alignment.TopLeft;
 
 		private IEnumerable<string> _breakString(string text)
@@ -94,32 +112,47 @@ namespace GRaff.Graphics.Text
 		//	}
 		//}
 
-		public string[] LineSplit(string text)
+        /// <summary>
+		/// Splits the text into lines as they would be rendered by this 
+		/// text renderer.
+        /// </summary>
+        /// <returns>The lines as they would be rendered.</returns>
+        /// <param name="text">The text to be split.</param>
+		public IEnumerable<string> LineSplit(string text)
 		{
-			return text == null ? new string[0] : NewlineRegex.Split(text).SelectMany(_breakString).ToArray();
+			return text == null ? new string[0] : NewlineRegex.Split(text).SelectMany(_breakString);
 		}
 
-		public string Truncate(string text)
+        /// <summary>
+        /// If the input string is less than the maximum width of a line, that
+		/// string is returned. Otherwise, as many characters as possible are
+		/// returned, appended by the specified ellipsis.
+        /// </summary>
+        /// <returns>The truncated text.</returns>
+        /// <param name="text">The text to truncate.</param>
+        /// <param name="ellipsis">The ellipsis to append to the text if it is too long.</param>
+		#warning ellipsis is not the right word
+		public string Truncate(string text, string ellipsis = "...")
 		{
 			if (text == null)
 				return "";
 			if (LineWidth == null)
 				return text;
-
-			var ellipsisWidth = Font.GetWidth("...");
+            
+			var ellipsisWidth = Font.GetWidth(ellipsis);
 			var lowerBound = LineWidth - ellipsisWidth;
 			var offset = 0;
 
 			for (var i = 0; i < text.Length; i++)
 			{
 				if (_isNewline(text[i]))
-					return text.Substring(0, i) + "...";
+					return text.Substring(0, i) + ellipsis;
 
 				var nextWidth = Font.GetWidth(text[i]);
 				var advance = Font.GetAdvance(text, i);
 
 				if (offset + nextWidth > LineWidth)
-					return text.Substring(0, i) + "...";
+					return text.Substring(0, i) + ellipsis;
 
 				if (offset + advance >= lowerBound)
 				{
@@ -128,7 +161,7 @@ namespace GRaff.Graphics.Text
 					{
 						nextWidth = Font.GetWidth(text[j]);
 						if (offset + nextWidth > LineWidth)
-							return text.Substring(0, i) + "...";
+							return text.Substring(0, i) + ellipsis;
 						offset += Font.GetAdvance(text, j);
                     }
 					break;
@@ -140,14 +173,23 @@ namespace GRaff.Graphics.Text
 			return text;
 		}
 
-		public int GetWidth(string text)
-		{
-			return LineSplit(text).Select(Font.GetWidth).Max();
-		}
-
+        /// <summary>
+        /// Gets the width of the text as it would be rendered, taking into 
+		/// account line splits.
+        /// </summary>
+        /// <returns>The width of the text.</returns>
+        /// <param name="text">The text.</param>
+		public int GetWidth(string text) => LineSplit(text).Select(Font.GetWidth).Max();
+		
+        /// <summary>
+        /// Gets the height of the text as it would be rendered, taking into
+		/// account line splits.
+        /// </summary>
+        /// <returns>The height of the text.</returns>
+        /// <param name="text">The text.</param>
 		public double GetHeight(string text)
 		{
-			var n = LineSplit(text).Length;
+			var n = LineSplit(text).Count();
 			return n * Font.Height + (n - 1) * LineSeparation;
 		}
 
@@ -174,6 +216,12 @@ namespace GRaff.Graphics.Text
 			return new Point(x, y);
 		}
 
+        /// <summary>
+        /// Renders the specified text to a new GRaff.Texture. The text is 
+		/// rendered white.
+        /// </summary>
+        /// <returns>The rendered text.</returns>
+        /// <param name="text">The text to be rendered.</param>
 		public Texture Render(string text)
 		{
 			var width = GetWidth(text);
@@ -187,10 +235,17 @@ namespace GRaff.Graphics.Text
 			}
 		}
 
-
-		internal (GraphicsPoint[] vertices, GraphicsPoint[] texCoords) RenderCoords(string text)
+        /// <summary>
+        /// Renders spatial and uv-vertices to be used to draw the specified text.
+		/// The text is rendered as it would be if it was drawn at the origin, taking
+		/// alignment and line width into account.
+        /// </summary>
+        /// <returns>The spatial and uv-vertices that would be used to render
+		/// the specified text.</returns>
+        /// <param name="text">The text to be rendered.</param>
+		public (GraphicsPoint[] vertices, GraphicsPoint[] texCoords) RenderVertices(string text)
 		{
-			var lines = LineSplit(text);
+			var lines = LineSplit(text).ToArray();
 			var length = lines.SelectMany(str => str.ToCharArray())
                               .Where(c => Font.HasCharacter(c))
                               .Count();
