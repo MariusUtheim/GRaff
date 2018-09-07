@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.ExceptionServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -56,7 +57,8 @@ namespace GRaff
 		}
 
         public static IEnumerable<GameElement> Where(Func<GameElement, bool> predicate) => All.Where(predicate);
-        public static IEnumerable<T> OfType<T>() => All.OfType<T>();
+		public static IEnumerable<T> OfType<T>() where T : GameElement => All.OfType<T>();
+		public static T One<T>() where T : GameElement => All.OfType<T>().FirstOrDefault();
     }
 
 	/// <summary>
@@ -129,7 +131,15 @@ namespace GRaff
 				throw new InvalidOperationException($"Unable to create instances of the abstract type {nameof(T)}");
             if (_parameterlessConstructor == null)
 				throw new InvalidOperationException($"Unable to create instances through {nameof(Instance<T>)}: Type {nameof(T)} must specify a parameterless constructor, a constructor taking a GRaff.Point structure or a constructor taking two System.Double structures.");
-			return Instance.Create(_parameterlessConstructor());
+			try
+			{
+				return Instance.Create(_parameterlessConstructor());
+			}
+			catch (TargetInvocationException ex)
+			{
+				ExceptionDispatchInfo.Capture(ex.InnerException).Throw();
+				throw new Exception("Unreachable code reached"); // Unreachable
+			}
 		}
 
 		/// <summary>
@@ -145,9 +155,20 @@ namespace GRaff
 		/// </remarks>
 		public static T Create(Point location)
 		{
+			if (_isAbstract)
+                throw new InvalidOperationException($"Unable to create instances of the abstract type {nameof(T)}");
 			if (_parameterlessConstructor == null)
 				throw new InvalidOperationException($"Unable to create instances through {nameof(Instance<T>)}: Type {nameof(T)} must specify a parameterless constructor, a constructor taking a GRaff.Point structure or a constructor taking two System.Double structures.");
-			return Instance.Create(_locationConstructor(location));
+
+			try 
+			{
+				return Instance.Create(_locationConstructor(location));
+			}
+            catch (TargetInvocationException ex)
+            {
+                ExceptionDispatchInfo.Capture(ex.InnerException).Throw();
+                throw new Exception("Unreachable code reached"); // Unreachable
+            }
 		}
 
 		/// <summary>
@@ -164,9 +185,20 @@ namespace GRaff
 		/// </remarks>
 		public static T Create(double x, double y)
 		{
+			if (_isAbstract)
+                throw new InvalidOperationException($"Unable to create instances of the abstract type {nameof(T)}");
 			if (_parameterlessConstructor == null)
 				throw new InvalidOperationException(string.Format("Unable to create instances through {0}: Type {1} must specify a parameterless constructor, a constructor taking a GRaff.Point structure or a constructor taking two System.Double structures.", typeof(Instance<T>).Name, typeof(T).Name));
-			return Instance.Create(_xyConstructor(x, y));
+
+			try
+            {
+                return Instance.Create(_xyConstructor(x, y));
+            }
+            catch (TargetInvocationException ex)
+            {
+                ExceptionDispatchInfo.Capture(ex.InnerException).Throw();
+                throw new Exception("Unreachable code reached"); // Unreachable
+            }
 		}
 
 		public static T _ => Enumerate().FirstOrDefault();
