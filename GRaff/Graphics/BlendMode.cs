@@ -4,6 +4,7 @@ using OpenTK.Graphics.OpenGL4;
 #else
 using OpenTK.Graphics.ES30;
 #endif
+using GLBlendingFactor = OpenTK.Graphics.OpenGL4.BlendingFactor;
 
 
 namespace GRaff.Graphics
@@ -44,11 +45,11 @@ namespace GRaff.Graphics
 
 				return new BlendMode((BlendEquation)GL.GetInteger(GetPName.BlendEquationRgb), (BlendingFactor)GL.GetInteger(GetPName.BlendSrc), (BlendingFactor)GL.GetInteger(GetPName.BlendDst));
 			}
-
+            
 			set
 			{
 				Contract.Requires<ArgumentNullException>(value != null);
-				GL.BlendFunc((BlendingFactorSrc)value.SourceFactor, (BlendingFactorDest)value.DestinationFactor);
+				GL.BlendFunc((GLBlendingFactor)value.SourceFactor, (GLBlendingFactor)value.DestinationFactor);
 				GL.BlendEquation((BlendEquationMode)value.Equation);
 			}
 		}
