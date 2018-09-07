@@ -99,21 +99,19 @@ namespace GRaff
             Time.Loop();
 
             GlobalEvent.OnBeginStep();
-            Room.Current.OnBeginStep();
             _do<GameObject>(obj => obj.OnBeginStep());
 
             Async.HandleEvents();
 
             _handleInput();
 
+			GlobalEvent.OnStep();
             _do(obj => obj.OnStep());
-            GlobalEvent.OnStep();
 
             _detectCollisions();
 
-            Instance<GameObject>.Do(instance => instance.OnEndStep());
-            Room.Current.OnEndStep();
-            GlobalEvent.OnEndStep();
+			GlobalEvent.OnEndStep();
+            _do<GameObject>(obj => obj.OnEndStep());
 
             Instance.Sort();
         }
@@ -164,20 +162,20 @@ namespace GRaff
         {
             foreach (var key in Keyboard.Down)
             {
+				GlobalEvent.OnKey(key);
                 _do<IKeyListener>(i => i.OnKey(key));
-                GlobalEvent.OnKey(key);
             }
 
             foreach (var key in Keyboard.Pressed)
             {
+				GlobalEvent.OnKeyPressed(key);
                 _do<IKeyPressListener>(i => i.OnKeyPress(key));
-                GlobalEvent.OnKeyPressed(key);
             }
 
             foreach (var key in Keyboard.Released)
             {
+				GlobalEvent.OnKeyReleased(key);
                 _do<IKeyReleaseListener>(i => i.OnKeyRelease(key));
-                GlobalEvent.OnKeyReleased(key);
             }
             
             foreach (var button in Mouse.Down)
