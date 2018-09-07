@@ -154,34 +154,31 @@ namespace GRaff
             return instance;
         }
 
-        public SoundElement Play(bool looping, double volume = 1.0, double pitch = 1.0)
+        public SoundElement Play(bool looping = false, double volume = 1.0, double pitch = 1.0)
             => _create(looping, true, (0, 0), volume, pitch);
 
-        public SoundElement Play(bool looping, Point location, double volume = 1.0, double pitch = 1.0)
+        public SoundElement Play(Point location, bool looping = false, double volume = 1.0, double pitch = 1.0)
         {
-            Contract.Requires<InvalidOperationException>(Channels == 1);
+#warning Add error message - test that this applies only to mono (also see PlayPaused)
+			Contract.Requires<InvalidOperationException>(Channels == 1);
             return _create(looping, true, location, volume, pitch);
         }
 
-        public SoundElement Pause(bool looping, double volume = 1.0, double pitch = 1.0)
+        public SoundElement PlayPaused(bool looping = false, double volume = 1.0, double pitch = 1.0)
             => _create(looping, false, (0, 0), volume, pitch);
 
-        public SoundElement Pause(bool looping, Point location, double volume = 1.0, double pitch = 1.0)
-        {
-            Contract.Requires<InvalidOperationException>(Channels == 1);
-            return _create(looping, false, (0, 0), volume, pitch);
-        }
-
+		public SoundElement PlayPaused(Point location, bool looping = false, double volume = 1.0, double pitch = 1.0)
+		{
+			Contract.Requires<InvalidOperationException>(Channels == 1);
+			return _create(looping, false, location, volume, pitch);
+		}
 
         public void StopAll()
 		{
             foreach (var instance in _instances)
 				instance.Destroy();
 		}
-
-
-
-
+       
 
         [ContractInvariantMethod]
         private void invariants()
