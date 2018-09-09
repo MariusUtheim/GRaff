@@ -5,9 +5,19 @@ using System.Diagnostics.Contracts;
 namespace GRaff.Synchronization
 {
 
+    public class TweenEventArgs : EventArgs
+    {
+        public TweenEventArgs(double amount)
+        {
+            this.Amount = amount;
+        }
+
+        public double Amount { get; }
+    }
+
 	public partial class Tween : GameElement
 	{
-		private event EventHandler<double> _step;
+		private event EventHandler<TweenEventArgs> _step;
 		private event EventHandler _complete;
 		private Dictionary<int, List<Action>> _sentinels = new Dictionary<int, List<Action>>();
 
@@ -20,7 +30,7 @@ namespace GRaff.Synchronization
 			Contract.Requires<ArgumentNullException>(tweeningFunction != null);
 			Duration = duration;
 			TweeningFunction = tweeningFunction;
-			_step += (sender, e) => stepAction(e);
+			_step += (sender, e) => stepAction(e.Amount);
 			_complete += (sender, e) => completeAction?.Invoke();
 		}
 
@@ -29,7 +39,8 @@ namespace GRaff.Synchronization
 
 		public static Tween Start(int duration, TweeningFunction tweeningFunction, Action<double> stepAction, Action completeAction)
 			=> Instance.Create(new Tween(duration, tweeningFunction, stepAction, completeAction));
-		public event EventHandler<double> Step
+
+		public event EventHandler<TweenEventArgs> Step
 		{
 			add { _step += value; } 
 			remove { _step -= value; }
@@ -63,9 +74,9 @@ namespace GRaff.Synchronization
 		{
 			Progress++;
 			if (Progress == Duration)
-				_step?.Invoke(null, TweeningFunction(1));
+                _step?.Invoke(this, new TweenEventArgs(TweeningFunction(1)));
 			else
-				_step?.Invoke(null, TweeningFunction((double)Progress / Duration));
+                _step?.Invoke(this, new TweenEventArgs(TweeningFunction((double)Progress / Duration)));
 
 			List<Action> sentinels;
 			if (_sentinels.TryGetValue(Progress, out sentinels))

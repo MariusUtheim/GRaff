@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>GRaff</RootNamespace>
     <AssemblyName>GRaff.Extensions</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
   </PropertyGroup>
@@ -31,25 +31,13 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="OpenTK, Version=1.1.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\Library\OpenTK\1.1\Binaries\OpenTK\Release\OpenTK.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Runtime.Serialization" />
-    <Reference Include="System.ValueTuple, Version=4.0.1.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.ValueTuple.4.3.1\lib\netstandard1.0\System.ValueTuple.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Web.Extensions" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Net.Http" />
-    <Reference Include="System.Xml" />
     <Reference Include="OpenTK">
       <HintPath>..\..\..\Documents\Libraries\OpenTK\Binaries\OpenTK\Release\OpenTK.dll</HintPath>
+    </Reference>
+    <Reference Include="mscorlib" />
+    <Reference Include="System.ValueTuple">
+      <HintPath>..\packages\System.ValueTuple.4.4.0\lib\net461\System.ValueTuple.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -115,7 +103,6 @@
     <Compile Include="Randomness\RectanglePointDistribution.cs" />
     <Compile Include="Randomness\RgbDistribution.cs" />
     <Compile Include="Randomness\Statistics.cs" />
-    <Compile Include="Randomness\TrueRandom.cs" />
     <Compile Include="Randomness\VectorDistribution.cs" />
     <Compile Include="Graphics.Shaders\CausticShaderProgram.cs" />
     <Compile Include="Graphics.Shaders\ColorMatrixShaderProgram.cs" />
@@ -131,9 +118,14 @@
     <Compile Include="Panels\IPanelMouseListener.cs" />
     <Compile Include="Panels\DraggableNode.cs" />
     <Compile Include="Graphics.Shaders\ShockwaveShaderProgram.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
+    <Compile Include="Randomness\IntegerPairDistribution.cs" />
+    <Compile Include="Randomness\MonteCarloDistribution.cs" />
+    <Compile Include="Graphics.Text.TrueType\TrueTypeLoader.cs" />
+    <Compile Include="Graphics.Text.TrueType\TrueTypeFont.cs" />
+    <Compile Include="Graphics.Text.TrueType\Glyph.cs" />
+    <Compile Include="Graphics.Text.TrueType\RectPacker\Canvas.cs" />
+    <Compile Include="Graphics.Text.TrueType\RectPacker\CanvasStats.cs" />
+    <Compile Include="Graphics.Text.TrueType\RectPacker\DynamicTwoDimensionalArray.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\GRaff\GRaff.csproj">
@@ -144,6 +136,11 @@
   <ItemGroup>
     <Folder Include="Effects\" />
     <Folder Include="Panels\" />
+    <Folder Include="Graphics.Text.TrueType\" />
+    <Folder Include="Graphics.Text.TrueType\RectPacker\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

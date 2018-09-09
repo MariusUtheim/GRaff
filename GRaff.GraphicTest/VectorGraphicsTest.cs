@@ -8,7 +8,7 @@ using static GRaff.GMath;
 
 namespace GRaff.GraphicTest
 {
-    [Test(Order = 1)]
+    [Test]
     class VectorGraphicsTest : GameElement, IKeyPressListener
 	{
         private const double dx = 100;
@@ -38,7 +38,7 @@ namespace GRaff.GraphicTest
                                   new Point(550, 60) - new Vector(35, Angle.Deg(210)),
                                   new Point(550, 60) - new Vector(35, Angle.Deg(330)),
                                   Color.FromRgb(255, 0, 0), Color.FromRgb(0, 255, 0), Color.FromRgb(0, 0, 255));
-
+                
                 Draw.Primitive(PrimitiveType.TriangleFan, new[] {
                 (new GraphicsPoint(650, 50), Colors.Gray),
                 (new GraphicsPoint(650, 50) + new Vector(30, Angle.Deg(0)), Color.FromHsv(Angle.Deg(0), 1, 0.9)),

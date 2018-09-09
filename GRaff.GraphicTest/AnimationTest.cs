@@ -7,11 +7,12 @@ using GRaff.Graphics;
 
 namespace GRaff.GraphicTest
 {
-#warning [Test]
+	[Test(Order = -10000)]
     class AnimationTest : GameElement
 	{
-		Sprite sprite = new Sprite(new AnimationStrip(Textures.Giraffe, 20), origin: new Vector(0, 0));
-		Sprite pausedSprite = new Sprite(new AnimationStrip(Textures.Giraffe, 20, new ValueTuple<int, double>[] {
+
+		static Sprite sprite = new Sprite(new AnimationStrip(Textures.Giraffe, 4), origin: new Vector(0, 0));
+		static Sprite pausedSprite = new Sprite(new AnimationStrip(Textures.Giraffe, 20, new ValueTuple<int, double>[] {
 			(0, 4),
 			(1, 3),
 			(2, 2),
@@ -35,13 +36,26 @@ namespace GRaff.GraphicTest
 		}), origin: new Vector(0, 0));
 
 
+		class AnimatedImage : GameObject
+		{
+			public AnimatedImage(Point location, double spd)
+				: base(location)
+			{
+				this.Sprite = sprite;
+				Model.Speed = spd;
+			}
+		}
+
 
 		public override void OnDraw()
 		{
-			Draw.Sprite(sprite, Time.LoopCount / 2, (0, 0));
+			/*Draw.Sprite(sprite, Time.LoopCount / 2, (0, 0));
 			Draw.Sprite(sprite, Time.LoopCount / 4, (sprite.Width, 0));
 			Draw.Sprite(sprite, Time.LoopCount / 8, (2 * sprite.Width, 0));
 			Draw.Sprite(pausedSprite, Time.LoopCount / 2, (0, sprite.Height));
+*/
+			Instance.Create(new AnimatedImage((3.5 * sprite.Width, 0), 1));
+			Instance.Create(new AnimatedImage((5 * sprite.Width, 0), -0.5));
 		}
 	}
 }

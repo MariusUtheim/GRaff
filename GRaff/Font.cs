@@ -43,19 +43,18 @@ namespace GRaff
         }
 
         private static readonly Regex NewlinePattern = new Regex("\r\n|\n");
+		public static ISet<char> ASCIICharacters { get; } = new ImmutableSet("\n !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~");
 
+        
         private readonly Dictionary<char, FontCharacter> _characters = new Dictionary<char, FontCharacter>();
         private readonly Dictionary<Tuple<char, char>, int> _kerning = new Dictionary<Tuple<char, char>, int>();
 
-        public static ISet<char> ASCIICharacters { get; } = new ImmutableSet("\n !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~");
-        public static IEnumerable<string> GetFontFamilies() => new InstalledFontCollection().Families.Select(f => f.Name);
-
-
+        
         public Font(Texture texture, FontFile fontData)
         {
             Texture = texture;
             foreach (var c in fontData.Chars)
-                _characters.Add((char)c.Id, new FontCharacter(c));
+				_characters.Add((char)c.Id, c);
 
             Height = fontData.Common.LineHeight;
 
@@ -68,7 +67,7 @@ namespace GRaff
             else
                 HasKerning = false;
         }
-
+      
 
         public bool IsDisposed { get; private set; }
 
@@ -83,7 +82,8 @@ namespace GRaff
             GC.SuppressFinalize(this);
         }
 
-        private void Dispose(bool disposing)
+#warning Unify this disposal
+		private void Dispose(bool disposing)
         {
             if (!IsDisposed)
             {
@@ -108,73 +108,12 @@ namespace GRaff
                 });
         }
 
-
         public static Font Load(string bitmapFile, string fontDataFile)
         {
             Contract.Ensures(Contract.Result<Font>() != null);
             return LoadAsync(bitmapFile, fontDataFile).Wait();
         }
-
-#warning Do this better
-        private static FileInfo _getFontFileName(string fontFamily, FontOptions options)
-        {
-            if ((options & FontOptions.Bold) == FontOptions.Bold)
-                fontFamily += " Bold";
-            if ((options & FontOptions.Italic) == FontOptions.Italic)
-                fontFamily += " Italic";
-
-            var fontFileName = TrueTypeLoader.GetTrueTypeFile(fontFamily);
-
-            if (fontFileName == null)
-                throw new IOException("The specified font name is not a valid font family, or the font family does not support the specified font options.");
-
-            switch (Environment.OSVersion.Platform)
-            {
-                case PlatformID.Win32NT:
-                    fontFileName = Path.Combine(@"C:\Windows\Fonts\", fontFileName);
-                    break;
-
-                case PlatformID.Unix:
-                case PlatformID.MacOSX:
-                    var basePath = Path.Combine("/Library/Fonts/", fontFamily);
-                    if (File.Exists(basePath + ".ttf"))
-                        fontFileName = basePath + ".ttf";
-                    else
-                        fontFileName = basePath + ".ttc";
-                    break;
-
-                default:
-                    throw new NotSupportedException("TrueType loading is not supported on OS version " + Environment.OSVersion.Platform.ToString());
-            }
-
-
-            if (!File.Exists(fontFileName))
-                throw new FileNotFoundException();
-
-            return new FileInfo(fontFileName);
-        }
-
-        public static Font LoadTrueType(string fontFamily, int size, ISet<char> charSet, FontOptions options = FontOptions.None)
-		{
-            return TrueTypeLoader.LoadTrueType(_getFontFileName(fontFamily, options), size, charSet, (options & FontOptions.IgnoreKerning) == FontOptions.IgnoreKerning);
-		}
-
-        /// <summary>
-        /// Loads a TrueType font from the specified file.
-        /// </summary>
-        /// <param name="fileName">The TrueType font file to load.</param>
-        /// <param name="size">The size of the loaded font.</param>
-        /// <param name="charSet">The character set to load.</param>
-        /// <returns></returns>
-        public static Font LoadTrueTypeFromFile(string fileName, int size, ISet<char> charSet)
-        {
-            return TrueTypeLoader.LoadTrueType(new FileInfo(fileName), size, charSet, true);
-        }
-
-		public static IAsyncOperation<Font> LoadTrueTypeAsync(string fontFamily, int size, ISet<char> charSet, FontOptions options = FontOptions.None)
-		{
-			return TrueTypeLoader.LoadTrueTypeAsync(_getFontFileName(fontFamily, options), size, charSet, (options & FontOptions.IgnoreKerning) == FontOptions.IgnoreKerning);
-		}
+      
 
 		public bool HasKerning { get; }
 
@@ -243,8 +182,7 @@ namespace GRaff
 				width += GetAdvance(str, i);
 			return width;
 		}
-
-
+        
 		internal Texture TextureBuffer
 		{
 			get

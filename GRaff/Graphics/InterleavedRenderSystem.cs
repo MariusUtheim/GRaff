@@ -55,7 +55,7 @@ namespace GRaff.Graphics
             Contract.Requires<ObjectDisposedException>(!IsDisposed, nameof(InterleavedRenderSystem));
             Async.Run(() =>
             {
-                if (Giraffe.IsRunning)
+                if (Game.IsRunning)
                 {
                     GL.DeleteVertexArray(_array);
                     GL.DeleteBuffer(_arrayBuffer);

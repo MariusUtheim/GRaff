@@ -25,18 +25,6 @@ namespace GRaff.Graphics.Text
 			using (var textReader = new FileStream(filename, FileMode.Open, FileAccess.Read))
 				return (FontFile)deserializer.Deserialize(textReader);
 		}
-
-
-		[StructLayout(LayoutKind.Sequential)]
-		struct TEXTMETRIC
-		{
-			long tmHeight, tmAscent, tmDescent, tmInternalLeading, tmExternalLeading,
-				tmAveCharWidth, tmMaxCharWidth, tmWeight, tmOverhang, tmDigitizedAspectX, tmDigitizedAspectY;
-			char tmFirstChar, tmLastChar, tmDefaultChar, tmBreakChar;
-			byte tmItalic, tmUnderlined, tmStruckOut, tmPitchAndFamily, tmCharSet;
-		}
-		[DllImport("Gdi32.dll")]
-		private static extern bool GetTextMetrics(IntPtr hdc, out TEXTMETRIC tm);
-		
+       
 	}
 }

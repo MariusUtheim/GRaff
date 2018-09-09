@@ -16,8 +16,8 @@ namespace GRaff
 		/// </summary>
 		public static bool IsBorderVisible
 		{
-			get => Giraffe.Window.WindowBorder == WindowBorder.Fixed; 
-			set => Giraffe.Window.WindowBorder = value ? WindowBorder.Fixed : WindowBorder.Hidden; 
+			get => Game.Window.WindowBorder == WindowBorder.Fixed; 
+			set => Game.Window.WindowBorder = value ? WindowBorder.Fixed : WindowBorder.Hidden; 
 		}
 
 		/// <summary>
@@ -25,14 +25,14 @@ namespace GRaff
 		/// </summary>
 		public static string Title
 		{
-			get => Giraffe.Window.Title;
-			set => Giraffe.Window.Title = value;
+			get => Game.Window.Title;
+			set => Game.Window.Title = value;
 		}
 
 		public static bool IsFullscreen
 		{
-			get => Giraffe.Window.WindowState == WindowState.Fullscreen;
-			set => Giraffe.Window.WindowState = WindowState.Fullscreen;
+			get => Game.Window.WindowState == WindowState.Fullscreen;
+			set => Game.Window.WindowState = WindowState.Fullscreen;
 		}
 
 
@@ -61,13 +61,13 @@ namespace GRaff
         {
             get
             {
-                return new IntVector((int)(Giraffe.Window.ClientSize.Width / DisplayScale.X), (int)(Giraffe.Window.ClientSize.Height / DisplayScale.Y));
+                return new IntVector((int)(Game.Window.ClientSize.Width / DisplayScale.X), (int)(Game.Window.ClientSize.Height / DisplayScale.Y));
             }
             set
             {
                 if (value.X <= 0 || value.Y <= 0)
                     throw new ArgumentOutOfRangeException("value", "Both components must be greater than 0.");
-                Giraffe.Window.ClientSize = new Size(value.X, value.Y);
+                Game.Window.ClientSize = new Size(value.X, value.Y);
                 View.UpdateGLToScreenMatrix();
             }
         }
@@ -76,14 +76,14 @@ namespace GRaff
 
         public static int X
         {
-            get => Giraffe.Window.X;
-            set => Giraffe.Window.X = value;
+            get => Game.Window.X;
+            set => Game.Window.X = value;
         }
 
         public static int Y
         {
-            get => Giraffe.Window.Y;
-            set => Giraffe.Window.Y = value;
+            get => Game.Window.Y;
+            set => Game.Window.Y = value;
         }
 
         public static IntVector Location

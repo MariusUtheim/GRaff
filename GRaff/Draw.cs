@@ -115,6 +115,8 @@ namespace GRaff
         }
         public static void Texture(Texture texture, Point location)
             => Texture(texture, location, Colors.White);
+        public static void Texture(Texture texture, Rectangle rect)
+        => Texture(texture.SubTexture(), rect);
 
         public static void Texture(SubTexture texture, Point location, Color blend)
         {
@@ -153,7 +155,8 @@ namespace GRaff
         public static void Sprite(Sprite sprite, double imageIndex, Point location) => Sprite(sprite, imageIndex, Matrix.Translation(location), Colors.White);
         public static void Sprite(Sprite sprite, int imageIndex, Transform transform) => Sprite(sprite, imageIndex, transform.GetMatrix(), Colors.White);
         public static void Sprite(Sprite sprite, int imageIndex, Transform transform, Color blend) => Sprite(sprite, imageIndex, transform.GetMatrix(), blend);
-        public static void Model(Model model)
+        
+		public static void Model(Model model)
         {
             if (model != null)
                 Sprite(model.Sprite, model.Index, model.Transform.GetMatrix(), model.Blend);

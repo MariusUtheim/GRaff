@@ -92,7 +92,7 @@ namespace GRaff
 			{
 				Async.Capture(Id).ThenQueue(id =>
 				{
-                    if (Giraffe.IsRunning)
+                    if (Game.IsRunning)
                     {
                         GL.DeleteTexture(id);
                         _Graphics.ErrorCheck();
@@ -170,6 +170,7 @@ namespace GRaff
 			});
 		}
 
+
         public static Texture FromScreen()
         {
             using (var buffer = Framebuffer.CopyFromScreen())
@@ -208,6 +209,40 @@ namespace GRaff
         {
             SetWrapMode(horizontal, vertical);
             GL.TexParameterI(TextureTarget.Texture2D, TextureParameterName.TextureBorderColor, new[] { borderColor.Rgba });
+        }
+
+        public TextureScaleFilter MagnificationFilter
+        {
+            get
+            {
+                this.Bind();
+                GL.GetTexParameterI(TextureTarget.Texture2D, GetTextureParameter.TextureMagFilter, out int value);
+                
+                return (TextureScaleFilter)value;
+            }
+
+            set
+            {
+                this.Bind();
+                GL.TexParameterI(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, new[] { (int)value });
+            }
+        }
+
+        public TextureScaleFilter MinificationFilter
+        {
+            get
+            {
+                this.Bind();
+                GL.GetTexParameterI(TextureTarget.Texture2D, GetTextureParameter.TextureMinFilter, out int value);
+
+                return (TextureScaleFilter)value;
+            }
+
+            set
+            {
+                this.Bind();
+                GL.TexParameterI(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, new[] { (int)value });
+            }
         }
 
         public Color[,] ToColorArray()

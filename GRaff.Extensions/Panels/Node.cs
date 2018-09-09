@@ -6,9 +6,7 @@ namespace GRaff.Panels
 {
     public class Node
     {
-
-        public Node() { }
-
+        
         public virtual Rectangle Region { get; set; }
 
 
@@ -30,6 +28,17 @@ namespace GRaff.Panels
             set => Region = new Rectangle(Region.Top, value, Region.Width, Region.Height);
         }
 
+        public virtual bool ContainsPoint(Point location) => Region.Contains(location);
+
+        public Node GetChildAt(Point location)
+        {
+            var child = Children.Reverse().FirstOrDefault(n => n.ContainsPoint(location));
+            if (child == null)
+                return null;
+            else
+                return child.GetChildAt(child._fromParent(location)) ?? child;
+        }
+
         private Node _parent;
         public Node Parent
         {
@@ -42,6 +51,13 @@ namespace GRaff.Panels
                 _parent?._children.Remove(this);
                 value?._children.AddLast(this);
             }
+        }
+
+        private PanelElement _container;
+        public PanelElement Container
+        {
+            get => _container ?? _parent?.Container;
+            set => _container = value;
         }
 
 #warning Make children keep track of their LinkedListNode
@@ -80,13 +96,16 @@ namespace GRaff.Panels
 
 		public void RemoveChild(Node element)
 		{
-			if (element.Parent == this)
+			if (element != null && element.Parent == this)
 			{
 				element._parent = null;
 				_children.Remove(element);
 			}
 		}
 
+        public void RemoveFirstChild() => RemoveChild(_children.First());
+
+        public void RemoveLastChild() => RemoveChild(_children.Last());
 
         public Point ToClient(Point point)
         {
@@ -116,6 +135,7 @@ namespace GRaff.Panels
         public Rectangle ToParent(Rectangle rect) => new Rectangle(ToParent(rect.TopLeft), ToParent(rect.Size));
         public Line ToParent(Line line) => new Line(ToParent(line.Origin), ToParent(line.Direction));
 
+        private Point _fromParent(Point point) => (Point)(point - Region.TopLeft);
 
         public virtual void OnStep() { }
 
@@ -126,12 +146,12 @@ namespace GRaff.Panels
         // Return whetner the event should propagate
         internal bool _MouseEvent<TInterface>(Action<TInterface, MouseEventArgs> action, MouseEventArgs e)
         {
-            if (!Region.Contains(e.Location))
+            if (!ContainsPoint(e.Location))
                 return true;
 
             foreach (var child in _children.Reverse())
             {
-				var nextE = new MouseEventArgs(e.Button, (Point)(e.Location - Region.TopLeft), e.WheelDelta);
+                var nextE = new MouseEventArgs(e.Button, _fromParent(e.Location), e.WheelDelta);
 				if (!child._MouseEvent(action, nextE))
                     return false;
             }

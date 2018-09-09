@@ -5,19 +5,17 @@ namespace GRaff.Panels
 {
     public class PanelElement : GameElement, IGlobalMouseListener, IGlobalMousePressListener, IGlobalMouseReleaseListener, IGlobalMouseWheelListener
     {
-        private Node _hoverNode;
-
         public PanelElement(Node root)
         {
-            Contract.Requires<ArgumentNullException>(root != null);
+            Contract.Requires<ArgumentNullException>(root != null && root.Parent == null && root.Container == null);
             this.Root = root;
+            root.Container = this;
         }
 
-        public PanelElement(Rectangle region)
-            : this(new Node { Region = region }) { }
-
-
         public Node Root { get; }
+
+        public Node HoveredNode { get; private set; }
+
 
         public void OnGlobalMouse(MouseButton button)
         {
@@ -53,12 +51,12 @@ namespace GRaff.Panels
                 }
             }, new MouseEventArgs(MouseButton.None, Mouse.Location, 0));
 
-            if (newHover != _hoverNode)
+            if (newHover != HoveredNode)
             {
-                (_hoverNode as IPanelEndHoverListener)?.OnEndHover();
-                if (_hoverNode != null)
-                    _hoverNode.IsMouseHovering = false;
-                _hoverNode = newHover;
+                (HoveredNode as IPanelEndHoverListener)?.OnEndHover();
+                if (HoveredNode != null)
+                    HoveredNode.IsMouseHovering = false;
+                HoveredNode = newHover;
                 (newHover as IPanelBeginHoverListener)?.OnBeginHover();
             }
         }

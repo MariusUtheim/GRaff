@@ -40,7 +40,7 @@ namespace GRaff
 		public double Index
 		{ 
 			get { return _index; }
-			set { _index = value % Count; }
+			set { _index = GMath.Remainder(value, Count); }
 		}
 
 		public double Speed
@@ -121,10 +121,11 @@ namespace GRaff
 		{
 			if (Sprite != null)
 			{
+#warning Test negative speeds
 				_index += Speed;
-				if (_index >= Count)
+				if (_index >= Count || _index < 0)
 				{
-					_index %= Count;
+					_index = GMath.Remainder(_index, Count);
 					return true;
 				}
 			}

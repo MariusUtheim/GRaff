@@ -40,7 +40,7 @@ namespace GRaff.GraphicTest
 
         public PanelsTest()
         {
-            _rootElement = Instance.Create(new PanelElement(new Rectangle(100, 100, 200, 120)));
+            _rootElement = Instance.Create(new PanelElement(new Node { Region = new Rectangle(100, 100, 200, 120) }));
 
             var block = _rootElement.Root.AddChildLast(new Block(new Rectangle(20, 20, 100, 100), Colors.Red, Colors.IndianRed));
             block.AddChildLast(new Block(new Rectangle(10, 10, 40, 30), Colors.Blue, Colors.Aqua));

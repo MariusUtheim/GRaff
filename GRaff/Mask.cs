@@ -3,6 +3,7 @@ using System.Diagnostics.Contracts;
 
 namespace GRaff
 {
+#warning Revamp the interaction between mask/sprite/model/transform/object
 	public sealed class Mask
 	{
 		private readonly GameObject _owner;
