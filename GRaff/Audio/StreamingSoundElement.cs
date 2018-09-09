@@ -12,7 +12,7 @@ namespace GRaff.Audio
 
         public StreamingSoundElement(string path, bool looping, int bufferSize = 8 * 4096)
         {
-            _stream = new AudioStream(path);
+            _stream = AudioStream.Open(path);
             _buffer = new byte[bufferSize];
             _looping = looping;
 

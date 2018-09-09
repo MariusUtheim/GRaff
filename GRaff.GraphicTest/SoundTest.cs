@@ -10,7 +10,7 @@ using GRaff.Effects;
 
 namespace GRaff.GraphicTest
 {
-	[Test]
+	[Test(Order = -1)]
 	class SoundTest : GameElement, IKeyPressListener
 	{
         SoundBuffer buffer;
@@ -20,7 +20,7 @@ namespace GRaff.GraphicTest
 		public SoundTest()
 		{
             //instance = SoundBuffer.Stream(@"Assets/Panacea.wav");
-            buffer = SoundBuffer.Load(@"Assets/PanaceaLong.wav");
+            buffer = SoundBuffer.Load(@"Assets/Panacea.ogg");
             //buffer = WaveGenerator.Generate(WaveGenerator.Binary(440), TimeSpan.FromSeconds(1));
 		}
 

@@ -90,10 +90,33 @@
     <UseVSHostingProcess>false</UseVSHostingProcess>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="NVorbis, Version=0.8.5.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\NVorbis.0.8.5.0\lib\NVorbis.dll</HintPath>
+    </Reference>
+    <Reference Include="OpenTK, Version=3.0.1.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
+      <HintPath>..\packages\OpenTK.3.0.1\lib\net20\OpenTK.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Collections" />
+    <Reference Include="System.Collections.Concurrent" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Diagnostics.Debug" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Globalization" />
+    <Reference Include="System.IO" />
+    <Reference Include="System.Linq" />
+    <Reference Include="System.Linq.Expressions" />
+    <Reference Include="System.Linq.Queryable" />
+    <Reference Include="System.Reflection" />
+    <Reference Include="System.Reflection.Extensions" />
+    <Reference Include="System.Reflection.Primitives" />
+    <Reference Include="System.Runtime" />
+    <Reference Include="System.Runtime.Extensions" />
+    <Reference Include="System.Runtime.InteropServices" />
     <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Text.RegularExpressions" />
+    <Reference Include="System.Threading" />
+    <Reference Include="System.Threading.Tasks" />
     <Reference Include="System.ValueTuple, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\System.ValueTuple.4.5.0\lib\net461\System.ValueTuple.dll</HintPath>
     </Reference>
@@ -105,11 +128,10 @@
     <Reference Include="System.Xml" />
     <Reference Include="WindowsBase" />
     <Reference Include="mscorlib" />
-    <Reference Include="OpenTK">
-      <HintPath>..\packages\OpenTK.3.0.1\lib\net20\OpenTK.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Audio\OggAudioStream.cs" />
+    <Compile Include="Audio\WaveAudioStream.cs" />
     <Compile Include="Contract.cs" />
     <Compile Include="Graphics\IRenderDevice.cs" />
     <Compile Include="ObjectDisposedIncorrectlyException.cs" />
@@ -135,14 +157,6 @@
     <Compile Include="Geometry\MatrixException.cs" />
     <Compile Include="Audio\DistanceModel.cs" />
     <Compile Include="Audio\AudioListener.cs" />
-    <Compile Include="Audio\OggVorbisDecoder\AudioInfo.cs" />
-    <Compile Include="Audio\OggVorbisDecoder\Externals.cs" />
-    <Compile Include="Audio\OggVorbisDecoder\OggVorbisEncodedStream.cs" />
-    <Compile Include="Audio\OggVorbisDecoder\OggVorbisException.cs" />
-    <Compile Include="Audio\OggVorbisDecoder\OggVorbisFile.cs" />
-    <Compile Include="Audio\OggVorbisDecoder\OggVorbisFileStream.cs" />
-    <Compile Include="Audio\OggVorbisDecoder\OggVorbisMemoryStream.cs" />
-    <Compile Include="Audio\OggVorbisDecoder\VorbisInfo.cs" />
     <Compile Include="Audio\WaveFile.cs" />
     <Compile Include="Audio\_Audio.cs" />
     <Compile Include="Graphics\BlendingFactor.cs" />

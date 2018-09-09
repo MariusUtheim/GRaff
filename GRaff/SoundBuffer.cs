@@ -49,7 +49,7 @@ namespace GRaff
 
         public static SoundBuffer Load(string path)
         {
-            using (var stream = new AudioStream(path))
+            using (var stream = AudioStream.Open(path))
             {
                 var buffer = new byte[stream.Length];
                 stream.Read(buffer, 0, (int)stream.Length);
@@ -61,7 +61,7 @@ namespace GRaff
         {
             return Async.RunAsync(async () =>
             {
-                using (var stream = new AudioStream(path))
+                using (var stream = AudioStream.Open(path))
                 {
                     var buffer = new byte[stream.Length];
                     await stream.ReadAsync(buffer, 0, (int)stream.Length);
