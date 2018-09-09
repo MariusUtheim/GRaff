@@ -121,7 +121,6 @@ namespace GRaff
 		{
 			if (Sprite != null)
 			{
-#warning Test negative speeds
 				_index += Speed;
 				if (_index >= Count || _index < 0)
 				{

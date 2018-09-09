@@ -43,19 +43,21 @@ namespace GRaff.GraphicTest
 			{
 				this.Sprite = sprite;
 				Model.Speed = spd;
-			}
+            }
 		}
 
+        public AnimationTest()
+        {
+            Instance.Create(new AnimatedImage((3.5 * sprite.Width, 0), 0.1));
+            Instance.Create(new AnimatedImage((5 * sprite.Width, 0), -0.1));
+        }
 
-		public override void OnDraw()
+        public override void OnDraw()
 		{
-			/*Draw.Sprite(sprite, Time.LoopCount / 2, (0, 0));
-			Draw.Sprite(sprite, Time.LoopCount / 4, (sprite.Width, 0));
-			Draw.Sprite(sprite, Time.LoopCount / 8, (2 * sprite.Width, 0));
-			Draw.Sprite(pausedSprite, Time.LoopCount / 2, (0, sprite.Height));
-*/
-			Instance.Create(new AnimatedImage((3.5 * sprite.Width, 0), 1));
-			Instance.Create(new AnimatedImage((5 * sprite.Width, 0), -0.5));
-		}
+			Draw.Sprite(sprite, Time.LoopCount / 5, (0, 0));
+			Draw.Sprite(sprite, Time.LoopCount / 10, (sprite.Width, 0));
+			Draw.Sprite(sprite, Time.LoopCount / 20, (2 * sprite.Width, 0));
+			Draw.Sprite(pausedSprite, Time.LoopCount / 10, (0, sprite.Height));
+        }
 	}
 }
