@@ -161,3 +161,5 @@ Documentation.pdf
 *._
 *.json
 *.sqlite
+/.vs/GRaff/v15/Server/sqlite3
+/packages/System.ValueTuple.4.4.0
