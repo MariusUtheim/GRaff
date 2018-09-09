@@ -48,5 +48,24 @@ namespace GRaff.Randomness
 			Contract.Requires<ArgumentException>(items.Length > 0);
 			return _median(items);
 		}
-	}
+
+
+        public static double Mean(IEnumerable<double> data) => data.Average();
+
+        public static double StandardDeviation(IEnumerable<double> data)
+        {
+            return MeanStd(data).StandardDeviation;
+        }
+
+        public static (double Mean, double StandardDeviation) MeanStd(IEnumerable<double> data)
+        {
+            if (!data.Any())
+                return (0, Double.NaN);
+            if (data.Take(2).Count() == 1)
+                return (data.Single(), Double.PositiveInfinity);
+
+            var m = Mean(data);
+            return (m, GMath.Sqrt(data.Sum(d => (d - m) * (d - m))));
+        }
+    }
 }
