@@ -77,7 +77,7 @@ namespace GRaff
 
         public int Id { get; }
 
-#warning The user can keep track of the buffer
+#warning The user can keep track of the buffer. Consider just making it ungettable
         private byte[] _buffer;
         public IReadOnlyList<byte> Buffer => Array.AsReadOnly(_buffer);
 

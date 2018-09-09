@@ -19,7 +19,7 @@ namespace GRaff.GraphicTest
 			GlobalEvent.ExitOnEscape = true;
 			Textures.LoadAll();
 
-			Instance<TestController>.Create();
+			Instance.Create(new TestController());
 		}
 
 	}

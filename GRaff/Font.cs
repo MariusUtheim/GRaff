@@ -82,7 +82,8 @@ namespace GRaff
             GC.SuppressFinalize(this);
         }
 
-        private void Dispose(bool disposing)
+#warning Unify this disposal
+		private void Dispose(bool disposing)
         {
             if (!IsDisposed)
             {
@@ -181,8 +182,7 @@ namespace GRaff
 				width += GetAdvance(str, i);
 			return width;
 		}
-
-
+        
 		internal Texture TextureBuffer
 		{
 			get
