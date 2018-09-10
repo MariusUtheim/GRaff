@@ -7,7 +7,7 @@ using GRaff.Graphics;
 
 namespace GRaff.GraphicTest
 {
-	[Test(Order = -10000)]
+	[Test]
     class AnimationTest : GameElement
 	{
 
@@ -42,7 +42,7 @@ namespace GRaff.GraphicTest
 				: base(location)
 			{
 				this.Sprite = sprite;
-				Model.Speed = spd;
+				this.ImageSpeed = spd;
             }
 		}
 
