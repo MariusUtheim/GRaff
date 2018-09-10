@@ -28,11 +28,11 @@ namespace GRaff.Audio
         }
         
 
-        public abstract int Bitrate { get; }
+		public int Bitrate { get; protected set; }
 
-        public abstract int Channels { get; }
+		public int Channels { get; protected set; }
 
-        public abstract int Frequency { get; }
+		public int Frequency { get; protected set; }
         
 
     }

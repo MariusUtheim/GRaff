@@ -42,13 +42,7 @@ namespace GRaff.Audio
             _beginOffset = _underlyingStream.Position;
         }
 
-
-        public override int Bitrate { get; }
-
-        public override int Channels { get; }
-
-        public override int Frequency { get; }
-
+              
         protected override void Dispose(bool disposing)
         {
             _underlyingStream.Dispose();

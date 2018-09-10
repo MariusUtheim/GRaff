@@ -1,4 +1,4 @@
-﻿using System.Drawing;
+﻿/*using System.Drawing;
 
 namespace GRaff.Graphics.Text
 {
@@ -12,4 +12,4 @@ namespace GRaff.Graphics.Text
 		public int XOffset { get; internal set; }
 		public int YOffset { get; internal set; }
 	}
-}
+}*/

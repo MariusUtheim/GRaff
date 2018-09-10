@@ -22,12 +22,6 @@ namespace GRaff.Audio
             this.Bitrate = 16;
         }
 
-        public override int Bitrate { get; }
-
-        public override int Channels { get; }
-
-        public override int Frequency { get; }
-
         protected override void Dispose(bool disposing)
         {
             _reader.Dispose();
@@ -42,7 +36,7 @@ namespace GRaff.Audio
 
         public override bool CanWrite => false;
 
-        public override long Length => _reader.TotalSamples;
+		public override long Length => sizeof(float) * _reader.TotalSamples;
 
         public override long Position
         {
