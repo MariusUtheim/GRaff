@@ -1,90 +1,67 @@
 ﻿using System;
-using System.Diagnostics.Contracts;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace GRaff
 {
-#warning Revamp the interaction between mask/sprite/model/transform/object
 	public sealed class Mask
 	{
-		private readonly GameObject _owner;
-		private MaskShape _maskShape;
-
-		internal Mask(GameObject owner)
+		public Mask(Polygon polygon)
 		{
-			Contract.Requires<ArgumentNullException>(owner != null);
-			this._owner = owner;
-			this.Shape = MaskShape.Automatic;
+			this.Polygon = polygon;
 		}
 
-		[ContractInvariantMethod]
-		private void invariants()
+		private Mask()
 		{
-			Contract.Invariant(_owner != null);
+			Polygon = null;
 		}
 
-		public Polygon GetPolygon() => Transform.Polygon(Shape?.Polygon);
+		private Mask(params Point[] pts)
+		{
+			Polygon = new Polygon(pts, Unit._);
+		}
 
-		private Transform Transform => _owner.Transform;
+		public Polygon Polygon { get; private set; }
+
+		public static Mask Rectangle(double x, double y, double width, double height) => Rectangle(new Rectangle(x, y, width, height));
+
+		public static Mask Rectangle(double width, double height) => Rectangle(-width / 2, -height / 2, width, height);
+
+		public static Mask Rectangle(Rectangle rectangle) => new Mask(rectangle.TopLeft, rectangle.TopRight, rectangle.BottomRight, rectangle.BottomLeft);
+
+
+		public static Mask Diamond(double x, double y, double width, double height)
+			=> new Mask(new Point(x + width / 2, y), new Point(x + width, y + height / 2), new Point(x + width / 2, y + height), new Point(x, y + height / 2) );
+
+		public static Mask Diamond(double width, double height) => Diamond(-width / 2, -height / 2, width, height);
+
+		public static Mask Diamond(Rectangle rectangle) => Diamond(rectangle.Left, rectangle.Top, rectangle.Width, rectangle.Height);
+ 		
+
+		public static Mask Circle(double radius) => Circle(new Point(0, 0), radius);
+
+		public static Mask Circle(Point center, double radius) => new Mask(Polygon.Circle(center, radius));
+
+
+		public static Mask Ellipse(double x, double y, double xRadius, double yRadius) => new Mask(Polygon.Ellipse(new Rectangle(x, y, xRadius, yRadius)));
+
+		public static Mask Ellipse(Point center, double xRadius, double yRadius) => new Mask(Polygon.Ellipse(center, xRadius, yRadius));
+
+		public static Mask Ellipse(double xRadius, double yRadius) => Ellipse(Point.Zero, xRadius, yRadius);
+	
+		public static Mask Ellipse(Rectangle rectangle) => new Mask(GRaff.Polygon.Ellipse(rectangle));
 
 		/// <summary>
-		/// Gets or sets the shape of this GRaff.Mask.
-		/// If the shape is set to GRaff.MaskShape.Automatic, it instead returns the MaskShape of the underlying sprite, or GRaff.MaskShape.None if that sprite is null.
-		/// This value cannot be set to null.
+		/// Gets the special GRaff.MaskShape that indicates no mask.
+		/// GRaff.Mask objects using this GRaff.MaskShape will never intersect another GRaff.Mask.
 		/// </summary>
-		/// <exception cref="ArgumentNullException">the value is null.</exception>
-		public MaskShape Shape
-		{
-			get
-			{
-				if (_maskShape == MaskShape.Automatic)
-					return _owner.Sprite?.MaskShape;
-				else
-					return _maskShape;	
-			}
+		public static Mask None { get; } = new Mask();
 
-			set
-			{
-				Contract.Requires<ArgumentNullException>(value != null);
-				_maskShape = value;
-			}
-		}
-
-		public Rectangle BoundingBox
-		{
-			get
-			{
-				Polygon _polygon = GetPolygon();
-				if (_polygon == null)
-					return new Rectangle(Transform.X, Transform.Y, 0, 0);
-
-				Point vertex;
-				double left, right, top, bottom;
-				vertex = _polygon.Vertex(0);
-				left = right = vertex.X;
-				top = bottom = vertex.Y;
-
-				for (int i = 1; i < _polygon.Length; i++)
-				{
-					vertex = _polygon.Vertex(i);
-					if (vertex.X < left) left = vertex.X;
-					if (vertex.X > right) right = vertex.X;
-					if (vertex.Y < top) top = vertex.Y;
-					if (vertex.Y > bottom) bottom = vertex.Y;
-				}
-
-				return new Rectangle(left, top, right - left, bottom - top);
-			}
-		}
-
-		public bool ContainsPoint(Point pt) => GetPolygon()?.ContainsPoint(pt) ?? false;
-
-		public bool ContainsPoint(double x, double y) => ContainsPoint(new Point(x, y));
-
-		public bool Intersects(Mask other)
-		{
-			if (other == null)
-				return false;
-			return GetPolygon()?.Intersects(other.GetPolygon()) ?? false;
-		}
+		/// <summary>
+		/// Gets the special GRaff.MaskShape that indicates a mask should use the MaskShape from the sprite of its referred object.
+		/// </summary>
+		public static Mask Automatic { get; } = new Mask();
 	}
 }

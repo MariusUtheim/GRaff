@@ -184,7 +184,6 @@
     <Compile Include="IAnimationEndListener.cs" />
     <Compile Include="ICollisionListener.cs" />
     <Compile Include="IKeyListener.cs" />
-    <Compile Include="Model.cs" />
     <Compile Include="IMouseListener.cs" />
     <Compile Include="Instance.cs" />
     <Compile Include="Geometry\IntRectangle.cs" />
@@ -193,7 +192,6 @@
     <Compile Include="Keyboard.cs" />
     <Compile Include="Geometry\Line.cs" />
     <Compile Include="Mask.cs" />
-    <Compile Include="MaskShape.cs" />
     <Compile Include="Geometry\Matrix.cs" />
     <Compile Include="Mouse.cs" />
     <Compile Include="MouseButton.cs" />
@@ -260,11 +258,10 @@
     </None>
     <None Include="OpenTK.dll.config" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
-    <Folder Include="Graphics\Shaders\" />
     <Folder Include="External\" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>
