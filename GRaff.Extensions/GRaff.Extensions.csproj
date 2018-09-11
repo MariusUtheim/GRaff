@@ -47,6 +47,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Graphics.Shaders\ColorMatrix.cs" />
+    <Compile Include="Graphics.Text.TrueType\FontOptions.cs" />
     <Compile Include="Particles\AccelerationBehavior.cs" />
     <Compile Include="Particles\ColorBehavior.cs" />
     <Compile Include="Particles\ColoredParticleRenderer.cs" />
