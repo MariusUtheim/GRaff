@@ -14,7 +14,7 @@ namespace GRaff.Graphics.Text.TrueType
 		public static ISet<char> ASCIICharacters { get; } = new ImmutableSet("\n !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~");
 		public static ISet<char> AlphaNumeric { get; } = new ImmutableSet("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789");
 
-		public TrueTypeFont(FileInfo file, ISet<char> charSet, FontOptions options)
+        public TrueTypeFont(FileInfo file, ISet<char> charSet, FontOptions options)
 		{
 			this.FontFile = file;
 			this.CharSet = charSet;
@@ -27,9 +27,6 @@ namespace GRaff.Graphics.Text.TrueType
 				fontFamily += " Bold";
 			if ((options & FontOptions.Italic) == FontOptions.Italic)
 				fontFamily += " Italic";
-
-#warning For Mac, use some system calls to get the correct list of Fonts
-			// var fontFileName = TrueTypeLoader.GetTrueTypeFile(fontFamily);
 
 			switch (Environment.OSVersion.Platform)
 			{
@@ -63,7 +60,6 @@ namespace GRaff.Graphics.Text.TrueType
 			return new TrueTypeFont(file, charSet, options);
 		}
 
-
 		public static Font LoadRasterized(string fontFamily, ISet<char> charSet, int size, FontOptions options = FontOptions.None)
 		{
 			var ttf = LoadFamily(fontFamily, charSet, options);
@@ -89,13 +85,11 @@ namespace GRaff.Graphics.Text.TrueType
 			foreach (var c in chars)
 				_blit(face, c, dst);
 
-			var texture = new Texture(dst);
-
-
 			var kernings = ((FontOptions & FontOptions.IgnoreKerning) == FontOptions.IgnoreKerning)
 				            ? new List<FontKerning>() : _makeKernings(face, CharSet);
             
-#warning Provide correct info for all fields. Try saving and loading and see if it gives the same result
+			var texture = new Texture(dst);
+
 			return new Font(texture, new FontFile
 			{
 				Chars = chars.ToList(),
@@ -107,10 +101,8 @@ namespace GRaff.Graphics.Text.TrueType
 
 		}
 
-
 		#region Rasterizing helper functions
-        
-      
+
 		private static List<FontKerning> _makeKernings(Face face, ISet<char> charSet)
         {
             if (!face.HasKerning)
@@ -128,10 +120,6 @@ namespace GRaff.Graphics.Text.TrueType
         
 		private static FontCharacter[] _genCharLayout(Face face, IEnumerable<char> chars)
         {
-#warning Does this work with italics?
-#warning What about missing characters?
-#warning Is rendering everything twice very inefficient? 
-
 			//TODO// Pack a bit more efficiently
 			var x = 0;
 			return chars.Select(c =>
@@ -157,56 +145,18 @@ namespace GRaff.Graphics.Text.TrueType
 			if (face.Glyph.Bitmap.Buffer == IntPtr.Zero)
 				return;
 
-#warning Is it faster to use a pointer here? 
-			var c = 0;
 			var data = face.Glyph.Bitmap.BufferData;
-            
+			var c = 0;
+
 			for (var y = 0; y < character.Height; y++)
                 for (var x = 0; x < character.Width; x++)
-				{
 					dst[character.Y + y, character.X + x] = new Color(255, 255, 255, data[c++]);
-				}
 		}
 
 		#endregion
 
-
-		/*
-        public static TrueTypeFont LoadFromSystem(string fontFamily, ISet<char> charSet, FontOptions options = FontOptions.None)
-        {
-            return TrueTypeLoader.LoadTrueType(_getFontFileName(fontFamily, options), charSet, (options & FontOptions.IgnoreKerning) == FontOptions.IgnoreKerning);
-        }
-
-        
-        public static IAsyncOperation<TrueTypeFont> LoadFromSystemAsync(string fontFamily, ISet<char> charSet, FontOptions options = FontOptions.None)
-        {
-            return TrueTypeLoader.LoadTrueTypeAsync(_getFontFileName(fontFamily, options), size, charSet, (options & FontOptions.IgnoreKerning) == FontOptions.IgnoreKerning);
-        }
-
-        /// <summary>
-        /// Loads a TrueType font from the specified file.
-        /// </summary>
-        /// <param name="fileName">The TrueType font file to load.</param>
-        /// <param name="size">The size of the loaded font.</param>
-        /// <param name="charSet">The character set to load.</param>
-        /// <returns></returns>
-        public static Font LoadFromFile(string fileName, int size, ISet<char> charSet)
-        {
-            return TrueTypeLoader.LoadTrueType(new FileInfo(fileName), size, charSet, true);
-        }
-
-		public static IAsyncOperation<TrueTypeFont> LoadFromFileAsync(string fileName, int size, ISet<char> charSet)
-		{
-#warning Not implemented
-			throw new NotImplementedException();
-		}
-
-		public Font Render(int size)
-		{
-			throw new NotImplementedException();
-		}
-		*/
 	}
+
 
 	internal class ImmutableSet : ISet<char>
     {
