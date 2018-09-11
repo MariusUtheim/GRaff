@@ -1,5 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\SharpFont.4.0.1\build\SharpFont.props" Condition="Exists('..\packages\SharpFont.4.0.1\build\SharpFont.props')" />
+  <Import Project="..\packages\SharpFont.Dependencies.2.6\build\SharpFont.Dependencies.props" Condition="Exists('..\packages\SharpFont.Dependencies.2.6\build\SharpFont.Dependencies.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -38,6 +40,9 @@
     <Reference Include="mscorlib" />
     <Reference Include="System.ValueTuple, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\System.ValueTuple.4.5.0\lib\net461\System.ValueTuple.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpFont">
+      <HintPath>..\packages\SharpFont.4.0.1\lib\net45\SharpFont.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -120,9 +125,7 @@
     <Compile Include="Graphics.Shaders\ShockwaveShaderProgram.cs" />
     <Compile Include="Randomness\IntegerPairDistribution.cs" />
     <Compile Include="Randomness\MonteCarloDistribution.cs" />
-    <Compile Include="Graphics.Text.TrueType\TrueTypeLoader.cs" />
     <Compile Include="Graphics.Text.TrueType\TrueTypeFont.cs" />
-    <Compile Include="Graphics.Text.TrueType\Glyph.cs" />
     <Compile Include="Graphics.Text.TrueType\RectPacker\Canvas.cs" />
     <Compile Include="Graphics.Text.TrueType\RectPacker\CanvasStats.cs" />
     <Compile Include="Graphics.Text.TrueType\RectPacker\DynamicTwoDimensionalArray.cs" />
