@@ -28,15 +28,17 @@ namespace GRaff.Graphics.Text.TrueType
 			if ((options & FontOptions.Italic) == FontOptions.Italic)
 				fontFamily += " Italic";
 
-#warning Implement for Windows
 #warning For Mac, use some system calls to get the correct list of Fonts
 			// var fontFileName = TrueTypeLoader.GetTrueTypeFile(fontFamily);
 
 			switch (Environment.OSVersion.Platform)
 			{
-				//case PlatformID.Win32NT:
-				// fontFileName = Path.Combine(@"C:\Windows\Fonts\", fontFileName);
-				//    break;
+				case PlatformID.Win32NT:
+                    var _fontsKey = Microsoft.Win32.Registry.LocalMachine.OpenSubKey("Software\\Microsoft\\Windows NT\\CurrentVersion\\Fonts");
+                    var fontFileName = (string)(_fontsKey.GetValue(fontFamily)
+                                               ?? _fontsKey.GetValue(fontFamily + " (TrueType)"));
+                    fontFileName = Path.Combine(@"C:\Windows\Fonts\", fontFileName);
+                    return File.Exists(fontFileName) ? new FileInfo(fontFileName) : null;
 
 				case PlatformID.Unix:
 				case PlatformID.MacOSX:
@@ -48,12 +50,9 @@ namespace GRaff.Graphics.Text.TrueType
 					else
 						return null;
 
-
 				default:
 					throw new NotSupportedException("TrueType loading is not supported on OS version " + Environment.OSVersion.Platform.ToString());
 			}
-
-
 		}
 
 		public static TrueTypeFont LoadFamily(string fontFamily, ISet<char> charSet, FontOptions options = FontOptions.None)
