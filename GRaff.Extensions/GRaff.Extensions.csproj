@@ -127,9 +127,6 @@
     <Compile Include="Randomness\IntegerPairDistribution.cs" />
     <Compile Include="Randomness\MonteCarloDistribution.cs" />
     <Compile Include="Graphics.Text.TrueType\TrueTypeFont.cs" />
-    <Compile Include="Graphics.Text.TrueType\RectPacker\Canvas.cs" />
-    <Compile Include="Graphics.Text.TrueType\RectPacker\CanvasStats.cs" />
-    <Compile Include="Graphics.Text.TrueType\RectPacker\DynamicTwoDimensionalArray.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\GRaff\GRaff.csproj">
