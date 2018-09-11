@@ -71,5 +71,10 @@ namespace GRaff
 
 		[XmlAttribute("chnl")]
 		public int Channel { get; set; }
+
+		public override string ToString()
+		{
+			return $"{nameof(FontCharacter)}:{Char}";
+		}
 	}
 }

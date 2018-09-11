@@ -14,38 +14,7 @@ namespace GRaff
 {
     public class Font : IDisposable
     {
-        private class ImmutableSet : ISet<char>
-        {
-            private HashSet<char> _backingSet;
 
-            public ImmutableSet(IEnumerable<char> chars) => _backingSet = new HashSet<char>(chars);
-
-            public int Count => _backingSet.Count;
-            public bool IsReadOnly => true;
-            public bool Add(char item) => throw new NotSupportedException();
-            public void Clear() => throw new NotSupportedException();
-            public bool Contains(char item) => _backingSet.Contains(item);
-            public void CopyTo(char[] array, int arrayIndex) => _backingSet.CopyTo(array, arrayIndex);
-            public void ExceptWith(IEnumerable<char> other) => throw new NotSupportedException();
-            public IEnumerator<char> GetEnumerator() => _backingSet.GetEnumerator();
-            public void IntersectWith(IEnumerable<char> other) => throw new NotSupportedException();
-            public bool IsProperSubsetOf(IEnumerable<char> other) => _backingSet.IsProperSubsetOf(other);
-            public bool IsProperSupersetOf(IEnumerable<char> other) => _backingSet.IsProperSupersetOf(other);
-            public bool IsSubsetOf(IEnumerable<char> other) => _backingSet.IsSubsetOf(other);
-            public bool IsSupersetOf(IEnumerable<char> other) => _backingSet.IsSupersetOf(other);
-            public bool Overlaps(IEnumerable<char> other) => _backingSet.Overlaps(other);
-            public bool Remove(char item) => throw new NotSupportedException();
-            public bool SetEquals(IEnumerable<char> other) => _backingSet.SetEquals(other);
-            public void SymmetricExceptWith(IEnumerable<char> other) => throw new NotSupportedException();
-            public void UnionWith(IEnumerable<char> other) => throw new NotSupportedException();
-            void ICollection<char>.Add(char item) => throw new NotSupportedException();
-            IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
-        }
-
-        private static readonly Regex NewlinePattern = new Regex("\r\n|\n");
-		public static ISet<char> ASCIICharacters { get; } = new ImmutableSet("\n !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~");
-
-        
         private readonly Dictionary<char, FontCharacter> _characters = new Dictionary<char, FontCharacter>();
         private readonly Dictionary<Tuple<char, char>, int> _kerning = new Dictionary<Tuple<char, char>, int>();
 
