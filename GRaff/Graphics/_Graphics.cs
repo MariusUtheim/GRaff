@@ -27,8 +27,7 @@ namespace GRaff.Graphics
 
             ShaderProgram.Default.Bind();
 
-            Framebuffer.ExpectedViewWidth = (int)(Window.Width * Window.DisplayScale.X);
-            Framebuffer.ExpectedViewHeight = (int)(Window.Height * Window.DisplayScale.Y);
+			View.InitializeFramebufferSize((int)(Window.Width * Window.DisplayScale.X), (int)(Window.Height * Window.DisplayScale.Y));
 
 #if DEBUG
             GlobalEvent.EndStep += () =>

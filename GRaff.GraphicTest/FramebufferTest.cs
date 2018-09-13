@@ -8,7 +8,7 @@ using GRaff.Synchronization;
 
 namespace GRaff.GraphicTest
 {
-	[Test]
+	[Test(Order = -10)]
 	class FramebufferTest : GameElement
 	{
 		Framebuffer _framebuffer;
@@ -17,21 +17,19 @@ namespace GRaff.GraphicTest
 
 		public FramebufferTest()
 		{
-				_framebuffer = new Framebuffer(w, h);
+			_framebuffer = new Framebuffer(w, h);
 
-				using (_framebuffer.Use())
-				{
-                    Draw.Clear(Colors.Red);
+            using (_framebuffer.Use())
+            {
 
-					Draw.Texture(_giraffe, (0, 0));
+                Draw.FillCircle((0, 0), 5, Colors.Black);
+                Draw.FillCircle((w, 0), 5, Colors.Black);
+                Draw.FillCircle((0, h), 5, Colors.Black);
+                Draw.FillCircle((w, h), 5, Colors.Black);
 
-					Draw.FillTriangle((0, 0), (0, 10), (10, 0), Colors.Black.Transparent(0), Colors.Black, Colors.Black);
-					Draw.FillTriangle((w, 0), (w, 10), (w - 10, 0), Colors.Black.Transparent(0), Colors.Black, Colors.Black);
-					Draw.FillTriangle((0, h), (0, h - 10), (10, h), Colors.Black.Transparent(0), Colors.Black, Colors.Black);
-					Draw.FillTriangle((w, h), (w, h - 10), (w - 10, h), Colors.Black.Transparent(0), Colors.Black, Colors.Black);
-
-					Draw.Line((0, h), (w, 0), Colors.Black);
-				}
+				Draw.Line((0, 0), (w, h), Colors.Black);
+                Draw.Line((0, h), (w, 0), Colors.Black);
+            }
 		}
 
 

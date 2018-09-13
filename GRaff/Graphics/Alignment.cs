@@ -1,7 +1,9 @@
-﻿
+﻿using System;
+
 
 namespace GRaff.Graphics
 {
+	[Flags]
     public enum Alignment
 	{
 		Horizontal = 0x03,
