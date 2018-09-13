@@ -168,10 +168,7 @@ namespace GRaff.Graphics
 			if (text == null)
 				return;
 
-            (var vertices, var texCoords) = renderer.RenderVertices(text);
-            
-			for (int i = 0; i < vertices.Length; i++)
-				vertices[i] = transform * vertices[i];
+            (var vertices, var texCoords) = renderer.RenderVertices(text, transform);
 
             _renderSystem.SetVertices(vertices);
             _renderSystem.SetColor(color);
