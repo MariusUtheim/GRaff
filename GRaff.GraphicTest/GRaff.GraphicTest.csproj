@@ -61,7 +61,6 @@
     <Compile Include="TestAttribute.cs" />
     <Compile Include="TestController.cs" />
     <Compile Include="TextTest.cs" />
-    <Compile Include="TextAlignmentTest.cs" />
     <Compile Include="TextureBufferTest.cs" />
     <Compile Include="TransformTest.cs" />
     <Compile Include="TweenTest.cs" />
@@ -81,6 +80,9 @@
     <None Include="Assets\PanaceaShort.wav">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="Assets\Times New Roman.fnt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="Assets\VectorGraphicsReference.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -96,6 +98,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Assets\Particle.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Times New Roman_0.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
