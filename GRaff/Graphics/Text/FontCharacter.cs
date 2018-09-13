@@ -6,6 +6,8 @@ namespace GRaff
 	[Serializable]
 	public class FontCharacter
 	{
+        public FontCharacter() { }
+
 		public FontCharacter(char c, int x, int y, int width, int height, int xOffset, int yOffset, int xAdvance)
         {
 			this.Id = c;
@@ -24,11 +26,10 @@ namespace GRaff
         public char Char
 		{
 			get => (char)Id;
-			set => Id = value;
 		}
 
 		[XmlAttribute("x")]
-		public int X { get; set; }
+		public int X { get; internal set; }
 
 		[XmlAttribute("y")]
 		public int Y { get; set; }
@@ -36,7 +37,6 @@ namespace GRaff
 		public IntVector Location
 		{
 			get => (X, Y);
-			set => (X, Y) = value;
 		}
 
 		[XmlAttribute("width")]
@@ -48,7 +48,6 @@ namespace GRaff
 		public IntVector Size
 		{
 			get => (Width, Height);
-			set => (Width, Height) = value;
 		}
 
 		[XmlAttribute("xoffset")]
@@ -60,7 +59,6 @@ namespace GRaff
 		public IntVector Offset
 		{
 			get => (XOffset, YOffset);
-			set => (XOffset, YOffset) = value;
 		}
 
 		[XmlAttribute("xadvance")]
