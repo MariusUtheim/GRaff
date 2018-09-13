@@ -1,4 +1,5 @@
-﻿using System.Diagnostics.Contracts;
+﻿using System;
+using System.Diagnostics.Contracts;
 using GRaff.Graphics;
 
 
@@ -22,35 +23,33 @@ namespace GRaff
 		/// <param name="y">The y-coordinate.</param>
 		protected GameObject(double x, double y)
 		{
-			Transform = new Transform();
-			X = x;
-			Y = y;
-			Model = new Model(this);
-			Mask = new Mask(this);
-		}
+            Transform = new Transform { X = x, Y = y };
+        }
 
-		/// <summary>
-		/// Initializes a new instance of the GRaff.GameObject class at the specified location.
-		/// </summary>
-		/// <param name="location">The location.</param>
-		protected GameObject(Point location)
-			: this(location.X, location.Y) { }
+        /// <summary>
+        /// Initializes a new instance of the GRaff.GameObject class at the specified location.
+        /// </summary>
+        /// <param name="location">The location.</param>
+        protected GameObject(Point location)
+            : this(location.X, location.Y) { }
 
-		[ContractInvariantMethod]
-		private void invariants()
-		{
-			Contract.Invariant(Transform != null);
-			Contract.Invariant(Model != null);
-			Contract.Invariant(Mask != null);
-		}
+
+
+        public Transform Transform { get; }
+
+        public Sprite Sprite
+        {
+            get; set;
+        }
+
 
 		/// <summary>
 		/// Gets or sets the x-coordinate of this GRaff.GameObject.
 		/// </summary>
 		public double X
 		{
-			get { return Transform.X; }
-			set { Transform.X = value; }
+            get => Transform.X;
+            set => Transform.X = value;
 		}
 
 		/// <summary>
@@ -58,8 +57,8 @@ namespace GRaff
 		/// </summary>
 		public double Y
 		{
-			get { return Transform.Y; }
-			set { Transform.Y = value; }
+            get => Transform.Y;
+            set => Transform.Y = value;
 		}
 
 		/// <summary>
@@ -67,36 +66,10 @@ namespace GRaff
 		/// </summary>
 		public Point Location
 		{
-			get { return new Point(Transform.X, Transform.Y); }
-			set { Transform.Location = value; }
+			get => Transform.Location; 
+			set => Transform.Location = value; 
 		}
-
-
-		public Model Model { get; private set; }
-
-
-		public Sprite Sprite
-		{
-			get { return Model.Sprite; }
-			set { Model.Sprite = value; }
-		}
-
-		public Transform Transform { get; private set; }
-
-		public bool Intersects(GameObject other)
-			=> other == null || Mask.Intersects(other.Mask);
-
-		public Mask Mask
-		{
-			get;
-			private set;
-		}
-
-		public Rectangle BoundingBox
-		{
-			get { return Mask.BoundingBox; }
-		}
-
+   
 		/// <summary>
 		/// An action that is performed at the beginning of each update loop.
 		/// </summary>
@@ -113,12 +86,148 @@ namespace GRaff
 		/// </summary>
 		public override void OnDraw()
 		{
-			if (Model.Sprite != null)
+			if (Sprite != null)
 			{
-				Draw.Model(Model);
-				if (Model.Animate())
+				Draw.Sprite(Sprite, ImageIndex, Transform, Blend);
+				if (Animate())
 					(this as IAnimationEndListener)?.AnimationEnd();
 			}
 		}
-	}
+
+        #region Image section
+
+        public Color Blend { get; set; }
+
+        public double Alpha
+        {
+            get { return Blend.A / 255.0; }
+            set { Blend = Blend.Transparent(value); }
+        }
+
+        private double _index;
+        public double ImageIndex
+        {
+            get { return _index; }
+            set { _index = GMath.Remainder(value, ImageCount); }
+        }
+
+        public double ImageSpeed
+        {
+            get;
+            set;
+        }
+
+        public int ImageCount => Sprite?.AnimationStrip.ImageCount ?? 1;
+
+        public double ImagePeriod
+        {
+            get
+            {
+                if (Sprite == null)
+                    return Double.NaN;
+                else if (ImageSpeed == 0)
+                    return Double.PositiveInfinity;
+                else
+                    return GMath.Abs(Sprite.AnimationStrip.Duration / ImageSpeed);
+            }
+        }
+
+        public SubTexture CurrentTexture
+        {
+            get
+            {
+                if (Sprite == null)
+                    throw new InvalidOperationException($"The {nameof(GRaff)}.{nameof(GameObject)} has no sprite.");
+                return Sprite.SubImage(ImageIndex);
+            }
+        }
+
+
+        public bool Animate()
+        {
+            if (Sprite != null)
+            {
+                _index += ImageSpeed;
+                if (_index >= ImageCount || _index < 0)
+                {
+                    _index = GMath.Remainder(_index, ImageCount);
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        #endregion
+
+        #region Mask section
+
+        private Mask _mask;
+        public Mask Mask
+        {
+            get
+            {
+                return _mask;
+            }
+
+            set
+            {
+                Contract.Requires<ArgumentNullException>(value != null);
+                _mask = value;
+            }
+        }
+
+        public Polygon MaskPolygon
+        {
+            get
+            {
+                if (Mask.ReferenceEquals(Mask, Mask.Automatic))
+                    return Transform.Polygon(Sprite?.MaskShape?.Polygon);
+                else
+                    return Transform.Polygon(Mask?.Polygon);
+            }
+        }
+
+
+        public Rectangle BoundingBox
+        {
+            get
+            {
+                Polygon _polygon = MaskPolygon;
+                if (_polygon == null)
+                    return new Rectangle(Transform.X, Transform.Y, 0, 0);
+
+                Point vertex;
+                double left, right, top, bottom;
+                vertex = _polygon.Vertex(0);
+                left = right = vertex.X;
+                top = bottom = vertex.Y;
+
+                for (int i = 1; i < _polygon.Length; i++)
+                {
+                    vertex = _polygon.Vertex(i);
+                    if (vertex.X < left) left = vertex.X;
+                    if (vertex.X > right) right = vertex.X;
+                    if (vertex.Y < top) top = vertex.Y;
+                    if (vertex.Y > bottom) bottom = vertex.Y;
+                }
+
+                return new Rectangle(left, top, right - left, bottom - top);
+            }
+        }
+
+        public bool ContainsPoint(Point pt) => MaskPolygon?.ContainsPoint(pt) ?? false;
+
+        public bool ContainsPoint(double x, double y) => ContainsPoint((x, y));
+
+        public bool Intersects(GameObject other)
+        {
+            if (other == null)
+                return false;
+            return MaskPolygon?.Intersects(other.MaskPolygon) ?? false;
+        }
+
+        #endregion
+
+    }
 }

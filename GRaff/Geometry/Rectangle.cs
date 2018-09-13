@@ -108,7 +108,7 @@ namespace GRaff
 		/// <returns>true if the two GRaff.Rectangle structures intersect.</returns>
 		#warning Does this work with negative rectangles?
         public bool Intersects(Rectangle other)
-			=> !(Left > other.Right || Top > other.Bottom || Right < other.Left || Bottom < other.Top);
+			=> !(Left >= other.Right || Top >= other.Bottom || Right <= other.Left || Bottom <= other.Top);
 		
 		public Rectangle? Intersection(Rectangle other)
 		{

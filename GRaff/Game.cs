@@ -153,7 +153,7 @@ namespace GRaff
 
         private static void _doMouseClick<T>(Action<T> action) where T : class
         {
-            foreach (var instance in Instance.OfType<GameObject>().Where(obj => obj is T && obj.Mask.ContainsPoint(Mouse.Location)).ToList())
+            foreach (var instance in Instance.OfType<GameObject>().Where(obj => obj is T && obj.ContainsPoint(Mouse.Location)).ToList())
                 if (instance.Exists)
                     action(instance as T);
         }
