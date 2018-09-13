@@ -138,7 +138,6 @@
     <Compile Include="Font.cs" />
     <Compile Include="Graphics\Text\FontInfo.cs" />
     <Compile Include="GRaffExtensions.cs" />
-    <Compile Include="Graphics\Text\FontLoader.cs" />
     <Compile Include="Graphics\GraphicsPoint.cs" />
     <Compile Include="Geometry\MatrixException.cs" />
     <Compile Include="Audio\DistanceModel.cs" />

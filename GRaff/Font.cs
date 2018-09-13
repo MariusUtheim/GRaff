@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Drawing.Text;
 using System.IO;
 using System.Linq;
-using System.Text.RegularExpressions;
+using System.Xml.Serialization;
 using GRaff.Graphics;
 using GRaff.Graphics.Text;
 using GRaff.Synchronization;
@@ -14,6 +12,7 @@ namespace GRaff
 {
     public class Font : IDisposable
     {
+        private static XmlSerializer deserializer = new XmlSerializer(typeof(FontFile));
 
         private readonly Dictionary<char, FontCharacter> _characters = new Dictionary<char, FontCharacter>();
         private readonly Dictionary<Tuple<char, char>, int> _kerning = new Dictionary<Tuple<char, char>, int>();
@@ -67,20 +66,29 @@ namespace GRaff
 
         public Texture Texture { get; private set; }
 
-        public static IAsyncOperation<Font> LoadAsync(string bitmapFile, string fontDataFile)
+        public static IAsyncOperation<Font> LoadAsync(string fontDataFile)
         {
-            return Texture.LoadAsync(bitmapFile)
-                .ThenQueue(textureBuffer =>
-                {
-                    var fontData = FontLoader.Load(fontDataFile);
-                    return new Font(textureBuffer, fontData);
-                });
+            FontFile fontData;
+            using (var textReader = File.OpenRead(fontDataFile))
+                fontData = (FontFile)deserializer.Deserialize(textReader);
+
+#warning Support multiple pages?
+            if (fontData.Pages.Count > 1)
+                throw new NotSupportedException("Fonts with multiple pages are currently not supported");
+
+            var fontTextureFile = Path.Combine(Path.GetDirectoryName(fontDataFile), fontData.Pages[0].File);
+
+            if (!File.Exists(fontTextureFile))
+                throw new FileNotFoundException("The font texture file was not found.", fontTextureFile);
+
+            return Texture.LoadAsync(fontTextureFile).ThenQueue(textureBuffer => new Font(textureBuffer, fontData));
+
         }
 
-        public static Font Load(string bitmapFile, string fontDataFile)
+        public static Font Load(string fontDataFile)
         {
             Contract.Ensures(Contract.Result<Font>() != null);
-            return LoadAsync(bitmapFile, fontDataFile).Wait();
+            return LoadAsync(fontDataFile).Wait();
         }
       
 
