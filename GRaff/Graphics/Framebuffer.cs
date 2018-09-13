@@ -11,16 +11,11 @@ namespace GRaff.Graphics
 {
 	public sealed class Framebuffer : IDisposable
 	{
-		internal static int ExpectedViewWidth, ExpectedViewHeight;
-        internal static IntVector ExpectedViewSize => (ExpectedViewWidth, ExpectedViewHeight);
-
-        public Framebuffer(IntVector size)
-            : this(size.X, size.Y) { }
-
-		public Framebuffer(int width, int height)
+		      
+		public Framebuffer(Texture texture)
 		{
 			Id = GL.GenFramebuffer();
-			Texture = new Texture(width, height, IntPtr.Zero);
+			this.Texture = texture;
 
             var previous = Current;
 
@@ -35,9 +30,29 @@ namespace GRaff.Graphics
             finally
             {
                 GL.BindFramebuffer(FramebufferTarget.Framebuffer, previous?.Id ?? 0);
-            }
-            
+            }         
 		}
+
+        public Framebuffer(IntVector size)
+			: this(new Texture(size.X, size.Y, IntPtr.Zero)) { }
+
+		public Framebuffer(int width, int height)
+			: this(new Texture(width, height, IntPtr.Zero)) { }
+
+
+
+		private static Color[,] _fill(int width, int height, Color clearColor)
+		{
+			var result = new Color[height, width];
+			for (var y = 0; y < height; y++)
+				for (var x = 0; x < width; x++)
+					result[y, x] = clearColor;
+			return result;
+		}
+
+        public Framebuffer(int width, int height, Color clearColor)
+			: this(new Texture(_fill(width, height, clearColor))) { }
+
 
 		public static Framebuffer Current { get; private set; }
 
@@ -69,13 +84,14 @@ namespace GRaff.Graphics
 
         public IDisposable Use()
         {
-            return UseContext.CreateAt($"{typeof(Framebuffer).FullName}.{nameof(Use)}",
-                                       (frameBuffer: Framebuffer.Current, viewContext: View.Rectangle((Point.Zero, ExpectedViewSize)).Use()),
+			return UseContext.CreateAt($"{typeof(Framebuffer).FullName}.{nameof(Use)}",
+                                       (frameBuffer: Framebuffer.Current, 
+			                            viewContext: View.Framebuffer().Use()),
                 () => GL.BindFramebuffer(FramebufferTarget.Framebuffer, this.Id),
-                previous =>
+                capture =>
                 {
-                    GL.BindFramebuffer(FramebufferTarget.Framebuffer, previous.frameBuffer?.Id ?? 0);
-                    previous.viewContext.Dispose();
+                    GL.BindFramebuffer(FramebufferTarget.Framebuffer, capture.frameBuffer?.Id ?? 0);
+                    capture.viewContext.Dispose();
                 });
         }
 

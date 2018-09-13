@@ -19,7 +19,7 @@ namespace GRaff
 	/// </summary>
 	public class View
 	{
-        //TODO// Define up direction
+		private static int FramebufferViewWidth, FramebufferViewHeight;
         private static readonly Triangle GLTriangle = new Triangle((-1, 1), (1, 1), (-1, -1));
         private static Matrix GLToScreenMatrix;
 
@@ -32,6 +32,12 @@ namespace GRaff
             Contract.Requires<MatrixException>(viewMatrix.Determinant != 0);
             this._transform = new Transform(viewMatrix);
         }
+
+		internal static void InitializeFramebufferSize(int width, int height)
+		{
+			FramebufferViewWidth = width;
+			FramebufferViewHeight = height;
+		}
 
         internal static void UpdateGLToScreenMatrix()
         {
@@ -46,13 +52,15 @@ namespace GRaff
 
         public static View Rectangle(Rectangle rect)
         {
-            var m = Matrix.Translation(-(Vector)rect.Center).Scale(2.0 / rect.Width, -2.0 / rect.Height);
+			var m = Matrix.Translation(-(Vector)rect.Center).Scale(2.0 / rect.Width, -2.0 / rect.Height);
             return new View(m);
         }
 
         public static View Centered(Point location, Vector size) => Rectangle(new Rectangle((location - size / 2), size));
 
         public static View DrawTo(Point location) => new View(View.Current.ViewMatrix * Matrix.Translation(location));
+
+		public static View Framebuffer() => Rectangle(0, FramebufferViewHeight, FramebufferViewWidth, -FramebufferViewHeight);
 
         internal static void Validate()
         {
