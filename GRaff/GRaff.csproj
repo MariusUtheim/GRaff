@@ -255,6 +255,7 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="OpenTK.dll.config" />
+    <None Include="Long-term backlog.txt" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="External\" />

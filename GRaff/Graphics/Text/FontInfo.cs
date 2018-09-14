@@ -13,7 +13,6 @@ namespace GRaff
         [XmlAttribute("size")]
         public int Size { get; set; }
 
-#warning Can we make these bools?
 		[XmlAttribute("bold")]
         public int Bold { get; set; }
 

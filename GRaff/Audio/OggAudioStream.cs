@@ -8,8 +8,7 @@ using NVorbis;
 
 namespace GRaff.Audio
 {
-#warning Should have some more testing of different variations on the format (e.g. concatenated files)
-    public class OggAudioStream : AudioStream
+	public class OggAudioStream : AudioStream
     {
         private VorbisReader _reader;
 

@@ -1,0 +1,4 @@
+﻿- Pack font characters more neatly
+- Support multiple font pages
+- Figure which properties of FontInfo (etc.) can be made bools
+- Support more complicated forms of OGG files, such as concatenated files

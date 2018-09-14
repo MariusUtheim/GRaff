@@ -72,7 +72,6 @@ namespace GRaff
             using (var textReader = File.OpenRead(fontDataFile))
                 fontData = (FontFile)deserializer.Deserialize(textReader);
 
-#warning Support multiple pages?
             if (fontData.Pages.Count > 1)
                 throw new NotSupportedException("Fonts with multiple pages are currently not supported");
 

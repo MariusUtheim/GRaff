@@ -172,7 +172,6 @@ namespace GRaff.Graphics.Text
         /// <param name="text">The text.</param>
         public virtual double GetHeight(string text)
         {
-#warning Gives the wrong height, since it looks at top-to-baseline instead of top-to-bottom
 			var n = LineSplit(text).Count();
             return n * Font.Height + (n - 1) * LineSeparation;
         }

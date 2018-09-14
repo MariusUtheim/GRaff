@@ -120,7 +120,6 @@ namespace GRaff.Graphics.Text.TrueType
         
 		private static FontCharacter[] _genFontCharacters(Face face, IEnumerable<char> chars)
         {
-#warning Maybe pack a bit more efficiently
 			var x = 0;
 			return chars.Select(c =>
             {
