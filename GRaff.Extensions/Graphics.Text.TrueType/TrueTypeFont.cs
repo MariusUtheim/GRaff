@@ -79,7 +79,7 @@ namespace GRaff.Graphics.Text.TrueType
 
 			face.SetPixelSizes((uint)size, 0);
             
-			var chars = _genCharLayout(face, CharSet);
+			var chars = _genFontCharacters(face, CharSet);
 
 			var dst = new Color[chars.Max(c => c.Y + c.Height), chars.Max(c => c.X + c.Width)];
 			foreach (var c in chars)
@@ -89,11 +89,11 @@ namespace GRaff.Graphics.Text.TrueType
 				            ? new List<FontKerning>() : _makeKernings(face, CharSet);
             
 			var texture = new Texture(dst);
-
+            
 			return new Font(texture, new FontFile
 			{
 				Chars = chars.ToList(),
-				Common = new FontCommon { LineHeight = face.Glyph.Metrics.VerticalAdvance.ToInt32() },
+				Common = new FontCommon { LineHeight = face.Size.Metrics.Height.ToInt32() },
 				Info = null,
 				Kernings = kernings,
 				Pages = new List<FontPage>()
@@ -118,9 +118,9 @@ namespace GRaff.Graphics.Text.TrueType
             return kernings.ToList();
         }
         
-		private static FontCharacter[] _genCharLayout(Face face, IEnumerable<char> chars)
+		private static FontCharacter[] _genFontCharacters(Face face, IEnumerable<char> chars)
         {
-			//TODO// Pack a bit more efficiently
+#warning Maybe pack a bit more efficiently
 			var x = 0;
 			return chars.Select(c =>
             {
@@ -129,7 +129,8 @@ namespace GRaff.Graphics.Text.TrueType
 				var m = face.Glyph.Metrics;
                 
 				var fc = new FontCharacter(c, x, 0, face.Glyph.Bitmap.Width, face.Glyph.Bitmap.Rows,
-										   face.Glyph.BitmapLeft, face.Glyph.LinearVerticalAdvance.ToInt32() - face.Glyph.BitmapTop, face.Glyph.Advance.X.ToInt32());
+										   face.Glyph.BitmapLeft, face.Glyph.LinearVerticalAdvance.ToInt32() - face.Glyph.BitmapTop,
+				                           face.Glyph.Advance.X.ToInt32());
 				x += fc.Width + 1;
                 
 				return fc;
