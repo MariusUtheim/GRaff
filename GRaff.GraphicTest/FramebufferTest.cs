@@ -8,7 +8,7 @@ using GRaff.Synchronization;
 
 namespace GRaff.GraphicTest
 {
-	[Test(Order = -10)]
+	[Test]
 	class FramebufferTest : GameElement
 	{
 		Framebuffer _framebuffer;

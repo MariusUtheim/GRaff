@@ -33,8 +33,16 @@ namespace GRaff.GraphicTest
 				_currentTest.Destroy();
 
 			Window.Title = test.Name;
-			_currentTest = (GameElement)Activator.CreateInstance(test);
-			Instance.Create(_currentTest);
+			try
+			{
+				_currentTest = (GameElement)Activator.CreateInstance(test);
+				Instance.Create(_currentTest);
+			}
+			catch (TargetInvocationException ex)
+            {
+				System.Runtime.ExceptionServices.ExceptionDispatchInfo.Capture(ex.InnerException).Throw();
+                throw new Exception("Unreachable code reached"); // Unreachable
+            }
 		}
 
 		public void OnKeyPress(Key key)

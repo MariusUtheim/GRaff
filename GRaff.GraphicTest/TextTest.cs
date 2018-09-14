@@ -1,23 +1,45 @@
 ﻿using System;
 using GRaff.Graphics.Text;
 using GRaff.Graphics;
+using GRaff.Graphics.Text.TrueType;
 
 namespace GRaff.GraphicTest
 {
-	[Test(Order = -100)]
-	class TextTest : GameElement
+	[Test]
+	class TextTest : GameElement, IKeyPressListener
 	{
-        private static Font _font = Font.Load("Assets/Times New Roman.fnt");
+		private static Font _font;
+		private static Font _preRenderedFont = Font.Load("Assets/Times New Roman.fnt");
+		private static Font _trueTypeFont = TrueTypeFont.LoadRasterized("Times New Roman", TrueTypeFont.ASCIICharacters, 22);
 		private TextRenderer _render;
 		private Texture _renderedText;
 
 		public TextTest()
 		{
             Instance.Create(new Background { Color = Colors.LightGray });
+			_font = _preRenderedFont;
+			Window.Title = "TextTest - Pre-rendered";
 			_render = new TextRenderer(_font, Alignment.TopLeft, 300);
             _renderedText = _render.Render("This text is prerendered. It has been turned into a texture, which makes it more efficent to draw and enables blending.");
 		}
 
+		public void OnKeyPress(Key key)
+		{
+			if (key == Key.Enter)
+			{
+				if (_font == _preRenderedFont)
+				{
+					_font = _trueTypeFont;
+					Window.Title = "TextTest - TrueType";
+				}
+				else
+				{
+					_font = _preRenderedFont;
+					Window.Title = "TextTest - Pre-rendered";
+				}
+				_render.Font = _font;
+			}
+		}
 
 		public override void OnDraw()
 		{
