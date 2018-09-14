@@ -70,21 +70,27 @@ namespace GRaff.Graphics.Text
                 yield return text;
                 yield break;
             }
+
+			if (LineWidth == null)
+			{
+				foreach (var line in NewlineRegex.Split(text))
+					yield return line;
+				yield break;
+			}
+
+			var lengthOfSpace = Font.GetWidth(" ");
             
 			foreach (var paragraph in NewlineRegex.Split(text))
-			{            
-				var words = paragraph.Split(' ');
-				var lengthOfSpace = Font.GetWidth(" ");
+            {            
+                var words = paragraph.Split(' ');
 
 				var currentLine = new StringBuilder(words[0]);
 				var currentLineLength = Font.GetWidth(words[0]);
-
-				var lengths = words.Select(word => Font.GetWidth(word));
-
+                
 				for (var i = 1; i < words.Length; i++)
 				{
 					var wordLength = Font.GetWidth(words[i]);
-					if (LineWidth == null || currentLineLength + wordLength < LineWidth)
+					if (currentLineLength + wordLength + lengthOfSpace < LineWidth)
 					{
 						currentLine.Append(" " + words[i]);
 						currentLineLength += lengthOfSpace + wordLength;
