@@ -18,7 +18,7 @@ namespace GRaff.Panels
 
             if (Mouse.IsDown(MouseButton.Left))
             {
-                DragNode.OnDrag(DragNode.ToParent(Mouse.Location) + DragOffset);
+                DragNode.OnDrag(DragNode.ToParent(Mouse.ViewLocation) + DragOffset);
             }
             else
             {
@@ -49,6 +49,6 @@ namespace GRaff.Panels
             OnBeginDrag();
         }
 
-        public void Drag() => Drag(ToParent(Mouse.Location));
+        public void Drag() => Drag(ToParent(Mouse.ViewLocation));
     }
 }

@@ -27,7 +27,7 @@ namespace GRaff.GraphicTest
 				else if (_selectedVertex != null)
 				{
 					if (_drag)
-						_selectedVertex.Location = Mouse.Location;
+						_selectedVertex.Location = Mouse.ViewLocation;
 				}
 			}
 			else
@@ -35,7 +35,7 @@ namespace GRaff.GraphicTest
 				if (!Mouse.IsDown(MouseButton.Right))
 				{
 					var drop = _graph.Vertices
-						.FirstOrDefault(v => v != _selectedVertex && (v.Location - Mouse.Location).Magnitude < Radius);
+						.FirstOrDefault(v => v != _selectedVertex && (v.Location - Mouse.ViewLocation).Magnitude < Radius);
 					if (drop != null)
 						_graph.AddEdge(_selectedVertex, drop);
 					_selectedVertex = null;
@@ -53,7 +53,7 @@ namespace GRaff.GraphicTest
 			foreach (var vertex in _graph.Vertices)
 				Draw.FillCircle(vertex.Location, Radius, Colors.Red);
 			if (_selectedVertex != null && !_drag)
-				Draw.Line(_selectedVertex.Location, Mouse.Location, Colors.White);
+				Draw.Line(_selectedVertex.Location, Mouse.ViewLocation, Colors.White);
 			foreach (var edge in _graph.Edges)
 				Draw.Line(edge.Line, Colors.Red);
 
@@ -72,7 +72,7 @@ namespace GRaff.GraphicTest
 			if (Keyboard.IsDown(Key.ControlLeft) || Keyboard.IsDown(Key.ControlRight))
 			{
 				foreach (var vertex in _graph.Vertices)
-					if ((vertex.Location - Mouse.Location).Magnitude < Radius)
+					if ((vertex.Location - Mouse.ViewLocation).Magnitude < Radius)
 					{
 						if (button == MouseButton.Left)
 							_fromVertex = vertex;
@@ -91,18 +91,18 @@ namespace GRaff.GraphicTest
 				{
 					_drag = true;
 					foreach (var vertex in _graph.Vertices)
-						if ((vertex.Location - Mouse.Location).Magnitude < Radius)
+						if ((vertex.Location - Mouse.ViewLocation).Magnitude < Radius)
 						{
 							_selectedVertex = vertex;
 							return;
 						}
 
-					_selectedVertex = _graph.AddVertex(Mouse.Location);
+					_selectedVertex = _graph.AddVertex(Mouse.ViewLocation);
 				}
 				else if (button == MouseButton.Right)
 				{
 					foreach (var vertex in _graph.Vertices)
-						if ((vertex.Location - Mouse.Location).Magnitude < Radius)
+						if ((vertex.Location - Mouse.ViewLocation).Magnitude < Radius)
 						{
 							_selectedVertex = vertex;
 							_drag = false;

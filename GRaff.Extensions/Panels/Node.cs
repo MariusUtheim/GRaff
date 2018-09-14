@@ -176,8 +176,7 @@ namespace GRaff.Panels
         internal void _Draw()
         {
             OnDraw();
-            //using (View.UMap(X, Y, View.Width, View.Height, View.Rotation))
-            using (View.DrawTo(Region.TopLeft).Use())
+            using (View.TranslateTo(Region.TopLeft).Use())
                 foreach (var child in _children)
                     child._Draw();
         }

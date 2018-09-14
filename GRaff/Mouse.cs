@@ -21,12 +21,11 @@ namespace GRaff
 		/// </summary>
 		internal static void Update()
 		{
-			XPrevious = X;
-			YPrevious = Y;
+			XPrevious = ViewX;
+			YPrevious = ViewY;
 			for (int i = 0; i < _buttonCount; i++)
 				_pressed[i] = _released[i] = false;
             WheelDelta = 0;
-            Location = View.Current.ScreenToView * (Point)WindowLocation;
 		}
 
 		/// <summary>
@@ -89,36 +88,35 @@ namespace GRaff
         /// <summary>
         /// Gets the x-coordinate of the cursor in the room. This value might be non-integer if the View is scaled.
         /// </summary>
-        public static double X => Location.X;
+		public static double ViewX => ViewLocation.X;
 
         /// <summary>
         /// Gets the y-coordinate of the cursor in the room. This value might be non-integer if the View is scaled.
         /// </summary>
-        public static double Y => Location.Y;
+        public static double ViewY => ViewLocation.Y;
 
 		/// <summary>
-		/// Gets the location of the cursor in the room. The coordinates might be non-integer if the View is scaled.
+		/// Gets the location of the cursor in the current View. The coordinates might be non-integer if the View is scaled.
 		/// </summary>
-        #warning This is weird when changing views during drawing
-        public static Point Location { get; private set; }
+		public static Point ViewLocation => View.Current.ScreenToView * (Point)Location;
 
 		/// <summary>
 		/// Gets the x-coordinate of the cursor relative to the game window.
 		/// </summary>
-		public static int WindowX { get; internal set; }
+		public static int X { get; internal set; }
 
 		/// <summary>
 		/// Gets the y-coordinate of the cursor relative to the game window.
 		/// </summary>
-		public static int WindowY { get; internal set; }
+		public static int Y { get; internal set; }
 
 		/// <summary>
 		/// Gets the location of the cursor relative to the game window.
 		/// </summary>
-		public static IntVector WindowLocation
+		public static IntVector Location
 		{
-			get => (WindowX, WindowY);
-            internal set => (WindowX, WindowY) = value; 
+			get => (X, Y);
+            internal set => (X, Y) = value; 
 		}
 
 		/// <summary>

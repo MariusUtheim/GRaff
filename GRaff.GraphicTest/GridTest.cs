@@ -102,7 +102,7 @@ namespace GRaff.GraphicTest
 		{
             Draw.Clear(Colors.LightGray);
 			Draw.Lines(_grid.Edges.Select(e => new Line(_mapToScreen(e.From.Location), _mapToScreen(e.To.Location))), Colors.White);
-            Draw.FillRectangle(_snapToGrid(Mouse.Location) - size/2, size, Colors.White.Transparent(0.8));
+            Draw.FillRectangle(_snapToGrid(Mouse.ViewLocation) - size/2, size, Colors.White.Transparent(0.8));
 			switch (mode)
 			{
 				case 1: _drawShortestPath(); break;
@@ -116,11 +116,11 @@ namespace GRaff.GraphicTest
 		{
 			if (button == MouseButton.Left)
 			{
-				_from = _grid[_mapToGrid(Mouse.Location)];
+				_from = _grid[_mapToGrid(Mouse.ViewLocation)];
 			}
 			else if (button == MouseButton.Right)
 			{
-				_to = _grid[_mapToGrid(Mouse.Location)];
+				_to = _grid[_mapToGrid(Mouse.ViewLocation)];
 			}
 		}
 

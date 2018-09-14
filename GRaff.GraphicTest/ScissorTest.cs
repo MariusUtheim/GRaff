@@ -19,7 +19,7 @@ namespace GRaff.GraphicTest
             Scissor.Region = ((0, 0), Window.Size);
         }
 
-        private Rectangle _dragRectangle => (_mouseClickLocation, Mouse.Location - _mouseClickLocation);
+        private Rectangle _dragRectangle => (_mouseClickLocation, Mouse.ViewLocation - _mouseClickLocation);
 
         protected override void OnDestroy()
         {
@@ -37,10 +37,10 @@ namespace GRaff.GraphicTest
         public void OnGlobalMousePress(MouseButton button)
         {
             if (button == MouseButton.Left)
-                Instance<PlingEffect>.Create(Mouse.Location);
+                Instance<PlingEffect>.Create(Mouse.ViewLocation);
             else if (button == MouseButton.Right)
             {
-                _mouseClickLocation = Mouse.Location;
+                _mouseClickLocation = Mouse.ViewLocation;
                 Scissor.IsEnabled = false;
                 _drawMode = false;
             }

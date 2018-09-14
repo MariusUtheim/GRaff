@@ -45,7 +45,7 @@ namespace GRaff
 
             Window.KeyDown += (sender, e) => { Keyboard.Press((Key)e.Key); };
             Window.KeyUp += (sender, e) => { Keyboard.Release((Key)e.Key); };
-            Window.MouseMove += (sender, e) => { Mouse.WindowX = (int)(e.X / GRaff.Window.DisplayScale.X); Mouse.WindowY = (int)(e.Y / GRaff.Window.DisplayScale.Y); };
+            Window.MouseMove += (sender, e) => { Mouse.X = (int)(e.X / GRaff.Window.DisplayScale.X); Mouse.Y = (int)(e.Y / GRaff.Window.DisplayScale.Y); };
             Window.MouseDown += (sender, e) => { Mouse.Press((MouseButton)e.Button); };
             Window.MouseUp += (sender, e) => { Mouse.Release((MouseButton)e.Button); };
             Window.MouseWheel += (sender, e) => { Mouse.Wheel(e.ValuePrecise, e.DeltaPrecise); };
@@ -153,7 +153,7 @@ namespace GRaff
 
         private static void _doMouseClick<T>(Action<T> action) where T : class
         {
-            foreach (var instance in Instance.OfType<GameObject>().Where(obj => obj is T && obj.ContainsPoint(Mouse.Location)).ToList())
+            foreach (var instance in Instance.OfType<GameObject>().Where(obj => obj is T && obj.ContainsPoint(Mouse.ViewLocation)).ToList())
                 if (instance.Exists)
                     action(instance as T);
         }

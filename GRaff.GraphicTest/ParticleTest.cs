@@ -10,7 +10,7 @@ namespace GRaff.GraphicTest
 	{
 		ParticleSystem starSystem;
         ParticleSystem pentagonSystem;
-		static PointAttractionBehavior attractor = new PointAttractionBehavior(Mouse.Location, 1);
+		static PointAttractionBehavior attractor = new PointAttractionBehavior(Mouse.ViewLocation, 1);
         static ParticleType starType = _createStarType();
         static ParticleType pentagonType = _createPentagonType();
         Background background;
@@ -59,7 +59,7 @@ namespace GRaff.GraphicTest
 		public override void OnStep()
 		{
 			//Window.Title = $"Particle count: {starSystem.Count.ToString()}\t-\tFPS: {Time.Fps}";
-			attractor.Location = Mouse.Location;
+			attractor.Location = Mouse.ViewLocation;
         }
 
 		public void OnGlobalMouse(MouseButton button)
@@ -67,7 +67,7 @@ namespace GRaff.GraphicTest
 		//	if (button == MouseButton.Left)
 		//		starSystem.Create(Mouse.Location, 1);
 		//	else
-				pentagonSystem.Create(Mouse.Location, 1);
+				pentagonSystem.Create(Mouse.ViewLocation, 1);
 		}
 
 

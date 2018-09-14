@@ -62,9 +62,9 @@ namespace GRaff.GraphicTest
 			_marker = Instance<Marker>.Create(new Point(GRandom.Integer(Window.Width), GRandom.Integer(Window.Height)));
 
 			if (button == MouseButton.Left)
-				Tween.Animate(90, f, () => this.Location, Mouse.Location, () => _color = Colors.DarkRed);
+				Tween.Animate(90, f, () => this.Location, Mouse.ViewLocation, () => _color = Colors.DarkRed);
 			else if (button == MouseButton.Right)
-				Tween.Animate(90, f.Out(), () => this.Location, Mouse.Location, () => _color = Colors.DarkRed);
+				Tween.Animate(90, f.Out(), () => this.Location, Mouse.ViewLocation, () => _color = Colors.DarkRed);
 		}
 
 		public void OnKeyPress(Key key)

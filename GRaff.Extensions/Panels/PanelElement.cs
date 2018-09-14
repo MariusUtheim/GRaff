@@ -19,22 +19,22 @@ namespace GRaff.Panels
 
         public void OnGlobalMouse(MouseButton button)
         {
-            Root._MouseEvent((IPanelMouseListener n, MouseEventArgs e) => n.OnMouse(e), new MouseEventArgs(button, Mouse.Location, Mouse.WheelDelta));
+            Root._MouseEvent((IPanelMouseListener n, MouseEventArgs e) => n.OnMouse(e), new MouseEventArgs(button, Mouse.ViewLocation, Mouse.WheelDelta));
         }
 
         public void OnGlobalMousePress(MouseButton button)
         {
-            Root._MouseEvent((IPanelMousePressListener n, MouseEventArgs e) => n.OnMousePress(e), new MouseEventArgs(button, Mouse.Location, Mouse.WheelDelta));
+            Root._MouseEvent((IPanelMousePressListener n, MouseEventArgs e) => n.OnMousePress(e), new MouseEventArgs(button, Mouse.ViewLocation, Mouse.WheelDelta));
         }
 
         public void OnGlobalMouseRelease(MouseButton button)
         {
-            Root._MouseEvent((IPanelMouseReleaseListener n, MouseEventArgs e) => n.OnMouseRelease(e), new MouseEventArgs(button, Mouse.Location, Mouse.WheelDelta));
+            Root._MouseEvent((IPanelMouseReleaseListener n, MouseEventArgs e) => n.OnMouseRelease(e), new MouseEventArgs(button, Mouse.ViewLocation, Mouse.WheelDelta));
         }
 
         public void OnGlobalMouseWheel(double delta)
         {
-            Root._MouseEvent((IPanelMouseWheelListener n, MouseEventArgs e) => n.OnMouseWheel(e), new MouseEventArgs(MouseButton.None, Mouse.Location, delta));
+            Root._MouseEvent((IPanelMouseWheelListener n, MouseEventArgs e) => n.OnMouseWheel(e), new MouseEventArgs(MouseButton.None, Mouse.ViewLocation, delta));
         }
 
         public override void OnStep()
@@ -49,7 +49,7 @@ namespace GRaff.Panels
                     newHover = n;
                     newHover.IsMouseHovering = true;
                 }
-            }, new MouseEventArgs(MouseButton.None, Mouse.Location, 0));
+            }, new MouseEventArgs(MouseButton.None, Mouse.ViewLocation, 0));
 
             if (newHover != HoveredNode)
             {

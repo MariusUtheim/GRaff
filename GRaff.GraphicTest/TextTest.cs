@@ -56,7 +56,7 @@ namespace GRaff.GraphicTest
 
             Draw.Rectangle(new Rectangle((350, 10), (500, 500)), Colors.Black);
 
-            using (View.DrawTo((350, 10)).Use())
+			using (View.TranslateTo((350, 10)).Use())
             {
                 Draw.Line((0, 250), (500, 250), Colors.DarkGray);
                 Draw.Line((250, 0), (250, 500), Colors.DarkGray);

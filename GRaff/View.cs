@@ -13,7 +13,6 @@ using OpenTK.Graphics.ES30;
 
 namespace GRaff
 {
-#warning Review class
 	/// <summary>
 	/// Defines which part of the room is being drawn to the screen.
 	/// </summary>
@@ -44,60 +43,96 @@ namespace GRaff
             GLToScreenMatrix = Matrix.Mapping(GLTriangle, new Triangle((0, 0), (Window.Width, 0), (0, Window.Height)));
         }
 
+        /// <summary>
+        /// Creates a View that identically maps drawing vertices to pixels in the window.
+        /// </summary>
         public static View FullWindow() => Rectangle(Window.ClientRectangle);
 
-        public static View Triangle(Triangle t) => new View(Matrix.Mapping(t, GLTriangle));
-
+       
+		/// <summary>
+        /// Creates a View that maps from the specified Rectangle to pixels in the window.
+        /// That is, the vertex (x, y) is mapped to (0, 0) on the screen, and (x + width, y + height)
+        /// is mapped to (Window.Width, Window.Height).
+        /// </summary>
         public static View Rectangle(double x, double y, double width, double height) => Rectangle(new Rectangle(x, y, width, height));
 
+		/// <summary>
+        /// Creates a View that maps from the specified Rectangle to pixels in the window.
+        /// That is, the vertex (rect.Left, rect.Top) is mapped to (0, 0) on the window, and 
+		/// (rect.Right, rect.Bottom) is mapped to (Window.Width, Window.Height).
+        /// </summary>
         public static View Rectangle(Rectangle rect)
         {
 			var m = Matrix.Translation(-(Vector)rect.Center).Scale(2.0 / rect.Width, -2.0 / rect.Height);
             return new View(m);
         }
 
+        /// <summary>
+        /// Creates a View that maps from a rectangle centered at the specified location and with the
+		/// specified size, to pixels on the screen. For example, in this View, an ellipse drawn at
+		/// location with the specified size will tangent each edge of the window.
+        /// </summary>
         public static View Centered(Point location, Vector size) => Rectangle(new Rectangle((location - size / 2), size));
+        
+        /// <summary>
+        /// Translates the current view, so that the specified Point, as seen in the current View, 
+		/// will be translated to (0, 0) in the new View.
+        /// </summary>
+        public static View TranslateTo(Point location) => new View(View.Current.ViewMatrix * Matrix.Translation(location));
 
-        public static View DrawTo(Point location) => new View(View.Current.ViewMatrix * Matrix.Translation(location));
+        /// <summary>
+        /// Creates a View that should be used when drawing to Framebuffers.
+        /// </summary>
+		public static View Framebuffer() => Rectangle(0, FramebufferViewHeight, FramebufferViewWidth, -FramebufferViewHeight);      
 
-		public static View Framebuffer() => Rectangle(0, FramebufferViewHeight, FramebufferViewWidth, -FramebufferViewHeight);
+        /// <summary>
+        /// Gets the current View that is used by drawing functions. 
+        /// </summary>
+        public static View Current { get; private set; } = new View(new Matrix());
 
-        internal static void Validate()
+		internal static void Validate()
         {
             if (Current._needsValidation)
                 LoadMatrixToProgram();
         }
-                
+        
+        internal static void LoadMatrixToProgram()
+        {
+            if (ShaderProgram.Current == null)
+                return;
 
-		internal static void LoadMatrixToProgram()
-		{
-			if (ShaderProgram.Current == null)
-				return;
+            var tr = Current.ViewMatrix;
 
-			var tr = Current.ViewMatrix;
+            var projectionMatrix = new Matrix4(
+                (float)tr.M00, (float)tr.M01, 0, (float)tr.M02,
+                (float)tr.M10, (float)tr.M11, 0, (float)tr.M12,
+                            0, 0, 1, 0,
+                            0, 0, 0, 1
+            );
 
-			var projectionMatrix = new Matrix4(
-				(float)tr.M00, (float)tr.M01, 0, (float)tr.M02,
-				(float)tr.M10, (float)tr.M11, 0, (float)tr.M12,
-							0, 0, 1, 0,
-							0, 0, 0, 1
-			);
-
-			int matrixLocation;
-			matrixLocation = GL.GetUniformLocation(ShaderProgram.Current.Id, "GRaff_ViewMatrix");
-			GL.UniformMatrix4(matrixLocation, true, ref projectionMatrix);
+            int matrixLocation;
+            matrixLocation = GL.GetUniformLocation(ShaderProgram.Current.Id, "GRaff_ViewMatrix");
+            GL.UniformMatrix4(matrixLocation, true, ref projectionMatrix);
 
             Current._needsValidation = false;
-			_Graphics.ErrorCheck();
-		}
+            _Graphics.ErrorCheck();
+        }
 
-
-        public static View Current { get; private set; } = new View(new Matrix());
-
-
-
+        /// <summary>
+        /// Gets the Matrix that is used to map drawing vertices to screen pixels.
+        /// </summary>
         public Matrix ViewMatrix => _transform.GetMatrix();
+
+        /// <summary>
+        /// Gets the Matrix that is used to map drawing vertices to OpenGL coordinates,
+		/// which are contained in the rectangle [-1, 1] x [-1, 1]
+        /// </summary>
 		public Matrix ViewToScreen => GLToScreenMatrix * ViewMatrix;
+
+        /// <summary>
+        /// Gets the Matrix that is used to map 
+        /// </summary>
+        /// <value>The screen to view.</value>
 		public Matrix ScreenToView => ViewMatrix.Inverse * GLToScreenMatrix.Inverse;
 
 
@@ -163,7 +198,7 @@ namespace GRaff
         }
 
         /// <summary>
-        /// Returns a Rectangle that is guaranteed to contain the whole view region. 
+        /// Gets a Rectangle that is guaranteed to contain the whole view region. 
         /// </summary>
         /// <value>The bounding box.</value>
         public Rectangle BoundingBox
@@ -176,13 +211,20 @@ namespace GRaff
             }
         }
 
-
+        /// <summary>
+        /// Makes this View the current View to be used by drawing functions.
+        /// </summary>
 		public void Bind()
 		{
 			Current = this;
 			LoadMatrixToProgram();
 		}
 
+        /// <summary>
+        /// Temporarily makes this View the current View to be used by drawing functions.
+		/// This returns a use context that must be disposed when done drawing. When it is
+		/// disposed, the previous View is automatically made current. 
+        /// </summary>
 		public IDisposable Use()
 		{
             return UseContext.CreateAt($"{typeof(View).FullName}.{nameof(Use)}",

@@ -7,13 +7,8 @@ using System.Threading.Tasks;
 namespace GRaff.GraphicTest
 {
     [Test]
-    class ViewTest : GameElement, IKeyListener
-	{
-
-        public override void OnStep()
-        {
-            Window.Title = View.Current.Location.ToString();// Mouse.Location.ToString();
-        }
+    class ViewTest : GameElement
+	{ 
 
         protected override void OnDestroy()
         {
@@ -36,7 +31,7 @@ namespace GRaff.GraphicTest
             Draw.FillCircle((0, 0), 10, Colors.Black);
             Draw.FillCircle(Window.Size, 10, Colors.White);
 
-            using (View.DrawTo(new Point(150, 50)).Use())
+			using (View.TranslateTo(new Point(150, 50)).Use())
                 Draw.FillCircle(Point.Zero, 5, Colors.Red);
             Draw.Point((150, 50), Colors.Black);
 
@@ -44,19 +39,11 @@ namespace GRaff.GraphicTest
             using (View.Rectangle(0, 0, tx.Width, tx.Height).Use())
                 Draw.Texture(tx, (0, 0), Colors.White.Transparent(0.2));
 
-            Draw.FillCircle(Mouse.Location, 5, Colors.Lime);
-		}
+            Draw.FillCircle(Mouse.ViewLocation, 5, Colors.Lime);
 
-        public void OnKey(Key key)
-        {
-            switch (key)
-            {
-                case Key.A: View.Current.X -= 0.01; break;
-                case Key.D: View.Current.X += 0.01; break;
-                case Key.W: View.Current.Y -= 0.01; break;
-                case Key.S: View.Current.Y += 0.01; break;
-                case Key.R: View.Current.Location = Point.Zero; break;
-            }
-        }
+			using (View.Centered((0, 0), (2, 2)).Use())
+				Window.Title = "ViewTest - " + Mouse.ViewLocation.ToString();
+		}
+        
     }
 }
