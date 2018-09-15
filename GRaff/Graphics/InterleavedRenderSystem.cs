@@ -14,8 +14,6 @@ namespace GRaff.Graphics
         private readonly int _arrayBuffer;
         private int _vertexCount;
 
-        private static Quadrilateral defaultQuadCoords = new Quadrilateral(0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f);
-        private static Quadrilateral defaultTriangleStripCoords = new Quadrilateral(0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f);
         private static int _vertexSize = GraphicsPoint.Size + 4;
 
         public InterleavedRenderSystem()
@@ -32,9 +30,6 @@ namespace GRaff.Graphics
             GL.EnableVertexAttribArray(1);
             GL.VertexAttribPointer(1, 4, VertexAttribPointerType.UnsignedByte, true, _vertexSize, GraphicsPoint.Size);
 
-
-			//            GL.DisableVertexAttribArray(1);
-			//            GL.VertexAttrib4N(1, 255, 255, 255, 255);
 		}
 
         public bool IsDisposed { get; private set; }
@@ -72,7 +67,6 @@ namespace GRaff.Graphics
             Contract.Requires<ArgumentNullException>(primitive != null);
 
             GL.BindBuffer(BufferTarget.ArrayBuffer, _arrayBuffer);
-            //GL.BufferData(BufferTarget.ArrayBuffer, new IntPtr(_vertexSize * primitive.Length), primitive.Select(p => p.vertex).ToArray(), BufferUsageHint.StreamDraw);
             GL.BufferData(BufferTarget.ArrayBuffer, new IntPtr(_vertexSize * primitive.Length), primitive, BufferUsageHint.StreamDraw);
             _vertexCount = primitive.Length;
         }

@@ -12,17 +12,19 @@ namespace GRaff.Graphics
 {
 	public static class GLExtensions
 	{
-		public static GraphicsPoint[] QuadCoordinates(this Rectangle rect)
-		{
-			return new[] {
-				new GraphicsPoint(rect.Left, rect.Top),
-				new GraphicsPoint(rect.Right, rect.Top),
-				new GraphicsPoint(rect.Right, rect.Bottom),
-				new GraphicsPoint(rect.Left, rect.Bottom)
-			};
-		}
 
-		public static GraphicsPoint[] Tesselate(this Polygon polygon)
+        public static GraphicsPoint[] TriangleStripCoordinates(this Rectangle rect)
+        {
+            return new[]
+            {
+                new GraphicsPoint(rect.Left, rect.Top),
+                new GraphicsPoint(rect.Right, rect.Top),
+                new GraphicsPoint(rect.Left, rect.Bottom),
+                new GraphicsPoint(rect.Right, rect.Bottom)
+            };
+        }
+
+        public static GraphicsPoint[] Tesselate(this Polygon polygon)
 		{
 			Contract.Requires<ArgumentNullException>(polygon != null);
 			var result = new GraphicsPoint[polygon.Length];

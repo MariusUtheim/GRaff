@@ -62,8 +62,7 @@ namespace GRaff.Graphics
 
         public SpriteAtlas(params (Texture texture, string name)[] textureMappings)
         {
-            IntVector bounds;
-            var rects = RectanglePacker.Pack(textureMappings.Select(tm => tm.texture.Size), out bounds);
+            var rects = RectanglePacker.Pack(textureMappings.Select(tm => tm.texture.Size), out IntVector bounds);
 
             _subTextures = new Dictionary<string, IntRectangle>(textureMappings.Length);
 
@@ -72,7 +71,7 @@ namespace GRaff.Graphics
             {
                 for (var i = 0; i < textureMappings.Length; i++)
                 {
-                    Draw.Texture(textureMappings[i].texture.SubTexture(), rects[i].TopLeft);
+                    Draw.SubTexture(textureMappings[i].texture.SubTexture(), rects[i].TopLeft);
                     _subTextures.Add(textureMappings[i].name, rects[i]);
                 }
             }

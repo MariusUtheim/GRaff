@@ -123,7 +123,7 @@ namespace GRaff.Graphics
         {
 			Contract.Requires<ArgumentNullException>(texture != null && transform != null);
             Contract.Requires<ObjectDisposedException>(!texture.Texture.IsDisposed);
-
+            
             _renderSystem.SetVertices(new[] {
                 transform * new GraphicsPoint(-xOrigin, -yOrigin),
                 transform * new GraphicsPoint(texture.Width - xOrigin, -yOrigin),
@@ -132,7 +132,7 @@ namespace GRaff.Graphics
             });
             _renderSystem.SetColor(blend);
             
-            _renderSystem.SetTexCoords(texture.StripCoords);
+            _renderSystem.SetTexCoords(texture.TriangleStripCoords);
             _renderSystem.Render(texture.Texture, PrimitiveType.TriangleStrip);
         }
 

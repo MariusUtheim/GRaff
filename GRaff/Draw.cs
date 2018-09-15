@@ -192,7 +192,7 @@ namespace GRaff
 
         public static void Lines(IEnumerable<Line> lines, Color color)
             => Primitive(PrimitiveType.Lines, lines.SelectMany(l => ((GraphicsPoint)l.Origin, (GraphicsPoint)l.Destination)).ToArray(), color);
-
+        
         public static void Lines(IEnumerable<(Line line, Color color)> primitives)
             => Primitive(PrimitiveType.Lines, primitives.SelectMany(p => (((GraphicsPoint)p.line.Origin, p.color), ((GraphicsPoint)p.line.Destination, p.color))).ToArray());
 
@@ -206,49 +206,89 @@ namespace GRaff
 
 
         #region Textures
+        
+        private static readonly GraphicsPoint[] _triangleStripTexCoords = { new GraphicsPoint(0, 0), new GraphicsPoint(1, 0), new GraphicsPoint(0, 1), new GraphicsPoint(1, 1) };
+
+        public static void Texture(Texture texture, Rectangle rect, Color blend)
+        {
+            if (texture != null)
+                Device.DrawTexture(texture, PrimitiveType.TriangleStrip, rect.TriangleStripCoordinates(), blend, _triangleStripTexCoords);
+        }
+
+        public static void Texture(Texture texture, Rectangle rect)
+            => Texture(texture, rect, Colors.White);
+
+        public static void Texture(Texture texture, Point location)
+            => Texture(texture, (location, texture.Size), Colors.White);
 
         public static void Texture(Texture texture, Point location, Color blend)
+            => Texture(texture, (location, texture.Size), blend);
+
+
+        public static void SubTexture(SubTexture texture, Rectangle rect, Color c1, Color c2, Color c3, Color c4)
         {
             if (texture != null)
-                Device.DrawTexture(texture.SubTexture(), 0, 0, Matrix.Translation(location), blend);
+                Device.DrawTexture(texture.Texture, PrimitiveType.TriangleStrip, rect.TriangleStripCoordinates(), new[] { c1, c2, c4, c3 }, texture.TriangleStripCoords);
         }
-        public static void Texture(Texture texture, Point location)
-            => Texture(texture, location, Colors.White);
-        public static void Texture(Texture texture, Rectangle rect)
-            => Texture(texture.SubTexture(), rect);
-
-        public static void Texture(SubTexture texture, Point location, Color blend)
+        public static void SubTexture(SubTexture texture, Rectangle rect, Color blend)
         {
             if (texture != null)
-                Device.DrawTexture(texture, 0, 0, Matrix.Translation(location), blend);
+                Device.DrawTexture(texture.Texture, PrimitiveType.TriangleStrip, rect.TriangleStripCoordinates(), blend, texture.TriangleStripCoords);
         }
-        public static void Texture(SubTexture texture, Point location) => Texture(texture, location, Colors.White);
-        public static void Texture(SubTexture texture, Point location, Color c1, Color c2, Color c3, Color c4)
-            => Texture(texture, (location, texture.Size), c1, c2, c3, c4);
+        public static void SubTexture(SubTexture texture, Rectangle rect)
+            => SubTexture(texture, rect, Colors.White);
 
-        public static void Texture(SubTexture texture, Rectangle rect, Color blend)
-        {
-            if (texture != null)
-                Device.DrawTexture(texture, 0, 0, new Matrix(rect.Width / texture.Width, 0, rect.Left, 0, rect.Height / texture.Height, rect.Top), blend);
-        }
-        public static void Texture(SubTexture texture, Rectangle rect) => Texture(texture, rect, Colors.White);
-
-        public static void Texture(SubTexture texture, Rectangle rect, Color c1, Color c2, Color c3, Color c4)
+        public static void SubTexture(SubTexture texture, Point location, Color c1, Color c2, Color c3, Color c4)
         {
             if (texture != null)
             {
-                var pts = new[] { (GraphicsPoint)rect.TopLeft, (GraphicsPoint)rect.TopRight, (GraphicsPoint)rect.BottomLeft, (GraphicsPoint)rect.BottomRight };
-                var cols = new[] { c1, c2, c4, c3 };
-                Device.DrawTexture(texture.Texture, PrimitiveType.TriangleStrip, pts, cols, texture.StripCoords);
+                var (scX, scY) = texture.Texture.Size;
+                var vs = texture.TriangleStripCoords;
+                var (x0, y0) = location;
+
+                Device.DrawTexture(texture.Texture, PrimitiveType.TriangleStrip,
+                    new[] {
+                        (GraphicsPoint)location,
+                        new GraphicsPoint(x0 + scX * (vs[1].X - x0), y0 + scY * (vs[1].Y - y0)),
+                        new GraphicsPoint(x0 + scX * (vs[2].X - x0), y0 + scY * (vs[2].Y - y0)),
+                        new GraphicsPoint(x0 + scX * (vs[3].X - x0), y0 + scY * (vs[3].Y - y0))
+                    }, new[] { c1, c2, c4, c3 }, texture.TriangleStripCoords);
             }
-                                   
         }
+        public static void SubTexture(SubTexture texture, Point location, Color blend)
+        {
+            if (texture != null)
+            {
+                var (scX, scY) = texture.Texture.Size;
+                var vs = texture.TriangleStripCoords;
+                var (x0, y0) = location;
+
+                Device.DrawTexture(texture.Texture, PrimitiveType.TriangleStrip, 
+                    new[] {
+                        (GraphicsPoint)location,
+                        new GraphicsPoint(x0 + scX * (vs[1].X - x0), y0 + scY * (vs[1].Y - y0)),
+                        new GraphicsPoint(x0 + scX * (vs[2].X - x0), y0 + scY * (vs[2].Y - y0)),
+                        new GraphicsPoint(x0 + scX * (vs[3].X - x0), y0 + scY * (vs[3].Y - y0))
+                    }, blend, texture.TriangleStripCoords);
+            }
+        }
+        public static void SubTexture(SubTexture texture, Point location) => SubTexture(texture, location, Colors.White);
+
 
         public static void Sprite(Sprite sprite, double imageIndex, Matrix transform, Color blend)
         {
             Contract.Requires<ArgumentNullException>(transform != null);
             if (sprite != null)
-                Device.DrawTexture(sprite.SubImage(imageIndex), sprite.XOrigin, sprite.YOrigin, transform, blend);
+            {
+                var subTexture = sprite.SubImage(imageIndex);
+                Device.DrawTexture(subTexture.Texture, PrimitiveType.TriangleStrip,
+                    new[] {
+                        transform * new GraphicsPoint(-sprite.XOrigin, -sprite.YOrigin),
+                        transform * new GraphicsPoint(sprite.Width - sprite.XOrigin, -sprite.YOrigin),
+                        transform * new GraphicsPoint(-sprite.XOrigin, sprite.Height - sprite.YOrigin),
+                        transform * new GraphicsPoint(sprite.Width - sprite.XOrigin, sprite.Height - sprite.YOrigin)
+                    }, blend, subTexture.TriangleStripCoords);
+            }
         }
         public static void Sprite(Sprite sprite, double imageIndex, Matrix transform) => Sprite(sprite, imageIndex, transform, Colors.White);
         public static void Sprite(Sprite sprite, double imageIndex, Point location, Color blend) => Sprite(sprite, imageIndex, Matrix.Translation(location), blend);

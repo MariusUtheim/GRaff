@@ -14,7 +14,7 @@ namespace GRaff.Graphics
 		internal SubTexture(Texture buffer, GraphicsPoint topLeft, GraphicsPoint topRight, GraphicsPoint bottomLeft, GraphicsPoint bottomRight)
 		{
 			Contract.Requires<ArgumentNullException>(buffer != null);
-			QuadCoords = new[] { topLeft, topRight, bottomRight, bottomLeft };
+			TriangleStripCoords = new[] { topLeft, topRight, bottomLeft, bottomRight };
 			Texture = buffer;
 		}
 
@@ -38,24 +38,22 @@ namespace GRaff.Graphics
 		[ContractInvariantMethod]
 		private void invariants()
 		{
-			Contract.Invariant(QuadCoords != null);
-			Contract.Invariant(QuadCoords.Length == 4);
+			Contract.Invariant(TriangleStripCoords != null);
+			Contract.Invariant(TriangleStripCoords.Length == 4);
 			Contract.Invariant(Texture != null);
 		}
 
-		internal GraphicsPoint[] QuadCoords { get; }
-
-        internal GraphicsPoint[] StripCoords => new[] { TopLeft, TopRight, BottomLeft, BottomRight };
+        internal GraphicsPoint[] TriangleStripCoords { get; private set; }
 		
 		public Texture Texture { get; }
 
-		public GraphicsPoint TopLeft => QuadCoords[0];
+		public GraphicsPoint TopLeft => TriangleStripCoords[0];
 		
-		public GraphicsPoint TopRight => QuadCoords[1];
+		public GraphicsPoint TopRight => TriangleStripCoords[1];
 
-		public GraphicsPoint BottomRight => QuadCoords[2];
+		public GraphicsPoint BottomRight => TriangleStripCoords[3];
 
-		public GraphicsPoint BottomLeft => QuadCoords[3];
+		public GraphicsPoint BottomLeft => TriangleStripCoords[2];
 
 		public double Width => (0.5 * (TopLeft + BottomLeft) - 0.5 * (TopRight + BottomRight)).Magnitude * Texture.Width;
 
