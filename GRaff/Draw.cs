@@ -138,14 +138,9 @@ namespace GRaff
         }
         public static void FillRectangle(Rectangle rectangle, Color color) => FillRectangle(rectangle.TopLeft, rectangle.Size, color);
 
-        public static void FillRectangle(Point location, Vector size, Color col1, Color col2, Color col3, Color col4)
-        {
-            var (x, y) = location;
-            var (w, h) = size;
-            Device.Draw(PrimitiveType.TriangleStrip, new[] { new GraphicsPoint(x, y), new GraphicsPoint(x + w, y), new GraphicsPoint(x, y + h), new GraphicsPoint(x + w, y + h) },
-                        new[] { col1, col2, col3, col4 });
-        }
-        public static void FillRectangle(Rectangle rectangle, Color col1, Color col2, Color col3, Color col4) => FillRectangle(rectangle.TopLeft, rectangle.Size, col1, col2, col3, col4);
+        public static void FillRectangle(Rectangle rectangle, Color col1, Color col2, Color col3, Color col4)
+            => Device.Draw(PrimitiveType.TriangleStrip, rectangle.TriangleStripCoordinates(), new[] { col1, col2, col4, col3 });
+        public static void FillRectangle(Point location, Vector size, Color col1, Color col2, Color col3, Color col4) => FillRectangle((location, size), col1, col2, col3, col4);
 
 
         private static void _drawFan(GraphicsPoint origin, GraphicsPoint[] boundary, Color innerColor, Color outerColor)
@@ -208,6 +203,14 @@ namespace GRaff
         #region Textures
         
         private static readonly GraphicsPoint[] _triangleStripTexCoords = { new GraphicsPoint(0, 0), new GraphicsPoint(1, 0), new GraphicsPoint(0, 1), new GraphicsPoint(1, 1) };
+
+        public static void Texture(Texture texture, Rectangle rect, Color col1, Color col2, Color col3, Color col4)
+        {
+            if (texture != null)
+                Device.DrawTexture(texture, PrimitiveType.TriangleStrip, rect.TriangleStripCoordinates(), new[] { col1, col2, col4, col3 }, _triangleStripTexCoords);
+        }
+        public static void Texture(Texture texture, Point location, Color col1, Color col2, Color col3, Color col4)
+            => Texture(texture, (location, texture.Size), col1, col2, col3, col4);
 
         public static void Texture(Texture texture, Rectangle rect, Color blend)
         {
@@ -317,7 +320,7 @@ namespace GRaff
         public static void Text(string text, TextRenderer renderer, Transform transform) => Text(text, renderer, transform, Colors.Black);
 
         public static void Text(string text, Font font, Point location, Alignment alignment = Alignment.TopLeft) => Text(text, font, location, Colors.Black);
-		public static void Text(string text, Font font, Point location, Color color, Alignment alignment = Alignment.TopLeft) => Text(text, new TextRenderer(font), Matrix.Translation(location), color);
+		public static void Text(string text, Font font, Point location, Color color, Alignment alignment = Alignment.TopLeft) => Text(text, new TextRenderer(font, alignment), Matrix.Translation(location), color);
 
         #endregion
     }

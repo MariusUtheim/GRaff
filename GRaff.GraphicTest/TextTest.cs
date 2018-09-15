@@ -52,7 +52,7 @@ namespace GRaff.GraphicTest
 			Draw.Rectangle(new Rectangle((10, 250), (_render.LineWidth.Value, _render.GetHeight(largeText))), Colors.Black);
 			Draw.Text(largeText, _render, (10, 250), Colors.Black);
 
-            Draw.Texture(_renderedText.SubTexture(), (10, 400), Colors.Red, Colors.Aqua, Colors.Green, Colors.Black);
+            Draw.Texture(_renderedText, (10, 400), Colors.Red, Colors.Aqua, Colors.Green, Colors.Black);
 
             Draw.Rectangle(new Rectangle((350, 10), (500, 500)), Colors.Black);
 
@@ -63,13 +63,13 @@ namespace GRaff.GraphicTest
 
                 Draw.Text("Top Left", _font, (0, 0), Colors.Black, Alignment.TopLeft);
                 Draw.Text("Top", _font, (250, 0), Colors.Black, Alignment.Top);
-                Draw.Text("Top Right", _font, (500, 0), Colors.Black, Alignment.Top);
-                Draw.Text("Left", _font, (0, 250), Colors.Black, Alignment.Top);
-                Draw.Text("Center", _font, (250, 250), Colors.Black, Alignment.Top);
-                Draw.Text("Right", _font, (500, 250), Colors.Black, Alignment.Top);
-                Draw.Text("Bottom Left", _font, (0, 500), Colors.Black, Alignment.Top);
-                Draw.Text("Bottom", _font, (250, 500), Colors.Black, Alignment.Top);
-                Draw.Text("Bottom Right", _font, (500, 500), Colors.Black, Alignment.Top);
+                Draw.Text("Top Right", _font, (500, 0), Colors.Black, Alignment.TopRight);
+                Draw.Text("Left", _font, (0, 250), Colors.Black, Alignment.Left);
+                Draw.Text("Center", _font, (250, 250), Colors.Black, Alignment.Center);
+                Draw.Text("Right", _font, (500, 250), Colors.Black, Alignment.Right);
+                Draw.Text("Bottom Left", _font, (0, 500), Colors.Black, Alignment.BottomLeft);
+                Draw.Text("Bottom", _font, (250, 500), Colors.Black, Alignment.Right);
+                Draw.Text("Bottom Right", _font, (500, 500), Colors.Black, Alignment.BottomRight);
             }
 
             
