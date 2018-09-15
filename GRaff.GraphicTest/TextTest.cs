@@ -61,15 +61,15 @@ namespace GRaff.GraphicTest
                 Draw.Line((0, 250), (500, 250), Colors.DarkGray);
                 Draw.Line((250, 0), (250, 500), Colors.DarkGray);
 
-                Draw.Text("Top Left", _font, Alignment.TopLeft, (0, 0), Colors.Black);
-                Draw.Text("Top", _font, Alignment.Top, (250, 0), Colors.Black);
-                Draw.Text("Top Right", _font, Alignment.TopRight, (500, 0), Colors.Black);
-                Draw.Text("Left", _font, Alignment.Left, (0, 250), Colors.Black);
-                Draw.Text("Center", _font, Alignment.Center, (250, 250), Colors.Black);
-                Draw.Text("Right", _font, Alignment.Right, (500, 250), Colors.Black);
-                Draw.Text("Bottom Left", _font, Alignment.BottomLeft, (0, 500), Colors.Black);
-                Draw.Text("Bottom", _font, Alignment.Bottom, (250, 500), Colors.Black);
-                Draw.Text("Bottom Right", _font, Alignment.BottomRight, (500, 500), Colors.Black);
+                Draw.Text("Top Left", _font, (0, 0), Colors.Black, Alignment.TopLeft);
+                Draw.Text("Top", _font, (250, 0), Colors.Black, Alignment.Top);
+                Draw.Text("Top Right", _font, (500, 0), Colors.Black, Alignment.Top);
+                Draw.Text("Left", _font, (0, 250), Colors.Black, Alignment.Top);
+                Draw.Text("Center", _font, (250, 250), Colors.Black, Alignment.Top);
+                Draw.Text("Right", _font, (500, 250), Colors.Black, Alignment.Top);
+                Draw.Text("Bottom Left", _font, (0, 500), Colors.Black, Alignment.Top);
+                Draw.Text("Bottom", _font, (250, 500), Colors.Black, Alignment.Top);
+                Draw.Text("Bottom Right", _font, (500, 500), Colors.Black, Alignment.Top);
             }
 
             

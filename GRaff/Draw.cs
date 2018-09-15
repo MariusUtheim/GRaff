@@ -14,9 +14,62 @@ namespace GRaff
         public static IRenderDevice Device { get; set; }
 
 		public static void Clear(Color color) => Device.Clear(color);
-
 		
-		public static void Point(Point p, Color color) => Device.Draw(PrimitiveType.Points, new[] { (GraphicsPoint)p }, color);
+        /// <summary>
+        /// Copies the current content of the screen, then draws that image back to the screen.
+        /// This can for example be used to add post-processing effects.
+        /// </summary>
+        public static void Redraw()
+        {
+            Device.Redraw();
+        }
+
+        /// <summary>
+        /// Copies the current content of the screen, then draws that image back to the screen using the specified ShaderProgram.
+        /// This can for example be used to add post-processing effects.
+        /// </summary>
+        public static void Redraw(ShaderProgram program)
+        {
+            using (program.Use())
+                Device.Redraw();
+        }
+
+
+        #region Primitives
+
+        public static void Primitive(PrimitiveType primitiveType, GraphicsPoint[] vertices, Color color)
+        {
+            Contract.Requires<ArgumentNullException>(vertices != null);
+            Device.Draw(primitiveType, vertices, color);
+        }
+        public static void Primitive(PrimitiveType primitiveType, Point[] vertices, Color color)
+        {
+            Contract.Requires<ArgumentNullException>(vertices != null);
+            Primitive(primitiveType, vertices.Select(v => (GraphicsPoint)v).ToArray(), color);
+        }
+
+        public static void Primitive(PrimitiveType primitiveType, (GraphicsPoint vertex, Color color)[] primitive)
+        {
+            Contract.Requires<ArgumentNullException>(primitive != null);
+            Device.Draw(primitiveType, primitive);
+        }
+        public static void Primitive(PrimitiveType primitiveType, (Point vertex, Color color)[] primitive)
+        {
+            Contract.Requires<ArgumentNullException>(primitive != null);
+            Device.Draw(primitiveType, primitive.Select(p => ((GraphicsPoint)p.vertex, p.color)).ToArray());
+        }
+
+        public static void Primitive(PrimitiveType primitiveType, Texture buffer, (Point vertex, Point texCoord)[] vertices, Color color)
+        {
+            Device.DrawTexture(buffer, primitiveType, vertices.Select(v => (GraphicsPoint)v.vertex).ToArray(), color, vertices.Select(v => (GraphicsPoint)v.texCoord).ToArray());
+        }
+
+        #endregion
+
+
+        #region Outlined shapes
+
+        public static void Point(Point p, Color color) => Device.Draw(PrimitiveType.Points, new[] { (GraphicsPoint)p }, color);
 
 
         public static void Line(Point p1, Point p2, Color color) => Device.Draw(PrimitiveType.Lines, new[] { (GraphicsPoint)p1, (GraphicsPoint)p2 }, color);
@@ -32,13 +85,7 @@ namespace GRaff
         public static void Triangle(Point p1, Point p2, Point p3, Color col1, Color col2, Color col3) => Device.Draw(PrimitiveType.LineLoop, new[] { (GraphicsPoint)p1, (GraphicsPoint)p2, (GraphicsPoint)p3 }, new[] { col1, col2, col3 });
         public static void Triangle(Triangle triangle, Color col1, Color col2, Color col3) => Triangle(triangle.V1, triangle.V2, triangle.V3, col1, col2, col3);
 
-        public static void FillTriangle(Point p1, Point p2, Point p3, Color color) => Device.Draw(PrimitiveType.Triangles, new[] { (GraphicsPoint)p1, (GraphicsPoint)p2, (GraphicsPoint)p3 }, color);
-        public static void FillTriangle(Triangle triangle, Color color) => FillTriangle(triangle.V1, triangle.V2, triangle.V3, color);
-
-        public static void FillTriangle(Point p1, Point p2, Point p3, Color col1, Color col2, Color col3) => Device.Draw(PrimitiveType.Triangles, new[] { (GraphicsPoint)p1, (GraphicsPoint)p2, (GraphicsPoint)p3 }, new[] { col1, col2, col3 });
-        public static void FillTriangle(Triangle triangle, Color col1, Color col2, Color col3) => FillTriangle(triangle.V1, triangle.V2, triangle.V3, col1, col2, col3);
-
-
+ 
 		public static void Rectangle(Point location, Vector size, Color color)
         {
             (var x, var y) = location;
@@ -56,6 +103,33 @@ namespace GRaff
         }
         public static void Rectangle(Rectangle rectangle, Color col1, Color col2, Color col3, Color col4) => Rectangle(rectangle.TopLeft, rectangle.Size, col1, col2, col3, col4);
         
+         
+        public static void Circle(Point location, double radius, Color color) => Device.Draw(PrimitiveType.LineLoop, GRaff.Polygon.Circle(location, radius).Outline(), color);
+
+        
+        public static void Ellipse(Point location, Vector radii, Color color) 
+            => Device.Draw(PrimitiveType.LineLoop, GRaff.Polygon.Ellipse(location, radii.X, radii.Y).Outline(), color);
+        public static void Ellipse(Rectangle rectangle, Color color) => Device.Draw(PrimitiveType.LineLoop, GRaff.Polygon.Ellipse(rectangle).Outline(), color);
+
+
+        public static void Polygon(Polygon polygon, Color color)
+        {
+            if (polygon != null)
+                Device.Draw(PrimitiveType.LineStrip, polygon.Vertices.Select(v => (GraphicsPoint)v).ToArray(), color);
+        }
+
+
+        #endregion
+
+        #region Filled shapes
+
+        public static void FillTriangle(Point p1, Point p2, Point p3, Color color) => Device.Draw(PrimitiveType.Triangles, new[] { (GraphicsPoint)p1, (GraphicsPoint)p2, (GraphicsPoint)p3 }, color);
+        public static void FillTriangle(Triangle triangle, Color color) => FillTriangle(triangle.V1, triangle.V2, triangle.V3, color);
+
+        public static void FillTriangle(Point p1, Point p2, Point p3, Color col1, Color col2, Color col3) => Device.Draw(PrimitiveType.Triangles, new[] { (GraphicsPoint)p1, (GraphicsPoint)p2, (GraphicsPoint)p3 }, new[] { col1, col2, col3 });
+        public static void FillTriangle(Triangle triangle, Color col1, Color col2, Color col3) => FillTriangle(triangle.V1, triangle.V2, triangle.V3, col1, col2, col3);
+
+
         public static void FillRectangle(Point location, Vector size, Color color)
         {
             (var x, var y) = location;
@@ -73,40 +147,65 @@ namespace GRaff
         }
         public static void FillRectangle(Rectangle rectangle, Color col1, Color col2, Color col3, Color col4) => FillRectangle(rectangle.TopLeft, rectangle.Size, col1, col2, col3, col4);
 
-		private static void _drawFan(GraphicsPoint origin, GraphicsPoint[] boundary, Color innerColor, Color outerColor)
-		{
-			var vertices = new GraphicsPoint[boundary.Length + 2];
-			vertices[0] = origin;
-			Array.Copy(boundary, 0, vertices, 1, boundary.Length);
-			vertices[vertices.Length - 1] = boundary[0];
 
-			var colors = new Color[vertices.Length];
-			colors[0] = innerColor;
-			for (int j = 1; j < colors.Length; j++)
-				colors[j] = outerColor;
+        private static void _drawFan(GraphicsPoint origin, GraphicsPoint[] boundary, Color innerColor, Color outerColor)
+        {
+            var vertices = new GraphicsPoint[boundary.Length + 2];
+            vertices[0] = origin;
+            Array.Copy(boundary, 0, vertices, 1, boundary.Length);
+            vertices[vertices.Length - 1] = boundary[0];
 
-			Device.Draw(PrimitiveType.TriangleFan, vertices, colors);
-		}
-        
-        public static void Circle(Point location, double radius, Color color) => Device.Draw(PrimitiveType.LineLoop, GRaff.Polygon.Circle(location, radius).Outline(), color);
+            var colors = new Color[vertices.Length];
+            colors[0] = innerColor;
+            for (int j = 1; j < colors.Length; j++)
+                colors[j] = outerColor;
+
+            Device.Draw(PrimitiveType.TriangleFan, vertices, colors);
+        }
 
         public static void FillCircle(Point location, double radius, Color color) => Device.Draw(PrimitiveType.TriangleStrip, GRaff.Polygon.Circle(location, radius).Tesselate(), color);
-
         public static void FillCircle(Point location, double radius, Color innerColor, Color outerColor) => _drawFan((GraphicsPoint)location, GRaff.Polygon.Circle(location, radius).Outline(), innerColor, outerColor);
 
-
-        public static void Ellipse(Point location, Vector radii, Color color) 
-            => Device.Draw(PrimitiveType.LineLoop, GRaff.Polygon.Ellipse(location, radii.X, radii.Y).Outline(), color);
-
-        public static void Ellipse(Rectangle rectangle, Color color) => Device.Draw(PrimitiveType.LineLoop, GRaff.Polygon.Ellipse(rectangle).Outline(), color);
-
         public static void FillEllipse(Point location, Vector radii, Color color) => Device.Draw(PrimitiveType.TriangleStrip, GRaff.Polygon.Ellipse(location, radii.X, radii.Y).Tesselate(), color);
-
         public static void FillEllipse(Rectangle rectangle, Color color) => Device.Draw(PrimitiveType.TriangleStrip, GRaff.Polygon.Ellipse(rectangle).Tesselate(), color);
 
         public static void FillEllipse(Point location, Vector radii, Color innerColor, Color outerColor) => _drawFan((GraphicsPoint)location, GRaff.Polygon.Ellipse(location, radii.X, radii.Y).Outline(), innerColor, outerColor);
-
         public static void FillEllipse(Rectangle rectangle, Color innerColor, Color outerColor) => _drawFan((GraphicsPoint)rectangle.Center, GRaff.Polygon.Ellipse(rectangle).Outline(), innerColor, outerColor);
+
+
+        public static void FillPolygon(Polygon polygon, Color color)
+        {
+            if (polygon != null)
+                Device.Draw(PrimitiveType.TriangleFan, polygon.Vertices.Select(v => (GraphicsPoint)v).ToArray(), color);
+        }
+
+        #endregion
+
+
+        #region Shape lists
+
+        public static void Points(IEnumerable<Point> points, Color color)
+            => Primitive(PrimitiveType.Points, points.Select(p => (GraphicsPoint)p).ToArray(), color);
+
+        public static void Points(IEnumerable<(Point point, Color color)> primitives)
+            => Primitive(PrimitiveType.Points, primitives.Select(p => ((GraphicsPoint)p.point, p.color)).ToArray());
+
+        public static void Lines(IEnumerable<Line> lines, Color color)
+            => Primitive(PrimitiveType.Lines, lines.SelectMany(l => ((GraphicsPoint)l.Origin, (GraphicsPoint)l.Destination)).ToArray(), color);
+
+        public static void Lines(IEnumerable<(Line line, Color color)> primitives)
+            => Primitive(PrimitiveType.Lines, primitives.SelectMany(p => (((GraphicsPoint)p.line.Origin, p.color), ((GraphicsPoint)p.line.Destination, p.color))).ToArray());
+
+        public static void Triangles(IEnumerable<Triangle> triangles, Color color)
+            => Primitive(PrimitiveType.Triangles, triangles.SelectMany(t => ((GraphicsPoint)t.V1, (GraphicsPoint)t.V2, (GraphicsPoint)t.V3)).ToArray(), color);
+
+        public static void Triangles(IEnumerable<(Triangle triangle, Color color)> primitives)
+            => Primitive(PrimitiveType.Triangles, primitives.SelectMany(p => (((GraphicsPoint)p.triangle.V1, p.color), ((GraphicsPoint)p.triangle.V2, p.color), ((GraphicsPoint)p.triangle.V3, p.color))).ToArray());
+
+        #endregion
+
+
+        #region Textures
 
         public static void Texture(Texture texture, Point location, Color blend)
         {
@@ -116,7 +215,7 @@ namespace GRaff
         public static void Texture(Texture texture, Point location)
             => Texture(texture, location, Colors.White);
         public static void Texture(Texture texture, Rectangle rect)
-        => Texture(texture.SubTexture(), rect);
+            => Texture(texture.SubTexture(), rect);
 
         public static void Texture(SubTexture texture, Point location, Color blend)
         {
@@ -152,107 +251,34 @@ namespace GRaff
                 Device.DrawTexture(sprite.SubImage(imageIndex), sprite.XOrigin, sprite.YOrigin, transform, blend);
         }
         public static void Sprite(Sprite sprite, double imageIndex, Matrix transform) => Sprite(sprite, imageIndex, transform, Colors.White);
+        public static void Sprite(Sprite sprite, double imageIndex, Point location, Color blend) => Sprite(sprite, imageIndex, Matrix.Translation(location), blend);
         public static void Sprite(Sprite sprite, double imageIndex, Point location) => Sprite(sprite, imageIndex, Matrix.Translation(location), Colors.White);
-        public static void Sprite(Sprite sprite, double imageIndex, Transform transform) => Sprite(sprite, imageIndex, transform.GetMatrix(), Colors.White);
         public static void Sprite(Sprite sprite, double imageIndex, Transform transform, Color blend) => Sprite(sprite, imageIndex, transform.GetMatrix(), blend);
+        public static void Sprite(Sprite sprite, double imageIndex, Transform transform) => Sprite(sprite, imageIndex, transform.GetMatrix(), Colors.White);
 
-        public static void Polygon(Polygon polygon, Color color)
-		{
-			if (polygon != null)
-				Device.Draw(PrimitiveType.LineStrip, polygon.Vertices.Select(v => (GraphicsPoint)v).ToArray(), color);
-		}
-
-		public static void FillPolygon(Polygon polygon, Color color)
-		{
-			if (polygon != null)
-                Device.Draw(PrimitiveType.TriangleFan, polygon.Vertices.Select(v => (GraphicsPoint)v).ToArray(), color);
-        }
+        #endregion
 
 
+        #region Text
 
-
-		public static void Primitive(PrimitiveType primitiveType, GraphicsPoint[] vertices, Color color)
-		{
-			Contract.Requires<ArgumentNullException>(vertices != null);
-			Device.Draw(primitiveType, vertices.Select(p => (GraphicsPoint)p).ToArray(), color);
-		}
-
-		public static void Primitive(PrimitiveType primitiveType, (GraphicsPoint vertex, Color color)[] primitive)
-		{
-			Contract.Requires<ArgumentNullException>(primitive != null);
-            Device.Draw(primitiveType, primitive);
-		}
-
-    
-        public static void Primitive(PrimitiveType primitiveType, Texture buffer, (Point vertex, Point texCoord)[] vertices, Color color)
-        {
-            Device.DrawTexture(buffer, primitiveType, vertices.Select(v => (GraphicsPoint)v.vertex).ToArray(), color, vertices.Select(v => (GraphicsPoint)v.texCoord).ToArray());
-        }
-        public static void Primitive(PrimitiveType primitiveType, Texture buffer, params (Point vertex, Point texCoord)[] vertices)
-        => Primitive(primitiveType, buffer, vertices, Colors.White);
-
-//TODO//		public static void Primitive(PrimitiveType primitiveType, TextureBuffer buffer, (GraphicsPoint vertex, Color color, GraphicsPoint texCoord)[] primitive)
-//		{
-//            Device.DrawTexture(buffer, primitiveType, primitive);
-//		}
-
-        public static void Lines(IEnumerable<Line> lines, Color color)
-            => Primitive(PrimitiveType.Lines, lines.SelectMany(l => ((GraphicsPoint)l.Origin, (GraphicsPoint)l.Destination)).ToArray(), color);
-
-        public static void Lines(IEnumerable<(Line line, Color color)> primitives)
-            => Primitive(PrimitiveType.Lines, primitives.SelectMany(p => (((GraphicsPoint)p.line.Origin, p.color), ((GraphicsPoint)p.line.Destination, p.color))).ToArray());
-
-        public static void Triangles(IEnumerable<Triangle> triangles, Color color)
-            => Primitive(PrimitiveType.Triangles, triangles.SelectMany(t => ((GraphicsPoint)t.V1, (GraphicsPoint)t.V2, (GraphicsPoint)t.V3)).ToArray(), color);
-
-        public static void Triangles(IEnumerable<(Triangle triangle, Color color)> primitives)
-            => Primitive(PrimitiveType.Triangles, primitives.SelectMany(p => (((GraphicsPoint)p.triangle.V1, p.color), ((GraphicsPoint)p.triangle.V2, p.color), ((GraphicsPoint)p.triangle.V3, p.color))).ToArray());
-
-#warning Clean up these overloads
         public static void Text(string text, TextRenderer renderer, Matrix transform, Color color)
 		{
 			Contract.Requires<ArgumentNullException>(renderer != null && transform != null);
 			Device.DrawText(renderer, color, text, transform);
 		}
+        public static void Text(string text, TextRenderer renderer, Matrix transform) => Text(text, renderer, transform, Colors.Black);
+        public static void Text(string text, TextRenderer renderer, Point location, Color color) => Text(text, renderer, Matrix.Translation(location), color);
         public static void Text(string text, TextRenderer renderer, Point location) => Text(text, renderer, Matrix.Translation(location), Colors.Black);
-		public static void Text(string text, TextRenderer renderer, Point location, Color color) => Text(text, renderer, Matrix.Translation(location), color);
-		public static void Text(string text, TextRenderer renderer, Transform transform, Color color)
+        public static void Text(string text, TextRenderer renderer, Transform transform, Color color)
 		{
 			Contract.Requires<ArgumentNullException>(renderer != null && transform != null);
 			Text(text, renderer, transform.GetMatrix(), color);
 		}
-        public static void Text(string text, Font font, Point location) => Text(text, font, location, Colors.Black);
-		public static void Text(string text, Font font, Point location, Color color) => Text(text, new TextRenderer(font), Matrix.Translation(location), color);
-        public static void Text(string text, Font font, Alignment alignment, Point location) => Text(text, new TextRenderer(font, alignment), Matrix.Translation(location), Colors.Black);
-		public static void Text(string text, Font font, Alignment alignment, Point location, Color color) => Text(text, new TextRenderer(font, alignment), Matrix.Translation(location), color);
+        public static void Text(string text, TextRenderer renderer, Transform transform) => Text(text, renderer, transform, Colors.Black);
 
-        //public static void Text(string text, Font font, Color color, double x, double y) => CurrentSurface.DrawText(font, )
+        public static void Text(string text, Font font, Point location, Alignment alignment = Alignment.TopLeft) => Text(text, font, location, Colors.Black);
+		public static void Text(string text, Font font, Point location, Color color, Alignment alignment = Alignment.TopLeft) => Text(text, new TextRenderer(font), Matrix.Translation(location), color);
 
-        /*
-        public static void Text(string text, Font font, Color color, Transform transform) => CurrentSurface.DrawText(font, FontAlignment.TopLeft, color, text, transform);
-        
-        public static void Text(string text, Font font, FontAlignment alignment, Color color, double x, double y) => CurrentSurface.DrawText(font, alignment, color, text, new PointF(x, y));
-
-        public static void Text(string text, Font font, FontAlignment alignment, Color color, Point location) => CurrentSurface.DrawText(font, alignment, color, text, (PointF)location);
-
-        public static void Text(string text, Font font, FontAlignment alignment, Color color, Transform transform) => CurrentSurface.DrawText(font, alignment, color, text, transform);
-        */
-
-
-        /// <summary>
-        /// Copies the current content of the screen, then draws that image back to the screen.
-        /// This can for example be used to add post-processing effects.
-        /// </summary>
-        public static void Redraw()
-        {
-            Device.Redraw();
-        }
-
-        public static void Redraw(ShaderProgram program)
-        {
-            using (program.Use())
-                Device.Redraw();
-        }
-
+        #endregion
     }
 }

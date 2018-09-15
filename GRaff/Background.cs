@@ -112,7 +112,7 @@ namespace GRaff
                         (new Point(right, top), new Point(u1, v0)),
 						(new Point(left, bottom), new Point(u0, v1)),
                         (new Point(right, bottom), new Point(u1, v1)),
-                    });
+                    }, Colors.White);
                     
 				}
 				else
