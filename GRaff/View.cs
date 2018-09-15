@@ -18,7 +18,6 @@ namespace GRaff
 	/// </summary>
 	public class View
 	{
-		private static int FramebufferViewWidth, FramebufferViewHeight;
         private static readonly Triangle GLTriangle = new Triangle((-1, 1), (1, 1), (-1, -1));
         private static Matrix GLToScreenMatrix;
 
@@ -32,11 +31,6 @@ namespace GRaff
             this._transform = new Transform(viewMatrix);
         }
 
-		internal static void InitializeFramebufferSize(int width, int height)
-		{
-			FramebufferViewWidth = width;
-			FramebufferViewHeight = height;
-		}
 
         internal static void UpdateGLToScreenMatrix()
         {
@@ -83,7 +77,7 @@ namespace GRaff
         /// <summary>
         /// Creates a View that should be used when drawing to Framebuffers.
         /// </summary>
-		public static View Framebuffer() => Rectangle(0, FramebufferViewHeight, FramebufferViewWidth, -FramebufferViewHeight);      
+		public static View Framebuffer() => Rectangle(0, Graphics.Framebuffer.ViewHeight, Graphics.Framebuffer.ViewWidth, -Graphics.Framebuffer.ViewHeight);      
 
         /// <summary>
         /// Gets the current View that is used by drawing functions. 

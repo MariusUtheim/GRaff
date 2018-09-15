@@ -27,7 +27,7 @@ namespace GRaff.Graphics
 
             ShaderProgram.Default.Bind();
 
-			View.InitializeFramebufferSize((int)(Window.Width * Window.DisplayScale.X), (int)(Window.Height * Window.DisplayScale.Y));
+			Framebuffer.InitializeFramebufferDimensions((int)(Window.Width * Window.DisplayScale.X), (int)(Window.Height * Window.DisplayScale.Y));
 
 #if DEBUG
             GlobalEvent.EndStep += () =>

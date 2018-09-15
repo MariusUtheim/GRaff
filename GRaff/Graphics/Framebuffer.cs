@@ -11,8 +11,8 @@ namespace GRaff.Graphics
 {
 	public sealed class Framebuffer : IDisposable
 	{
-		      
-		public Framebuffer(Texture texture)
+
+        public Framebuffer(Texture texture)
 		{
 			Id = GL.GenFramebuffer();
 			this.Texture = texture;
@@ -39,9 +39,18 @@ namespace GRaff.Graphics
 		public Framebuffer(int width, int height)
 			: this(new Texture(width, height, IntPtr.Zero)) { }
 
+        internal static void InitializeFramebufferDimensions(int width, int height)
+        {
+            ViewWidth = width;
+            ViewHeight = height;
+        }
+
+        internal static int ViewWidth { get; private set; }
+        internal static int ViewHeight { get; private set; }
 
 
-		private static Color[,] _fill(int width, int height, Color clearColor)
+
+        private static Color[,] _fill(int width, int height, Color clearColor)
 		{
 			var result = new Color[height, width];
 			for (var y = 0; y < height; y++)
@@ -68,7 +77,7 @@ namespace GRaff.Graphics
 
             GL.BindFramebuffer(FramebufferTarget.ReadFramebuffer, 0);
             GL.BindFramebuffer(FramebufferTarget.DrawFramebuffer, buffer.Id);
-            GL.BlitFramebuffer(0, 0, Window.Width, Window.Height, 0, Window.Height, Window.Width, 0, ClearBufferMask.ColorBufferBit, BlitFramebufferFilter.Nearest);
+            GL.BlitFramebuffer(0, 0, ViewWidth, ViewHeight, 0, Window.Height, Window.Width, 0, ClearBufferMask.ColorBufferBit, BlitFramebufferFilter.Nearest);
 
             if (previous == null)
                 BindDefault();
