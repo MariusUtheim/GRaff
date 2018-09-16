@@ -3,7 +3,7 @@ using GRaff.Effects;
 
 namespace GRaff.GraphicTest
 {
-    [Test]
+    [Test(Order = -1)]
 	class TextureBufferTest : GameElement
 	{
 		private Texture _texture = Textures.Giraffe;
@@ -22,6 +22,7 @@ namespace GRaff.GraphicTest
 		{
 			Draw.Clear(Colors.LightGray);
 			Draw.Texture(_texture, (0, 0));
+            Draw.SubTexture(new SubTexture(_texture), new Rectangle(_texture.Width, 0, 400, 400), Colors.MediumPurple, Colors.Blue, Colors.Red, Colors.ForestGreen);
 			Draw.Texture(_chessboard, (10, _texture.Height + 10));
             Draw.Texture(_mono, (110, _texture.Height + 10));
             Draw.Texture(_linear, (210, _texture.Height + 10));

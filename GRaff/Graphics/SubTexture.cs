@@ -23,7 +23,6 @@ namespace GRaff.Graphics
 			Texture = buffer;
 		}
 
-#warning MUST TEST!
         public SubTexture(Texture buffer)
             : this(buffer, defaultTL, defaultTR, defaultBL, defaultBR)
         {

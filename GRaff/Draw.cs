@@ -252,9 +252,9 @@ namespace GRaff
                 Device.DrawTexture(texture.Texture, PrimitiveType.TriangleStrip,
                     new[] {
                         (GraphicsPoint)location,
-                        new GraphicsPoint(x0 + scX * (vs[1].X - x0), y0 + scY * (vs[1].Y - y0)),
-                        new GraphicsPoint(x0 + scX * (vs[2].X - x0), y0 + scY * (vs[2].Y - y0)),
-                        new GraphicsPoint(x0 + scX * (vs[3].X - x0), y0 + scY * (vs[3].Y - y0))
+                        new GraphicsPoint(x0 + scX * vs[1].X, y0 + scY * vs[1].Y),
+                        new GraphicsPoint(x0 + scX * vs[2].X, y0 + scY * vs[2].Y),
+                        new GraphicsPoint(x0 + scX * vs[3].X, y0 + scY * vs[3].Y)
                     }, new[] { c1, c2, c4, c3 }, texture.TriangleStripCoords);
             }
         }
@@ -269,9 +269,9 @@ namespace GRaff
                 Device.DrawTexture(texture.Texture, PrimitiveType.TriangleStrip, 
                     new[] {
                         (GraphicsPoint)location,
-                        new GraphicsPoint(x0 + scX * (vs[1].X - x0), y0 + scY * (vs[1].Y - y0)),
-                        new GraphicsPoint(x0 + scX * (vs[2].X - x0), y0 + scY * (vs[2].Y - y0)),
-                        new GraphicsPoint(x0 + scX * (vs[3].X - x0), y0 + scY * (vs[3].Y - y0))
+                        new GraphicsPoint(x0 + scX * vs[1].X, y0 + scY * vs[1].Y),
+                        new GraphicsPoint(x0 + scX * vs[2].X, y0 + scY * vs[2].Y),
+                        new GraphicsPoint(x0 + scX * vs[3].X, y0 + scY * vs[3].Y)
                     }, blend, texture.TriangleStripCoords);
             }
         }
