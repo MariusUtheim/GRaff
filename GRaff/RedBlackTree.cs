@@ -241,8 +241,6 @@ namespace GRaff
 
 		private void Delete()
 		{
-			Debug.Assert(IsLeaf);
-
 			if (_color == Black)
 				Rebalance();
 

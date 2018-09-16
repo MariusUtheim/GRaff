@@ -29,48 +29,69 @@ namespace GRaff.UnitTesting
 			}
 		}
 
-		[TestMethod]
-		public void RBTree_Add()
+        [TestMethod]
+		public void RBTree_Add_And_Sort()
 		{
-			var collection = new RedBlackTree();
-			var indices = GRandom.Range(0, 100).ToArray();
-			var elements = indices.Select(i => new TestElement(i)).ToList();
+			var tree = new RedBlackTree();
+			var elements = GRandom.Range(0, 100).Select(i => new TestElement(i)).ToArray();
 
-			for (int i = 0; i < elements.Count; i++)
-				collection.Add(elements[i]);
+			foreach (var element in elements)
+				tree.Add(element);
 
-			var results = collection.ToArray();
-			indices = indices.OrderBy(i => i).ToArray();
-			for (int i = 0; i < indices.Length; i++)
-				Assert.AreEqual(indices[i], results[i].Depth);
+            Assert.AreEqual(elements.Length, tree.Count);
+
+			var results = tree.ToArray();
+			for (int i = 0; i < results.Length; i++)
+				Assert.AreEqual(i, results[i].Depth);
 		}
 
-		[TestMethod]
+        [TestMethod]
+        public void RBTree_Contains()
+        {
+            var tree = new RedBlackTree();
+            var elements = GRandom.Range(0, 100).Select(i => new TestElement(i)).ToArray();
+
+            var isAdded = new bool[elements.Length];
+            var addCount = 0;
+            for (var i = 0; i < elements.Length; i++)
+                if (GRandom.Probability(0.2))
+                {
+                    tree.Add(elements[i]);
+                    isAdded[i] = true;
+                    addCount++;
+                }
+
+            Assert.AreEqual(addCount, tree.Count);
+
+            var results = tree.ToArray();
+            for (var i = 0; i < elements.Length; i++)
+                Assert.AreEqual(isAdded[i], tree.Contains(elements[i]));
+        }
+
+        [TestMethod]
 		public void RBTree_Remove()
 		{
-			var collection = new RedBlackTree();
-			var indices = new List<int>(new[] { 1, 6, 8, 11, 15, 13, 22, 17, 27, 25 });
-			var elements = indices.Select(i => new TestElement(i)).ToList();
+			var tree = new RedBlackTree();
+			var elements = GRandom.Range(0, 100).Select(i => new TestElement(i)).ToArray();
+            
+            foreach (var element in elements)
+                tree.Add(element);
 
-			for (int i = 0; i < elements.Count; i++)
-				collection.Add(elements[i]);
+            var isRemoved = new bool[elements.Length];
+            var removeCount = 0;
+            for (int i = 0; i < elements.Length; i++)
+                if (GRandom.Probability(0.2))
+                {
+                    tree.Remove(elements[i]);
+                    isRemoved[i] = true;
+                    removeCount++;
+                }
 
-			
-			collection.Remove(elements[0]);
-			collection.Remove(elements[3]);
-			collection.Remove(elements[5]);
-			indices.RemoveAt(5);
-			indices.RemoveAt(3);
-			indices.RemoveAt(0);
-			elements.RemoveAt(5);
-			elements.RemoveAt(3);
-			elements.RemoveAt(0);
+            Assert.AreEqual(elements.Length - removeCount, tree.Count);
 
-			var results = collection.ToArray();
-
-			indices = indices.OrderBy(i => i).ToList();
-			for (int i = 0; i < indices.Count; i++)
-				Assert.AreEqual(indices[i], results[i].Depth);
+            var results = tree.ToArray();
+            for (int i = 0; i < elements.Length; i++)
+				Assert.AreEqual(!isRemoved[i], tree.Contains(elements[i]));
 		}
 
 
