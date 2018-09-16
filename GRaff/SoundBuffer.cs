@@ -24,8 +24,7 @@ namespace GRaff
 			Contract.Requires<ArgumentException>(buffer.Length > 0);
 
             Id = AL.GenBuffer();
-
-            this._buffer = buffer;
+            this.Buffer = buffer;
             this.Bitrate = bitrate;
             this.Channels = channels;
             this.Frequency = frequency;
@@ -41,7 +40,7 @@ namespace GRaff
 
             _Audio.ErrorCheck();
 
-            AL.BufferData(Id, _format, _buffer, length ?? _buffer.Length, Frequency);
+            AL.BufferData(Id, _format, buffer, length ?? buffer.Length, Frequency);
 
             _Audio.ErrorCheck();
         }
@@ -77,20 +76,23 @@ namespace GRaff
 
         public int Id { get; }
 
-#warning The user can keep track of the buffer. Consider just making it ungettable
-        private byte[] _buffer;
-        public IReadOnlyList<byte> Buffer => Array.AsReadOnly(_buffer);
+        public byte[] Buffer { get; }
 
         public int Bitrate { get; }
 
         public int Channels { get; }
 
-        public TimeSpan Duration => TimeSpan.FromSeconds(_buffer.Length * 8.0 / (double)(Bitrate * Channels * Frequency));
-
         public int Frequency { get; }
 
-        public IReadOnlyCollection<SoundElement> SoundInstances => Array.AsReadOnly(_instances.ToArray());
+        public int Size => Buffer.Length;
 
+        public int BytesPerSample => Bitrate / 8 * Channels;
+
+        public int SampleCount => Size / BytesPerSample;
+
+        public TimeSpan Duration => TimeSpan.FromSeconds(SampleCount / (double)Frequency);
+
+        public IEnumerable<SoundElement> SoundInstances => _instances.ToList();
 
         public bool IsDisposed { get; private set; }
 
@@ -124,9 +126,6 @@ namespace GRaff
 
                         AL.DeleteBuffer(id);
                         _Audio.ErrorCheck();
-
-                        if (disposing)
-                            _buffer = null;
                     }
                 });
 
