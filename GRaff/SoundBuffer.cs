@@ -158,8 +158,8 @@ namespace GRaff
 
         public SoundElement Play(Point location, bool looping = false, double volume = 1.0, double pitch = 1.0)
         {
-#warning Add error message - test that this applies only to mono (also see PlayPaused)
-			Contract.Requires<InvalidOperationException>(Channels == 1);
+            if (Channels != 1)
+                throw new InvalidOperationException("Sounds with more than one channel cannot be played at a spatial location");
             return _create(looping, true, location, volume, pitch);
         }
 
@@ -168,8 +168,9 @@ namespace GRaff
 
 		public SoundElement PlayPaused(Point location, bool looping = false, double volume = 1.0, double pitch = 1.0)
 		{
-			Contract.Requires<InvalidOperationException>(Channels == 1);
-			return _create(looping, false, location, volume, pitch);
+            if (Channels != 1)
+                throw new InvalidOperationException("Sounds with more than one channel cannot be played at a spatial location");
+            return _create(looping, false, location, volume, pitch);
 		}
 
         public void StopAll()
