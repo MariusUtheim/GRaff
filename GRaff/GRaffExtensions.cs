@@ -33,6 +33,17 @@ namespace GRaff
             }
         }
 
+        internal static T Reduce<T>(this IEnumerable<T> enumerable, Func<T, T, T> reducer)
+        {
+            if (!enumerable.Any())
+                throw new ArgumentException("Cannot reduce an empty list");
+
+            var current = enumerable.First();
+            foreach (var v in enumerable.Skip(1))
+                current = reducer(current, v);
+            return current;
+        }
+
         #region Random functions
 
         /// <summary>

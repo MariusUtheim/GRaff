@@ -108,16 +108,29 @@ namespace GRaff.Graphics.Text
 			}
         }
 
+        /// <summary>
+        /// Formats the text by inserting newlines in place of whitespaces whereever it would 
+        /// be split when rendered by this text renderer. 
+        /// </summary>
+        /// <param name="text">The text to be formatted.</param>
+        /// <returns>The formatted text.</returns>
+        public string MultilineFormat(string text)
+        {
+            if (text == null || text == "")
+                return "";
+            else
+                return LineSplit(text).Reduce((formatText, nextLine) => formatText + Environment.NewLine + nextLine);
+        }
 
         /// <summary>
         /// If the input string is narrower than the maximum width of a line, that
         /// string is returned. Otherwise, as many characters as possible are
-        /// returned, appended by the specified ellipsis.
+        /// returned, appended by the specified ellipsis. If the string contains 
+        /// newline characters, it might cause unexpected effects.
         /// </summary>
         /// <returns>The truncated text.</returns>
         /// <param name="text">The text to truncate.</param>
         /// <param name="trail">The trail to append to the text if it is too long.</param>
-        #warning Do a check for maximum height as well
         public virtual string Truncate(string text, string trail = "...")
         {
             if (text == null)
