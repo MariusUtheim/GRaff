@@ -6,6 +6,7 @@ namespace GRaff.UnitTesting
 	[TestClass]
 	public class TransformTest
 	{
+        private const double delta = 1e-14;
 
 		[TestMethod]
 		public void Transform_Translate()
@@ -108,5 +109,65 @@ namespace GRaff.UnitTesting
 			Point actual = transform.Point(pt);
 			Assert.AreEqual<Point>(expected, actual);
 		}
-	}
+
+        [TestMethod]
+        public void Transform_Matrix_Gives_Correct_Transform()
+        {
+            double sx = GRandom.Double(0, 1), sy = GRandom.Double(0, 1), shear = GRandom.Double(-1, 1),
+                   tx = GRandom.Double(-100, 100), ty = GRandom.Double(-100, 100);
+            Angle rot = GRandom.Angle();
+
+            var matrix = Matrix.Translation(tx, ty) * Matrix.Rotation(rot) * Matrix.Shearing(shear, 0) * Matrix.Scaling(sx, sy);
+            var transform = new Transform(matrix);
+
+            Assert.AreEqual(sx, transform.XScale, delta);
+            Assert.AreEqual(sy, transform.YScale, delta);
+            Assert.AreEqual(shear, transform.XShear, delta);
+            Assert.AreEqual(0, transform.YShear, delta);
+            Assert.AreEqual(tx, transform.X, delta);
+            Assert.AreEqual(ty, transform.Y, delta);
+            Assert.AreEqual(rot.Radians, transform.Rotation.Radians, delta);
+        }
+
+        private static void _checkTransformsCorrectly(Matrix matrix)
+        {
+            var transform = new Transform(matrix);
+            Assert.AreEqual(0, (matrix - transform.GetMatrix()).Determinant, delta);
+        }
+
+        [TestMethod]
+        public void Transform_From_Random_Matrix()
+        {
+            double a = GRandom.Double(-1, 1), b = GRandom.Double(-1, 1), c = GRandom.Double(-1, 1), d = GRandom.Double(-1, 1);
+            var matrix = new Matrix(a, b, 0, c, d, 0);
+            _checkTransformsCorrectly(matrix);
+        }
+
+        [TestMethod]
+        public void Transform_Degenerate_Matrices()
+        {
+            double a = GRandom.Double(-1, 1), b = GRandom.Double(-1, 1), c = GRandom.Double(-1, 1), d = GRandom.Double(-1, 1);
+
+            _checkTransformsCorrectly(new Matrix(a, b, c, 0));
+            _checkTransformsCorrectly(new Matrix(a, b, 0, d));
+            _checkTransformsCorrectly(new Matrix(a, 0, c, d));
+            _checkTransformsCorrectly(new Matrix(0, b, c, d));
+
+            _checkTransformsCorrectly(new Matrix(a, b, 0, 0));
+            _checkTransformsCorrectly(new Matrix(a, 0, c, 0));
+            _checkTransformsCorrectly(new Matrix(a, 0, 0, d));
+            _checkTransformsCorrectly(new Matrix(0, b, c, 0));
+            _checkTransformsCorrectly(new Matrix(0, b, 0, d));
+            _checkTransformsCorrectly(new Matrix(0, 0, c, d));
+
+            _checkTransformsCorrectly(new Matrix(a, 0, 0, 0));
+            _checkTransformsCorrectly(new Matrix(0, b, 0, 0));
+            _checkTransformsCorrectly(new Matrix(0, 0, c, 0));
+            _checkTransformsCorrectly(new Matrix(0, 0, 0, d));
+
+            _checkTransformsCorrectly(new Matrix(1, 0, 0, 1));
+            _checkTransformsCorrectly(new Matrix(0, 0, 0, 0));
+
+        }
+    }
 }

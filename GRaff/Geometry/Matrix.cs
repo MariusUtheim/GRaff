@@ -17,8 +17,25 @@ namespace GRaff
 			: this(1, 0, 0, 0, 1, 0)
 		{ }
 
+        /// <summary>
+        /// Initializes a new instance of the GRaff.Matrix class with the specified matrix elements and with the affine components being zero.
+        /// </summary>
+        /// <param name="m00">The first element of the first row.</param>
+        /// <param name="m01">The second element of the first row.</param>
+        /// <param name="m10">The first element of the second row.</param>
+        /// <param name="m11">The second element of the second row.</param>
+        public Matrix(double m00, double m01, double m10, double m11)
+        {
+            this.M00 = m00;
+            this.M01 = m01;
+            this.M02 = 0;
+            this.M10 = m10;
+            this.M11 = m11;
+            this.M12 = 0;
+        }
+
 		/// <summary>
-		/// Initializes a new instance of the GRaff.AffineMatix class with the specified matrix elements.
+		/// Initializes a new instance of the GRaff.Matrix class with the specified matrix elements.
 		/// </summary>
 		/// <param name="m00">The first element of the first row.</param>
 		/// <param name="m01">The second element of the first row.</param>

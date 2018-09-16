@@ -25,28 +25,72 @@ namespace GRaff
 		{
 		}
 
-#warning Needs unit testing, and also extract rotation
+#warning Needs unit testing, and also extract rotation, give right comments
+#warning Do all the necessary checks for entries equal to zero
+        /// <summary>
+        /// Creates a transform defined by the specified matrix.
+        /// </summary>
+        /// <param name="t">The matrix defining the transformation.</param>
+        /// <remarks>Note that the Transform object defines seven degrees of freedom (2 scales, 2 shears, 1 rotation, 2 translations), 
+        /// while the Matrix has only six. Because of this, given the matrix of an arbitrary Transform, creating a new Transform 
+        /// from that Matrix might not give a correct copy of the original Transform.
+        /// </remarks>
         public Transform(Matrix t)
         {
             X = t.M02;
             Y = t.M12;
-            XScale = GMath.Sqrt(t.M00 * t.M00 + t.M01 * t.M01);
-            YScale = GMath.Sqrt(t.M10 * t.M10 + t.M11 * t.M11);
-            var rotationMatrix = new Matrix(t.M00 / XScale, t.M01 / XScale, 0, t.M10 / YScale, t.M11 / YScale, 0);
 
-            if (rotationMatrix.Determinant == -1)
+            XScale = GMath.Sqrt(t.M00 * t.M00 + t.M10 * t.M10);
+            YShear = 0;
+
+            if (XScale == 0)
             {
-                rotationMatrix *= new Matrix(1, 0, 0, 0, -1, 0);
-                YScale = -YScale;
+                XShear = 0;
+                YScale = GMath.Sqrt(t.M11 * t.M11 + t.M01 * t.M01);
+                if (YScale == 0)
+                    Rotation = Angle.Zero;
+                else
+                    Rotation = GMath.Atan2(-t.M01, t.M11);
             }
+            else
+            {
+                Rotation = GMath.Atan2(t.M10, t.M00); 
 
-            Contract.Requires(GetMatrix() * rotationMatrix == t);
-            Contract.Requires(rotationMatrix.Determinant == 1);
-
-            Rotation = GMath.Atan2(rotationMatrix.M10, rotationMatrix.M00);
-
-            Contract.Requires(GetMatrix() == t);
-			//throw new NotImplementedException();
+                var (c, s) = (GMath.Cos(Rotation), GMath.Sin(Rotation));
+                if (t.M01 == 0 && t.M11 == 0)
+                    XShear = YScale = 0;
+                else if (t.M01 == 0)
+                {
+                    if (c == 0)
+                    {
+                        XShear = 1;
+                        YScale = t.M11;
+                    }
+                    else
+                    {
+                        XShear = s / c;
+                        YScale = t.M11 / (XShear * s + c);
+                    }
+                }
+                else if (t.M11 == 0)
+                {
+                    if (s == 0)
+                    {
+                        XShear = 1;
+                        YScale = t.M01;
+                    }
+                    else
+                    {
+                        XShear = -1 / GMath.Tan(Rotation);
+                        YScale = t.M01 / (XShear * c - s);
+                    }
+                }
+                else
+                {
+                    XShear = (t.M01 * c + t.M11 * s) / (t.M11 * c - t.M01 * s);
+                    YScale = t.M11 / (c + XShear * s);
+                }
+            }
 	    }
 
 		/// <summary>
@@ -110,8 +154,8 @@ namespace GRaff
 		{
 			double c = GMath.Cos(Rotation), s = GMath.Sin(Rotation);
 			return new Matrix(
-				XScale * (c - s * YShear), YScale * (-s + c * XShear), X,
-				XScale * (s + c * YShear), YScale * (c + s * XShear), Y
+				XScale * (c - s * YShear), YScale * ((XShear * YShear - 1) * s + c * XShear), X,
+				XScale * (s + c * YShear), YScale * ((XShear * YShear + 1) * c + s * XShear), Y
 			);
 		}
 
