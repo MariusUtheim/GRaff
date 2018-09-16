@@ -20,7 +20,7 @@ namespace GRaff.Graphics
 		}
 
         public Sprite(Texture texture, Vector? size = null, Vector? origin = null, Mask maskShape = null)
-            : this(texture?.SubTexture(), size, origin, maskShape)
+            : this(new SubTexture(texture), size, origin, maskShape)
         { }
 
 		public Sprite(SubTexture texture, Vector? size = null, Vector? origin = null, Mask maskShape = null)

@@ -11,12 +11,24 @@ namespace GRaff.Graphics
 {
 	public sealed class SubTexture
 	{
+        private static readonly GraphicsPoint defaultTL = new GraphicsPoint(0, 0);
+        private static readonly GraphicsPoint defaultTR = new GraphicsPoint(1, 0);
+        private static readonly GraphicsPoint defaultBL = new GraphicsPoint(0, 1);
+        private static readonly GraphicsPoint defaultBR = new GraphicsPoint(1, 1);
+
 		internal SubTexture(Texture buffer, GraphicsPoint topLeft, GraphicsPoint topRight, GraphicsPoint bottomLeft, GraphicsPoint bottomRight)
 		{
 			Contract.Requires<ArgumentNullException>(buffer != null);
 			TriangleStripCoords = new[] { topLeft, topRight, bottomLeft, bottomRight };
 			Texture = buffer;
 		}
+
+#warning MUST TEST!
+        public SubTexture(Texture buffer)
+            : this(buffer, defaultTL, defaultTR, defaultBL, defaultBR)
+        {
+            Contract.Requires<ArgumentNullException>(buffer != null);
+        }
 
 		public SubTexture(Texture buffer, Rectangle region)
 			: this(buffer,

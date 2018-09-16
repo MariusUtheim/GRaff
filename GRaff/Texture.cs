@@ -180,10 +180,6 @@ namespace GRaff
 
 		public int Id { get; private set; }
 
-#warning Handle this better
-        private SubTexture _texture = null;
-        public SubTexture SubTexture() => _texture ?? (_texture = new SubTexture(this, new GraphicsPoint(0, 0), new GraphicsPoint(1, 0), new GraphicsPoint(0, 1), new GraphicsPoint(1, 1)));
-
 		public int Width { get;}
 
 		public int Height { get; }

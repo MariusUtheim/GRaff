@@ -12,7 +12,8 @@ using GRaff.Synchronization;
 
 namespace GRaff.Graphics
 {
-	public class SpriteAtlas
+#warning Needs testing!
+    public class SpriteAtlas
 	{
         [XmlType("SubTexture")]
 		public class SubTextureData
@@ -71,7 +72,7 @@ namespace GRaff.Graphics
             {
                 for (var i = 0; i < textureMappings.Length; i++)
                 {
-                    Draw.SubTexture(textureMappings[i].texture.SubTexture(), rects[i].TopLeft);
+                    Draw.SubTexture(new SubTexture(textureMappings[i].texture), rects[i].TopLeft);
                     _subTextures.Add(textureMappings[i].name, rects[i]);
                 }
             }
