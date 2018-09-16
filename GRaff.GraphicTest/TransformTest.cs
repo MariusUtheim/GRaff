@@ -10,7 +10,7 @@ namespace GRaff.GraphicTest
 	[Test]
 	class TransformTest : GameElement
 	{
-        Sprite sprite = new Sprite(Textures.Giraffe.SubTexture());
+        Sprite sprite = new Sprite(Textures.Giraffe);
 		Sprite fourSprites = new Sprite(new AnimationStrip(Textures.Giraffe, new IntVector(2, 2)), origin: Vector.Zero);
         
 		Matrix Identity => new Matrix().Translate(200, 200);
