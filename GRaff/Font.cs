@@ -188,7 +188,6 @@ namespace GRaff
 
 		public Texture RenderText(string text)
 		{
-#warning Not tested
             Contract.Requires<ArgumentNullException>(text != null);
             var width = GetWidth(text);
             var height = Height;

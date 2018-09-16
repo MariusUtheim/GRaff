@@ -12,7 +12,8 @@ using coord = System.Float;
 
 namespace GRaff.Graphics
 {
-	[StructLayout(LayoutKind.Sequential)]
+#warning Make public
+    [StructLayout(LayoutKind.Sequential)]
 	internal struct Quadrilateral
 	{
 		public readonly coord V1;

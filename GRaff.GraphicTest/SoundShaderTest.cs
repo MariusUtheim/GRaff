@@ -14,7 +14,7 @@ namespace GRaff.GraphicTest
 
         public SoundShaderTest()
         {
-            sound = SoundBuffer.Load("Assets/PanaceaLong.wav");
+            sound = SoundBuffer.Load("Assets/Panacea.ogg");
             instance = sound.Play(true);
 
             program = new SoundVisualizerShaderProgram(sound.Buffer.ToArray(), Window.Size);

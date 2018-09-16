@@ -43,6 +43,9 @@ namespace GRaff.GraphicTest
 
 		public override void OnDraw()
 		{
+            Draw.Text(null, _render, (0, 0));
+            Draw.Text("", _render, (0, 0));
+
 			Draw.Text($"Line one\nLine two{Environment.NewLine}Line three\n\nSpace single\nSpace  double\nSpace   triple", _render, (10, 10), Colors.Black);
 			
 			Draw.Rectangle(new Rectangle((10, 200), (_render.LineWidth.Value, _font.Height)), Colors.Black);
@@ -68,7 +71,7 @@ namespace GRaff.GraphicTest
                 Draw.Text("Center", _font, (250, 250), Colors.Black, Alignment.Center);
                 Draw.Text("Right", _font, (500, 250), Colors.Black, Alignment.Right);
                 Draw.Text("Bottom Left", _font, (0, 500), Colors.Black, Alignment.BottomLeft);
-                Draw.Text("Bottom", _font, (250, 500), Colors.Black, Alignment.Right);
+                Draw.Text("Bottom", _font, (250, 500), Colors.Black, Alignment.Bottom);
                 Draw.Text("Bottom Right", _font, (500, 500), Colors.Black, Alignment.BottomRight);
             }
 

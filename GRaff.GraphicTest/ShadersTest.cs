@@ -42,9 +42,7 @@ namespace GRaff.GraphicTest
             Draw.FillRectangle((100, 500), (400, 400 / GMath.Phi), Colors.ForestGreen);
             Draw.Texture(Textures.Giraffe, (500, 0));
 
-
-            using (_currentProgram.Use())
-                Draw.Redraw();
+            Draw.Redraw(_currentProgram);
 		}
 
         private void _setShader(ShaderProgram program, string name)
@@ -71,6 +69,7 @@ namespace GRaff.GraphicTest
 
         public void OnGlobalMousePress(MouseButton button)
         {
+#warning This gives the wrong location
             shockwaveShader.Origin = Mouse.Location;
             shockwaveShader.Radius = 10;
             shockwaveShaderTimeOrigin = Time.LoopCount;
