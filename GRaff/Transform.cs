@@ -12,8 +12,7 @@ namespace GRaff
 	/// <remarks>
 	/// Transformation of a point is performed in the following order:
 	/// - Scaling
-	/// - Horizontal shearing
-    /// - Vertical shearing
+	/// - Shearing
 	/// - Rotation
 	/// - Translation (not performed on vectors)
 	/// </remarks>
@@ -96,8 +95,8 @@ namespace GRaff
 		{
 			double c = GMath.Cos(Rotation), s = GMath.Sin(Rotation);
 			return new Matrix(
-				XScale * (c - s * YShear), YScale * ((XShear * YShear - 1) * s + c * XShear), X,
-				XScale * (s + c * YShear), YScale * ((XShear * YShear + 1) * c + s * XShear), Y
+				XScale * (c - s * YShear), YScale * (-s + c * XShear), X,
+				XScale * (s + c * YShear), YScale * (c + s * XShear), Y
 			);
 		}
 
