@@ -6,7 +6,13 @@ namespace GRaff.Panels
 {
     public class Node
     {
-        
+        private LinkedListNode<Node> _listNode;
+
+        public Node()
+        {
+            _listNode = new LinkedListNode<Node>(this);
+        }
+
         public virtual Rectangle Region { get; set; }
 
 
@@ -48,8 +54,8 @@ namespace GRaff.Panels
                 if (value == _parent)
                     return;
                 OnParentChanging(value);
-                _parent?._children.Remove(this);
-                value?._children.AddLast(this);
+                _parent?._children.Remove(_listNode);
+                value?._children.AddLast(_listNode);
             }
         }
 
@@ -57,10 +63,9 @@ namespace GRaff.Panels
         public PanelElement Container
         {
             get => _container ?? _parent?.Container;
-            set => _container = value;
+            internal set => _container = value; // Do this ONLY in PanelElement constructor!
         }
 
-#warning Make children keep track of their LinkedListNode
         private LinkedList<Node> _children = new LinkedList<Node>();
         public IEnumerable<Node> Children => _children.ToList();
 
@@ -74,9 +79,9 @@ namespace GRaff.Panels
 			if (element._parent != this)
 			{
                 element.OnParentChanging(this);
-				element._parent?._children.Remove(element);
+				element._parent?._children.Remove(element._listNode);
 				element._parent = this;
-				_children.AddLast(element);
+				_children.AddLast(element._listNode);
 			}
             return element;
 		}
@@ -87,9 +92,9 @@ namespace GRaff.Panels
 			if (element._parent != this)
 			{
                 element.OnParentChanging(this);
-				element._parent?._children.Remove(element);
+				element._parent?._children.Remove(element._listNode);
 				element._parent = this;
-                _children.AddFirst(element);
+                _children.AddFirst(element._listNode);
 			}
 			return element;
         }
@@ -99,7 +104,7 @@ namespace GRaff.Panels
 			if (element != null && element.Parent == this)
 			{
 				element._parent = null;
-				_children.Remove(element);
+				_children.Remove(element._listNode);
 			}
 		}
 
@@ -143,7 +148,7 @@ namespace GRaff.Panels
 
         public virtual void OnMouseHover(MouseEventArgs e) { }
 
-        // Return whetner the event should propagate
+        // Return whether the event should propagate
         internal bool _MouseEvent<TInterface>(Action<TInterface, MouseEventArgs> action, MouseEventArgs e)
         {
             if (!ContainsPoint(e.Location))

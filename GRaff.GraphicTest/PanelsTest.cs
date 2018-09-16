@@ -5,6 +5,7 @@ using GRaff.Panels;
 namespace GRaff.GraphicTest
 {
     [Test]
+#warning Expand this test - it has very poor coverage
     public class PanelsTest : GameElement
     {
         class Block : DraggableNode, IPanelMousePressListener
