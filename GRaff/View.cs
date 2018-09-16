@@ -13,24 +13,26 @@ using OpenTK.Graphics.ES30;
 
 namespace GRaff
 {
-	/// <summary>
-	/// Defines which part of the room is being drawn to the screen.
-	/// </summary>
-	public class View
-	{
+    /// <summary>
+    /// Defines which part of the room is being drawn to the screen.
+    /// </summary>
+    public class View
+    {
         private static readonly Triangle GLTriangle = new Triangle((-1, 1), (1, 1), (-1, -1));
         private static Matrix GLToScreenMatrix;
 
         private Transform _transform;
         private bool _needsValidation = false;
 
-        public View(Matrix viewMatrix)
+        public View()
         {
-            Contract.Requires<ArgumentNullException>(viewMatrix != null);
-            Contract.Requires<MatrixException>(viewMatrix.Determinant != 0);
-            this._transform = new Transform(viewMatrix);
+            this._transform = new Transform();
         }
 
+        private View(Transform transform)
+        {
+            this._transform = transform;
+        }
 
         internal static void UpdateGLToScreenMatrix()
         {
@@ -42,23 +44,23 @@ namespace GRaff
         /// </summary>
         public static View FullWindow() => Rectangle(Window.ClientRectangle);
 
-       
-		/// <summary>
+
+        /// <summary>
         /// Creates a View that maps from the specified Rectangle to pixels in the window.
         /// That is, the vertex (x, y) is mapped to (0, 0) on the screen, and (x + width, y + height)
         /// is mapped to (Window.Width, Window.Height).
         /// </summary>
         public static View Rectangle(double x, double y, double width, double height) => Rectangle(new Rectangle(x, y, width, height));
 
-		/// <summary>
+        /// <summary>
         /// Creates a View that maps from the specified Rectangle to pixels in the window.
         /// That is, the vertex (rect.Left, rect.Top) is mapped to (0, 0) on the window, and 
-		/// (rect.Right, rect.Bottom) is mapped to (Window.Width, Window.Height).
+        /// (rect.Right, rect.Bottom) is mapped to (Window.Width, Window.Height).
         /// </summary>
         public static View Rectangle(Rectangle rect)
         {
-			var m = Matrix.Translation(-(Vector)rect.Center).Scale(2.0 / rect.Width, -2.0 / rect.Height);
-            return new View(m);
+            var t = new Transform { X = -rect.Center.X * 2.0 / rect.Width, Y = rect.Center.Y * 2.0 / rect.Height, XScale = 2.0 / rect.Width, YScale = -2.0 / rect.Height };
+            return new View(t);
         }
 
         /// <summary>
@@ -67,29 +69,34 @@ namespace GRaff
 		/// location with the specified size will tangent each edge of the window.
         /// </summary>
         public static View Centered(Point location, Vector size) => Rectangle(new Rectangle((location - size / 2), size));
-        
+
         /// <summary>
         /// Translates the current view, so that the specified Point, as seen in the current View, 
-		/// will be translated to (0, 0) in the new View.
+        /// will be translated to (0, 0) in the new View.
         /// </summary>
-        public static View TranslateTo(Point location) => new View(View.Current.ViewMatrix * Matrix.Translation(location));
+        public static View TranslateTo(Point location)
+        {
+            var t = Current._transform.Clone();
+            t.Location += location;
+            return new View(t);
+        }
 
         /// <summary>
         /// Creates a View that should be used when drawing to Framebuffers.
         /// </summary>
-		public static View Framebuffer() => Rectangle(0, Graphics.Framebuffer.ViewHeight, Graphics.Framebuffer.ViewWidth, -Graphics.Framebuffer.ViewHeight);      
+		public static View Framebuffer() => Rectangle(0, Graphics.Framebuffer.ViewHeight, Graphics.Framebuffer.ViewWidth, -Graphics.Framebuffer.ViewHeight);
 
         /// <summary>
         /// Gets the current View that is used by drawing functions. 
         /// </summary>
-        public static View Current { get; private set; } = new View(new Matrix());
+        public static View Current { get; private set; } = new View();
 
-		internal static void Validate()
+        internal static void Validate()
         {
             if (Current._needsValidation)
                 LoadMatrixToProgram();
         }
-        
+
         internal static void LoadMatrixToProgram()
         {
             if (ShaderProgram.Current == null)
@@ -130,7 +137,7 @@ namespace GRaff
 		public Matrix ScreenToView => ViewMatrix.Inverse * GLToScreenMatrix.Inverse;
 
 
-		void _invalidate(object _)
+        void _invalidate(object _)
         {
             _needsValidation = true;
         }
@@ -209,10 +216,10 @@ namespace GRaff
         /// Makes this View the current View to be used by drawing functions.
         /// </summary>
 		public void Bind()
-		{
-			Current = this;
-			LoadMatrixToProgram();
-		}
+        {
+            Current = this;
+            LoadMatrixToProgram();
+        }
 
         /// <summary>
         /// Temporarily makes this View the current View to be used by drawing functions.
@@ -220,14 +227,14 @@ namespace GRaff
 		/// disposed, the previous View is automatically made current. 
         /// </summary>
 		public IDisposable Use()
-		{
+        {
             return UseContext.CreateAt($"{typeof(View).FullName}.{nameof(Use)}",
                                        View.Current,
                                        () => { View.Current = this; LoadMatrixToProgram(); },
                                        view => { View.Current = view; LoadMatrixToProgram(); }
             );
-		}
+        }
 
 
-	}
+    }
 }

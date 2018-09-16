@@ -121,6 +121,9 @@ namespace GRaff
 			=> new Point(p.X + v.X, p.Y + v.Y);
 
 
+        public static Point operator -(Point p)
+            => new Point(-p.X, -p.Y);
+
 		/// <summary>
 		/// Computes the vector between the two specified GRaff.Point structures.
 		/// </summary>

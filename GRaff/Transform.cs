@@ -12,7 +12,8 @@ namespace GRaff
 	/// <remarks>
 	/// Transformation of a point is performed in the following order:
 	/// - Scaling
-	/// - Shearing
+	/// - Horizontal shearing
+    /// - Vertical shearing
 	/// - Rotation
 	/// - Translation (not performed on vectors)
 	/// </remarks>
@@ -25,73 +26,8 @@ namespace GRaff
 		{
 		}
 
-#warning Needs unit testing, and also extract rotation, give right comments
-#warning Do all the necessary checks for entries equal to zero
-        /// <summary>
-        /// Creates a transform defined by the specified matrix.
-        /// </summary>
-        /// <param name="t">The matrix defining the transformation.</param>
-        /// <remarks>Note that the Transform object defines seven degrees of freedom (2 scales, 2 shears, 1 rotation, 2 translations), 
-        /// while the Matrix has only six. Because of this, given the matrix of an arbitrary Transform, creating a new Transform 
-        /// from that Matrix might not give a correct copy of the original Transform.
-        /// </remarks>
-        public Transform(Matrix t)
-        {
-            X = t.M02;
-            Y = t.M12;
-
-            XScale = GMath.Sqrt(t.M00 * t.M00 + t.M10 * t.M10);
-            YShear = 0;
-
-            if (XScale == 0)
-            {
-                XShear = 0;
-                YScale = GMath.Sqrt(t.M11 * t.M11 + t.M01 * t.M01);
-                if (YScale == 0)
-                    Rotation = Angle.Zero;
-                else
-                    Rotation = GMath.Atan2(-t.M01, t.M11);
-            }
-            else
-            {
-                Rotation = GMath.Atan2(t.M10, t.M00); 
-
-                var (c, s) = (GMath.Cos(Rotation), GMath.Sin(Rotation));
-                if (t.M01 == 0 && t.M11 == 0)
-                    XShear = YScale = 0;
-                else if (t.M01 == 0)
-                {
-                    if (c == 0)
-                    {
-                        XShear = 1;
-                        YScale = t.M11;
-                    }
-                    else
-                    {
-                        XShear = s / c;
-                        YScale = t.M11 / (XShear * s + c);
-                    }
-                }
-                else if (t.M11 == 0)
-                {
-                    if (s == 0)
-                    {
-                        XShear = 1;
-                        YScale = t.M01;
-                    }
-                    else
-                    {
-                        XShear = -1 / GMath.Tan(Rotation);
-                        YScale = t.M01 / (XShear * c - s);
-                    }
-                }
-                else
-                {
-                    XShear = (t.M01 * c + t.M11 * s) / (t.M11 * c - t.M01 * s);
-                    YScale = t.M11 / (c + XShear * s);
-                }
-            }
-	    }
+        public Transform Clone()
+            => new Transform { Scale = this.Scale, Shear = this.Shear, Rotation = this.Rotation, Location = this.Location };
 
 		/// <summary>
 		/// Gets or sets the translation in the x-direction of this GRaff.Transform.
@@ -127,8 +63,8 @@ namespace GRaff
 		/// </summary>
 		public Vector Scale
 		{
-			get { return new Vector(XScale, YScale); }
-			set { XScale = value.X; YScale = value.Y; }
+			get => (XScale, YScale);
+            set => (XScale, YScale) = value;
 		}
 
 		/// <summary>
@@ -145,6 +81,12 @@ namespace GRaff
 		/// Gets or sets the vertical shear of this GRaff.Transform.
 		/// </summary>
 		public double YShear { get; set; } = 0;
+
+        public Vector Shear
+        {
+            get => (XShear, YShear);
+            set => (XShear, YShear) = value;
+        }
 
 		/// <summary>
 		/// Gets an GRaff.AffineMatrix representing this GRaff.Transform.
