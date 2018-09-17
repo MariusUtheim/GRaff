@@ -45,35 +45,6 @@ namespace GRaff.Graphics
 			GL.VertexAttribPointer(2, 2, GraphicsPoint.PointerType, false, 0, 0);
 		}
 
-		~SerialRenderSystem()
-		{
-			Dispose(false);
-		}
-
-		public void Dispose()
-		{
-			Dispose(true);
-			GC.SuppressFinalize(this);
-		}
-
-		private void Dispose(bool disposing)
-		{
-			Contract.Requires<ObjectDisposedException>(!IsDisposed);
-			Async.Run(() =>
-			{
-			    if (Game.IsRunning)
-				{
-					GL.DeleteVertexArray(_array);
-					GL.DeleteBuffer(_vertexBuffer);
-					GL.DeleteBuffer(_colorBuffer);
-					GL.DeleteBuffer(_texCoordBuffer);
-				}
-			});
-			IsDisposed = true;
-		}
-
-		public bool IsDisposed { get; private set; }
-
 
         public void SetVertices(params GraphicsPoint[] vertices) => SetVertices(UsageHint.StreamDraw, vertices);
 		public void SetVertices(UsageHint usage, params GraphicsPoint[] vertices)
@@ -189,5 +160,40 @@ namespace GRaff.Graphics
 			GL.DrawArrays((GLPrimitiveType)type, 0, _vertexCount);
             _Graphics.ErrorCheck();
 		}
-	}
+
+
+        #region IDisposable implementation
+
+        public bool IsDisposed { get; private set; }
+
+        ~SerialRenderSystem()
+        {
+            Dispose(false);
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        private void Dispose(bool disposing)
+        {
+            Contract.Requires<ObjectDisposedException>(!IsDisposed);
+            Async.Run(() =>
+            {
+                if (Game.IsRunning)
+                {
+                    GL.DeleteVertexArray(_array);
+                    GL.DeleteBuffer(_vertexBuffer);
+                    GL.DeleteBuffer(_colorBuffer);
+                    GL.DeleteBuffer(_texCoordBuffer);
+                }
+            });
+            IsDisposed = true;
+        }
+
+        #endregion
+
+    }
 }

@@ -14,7 +14,6 @@ namespace GRaff.Graphics.Shaders
 
     public class ShaderProgram : IDisposable
 	{
-		private bool _disposed = false;
 
         public static ShaderProgram Default { get; } = new ShaderProgram(VertexShader.Default, FragmentShader.Default);
 
@@ -51,6 +50,7 @@ namespace GRaff.Graphics.Shaders
 			private set { _current = value; GL.UseProgram(_current.Id); }
 		}
 
+
         public int Id { get; }
 
         public void Bind()
@@ -72,6 +72,8 @@ namespace GRaff.Graphics.Shaders
 
         #region IDisposable support
 
+        public bool IsDisposed { get; private set; }
+
         ~ShaderProgram()
 		{
 			Dispose(false);
@@ -85,13 +87,14 @@ namespace GRaff.Graphics.Shaders
 
         private void Dispose(bool disposing)
 		{
-			if (!_disposed)
+			if (!IsDisposed)
 			{
-				if (_Graphics.IsContextActive)
-					GL.DeleteProgram(Id);
-				else
-					Async.Run(() => GL.DeleteProgram(Id));
-				_disposed = true;
+                Async.Run(() =>
+                {
+                    if (_Graphics.IsContextActive)
+                        GL.DeleteProgram(Id);
+                });
+                IsDisposed = true;
 			}
 		}
 

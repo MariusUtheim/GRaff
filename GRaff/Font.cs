@@ -16,11 +16,11 @@ namespace GRaff
 
         private readonly Dictionary<char, FontCharacter> _characters = new Dictionary<char, FontCharacter>();
         private readonly Dictionary<Tuple<char, char>, int> _kerning = new Dictionary<Tuple<char, char>, int>();
+        private bool _isTexturePrivate = false;
 
-        
         public Font(Texture texture, FontFile fontData)
         {
-            Texture = texture;
+            this._texture = texture;
             foreach (var c in fontData.Chars)
 				_characters.Add((char)c.Id, c);
 
@@ -35,63 +35,49 @@ namespace GRaff
             else
                 HasKerning = false;
         }
-      
-
-        public bool IsDisposed { get; private set; }
-
-        ~Font()
+     
+        private static FontFile _loadFontFile(string fontFilePath)
         {
-            Dispose(false);
-        }
+            FontFile fontFile;
+            using (var textReader = File.OpenRead(fontFilePath))
+                fontFile = (FontFile)deserializer.Deserialize(textReader);
 
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-
-#warning Unify this disposal
-		private void Dispose(bool disposing)
-        {
-            if (!IsDisposed)
-            {
-                if (disposing)
-                {
-                    if (!Texture.IsDisposed)
-                        Texture.Dispose();
-                    Texture = null;
-                }
-            }
-        }
-
-        public Texture Texture { get; private set; }
-
-        public static IAsyncOperation<Font> LoadAsync(string fontDataFile)
-        {
-            FontFile fontData;
-            using (var textReader = File.OpenRead(fontDataFile))
-                fontData = (FontFile)deserializer.Deserialize(textReader);
-
-            if (fontData.Pages.Count > 1)
+            if (fontFile.Pages.Count > 1)
                 throw new NotSupportedException("Fonts with multiple pages are currently not supported");
 
-            var fontTextureFile = Path.Combine(Path.GetDirectoryName(fontDataFile), fontData.Pages[0].File);
-
-            if (!File.Exists(fontTextureFile))
-                throw new FileNotFoundException("The font texture file was not found.", fontTextureFile);
-
-            return Texture.LoadAsync(fontTextureFile).ThenQueue(textureBuffer => new Font(textureBuffer, fontData));
-
+            return fontFile;
         }
 
-        public static Font Load(string fontDataFile)
+        public static IAsyncOperation<Font> LoadAsync(string fontFilePath)
         {
-            Contract.Ensures(Contract.Result<Font>() != null);
-            return LoadAsync(fontDataFile).Wait();
-        }
-      
+            var fontFile = _loadFontFile(fontFilePath);
+            var fontTexturePath = Path.Combine(Path.GetDirectoryName(fontFilePath), fontFile.Pages[0].File);
 
-		public bool HasKerning { get; }
+            if (!File.Exists(fontTexturePath))
+                throw new FileNotFoundException("The font texture file was not found.", fontTexturePath);
+
+            return Texture.LoadAsync(fontTexturePath).ThenQueue(textureBuffer => new Font(textureBuffer, fontFile) { _isTexturePrivate = true });
+        }
+
+        public static Font Load(string fontFilePath)
+        {
+            var fontFile = _loadFontFile(fontFilePath);
+            var fontTexturePath = Path.Combine(Path.GetDirectoryName(fontFilePath), fontFile.Pages[0].File);
+
+            if (!File.Exists(fontTexturePath))
+                throw new FileNotFoundException("The font texture file was not found.", fontTexturePath);
+
+            return new Font(Texture.Load(fontTexturePath), fontFile) { _isTexturePrivate = true };
+        }
+
+
+        private Texture _texture;
+        public Texture Texture
+        {
+            get { _isTexturePrivate = false; return _texture; }
+        }
+
+        public bool HasKerning { get; }
 
 		public int Height { get; }
 		
@@ -124,6 +110,7 @@ namespace GRaff
 		
 		private int GetAdvance(char character)
 		{
+            Contract.Requires<ObjectDisposedException>(!IsDisposed);
             if (_characters.TryGetValue(character, out FontCharacter c))
                 return c.XAdvance;
             else
@@ -141,6 +128,7 @@ namespace GRaff
 		{
 			Contract.Requires<ArgumentNullException>(str != null);
 			Contract.Requires<IndexOutOfRangeException>(i >= 0 && i < str.Length);
+            Contract.Requires<ObjectDisposedException>(!IsDisposed);
 
 			if (i == str.Length - 1)
 				return GetAdvance(str[i]);
@@ -158,28 +146,29 @@ namespace GRaff
 				width += GetAdvance(str, i);
 			return width;
 		}
-        
-		internal Texture TextureBuffer
-		{
-			get
-			{
-				Contract.Requires<ObjectDisposedException>(!IsDisposed);
-				return Texture;
-			}
-		}
 
 		public FontCharacter GetCharacter(char c)
 		{
-			return _characters[c];
+            Contract.Requires<ObjectDisposedException>(!IsDisposed);
+            return _characters[c];
 		}
 
-        public bool HasCharacter(char c) => _characters.ContainsKey(c);
+        public bool HasCharacter(char c)
+        {
+            Contract.Requires<ObjectDisposedException>(!IsDisposed);
+             return _characters.ContainsKey(c);
+        }
 
-		public bool TryGetCharacter(char c, out FontCharacter fontCharacter) => _characters.TryGetValue(c, out fontCharacter);
+        public bool TryGetCharacter(char c, out FontCharacter fontCharacter)
+        {
+            Contract.Requires<ObjectDisposedException>(!IsDisposed);
+           return _characters.TryGetValue(c, out fontCharacter);
+        }
 
 		public int GetKerning(char first, char second)
 		{
-			if (!HasKerning) return 0;
+            Contract.Requires<ObjectDisposedException>(!IsDisposed);
+            if (!HasKerning) return 0;
             if (_kerning.TryGetValue(new Tuple<char, char>(first, second), out int kerning))
                 return kerning;
             else
@@ -188,6 +177,7 @@ namespace GRaff
 
 		public Texture RenderText(string text)
 		{
+            Contract.Requires<ObjectDisposedException>(!IsDisposed);
             Contract.Requires<ArgumentNullException>(text != null);
             var width = GetWidth(text);
             var height = Height;
@@ -198,5 +188,34 @@ namespace GRaff
                 return buffer.Texture;
             }
 		}
-	}
+
+
+        #region IDisposable support
+
+        public bool IsDisposed { get; private set; }
+
+        ~Font()
+        {
+            Dispose(false);
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        private void Dispose(bool disposing)
+        {
+            if (!IsDisposed)
+            {
+                if (_isTexturePrivate)
+                    _texture.Dispose();
+                _texture = null;
+                _characters.Clear();
+                IsDisposed = true;
+            }
+        }
+        #endregion
+    }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using GRaff.Synchronization;
 using OpenTK.Graphics.OpenGL4;
 
 namespace GRaff.Graphics.Shaders
@@ -22,6 +23,8 @@ namespace GRaff.Graphics.Shaders
 
         public void BindToLocation(int location)
         {
+            Contract.Requires<ObjectDisposedException>(!IsDisposed);
+
             GL.ActiveTexture(TextureUnit.Texture0 + location);
 
             GL.BindBuffer(BufferTarget.TextureBuffer, _bufferId);
@@ -33,43 +36,42 @@ namespace GRaff.Graphics.Shaders
 
         public void WriteData(byte[] data, UsageHint usageHint = UsageHint.DynamicRead)
         {
+            Contract.Requires<ObjectDisposedException>(!IsDisposed);
             GL.BindBuffer(BufferTarget.TextureBuffer, _bufferId);
             GL.BufferData(BufferTarget.TextureBuffer, new IntPtr(data.Length), data, (BufferUsageHint)usageHint);
         }
 
-        #region IDisposable Support
-        private bool disposedValue = false; // To detect redundant calls
+        #region IDisposable implementation 
+
+        public bool IsDisposed { get; private set; }
+
+        ~SamplerBuffer()
+        {
+            Dispose(false);
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
 
         protected virtual void Dispose(bool disposing)
         {
-            if (!disposedValue)
+            if (!IsDisposed)
             {
-                if (disposing)
+                Async.Capture((bufferId: _bufferId, textureId: _textureId)).ThenQueue(cap =>
                 {
-                    // TODO: dispose managed state (managed objects).
-                }
-
-                // TODO: free unmanaged resources (unmanaged objects) and override a finalizer below.
-                // TODO: set large fields to null.
-
-                disposedValue = true;
+                    if (_Graphics.IsContextActive)
+                    {
+                        GL.DeleteBuffer(cap.bufferId);
+                        GL.DeleteTexture(cap.textureId);
+                    }
+                });
+                IsDisposed = true;
             }
         }
 
-        // TODO: override a finalizer only if Dispose(bool disposing) above has code to free unmanaged resources.
-        // ~SamplerBuffer() {
-        //   // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
-        //   Dispose(false);
-        // }
-
-        // This code added to correctly implement the disposable pattern.
-        public void Dispose()
-        {
-            // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
-            Dispose(true);
-            // TODO: uncomment the following line if the finalizer is overridden above.
-            // GC.SuppressFinalize(this);
-        }
         #endregion
 
     }

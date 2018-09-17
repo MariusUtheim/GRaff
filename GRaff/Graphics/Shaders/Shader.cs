@@ -11,7 +11,6 @@ namespace GRaff.Graphics.Shaders
 {
 	public abstract class Shader : IDisposable
 	{
-        private bool _disposed;
 
 		protected Shader(ShaderType type, params string[] source)
 		{
@@ -30,24 +29,25 @@ namespace GRaff.Graphics.Shaders
 		public int Id { get; private set; }
 
 
-		~Shader()
+        #region IDisposable implementation
+
+        public bool IsDisposed { get; private set; }
+
+        ~Shader()
 		{
 			Dispose(false);
 		}
 
 		private void Dispose(bool disposing)
 		{
-			if (!_disposed)
+			if (!IsDisposed)
 			{
-				if (disposing)
-				{
-				}
-
-                if (_Graphics.IsContextActive)
-					GL.DeleteShader(Id);
-				else
-					Async.Run(() => GL.DeleteShader(Id));
-				_disposed = true;
+                Async.Run(() =>
+                {
+                    if (_Graphics.IsContextActive)
+                        GL.DeleteShader(Id);
+                });
+                IsDisposed = true;
 			}
 		}
 
@@ -57,6 +57,7 @@ namespace GRaff.Graphics.Shaders
 			GC.SuppressFinalize(this);
 		}
 
+        #endregion
 
-	}
+    }
 }

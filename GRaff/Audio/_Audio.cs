@@ -7,6 +7,8 @@ namespace GRaff.Audio
 {
 	internal static class _Audio
 	{
+        public static bool IsContextActive => Alc.GetCurrentContext() != null;
+
 		public static void Initialize()
 		{
 			IntPtr device = Alc.OpenDevice("");

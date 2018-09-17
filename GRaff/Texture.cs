@@ -73,36 +73,7 @@ namespace GRaff
 			Contract.Invariant(Height > 0);
 		}
 
-		public bool IsDisposed { get; private set; }
-
-		~Texture()
-		{
-			Dispose(false);
-		}
-
-		public void Dispose()
-		{
-			Dispose(true);
-			GC.SuppressFinalize(this);
-		}
-
-		private void Dispose(bool disposing)
-		{
-			if (!IsDisposed)
-			{
-				Async.Capture(Id).ThenQueue(id =>
-				{
-                    if (Game.IsRunning)
-                    {
-                        GL.DeleteTexture(id);
-                        _Graphics.ErrorCheck();
-                    }
-                });
-				IsDisposed = true;
-			}
-		}
-
-		public static Texture Load(string path)
+        public static Texture Load(string path)
 		{
 			Contract.Ensures(Contract.Result<Texture>() != null);
 
@@ -275,8 +246,42 @@ namespace GRaff
 			img.UnlockBits(imgData);
 
             img.Save(path);
-             
 		}
-	}
+
+
+        #region IDisposable implementation
+
+        public bool IsDisposed { get; private set; }
+
+        ~Texture()
+        {
+            Dispose(false);
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        private void Dispose(bool disposing)
+        {
+            if (!IsDisposed)
+            {
+                Async.Capture(Id).ThenQueue(id =>
+                {
+                    if (_Graphics.IsContextActive)
+                    {
+                        GL.DeleteTexture(id);
+                        _Graphics.ErrorCheck();
+                    }
+                });
+                IsDisposed = true;
+            }
+        }
+
+        #endregion
+
+    }
 
 }

@@ -87,6 +87,7 @@ namespace GRaff.Graphics
             return buffer;
         }
 
+
         public int Id { get; }
 
         public Texture Texture { get; private set; }
@@ -106,31 +107,16 @@ namespace GRaff.Graphics
 
         public void Bind()
         {
+            Contract.Requires<ObjectDisposedException>(!IsDisposed);
             GL.BindFramebuffer(FramebufferTarget.Framebuffer, Id);
             Current = this;
         }
 
         //TODO// Blitting
 
-        #region IDisposable Support
-        private bool _isDisposed = false;
+        #region IDisposable implementation 
 
-        private void Dispose(bool disposing)
-        {
-            if (!_isDisposed)
-            {
-                Async.Capture(Id).ThenQueue(id =>
-                {
-                    if (Game.IsRunning)
-                    {
-                        GL.DeleteFramebuffer(id);
-                        _Graphics.ErrorCheck();
-                    }
-                });
-
-                _isDisposed = true;
-            }
-        }
+        public bool IsDisposed { get; private set; }
 
         ~Framebuffer()
         {
@@ -142,6 +128,24 @@ namespace GRaff.Graphics
             Dispose(true);
             GC.SuppressFinalize(this);
         }
+
+        private void Dispose(bool disposing)
+        {
+            if (!IsDisposed)
+            {
+                Async.Capture(Id).ThenQueue(id =>
+                {
+                    if (_Graphics.IsContextActive)
+                    {
+                        GL.DeleteFramebuffer(id);
+                        _Graphics.ErrorCheck();
+                    }
+                });
+
+                IsDisposed = true;
+            }
+        }
+
         #endregion
 
 

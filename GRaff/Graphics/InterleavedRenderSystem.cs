@@ -32,6 +32,34 @@ namespace GRaff.Graphics
 
 		}
 
+
+        public void SetPrimitive(params (GraphicsPoint vertex, Color color)[] primitive)
+        {
+            Contract.Requires<ObjectDisposedException>(!IsDisposed);
+            Contract.Requires<ArgumentNullException>(primitive != null);
+
+            GL.BindBuffer(BufferTarget.ArrayBuffer, _arrayBuffer);
+            GL.BufferData(BufferTarget.ArrayBuffer, new IntPtr(_vertexSize * primitive.Length), primitive, BufferUsageHint.StreamDraw);
+            _vertexCount = primitive.Length;
+        }
+
+		public void Render(PrimitiveType type)
+		{
+            Contract.Requires<ObjectDisposedException>(!IsDisposed);
+
+			var loc = GL.GetUniformLocation(ShaderProgram.Current.Id, "GRaff_IsTextured");
+			if (loc >= 0)
+				GL.Uniform1(loc, 0);
+			_Graphics.ErrorCheck();
+
+			GL.BindVertexArray(_array);
+			GL.DrawArrays((GLPrimitiveType)type, 0, _vertexCount);
+			_Graphics.ErrorCheck();
+		}
+
+
+        #region IDisposable implementation
+
         public bool IsDisposed { get; private set; }
 
         ~InterleavedRenderSystem()
@@ -50,7 +78,7 @@ namespace GRaff.Graphics
             Contract.Requires<ObjectDisposedException>(!IsDisposed, nameof(InterleavedRenderSystem));
             Async.Run(() =>
             {
-                if (Game.IsRunning)
+                if (_Graphics.IsContextActive)
                 {
                     GL.DeleteVertexArray(_array);
                     GL.DeleteBuffer(_arrayBuffer);
@@ -60,30 +88,7 @@ namespace GRaff.Graphics
             GC.SuppressFinalize(this);
         }
 
+        #endregion
 
-        public void SetPrimitive(params (GraphicsPoint vertex, Color color)[] primitive)
-        {
-            Contract.Requires<ObjectDisposedException>(!IsDisposed, nameof(InterleavedRenderSystem));
-            Contract.Requires<ArgumentNullException>(primitive != null);
-
-            GL.BindBuffer(BufferTarget.ArrayBuffer, _arrayBuffer);
-            GL.BufferData(BufferTarget.ArrayBuffer, new IntPtr(_vertexSize * primitive.Length), primitive, BufferUsageHint.StreamDraw);
-            _vertexCount = primitive.Length;
-        }
-
-		public void Render(PrimitiveType type)
-		{
-            Contract.Requires<ObjectDisposedException>(!IsDisposed, nameof(InterleavedRenderSystem));
-
-			var loc = GL.GetUniformLocation(ShaderProgram.Current.Id, "GRaff_IsTextured");
-			if (loc >= 0)
-				GL.Uniform1(loc, 0);
-			_Graphics.ErrorCheck();
-
-			GL.BindVertexArray(_array);
-			GL.DrawArrays((GLPrimitiveType)type, 0, _vertexCount);
-			_Graphics.ErrorCheck();
-		}
-
-	}
+    }
 }

@@ -74,6 +74,46 @@ namespace GRaff
             return Instance.Create(new StreamingSoundElement(fileName, true));
         }
 
+
+        #region IDisposable implementation
+
+        public bool IsDisposed { get; private set; }
+
+        ~SoundBuffer()
+        {
+            Dispose(false);
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        private void Dispose(bool disposing)
+        {
+            if (!IsDisposed)
+            {
+                Async.Capture(Id).ThenQueue(id =>
+                {
+                    if (_Audio.IsContextActive)
+                    {
+                        _Audio.ClearError();
+                        foreach (var instance in _instances)
+                            instance.Destroy();
+
+                        AL.DeleteBuffer(id);
+                        _Audio.ErrorCheck();
+                    }
+                });
+
+                IsDisposed = true;
+            }
+        }
+
+        #endregion
+
+
         public int Id { get; }
 
         public byte[] Buffer { get; }
@@ -94,44 +134,6 @@ namespace GRaff
 
         public IEnumerable<SoundElement> SoundInstances => _instances.ToList();
 
-        public bool IsDisposed { get; private set; }
-
-
-        ~SoundBuffer()
-        {
-            Dispose(false);
-        }
-
-
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-
-
-        private void Dispose(bool disposing)
-        {
-            if (!IsDisposed)
-            {
-                Async.Capture(Id).ThenQueue(id =>
-                {
-                    if (Game.IsRunning)
-                    {
-                        _Audio.ClearError();
-                        foreach (var instance in _instances)
-                            instance.Destroy();
-
-                        _Audio.ClearError();
-
-                        AL.DeleteBuffer(id);
-                        _Audio.ErrorCheck();
-                    }
-                });
-
-                IsDisposed = true;
-            }
-        }
 
         internal void Remove(SoundElement instance)
         {

@@ -37,6 +37,7 @@ namespace GRaff.Graphics
 #endif
         }
 
+
         [Conditional("DEBUG")]
         public static void ErrorCheck()
         {
