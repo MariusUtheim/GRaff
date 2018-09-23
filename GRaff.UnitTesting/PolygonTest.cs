@@ -80,9 +80,15 @@ namespace GRaff.UnitTesting
 				for (int y = 0; y < 9; y++)
 					Assert.IsTrue(GMath.Abs(actualMask[x, y]) < 1, "Element ({0}, {1}) is equal to {2}", x, y, actualMask[x, y]);
 			}
-		}
 
-		[TestMethod]
+            var polygon = new Polygon(new Point[] { (0, 0), (1, 0), (1, 1), (0, 1) });
+            Assert.IsTrue(polygon.ContainsPoint((0, GRandom.Double())));
+            Assert.IsTrue(polygon.ContainsPoint((1, GRandom.Double())));
+            Assert.IsTrue(polygon.ContainsPoint((GRandom.Double(), 0)));
+            Assert.IsTrue(polygon.ContainsPoint((GRandom.Double(), 1)));
+        }
+
+        [TestMethod]
 		public void Polygon_Intersects()
 		{
 			Polygon completelyInside = new Polygon(new[] { new Point(3, 3), new Point(5, 5), new Point(4, 7) });
@@ -106,6 +112,15 @@ namespace GRaff.UnitTesting
 			new Polygon(new[] { new Point(0, 0), new Point(1, 0), new Point(0, 1) });
 			new Polygon(new[] { new Point(0, 0) });
 		}
+
+        [TestMethod]
+        public void Polygon_SharedBordersDoNotIntersect()
+        {
+            var p1 = new Polygon(new Point[] { (0, 0), (1, 0), (1, 1), (0, 1) });
+            var p2 = new Polygon(new Point[] { (1, 0), (2, 0), (2, 1), (1, 1) });
+
+            Assert.IsFalse(p1.Intersects(p2));
+        }
 
 		[TestMethod]
 		[ExpectedException(typeof(ArgumentException))]
@@ -147,5 +162,6 @@ namespace GRaff.UnitTesting
 			Assert.IsTrue(originalPolygon.ContainsPoint(Point.Zero));
 			Assert.IsTrue(originalPolygon.Intersects(intersectingPolygon));
 		}
+
 	}
 }

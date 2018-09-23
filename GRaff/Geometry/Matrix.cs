@@ -391,6 +391,6 @@ namespace GRaff
         }
 
 		public static Polygon operator *(Matrix left, Polygon right)
-	        => new Polygon(right.Vertices.Select(p => left * p).ToArray(), Unit._);
+	        => new Polygon(right.Vertices.Select(p => left * p).ToArray());
 	}
 }

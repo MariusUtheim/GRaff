@@ -30,11 +30,7 @@ namespace GRaff
 			Contract.Requires<ArgumentNullException>(pts != null);
 			Contract.Requires<ArgumentException>(pts.Count() > 0);
 			_pts = pts.ToArray();
-			_SanityCheck();
-		}
 
-		private void _SanityCheck()
-		{
 			if (_pts.Length <= 2)
 				return;
 
@@ -85,7 +81,6 @@ namespace GRaff
 		public static Polygon Regular(int degree, double radius, Point center)
 		{
 			Contract.Requires<ArgumentOutOfRangeException>(degree >= 2);
-			Debug.Assert(degree >= 2);
 
 			double dt = GMath.Tau / degree;
 			double c = GMath.Cos(dt), s = GMath.Sin(dt);
@@ -164,7 +159,7 @@ namespace GRaff
 		#endregion
 
 		/// <summary>
-		/// Gets the number of vertices in this GRaff.Polynomial.
+		/// Gets the number of vertices in this GRaff.Polygon
 		/// </summary>
 		public int Length => _pts.Length;
 
@@ -189,9 +184,13 @@ namespace GRaff
 				if (_pts.Length != 0)
 					yield return new Line(_pts[Length - 1], _pts[0]);
 			}
-		}
+        }
 
-		public bool ContainsPoint(Point pt)
+		
+        /// <summary>
+        /// Returns true if the point is inside the Polygon or on its boundary.
+        /// </summary>
+        public bool ContainsPoint(Point pt)
 		{
 			/**
 			 * If the polygon is convex then one can consider the polygon as a "path" from the first vertex. 
@@ -210,9 +209,18 @@ namespace GRaff
 			return true;
 		}
 
-		public bool ContainsPoint(double x, double y)
+        /// <summary>
+        /// Returns true if the point is inside the Polygon or on its boundary.
+        /// </summary>
+        public bool ContainsPoint(double x, double y)
 			=> ContainsPoint(new Point(x, y));
 
+        /// <summary>
+        /// Returns true if this Polygon intersects the interior of the other Polygon.
+        /// Coincident lines are not considered intersecting. 
+        /// </summary>
+        /// <param name="other"></param>
+        /// <returns></returns>
 		public bool Intersects(Polygon other)
 			=> (other != null) ? this._Intersects(other) && other._Intersects(this) : false;
 
@@ -226,8 +234,7 @@ namespace GRaff
 			IEnumerable<Point> otherVertices = other.Vertices;
 			foreach (Line l in Edges)
 			{
-				Vector n = l.LeftNormal;
-				if (otherVertices.All(pt => n.DotProduct(pt - l.Origin) >= 0))
+				if (otherVertices.All(pt => l.LeftNormal.DotProduct(pt - l.Origin) >= 0))
 					return false;
 			}
 
