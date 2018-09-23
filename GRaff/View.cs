@@ -72,12 +72,13 @@ namespace GRaff
 
         /// <summary>
         /// Translates the current view, so that the specified Point, as seen in the current View, 
-        /// will be translated to (0, 0) in the new View.
+        /// will be translated to (0, 0) in the new View. That is, a point drawn at (0, 0) in the 
+        /// new View will be equivalent to a point drawn at the specificed location in the current View.
         /// </summary>
         public static View TranslateTo(Point location)
         {
             var t = Current._transform.Clone();
-            t.Location += location;
+            t.Location = t.Point(location);
             return new View(t);
         }
 
@@ -136,13 +137,11 @@ namespace GRaff
         /// <value>The screen to view.</value>
 		public Matrix ScreenToView => ViewMatrix.Inverse * GLToScreenMatrix.Inverse;
 
-
+        
         void _invalidate(object _)
         {
             _needsValidation = true;
         }
-
-
 
         public double X
         {
