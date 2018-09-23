@@ -55,6 +55,8 @@ namespace GRaff
 			private set { Direction = value - Origin; }
 		}
 
+        public bool IsDegenerate => Direction == Vector.Zero;
+
 		/// <summary>
 		/// Gets the left normal vector of this GRaff.Line.
 		/// </summary>
@@ -68,11 +70,52 @@ namespace GRaff
         public Vector Project(Vector v) =>
                         (v.Magnitude == 0 || Direction.Magnitude == 0)
                         ? Vector.Zero
-                        : new Vector(v.DotProduct(Direction) / Direction.Magnitude, Direction.Direction);
+                        : new Vector(v.Dot(Direction) / Direction.Magnitude, Direction.Direction);
 
         public Point Project(Point p) => Origin + Project(p - Origin);
 
         public Line Project(Line l) => new Line(Project(l.Origin), Project(l.Direction));
+
+        private bool _isPointAdjacent(Point p)
+        {
+            var d = Direction.UnitVector.Dot(p - Origin);
+            return d >= 0 && d <= Direction.Magnitude;
+        }
+
+        /// <summary>
+        /// Returns whether this line intersects the other.
+        /// Edge cases such as if the endpoint of one line lies on the other line 
+        /// have no definite behaviour.
+        /// </summary>
+        public bool Intersects(Line other)
+        {
+            var n = LeftNormal;
+            var h = n.Dot(other.Origin - Origin);
+
+            if (h * n.Dot(other.Destination - Origin) >  0)
+                return false;
+            else if (h * n.Dot(other.Destination - Origin) == 0)
+            {
+                if ((Direction.Dot(other.Origin - Origin) < 0 && Direction.Dot(other.Destination - Origin) < 0)
+                 || (Direction.Dot(other.Origin - Destination) > 0 && Direction.Dot(other.Destination - Destination) > 0))
+                    return false;
+                else
+                    return true;
+            }
+
+            var angle = other.Direction.Angle(this.Direction);
+        
+            if (angle.Degrees == 0 || angle.Degrees == 180)
+            {
+                if (h != 0)
+                    return false;
+                return _isPointAdjacent(other.Origin) || _isPointAdjacent(other.Destination);
+            }
+
+            var sign = n.Dot(other.Direction) > 0 ? 1 : -1;
+            var p = other.Origin - sign * new Vector(h / GMath.Sin(angle), angle);
+            return _isPointAdjacent(p);
+        }
 
 		/// <summary>
 		/// Converts this GRaff.Line to a human-readable string, indicating the location of the two endpoints.

@@ -4,3 +4,4 @@
 - Support more complicated forms of OGG files, such as concatenated files
 - Design Matrix <---> Transform mapping such that the forth-and-back transformation is stable for small variations in the Matrix, even for degenerate matrices
 - FontRendered truncation of multiline strings
+- Formalise the behaviour of geometric intersection methods

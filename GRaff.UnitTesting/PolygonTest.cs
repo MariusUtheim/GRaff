@@ -81,11 +81,41 @@ namespace GRaff.UnitTesting
 					Assert.IsTrue(GMath.Abs(actualMask[x, y]) < 1, "Element ({0}, {1}) is equal to {2}", x, y, actualMask[x, y]);
 			}
 
-            var polygon = new Polygon(new Point[] { (0, 0), (1, 0), (1, 1), (0, 1) });
-            Assert.IsTrue(polygon.ContainsPoint((0, GRandom.Double())));
-            Assert.IsTrue(polygon.ContainsPoint((1, GRandom.Double())));
-            Assert.IsTrue(polygon.ContainsPoint((GRandom.Double(), 0)));
-            Assert.IsTrue(polygon.ContainsPoint((GRandom.Double(), 1)));
+            var unitSquare = new Polygon(new Point[] { (0, 0), (1, 0), (1, 1), (0, 1) });
+            Assert.IsTrue(unitSquare.ContainsPoint((GRandom.Double(), GRandom.Double())));
+        }
+
+        [TestMethod]
+        public void Polygon_DegenerateBehavior()
+        {
+            var unitSquare = new Polygon(new Point[] { (0, 0), (1, 0), (1, 1), (0, 1) });
+
+            Assert.IsFalse(unitSquare.Intersects(new Polygon(new Point[] { (0, -0.1), (1, -0.1) })));
+            Assert.IsTrue(unitSquare.Intersects(new Polygon(new Point[] { (0, 0), (1, 0) })));
+            Assert.IsTrue(unitSquare.Intersects(new Polygon(new Point[] { (0, 0.5), (1, 0.5) })));
+            Assert.IsTrue(unitSquare.Intersects(new Polygon(new Point[] { (0, 0), (1, 1) })));
+            Assert.IsTrue(unitSquare.Intersects(new Polygon(new Point[] { (0, 1), (1, 1) })));
+            Assert.IsFalse(unitSquare.Intersects(new Polygon(new Point[] { (0, 1.1), (1, 1.1) })));
+
+            Assert.IsFalse(unitSquare.Intersects(new Polygon(new Point[] { (-0.1, 0), (-0.1, 1) })));
+            Assert.IsTrue(unitSquare.Intersects(new Polygon(new Point[] { (0, 0), (0, 1) })));
+            Assert.IsTrue(unitSquare.Intersects(new Polygon(new Point[] { (0.5, 0), (0.5, 1) })));
+            Assert.IsTrue(unitSquare.Intersects(new Polygon(new Point[] { (1, 0), (0, 1) })));
+            Assert.IsTrue(unitSquare.Intersects(new Polygon(new Point[] { (1, 0), (1, 1) })));
+            Assert.IsFalse(unitSquare.Intersects(new Polygon(new Point[] { (1.1, 0), (1.1, 1) })));
+
+            Assert.IsFalse(unitSquare.Intersects(new Polygon(new Point[] { (-0.5, 0.5) })));
+            Assert.IsFalse(unitSquare.Intersects(new Polygon(new Point[] { (0.5, -0.5) })));
+            Assert.IsFalse(unitSquare.Intersects(new Polygon(new Point[] { (1.5, 0.5) })));
+            Assert.IsFalse(unitSquare.Intersects(new Polygon(new Point[] { (0.5, 1.5) })));
+            Assert.IsTrue(unitSquare.Intersects(new Polygon(new Point[] { (0.5, 0.5) })));
+
+            Assert.IsFalse(unitSquare.Intersects(new Polygon(new Point[0])));
+
+            var line = new Polygon(new Point[] { (0, 0), (1, 0) });
+            Assert.IsTrue(line.Intersects(new Polygon(new Point[] { (0.5, -0.5), (0.5, 0.5) })));
+            Assert.IsFalse(line.Intersects(new Polygon(new Point[] { (0.5, 0) })));
+            Assert.IsFalse(line.ContainsPoint(0.5, 0));
         }
 
         [TestMethod]
@@ -121,13 +151,6 @@ namespace GRaff.UnitTesting
 
             Assert.IsFalse(p1.Intersects(p2));
         }
-
-		[TestMethod]
-		[ExpectedException(typeof(ArgumentException))]
-		public void Polygon_ZeroPointConstructorFailure()
-		{
-			new Polygon(new Point[0]);
-		}
 
 		[TestMethod]
 		[ExpectedException(typeof(ArgumentException))]

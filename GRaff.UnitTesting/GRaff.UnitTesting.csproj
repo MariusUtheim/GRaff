@@ -85,6 +85,7 @@
     <Compile Include="RBTreeTest.cs" />
     <Compile Include="GraphTest.cs" />
     <Compile Include="GridTest.cs" />
+    <Compile Include="LineTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\GRaff.Extensions\GRaff.Extensions.csproj">

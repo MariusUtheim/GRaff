@@ -15,7 +15,6 @@ namespace GRaff
 	/// The condition that the polygon must be convex is a strong condition that is unlikely to occur with arbitraty vertices.
 	/// In most cases, developers should not have to create their own polygons directly.
 	/// </remarks>
-	#warning How should degenerate polygons be handled? Will they work correctly with collisions?
 	public sealed class Polygon
 	{
 		private Point[] _pts;
@@ -28,7 +27,6 @@ namespace GRaff
 		public Polygon(IEnumerable<Point> pts)
 		{
 			Contract.Requires<ArgumentNullException>(pts != null);
-			Contract.Requires<ArgumentException>(pts.Count() > 0);
 			_pts = pts.ToArray();
 
 			if (_pts.Length <= 2)
@@ -155,7 +153,6 @@ namespace GRaff
 			return Ellipse(rectangle.Center, rectangle.Width / 2, rectangle.Height / 2);
 		}
 
-
 		#endregion
 
 		/// <summary>
@@ -188,11 +185,13 @@ namespace GRaff
 
 		
         /// <summary>
-        /// Returns true if the point is inside the Polygon or on its boundary.
+        /// Returns true if the point is strictly inside the Polygon. If this polygon has 
+        /// 2 or less vertices, this method always returns false. If the polygon has 3 or more
+        /// vertices and the point lies on the boundary, this method has no definite behaviour.
         /// </summary>
-        public bool ContainsPoint(Point pt)
+        public bool ContainsPoint(Point p)
 		{
-			/**
+            /**
 			 * If the polygon is convex then one can consider the polygon as a "path" from the first vertex. 
 			 * A point is on the interior of this polygons if it is always on the same side of all the line segments making up the path.
 			 * Given a line segment between P0 (x0,y0) and P1 (x1,y1), another point P (x,y) has the following relationship to the line segment:
@@ -202,8 +201,11 @@ namespace GRaff
 			 * if greater than 0 it is to the left, if equal to 0 then it lies on the line segment.
 			 * */
 
+            if (Length <= 2)
+                return false;
+
 			foreach (Line L in Edges)
-				if (L.LeftNormal.DotProduct(pt - L.Origin) > 0)
+				if (L.LeftNormal.Dot(p - L.Origin) >= 0)
 					return false;
 
 			return true;
@@ -216,13 +218,48 @@ namespace GRaff
 			=> ContainsPoint(new Point(x, y));
 
         /// <summary>
-        /// Returns true if this Polygon intersects the interior of the other Polygon.
-        /// Coincident lines are not considered intersecting. 
+        /// Returns true if this Polygon intersects other Polygon.
+        /// For polygons with 3 or more vertices, the boundary is not considered part of the
+        /// polygon. For polygons with 2 vertices, the endpoints are not considered part of the polygon.
+        /// For a polygons with 1 vertex, that point is considered part of the polygon.
+        /// Polygons with 0 vertices will never be considered intersecting other polygons.
         /// </summary>
         /// <param name="other"></param>
         /// <returns></returns>
-		public bool Intersects(Polygon other)
-			=> (other != null) ? this._Intersects(other) && other._Intersects(this) : false;
+        public static bool Intersects(Polygon first, Polygon second)
+        {
+            if (first == null || second == null || first.Length == 0 || second.Length == 0)
+                return false;
+            if (first.Length < second.Length)
+                (first, second) = (second, first);
+
+            // From here on out: first.Length >= second.Length >= 1
+            if (first.Length == 1)
+                return first.Vertex(0) == second.Vertex(0);
+            else if (first.Length == 2)
+            {
+                if (second.Length == 1)
+                    return false;
+                else // if (second.Length == 2)
+                    return first.Edge(0).Intersects(second.Edge(0));
+            }
+            else
+            {
+                if (second.Length == 1)
+                    return first.ContainsPoint(second.Vertex(0));
+                else if (second.Length == 2)
+                {
+                    if (first.ContainsPoint(second.Vertex(0)) || first.ContainsPoint(second.Vertex(1)))
+                        return true;
+                    var l = second.Edge(0);
+                    return first.Edges.Any(e => e.Intersects(l));
+                }
+                else
+                    return first._Intersects(second) && second._Intersects(first);
+            }
+        }
+
+        public bool Intersects(Polygon other) => Intersects(this, other);
 
 		private bool _Intersects(Polygon other)
 		{
@@ -234,7 +271,7 @@ namespace GRaff
 			IEnumerable<Point> otherVertices = other.Vertices;
 			foreach (Line l in Edges)
 			{
-				if (otherVertices.All(pt => l.LeftNormal.DotProduct(pt - l.Origin) >= 0))
+				if (otherVertices.All(pt => l.LeftNormal.Dot(pt - l.Origin) >= 0))
 					return false;
 			}
 

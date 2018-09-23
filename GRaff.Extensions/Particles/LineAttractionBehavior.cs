@@ -18,7 +18,7 @@ namespace GRaff.Particles
 			public void Update(Particle particle)
 			{
 				Vector d = particle.Location - _source.Line.Origin;
-				Vector r = _source.Strength * _source.Line.LeftNormal.DotProduct(d) * _source.Line.RightNormal;
+				Vector r = _source.Strength * _source.Line.LeftNormal.Dot(d) * _source.Line.RightNormal;
 				particle.Velocity += r;
 			}
 		}

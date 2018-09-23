@@ -71,11 +71,14 @@ namespace GRaff
 		/// </summary>
 		/// <param name="other">The other GRaff.Vector.</param>
 		/// <returns>The dot product of the two vectors.</returns>
-		public double DotProduct(Vector other)
+		public double Dot(Vector other)
 			=> X * other.X + Y * other.Y;
 
         public Vector Component(Angle direction)
             => new Vector(X * GMath.Cos(direction) + Y * GMath.Sin(direction), direction);
+
+        public Angle Angle(Vector other)
+            => GMath.Acos(UnitVector.Dot(other.UnitVector));
 
 		/// <summary>
 		/// Converts this GRaff.Vector to a human-readable string.
