@@ -19,6 +19,11 @@ namespace GRaff
 		}
 
 		/// <summary>
+		/// Represents the point (0, 0).
+		/// </summary>
+		public static Point Zero { get; } = new Point(0, 0);
+        
+        /// <summary>
 		/// Gets the x-coordinate of this GRaff.Point.
 		/// </summary>
 		public double X { get; private set; }
@@ -28,15 +33,6 @@ namespace GRaff
 		/// </summary>
 		public double Y { get; private set; }
 
-
-		/// <summary>
-		/// Represents the point (0, 0).
-		/// </summary>
-		public static Point Zero { get; } = new Point(0, 0);
-
-        public Point Project(Line line) => line.Origin + (this - line.Origin).Component(line.Direction.Direction);
-
-        public Point Confine(Rectangle region) => new Point(GMath.Median(region.Left, X, region.Right), GMath.Median(region.Top, Y, region.Bottom));
 
 		/// <summary>
 		/// Converts this GRaff.Point to a human-readable string, showing the value of the coordinates.

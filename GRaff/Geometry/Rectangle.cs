@@ -101,14 +101,14 @@ namespace GRaff
 		/// </summary>
 		public Point Center => TopLeft + Size / 2;
 
-		/// <summary>
-		/// Tests whether two GRaff.Rectangle structures intersect.
-		/// </summary>
-		/// <param name="other">The GRaff.Rectangle to test intersection with.</param>
-		/// <returns>true if the two GRaff.Rectangle structures intersect.</returns>
-		#warning Does this work with negative rectangles?
+        /// <summary>
+        /// Tests whether two GRaff.Rectangle structures intersect.
+        /// </summary>
+        /// <param name="other">The GRaff.Rectangle to test intersection with.</param>
+        /// <returns>true if the two GRaff.Rectangle structures intersect.</returns>
+#warning Does this work with negative rectangles?
         public bool Intersects(Rectangle other)
-			=> !(Left >= other.Right || Top >= other.Bottom || Right <= other.Left || Bottom <= other.Top);
+            => !(Left >= other.Right || Top >= other.Bottom || Right <= other.Left || Bottom <= other.Top);
 		
 		public Rectangle? Intersection(Rectangle other)
 		{
@@ -122,6 +122,9 @@ namespace GRaff
 			else
 				return new Rectangle(left, top, right - left, bottom - top);
 		}
+
+        public Point Project(Point pt)
+            => new Point(GMath.Median(Left, pt.X, Right), GMath.Median(Top, pt.Y, Bottom));
 
         /// <summary>
         /// Tests whether this GRaff.Rectangle contains the specified GRaff.PointD.

@@ -27,7 +27,7 @@ namespace GRaff.GraphicTest
 
             protected override void OnDrag(Point location)
             {
-                Location = location.Confine(new Rectangle(Point.Zero, Parent.Region.Size - Region.Size));
+                Location = new Rectangle(Point.Zero, Parent.Region.Size - Region.Size).Project(location);
             }
 
 
