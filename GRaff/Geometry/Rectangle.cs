@@ -160,11 +160,8 @@ namespace GRaff
         /// <param name="pt">The GRaff.PointD to test.</param>
         /// <returns>true if this GRaff.Rectangle contains pt.</returns>
         public bool Contains(Point pt)
-        {
-            return
-                ((Width >= 0 && pt.X >= this.Left && pt.X < this.Right) || (Width < 0 && pt.X > this.Right && pt.X <= this.Left))
-                && ((Height >= 0 && pt.Y >= this.Top && pt.Y < this.Bottom) || (Height < 0 && pt.Y > this.Bottom && pt.Y <= this.Top));
-        }
+            => ((Width >= 0 && pt.X >= this.Left && pt.X < this.Right) || (Width < 0 && pt.X > this.Right && pt.X <= this.Left))
+            && ((Height >= 0 && pt.Y >= this.Top && pt.Y < this.Bottom) || (Height < 0 && pt.Y > this.Bottom && pt.Y <= this.Top));
 
 		/// <summary>
 		/// Converts this GRaff.Rectangle to a human-readable string.
@@ -175,19 +172,28 @@ namespace GRaff
 		public bool Equals(Rectangle other)
 			=> Left == other.Left && Top == other.Top && Width == other.Width && Height == other.Height;
 
-		/// <summary>
-		/// Specifies whether this GRaff.Rectangle contans the same location and size as the specified System.Object.
-		/// </summary>
-		/// <param name="obj">The System.Object to compare to.</param>
-		/// <returns>true if obj is a GRaff.Rectangle and has the same location and size as this GRaff.Rectangle.</returns>
-		public override bool Equals(object obj)
-			=> (obj is Rectangle) ? Equals((Rectangle)obj) : base.Equals(obj);
+        public bool Equals(IntRectangle other)
+            => Left == other.Left && Top == other.Top && Width == other.Width && Height == other.Height;
 
-		/// <summary>
-		/// Returns a hash code for this GRaff.Rectangle.
-		/// </summary>
-		/// <returns>An integer value that specifies a hash value for this GRaff.Rectangle.</returns>
-		public override int GetHashCode()
+        /// <summary>
+        /// Specifies whether this GRaff.Rectangle contans the same location and size as the specified System.Object.
+        /// </summary>
+        /// <param name="obj">The System.Object to compare to.</param>
+        /// <returns>true if obj is a GRaff.Rectangle and has the same location and size as this GRaff.Rectangle.</returns>
+        public override bool Equals(object obj)
+        {
+            if (obj is Rectangle)
+                return obj.Equals(this);
+            else if (obj is IntRectangle)
+                return Equals((IntRectangle)obj);
+            else
+                return base.Equals(obj);
+        }
+        /// <summary>
+        /// Returns a hash code for this GRaff.Rectangle.
+        /// </summary>
+        /// <returns>An integer value that specifies a hash value for this GRaff.Rectangle.</returns>
+        public override int GetHashCode()
 			=> GMath.HashCombine(Left.GetHashCode(), Top.GetHashCode(), Width.GetHashCode(), Height.GetHashCode());
 
 		/// <summary>
