@@ -90,39 +90,63 @@ namespace GRaff
 		/// </summary>
 		public IntVector Size => new IntVector(Width, Height);
 
-		/// <summary>
-		/// Tests whether two rectangles intersect.
-		/// </summary>
-		/// <param name="other">The GRaff.IntRectangle to test intersection with.</param>
-		/// <returns>true if the two rectangles intersect.</returns>
-		public bool Intersects(IntRectangle other)
-			=> !(Left >= other.Right || Top >= other.Bottom || Right <= other.Left || Bottom <= other.Top);
+        public IntRectangle Abs => new IntRectangle(GMath.Min(Left, Right), GMath.Min(Top, Bottom), GMath.Abs(Width), GMath.Abs(Height));
+
+        private bool _Intersects(IntRectangle other)
+            => !(Left >= other.Right || Top >= other.Bottom || Right <= other.Left || Bottom <= other.Top);
+
+        /// <summary>
+        /// Tests whether two rectangles intersect.
+        /// </summary>
+        /// <param name="other">The GRaff.IntRectangle to test intersection with.</param>
+        /// <returns>true if the two rectangles intersect.</returns>
+        public bool Intersects(IntRectangle other)
+            => Abs._Intersects(other.Abs);
 
 
-		public IntRectangle? Intersection(IntRectangle other)
-		{
-			var left = GMath.Max(Left, other.Left);
-			var top = GMath.Max(Top, other.Top);
-			var right = GMath.Min(Right, other.Right);
-			var bottom = GMath.Min(Bottom, other.Bottom);
+        private IntRectangle? _intersectionAbs(IntRectangle other)
+        {
+            IntRectangle thisAbs = this.Abs, otherAbs = other.Abs;
+            int l = GMath.Max(thisAbs.Left, otherAbs.Left), r = GMath.Min(thisAbs.Right, otherAbs.Right),
+                t = GMath.Max(thisAbs.Top, otherAbs.Top), b = GMath.Min(thisAbs.Bottom, otherAbs.Bottom);
 
-			if (left > right || top > bottom)
-				return null;
-			else
-				return new IntRectangle(left, top, right - left, bottom - top);
-		}
+            if (l > r || t > b)
+                return null;
+            else
+                return new IntRectangle(l, t, r - l, b - t);
+        }
 
-		public bool ContainsPoint(double x, double y)
-			=> x >= this.Left && y >= this.Top && x < this.Right && y < this.Bottom;
+        public IntRectangle? Intersection(IntRectangle other)
+        {
+            var absRes = _intersectionAbs(other);
 
-		public bool ContainsPoint(Point pt) => ContainsPoint(pt.X, pt.Y);
+            if (absRes == null)
+                return null;
+            var res = absRes.Value;
+            if (res.Width == 0 && (res.Left == Right || res.Left == other.Right))
+                return null;
+            if (res.Height == 0 && (res.Top == Bottom || res.Top == other.Bottom))
+                return null;
+
+            if (this.Width < 0)
+                res = new IntRectangle(res.Right, res.Top, -res.Width, res.Height);
+            if (this.Height < 0)
+                res = new IntRectangle(res.Left, res.Bottom, res.Width, -res.Height);
+
+            return res;
+        }
+        
+
+		public bool Contains(IntVector pt)
+            => ((Width >= 0 && pt.X >= this.Left && pt.X < this.Right) || (Width< 0 && pt.X> this.Right && pt.X <= this.Left))
+            && ((Height >= 0 && pt.Y >= this.Top && pt.Y < this.Bottom) || (Height< 0 && pt.Y> this.Bottom && pt.Y <= this.Top));
 
 
-		/// <summary>
-		/// Converts this GRaff.IntRectangle to a human-readable string.
-		/// </summary>
-		/// <returns>A string that represents this GRaff.IntRectangle</returns>
-		public override string ToString() => $"[({Left},{Top}), ({Width},{Height})]";
+        /// <summary>
+        /// Converts this GRaff.IntRectangle to a human-readable string.
+        /// </summary>
+        /// <returns>A string that represents this GRaff.IntRectangle</returns>
+        public override string ToString() => $"[({Left},{Top}), ({Width},{Height})]";
 
 		public bool Equals(IntRectangle other)
 			=> Left == other.Left && Top == other.Top && Width == other.Width && Height == other.Height;
@@ -152,13 +176,13 @@ namespace GRaff
 		public override int GetHashCode()
 			=> GMath.HashCombine(Left, Top, Width, Height);
 
-		/// <summary>
-		/// Compares two GRaff.IntRectangle objects. The result specifies whether their locations and sizes are equal.
-		/// </summary>
-		/// <param name="left">The first GRaff.IntRectangle to compare.</param>
-		/// <param name="right">The second GRaff.IntRectangle to compare.</param>
-		/// <returns>true if the locations and sizes of the two GRaff.IntRectangle structures are equal.</returns>
-		public static bool operator ==(IntRectangle left, IntRectangle right) => left.Equals(right);
+        /// <summary>
+        /// Compares two GRaff.IntRectangle objects. The result specifies whether their locations and sizes are equal.
+        /// </summary>
+        /// <param name="left">The first GRaff.IntRectangle to compare.</param>
+        /// <param name="right">The second GRaff.IntRectangle to compare.</param>
+        /// <returns>true if the locations and sizes of the two GRaff.IntRectangle structures are equal.</returns>
+        public static bool operator ==(IntRectangle left, IntRectangle right) => left.Equals(right);
 
 		/// <summary>
 		/// Compares two GRaff.IntRectangle objects. The result specifies whether their locations and sizes are unequal.

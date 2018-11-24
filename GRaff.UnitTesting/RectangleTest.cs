@@ -12,27 +12,6 @@ namespace GRaff.UnitTesting
         private static bool _rectEquals(Rectangle rect1, Rectangle rect2)
             => new Rectangle((Point)(rect1.TopLeft - rect2.TopLeft), rect1.Size - rect2.Size).Area <= GMath.MachineEpsilon;
 
-
-        [TestMethod]
-		public void IntRectangle_Intersection()
-		{
-			IntRectangle rec1, rec2;
-
-			rec1 = new IntRectangle(0, 0, 100, 100);
-			rec2 = new IntRectangle(60, 60, 100, 100);
-			Assert.AreEqual(new IntRectangle(60, 60, 40, 40), rec1.Intersection(rec2));
-			Assert.AreEqual(new IntRectangle(60, 60, 40, 40), rec2.Intersection(rec1));
-
-			rec1 = new IntRectangle(0, 0, 100, 100);
-			rec2 = new IntRectangle(25, 25, 50, 50);
-			Assert.AreEqual(new IntRectangle(25, 25, 50, 50), rec1.Intersection(rec2));
-			Assert.AreEqual(new IntRectangle(25, 25, 50, 50), rec2.Intersection(rec1));
-
-			rec1 = new IntRectangle(0, 0, 40, 40);
-			rec2 = new IntRectangle(50, 50, 40, 40);
-			Assert.AreEqual(null, rec1.Intersection(rec2));
-		}
-
         [TestMethod]
         public void Rectangle_Abs()
         {
@@ -78,7 +57,9 @@ namespace GRaff.UnitTesting
             
             var nonIntersection = new Rectangle(1 + rand.Double(), 1 + rand.Double(), 1, 1);
             Assert.IsFalse(unitRect.Intersects(nonIntersection));
+            Assert.IsFalse(nonIntersection.Intersects(unitRect));
             Assert.IsNull(unitRect.Intersection(nonIntersection));
+            Assert.IsNull(nonIntersection.Intersection(unitRect));
         }
 
         [TestMethod]
