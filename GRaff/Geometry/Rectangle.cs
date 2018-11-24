@@ -102,25 +102,53 @@ namespace GRaff
 		public Point Center => TopLeft + Size / 2;
 
         /// <summary>
+        /// Creates a new GRaff.Rectangle from this GRaff.Rectangle where if Width and/or Height 
+        /// are negative, they are flipped and the corresponding coordinates are also offset, so 
+        /// that the returned Rectangle still describes the same region.
+        /// </summary>
+        public Rectangle Abs => new Rectangle(GMath.Min(Left, Right), GMath.Min(Top, Bottom), GMath.Abs(Width), GMath.Abs(Height));
+
+        private bool _Intersects(Rectangle other)
+            => !(Left >= other.Right || Top >= other.Bottom || Right <= other.Left || Bottom <= other.Top);
+
+        /// <summary>
         /// Tests whether two GRaff.Rectangle structures intersect.
         /// </summary>
         /// <param name="other">The GRaff.Rectangle to test intersection with.</param>
         /// <returns>true if the two GRaff.Rectangle structures intersect.</returns>
-#warning Does this work with negative rectangles?
         public bool Intersects(Rectangle other)
-            => !(Left >= other.Right || Top >= other.Bottom || Right <= other.Left || Bottom <= other.Top);
+            => Abs._Intersects(other.Abs);
 		
-		public Rectangle? Intersection(Rectangle other)
-		{
-			var left = GMath.Max(Left, other.Left);
-			var top = GMath.Max(Top, other.Top);
-			var right = GMath.Min(Right, other.Right);
-			var bottom = GMath.Min(Bottom, other.Bottom);
+        private Rectangle? _intersectionAbs(Rectangle other)
+        {
+            Rectangle thisAbs = this.Abs, otherAbs = other.Abs;
+            double l = GMath.Max(thisAbs.Left, otherAbs.Left), r = GMath.Min(thisAbs.Right, otherAbs.Right),
+                   t = GMath.Max(thisAbs.Top, otherAbs.Top), b = GMath.Min(thisAbs.Bottom, otherAbs.Bottom);
 
-			if (left > right || top > bottom)
-				return null;
-			else
-				return new Rectangle(left, top, right - left, bottom - top);
+            if (l > r || t > b)
+                return null;
+            else
+                return new Rectangle(l, t, r - l, b - t);
+        }
+
+        public Rectangle? Intersection(Rectangle other)
+		{
+            var absRes = _intersectionAbs(other);
+
+            if (absRes == null)
+                return null;
+            var res = absRes.Value;
+            if (res.Width == 0 && (res.Left == Right || res.Left == other.Right))
+                    return null;
+            if (res.Height == 0 && (res.Top == Bottom || res.Top == other.Bottom))
+                    return null;
+
+            if (this.Width < 0)
+                res = new Rectangle(res.Right, res.Top, -res.Width, res.Height);
+            if (this.Height < 0)
+                res = new Rectangle(res.Left, res.Bottom, res.Width, -res.Height);
+
+            return res;
 		}
 
         public Point Project(Point pt)

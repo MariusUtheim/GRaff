@@ -9,8 +9,12 @@ namespace GRaff.UnitTesting
 	{
         Random rand = new Random();
 
-		[TestMethod]
-		public void IntRectangleIntersection()
+        private static bool _rectEquals(Rectangle rect1, Rectangle rect2)
+            => new Rectangle((Point)(rect1.TopLeft - rect2.TopLeft), rect1.Size - rect2.Size).Area <= GMath.MachineEpsilon;
+
+
+        [TestMethod]
+		public void IntRectangle_Intersection()
 		{
 			IntRectangle rec1, rec2;
 
@@ -30,7 +34,39 @@ namespace GRaff.UnitTesting
 		}
 
         [TestMethod]
-        public void RectangleIntersections()
+        public void Rectangle_Abs()
+        {
+            var (w, h) = (rand.Double(), rand.Double());
+            var negRect = new Rectangle(0, 0, -w, -h);
+            Assert.AreEqual(new Rectangle(-w, -h, w, h), negRect.Abs);
+        }
+
+        [TestMethod]
+        public void Rectangle_ContainsPoint()
+        {
+            var (w, h) = (rand.Double(), rand.Double());
+            var rect = new Rectangle(0, 0, w, h);
+
+            Assert.IsTrue(rect.Contains((w / 2, h / 2)));
+            Assert.IsTrue(rect.Contains((0, 0)));
+            Assert.IsFalse(rect.Contains((w, 0)));
+            Assert.IsFalse(rect.Contains((0, h)));
+            Assert.IsFalse(rect.Contains((w, h)));
+
+            var negRect = new Rectangle(0, 0, -w, -h);
+            Assert.IsTrue(negRect.Contains((-w / 2, -h / 2)));
+            Assert.IsTrue(negRect.Contains(Point.Zero));
+            Assert.IsFalse(rect.Contains((-w, 0)));
+            Assert.IsFalse(rect.Contains((0, -h)));
+            Assert.IsFalse(negRect.Contains((-w, -h)));
+
+            var (x, y) = (rand.Double(), rand.Double());
+            Assert.IsTrue(new Rectangle(x, y, w, h).Contains((x, y)));
+            Assert.IsFalse(new Rectangle(x, y, w, h).Contains((x + w, y + h)));
+        }
+
+        [TestMethod]
+        public void Rectangle_Intersections()
         {
             var unitRect = new Rectangle(0, 0, 1, 1);
 
@@ -46,7 +82,7 @@ namespace GRaff.UnitTesting
         }
 
         [TestMethod]
-        public void RectangleBoundaryIntersections()
+        public void Rectangle_BoundaryIntersections()
         {
             var rect = new Rectangle(0, 0, rand.Double(), rand.Double());
 
@@ -61,9 +97,30 @@ namespace GRaff.UnitTesting
         }
 
         [TestMethod]
-        public void RectangleNegativeIntersections()
+        public void Rectangle_NegativeIntersections()
         {
+            var (dx, dy) = (rand.Double(), rand.Double());
+            var unitRect = new Rectangle(0, 0, 1, 1);
+            var negRect = new Rectangle(0, 0, -1, -1);
 
+            Assert.AreEqual(new Rectangle(0, 0, 0, 0), unitRect.Intersection(negRect));
+            Assert.IsNull(unitRect.Intersection(negRect + (2.0, 2.0)));
+
+            Assert.IsTrue(_rectEquals(new Rectangle(0, 0, dx, dy), unitRect.Intersection(negRect + (dx, dy)).Value));
+            Assert.IsTrue(_rectEquals(new Rectangle(dx, 0, 1 - dx, dy), unitRect.Intersection(negRect + (1 + dx, dy)).Value));
+            Assert.IsTrue(_rectEquals(new Rectangle(0, dy, dx, 1 - dy), unitRect.Intersection(negRect + (dx, 1 + dy)).Value));
+            Assert.IsTrue(_rectEquals(new Rectangle(dx, dy, 1 - dx, 1 - dy), unitRect.Intersection(negRect + (1 + dx, 1 + dy)).Value));
+
+
+            Assert.AreEqual(new Rectangle(0, 0, 0, 0), negRect.Intersection(unitRect));
+            Assert.IsNull(negRect.Intersection(unitRect - (2.0, 2.0)));
+
+            Assert.IsTrue(_rectEquals(new Rectangle(dx, dy, -dx, -dy), (negRect + (dx, dy)).Intersection(unitRect).Value));
+            Assert.IsTrue(_rectEquals(new Rectangle(dx, 0, 1 - dx, dy), unitRect.Intersection(negRect + (1 + dx, dy)).Value));
+            Assert.IsTrue(_rectEquals(new Rectangle(0, dy, dx, 1 - dy), unitRect.Intersection(negRect + (dx, 1 + dy)).Value));
+            Assert.IsTrue(_rectEquals(new Rectangle(dx, dy, 1 - dx, 1 - dy), unitRect.Intersection(negRect + (1 + dx, 1 + dy)).Value));
         }
-	}
+
+
+    }
 }
