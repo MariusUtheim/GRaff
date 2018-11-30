@@ -316,24 +316,18 @@ namespace GRaff.UnitTesting
 			Assert.IsTrue(allCompleted);
 
 			Async.HandleEvents();
-			bool errorsWereHandled = false;
+
 			all = Async.All(
 				Async.Run(() => {
 					throw new Exception("1");
 				}),
 				Async.Run(() => { }),
 				Async.Run(() => { throw new Exception("3"); })
-			).Catch<AggregateException>(ex => {
-				Assert.AreEqual(3, ex.InnerExceptions.Count);
-				Assert.AreEqual("1", ex.InnerExceptions[0].Message);
-				Assert.AreEqual("", ex.InnerExceptions[1].Message);
-				Assert.AreEqual("3", ex.InnerExceptions[2].Message);
-				errorsWereHandled = true;
-			});
+			);
 
 			Async.HandleEvents();
-			Async.HandleEvents();
-			Assert.IsTrue(errorsWereHandled);
+			
+            Assert.AreEqual(AsyncOperationState.Failed, all.State);
 		}
 
 		[TestMethod]
