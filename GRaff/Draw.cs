@@ -85,8 +85,14 @@ namespace GRaff
         public static void Triangle(Point p1, Point p2, Point p3, Color col1, Color col2, Color col3) => Device.Draw(PrimitiveType.LineLoop, new[] { (GraphicsPoint)p1, (GraphicsPoint)p2, (GraphicsPoint)p3 }, new[] { col1, col2, col3 });
         public static void Triangle(Triangle triangle, Color col1, Color col2, Color col3) => Triangle(triangle.V1, triangle.V2, triangle.V3, col1, col2, col3);
 
- 
-		public static void Rectangle(Point location, Vector size, Color color)
+        public static void Quadrilateral(Point p1, Point p2, Point p3, Point p4, Color color) => Device.Draw(PrimitiveType.LineLoop, new[] { (GraphicsPoint)p1, (GraphicsPoint)p2, (GraphicsPoint)p3, (GraphicsPoint)p4 }, color);
+        public static void Quadrilateral(Quadrilateral quad, Color color) => Quadrilateral(quad.V1, quad.V2, quad.V3, quad.V4, color);
+
+        public static void Quadrilateral(Point p1, Point p2, Point p3, Point p4, Color col1, Color col2, Color col3, Color col4) => Device.Draw(PrimitiveType.LineLoop, new[] { (GraphicsPoint)p1, (GraphicsPoint)p2, (GraphicsPoint)p3, (GraphicsPoint)p4 }, new[] { col1, col2, col3, col4 });
+        public static void Quadrilateral(Quadrilateral quad, Color col1, Color col2, Color col3, Color col4) => Quadrilateral(quad.V1, quad.V2, quad.V3, quad.V4, col1, col2, col3, col4);
+
+
+        public static void Rectangle(Point location, Vector size, Color color)
         {
             (var x, var y) = location;
             (var w, var h) = size;
@@ -128,6 +134,13 @@ namespace GRaff
 
         public static void FillTriangle(Point p1, Point p2, Point p3, Color col1, Color col2, Color col3) => Device.Draw(PrimitiveType.Triangles, new[] { (GraphicsPoint)p1, (GraphicsPoint)p2, (GraphicsPoint)p3 }, new[] { col1, col2, col3 });
         public static void FillTriangle(Triangle triangle, Color col1, Color col2, Color col3) => FillTriangle(triangle.V1, triangle.V2, triangle.V3, col1, col2, col3);
+
+
+        public static void FillQuadrilateral(Point p1, Point p2, Point p3, Point p4, Color color) => Device.Draw(PrimitiveType.TriangleStrip, new[] { (GraphicsPoint)p1, (GraphicsPoint)p2, (GraphicsPoint)p4, (GraphicsPoint)p3 }, color);
+        public static void FillQuadrilateral(Quadrilateral quad, Color color) => FillQuadrilateral(quad.V1, quad.V2, quad.V3, quad.V4, color);
+
+        public static void FillQuadrilateral(Point p1, Point p2, Point p3, Point p4, Color col1, Color col2, Color col3, Color col4) => Device.Draw(PrimitiveType.TriangleStrip, new[] { (GraphicsPoint)p1, (GraphicsPoint)p2, (GraphicsPoint)p4, (GraphicsPoint)p3 }, new[] { col1, col2, col4, col3 });
+        public static void FillQuadrilateral(Quadrilateral quad, Color col1, Color col2, Color col3, Color col4) => FillQuadrilateral(quad.V1, quad.V2, quad.V3, quad.V4, col1, col2, col3, col4);
 
 
         public static void FillRectangle(Point location, Vector size, Color color)

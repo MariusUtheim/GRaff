@@ -124,7 +124,7 @@
     <Compile Include="ObjectDisposedIncorrectlyException.cs" />
     <Compile Include="Audio\SoundSource.cs" />
     <Compile Include="Graphics\Framebuffer.cs" />
-    <Compile Include="Graphics\Quadrilateral.cs" />
+    <Compile Include="Geometry\Quadrilateral.cs" />
     <Compile Include="Graphics\Text\FontFile.cs" />
     <Compile Include="Graphics\Text\TextRenderer.cs" />
     <Compile Include="RedBlackTree.cs" />

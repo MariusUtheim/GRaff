@@ -370,13 +370,11 @@ namespace GRaff
 		}
 
 
-
         public static Line operator *(Matrix m, Line l)
         {
             Contract.Requires<ArgumentNullException>(m != null);
             return new Line(m * l.Origin, m * l.Destination);
         }
-
 
 		public static Triangle operator *(Matrix left, Triangle right)
 		{
@@ -384,13 +382,22 @@ namespace GRaff
 			return new Triangle(left * right.V1, left * right.V2, left * right.V3);
 		}
 
-		public static Polygon operator *(Matrix m, Rectangle r)
+        public static Quadrilateral operator *(Matrix left, Quadrilateral right)
         {
-            Contract.Requires<ArgumentNullException>(m != null);
-            return new Polygon(new[] { m * r.TopLeft, m * r.TopRight, m * r.BottomRight, m * r.BottomLeft });
+            Contract.Requires<ArgumentNullException>(left != null);
+            return new Quadrilateral(left * right.V1, left * right.V2, left * right.V3, left * right.V4);
         }
 
-		public static Polygon operator *(Matrix left, Polygon right)
-	        => new Polygon(right.Vertices.Select(p => left * p).ToArray());
+        public static Quadrilateral operator *(Matrix m, Rectangle r)
+        {
+            Contract.Requires<ArgumentNullException>(m != null);
+            return new Quadrilateral(m * r.TopLeft, m * r.TopRight, m * r.BottomRight, m * r.BottomLeft);
+        }
+
+        public static Polygon operator *(Matrix left, Polygon right)
+        {
+            Contract.Requires<ArgumentNullException>(left != null);
+            return new Polygon(right.Vertices.Select(p => left * p).ToArray());
+        }
 	}
 }
