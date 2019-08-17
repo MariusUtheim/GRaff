@@ -108,6 +108,10 @@ namespace GRaff
         /// </summary>
         public Rectangle Abs => new Rectangle(GMath.Min(Left, Right), GMath.Min(Top, Bottom), GMath.Abs(Width), GMath.Abs(Height));
 
+        public IEnumerable<Point> Vertices => new[] { TopLeft, TopRight, BottomRight, BottomLeft };
+
+        public IEnumerable<Line> Edges => new[] { new Line(TopLeft, TopRight), new Line(TopRight, BottomRight), new Line(BottomRight, BottomLeft), new Line(BottomLeft, TopLeft) };
+
         private bool _Intersects(Rectangle other)
             => !(Left >= other.Right || Top >= other.Bottom || Right <= other.Left || Bottom <= other.Top);
 
@@ -229,8 +233,6 @@ namespace GRaff
 		/// <returns>The translated GRaff.Rectangle.</returns>
 		public static Rectangle operator -(Rectangle r, Vector v) 
 			=> new Rectangle(r.TopLeft - v, r.Size);
-
-
 
         public static implicit operator Rectangle((Point location, Vector size) r) => new Rectangle(r.location, r.size);
         public static implicit operator (Point location, Vector size) (Rectangle r) => (r.TopLeft, r.Size);

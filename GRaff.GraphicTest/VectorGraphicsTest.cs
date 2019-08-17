@@ -8,7 +8,7 @@ using static GRaff.GMath;
 
 namespace GRaff.GraphicTest
 {
-    [Test]
+    [Test(Order = -1)]
     class VectorGraphicsTest : GameElement, IKeyPressListener
 	{
         private const double dx = 100;
@@ -73,20 +73,34 @@ namespace GRaff.GraphicTest
                 Draw.FillRectangle(new Rectangle(710, 225 + 80 / Phi, 80, -80 / Phi), Colors.Invisible, Colors.Red, Colors.Blue, Colors.Purple);
 
 
-                Draw.Circle((50, 350), 40, Colors.ForestGreen);
-                Draw.Ellipse((150, 350), (40, 40 / Phi), Colors.ForestGreen);
-                Draw.Ellipse(((250 - 40 / Phi, 310), (80 / Phi, 80)), Colors.ForestGreen);
+                Draw.Quadrilateral((10, 325), (85, 330), (90, 380), (5, 375), Colors.ForestGreen);
+                Draw.Quadrilateral(new Quadrilateral((110, 325), (185, 330), (190, 380), (105, 375)), Colors.ForestGreen);
+                Draw.Quadrilateral((210, 325), (285, 330), (290, 380), (205, 375), Colors.Red, Colors.Green, Colors.Blue, Colors.Purple);
+                Draw.Quadrilateral(new Quadrilateral((310, 325), (385, 330), (305, 375), (390, 380)), Colors.Red, Colors.Green, Colors.Blue, Colors.Purple);
 
-                Draw.FillCircle((350, 350), 40, Colors.DarkGreen);
-                Draw.FillCircle((450, 350), 40, Colors.Red.Transparent(0.8), Colors.Blue.Transparent(0.5));
-                Draw.FillEllipse(new Rectangle(510, 350 - 40 / Phi, 80, 80 / Phi), Colors.DarkGreen);
-                Draw.FillEllipse((650, 350), (40 / Phi, 40), Colors.DarkGreen);
-                Draw.FillEllipse(new Rectangle(710, 350 - 40 / Phi, 80, 80 / Phi), Colors.Red.Transparent(0.8), Colors.Blue.Transparent(0.5));
-                Draw.FillEllipse((850, 350), (40 / Phi, 40), Colors.Red.Transparent(0.8), Colors.Blue.Transparent(0.5));
+                Draw.FillQuadrilateral((410, 325), (485, 330), (490, 380), (405, 375), Colors.ForestGreen);
+                Draw.FillQuadrilateral(new Quadrilateral((510, 325), (585, 330), (590, 380), (505, 375)), Colors.ForestGreen);
+                Draw.FillQuadrilateral((610, 325), (685, 330), (690, 380), (605, 375), Colors.Red, Colors.Green, Colors.Blue, Colors.Purple);
+                Draw.FillQuadrilateral(new Quadrilateral((710, 325), (785, 330), (790, 380), (705, 375)), Colors.Red, Colors.Green, Colors.Blue, Colors.Purple);
+
+                Draw.FillQuadrilateral(new Quadrilateral((810, 325), (885, 330), (890, 380), (865, 345)), Colors.Red, Colors.Green, Colors.Blue, Colors.Purple);
+                Draw.FillQuadrilateral(new Quadrilateral((910, 325), (985, 330), (905, 375), (990, 380)), Colors.Red, Colors.Green, Colors.Blue, Colors.Purple);
+
+
+                Draw.Circle((50, 450), 40, Colors.ForestGreen);
+                Draw.Ellipse((150, 450), (40, 40 / Phi), Colors.ForestGreen);
+                Draw.Ellipse(((250 - 40 / Phi, 410), (80 / Phi, 80)), Colors.ForestGreen);
+
+                Draw.FillCircle((350, 450), 40, Colors.DarkGreen);
+                Draw.FillCircle((450, 450), 40, Colors.Red.Transparent(0.8), Colors.Blue.Transparent(0.5));
+                Draw.FillEllipse(new Rectangle(510, 450 - 40 / Phi, 80, 80 / Phi), Colors.DarkGreen);
+                Draw.FillEllipse((650, 450), (40 / Phi, 40), Colors.DarkGreen);
+                Draw.FillEllipse(new Rectangle(710, 450 - 40 / Phi, 80, 80 / Phi), Colors.Red.Transparent(0.8), Colors.Blue.Transparent(0.5));
+                Draw.FillEllipse((850, 450), (40 / Phi, 40), Colors.Red.Transparent(0.8), Colors.Blue.Transparent(0.5));
 
                 for (int i = 0; i < 15; i++)
                 {
-                    var rect = new Rectangle(50 + 50 * i, 450 - i / 2.0, i, i);
+                    var rect = new Rectangle(50 + 50 * i, 550 - i / 2.0, i, i);
                     Draw.Rectangle(rect, Colors.DarkSlateGray);
                     Draw.FillRectangle(rect + (0, 50), Colors.DarkSlateGray);
                     Draw.Ellipse(rect + (0, 100), Colors.DarkSlateGray);

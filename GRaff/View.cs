@@ -197,6 +197,8 @@ namespace GRaff
             set => _invalidate(_transform.YShear = value);
         }
 
+        public Quadrilateral ViewQuad => ScreenToView * Window.ClientRectangle;
+
         /// <summary>
         /// Gets a Rectangle that is guaranteed to contain the whole view region. 
         /// </summary>
@@ -205,7 +207,7 @@ namespace GRaff
         {
             get
             {
-                var pts = (ScreenToView * Window.ClientRectangle).Vertices.ToArray();
+                var pts = ViewQuad.Vertices;
                 double left = pts.Min(p => p.X), right = pts.Max(p => p.X), top = pts.Min(p => p.Y), bottom = pts.Max(p => p.Y);
                 return new Rectangle(left, top, right - left, bottom - top);
             }
