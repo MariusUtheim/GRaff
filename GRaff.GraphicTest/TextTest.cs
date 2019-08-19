@@ -1,7 +1,6 @@
 ﻿using System;
 using GRaff.Graphics.Text;
 using GRaff.Graphics;
-using GRaff.Graphics.Text.TrueType;
 
 namespace GRaff.GraphicTest
 {
