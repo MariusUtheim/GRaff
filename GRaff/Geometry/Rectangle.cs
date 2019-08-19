@@ -187,12 +187,13 @@ namespace GRaff
         public override bool Equals(object obj)
         {
             if (obj is Rectangle)
-                return obj.Equals(this);
+                return Equals((Rectangle)obj);
             else if (obj is IntRectangle)
                 return Equals((IntRectangle)obj);
             else
                 return base.Equals(obj);
         }
+
         /// <summary>
         /// Returns a hash code for this GRaff.Rectangle.
         /// </summary>
