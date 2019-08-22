@@ -3,7 +3,7 @@ using System.Diagnostics.Contracts;
 using GRaff.Randomness;
 
 
-namespace GRaff.Particles
+namespace GRaff.Graphics.Particles
 {
 	public class LinearMotionBehavior : IParticleBehavior
 	{

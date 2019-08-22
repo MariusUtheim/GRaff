@@ -3,7 +3,7 @@
 using System;
 using System.Diagnostics.Contracts;
 
-namespace GRaff.Particles
+namespace GRaff.Graphics.Particles
 {
 	[ContractClass(typeof(ParticleBehaviorContract))]
 	public interface IParticleBehavior

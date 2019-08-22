@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Diagnostics.Contracts;
 
-namespace GRaff.Particles
+namespace GRaff.Graphics.Particles
 {
 	public class LineAttractionBehavior : IParticleBehavior
 	{

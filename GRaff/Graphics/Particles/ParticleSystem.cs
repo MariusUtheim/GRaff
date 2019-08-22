@@ -6,7 +6,7 @@ using System.Diagnostics.Contracts;
 using System.Threading.Tasks;
 using GRaff.Graphics;
 
-namespace GRaff.Particles
+namespace GRaff.Graphics.Particles
 {
 	public class ParticleSystem : GameElement
 	{

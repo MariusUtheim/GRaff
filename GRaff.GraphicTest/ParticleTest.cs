@@ -1,5 +1,5 @@
 ﻿using GRaff.Graphics;
-using GRaff.Particles;
+using GRaff.Graphics.Particles;
 using GRaff.Randomness;
 
 

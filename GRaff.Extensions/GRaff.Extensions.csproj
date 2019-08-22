@@ -48,29 +48,6 @@
   <ItemGroup>
     <Compile Include="Graphics.Shaders\ColorMatrix.cs" />
     <Compile Include="Graphics.Text.TrueType\FontOptions.cs" />
-    <Compile Include="Particles\AccelerationBehavior.cs" />
-    <Compile Include="Particles\ColorBehavior.cs" />
-    <Compile Include="Particles\ColoredParticleRenderer.cs" />
-    <Compile Include="Particles\FadeoutBehavior.cs" />
-    <Compile Include="Particles\FadeoutProperty.cs" />
-    <Compile Include="Particles\FrictionProperty.cs" />
-    <Compile Include="Particles\GravityProperty.cs" />
-    <Compile Include="Particles\IParticleBehavior.cs" />
-    <Compile Include="Particles\IParticleProperty.cs" />
-    <Compile Include="Particles\IParticleRenderer.cs" />
-    <Compile Include="Particles\LinearMotionBehavior.cs" />
-    <Compile Include="Particles\LineAttractionBehavior.cs" />
-    <Compile Include="Particles\Particle.cs" />
-    <Compile Include="Particles\ParticleSystem.cs" />
-    <Compile Include="Particles\ParticleType.cs" />
-    <Compile Include="Particles\PointAttractionBehavior.cs" />
-    <Compile Include="Particles\RotatingBehavior.cs" />
-    <Compile Include="Particles\RotatingProperty.cs" />
-    <Compile Include="Particles\RotationBehavior.cs" />
-    <Compile Include="Particles\ScaleBehavior.cs" />
-    <Compile Include="Particles\ScalingBehavior.cs" />
-    <Compile Include="Particles\ScalingProperty.cs" />
-    <Compile Include="Particles\TexturedParticleRenderer.cs" />
     <Compile Include="Pathfinding\DiagonalGrid.cs" />
     <Compile Include="Pathfinding\DiagonalGridEdge.cs" />
     <Compile Include="Pathfinding\DiagonalGridVertex.cs" />
@@ -92,24 +69,6 @@
     <Compile Include="Pathfinding\SpatialVertex.cs" />
     <Compile Include="Pathfinding\Vertex.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Randomness\AngleDistribution.cs" />
-    <Compile Include="Randomness\BinomialDistribution.cs" />
-    <Compile Include="Randomness\Combinatorics.cs" />
-    <Compile Include="Randomness\ConstantDistribution.cs" />
-    <Compile Include="Randomness\DiscreteDistribution.cs" />
-    <Compile Include="Randomness\DiskPointDistribution.cs" />
-    <Compile Include="Randomness\DoubleDistribution.cs" />
-    <Compile Include="Randomness\IDistribution.cs" />
-    <Compile Include="Randomness\IntegerDistribution.cs" />
-    <Compile Include="Randomness\LinePointDistribution.cs" />
-    <Compile Include="Randomness\NormalDistribution.cs" />
-    <Compile Include="Randomness\NormalDistribution2D.cs" />
-    <Compile Include="Randomness\PolarVectorDistribution.cs" />
-    <Compile Include="Randomness\RadialDistribution.cs" />
-    <Compile Include="Randomness\RectanglePointDistribution.cs" />
-    <Compile Include="Randomness\RgbDistribution.cs" />
-    <Compile Include="Randomness\Statistics.cs" />
-    <Compile Include="Randomness\VectorDistribution.cs" />
     <Compile Include="Graphics.Shaders\CausticShaderProgram.cs" />
     <Compile Include="Graphics.Shaders\ColorMatrixShaderProgram.cs" />
     <Compile Include="Graphics.Shaders\SpotlightShaderProgram.cs" />
@@ -124,8 +83,6 @@
     <Compile Include="Panels\IPanelMouseListener.cs" />
     <Compile Include="Panels\DraggableNode.cs" />
     <Compile Include="Graphics.Shaders\ShockwaveShaderProgram.cs" />
-    <Compile Include="Randomness\IntegerPairDistribution.cs" />
-    <Compile Include="Randomness\MonteCarloDistribution.cs" />
     <Compile Include="Graphics.Text.TrueType\TrueTypeFont.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using GRaff.Randomness;
 using System.Diagnostics.Contracts;
 
-namespace GRaff.Particles
+namespace GRaff.Graphics.Particles
 {
 	public class RotatingBehavior : IParticleBehavior
 	{

@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using GRaff.Graphics;
 
-namespace GRaff.Particles
+namespace GRaff.Graphics.Particles
 {
 	internal class TexturedParticleRenderer : IParticleRenderer
 	{

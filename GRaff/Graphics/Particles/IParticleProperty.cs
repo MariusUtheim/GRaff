@@ -1,6 +1,6 @@
 
 
-namespace GRaff.Particles
+namespace GRaff.Graphics.Particles
 {
 	public interface IParticleProperty
 	{

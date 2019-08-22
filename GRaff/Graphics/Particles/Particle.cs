@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GRaff.Particles
+namespace GRaff.Graphics.Particles
 {
 	public sealed class Particle
 	{

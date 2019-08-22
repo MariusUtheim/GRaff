@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace GRaff.Particles
+namespace GRaff.Graphics.Particles
 {
 	internal interface IParticleRenderer
 	{

@@ -246,6 +246,49 @@
     <Compile Include="Graphics\Text\FontCommon.cs" />
     <Compile Include="Audio\OggAudioStream.cs" />
     <Compile Include="Audio\WaveAudioStream.cs" />
+    <Compile Include="Randomness\AngleDistribution.cs" />
+    <Compile Include="Randomness\BinomialDistribution.cs" />
+    <Compile Include="Randomness\Combinatorics.cs" />
+    <Compile Include="Randomness\ConstantDistribution.cs" />
+    <Compile Include="Randomness\DiscreteDistribution.cs" />
+    <Compile Include="Randomness\DiskPointDistribution.cs" />
+    <Compile Include="Randomness\DoubleDistribution.cs" />
+    <Compile Include="Randomness\IDistribution.cs" />
+    <Compile Include="Randomness\IntegerDistribution.cs" />
+    <Compile Include="Randomness\IntegerPairDistribution.cs" />
+    <Compile Include="Randomness\LinePointDistribution.cs" />
+    <Compile Include="Randomness\MonteCarloDistribution.cs" />
+    <Compile Include="Randomness\NormalDistribution.cs" />
+    <Compile Include="Randomness\NormalDistribution2D.cs" />
+    <Compile Include="Randomness\PolarVectorDistribution.cs" />
+    <Compile Include="Randomness\RadialDistribution.cs" />
+    <Compile Include="Randomness\RectanglePointDistribution.cs" />
+    <Compile Include="Randomness\RgbDistribution.cs" />
+    <Compile Include="Randomness\Statistics.cs" />
+    <Compile Include="Randomness\VectorDistribution.cs" />
+    <Compile Include="Graphics\Particles\AccelerationBehavior.cs" />
+    <Compile Include="Graphics\Particles\ColorBehavior.cs" />
+    <Compile Include="Graphics\Particles\ColoredParticleRenderer.cs" />
+    <Compile Include="Graphics\Particles\FadeoutBehavior.cs" />
+    <Compile Include="Graphics\Particles\FadeoutProperty.cs" />
+    <Compile Include="Graphics\Particles\FrictionProperty.cs" />
+    <Compile Include="Graphics\Particles\GravityProperty.cs" />
+    <Compile Include="Graphics\Particles\IParticleBehavior.cs" />
+    <Compile Include="Graphics\Particles\IParticleProperty.cs" />
+    <Compile Include="Graphics\Particles\IParticleRenderer.cs" />
+    <Compile Include="Graphics\Particles\LinearMotionBehavior.cs" />
+    <Compile Include="Graphics\Particles\LineAttractionBehavior.cs" />
+    <Compile Include="Graphics\Particles\Particle.cs" />
+    <Compile Include="Graphics\Particles\ParticleSystem.cs" />
+    <Compile Include="Graphics\Particles\ParticleType.cs" />
+    <Compile Include="Graphics\Particles\PointAttractionBehavior.cs" />
+    <Compile Include="Graphics\Particles\RotatingBehavior.cs" />
+    <Compile Include="Graphics\Particles\RotatingProperty.cs" />
+    <Compile Include="Graphics\Particles\RotationBehavior.cs" />
+    <Compile Include="Graphics\Particles\ScaleBehavior.cs" />
+    <Compile Include="Graphics\Particles\ScalingBehavior.cs" />
+    <Compile Include="Graphics\Particles\ScalingProperty.cs" />
+    <Compile Include="Graphics\Particles\TexturedParticleRenderer.cs" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
@@ -259,6 +302,8 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="External\" />
+    <Folder Include="Randomness\" />
+    <Folder Include="Graphics\Particles\" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
