@@ -12,6 +12,7 @@ using GRaff.Synchronization;
 
 namespace GRaff.Graphics
 {
+#if DEBUG
 #warning Needs testing!
     public class SpriteAtlas
 	{
@@ -132,4 +133,5 @@ namespace GRaff.Graphics
 
 
 	}
+#endif
 }

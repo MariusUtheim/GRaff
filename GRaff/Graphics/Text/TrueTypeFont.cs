@@ -6,7 +6,7 @@ using System.Linq;
 using SharpFont;
 
 
-namespace GRaff.Graphics.Text.TrueType
+namespace GRaff.Graphics.Text
 {
 	public class TrueTypeFont
 	{

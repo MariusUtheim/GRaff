@@ -339,12 +339,9 @@ namespace GRaff
 			for (int i = index + 1; i < end; i++)
 			{
 				var randomIndex = rnd.Next(i + 1);
-				
-				var tmp = array[i];
-				array[i] = array[randomIndex];
-				array[randomIndex] = tmp;
-			}
-		}
+                (array[i], array[randomIndex]) = (array[randomIndex], array[i]);
+            }
+        }
 
 
 
@@ -355,15 +352,19 @@ namespace GRaff
 		/// <typeparam name="T">The type of elements in the array.</typeparam>
 		/// <param name="array">The array the elements will be selected from.</param>
 		/// <returns>The randomized array.</returns>
-		public static IEnumerable<T> Shuffle<T>(this Random rnd, IEnumerable<T> array)
+		public static IEnumerable<T> Shuffle<T>(this Random rnd, IEnumerable<T> collection)
 		{
 			Contract.Requires<ArgumentNullException>(rnd != null);
-			if (array == null)
-				return Enumerable.Empty<T>();
+            if (collection == null)
+                yield break;
 
-			var result = array.ToArray();
-			ShuffleInPlace(rnd, result);
-			return result;
+            var array = collection.ToArray();
+            for (int i = 0; i < array.Length; i++)
+            {
+                int randomIndex = rnd.Next(i, array.Length);
+                (array[i], array[randomIndex]) = (array[randomIndex], array[i]);
+                yield return array[i];
+            }
 		}
 
 		/// <summary>

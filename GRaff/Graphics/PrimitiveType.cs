@@ -12,7 +12,6 @@ namespace GRaff.Graphics
 	//     functions
 	public enum PrimitiveType
 	{
-#warning Ensure that all modes are actually supported
         //
         // Summary:
         //     Original was GL_POINTS = 0x0000
@@ -41,14 +40,6 @@ namespace GRaff.Graphics
 		// Summary:
 		//     Original was GL_TRIANGLE_FAN = 0x0006
 		TriangleFan,
-		//
-		// Summary:
-		//     Original was GL_QUADS = 0x0007
-//		Quads,
-		//
-		// Summary:
-		//     Original was GL_QUAD_STRIP = 0x0008
-//		QuadStrip,
 		//
 		// Summary:
 		//     Original was GL_POLYGON = 0x0009
