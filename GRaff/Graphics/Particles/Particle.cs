@@ -8,7 +8,7 @@ namespace GRaff.Graphics.Particles
 {
 	public sealed class Particle
 	{
-		internal readonly List<IParticleProperty> Properties = new List<IParticleProperty>();
+		internal readonly List<IParticleBehavior> Behaviors = new List<IParticleBehavior>();
 
 		public Particle(double x, double y, int lifetime)
 		{
@@ -37,15 +37,16 @@ namespace GRaff.Graphics.Particles
 				return false;
 
 			Location += Velocity;
-			foreach (var property in Properties)
-				property.Update(this);
+			foreach (var behavior in Behaviors)
+				behavior.Update(this);
 
 			return true;
 		}
 
-		public void AttachBehavior(IParticleProperty behavior)
+		public void AttachBehavior(IParticleBehavior behavior)
 		{
-			Properties.Add(behavior);
+			Behaviors.Add(behavior);
+            behavior.Initialize(this);
 		}
 	}
 }

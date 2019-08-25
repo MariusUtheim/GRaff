@@ -9,7 +9,7 @@ namespace GRaff.Graphics.Particles
 {
 	public class ParticleType
 	{
-		private readonly List<IParticleBehavior> _behaviors = new List<IParticleBehavior>();
+		private readonly List<IParticleTypeDescriptor> _descriptors = new List<IParticleTypeDescriptor>();
 		private readonly IParticleRenderer _renderer;
 
 		public ParticleType(Sprite sprite, int lifetime, double animationSpeed = 1.0)
@@ -38,35 +38,25 @@ namespace GRaff.Graphics.Particles
 		public Particle Generate(double x, double y)
 		{
 			var result = new Particle(x, y, Lifetime.Generate());
-			foreach (var behavior in _behaviors)
-				behavior.AttachTo(result);
+			foreach (var descriptor in _descriptors)
+				result.AttachBehavior(descriptor.MakeBehavior());
 			return result;
 		}
 
-		public void AddBehaviors(IEnumerable<IParticleBehavior> behaviors)
+		public void AddDescriptors(IEnumerable<IParticleTypeDescriptor> descriptors)
 		{
-			Contract.Requires<ArgumentNullException>(behaviors != null);
-			Contract.Requires<ArgumentNullException>(Contract.ForAll(behaviors, b => b != null));
-			foreach (var behavior in behaviors)
-				AddBehavior(behavior);
+			foreach (var descriptor in descriptors)
+				AddDescriptor(descriptor);
 		}
 
-		public void AddBehavior(IParticleBehavior behavior)
+		public void AddDescriptor(IParticleTypeDescriptor descriptor)
 		{
-			Contract.Requires<ArgumentNullException>(behavior != null);
-			_behaviors.Add(behavior);
+			_descriptors.Add(descriptor);
 		}
 
 		public IDistribution<int> Lifetime { get; private set; }
 
 		public BlendMode BlendMode { get; set; }
-
-		public void Initialize(Particle particle)
-		{
-			Contract.Requires<ArgumentNullException>(particle != null);
-			foreach (var behavior in _behaviors)
-				behavior.AttachTo(particle);
-		}
 
 		internal void Render(IEnumerable<Particle> particles)
 		{

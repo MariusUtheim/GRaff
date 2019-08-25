@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 
 namespace GRaff.Randomness
@@ -15,5 +16,8 @@ namespace GRaff.Randomness
 			for (int i = 0; i < count; i++)
 				yield return distribution.Generate();
 		}
+
+        public static IDistribution<TOut> Transform<TIn, TOut>(this IDistribution<TIn> distribution, Func<TIn, TOut> transformer)
+            => new FuncDistribution<TOut>(() => transformer(distribution.Generate()));
 	}
 }

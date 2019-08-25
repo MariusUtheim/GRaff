@@ -10,7 +10,7 @@ namespace GRaff.GraphicTest
 	{
 		ParticleSystem starSystem;
         ParticleSystem pentagonSystem;
-		static PointAttractionBehavior attractor = new PointAttractionBehavior(Mouse.ViewLocation, 1);
+		static PointAttractionDescriptor attractor = new PointAttractionDescriptor(Mouse.ViewLocation, 1);
         static ParticleType starType = _createStarType();
         static ParticleType pentagonType = _createPentagonType();
         Background background;
@@ -18,13 +18,14 @@ namespace GRaff.GraphicTest
 		static ParticleType _createStarType()
 		{
             var type = new ParticleType(new Sprite(Textures.Star), 75);
-			type.AddBehaviors(new IParticleBehavior[] {
-				new RotationBehavior(),
-				new RotatingBehavior(Angle.Deg(3)),
-				new ScalingBehavior(0.95),
-				new ScaleBehavior(new DoubleDistribution(0.36, 0.60)),
-				new LinearMotionBehavior(5, 6),
-			});
+
+            type.AddDescriptors(new IParticleTypeDescriptor[]
+            {
+                new InitialStateDescriptor().UniformRotation().ConstantScale(0.95),
+                new TransformationDescriptor().ConstantRotation(Angle.Deg(3)).UniformScaling(0.36, 0.60),
+                LinearMotionDescriptor.Uniform(5, 6)
+            });
+
 			return type;
 		}
 
@@ -32,13 +33,16 @@ namespace GRaff.GraphicTest
 		{
 			var type = new ParticleType(Polygon.Regular(5, 25), 75);
 			type.BlendMode = BlendMode.Additive;
-            type.AddBehavior(new RotationBehavior());
-			type.AddBehavior(new ColorBehavior());
-			type.AddBehavior(new ScaleBehavior(new DoubleDistribution(1, 2)));
-			type.AddBehavior(new ScalingBehavior(0.95));
-			type.AddBehavior(new LinearMotionBehavior(5, 12));
-			type.AddBehavior(new FadeoutBehavior());
-			type.AddBehavior(attractor);
+            type.AddDescriptors(new IParticleTypeDescriptor[]
+            {
+                ColorDescriptor.Uniform(),
+                new InitialStateDescriptor().UniformRotation().UniformScale(1, 2),
+                new TransformationDescriptor().UniformRotation(Angle.Deg(-3), Angle.Deg(3)).ConstantScaling(0.95),
+                LinearMotionDescriptor.Uniform(5, 12),
+                FadeoutDescriptor.Default,
+                attractor
+            });
+
 			return type;
 		}
 
