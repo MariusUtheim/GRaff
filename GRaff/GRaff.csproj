@@ -130,6 +130,11 @@
     <Compile Include="Geometry\Quadrilateral.cs" />
     <Compile Include="Graphics\Text\FontFile.cs" />
     <Compile Include="Graphics\Text\TextRenderer.cs" />
+    <Compile Include="Pathfinding2\Heap.cs" />
+    <Compile Include="Pathfinding2\IEdge.cs" />
+    <Compile Include="Pathfinding2\IGraph.cs" />
+    <Compile Include="Pathfinding2\IVertex.cs" />
+    <Compile Include="Pathfinding2\PathfindingExtensions.cs" />
     <Compile Include="RedBlackTree.cs" />
     <Compile Include="Synchronization\Alarm.cs" />
     <Compile Include="Geometry\Angle.cs" />
