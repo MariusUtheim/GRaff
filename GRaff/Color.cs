@@ -125,7 +125,7 @@ namespace GRaff
 
 
 		/// <summary>
-		/// Creates a new GRaff.Color, with the same color channels as this instance, but iwth the new specified opacity.
+		/// Creates a new GRaff.Color, with the same color channels as this instance, but with the new specified opacity.
 		/// </summary>
 		/// <param name="opacity">The opacity of the new color. 0.0 means it is completely transparent, and 1.0 means it is completely opaque.</param>
 		/// <returns>A new GRaff.Color with the same color as this instance, but with an alpha channel corresponding to the specified opacity.</returns>
