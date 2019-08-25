@@ -30,7 +30,7 @@ namespace GRaff.UnitTesting
 		}
 
         [TestMethod]
-		public void RBTree_Add_And_Sort()
+		public void RBTree_Add_Sorts_Automatically()
 		{
 			var tree = new RedBlackTree();
 			var elements = GRandom.Range(0, 100).Select(i => new TestElement(i)).ToArray();
@@ -63,7 +63,6 @@ namespace GRaff.UnitTesting
 
             Assert.AreEqual(addCount, tree.Count);
 
-            var results = tree.ToArray();
             for (var i = 0; i < elements.Length; i++)
                 Assert.AreEqual(isAdded[i], tree.Contains(elements[i]));
         }
@@ -72,26 +71,24 @@ namespace GRaff.UnitTesting
 		public void RBTree_Remove()
 		{
 			var tree = new RedBlackTree();
-			var elements = GRandom.Range(0, 100).Select(i => new TestElement(i)).ToArray();
+			var elements = GRandom.Range(0, 100).Select(i => new TestElement(i)).ToList();
             
             foreach (var element in elements)
                 tree.Add(element);
 
-            var isRemoved = new bool[elements.Length];
-            var removeCount = 0;
-            for (int i = 0; i < elements.Length; i++)
-                if (GRandom.Probability(0.2))
+            for (var i = 0; i < elements.Count; i++)
+                if (GRandom.Probability(0.5))
                 {
-                    tree.Remove(elements[i]);
-                    isRemoved[i] = true;
-                    removeCount++;
+                    Assert.IsTrue(tree.Remove(elements[i]));
+                    elements.RemoveAt(i);
+                    i--;
                 }
 
-            Assert.AreEqual(elements.Length - removeCount, tree.Count);
+            Assert.AreEqual(elements.Count, tree.Count);
 
             var results = tree.ToArray();
-            for (int i = 0; i < elements.Length; i++)
-				Assert.AreEqual(!isRemoved[i], tree.Contains(elements[i]));
+            for (int i = 0; i < elements.Count; i++)
+                Assert.IsTrue(tree.Contains(elements[i]));
 		}
 
 
@@ -110,5 +107,23 @@ namespace GRaff.UnitTesting
 			foreach (var element in collection)
 				Assert.AreEqual(indices[index++], element.Depth);
 		}
+
+        [TestMethod]
+        public void RBTree_Clear()
+        {
+            var tree = new RedBlackTree();
+            var elements = GRandom.Range(0, 10).Select(i => new TestElement(i)).ToList();
+
+            foreach (var element in elements)
+                tree.Add(element);
+
+            Assert.AreEqual(10, tree.Count);
+
+            tree.Clear();
+
+            Assert.AreEqual(0, tree.Count);
+            foreach (var element in elements)
+                Assert.IsFalse(tree.Contains(element));
+        }
 	}
 }
