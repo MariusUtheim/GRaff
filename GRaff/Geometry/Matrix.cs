@@ -59,25 +59,25 @@ namespace GRaff
 		/// <summary>
 		/// Creates a GRaff.Matrix representing a scaling transformation.
 		/// </summary>
-		/// <param name="scaleX">The horizontal scale factor.</param>
-		/// <param name="scaleY">The vertical scale factor</param>
+		/// <param name="sX">The horizontal scale factor.</param>
+		/// <param name="sY">The vertical scale factor</param>
 		/// <returns>A new GRaff.Matrix representing the transformation.</returns>
-		public static Matrix Scaling(double scaleX, double scaleY)
+		public static Matrix Scaling(double sX, double sY)
 		{
 			Contract.Ensures(Contract.Result<Matrix>() != null);
-			return new Matrix(scaleX, 0, 0, 0, scaleY, 0);
+			return new Matrix(sX, 0, 0, 0, sY, 0);
 		}
 
 		/// <summary>
 		/// Creates a GRaff.Matrix representing a shear transformation.
 		/// </summary>
-		/// <param name="shearX">The horizontal shear factor.</param>
-		/// <param name="shearY">The vertical shear factor.</param>
+		/// <param name="hX">The horizontal shear factor.</param>
+		/// <param name="hY">The vertical shear factor.</param>
 		/// <returns>A new GRaff.Matrix representing the transformation.</returns>
-		public static Matrix Shearing(double shearX, double shearY)
+		public static Matrix Shearing(double hX, double hY)
 		{
 			Contract.Ensures(Contract.Result<Matrix>() != null);
-			return new Matrix(1, shearX, 0, shearY, 1, 0);
+			return new Matrix(1, hX, 0, hY, 1, 0);
 		}
 
 		/// <summary>
@@ -94,13 +94,13 @@ namespace GRaff
 		/// <summary>
 		/// Creates a GRaff.Matrix representing a translation trnasformation.
 		/// </summary>
-		/// <param name="dx">The amount to translate by in the horizontal direction.</param>
-		/// <param name="dy">The amount to translate by in the vertical direction.</param>
+		/// <param name="tX">The amount to translate by in the horizontal direction.</param>
+		/// <param name="tY">The amount to translate by in the vertical direction.</param>
 		/// <returns>A new GRaff.Matrix representing the transformation.</returns>
-		public static Matrix Translation(double dx, double dy)
+		public static Matrix Translation(double tX, double tY)
 		{
 			Contract.Ensures(Contract.Result<Matrix>() != null);
-			return new Matrix(1, 0, dx, 0, 1, dy);
+			return new Matrix(1, 0, tX, 0, 1, tY);
 		}
 
         public static Matrix Translation(Point p) => Translation((Vector)p);
@@ -185,17 +185,19 @@ namespace GRaff
 
 
 		/// <summary>
-		/// Applies a scaling transformation to this GRaff.Matrix.
+		/// Applies a scaling transformation to this GRaff.Matrix and returns the result.
+        /// This is equivalent to Matrix.Scaling(sX, sY) * this.
 		/// </summary>
-		/// <param name="scaleX">The horizontal scale factor.</param>
-		/// <param name="scaleY">The vertical scale factor.</param>
+		/// <param name="sX">The horizontal scale factor.</param>
+		/// <param name="sY">The vertical scale factor.</param>
 		/// <returns>This GRaff.Matrix, after the transformation.</returns>
-		public Matrix Scale(double scaleX, double scaleY)
-			=> new Matrix(M00 * scaleX, M01 * scaleX, M02 * scaleX, M10 * scaleY, M11 * scaleY, M12 * scaleY);
+		public Matrix Scale(double sX, double sY)
+			=> new Matrix(M00 * sX, M01 * sX, M02 * sX, M10 * sY, M11 * sY, M12 * sY);
 
 
 		/// <summary>
 		/// Applies a rotation transformation to this GRaff.Matrix.
+        /// This is equivalent to Matrix.Rotation(a) * this.
 		/// </summary>
 		/// <param name="a">The angle to rotate by.</param>
 		/// <returns>This GRaff.Matrix, after the transformation.</returns>
@@ -207,21 +209,23 @@ namespace GRaff
 
 		/// <summary>
 		/// Applies a translation transformation to this GRaff.Matrix.
+        /// This is equivalent to Matrix.Translation(tX, tY) * this.
 		/// </summary>
-		/// <param name="tx">The horizontal translation.</param>
-		/// <param name="ty">The vertical translation.</param>
+		/// <param name="tX">The horizontal translation.</param>
+		/// <param name="tY">The vertical translation.</param>
 		/// <returns>This GRaff.Matrix, after the transformation.</returns>
-		public Matrix Translate(double tx, double ty)
-			=> new Matrix(M00, M01, M02 + tx, M10, M11, M12 + ty);
+		public Matrix Translate(double tX, double tY)
+			=> new Matrix(M00, M01, M02 + tX, M10, M11, M12 + tY);
 
 		/// <summary>
 		/// Applies a shear transformation to this GRaff.Matrix.
+        /// This is equivalent to Matrix.Shearing(hX, hY) * this.
 		/// </summary>
-		/// <param name="shearX">The horizontal shear factor.</param>
-		/// <param name="shearY">The vertical shear factor.</param>
+		/// <param name="hX">The horizontal shear factor.</param>
+		/// <param name="hY">The vertical shear factor.</param>
 		/// <returns>This GRaff.Matrix, after the transformation.</returns>
-		public Matrix Shear(double shearX, double shearY)
-			=> new Matrix(M00 + shearX * M10, M01 + shearX * M11, M02 + shearX * M12, M10 + shearY * M00, M11 + shearY * M01, M12 + shearY * M02);
+		public Matrix Shear(double hX, double hY)
+			=> new Matrix(M00 + hX * M10, M01 + hX * M11, M02 + hX * M12, M10 + hY * M00, M11 + hY * M01, M12 + hY * M02);
 
 		
 		public bool Equals(Matrix other)
