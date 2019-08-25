@@ -7,7 +7,6 @@ namespace GRaff.Graphics.Particles
 {
 	public class LinearMotionDescriptor : IParticleTypeDescriptor
 	{
-		private IDistribution<Vector> _velocity;
 
 		public LinearMotionDescriptor(double speed)
 			: this(new VectorDistribution(speed))
@@ -15,9 +14,7 @@ namespace GRaff.Graphics.Particles
 
 		public LinearMotionDescriptor(double minSpeed, double maxSpeed)
 			: this(new VectorDistribution(GRandom.Source, minSpeed, maxSpeed))
-		{
-			Contract.Requires<ArgumentOutOfRangeException>(minSpeed >= 0 && maxSpeed >= minSpeed);
-		}
+		{ }
 
 		public LinearMotionDescriptor(Vector velocity)
 			: this(new ConstantDistribution<Vector>(velocity))
@@ -26,7 +23,7 @@ namespace GRaff.Graphics.Particles
 		public LinearMotionDescriptor(IDistribution<Vector> distribution)
 		{
 			Contract.Requires<ArgumentNullException>(distribution != null);
-			this._velocity = distribution;
+			this.VelocityDistribution = distribution;
 		}
 
         public static LinearMotionDescriptor Uniform(double speed)
