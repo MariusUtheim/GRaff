@@ -12,20 +12,25 @@ namespace GRaff.Graphics.Particles
 		private readonly List<IParticleTypeDescriptor> _descriptors = new List<IParticleTypeDescriptor>();
 		private readonly IParticleRenderer _renderer;
 
+        public ParticleType(Sprite sprite, IDistribution<int> lifetimeDistribution, double animationSpeed = 1.0)
+        {
+            _renderer = new TexturedParticleRenderer(sprite, animationSpeed);
+            this.Lifetime = lifetimeDistribution;
+        }
 		public ParticleType(Sprite sprite, int lifetime, double animationSpeed = 1.0)
-		{
-			Contract.Requires<ArgumentNullException>(sprite != null);
-			_renderer = new TexturedParticleRenderer(sprite, animationSpeed);
-			this.Lifetime = new ConstantDistribution<int>(lifetime);
-		}
+            : this(sprite, new ConstantDistribution<int>(lifetime), animationSpeed)
+		{ }
 
 
-		public ParticleType(Polygon polygon, int lifetime)
+		public ParticleType(Polygon polygon, IDistribution<int> lifetimeDistribution)
 		{
-			Contract.Requires<ArgumentNullException>(polygon != null);
 			_renderer = new ColoredParticleRenderer(polygon);
-			this.Lifetime = new ConstantDistribution<int>(lifetime);
+            this.Lifetime = lifetimeDistribution;
 		}
+
+        public ParticleType(Polygon polygon, int lifetime)
+            : this(polygon, new ConstantDistribution<int>(lifetime))
+        { }
 
 		public ParticleSystem Burst(Point location, int count)
 		{

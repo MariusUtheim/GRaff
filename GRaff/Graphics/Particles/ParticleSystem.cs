@@ -15,7 +15,7 @@ namespace GRaff.Graphics.Particles
 		// Hiding this from subclasses 
 		private readonly SerialRenderSystem _renderSystem;
 
-		public int Count { get { return particles.Count; } }
+        public int Count => particles.Count;
 
 		public ParticleSystem(ParticleType type)
 		{
