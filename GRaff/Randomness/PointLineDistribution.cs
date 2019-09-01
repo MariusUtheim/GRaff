@@ -3,27 +3,30 @@ using System.Diagnostics.Contracts;
 
 namespace GRaff.Randomness
 {
-	public sealed class LinePointDistribution : IDistribution<Point>
+    /// <summary>
+    /// Generator for points distributed uniformly on a line.
+    /// </summary>
+    public sealed class PointLineDistribution : IDistribution<Point>
 	{
 		private readonly Random _rnd;
 		private readonly Point _firstPointInclusive;
 		private readonly Point _secondPointExclusive;
 
-		public LinePointDistribution(Point firstPointInclusive, Point secondPointExclusive)
-			: this(GRandom.Source, firstPointInclusive, secondPointExclusive)
-		{ }
-
-        public LinePointDistribution(Line line)
+        public PointLineDistribution(Line line)
 			: this(GRandom.Source, line.Origin, line.Destination)
 		{ }
 
-		public LinePointDistribution(Random rnd, Line line)
+		public PointLineDistribution(Point firstPointInclusive, Point secondPointExclusive)
+			: this(GRandom.Source, firstPointInclusive, secondPointExclusive)
+		{ }
+
+		public PointLineDistribution(Random rnd, Line line)
 			: this(rnd, line.Origin, line.Destination)
 		{
 			Contract.Requires<ArgumentNullException>(rnd != null);
 		}
 
-		public LinePointDistribution(Random rnd, Point firstPointInclusive, Point secondPointExclusive)
+		public PointLineDistribution(Random rnd, Point firstPointInclusive, Point secondPointExclusive)
 		{
 			Contract.Requires<ArgumentNullException>(rnd != null);
 			this._rnd = rnd;

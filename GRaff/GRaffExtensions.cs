@@ -249,7 +249,6 @@ namespace GRaff
 		}
 		
 
-
 		/// <summary>
 		/// Takes a list of items and picks one of them randomly.
 		/// </summary>
@@ -265,6 +264,38 @@ namespace GRaff
 			else
 				return items[rnd.Next(items.Length)];
 		}
+
+        /// <summary>
+        /// Takes a list of relative weights and returns the index of one of them, with probability proportional to the weight of that element.
+        /// </summary>
+        /// <param name="rnd">The System.Random to generate the numbers.</param>
+        /// <param name="weights">A list of non-negative weights.</param>
+        /// <returns>The index of one weight at random, with probability proportional to the weight of that element.</returns>
+        public static int Pick(this Random rnd, double[] weights)
+        {
+            Contract.Requires<ArgumentNullException>(weights != null);
+            Contract.Requires<ArgumentException>(weights.Length > 0);
+
+            double sum = 0;
+            for (int i = 0; i < weights.Length; i++)
+            {
+                if (weights[i] < 0)
+                    throw new InvalidOperationException("One or more weights were negative");
+                sum += weights[i];
+            }
+
+            if (sum == 0)
+                return rnd.Next(weights.Length);
+            
+            for (int i = 0; i < weights.Length; i++)
+            {
+                sum -= weights[i];
+                if (sum <= 0)
+                    return i;
+            }
+
+            return weights.Length - 1;
+        }
 
 		/// <summary>
 		/// Returns true with probability p; otherwise, returns false.

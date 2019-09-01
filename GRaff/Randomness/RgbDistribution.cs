@@ -3,7 +3,11 @@ using System.Diagnostics.Contracts;
 
 namespace GRaff.Randomness
 {
-	public sealed class RgbDistribution : IDistribution<Color>
+    /// <summary>
+    /// Generator for a color distribution where the red, green and blue channels are independently distributed. 
+    /// </summary>
+    #warning Add more constructors
+    public sealed class RgbDistribution : IDistribution<Color>
 	{
 		private readonly Random _rnd;
 

@@ -3,6 +3,9 @@ using System.Diagnostics.Contracts;
 
 namespace GRaff.Randomness
 {
+    /// <summary>
+    /// Generator for integers according to a binomial distribution.
+    /// </summary>
 	public sealed class BinomialDistribution : IDistribution<int>
 	{
 		private readonly Random _rnd;

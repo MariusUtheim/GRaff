@@ -3,14 +3,17 @@ using System.Diagnostics.Contracts;
 
 namespace GRaff.Randomness
 {
-	public sealed class RectanglePointDistribution : IDistribution<Point>
+    /// <summary>
+    /// Generator for points distributed uniformly on a rectangle.
+    /// </summary>
+    public sealed class PointRectDistribution : IDistribution<Point>
 	{
 		private readonly Random _rnd;
 
-		public RectanglePointDistribution(Rectangle region)
+		public PointRectDistribution(Rectangle region)
 			: this(GRandom.Source, region) { }
 
-		public RectanglePointDistribution(Random rnd, Rectangle region)
+		public PointRectDistribution(Random rnd, Rectangle region)
 		{
 			Contract.Requires<ArgumentNullException>(rnd != null);
 			_rnd = rnd;

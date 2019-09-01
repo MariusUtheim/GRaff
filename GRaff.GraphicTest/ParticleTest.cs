@@ -62,15 +62,15 @@ namespace GRaff.GraphicTest
 
 		public override void OnStep()
 		{
-			//Window.Title = $"Particle count: {starSystem.Count.ToString()}\t-\tFPS: {Time.Fps}";
+			Window.Title = $"Particle Test - Particle count: {starSystem.Count + pentagonSystem.Count}\t-\tFPS: {Time.Fps}";
 			attractor.Location = Mouse.ViewLocation;
         }
 
 		public void OnGlobalMouse(MouseButton button)
 		{
-		//	if (button == MouseButton.Left)
-		//		starSystem.Create(Mouse.Location, 1);
-		//	else
+			if (button == MouseButton.Left)
+				starSystem.Create(Mouse.Location, 1);
+			else
 				pentagonSystem.Create(Mouse.ViewLocation, 1);
 		}
 

@@ -3,7 +3,10 @@ using System.Diagnostics.Contracts;
 
 namespace GRaff.Randomness
 {
-	public sealed class DoubleDistribution : IDistribution<double>
+    /// <summary>
+    /// Generator for double-precision numbers according to a uniform distribution.
+    /// </summary>
+    public sealed class DoubleDistribution : IDistribution<double>
 	{
 		private readonly Random _rnd;
 		private readonly double _firstValueInclusive, _secondValueExclusive;
@@ -11,10 +14,10 @@ namespace GRaff.Randomness
 		public DoubleDistribution(double firstValueInclusive, double secondValueExclusive)
 			: this(GRandom.Source, firstValueInclusive, secondValueExclusive) { }
 
-		public DoubleDistribution(Random rng, double firstValueInclusive, double secondValueExclusive)
+		public DoubleDistribution(Random rnd, double firstValueInclusive, double secondValueExclusive)
 		{
-			Contract.Requires<ArgumentNullException>(rng != null);
-			_rnd = rng;
+			Contract.Requires<ArgumentNullException>(rnd != null);
+			_rnd = rnd;
 			_firstValueInclusive = firstValueInclusive;
 			_secondValueExclusive = secondValueExclusive;
 		}

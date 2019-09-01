@@ -3,7 +3,10 @@ using System.Diagnostics.Contracts;
 
 namespace GRaff.Randomness
 {
-	public sealed class NormalDistribution : IDistribution<double>
+    /// <summary>
+    /// Generator for double-precision values according to a normal distribution.
+    /// </summary>
+    public sealed class NormalDistribution : IDistribution<double>
 	{
 		private readonly Random _rnd;
 		private readonly double _mean, _std;

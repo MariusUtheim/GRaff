@@ -4,6 +4,10 @@ using System.Collections.Generic;
 
 namespace GRaff.Randomness
 {
+    /// <summary>
+    /// Defines a random distribution that can be sampled. 
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
 	public interface IDistribution<out T>
 	{
 		T Generate();

@@ -3,6 +3,9 @@ using System.Diagnostics.Contracts;
 
 namespace GRaff.Randomness
 {
+    /// <summary>
+    /// Generator for angles according to a uniform distribution.
+    /// </summary>
 	public sealed class AngleDistribution : IDistribution<Angle>
 	{
 		private readonly Random _rnd;

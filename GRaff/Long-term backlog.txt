@@ -9,3 +9,4 @@
 --- Passive catchers?
 --- Accept/Reject/Throw on Deferred
 - Render filled Quadrilaterals correctly, even when they are not convex
+- For probability distribution, allow more writeable properties

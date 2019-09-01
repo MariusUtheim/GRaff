@@ -7,7 +7,11 @@ using System.Threading.Tasks;
 
 namespace GRaff.Randomness
 {
-	public sealed class NormalDistribution2D : IDistribution<Point>
+    /// <summary>
+    /// Generator for a pair of double-precision numbers according to independent normal distributions.
+    /// </summary>
+    #warning Extend this to a true bivariate normal distribution
+    public sealed class NormalDistribution2D : IDistribution<Point>
 	{
 		private readonly Random _rnd;
 		private readonly Point _mean;
