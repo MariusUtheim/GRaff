@@ -26,7 +26,7 @@ namespace GRaff.GraphicTest
 			var blocked = new bool[width, height];
 			for (var x = 0; x < width; x++)
 				for (var y = 0; y < height; y++)
-					blocked[x, y] = GRandom.Probability(0.15);
+					blocked[x, y] = GRandom.Boolean(0.15);
 
 			_grid = new Grid(blocked);
 		}
