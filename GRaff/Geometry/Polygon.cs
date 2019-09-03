@@ -19,7 +19,7 @@ namespace GRaff
 	{
 		private Point[] _pts;
 
-		internal Polygon(Point[] pts, Unit sentinel)
+		internal Polygon(Point[] pts)
 		{
 			_pts = pts;	// Used to create Polygon in an efficient way without doing sanity checks
 		}
@@ -95,7 +95,7 @@ namespace GRaff
 				y = s * tmp + c * y;
 			}
 
-			return new Polygon(pts, Unit._);
+			return new Polygon(pts);
 		}
 
 		public static Polygon Rectangle(double width, double height)
@@ -105,7 +105,7 @@ namespace GRaff
 				new Point(width / 2, -height / 2),
 				new Point(width / 2, height / 2),
 				new Point(-width / 2, height / 2)
-			}, Unit._);
+			});
 		}
 
 		public static Polygon Circle(double radius)
@@ -116,7 +116,7 @@ namespace GRaff
 		public static Polygon Circle(Point center, double radius)
 		{
 			if (radius == 0)
-				return new Polygon(new[] { center }, Unit._);
+				return new Polygon(new[] { center });
 
 			int precision = (int)GMath.Ceiling(GMath.Tau * GMath.Abs(radius));
 			if (precision < 2)
@@ -129,7 +129,7 @@ namespace GRaff
 		{
 			int precision = (int)GMath.Ceiling(GMath.Pi * GMath.Abs(xRadius + yRadius));
 			if (precision <= 0)
-				return new Polygon(new[] { center }, Unit._);
+				return new Polygon(new[] { center });
 			double dt = GMath.Tau / precision;
 			double c = GMath.Cos(dt), s = GMath.Sin(dt);
 
@@ -145,7 +145,7 @@ namespace GRaff
 				y = s * tmp + c * y;
 			}
 
-			return new Polygon(pts, Unit._);
+			return new Polygon(pts);
 		}
 
 		public static Polygon Ellipse(Rectangle rectangle)
@@ -224,7 +224,6 @@ namespace GRaff
         /// For a polygons with 1 vertex, that point is considered part of the polygon.
         /// Polygons with 0 vertices will never be considered intersecting other polygons.
         /// </summary>
-        /// <param name="other"></param>
         /// <returns></returns>
         public static bool Intersects(Polygon first, Polygon second)
         {
@@ -281,13 +280,13 @@ namespace GRaff
 
 
 		public static Polygon operator +(Polygon left, Vector right)
-			=> new Polygon(left._pts.Select(p => p + right).ToArray(), Unit._);
+			=> new Polygon(left._pts.Select(p => p + right).ToArray());
 		
 		public static Polygon operator +(Vector left, Polygon right)
-			=> new Polygon(right._pts.Select(p => left + p).ToArray(), Unit._);
+			=> new Polygon(right._pts.Select(p => left + p).ToArray());
 
 		public static Polygon operator -(Polygon left, Vector right)
-			=> new Polygon(left._pts.Select(p => p - right).ToArray(), Unit._);
+			=> new Polygon(left._pts.Select(p => p - right).ToArray());
 
 
 	}
