@@ -16,9 +16,6 @@ namespace GRaff.Randomness
 			_constantValue = constantValue;
 		}
 
-		public T Generate()
-		{
-			return _constantValue;
-		}
+		public T Generate() => _constantValue;
 	}
 }

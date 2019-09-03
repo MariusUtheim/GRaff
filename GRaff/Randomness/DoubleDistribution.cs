@@ -22,9 +22,6 @@ namespace GRaff.Randomness
 			_secondValueExclusive = secondValueExclusive;
 		}
 
-		public double Generate()
-		{
-			return _rnd.Double(_firstValueInclusive, _secondValueExclusive);
-		}
+		public double Generate() => _rnd.Double(_firstValueInclusive, _secondValueExclusive);
 	}
 }

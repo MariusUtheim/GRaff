@@ -35,9 +35,6 @@ namespace GRaff.Randomness
 			_std = standardDeviation;
 		}
 
-		public double Generate()
-		{
-			return _rnd.Gaussian(_mean, _std);
-		}
+		public double Generate() => _rnd.Gaussian(_mean, _std);
 	}
 }

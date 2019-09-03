@@ -31,9 +31,6 @@ namespace GRaff.Randomness
             : this(GRandom.Source, region)
         { }
 
-        public IntVector Generate()
-        {
-            return new IntVector(_first.Generate(), _second.Generate());
-        }
+        public IntVector Generate() => new IntVector(_first.Generate(), _second.Generate());
     }
 }

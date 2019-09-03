@@ -17,9 +17,6 @@ namespace GRaff.Randomness
             _rnd = rnd;
         }
 
-        public byte Generate()
-        {
-            return _rnd.Byte();
-        }
+        public byte Generate() => _rnd.Byte();
     }
 }

@@ -54,7 +54,6 @@ namespace GRaff.Randomness
 
 		public IDistribution<Angle> DirectionDistribution { get; set; }
 
-		public Vector Generate()
-			=> new Vector(MagnitudeDistribution.Generate(), DirectionDistribution.Generate());
+		public Vector Generate() => new Vector(MagnitudeDistribution.Generate(), DirectionDistribution.Generate());
 	}
 }

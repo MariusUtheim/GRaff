@@ -9,35 +9,20 @@ namespace GRaff.Randomness
     public sealed class PointLineDistribution : IDistribution<Point>
 	{
 		private readonly Random _rnd;
-		private readonly Point _firstPointInclusive;
-		private readonly Point _secondPointExclusive;
 
         public PointLineDistribution(Line line)
-			: this(GRandom.Source, line.Origin, line.Destination)
-		{ }
-
-		public PointLineDistribution(Point firstPointInclusive, Point secondPointExclusive)
-			: this(GRandom.Source, firstPointInclusive, secondPointExclusive)
+			: this(GRandom.Source, line)
 		{ }
 
 		public PointLineDistribution(Random rnd, Line line)
-			: this(rnd, line.Origin, line.Destination)
 		{
 			Contract.Requires<ArgumentNullException>(rnd != null);
+            this._rnd = rnd;
+            this.Line = line;
 		}
 
-		public PointLineDistribution(Random rnd, Point firstPointInclusive, Point secondPointExclusive)
-		{
-			Contract.Requires<ArgumentNullException>(rnd != null);
-			this._rnd = rnd;
-			this._firstPointInclusive = firstPointInclusive;
-			this._secondPointExclusive = secondPointExclusive;
-		}
+        public Line Line { get; set; }
 
-		public Point Generate()
-		{
-			double t = _rnd.Double();
-			return _firstPointInclusive * (1 - t) + _secondPointExclusive * t;
-		}
+        public Point Generate() => Line.Destination + _rnd.Double() * Line.Direction;
 	}
 }

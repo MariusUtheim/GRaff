@@ -32,9 +32,6 @@ namespace GRaff.Randomness
 			_std = standardDeviation;
 		}
 
-		public Point Generate()
-		{
-			return _mean + _rnd.Vector() * (_rnd.Gaussian() * _std);
-		}
+		public Point Generate() => _mean + _rnd.Vector() * (_rnd.Gaussian() * _std);
 	}
 }

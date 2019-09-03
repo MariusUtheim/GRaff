@@ -22,9 +22,6 @@ namespace GRaff.Randomness
 			_upperExclusive = upperExclusive;
 		}
 
-		public int Generate()
-		{
-			return _rnd.Integer(_lowerInclusive, _upperExclusive);
-		}
+		public int Generate() => _rnd.Integer(_lowerInclusive, _upperExclusive);
 	}
 }

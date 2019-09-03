@@ -30,9 +30,6 @@ namespace GRaff.Randomness
         public IDistribution<byte> Blue { get; set; }
 
 
-		public Color Generate()
-		{
-            return Color.FromRgb(Red.Generate(), Green.Generate(), Blue.Generate());
-		}
+		public Color Generate() => Color.FromRgb(Red.Generate(), Green.Generate(), Blue.Generate());
 	}
 }

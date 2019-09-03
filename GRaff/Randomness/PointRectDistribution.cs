@@ -22,9 +22,6 @@ namespace GRaff.Randomness
 
 		public Rectangle Region { get; set; }
 
-		public Point Generate()
-		{
-			return new Point(_rnd.Double(Region.Left, Region.Right), _rnd.Double(Region.Top, Region.Bottom));
-		}
+		public Point Generate() => new Point(_rnd.Double(Region.Left, Region.Right), _rnd.Double(Region.Top, Region.Bottom));
 	}
 }

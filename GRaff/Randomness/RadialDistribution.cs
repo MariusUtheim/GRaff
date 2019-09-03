@@ -47,7 +47,6 @@ namespace GRaff.Randomness
             _radiusSquareDifference = outerRadius * outerRadius - _innerRadiusSqr;
         }
 
-        public double Generate()
-            => GMath.Sqrt(_rnd.Double() * _radiusSquareDifference + _innerRadiusSqr);
+        public double Generate() => GMath.Sqrt(_rnd.Double() * _radiusSquareDifference + _innerRadiusSqr);
     }
 }

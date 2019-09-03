@@ -43,9 +43,6 @@ namespace GRaff.Randomness
 
 		public Point Center { get; set; }
 
-		public Point Generate()
-		{
-			return Center + new Vector(_radius.Generate(), _rnd.Angle());
-		}
+		public Point Generate() => Center + new Vector(_radius.Generate(), _rnd.Angle());
 	}
 }

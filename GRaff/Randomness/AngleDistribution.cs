@@ -34,7 +34,6 @@ namespace GRaff.Randomness
 			_maxAngle = maximum;
 		}
 
-		public Angle Generate()
-			=> _hasRange ? _rnd.Angle(_minAngle, _maxAngle) : _rnd.Angle();
+		public Angle Generate() => _hasRange ? _rnd.Angle(_minAngle, _maxAngle) : _rnd.Angle();
 	}
 }
