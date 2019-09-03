@@ -6,95 +6,36 @@ using System.Threading.Tasks;
 
 namespace GRaff.Graphics
 {
-	//
-	// Summary:
-	//     Used in GL.Angle.DrawArraysInstanced, GL.Angle.DrawElementsInstanced and 11 other
-	//     functions
+
 	public enum PrimitiveType
 	{
-        //
-        // Summary:
         //     Original was GL_POINTS = 0x0000
-        Points,
-		//
-		// Summary:
+        Points = 0x0000,
 		//     Original was GL_LINES = 0x0001
-		Lines,
-		//
-		// Summary:
+		Lines = 0x0001,
 		//     Original was GL_LINE_LOOP = 0x0002
-		LineLoop,
-		//
-		// Summary:
+		LineLoop = 0x0002,
 		//     Original was GL_LINE_STRIP = 0x0003
-		LineStrip,
-		//
-		// Summary:
+		LineStrip = 0x0003,
 		//     Original was GL_TRIANGLES = 0x0004
-		Triangles,
-		//
-		// Summary:
+		Triangles = 0x0004,
 		//     Original was GL_TRIANGLE_STRIP = 0x0005
-		TriangleStrip,
-		//
-		// Summary:
+		TriangleStrip = 0x0005,
 		//     Original was GL_TRIANGLE_FAN = 0x0006
-		TriangleFan,
-		//
-		// Summary:
+		TriangleFan = 0x0006,
 		//     Original was GL_POLYGON = 0x0009
-		Polygon,
-		//
-		// Summary:
+		Polygon = 0x0009,
 		//     Original was GL_LINES_ADJACENCY = 0x000A
-		LinesAdjacency,
-		//
-		// Summary:
-		//     Original was GL_LINES_ADJACENCY_ARB = 0x000A
-		LinesAdjacencyArb = 10,
-		//
-		// Summary:
-		//     Original was GL_LINES_ADJACENCY_EXT = 0x000A
-		LinesAdjacencyExt = 10,
-		//
-		// Summary:
+		LinesAdjacency = 0x000A,
 		//     Original was GL_LINE_STRIP_ADJACENCY = 0x000B
-		LineStripAdjacency = 11,
-		//
-		// Summary:
-		//     Original was GL_LINE_STRIP_ADJACENCY_ARB = 0x000B
-		LineStripAdjacencyArb = 11,
-		//
-		// Summary:
-		//     Original was GL_LINE_STRIP_ADJACENCY_EXT = 0x000B
-		LineStripAdjacencyExt = 11,
-		//
-		// Summary:
+		LineStripAdjacency = 0x000B,
 		//     Original was GL_TRIANGLES_ADJACENCY = 0x000C
-		TrianglesAdjacency = 12,
-		//
-		// Summary:
-		//     Original was GL_TRIANGLES_ADJACENCY_ARB = 0x000C
-		TrianglesAdjacencyArb = 12,
-		//
-		// Summary:
-		//     Original was GL_TRIANGLES_ADJACENCY_EXT = 0x000C
-		TrianglesAdjacencyExt = 12,
-		//
-		// Summary:
+		TrianglesAdjacency = 0x000C,
 		//     Original was GL_TRIANGLE_STRIP_ADJACENCY = 0x000D
-		TriangleStripAdjacency = 13,
-		//
-		// Summary:
-		//     Original was GL_TRIANGLE_STRIP_ADJACENCY_ARB = 0x000D
-		TriangleStripAdjacencyArb = 13,
-		//
-		// Summary:
-		//     Original was GL_TRIANGLE_STRIP_ADJACENCY_EXT = 0x000D
-		TriangleStripAdjacencyExt = 13,
+		TriangleStripAdjacency = 0x000D,
 		//
 		// Summary:
 		//     Original was GL_PATCHES = 0x000E
-		Patches = 14
+		Patches = 0x000E
 	}
 }
