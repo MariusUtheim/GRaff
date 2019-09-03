@@ -12,44 +12,42 @@ namespace GRaff
 	[StructLayout(LayoutKind.Sequential)]
 	public struct Color : IEquatable<Color>
 	{
-		private readonly byte _r, _g, _b, _a;
-
 		/// <summary>
-		/// Initializes a new instance of the GRaff.Color structure using the specifed alpha, red, green and blue values.
-		/// </summary>
-		/// <param name="a">The alpha channel.</param>
-		/// <param name="r">The red channel.</param>
-		/// <param name="g">The green channel.</param>
-		/// <param name="b">The blue channel.</param>
-		public Color(byte r, byte g, byte b, byte a)
-			: this()
-		{
-			_a = a;
-			_r = r;
-			_g = g;
-			_b = b;
-		}
-        
+        /// Gets the value of the red channel of this GRaff.Color.
+        /// </summary>
+        public byte R { get; }
+
+        /// <summary>
+        /// Gets the value of the green channel of this GRaff.Color.
+        /// </summary>
+        public byte G { get; }
+
+        /// <summary>
+        /// Gets the value of the blue channel of this GRaff.Color.
+        /// </summary>
+        public byte B { get; }
 
         /// <summary>
         /// Gets the value of the alpha channel of this GRaff.Color.
         /// </summary>
-        public byte A => _a;
+        public byte A { get; }
 
         /// <summary>
-        /// Gets the value of the red channel of this GRaff.Color.
+        /// Initializes a new instance of the GRaff.Color structure using the specifed alpha, red, green and blue values.
         /// </summary>
-        public byte R => _r;
-
-		/// <summary>
-		/// Gets the value of the green channel of this GRaff.Color.
-		/// </summary>
-		public byte G => _g;
-
-		/// <summary>
-		/// Gets the value of the blue channel of this GRaff.Color.
-		/// </summary>
-		public byte B => _b;
+        /// <param name="r">The red channel.</param>
+        /// <param name="g">The green channel.</param>
+        /// <param name="b">The blue channel.</param>
+        /// <param name="a">The alpha channel.</param>
+        public Color(byte r, byte g, byte b, byte a)
+			: this()
+		{
+			R = r;
+			G = g;
+			B = b;
+			A = a;
+		}
+        
 
         public static Color FromRgb(int r, int g, int b) => new Color((byte)r, (byte)g, (byte)b, 255);
 
@@ -88,19 +86,27 @@ namespace GRaff
         public static Color FromHsv(Angle h, double s, double v) => FromHsv(h, s, v, 255);
 
 
-		///// <summary>
-		/// Gets the value of this color as a 32-bit integer in ARGB format.
-		/// </summary>
-		//public uint ToArgb => (uint)((A << 24) | (R << 16) | (G << 8) | B);
-        public uint Rgba => (uint)((_r << 24) | (_g << 16) | (_b << 8) | _a);
-
-        public int Rgb => (_r << 16) | (_g << 8) | _b;
-
-
 		/// <summary>
-		/// Gets the inverse of this GRaff.Color. The alpha channel is unchanged while the other channels are inverted.
+		/// Gets the value of this color as a 32-bit unsigned integer in RGBA format.
 		/// </summary>
-		public Color Inverse => new Color((byte)(255 - _r), (byte)(255 - _g), (byte)(255 - _b), _a);
+        public uint Rgba => (uint)((R << 24) | (G << 16) | (B << 8) | A);
+
+        /// <summary>
+        /// Gets the value of this color as a 32-bit unsigned integer in ARGB format.
+        /// </summary>
+        public uint Argb => (uint)((A << 24) | (R << 16) | (G << 8) | B);
+
+        /// <summary>
+        /// Gets the value of this color as a 24-bit signed integer in RGB format.
+        /// </summary>
+        public int Rgb => (R << 16) | (G << 8) | B;
+
+
+
+        /// <summary>
+        /// Gets the inverse of this GRaff.Color. The alpha channel is unchanged while the other channels are inverted.
+        /// </summary>
+        public Color Inverse => new Color((byte)(255 - R), (byte)(255 - G), (byte)(255 - B), A);
         
 		public static Color Merge(Color c1, Color c2, double amount) => c1.Merge(c2, amount);
 
@@ -113,7 +119,7 @@ namespace GRaff
 		public Color Merge(Color c, double amount)
 		{
 			double b = 1 - amount;
-			return new Color((byte)(_r * b + c._r * amount), (byte)(_g * b + c._g * amount), (byte)(_b * b + c._b * amount), (byte)(_a * b + c._a * amount));
+			return new Color((byte)(R * b + c.R * amount), (byte)(G * b + c.G * amount), (byte)(B * b + c.B * amount), (byte)(A * b + c.A * amount));
 		}
 
 		/// <summary>
@@ -121,7 +127,7 @@ namespace GRaff
 		/// </summary>
 		/// <param name="alphaChannel">The alpha channel of the new color.</param>
 		/// <returns>A new GRaff.Color with the same color as this instance, but with the specified alpha channel.</returns>
-		public Color Transparent(byte alphaChannel) => new Color(_r, _g, _b, alphaChannel);
+		public Color Transparent(byte alphaChannel) => new Color(R, G, B, alphaChannel);
 
 
 		/// <summary>
@@ -129,14 +135,14 @@ namespace GRaff
 		/// </summary>
 		/// <param name="opacity">The opacity of the new color. 0.0 means it is completely transparent, and 1.0 means it is completely opaque.</param>
 		/// <returns>A new GRaff.Color with the same color as this instance, but with an alpha channel corresponding to the specified opacity.</returns>
-		public Color Transparent(double opacity) => new Color(_r, _g, _b, (byte)GMath.Round(255.0 * GMath.Median(0.0, opacity, 1.0)));
+		public Color Transparent(double opacity) => new Color(R, G, B, (byte)GMath.Round(255.0 * GMath.Median(0.0, opacity, 1.0)));
 
 		/// <summary>
 		/// Converts this GRaff.Color to an OpenTK.Graphics.Color4 object.
 		/// </summary>
 		/// <returns>The OpenTK.Graphics.Color4 that results from the conversion.</returns>
 		internal OpenTK.Graphics.Color4 ToOpenGLColor()
-		 => new OpenTK.Graphics.Color4(_r, _g, _b, _a);
+		 => new OpenTK.Graphics.Color4(R, G, B, A);
 
 
 		/// <summary>
@@ -145,7 +151,7 @@ namespace GRaff
 		/// <returns>A string that represents this GRaff.Color</returns>
 		public override string ToString() => $"{nameof(Color)}=0x{Rgba:X}";
 
-		public bool Equals(Color other) => _a == other._a && _r == other._r && _g == other._g && _b == other._b;
+		public bool Equals(Color other) => A == other.A && R == other.R && G == other.G && B == other.B;
 
 
 		/// <summary>
