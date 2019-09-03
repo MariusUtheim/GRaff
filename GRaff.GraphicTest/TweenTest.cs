@@ -15,18 +15,18 @@ namespace GRaff.GraphicTest
             OnKeyPress(Key.Number1);
         }
 
-		private static Dictionary<Key, TweeningFunction> functions = new Dictionary<Key, TweeningFunction>
+		private static Dictionary<Key, TweenFunction> functions = new Dictionary<Key, TweenFunction>
 		{
-            { Key.Number1, Tween.Linear },
-            { Key.Number2, Tween.Quadratic },
-			{ Key.Number3, Tween.Cubic },
-			{ Key.Number4, Tween.Cubic.InOut() },
-			{ Key.Number5, Tween.Cubic.OutIn() },
-			{ Key.Number6, Tween.Sine },
-			{ Key.Number7, Tween.Circle },
-			{ Key.Number8, Tween.Bounce(3) },
-			{ Key.Number9, Tween.Spring(3, 4) },
-			{ Key.Number0, Tween.Elastic(3, 4) }
+            { Key.Number1, TweenFunctions.Linear },
+            { Key.Number2, TweenFunctions.Quadratic },
+			{ Key.Number3, TweenFunctions.Cubic },
+			{ Key.Number4, TweenFunctions.Quartic },
+			{ Key.Number5, TweenFunctions.Quintic },
+			{ Key.Number6, TweenFunctions.Sine },
+			{ Key.Number7, TweenFunctions.Circle },
+			{ Key.Number8, TweenFunctions.Bounce(3) },
+			{ Key.Number9, TweenFunctions.Spring(3, 4) },
+			{ Key.Number0, TweenFunctions.Elastic(3, 4) }
 		};
 
 		private static Dictionary<Key, string> functionNames = new Dictionary<Key, string>
@@ -34,8 +34,8 @@ namespace GRaff.GraphicTest
 			{ Key.Number1, "Linear" },
 			{ Key.Number2, "Quadratic" },
 			{ Key.Number3, "Cubic" },
-			{ Key.Number4, "Cubic InOut" },
-			{ Key.Number5, "Cubic OutIn" },
+			{ Key.Number4, "Quartic" },
+			{ Key.Number5, "Quintic" },
 			{ Key.Number6, "Sine" },
 			{ Key.Number7, "Circle" },
 			{ Key.Number8, "Bounce" },
@@ -44,7 +44,7 @@ namespace GRaff.GraphicTest
 		};
 
 		private static Marker _marker { get; set; }
-		private TweeningFunction f = functions[Key.Number1];
+		private TweenFunction f = functions[Key.Number1];
 		private Color _color = Colors.DarkRed;
 
 		public override void OnDraw()
@@ -62,9 +62,9 @@ namespace GRaff.GraphicTest
 			_marker = Instance<Marker>.Create(new Point(GRandom.Integer(Window.Width), GRandom.Integer(Window.Height)));
 
 			if (button == MouseButton.Left)
-				Tween.Animate(90, f, () => this.Location, Mouse.ViewLocation, () => _color = Colors.DarkRed);
+				Tween.Animate(f, 90, () => this.Location, Mouse.ViewLocation, () => _color = Colors.DarkRed);
 			else if (button == MouseButton.Right)
-				Tween.Animate(90, f.Out(), () => this.Location, Mouse.ViewLocation, () => _color = Colors.DarkRed);
+				Tween.Animate(f.Inverse(), 90, () => this.Location, Mouse.ViewLocation, () => _color = Colors.DarkRed);
 		}
 
 		public void OnKeyPress(Key key)

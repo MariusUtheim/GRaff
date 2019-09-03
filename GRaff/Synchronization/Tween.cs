@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
+using System.Linq.Expressions;
 
 namespace GRaff.Synchronization
 {
@@ -17,75 +18,128 @@ namespace GRaff.Synchronization
 
 	public partial class Tween : GameElement
 	{
-		private event EventHandler<TweenEventArgs> _step;
-		private event EventHandler _complete;
-		private Dictionary<int, List<Action>> _sentinels = new Dictionary<int, List<Action>>();
+        private Dictionary<int, List<Action>> _sentinels = new Dictionary<int, List<Action>>();
 
-		public Tween(int duration, TweeningFunction tweeningFunction, Action<double> stepAction)
-			: this(duration, tweeningFunction, stepAction, null)
+		public Tween(TweenFunction tweeningFunction, int duration, Action<double> stepAction)
+			: this(tweeningFunction, duration, stepAction, null)
 		{ }
 
-		public Tween(int duration, TweeningFunction tweeningFunction, Action<double> stepAction, Action completeAction)
+		public Tween(TweenFunction tweeningFunction, int duration, Action<double> stepAction, Action completeAction)
 		{
 			Contract.Requires<ArgumentNullException>(tweeningFunction != null);
 			Duration = duration;
 			TweeningFunction = tweeningFunction;
-			_step += (sender, e) => stepAction(e.Amount);
-			_complete += (sender, e) => completeAction?.Invoke();
+			Step += (sender, e) => stepAction(e.Amount);
+			Complete += (sender, e) => completeAction?.Invoke();
 		}
 
-		public static Tween Start(int duration, TweeningFunction tweeningFunction, Action<double> stepAction)
-			=> Instance.Create(new Tween(duration, tweeningFunction, stepAction));
+        public static Tween Start(TweenFunction tweeningFunction, int duration, Action<double> stepAction, Action completeAction = null)
+        {
+            var tween = Instance.Create(new Tween(tweeningFunction, duration, stepAction, completeAction));
+            return tween;
+        }
 
-		public static Tween Start(int duration, TweeningFunction tweeningFunction, Action<double> stepAction, Action completeAction)
-			=> Instance.Create(new Tween(duration, tweeningFunction, stepAction, completeAction));
+        #region Animator tweens
 
-		public event EventHandler<TweenEventArgs> Step
-		{
-			add { _step += value; } 
-			remove { _step -= value; }
-		}
+        private static Action<double> _setter<TValue>(Expression<Func<TValue>> property, Func<double, TValue, TValue> setter)
+        {
+            Contract.Requires<ArgumentNullException>(property != null);
+            Contract.Requires<ArgumentNullException>(setter != null);
 
-		public event EventHandler Complete
-		{
-			add { _complete += value; }
-			remove { _complete -= value; }
-		}
+            var expression = (MemberExpression)property.Body;
+
+            object target;
+            if (expression.Expression is ConstantExpression)
+                target = ((ConstantExpression)expression.Expression).Value;
+            else
+            {
+                var fieldExpression = (MemberExpression)expression.Expression;
+                var m = fieldExpression.Member;
+
+                var classExpression = (ConstantExpression)fieldExpression.Expression;
+                dynamic val = classExpression?.Value;
+                target = ((dynamic)m).GetValue(val);
+            }
+
+            dynamic member = expression.Member;
+            TValue initialValue = member.GetValue(target);
+            return t => member.SetValue(target, setter(t, initialValue));
+        }
+
+        public static Tween Animate(TweenFunction f, int duration, Expression<Func<int>> property, int finalValue, Action completeAction = null)
+        {
+            var s = _setter(property, (double t, int initialValue) => (int)(initialValue * (1 - t) + finalValue * t));
+            return Start(f, duration, s, completeAction);
+        }
+
+        public static Tween Animate(TweenFunction f, int duration, Expression<Func<double>> property, double finalValue, Action completeAction = null)
+        {
+            var s = _setter(property, (double t, double initialValue) => initialValue * (1 - t) + finalValue * t);
+            return Start(f, duration, s, completeAction);
+        }
+
+        public static Tween Animate(TweenFunction f, int duration, Expression<Func<Point>> property, Point finalValue, Action completeAction = null)
+        {
+            var s = _setter(property, (double t, Point initialValue) => initialValue * (1 - t) + finalValue * t);
+            return Start(f, duration, s, completeAction);
+        }
+
+        public static Tween Animate(TweenFunction f, int duration, Expression<Func<Color>> property, Color finalValue, Action completeAction = null)
+        {
+            var s = _setter(property, (double t, Color initialValue) => initialValue.Merge(finalValue, t));
+            return Start(f, duration, s, completeAction);
+        }
+
+        public static Tween Animate(TweenFunction f, int duration, Expression<Func<Vector>> property, Vector finalValue, Action completeAction = null)
+        {
+            var s = _setter(property, (double t, Vector initialValue) => initialValue * (1 - t) + finalValue * t);
+            return Start(f, duration, s, completeAction);
+        }
+
+        public static Tween Animate(TweenFunction f, int duration, Expression<Func<Angle>> property, Angle finalValue, Action completeAction = null)
+        {
+            var s = _setter(property, (double t, Angle initialValue) => initialValue + t * Angle.Acute(initialValue, finalValue));
+            return Start(f, duration, s, completeAction);
+        }
+
+        #endregion
+
+        public event EventHandler<TweenEventArgs> Step;
+
+        public event EventHandler Complete;
 
 		public void AtStep(int step, Action action)
 		{
 			if (step < 0 || step >= Duration || action == null)
 				return;
 
-			List<Action> actions;
-			if (_sentinels.TryGetValue(step, out actions))
+			if (_sentinels.TryGetValue(step, out var actions))
 				actions.Add(action);
 			else
-				_sentinels[step] = new List<Action>(new[] { action });
+				_sentinels.Add(step, new List<Action>(new[] { action }));
 		}
 
 		public int Duration { get; private set; }
 
 		public int Progress { get; private set; }
 
-		public TweeningFunction TweeningFunction { get; private set; }
+		public TweenFunction TweeningFunction { get; private set; }
 
 		public sealed override void OnStep()
 		{
 			Progress++;
 			if (Progress == Duration)
-                _step?.Invoke(this, new TweenEventArgs(TweeningFunction(1)));
+                Step?.Invoke(this, new TweenEventArgs(TweeningFunction(1)));
 			else
-                _step?.Invoke(this, new TweenEventArgs(TweeningFunction((double)Progress / Duration)));
+                Step?.Invoke(this, new TweenEventArgs(TweeningFunction((double)Progress / Duration)));
 
-			List<Action> sentinels;
-			if (_sentinels.TryGetValue(Progress, out sentinels))
+			if (_sentinels.TryGetValue(Progress, out var sentinels))
 				foreach (var sentinel in sentinels)
 					sentinel.Invoke();
 			
 			if (Progress == Duration)
 			{
-				_complete?.Invoke(null, null);
+				Complete?.Invoke(null, null);
 				Destroy();
 			}
 		}

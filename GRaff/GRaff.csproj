@@ -216,7 +216,7 @@
     <Compile Include="Synchronization\operations\TaskOperator.cs" />
     <Compile Include="Graphics\SubTexture.cs" />
     <Compile Include="Synchronization\ParallelOperator.cs" />
-    <Compile Include="Synchronization\TweeningFunctions.cs" />
+    <Compile Include="Synchronization\TweenFunction.cs" />
     <Compile Include="Texture.cs" />
     <Compile Include="Time.cs" />
     <Compile Include="Transform.cs" />
