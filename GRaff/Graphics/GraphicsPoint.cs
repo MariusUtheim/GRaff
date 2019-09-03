@@ -22,7 +22,7 @@ namespace GRaff.Graphics
 #else
 		internal static OpenTK.Graphics.ES30.VertexAttribPointerType PointerType = OpenTK.Graphics.ES30.VertexAttribPointerType.Float;
 #endif
-		internal static readonly int Size = Marshal.SizeOf(typeof(GraphicsPoint));
+		internal static readonly int Size = Marshal.SizeOf<GraphicsPoint>();
 
         private readonly coord _x, _y;
 

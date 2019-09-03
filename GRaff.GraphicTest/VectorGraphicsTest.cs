@@ -38,18 +38,24 @@ namespace GRaff.GraphicTest
                                   new Point(550, 60) - new Vector(35, Angle.Deg(210)),
                                   new Point(550, 60) - new Vector(35, Angle.Deg(330)),
                                   Color.FromRgb(255, 0, 0), Color.FromRgb(0, 255, 0), Color.FromRgb(0, 0, 255));
-                
-                Draw.Primitive(PrimitiveType.TriangleFan, new[] {
-                (new GraphicsPoint(650, 50), Colors.Gray),
-                (new GraphicsPoint(650, 50) + new Vector(30, Angle.Deg(0)), Color.FromHsv(Angle.Deg(0), 1, 0.9)),
-                (new GraphicsPoint(650, 50) + new Vector(30, Angle.Deg(60)), Color.FromHsv(Angle.Deg(60), 0.75, 0.75)),
-                (new GraphicsPoint(650, 50) + new Vector(30, Angle.Deg(120)), Color.FromHsv(Angle.Deg(120), 1, 0.9)),
-                (new GraphicsPoint(650, 50) + new Vector(30, Angle.Deg(180)), Color.FromHsv(Angle.Deg(180), 0.75, 0.75)),
-                (new GraphicsPoint(650, 50) + new Vector(30, Angle.Deg(240)), Color.FromHsv(Angle.Deg(240), 1, 0.9)),
-                (new GraphicsPoint(650, 50) + new Vector(30, Angle.Deg(300)), Color.FromHsv(Angle.Deg(300), 0.75, 0.75)),
-                (new GraphicsPoint(650, 50) + new Vector(30, Angle.Deg(0)), Color.FromHsv(Angle.Deg(0), 1, 1)),
-                });
 
+                Draw.Primitive(PrimitiveType.Triangles, new GraphicsVertex[]
+                {
+                    new GraphicsVertex(new Point(650, 60) - new Vector(35, Angle.Deg(90)), Color.FromRgb(255, 0, 0)),
+                    new GraphicsVertex(new Point(650, 60) - new Vector(35, Angle.Deg(210)), Color.FromRgb(0, 255, 0)),
+                    new GraphicsVertex(new Point(650, 60) - new Vector(35, Angle.Deg(330)), Color.FromRgb(0, 0, 255)),
+                });
+                
+                Draw.Primitive(PrimitiveType.TriangleFan, new GraphicsVertex[] {
+                    new GraphicsVertex(new Point(750, 50), Colors.Gray),
+                    new GraphicsVertex(new Point(750, 50) + new Vector(30, Angle.Deg(0)), Color.FromHsv(Angle.Deg(0), 1, 0.9)),
+                    new GraphicsVertex(new Point(750, 50) + new Vector(30, Angle.Deg(60)), Color.FromHsv(Angle.Deg(60), 0.75, 0.75)),
+                    new GraphicsVertex(new Point(750, 50) + new Vector(30, Angle.Deg(120)), Color.FromHsv(Angle.Deg(120), 1, 0.9)),
+                    new GraphicsVertex(new Point(750, 50) + new Vector(30, Angle.Deg(180)), Color.FromHsv(Angle.Deg(180), 0.75, 0.75)),
+                    new GraphicsVertex(new Point(750, 50) + new Vector(30, Angle.Deg(240)), Color.FromHsv(Angle.Deg(240), 1, 0.9)),
+                    new GraphicsVertex(new Point(750, 50) + new Vector(30, Angle.Deg(300)), Color.FromHsv(Angle.Deg(300), 0.75, 0.75)),
+                    new GraphicsVertex(new Point(750, 50) + new Vector(30, Angle.Deg(0)), Color.FromHsv(Angle.Deg(0), 1, 1)),
+                });
 
                 Draw.Triangle((40, 125), (80, 180), (10, 185), Colors.ForestGreen);
                 Draw.Triangle(new Triangle((140, 125), (110, 185), (180, 180)), Colors.ForestGreen);

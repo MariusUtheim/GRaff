@@ -1,20 +1,17 @@
 ﻿using System;
-using System.Linq;
 using GRaff.Synchronization;
 using GRaff.Graphics.Shaders;
 using OpenTK.Graphics.OpenGL4;
 using GLPrimitiveType = OpenTK.Graphics.OpenGL4.PrimitiveType;
 
-
 namespace GRaff.Graphics
 {
     public class InterleavedRenderSystem : IDisposable
     {
+
         private readonly int _array;
         private readonly int _arrayBuffer;
         private int _vertexCount;
-
-        private static int _vertexSize = GraphicsPoint.Size + 4;
 
         public InterleavedRenderSystem()
         {
@@ -25,21 +22,20 @@ namespace GRaff.Graphics
             GL.BindBuffer(BufferTarget.ArrayBuffer, _arrayBuffer);
 
             GL.EnableVertexAttribArray(0);
-            GL.VertexAttribPointer(0, 2, GraphicsPoint.PointerType, false, _vertexSize, 0);
+            GL.VertexAttribPointer(0, 2, GraphicsPoint.PointerType, false, GraphicsVertex.Size, 0);
 
             GL.EnableVertexAttribArray(1);
-            GL.VertexAttribPointer(1, 4, VertexAttribPointerType.UnsignedByte, true, _vertexSize, GraphicsPoint.Size);
+            GL.VertexAttribPointer(1, 4, VertexAttribPointerType.UnsignedByte, true, GraphicsVertex.Size, GraphicsPoint.Size);
 
 		}
 
-
-        public void SetPrimitive(params (GraphicsPoint vertex, Color color)[] primitive)
+        public void SetPrimitive(params GraphicsVertex[] primitive)
         {
             Contract.Requires<ObjectDisposedException>(!IsDisposed);
             Contract.Requires<ArgumentNullException>(primitive != null);
-
+            
             GL.BindBuffer(BufferTarget.ArrayBuffer, _arrayBuffer);
-            GL.BufferData(BufferTarget.ArrayBuffer, new IntPtr(_vertexSize * primitive.Length), primitive, BufferUsageHint.StreamDraw);
+            GL.BufferData(BufferTarget.ArrayBuffer, new IntPtr(GraphicsVertex.Size * primitive.Length), primitive, BufferUsageHint.StreamDraw);
             _vertexCount = primitive.Length;
         }
 

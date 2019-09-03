@@ -48,7 +48,7 @@ namespace GRaff.Graphics
             _renderSystem.Render(type);
         }
 
-        public void Draw(PrimitiveType type, (GraphicsPoint vertex, Color color)[] primitive)
+        public void Draw(PrimitiveType type, GraphicsVertex[] primitive)
         {
             _interleaved.SetPrimitive(primitive);
             _interleaved.Render(type);

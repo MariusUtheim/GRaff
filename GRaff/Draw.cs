@@ -69,15 +69,10 @@ namespace GRaff
             Primitive(primitiveType, vertices.Select(v => (GraphicsPoint)v).ToArray(), color);
         }
 
-        public static void Primitive(PrimitiveType primitiveType, (GraphicsPoint vertex, Color color)[] primitive)
+        public static void Primitive(PrimitiveType primitiveType, GraphicsVertex[] primitive)
         {
             Contract.Requires<ArgumentNullException>(primitive != null);
             Device.Draw(primitiveType, primitive);
-        }
-        public static void Primitive(PrimitiveType primitiveType, (Point vertex, Color color)[] primitive)
-        {
-            Contract.Requires<ArgumentNullException>(primitive != null);
-            Device.Draw(primitiveType, primitive.Select(p => ((GraphicsPoint)p.vertex, p.color)).ToArray());
         }
 
         public static void Primitive(PrimitiveType primitiveType, Texture buffer, (Point vertex, Point texCoord)[] vertices, Color color)
@@ -217,19 +212,19 @@ namespace GRaff
             => Primitive(PrimitiveType.Points, points.Select(p => (GraphicsPoint)p).ToArray(), color);
 
         public static void Points(IEnumerable<(Point point, Color color)> primitives)
-            => Primitive(PrimitiveType.Points, primitives.Select(p => ((GraphicsPoint)p.point, p.color)).ToArray());
+            => Primitive(PrimitiveType.Points, primitives.Select(p => new GraphicsVertex(p.point, p.color)).ToArray());
 
         public static void Lines(IEnumerable<Line> lines, Color color)
             => Primitive(PrimitiveType.Lines, lines.SelectMany(l => ((GraphicsPoint)l.Origin, (GraphicsPoint)l.Destination)).ToArray(), color);
         
         public static void Lines(IEnumerable<(Line line, Color color)> primitives)
-            => Primitive(PrimitiveType.Lines, primitives.SelectMany(p => (((GraphicsPoint)p.line.Origin, p.color), ((GraphicsPoint)p.line.Destination, p.color))).ToArray());
+            => Primitive(PrimitiveType.Lines, primitives.SelectMany(p => (new GraphicsVertex(p.line.Origin, p.color), new GraphicsVertex(p.line.Destination, p.color))).ToArray());
 
         public static void Triangles(IEnumerable<Triangle> triangles, Color color)
             => Primitive(PrimitiveType.Triangles, triangles.SelectMany(t => ((GraphicsPoint)t.V1, (GraphicsPoint)t.V2, (GraphicsPoint)t.V3)).ToArray(), color);
 
         public static void Triangles(IEnumerable<(Triangle triangle, Color color)> primitives)
-            => Primitive(PrimitiveType.Triangles, primitives.SelectMany(p => (((GraphicsPoint)p.triangle.V1, p.color), ((GraphicsPoint)p.triangle.V2, p.color), ((GraphicsPoint)p.triangle.V3, p.color))).ToArray());
+            => Primitive(PrimitiveType.Triangles, primitives.SelectMany(p => (new GraphicsVertex(p.triangle.V1, p.color), new GraphicsVertex(p.triangle.V2, p.color), new GraphicsVertex(p.triangle.V3, p.color))).ToArray());
 
         #endregion
 

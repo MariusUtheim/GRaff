@@ -14,7 +14,7 @@ namespace GRaff.Graphics
 
         void Draw(PrimitiveType type, GraphicsPoint[] vertices, Color color);
 
-        void Draw(PrimitiveType type, (GraphicsPoint vertex, Color color)[] primitive);
+        void Draw(PrimitiveType type, GraphicsVertex[] primitive);
 
         void FillEllipse(Color color, GraphicsPoint center, double hRadius, double vRadius);
 
