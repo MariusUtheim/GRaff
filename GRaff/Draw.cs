@@ -8,7 +8,7 @@ using GRaff.Graphics.Shaders;
 
 namespace GRaff
 {
-	public static partial class Draw
+	public static class Draw
 	{
 
         public static IRenderDevice Device { get; set; }
