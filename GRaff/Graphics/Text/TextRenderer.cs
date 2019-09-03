@@ -118,8 +118,17 @@ namespace GRaff.Graphics.Text
         {
             if (text == null || text == "")
                 return "";
-            else
-                return LineSplit(text).Reduce((formatText, nextLine) => formatText + Environment.NewLine + nextLine);
+
+            var lines = LineSplit(text);
+            var str = new StringBuilder();
+            str.Append(lines.First());
+            foreach (var line in lines.Skip(1))
+            {
+                str.Append(Environment.NewLine);
+                str.Append(line);
+            }
+
+            return str.ToString();
         }
 
         /// <summary>

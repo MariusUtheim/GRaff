@@ -11,6 +11,27 @@ namespace GRaff
 	public static class Draw
 	{
 
+        internal static IEnumerable<TOut> SelectMany<TIn, TOut>(this IEnumerable<TIn> enumerable, Func<TIn, ValueTuple<TOut, TOut>> map)
+        {
+            foreach (var v in enumerable)
+            {
+                var w = map(v);
+                yield return w.Item1;
+                yield return w.Item2;
+            }
+        }
+
+        internal static IEnumerable<TOut> SelectMany<TIn, TOut>(this IEnumerable<TIn> enumerable, Func<TIn, ValueTuple<TOut, TOut, TOut>> map)
+        {
+            foreach (var v in enumerable)
+            {
+                var w = map(v);
+                yield return w.Item1;
+                yield return w.Item2;
+                yield return w.Item3;
+            }
+        }
+
         public static IRenderDevice Device { get; set; }
 
 		public static void Clear(Color color) => Device.Clear(color);
