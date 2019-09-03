@@ -14,17 +14,35 @@ namespace GRaff
 	/// </summary>
 	public sealed class Background : GameElement
 	{
-		//private readonly RenderSystem _renderSystem;
 
-		/// <summary>
-		/// Creates a new instance of the GRaff.Background class with no sprite or color.
-		/// </summary>
-		public Background()
+        /// <summary>
+        /// Creates a new instance of the GRaff.Background class with no sprite or color.
+        /// </summary>
+        public Background()
 		{
 			Depth = Int32.MaxValue;
-		//	_renderSystem = new RenderSystem();
-		//	_renderSystem.SetColor(UsageHint.StaticDraw, Colors.White);
 		}
+
+        /// <summary>
+        /// Creates a new instance of the GRaff.Background class with the specified color.
+        /// </summary>
+        /// <param name="color">The color of the background.</param>
+        public Background(Color color)
+            : this()
+        {
+            this.Color = color;
+        }
+
+        /// <summary>
+        /// Creates a new instance of the GRaff.Background class with the specified texture.
+        /// </summary>
+        /// <param name="texture">The texture of the background.</param>
+        /// <param name="isRepeated">Whether the background should draw the texture repeated.</param>
+        public Background(Texture texture, bool isRepeated = true)
+        {
+            this.Texture = texture;
+            this.IsRepeated = isRepeated;
+        }
 
 		/// <summary>
 		/// Gets or sets the background clear color. If set to null, the background won't draw a color.
@@ -37,9 +55,9 @@ namespace GRaff
 		public Texture Texture { get; set; }
 
 		/// <summary>
-		/// Gets or sets whether this GRaff.Background should draw its sprite tiled.
+		/// Gets or sets whether this GRaff.Background should draw its sprite repeated.
 		/// </summary>
-		public bool IsTiled { get; set; }
+		public bool IsRepeated { get; set; }
 
 		/// <summary>
 		/// Gets or sets the horizontal offset of the sprite drawn by this GRaff.Background.
@@ -98,7 +116,7 @@ namespace GRaff
 
 			if (Texture != null)
 			{
-				if (IsTiled)
+				if (IsRepeated)
 				{
 					var viewBox = View.Current.BoundingBox;
 					coords u0 = -(coords)(XOffset + viewBox.Left) / Texture.Width, v0 = -(coords)((YOffset + viewBox.Top) / Texture.Height);

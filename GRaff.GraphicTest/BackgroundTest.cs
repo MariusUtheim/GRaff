@@ -17,7 +17,7 @@ namespace GRaff.GraphicTest
 			{
 				Color = Colors.Bisque,
 				Texture = Textures.Giraffe,
-				IsTiled = true
+				IsRepeated = true
 			});
             Window.Title = "BackgroundTest - Tiled background";
         }
@@ -34,7 +34,7 @@ namespace GRaff.GraphicTest
                 case Key.Number1:
 					background.Velocity = Vector.Zero;
 					background.Offset = Vector.Zero;
-					background.IsTiled = true;
+					background.IsRepeated = true;
                     background.Texture = Textures.Giraffe;
                     Window.Title = "BackgroundTest - Tiled background";
 					break;
@@ -42,7 +42,7 @@ namespace GRaff.GraphicTest
                 case Key.Number2:
                     background.Velocity = Vector.Zero;
                     background.Offset = Vector.Zero;
-                    background.IsTiled = false;
+                    background.IsRepeated = false;
                     background.Texture = Textures.Giraffe;
                     Window.Title = "BackgroundTest - Static background";
                     break;
@@ -50,7 +50,7 @@ namespace GRaff.GraphicTest
                 case Key.Number3:
 					background.HSpeed = -1;
 					background.VSpeed = -1.1;
-					background.IsTiled = true;
+					background.IsRepeated = true;
                     background.Texture = Textures.Giraffe;
                     Window.Title = "BackgroundTest - Moving background";
 					break;
