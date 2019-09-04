@@ -5,9 +5,18 @@ namespace GRaff.Showcase
 {
     class MainClass
     {
-        public static void Main(string[] args)
+        static void Main(string[] args)
         {
-            Game.Run();
+            Game.Run(1024, 768, gameStart);
         }
+
+        static void gameStart()
+        {
+            GlobalEvent.ExitOnEscape = true;
+            Textures.LoadAll();
+
+            Instance.Create(new TestController());
+        }
+
     }
 }
