@@ -15,6 +15,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GRaff.ProjectTemplate", "GR
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GRaff.Extensions", "GRaff.Extensions\GRaff.Extensions.csproj", "{9FB060E1-9B82-4361-9590-06023AB42A91}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GRaff.Showcase", "GRaff.Showcase\GRaff.Showcase.csproj", "{B2CE6824-195B-453C-9FC5-795D78752569}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{9FB060E1-9B82-4361-9590-06023AB42A91}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9FB060E1-9B82-4361-9590-06023AB42A91}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9FB060E1-9B82-4361-9590-06023AB42A91}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B2CE6824-195B-453C-9FC5-795D78752569}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B2CE6824-195B-453C-9FC5-795D78752569}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B2CE6824-195B-453C-9FC5-795D78752569}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B2CE6824-195B-453C-9FC5-795D78752569}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -301,8 +301,8 @@
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
-    <None Include="OpenTK.dll.config" />
     <None Include="Long-term backlog.txt" />
+    <None Include="OpenTK.dll.config" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="External\" />
