@@ -12,7 +12,7 @@ namespace GRaff.Graphics.Shaders
             Location = GL.GetUniformLocation(program.Id, name);
             _Graphics.ErrorCheck();
             if (Location < 0)
-                throw new ArgumentException($"The uniform variable '{Name}' does not exist.");
+                throw new ShaderException($"The uniform variable '{Name}' does not exist.");
         }
 
         public ShaderProgram Program { get; }
