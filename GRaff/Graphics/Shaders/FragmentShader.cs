@@ -11,8 +11,6 @@ namespace GRaff.Graphics.Shaders
     {
         public FragmentShader(params string[] source)
             : base(ShaderType.FragmentShader, source) { }
-
-
         
         public static FragmentShader Default { get; }
             = new FragmentShader(

@@ -3,7 +3,7 @@ using OpenTK.Graphics.OpenGL4;
 
 namespace GRaff.Graphics.Shaders
 {
-    public class ShaderHints
+    public static class ShaderHints
     {
         public static string Version { get; } = $"{GL.GetInteger(GetPName.MajorVersion)}{GL.GetInteger(GetPName.MinorVersion)}0";
 
