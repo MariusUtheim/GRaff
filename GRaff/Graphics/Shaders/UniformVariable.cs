@@ -5,15 +5,14 @@ namespace GRaff.Graphics.Shaders
 {
     public class UniformVariable
     {
-        private bool _isVerified = false;
-
         internal UniformVariable(ShaderProgram program, string name)
         {
             Name = name;
 			Program = program;
             Location = GL.GetUniformLocation(program.Id, name);
+            _Graphics.ErrorCheck();
             if (Location < 0)
-                _Graphics.ErrorCheck();
+                throw new ArgumentException($"The uniform variable '{Name}' does not exist.");
         }
 
         public ShaderProgram Program { get; }
@@ -22,13 +21,5 @@ namespace GRaff.Graphics.Shaders
 
         public int Location { get; }
 
-        public void Verify()
-        {
-            if (!_isVerified && Location < 0)
-            {
-                _Graphics.ErrorCheck();
-                throw new ArgumentException($"The uniform variable '{Name}' does not exist.");
-            }
-        }
     }
 }

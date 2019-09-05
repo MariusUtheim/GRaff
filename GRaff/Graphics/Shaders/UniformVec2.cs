@@ -27,15 +27,13 @@ namespace GRaff.Graphics.Shaders
         {
             get
             {
-                Verify();
                 var value = new float[2];
                 GL.GetUniform(Program.Id, Location, value);
-                return (value[1], value[2]);
+                return (value[0], value[1]);
             }
 
             set
             {
-                Verify();
                 GL.ProgramUniform2(Program.Id, Location, (float)value.v1, (float)value.v2);
             }
         }

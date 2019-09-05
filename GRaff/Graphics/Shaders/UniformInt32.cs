@@ -27,14 +27,12 @@ namespace GRaff.Graphics.Shaders
         {
             get
             {
-                Verify();
                 GL.GetUniform(Program.Id, Location, out int value);
                 return value;
             }
 
             set
             {
-                Verify();
                 GL.ProgramUniform1(Program.Id, Location, value);
             }
         }

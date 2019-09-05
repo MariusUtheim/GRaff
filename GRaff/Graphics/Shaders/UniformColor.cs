@@ -26,7 +26,6 @@ namespace GRaff.Graphics.Shaders
         {
             get
             {
-                Verify();
                 var values = new int[4];
                 GL.GetUniform(Program.Id, Location, values);
                 return Color.FromRgba(values[0], values[1], values[2], values[3]);
@@ -34,7 +33,6 @@ namespace GRaff.Graphics.Shaders
 
             set
             {
-                Verify();
                 GL.ProgramUniform4(Program.Id, Location, value.R / 255.0f, value.G / 255.0f, value.B / 255.0f, value.A / 255.0f);
             }
         }
