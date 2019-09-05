@@ -73,8 +73,6 @@ void main(void) {
 
             _dataBuffer = new SamplerBuffer(data);
             _dataBuffer.BindToLocation(1);
-
-			_Graphics.ErrorCheck();
 		}
 
 

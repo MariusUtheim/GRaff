@@ -67,8 +67,6 @@ void main() {
             _intensity = new UniformFloat(this, "intensity", intensity);
             _offset = new UniformVec2(this, "offset", region.TopLeft);
             _scale = new UniformVec2(this, "scale", region.Size);
-
-            _Graphics.ErrorCheck();
 		}
 
         public double Phase

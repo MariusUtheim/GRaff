@@ -48,7 +48,6 @@
     <Compile Include="PlingEffect.cs" />
     <Compile Include="ScissorTest.cs" />
     <Compile Include="SoundTest.cs" />
-    <Compile Include="ShadersTest.cs" />
     <Compile Include="TrueTypeTest.cs" />
     <Compile Include="VectorGraphicsTest.cs" />
     <Compile Include="Marker.cs" />
@@ -62,7 +61,6 @@
     <Compile Include="TweenTest.cs" />
     <Compile Include="ViewTest.cs" />
     <Compile Include="Assets\Textures.cs" />
-    <Compile Include="SoundShaderTest.cs" />
     <Compile Include="PanelsTest.cs" />
   </ItemGroup>
   <ItemGroup>

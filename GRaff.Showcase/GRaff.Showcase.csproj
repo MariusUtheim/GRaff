@@ -31,6 +31,10 @@
     <Reference Include="OpenTK">
       <HintPath>..\packages\OpenTK.3.1.0\lib\net20\OpenTK.dll</HintPath>
     </Reference>
+    <Reference Include="System.ValueTuple">
+      <HintPath>..\packages\System.ValueTuple.4.5.0\lib\net47\System.ValueTuple.dll</HintPath>
+    </Reference>
+    <Reference Include="mscorlib" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Program.cs" />
@@ -39,6 +43,15 @@
     <Compile Include="Assets\Textures.cs" />
     <Compile Include="TestAttribute.cs" />
     <Compile Include="TestController.cs" />
+    <Compile Include="Graphics.Shaders\CausticShaderProgram.cs" />
+    <Compile Include="Graphics.Shaders\ColorMatrix.cs" />
+    <Compile Include="Graphics.Shaders\ColorMatrixShaderProgram.cs" />
+    <Compile Include="Graphics.Shaders\ShockwaveShaderProgram.cs" />
+    <Compile Include="Graphics.Shaders\SoundVisualizerShaderProgram.cs" />
+    <Compile Include="Graphics.Shaders\SpotlightShaderProgram.cs" />
+    <Compile Include="Graphics.Shaders\WaveShiftShaderProgram.cs" />
+    <Compile Include="ShadersTest.cs" />
+    <Compile Include="SoundShaderTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\GRaff\GRaff.csproj">
@@ -80,6 +93,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Assets\" />
+    <Folder Include="Graphics.Shaders\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

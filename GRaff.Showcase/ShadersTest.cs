@@ -2,7 +2,7 @@ using GRaff.Graphics.Shaders;
 
 
 
-namespace GRaff.GraphicTest
+namespace GRaff.Showcase
 {
     [Test]
     class ShadersTest : GameElement, IKeyPressListener, IGlobalMousePressListener

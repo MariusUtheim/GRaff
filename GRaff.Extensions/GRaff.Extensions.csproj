@@ -46,7 +46,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Graphics.Shaders\ColorMatrix.cs" />
     <Compile Include="Pathfinding\DiagonalGrid.cs" />
     <Compile Include="Pathfinding\DiagonalGridEdge.cs" />
     <Compile Include="Pathfinding\DiagonalGridVertex.cs" />
@@ -68,20 +67,14 @@
     <Compile Include="Pathfinding\SpatialVertex.cs" />
     <Compile Include="Pathfinding\Vertex.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Graphics.Shaders\CausticShaderProgram.cs" />
-    <Compile Include="Graphics.Shaders\ColorMatrixShaderProgram.cs" />
-    <Compile Include="Graphics.Shaders\SpotlightShaderProgram.cs" />
-    <Compile Include="Graphics.Shaders\SoundVisualizerShaderProgram.cs" />
     <Compile Include="Effects\WaveGenerator.cs" />
     <Compile Include="Effects\AudioFilter.cs" />
-    <Compile Include="Graphics.Shaders\WaveShiftShaderProgram.cs" />
     <Compile Include="Effects\TextureGenerator.cs" />
     <Compile Include="Panels\Node.cs" />
     <Compile Include="Panels\PanelElement.cs" />
     <Compile Include="Panels\MouseEventArgs.cs" />
     <Compile Include="Panels\IPanelMouseListener.cs" />
     <Compile Include="Panels\DraggableNode.cs" />
-    <Compile Include="Graphics.Shaders\ShockwaveShaderProgram.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\GRaff\GRaff.csproj">

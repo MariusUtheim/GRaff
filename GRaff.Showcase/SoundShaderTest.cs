@@ -3,7 +3,7 @@ using System.Linq;
 using GRaff.Audio;
 using GRaff.Graphics.Shaders;
 
-namespace GRaff.GraphicTest
+namespace GRaff.Showcase
 {
     [Test]
     public class SoundShaderTest : GameElement
