@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using OpenTK.Graphics;
 using GRaff.Graphics.Shaders;
+using OpenTK;
 #if OpenGL4
 using OpenTK.Graphics.OpenGL4;
 #else
@@ -43,7 +44,7 @@ namespace GRaff.Graphics
         {
             var err = GL.GetError();
             if (err != ErrorCode.NoError)
-               throw new Exception($"An OpenGL operation threw an exception with error code {Enum.GetName(typeof(ErrorCode), err)}");
+                throw new GraphicsException($"An OpenGL operation threw an exception with error code {Enum.GetName(typeof(ErrorCode), err)}");
         }
 
         public static bool ClearError()

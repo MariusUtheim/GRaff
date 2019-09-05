@@ -5,6 +5,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using GRaff.Synchronization;
+using OpenTK;
 using OpenTK.Graphics.OpenGL4;
 
 namespace GRaff.Graphics
@@ -25,7 +26,7 @@ namespace GRaff.Graphics
                 GL.FramebufferTexture(FramebufferTarget.Framebuffer, FramebufferAttachment.ColorAttachment0, Texture.Id, 0);
                 GL.DrawBuffer(DrawBufferMode.ColorAttachment0);
                 if (GL.CheckFramebufferStatus(FramebufferTarget.Framebuffer) != FramebufferErrorCode.FramebufferComplete)
-                    throw new InvalidOperationException("Unhandled exception in framebuffer");
+                    throw new GraphicsException("Unhandled exception in framebuffer");
             }
             finally
             {
