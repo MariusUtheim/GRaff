@@ -42,6 +42,7 @@ namespace GRaff
 
             Window.UpdateFrame += (sender, e) => Game.Loop();
             Window.Closing += (sender, e) => IsRunning = false;
+            Window.Closed += (sender, e) => Game.Window = null;
 
             Window.KeyDown += (sender, e) => { Keyboard.Press((Key)e.Key); };
             Window.KeyUp += (sender, e) => { Keyboard.Release((Key)e.Key); };
@@ -64,8 +65,6 @@ namespace GRaff
                 IsRunning = true;
 
                 /// ANY DEVELOPER LOGIC MAY COME AFTER THIS POINT
-                var initialRoom = new Room();
-                initialRoom._Enter();
 
                 gameStart?.Invoke();
             };
@@ -143,8 +142,6 @@ namespace GRaff
         {
             //TODO// The ToList is used becuase instances might get destroyed, and then it seems the order is messed up. Is it possible to avoid ToList, using only lazy evaluation?
             //TODO// Cancellation on input events
-            if (Room.Current is T)
-                action(Room.Current as T);
             foreach (var instance in Instance.Where(i => i is T).ToList())
                 if (instance.Exists)
                     action(instance as T);
@@ -230,12 +227,10 @@ namespace GRaff
             View.Validate();
 
             GlobalEvent.OnDrawBackground();
-            Room.Current.OnDrawBackground();
 
             foreach (var instance in Instance.All)
                 instance.OnDraw();
 
-            Room.Current.OnDrawForeground();
             GlobalEvent.OnDrawForeground();
             Time.UpdateFps();
         }
