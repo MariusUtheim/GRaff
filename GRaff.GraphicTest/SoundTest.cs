@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using GRaff.Synchronization;
 using GRaff.Audio;
 using System.Diagnostics;
-using GRaff.Effects;
+
 
 namespace GRaff.GraphicTest
 {

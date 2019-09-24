@@ -1,12 +1,6 @@
 ﻿using System;
 using GRaff.Synchronization;
-#if OpenGL4
 using OpenTK.Graphics.OpenGL4;
-using coords = System.Double;
-#else
-using OpenTK.Graphics.ES30;
-using coords = System.Single;
-#endif
 
 
 namespace GRaff.Graphics.Shaders

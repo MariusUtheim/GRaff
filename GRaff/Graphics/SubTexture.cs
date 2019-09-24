@@ -1,10 +1,6 @@
 ﻿using System.Diagnostics.Contracts;
 using System;
-#if OpenGL4
 using coord = System.Double;
-#else
-using coord = System.Single;
-#endif
 
 
 namespace GRaff.Graphics

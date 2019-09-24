@@ -1,99 +1,33 @@
-<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{B2CE6824-195B-453C-9FC5-795D78752569}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>GRaff.Showcase</RootNamespace>
-    <AssemblyName>GRaff.Showcase</AssemblyName>
-    <TargetFrameworkVersion>v4.7</TargetFrameworkVersion>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug</OutputPath>
-    <DefineConstants>DEBUG;</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <ExternalConsole>true</ExternalConsole>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release</OutputPath>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <ExternalConsole>true</ExternalConsole>
-  </PropertyGroup>
+
   <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="OpenTK">
-      <HintPath>..\packages\OpenTK.3.1.0\lib\net20\OpenTK.dll</HintPath>
-    </Reference>
-    <Reference Include="System.ValueTuple">
-      <HintPath>..\packages\System.ValueTuple.4.5.0\lib\net47\System.ValueTuple.dll</HintPath>
-    </Reference>
-    <Reference Include="mscorlib" />
+    <ProjectReference Include="..\GRaff\GRaff.csproj" />
   </ItemGroup>
+
   <ItemGroup>
-    <Compile Include="Program.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ParticleTest.cs" />
-    <Compile Include="Assets\Textures.cs" />
-    <Compile Include="TestAttribute.cs" />
-    <Compile Include="TestController.cs" />
-    <Compile Include="Graphics.Shaders\CausticShaderProgram.cs" />
-    <Compile Include="Graphics.Shaders\ColorMatrix.cs" />
-    <Compile Include="Graphics.Shaders\ColorMatrixShaderProgram.cs" />
-    <Compile Include="Graphics.Shaders\ShockwaveShaderProgram.cs" />
-    <Compile Include="Graphics.Shaders\SoundVisualizerShaderProgram.cs" />
-    <Compile Include="Graphics.Shaders\SpotlightShaderProgram.cs" />
-    <Compile Include="Graphics.Shaders\WaveShiftShaderProgram.cs" />
-    <Compile Include="ShadersTest.cs" />
-    <Compile Include="SoundShaderTest.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\GRaff\GRaff.csproj">
-      <Project>{64447CF0-9D21-4B49-B12B-7830BEE354C7}</Project>
-      <Name>GRaff</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="OpenTK.dll.config">
+    <None Update="Assets\Giraffe.jpg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="packages.config" />
-    <None Include="Assets\Panacea.ogg">
+    <None Update="Assets\Panacea.ogg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Assets\Panacea.wav">
+    <None Update="Assets\Particle.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Assets\PanaceaShort.wav">
+    <None Update="Assets\Times New Roman.fnt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Assets\Times New Roman.fnt">
+    <None Update="Assets\Times New Roman_0.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Assets\VectorGraphicsReference.png">
+    <None Update="Assets\VectorGraphicsReference.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
-  <ItemGroup>
-    <Content Include="Assets\GIraffe.jpg">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Assets\Particle.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Assets\Times New Roman_0.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Assets\" />
-    <Folder Include="Graphics.Shaders\" />
-  </ItemGroup>
-  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+
 </Project>

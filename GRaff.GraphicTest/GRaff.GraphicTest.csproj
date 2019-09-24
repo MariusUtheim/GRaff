@@ -1,119 +1,39 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{FD4FF50D-C554-4946-A639-AAC11BD5D2B1}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>GRaff.GraphicTest</RootNamespace>
-    <AssemblyName>GRaff.GraphicTest</AssemblyName>
-    <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
-    <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
+
   <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="mscorlib" />
-    <Reference Include="System.ValueTuple">
-      <HintPath>..\packages\System.ValueTuple.4.5.0\lib\net461\System.ValueTuple.dll</HintPath>
-    </Reference>
+    <ProjectReference Include="..\GRaff\GRaff.csproj" />
   </ItemGroup>
+
   <ItemGroup>
-    <Compile Include="AnimationTest.cs" />
-    <Compile Include="BackgroundTest.cs" />
-    <Compile Include="FramebufferTest.cs" />
-    <Compile Include="GraphTest.cs" />
-    <Compile Include="GridTest.cs" />
-    <Compile Include="PlingEffect.cs" />
-    <Compile Include="ScissorTest.cs" />
-    <Compile Include="SoundTest.cs" />
-    <Compile Include="TrueTypeTest.cs" />
-    <Compile Include="VectorGraphicsTest.cs" />
-    <Compile Include="Marker.cs" />
-    <Compile Include="Program.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TestAttribute.cs" />
-    <Compile Include="TestController.cs" />
-    <Compile Include="TextTest.cs" />
-    <Compile Include="TextureBufferTest.cs" />
-    <Compile Include="TransformTest.cs" />
-    <Compile Include="TweenTest.cs" />
-    <Compile Include="ViewTest.cs" />
-    <Compile Include="Assets\Textures.cs" />
-    <Compile Include="PanelsTest.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="App.config" />
-    <None Include="Assets\Panacea.ogg">
+    <None Update="Assets\Giraffe.jpg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Assets\Panacea.wav">
+    <None Update="Assets\Panacea.ogg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Assets\PanaceaShort.wav">
+    <None Update="Assets\Panacea.wav">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Assets\Times New Roman.fnt">
+    <None Update="Assets\PanaceaShort.wav">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Assets\VectorGraphicsReference.png">
+    <None Update="Assets\Particle.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="packages.config" />
-    <None Include="OpenTK.dll.config">
+    <None Update="Assets\Times New Roman.fnt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Assets\Times New Roman_0.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Assets\VectorGraphicsReference.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
-  <ItemGroup />
-  <ItemGroup />
-  <ItemGroup>
-    <Content Include="Assets\GIraffe.jpg">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Assets\Particle.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Assets\Times New Roman_0.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\GRaff\GRaff.csproj">
-      <Project>{64447CF0-9D21-4B49-B12B-7830BEE354C7}</Project>
-      <Name>GRaff</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\GRaff.Extensions\GRaff.Extensions.csproj">
-      <Project>{9FB060E1-9B82-4361-9590-06023AB42A91}</Project>
-      <Name>GRaff.Extensions</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
+
 </Project>

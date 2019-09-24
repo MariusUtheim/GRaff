@@ -1,9 +1,5 @@
 ﻿using System;
-#if OpenGL4
 using OpenTK.Graphics.OpenGL4;
-#else
-using OpenTK.Graphics.ES30;
-#endif
 using GLBlendingFactor = OpenTK.Graphics.OpenGL4.BlendingFactor;
 
 

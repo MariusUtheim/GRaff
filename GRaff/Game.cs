@@ -57,7 +57,6 @@ namespace GRaff
             };
 
             Window.Load += (sender, e) => {
-                Async.MainThreadDispatcher = System.Windows.Threading.Dispatcher.CurrentDispatcher;
 
                 Graphics._Graphics.Initialize();
                 Audio._Audio.Initialize();

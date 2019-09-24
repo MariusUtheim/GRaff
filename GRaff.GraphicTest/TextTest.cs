@@ -1,4 +1,5 @@
-﻿using System;
+﻿#if false
+using System;
 using GRaff.Graphics.Text;
 using GRaff.Graphics;
 
@@ -79,3 +80,4 @@ namespace GRaff.GraphicTest
         }
 	}
 }
+#endif

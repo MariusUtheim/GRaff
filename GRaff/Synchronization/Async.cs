@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using System.Windows.Threading;
 
 namespace GRaff.Synchronization
 {
@@ -11,11 +10,6 @@ namespace GRaff.Synchronization
 		private static List<AsyncEventArgs> _queuedEvents = new List<AsyncEventArgs>();
 		private static List<Exception> _exceptions = new List<Exception>();
 		private static CatchContext _catcher = new CatchContext();
-
-		public static Dispatcher MainThreadDispatcher
-		{
-			get; internal set;
-		}
 
 		public static void CatchException<TException>(Action<TException> exceptionHandler)
 			where TException : Exception

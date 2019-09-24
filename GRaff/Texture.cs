@@ -6,13 +6,8 @@ using System.IO;
 using System.Runtime.InteropServices;
 using GRaff.Graphics;
 using GRaff.Synchronization;
-#if OpenGL4
 using OpenTK.Graphics.OpenGL4;
 using GLPixelFormat = OpenTK.Graphics.OpenGL4.PixelFormat;
-#else
-using OpenTK.Graphics.ES30;
-using GLPixelFormat = OpenTK.Graphics.ES30.PixelFormat;
-#endif
 
 
 namespace GRaff

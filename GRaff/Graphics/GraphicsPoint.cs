@@ -1,11 +1,7 @@
 ﻿using System;
 using System.Diagnostics.Contracts;
 using System.Runtime.InteropServices;
-#if OpenGL4
 using coord = System.Double;
-#else
-using coord = System.Single;
-#endif
 
 namespace GRaff.Graphics
 {
@@ -17,11 +13,7 @@ namespace GRaff.Graphics
 	public struct GraphicsPoint
 	{
 		public static GraphicsPoint Zero { get; } = new GraphicsPoint();
-#if OpenGL4
 		internal static readonly OpenTK.Graphics.OpenGL4.VertexAttribPointerType PointerType = OpenTK.Graphics.OpenGL4.VertexAttribPointerType.Double;
-#else
-		internal static OpenTK.Graphics.ES30.VertexAttribPointerType PointerType = OpenTK.Graphics.ES30.VertexAttribPointerType.Float;
-#endif
 		internal static readonly int Size = Marshal.SizeOf<GraphicsPoint>();
 
         private readonly coord _x, _y;
