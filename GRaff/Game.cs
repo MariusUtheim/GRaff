@@ -63,6 +63,7 @@ namespace GRaff
                 Graphics._Graphics.Initialize();
                 Audio._Audio.Initialize();
                 Window.VSync = VSyncMode.On;
+                View.FullWindow().Bind();
                 IsRunning = true;
 
                 /// ANY DEVELOPER LOGIC MAY COME AFTER THIS POINT
