@@ -154,7 +154,7 @@ namespace GRaff
 		/// </summary>
 		/// <param name="line">The GRaff.Line to transform.</param>
 		/// <returns>The resulting GRaff.Line.</returns>
-		public Line Line(Line line) => new Line(this.Point(line.Origin), this.Vector(line.Direction));
+		public Line Line(Line line) => new Line(this.Point(line.Origin), this.Vector(line.Offset));
 
 		public Triangle Triangle(Triangle triangle)
 			=> this.Triangle(triangle.V1, triangle.V2, triangle.V3);
@@ -168,8 +168,6 @@ namespace GRaff
 		public Triangle Triangle(double x1, double y1, double x2, double y2, double x3, double y3)
 			=> this.Triangle(new Point(x1, y1), new Point(x2, y2), new Point(x3, y3));
 	
-
-
 		/// <summary>
 		/// Transforms the specified GRaff.Rectangle. This is equivalent to transforming its vertices.
 		/// </summary>
@@ -193,8 +191,6 @@ namespace GRaff
 		/// <returns>The resulting GRaff.Polygon.</returns>
 		public Polygon Polygon(Polygon polygon)
 		{
-			if (polygon == null)
-				return null;
 			Matrix T = GetMatrix();
 			return new GRaff.Polygon(polygon.Vertices.Select(v => T * v).ToArray());
 		}

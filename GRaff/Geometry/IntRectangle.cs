@@ -159,14 +159,14 @@ namespace GRaff
 		/// </summary>
 		/// <param name="obj">The System.Object to compare to.</param>
 		/// <returns>true if obj is a GRaff.IntRectangle and has the same location and size as this GRaff.IntRectangle.</returns>
-		public override bool Equals(object obj)
+		public override bool Equals(object? obj)
 		{
-			if (obj is IntRectangle)
-				return Equals((IntRectangle)obj);
-			else if (obj is Rectangle)
-				return obj.Equals(this);
-			else
-				return base.Equals(obj);
+            if (obj is IntRectangle intRect)
+                return Equals(intRect);
+            else if (obj is Rectangle rect)
+                return Equals(rect);
+            else
+                return false;
 		}
 
 		/// <summary>

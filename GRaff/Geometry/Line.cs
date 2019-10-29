@@ -21,7 +21,7 @@ namespace GRaff
 			: this()
 		{
 			this.Origin = origin;
-			this.Direction = direction;
+			this.Offset = direction;
 		}
 
 		/// <summary>
@@ -44,42 +44,45 @@ namespace GRaff
 		/// <summary>
 		/// Gets the GRaff.Vector specifying the direction and length of this GRaff.Line.
 		/// </summary>
-		public Vector Direction { get; private set; }
+		public Vector Offset { get; private set; }
 
 		/// <summary>
 		/// Gets the destination endpoint of this GRaff.Line.
 		/// </summary>
 		public Point Destination
 		{
-			get { return Origin + Direction; }
-			private set { Direction = value - Origin; }
+			get { return Origin + Offset; }
+			private set { Offset = value - Origin; }
 		}
 
-        public bool IsDegenerate => Direction == Vector.Zero;
+        public bool IsDegenerate => Offset == Vector.Zero;
 
 		/// <summary>
 		/// Gets the left normal vector of this GRaff.Line.
 		/// </summary>
-		public Vector LeftNormal => new Vector(1, Direction.Direction - Angle.Deg(90));
+		public Vector LeftNormal => new Vector(1, Offset.Direction - Angle.Deg(90));
 
 		/// <summary>
 		/// Gets the right normal vector of this GRaff.Line. 
 		/// </summary>
-		public Vector RightNormal => new Vector(1, Direction.Direction + Angle.Deg(90));
+		public Vector RightNormal => new Vector(1, Offset.Direction + Angle.Deg(90));
+
+        public bool ContainsPoint(Point p)
+            => (p - Origin).Direction == Offset.Direction && (p - Origin).Magnitude <= Offset.Magnitude;
 
         public Vector Project(Vector v) =>
-                        (v.Magnitude == 0 || Direction.Magnitude == 0)
+                        (v.Magnitude == 0 || Offset.Magnitude == 0)
                         ? Vector.Zero
-                        : new Vector(v.Dot(Direction) / Direction.Magnitude, Direction.Direction);
+                        : new Vector(v.Dot(Offset) / Offset.Magnitude, Offset.Direction);
 
         public Point Project(Point p) => Origin + Project(p - Origin);
 
-        public Line Project(Line l) => new Line(Project(l.Origin), Project(l.Direction));
+        public Line Project(Line l) => new Line(Project(l.Origin), Project(l.Offset));
 
         private bool _isPointAdjacent(Point p)
         {
-            var d = Direction.UnitVector.Dot(p - Origin);
-            return d >= 0 && d <= Direction.Magnitude;
+            var d = Offset.UnitVector.Dot(p - Origin);
+            return d >= 0 && d <= Offset.Magnitude;
         }
 
         /// <summary>
@@ -96,14 +99,14 @@ namespace GRaff
                 return false;
             else if (h * n.Dot(other.Destination - Origin) == 0)
             {
-                if ((Direction.Dot(other.Origin - Origin) < 0 && Direction.Dot(other.Destination - Origin) < 0)
-                 || (Direction.Dot(other.Origin - Destination) > 0 && Direction.Dot(other.Destination - Destination) > 0))
+                if ((Offset.Dot(other.Origin - Origin) < 0 && Offset.Dot(other.Destination - Origin) < 0)
+                 || (Offset.Dot(other.Origin - Destination) > 0 && Offset.Dot(other.Destination - Destination) > 0))
                     return false;
                 else
                     return true;
             }
 
-            var angle = other.Direction.Angle(this.Direction);
+            var angle = other.Offset.Angle(this.Offset);
         
             if (angle.Degrees == 0 || angle.Degrees == 180)
             {
@@ -112,7 +115,7 @@ namespace GRaff
                 return _isPointAdjacent(other.Origin) || _isPointAdjacent(other.Destination);
             }
 
-            var sign = n.Dot(other.Direction) > 0 ? 1 : -1;
+            var sign = n.Dot(other.Offset) > 0 ? 1 : -1;
             var p = other.Origin - sign * new Vector(h / GMath.Sin(angle), angle);
             return _isPointAdjacent(p);
         }
@@ -124,7 +127,7 @@ namespace GRaff
 		public override string ToString() => $"{Origin} -> {Destination}";
 
 		public bool Equals(Line other)
-			=> Origin == other.Origin && Direction == other.Direction;
+			=> Origin == other.Origin && Offset == other.Offset;
 
 		/// <summary>
 		/// Specifies whether this GRaff.Line contains the same origin and destination endpoints as the specified System.Object.
@@ -132,15 +135,15 @@ namespace GRaff
 		/// <param name="obj">The System.Object to compare to.</param>
 		/// <returns>true if obj is a GRaff.Line and has the same origin and destination endpoints as this GRaff.Line.</returns>
 		/// <remarks>Since lines are directed and there is a distinction between the left and right normals, the line from point a to b is not equal to the line from point b to a.</remarks>
-		public override bool Equals(object obj)
-			=> (obj is Line) ? Equals((Line)obj) : base.Equals(obj);
+		public override bool Equals(object? obj)
+			=> (obj is Line l) ? Equals(l) : false;
 
 		/// <summary>
 		/// Returns a hash code for this GRaff.Line.
 		/// </summary>
 		/// <returns>An integer value that specifies a hash value for this GRaff.Line.</returns>
 		public override int GetHashCode()
-			=> GMath.HashCombine(Origin.GetHashCode(), Direction.GetHashCode());
+			=> GMath.HashCombine(Origin.GetHashCode(), Offset.GetHashCode());
 
 		/// <summary>
 		/// Compares two GRaff.Line structures. The result specifies whether they are equal.
@@ -165,7 +168,7 @@ namespace GRaff
 		/// <param name="v">The GRaff.Vector to translate by.</param>
 		/// <returns>The translated GRaff.Line.</returns>
 		public static Line operator +(Line l, Vector v) 
-			=> new Line(l.Origin + v, l.Direction);
+			=> new Line(l.Origin + v, l.Offset);
 
 		/// <summary>
 		/// Translates the GRaff.Line by a specified GRaff.Vector.
@@ -174,7 +177,7 @@ namespace GRaff
 		/// <param name="v">The negative GRaff.Vector to translate by.</param>
 		/// <returns>The translated GRaff.Line.</returns>
 		public static Line operator -(Line l, Vector v) 
-			=> new Line(l.Origin - v, l.Direction);
+			=> new Line(l.Origin - v, l.Offset);
 
 
 	}

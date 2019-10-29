@@ -94,8 +94,8 @@ namespace GRaff
 		/// </summary>
 		/// <param name="obj">The System.Object to compare to.</param>
 		/// <returns>true if obj is a GRaff.Vector and has the same coordinates as this GRaff.Vector.</returns>
-		public override bool Equals(object obj)
-			=> (obj is Vector) ? Equals((Vector)obj) : base.Equals(obj);
+		public override bool Equals(object? obj)
+			=> (obj is Vector v) ? Equals(v) : false;
 
 		/// <summary>
 		/// Returns a hash code for this GRaff.Vector.

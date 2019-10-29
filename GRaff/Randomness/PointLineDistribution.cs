@@ -16,13 +16,12 @@ namespace GRaff.Randomness
 
 		public PointLineDistribution(Random rnd, Line line)
 		{
-			Contract.Requires<ArgumentNullException>(rnd != null);
-            this._rnd = rnd;
+			this._rnd = rnd;
             this.Line = line;
 		}
 
         public Line Line { get; set; }
 
-        public Point Generate() => Line.Destination + _rnd.Double() * Line.Direction;
+        public Point Generate() => Line.Destination + _rnd.Double() * Line.Offset;
 	}
 }

@@ -26,7 +26,6 @@ namespace GRaff
 
 		public Polygon(IEnumerable<Point> pts)
 		{
-			Contract.Requires<ArgumentNullException>(pts != null);
 			_pts = pts.ToArray();
 
 			if (_pts.Length <= 2)
@@ -35,15 +34,15 @@ namespace GRaff
 			double sum = 0;
 			Angle a;
 			Vector previous, next;
-			previous = Edge(-1).Direction;
-			next = Edge(0).Direction;
+			previous = Edge(-1).Offset;
+			next = Edge(0).Offset;
 
 			a = next.Direction - previous.Direction;
 			if (a.Degrees > 180)
 			{
 				Array.Reverse(_pts);
-				previous = Edge(-1).Direction;
-				next = Edge(0).Direction;
+				previous = Edge(-1).Offset;
+				next = Edge(0).Offset;
 				a = next.Direction - previous.Direction;
 			}
 			sum += a.Degrees;
@@ -51,7 +50,7 @@ namespace GRaff
 			for (int i = 1; i < _pts.Length; i++)
 			{
 				previous = next;
-				next = Edge(i).Direction;
+				next = Edge(i).Offset;
 				a = next.Direction - previous.Direction;
 				if (a.Degrees > 180)
 					throw new ArgumentException("The points must specify a convex polygon.");
@@ -62,13 +61,9 @@ namespace GRaff
 				throw new ArgumentException($"The points must specify a convex polygon with winding number equal to 1. (Winding is {sum} degrees)");
 		}
 
-		[ContractInvariantMethod]
-		private void invariants()
-		{
-			Contract.Invariant(_pts == null || _pts.Length > 0);
-		}
-
-		#region Static constructors
+        #region Static constructors
+#warning Test that Polygons with 0, 1 or 2 vertices work correctly
+        public static Polygon Empty { get; } = new Polygon(new Point[0]);
 
 		public static Polygon Regular(int degree, double radius)
 		{
@@ -162,12 +157,19 @@ namespace GRaff
 
 		public Point Center => _pts.Aggregate((p, q) => p + q) / _pts.Length;
 
-		public Point Vertex(int index)
-			=> _pts[(index % _pts.Length + _pts.Length) % _pts.Length];
+        /// <summary>
+        /// Gets whether this polygon is degenerate, i.e. if it has no vertices, it is a single point, or it is a single line.
+        /// </summary>
+        public bool IsDegenerate => Length <= 2;
+
+        public Point Vertex(int index)
+            => _pts.Length > 0 ? _pts[(index % _pts.Length + _pts.Length) % _pts.Length]
+                               : throw new InvalidOperationException("Trying to get a vertex from a polygon with zero vertices.");
 
 
 		public Line Edge(int index)
-			=> checked(new Line(Vertex(index), Vertex(index + 1)));
+			=> _pts.Length > 0 ? new Line(Vertex(index), Vertex(index + 1))
+                               : throw new InvalidOperationException("Trying to get an edge from a polygon with zero or only one vertex.");
 
 		public IEnumerable<Point> Vertices
 			=> Array.AsReadOnly(_pts);
@@ -176,10 +178,12 @@ namespace GRaff
 		{
 			get
 			{
+                if (_pts.Length < 2)
+                    yield break;
+
 				for (int i = 0; i < _pts.Length - 1; i++)
 					yield return new Line(_pts[i], _pts[i + 1]);
-				if (_pts.Length != 0)
-					yield return new Line(_pts[Length - 1], _pts[0]);
+				yield return new Line(_pts[Length - 1], _pts[0]);
 			}
         }
 
@@ -200,9 +204,12 @@ namespace GRaff
 			 * if it is less than 0 then P is to the right of the line segment, 
 			 * if greater than 0 it is to the left, if equal to 0 then it lies on the line segment.
 			 * */
-
-            if (Length <= 2)
+            if (Length == 0)
                 return false;
+            if (Length == 1)
+                return p == _pts[0];
+            if (Length == 2)
+                return Edge(0).ContainsPoint(p);
 
 			foreach (Line L in Edges)
 				if (L.LeftNormal.Dot(p - L.Origin) >= 0)

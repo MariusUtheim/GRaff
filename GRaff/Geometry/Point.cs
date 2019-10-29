@@ -48,8 +48,8 @@ namespace GRaff
 		/// </summary>
 		/// <param name="obj">The System.Object to compare to.</param>
 		/// <returns>true if obj is a GRaff.Point and has the same coordinates as this GRaff.Point.</returns>
-		public override bool Equals(object obj) 
-			=> (obj is Point) ? Equals((Point)obj) : base.Equals(obj);
+		public override bool Equals(object? obj) 
+			=> (obj is Point p) ? Equals(p) : false;
 
 
 		/// <summary>

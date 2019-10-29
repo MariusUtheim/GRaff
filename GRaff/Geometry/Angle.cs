@@ -148,8 +148,8 @@ namespace GRaff
 		/// </summary>
 		/// <param name="obj">The System.Object to compare to.</param>
 		/// <returns>true if obj is a GRaff.Angle and has the same value as this GRaff.Angle.</returns>
-		public override bool Equals(object obj)
-			=> (obj is Angle) ? Equals((Angle)obj) : base.Equals(obj);
+		public override bool Equals(object? obj)
+			=> (obj is Angle) ? Equals((Angle)obj) : false;
 
 		/// <summary>
 		/// Returns a hash code for this GRaff.Angle.

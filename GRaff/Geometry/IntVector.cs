@@ -47,17 +47,17 @@ namespace GRaff
 		/// Specifies whether this GRaff.IntVector contains the same coordinates as the specified System.Object.
 		/// </summary>
 		/// <param name="obj">The System.Object to compare to.</param>
-		/// <returns>true if obj is a GRaff.IntVector and has the same coordinates as this GRaff.IntVector.</returns>
-		public override bool Equals(object obj)
+		/// <returns>true if obj is a GRaff.IntVector, GRaff.Vector or GRaff.Point, and has the same coordinates as this GRaff.IntVector.</returns>
+		public override bool Equals(object? obj)
 		{
-			if (obj is IntVector)
-				return Equals((IntVector)obj);
-			else if (obj is Vector)
-				return Equals((Vector)obj);
-			else if (obj is Point)
-				return Equals((Point)obj);
-			else
-				return base.Equals(obj);
+            if (obj is IntVector i)
+                return Equals(i);
+            else if (obj is Vector v)
+                return Equals(v);
+            else if (obj is Point p)
+                return Equals(p);
+            else
+                return false;
 		}
 
 		/// <summary>
