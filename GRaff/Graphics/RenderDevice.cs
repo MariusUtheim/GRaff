@@ -33,7 +33,6 @@ namespace GRaff.Graphics
 
 		public void Draw(PrimitiveType type, GraphicsPoint[] vertices, Color[] colors)
 		{
-			Contract.Requires<ArgumentNullException>(vertices != null && colors != null);
 			Contract.Requires<ArgumentException>(vertices.Length == colors.Length);
             _renderSystem.SetVertices(vertices);
             _renderSystem.SetColors(colors);
@@ -42,7 +41,6 @@ namespace GRaff.Graphics
 
         public void Draw(PrimitiveType type, GraphicsPoint[] vertices, Color color)
         {
-            Contract.Requires<ArgumentNullException>(vertices != null);
             _renderSystem.SetVertices(vertices);
             _renderSystem.SetColor(color);
             _renderSystem.Render(type);
@@ -90,8 +88,6 @@ namespace GRaff.Graphics
 
 		public void DrawPolygon(Color color, Polygon polygon)
 		{
-			Contract.Requires<ArgumentNullException>(polygon != null);
-
             _renderSystem.SetVertices(polygon.Vertices.Select(v => (GraphicsPoint)v).ToArray());
             _renderSystem.SetColor(color);
 
@@ -105,8 +101,6 @@ namespace GRaff.Graphics
 
         public void FillPolygon(Color color, Polygon polygon)
         {
-            Contract.Requires<ArgumentNullException>(polygon != null);
-
             _renderSystem.SetVertices(polygon.Vertices.Select(v => (GraphicsPoint)v).ToArray());
             _renderSystem.SetColor(color);
 
@@ -121,7 +115,6 @@ namespace GRaff.Graphics
 
         public void DrawTexture(SubTexture texture, double xOrigin, double yOrigin, Matrix transform, Color blend)
         {
-			Contract.Requires<ArgumentNullException>(texture != null && transform != null);
             Contract.Requires<ObjectDisposedException>(!texture.Texture.IsDisposed);
             
             _renderSystem.SetVertices(new[] {
@@ -138,7 +131,6 @@ namespace GRaff.Graphics
 
         public void DrawTexture(Texture buffer, PrimitiveType type, GraphicsPoint[] vertices, Color blend, GraphicsPoint[] texCoords)
         {
-            Contract.Requires<ArgumentNullException>(buffer != null && vertices != null && texCoords != null);
             Contract.Requires<ObjectDisposedException>(!buffer.IsDisposed);
 
             _renderSystem.SetVertices(vertices);
@@ -149,7 +141,6 @@ namespace GRaff.Graphics
 
         public void DrawTexture(Texture buffer, PrimitiveType type, GraphicsPoint[] vertices, Color[] colors, GraphicsPoint[] texCoords)
         {
-            Contract.Requires<ArgumentNullException>(buffer != null && vertices != null && texCoords != null);
             Contract.Requires<ObjectDisposedException>(!buffer.IsDisposed);
 
             _renderSystem.SetVertices(vertices);
@@ -162,7 +153,6 @@ namespace GRaff.Graphics
 
         public void DrawText(TextRenderer renderer, Color color, string text, Matrix transform)
 		{
-			Contract.Requires<ArgumentNullException>(renderer != null && transform != null);
             Contract.Requires<ObjectDisposedException>(!renderer.Font.IsDisposed);
 
 			if (text == null)

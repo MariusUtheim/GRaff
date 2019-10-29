@@ -14,7 +14,6 @@ namespace GRaff.Graphics.Text
               
         public TextRenderer(Font font, Alignment alignment = Alignment.TopLeft, int? lineWidth = null, double lineSeparation = 0)
         {
-            Contract.Requires<ArgumentNullException>(font != null);
             this.Font = font;
             this.Alignment = alignment;
             this.LineWidth = lineWidth;

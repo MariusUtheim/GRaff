@@ -18,20 +18,24 @@ namespace GRaff.Graphics.Particles
 
 
 		class LineAttractionBehavior : IParticleBehavior
-      
 		{
-			public LineAttractionDescriptor Descriptor;
+			private LineAttractionDescriptor _descriptor;
+
+            public LineAttractionBehavior(LineAttractionDescriptor descriptor)
+            {
+                this._descriptor = descriptor;
+            }
 
 			public void Initialize(Particle particle) { }
 
 			public void Update(Particle particle)
 			{
-				Vector d = particle.Location - Descriptor.Line.Origin;
-				Vector r = Descriptor.Strength * Descriptor.Line.LeftNormal.Dot(d) * Descriptor.Line.RightNormal;
+				Vector d = particle.Location - _descriptor.Line.Origin;
+				Vector r = _descriptor.Strength * _descriptor.Line.LeftNormal.Dot(d) * _descriptor.Line.RightNormal;
 				particle.Velocity += r;
 			}
 		}
 
-        public IParticleBehavior  MakeBehavior() => new LineAttractionBehavior { Descriptor = this };
+        public IParticleBehavior MakeBehavior() => new LineAttractionBehavior(this);
 	}
 }

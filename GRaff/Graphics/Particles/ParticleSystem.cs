@@ -19,7 +19,6 @@ namespace GRaff.Graphics.Particles
 
 		public ParticleSystem(ParticleType type)
 		{
-			Contract.Requires<ArgumentNullException>(type != null);
 			_renderSystem = new SerialRenderSystem();
 			this.ParticleType = type;
 		}
@@ -30,7 +29,6 @@ namespace GRaff.Graphics.Particles
 
 		protected void Remove(Particle particle)
 		{
-			Contract.Requires<ArgumentNullException>(particle != null);
 			particles.Remove(particle);
 		}
 
@@ -47,7 +45,6 @@ namespace GRaff.Graphics.Particles
 
 		public void Create(IEnumerable<Point> pts)
 		{
-			Contract.Requires<ArgumentNullException>(pts != null);
 			foreach (var p in pts)
 				Create(p.X, p.Y, 1);
 		}

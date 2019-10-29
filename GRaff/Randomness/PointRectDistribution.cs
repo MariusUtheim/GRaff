@@ -15,7 +15,6 @@ namespace GRaff.Randomness
 
 		public PointRectDistribution(Random rnd, Rectangle region)
 		{
-			Contract.Requires<ArgumentNullException>(rnd != null);
 			_rnd = rnd;
 			Region = region;
 		}

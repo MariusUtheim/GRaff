@@ -15,7 +15,7 @@ namespace GRaff
 
 		private Mask()
 		{
-			Polygon = null;
+			Polygon = Polygon.Empty;
 		}
 
 		private Mask(params Point[] pts)
@@ -23,7 +23,7 @@ namespace GRaff
 			Polygon = new Polygon(pts);
 		}
 
-		public Polygon Polygon { get; private set; }
+		internal Polygon Polygon { get; private set; }
 
 		public static Mask Rectangle(double x, double y, double width, double height) => Rectangle(new Rectangle(x, y, width, height));
 

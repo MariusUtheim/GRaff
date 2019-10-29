@@ -17,7 +17,6 @@ namespace GRaff.Randomness
 
 		public AngleDistribution(Random rnd)
 		{
-			Contract.Requires<ArgumentNullException>(rnd != null);
 			this._rnd = rnd;
 			_hasRange = false;
 		}
@@ -27,7 +26,6 @@ namespace GRaff.Randomness
 
 		public AngleDistribution(Random rnd, Angle minimum, Angle maximum)
 		{
-			Contract.Requires<ArgumentNullException>(rnd != null);
 			_rnd = rnd;
 			_hasRange = true;
 			_minAngle = minimum;

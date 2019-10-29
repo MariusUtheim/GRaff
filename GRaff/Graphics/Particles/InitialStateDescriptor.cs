@@ -82,13 +82,17 @@ namespace GRaff.Graphics.Particles
             return this;
         }
 
-        public IDistribution<Vector> ScaleDistribution { get; set; }
+        public IDistribution<Vector>? ScaleDistribution { get; set; }
 
-        public IDistribution<Angle> RotationDistribution { get; set; }
+        public IDistribution<Angle>? RotationDistribution { get; set; }
 
         class InitialStateBehavior : IParticleBehavior
         {
             public Matrix Transform;
+            public InitialStateBehavior(Matrix transform)
+            {
+                this.Transform = transform;
+            }
 
             public void Initialize(Particle particle) => particle.TransformationMatrix = Transform;
 
@@ -103,7 +107,7 @@ namespace GRaff.Graphics.Particles
             if (RotationDistribution != null)
                 transform.Rotation = RotationDistribution.Generate();
 
-            return new InitialStateBehavior { Transform = transform.GetMatrix() };
+            return new InitialStateBehavior(transform.GetMatrix());
         }
     }
 }

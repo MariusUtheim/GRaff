@@ -22,7 +22,6 @@ namespace GRaff
 	[System.Diagnostics.Contracts.ContractVerification(false)]
 	internal class InstanceList : MutableList<GameElement>
 	{
-#warning Change to use RBTree
         public void Sort()
 		{
 			_list = _list.OrderByDescending(instance => instance.Depth).ToList();
@@ -152,7 +151,7 @@ namespace GRaff
 			_list.RemoveEnumerator(this);
 		}
 
-		object System.Collections.IEnumerator.Current
+		object? System.Collections.IEnumerator.Current
 		{
 			get { return _list[Index]; }
 		}

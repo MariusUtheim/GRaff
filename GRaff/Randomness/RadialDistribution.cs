@@ -32,13 +32,11 @@ namespace GRaff.Randomness
         public RadialDistribution(Random rnd, double radius)
             : this(rnd, 0, radius)
         {
-            Contract.Requires<ArgumentNullException>(rnd != null);
             Contract.Requires<ArgumentOutOfRangeException>(radius >= 0);
         }
 
         public RadialDistribution(Random rnd, double innerRadius, double outerRadius)
         {
-            Contract.Requires<ArgumentNullException>(rnd != null);
             Contract.Requires<ArgumentOutOfRangeException>(innerRadius >= 0);
             Contract.Requires<ArgumentOutOfRangeException>(outerRadius >= innerRadius);
 

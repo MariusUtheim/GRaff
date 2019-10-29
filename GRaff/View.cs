@@ -19,7 +19,7 @@ namespace GRaff
     public class View
     {
         private static readonly Triangle GLTriangle = new Triangle((-1, 1), (1, 1), (-1, -1));
-        private static Matrix GLToScreenMatrix;
+        private static Matrix GLToScreenMatrix = Matrix.Zero;
 
         private Transform _transform;
         private bool _needsValidation = false;

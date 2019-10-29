@@ -11,13 +11,23 @@ namespace GRaff
 	{
         public static Vector DisplayScale { get; internal set; }
 
+        private static GameWindow _Window
+        {
+            get
+            {
+                if (Game.Window == null)
+                    throw new InvalidOperationException("The game window does not exist.");
+                return Game.Window;
+            }
+        }
+
 		/// <summary>
 		/// Gets or sets whether the window border should be visible.
 		/// </summary>
 		public static bool IsBorderVisible
 		{
-			get => Game.Window.WindowBorder == WindowBorder.Fixed; 
-			set => Game.Window.WindowBorder = value ? WindowBorder.Fixed : WindowBorder.Hidden; 
+            get => _Window.WindowBorder == WindowBorder.Fixed; 
+			set => _Window.WindowBorder = value ? WindowBorder.Fixed : WindowBorder.Hidden; 
 		}
 
 		/// <summary>
@@ -25,14 +35,14 @@ namespace GRaff
 		/// </summary>
 		public static string Title
 		{
-			get => Game.Window.Title;
-			set => Game.Window.Title = value;
+			get => _Window.Title;
+			set => _Window.Title = value;
 		}
 
 		public static bool IsFullscreen
 		{
-			get => Game.Window.WindowState == WindowState.Fullscreen;
-			set => Game.Window.WindowState = WindowState.Fullscreen;
+			get => _Window.WindowState == WindowState.Fullscreen;
+			set => _Window.WindowState = WindowState.Fullscreen;
 		}
 
 
@@ -61,13 +71,13 @@ namespace GRaff
         {
             get
             {
-                return new IntVector((int)(Game.Window.ClientSize.Width / DisplayScale.X), (int)(Game.Window.ClientSize.Height / DisplayScale.Y));
+                return new IntVector((int)(_Window.ClientSize.Width / DisplayScale.X), (int)(_Window.ClientSize.Height / DisplayScale.Y));
             }
             set
             {
                 if (value.X <= 0 || value.Y <= 0)
                     throw new ArgumentOutOfRangeException("value", "Both components must be greater than 0.");
-                Game.Window.ClientSize = new Size(value.X, value.Y);
+                _Window.ClientSize = new Size(value.X, value.Y);
                 View.UpdateGLToScreenMatrix();
             }
         }
@@ -76,14 +86,14 @@ namespace GRaff
 
         public static int X
         {
-            get => Game.Window.X;
-            set => Game.Window.X = value;
+            get => _Window.X;
+            set => _Window.X = value;
         }
 
         public static int Y
         {
-            get => Game.Window.Y;
-            set => Game.Window.Y = value;
+            get => _Window.Y;
+            set => _Window.Y = value;
         }
 
         public static IntVector Location

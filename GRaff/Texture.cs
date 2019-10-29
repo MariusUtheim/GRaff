@@ -36,9 +36,6 @@ namespace GRaff
         public Texture(Color[,] colors)
 			: this(colors.GetLength(1), colors.GetLength(0))
 		{
-			Contract.Requires<ArgumentNullException>(colors != null);
-
-
 			var handle = GCHandle.Alloc(colors, GCHandleType.Pinned);
 			try
 			{

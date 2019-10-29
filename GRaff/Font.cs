@@ -7,6 +7,7 @@ using GRaff.Graphics;
 using GRaff.Graphics.Text;
 using GRaff.Synchronization;
 
+#nullable disable
 
 namespace GRaff
 {
@@ -21,7 +22,7 @@ namespace GRaff
         public Font(Texture texture, FontFile fontData)
         {
             this._texture = texture;
-            foreach (var c in fontData.Chars)
+            foreach (var c in fontData.Chars!)
 				_characters.Add((char)c.Id, c);
 
             Height = fontData.Common.LineHeight;
@@ -126,7 +127,6 @@ namespace GRaff
 		/// <returns>The horizontal advance of the character, taking kerning into consideration.</returns>
 		public int GetAdvance(string str, int i)
 		{
-			Contract.Requires<ArgumentNullException>(str != null);
 			Contract.Requires<IndexOutOfRangeException>(i >= 0 && i < str.Length);
             Contract.Requires<ObjectDisposedException>(!IsDisposed);
 
@@ -178,7 +178,6 @@ namespace GRaff
 		public Texture RenderText(string text)
 		{
             Contract.Requires<ObjectDisposedException>(!IsDisposed);
-            Contract.Requires<ArgumentNullException>(text != null);
             var width = GetWidth(text);
             var height = Height;
             var buffer = new Framebuffer(width, height);

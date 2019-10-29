@@ -27,13 +27,11 @@ namespace GRaff.Randomness
 		public PointDiskDistribution(Random rnd, Point center, double radius)
 			: this(GRandom.Source, center, 0, radius)
 		{
-			Contract.Requires<ArgumentNullException>(rnd != null);
 			Contract.Requires<ArgumentOutOfRangeException>(radius >= 0);
 		}
 
 		public PointDiskDistribution(Random rnd, Point center, double innerRadius, double outerRadius)
 		{
-			Contract.Requires<ArgumentNullException>(rnd != null);
 			Contract.Requires<ArgumentOutOfRangeException>(innerRadius >= 0);
 			Contract.Requires<ArgumentOutOfRangeException>(outerRadius >= innerRadius);
 			_radius = new RadialDistribution(innerRadius, outerRadius);

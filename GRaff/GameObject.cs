@@ -34,13 +34,9 @@ namespace GRaff
             : this(location.X, location.Y) { }
 
 
-
         public Transform Transform { get; }
 
-        public Sprite Sprite
-        {
-            get; set;
-        }
+        public Sprite? Sprite { get; set; }
 
 
 		/// <summary>
@@ -162,29 +158,19 @@ namespace GRaff
 
         #region Mask section
 
-        private Mask _mask;
-        public Mask Mask
-        {
-            get
-            {
-                return _mask;
-            }
+        public Mask Mask { get; set; } = Mask.None;
 
-            set
-            {
-                Contract.Requires<ArgumentNullException>(value != null);
-                _mask = value;
-            }
-        }
 
         public Polygon MaskPolygon
         {
             get
             {
-                if (Mask.ReferenceEquals(Mask, Mask.Automatic))
-                    return Transform.Polygon(Sprite?.MaskShape?.Polygon);
+                if (Mask.ReferenceEquals(Mask, Mask.None))
+                    return Polygon.Empty;
+                else if (Mask.ReferenceEquals(Mask, Mask.Automatic))
+                    return (Sprite != null) ? Transform.Polygon(Sprite.MaskShape.Polygon) : Polygon.Empty;
                 else
-                    return Transform.Polygon(Mask?.Polygon);
+                    return Transform.Polygon(Mask.Polygon);
             }
         }
 

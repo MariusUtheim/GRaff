@@ -44,7 +44,6 @@ namespace GRaff.Graphics
             
 			set
 			{
-				Contract.Requires<ArgumentNullException>(value != null);
 				GL.BlendFunc((GLBlendingFactor)value.SourceFactor, (GLBlendingFactor)value.DestinationFactor);
 				GL.BlendEquation((BlendEquationMode)value.Equation);
 			}
@@ -58,12 +57,12 @@ namespace GRaff.Graphics
 
 		public BlendingFactor SourceFactor { get; private set; }
 
-		public override bool Equals(object obj)
+		public override bool Equals(object? obj)
 		{
-			var otherMode = obj as BlendMode;
-			if (otherMode == null)
-				return false;
-			return DestinationFactor == otherMode.DestinationFactor && Equation == otherMode.Equation && SourceFactor == otherMode.SourceFactor;
+            if (obj is BlendMode other)
+                return DestinationFactor == other.DestinationFactor && Equation == other.Equation && SourceFactor == other.SourceFactor;
+            else
+                return false;
 		}
 
 		public override int GetHashCode()

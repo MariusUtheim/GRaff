@@ -11,6 +11,6 @@ namespace GRaff.Graphics.Text
         public int Id { get; set; }
 
         [XmlAttribute("file")]
-        public string File { get; set; }
+        public string? File { get; set; }
     }
 }

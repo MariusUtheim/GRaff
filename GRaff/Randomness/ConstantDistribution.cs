@@ -18,4 +18,10 @@ namespace GRaff.Randomness
 
 		public T Generate() => _constantValue;
 	}
+
+    public static class ConstantDistribution
+    {
+        public static ConstantDistribution<T> Create<T>(T constantValue) where T : struct 
+            => new ConstantDistribution<T>(constantValue);
+    }
 }

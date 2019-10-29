@@ -18,7 +18,6 @@ namespace GRaff.Randomness
 		}
 		private static double _median(double[] items)
 		{
-			Contract.Assume(items != null && items.Length > 0);
 			if (items.Length == 1)
 				return items[0];
 
@@ -44,8 +43,8 @@ namespace GRaff.Randomness
 		}
 		public static double Median(params double[] items)
 		{
-			Contract.Requires<ArgumentNullException>(items != null);
-			Contract.Requires<ArgumentException>(items.Length > 0);
+            if (items.Length == 0)
+                return Double.NaN;
 			return _median(items);
 		}
 

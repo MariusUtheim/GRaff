@@ -21,23 +21,25 @@ namespace GRaff.Graphics.Particles
 		public Vector Acceleration { get; set; }
 
         class AccelerationBehavior : IParticleBehavior
-
         {
-            public AccelerationDescriptor Descriptor;
-
+            public AccelerationDescriptor _descriptor;
+            public AccelerationBehavior(AccelerationDescriptor descriptor)
+            {
+                this._descriptor = descriptor;
+            }
             public void Initialize(Particle particle) { }
 
             public void Update(Particle particle)
             {
-                particle.Velocity += Descriptor.Acceleration;
+                particle.Velocity += _descriptor.Acceleration;
 
-                if (particle.Velocity.Magnitude > Descriptor.Friction)
+                if (particle.Velocity.Magnitude > _descriptor.Friction)
                     particle.Velocity = Vector.Zero;
                 else
-                    particle.Velocity -= particle.Velocity.UnitVector * Descriptor.Friction;
+                    particle.Velocity -= particle.Velocity.UnitVector * _descriptor.Friction;
             }
         }
 
-        public IParticleBehavior MakeBehavior() => new AccelerationBehavior { Descriptor = this };
+        public IParticleBehavior MakeBehavior() => new AccelerationBehavior(this);
 	}
 }

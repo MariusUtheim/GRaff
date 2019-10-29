@@ -5,6 +5,7 @@ using System.Linq;
 
 namespace GRaff
 {
+#nullable disable
     public static class Contract
     {
         [Conditional("DEBUG")]
@@ -25,7 +26,7 @@ namespace GRaff
         [Conditional("DEBUG")]
         public static void Ensures(bool _) { }
 
-        public static T Result<T>() => default(T);
+        public static T Result<T>() => default;
 
         [Conditional("DEBUG")]
         public static void Invariant(object _) { }

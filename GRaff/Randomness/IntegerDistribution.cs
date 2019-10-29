@@ -16,7 +16,6 @@ namespace GRaff.Randomness
 
         public IntegerDistribution(Random rnd, int lowerInclusive, int upperExclusive)
 		{
-			Contract.Requires<ArgumentNullException>(rnd != null);
 			_rnd = rnd;
 			_lowerInclusive = lowerInclusive;
 			_upperExclusive = upperExclusive;

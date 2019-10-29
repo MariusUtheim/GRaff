@@ -14,16 +14,13 @@ namespace GRaff.Graphics
 
 		internal SubTexture(Texture buffer, GraphicsPoint topLeft, GraphicsPoint topRight, GraphicsPoint bottomLeft, GraphicsPoint bottomRight)
 		{
-			Contract.Requires<ArgumentNullException>(buffer != null);
 			TriangleStripCoords = new[] { topLeft, topRight, bottomLeft, bottomRight };
 			Texture = buffer;
 		}
 
         public SubTexture(Texture buffer)
             : this(buffer, defaultTL, defaultTR, defaultBL, defaultBR)
-        {
-            Contract.Requires<ArgumentNullException>(buffer != null);
-        }
+        { }
 
 		public SubTexture(Texture buffer, Rectangle region)
 			: this(buffer,
@@ -31,23 +28,12 @@ namespace GRaff.Graphics
 				  new GraphicsPoint(region.Right / buffer.Width, region.Top / buffer.Height),
 				  new GraphicsPoint(region.Left / buffer.Width, region.Bottom / buffer.Height),
 				  new GraphicsPoint(region.Right / buffer.Width, region.Bottom / buffer.Height))
-		{
-			Contract.Requires<ArgumentNullException>(buffer != null);
-		}
+		{ }
 
 		public static SubTexture FromTexCoords(Texture buffer, Rectangle texCoords)
 		{
-			Contract.Requires<ArgumentNullException>(buffer != null);
 			Contract.Ensures(Contract.Result<SubTexture>() != null);
 			return new SubTexture(buffer, (GraphicsPoint)texCoords.TopLeft, (GraphicsPoint)texCoords.TopRight, (GraphicsPoint)texCoords.BottomLeft, (GraphicsPoint)texCoords.BottomRight);
-		}
-
-		[ContractInvariantMethod]
-		private void invariants()
-		{
-			Contract.Invariant(TriangleStripCoords != null);
-			Contract.Invariant(TriangleStripCoords.Length == 4);
-			Contract.Invariant(Texture != null);
 		}
 
         internal GraphicsPoint[] TriangleStripCoords { get; private set; }

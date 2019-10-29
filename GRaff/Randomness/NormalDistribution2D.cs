@@ -25,7 +25,6 @@ namespace GRaff.Randomness
 
 		public NormalDistribution2D(Random rnd, Point mean, double standardDeviation)
 		{
-			Contract.Requires<ArgumentNullException>(rnd != null);
 			Contract.Requires<ArgumentOutOfRangeException>(standardDeviation >= 0);
 			_rnd = rnd;
 			_mean = mean;

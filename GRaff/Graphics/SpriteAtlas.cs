@@ -81,7 +81,7 @@ namespace GRaff.Graphics
             this.Texture = framebuffer.Texture;
         }
 
-		public static SpriteAtlas Load(string texturePath, string xmlPath = null)
+		public static SpriteAtlas Load(string texturePath, string? xmlPath = null)
 		{
 			if (xmlPath == null)
 			{
@@ -96,7 +96,7 @@ namespace GRaff.Graphics
 			return new SpriteAtlas(texture, xml);
 		}
 
-		public static IAsyncOperation<SpriteAtlas> LoadAsync(string texturePath, string xmlPath = null)
+		public static IAsyncOperation<SpriteAtlas> LoadAsync(string texturePath, string? xmlPath = null)
 		{
 			if (xmlPath == null)
 			{

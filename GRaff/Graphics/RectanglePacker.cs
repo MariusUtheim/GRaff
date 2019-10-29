@@ -9,8 +9,6 @@ namespace GRaff.Graphics
         
         public static IntRectangle[] Pack(IEnumerable<IntVector> rects, out IntVector bounds)
         {
-            Contract.Requires<ArgumentNullException>(rects != null);
-
             var result = new IntRectangle[rects.Count()];
             var x = 0;
             var maxH = 0;

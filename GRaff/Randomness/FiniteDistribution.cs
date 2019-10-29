@@ -15,20 +15,17 @@ namespace GRaff.Randomness
 	{
 		private readonly Random _rnd;
 		private readonly T[] _elements;
-        private readonly double[] _weights;
+        private readonly double[]? _weights;
         private readonly double _totalWeight;
 
 		public FiniteDistribution(IEnumerable<T> elements)
 			: this(GRandom.Source, elements)
 		{
-			Contract.Requires<ArgumentNullException>(elements != null);
 			Contract.Requires<ArgumentException>(elements.Any());
 		}
         
 		public FiniteDistribution(Random rnd, IEnumerable<T> elements)
 		{
-			Contract.Requires<ArgumentNullException>(rnd != null);
-			Contract.Requires<ArgumentNullException>(elements != null);
 			Contract.Requires<ArgumentException>(elements.Any());
 			_rnd = rnd;
 			_elements = elements.ToArray();
@@ -37,7 +34,6 @@ namespace GRaff.Randomness
 
         public FiniteDistribution(Random rnd, IEnumerable<(T t, double weight)> elements)
         {
-            Contract.Requires<ArgumentNullException>(elements != null);
             Contract.Requires<ArgumentException>(elements.Any());
             Contract.Requires<ArgumentException>(elements.All(tw => tw.weight >= 0));
             _rnd = rnd;

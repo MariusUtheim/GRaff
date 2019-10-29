@@ -19,7 +19,6 @@ namespace GRaff.Randomness
 
 		public BinomialDistribution(Random rnd, int trials, double probability)
 		{
-			Contract.Requires<ArgumentNullException>(rnd != null);
 			Contract.Requires<ArgumentOutOfRangeException>(probability >= 0 && probability <= 1);
 
 			_rnd = rnd;

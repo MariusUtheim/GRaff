@@ -63,12 +63,13 @@ namespace GRaff.Graphics
         public Framebuffer(int width, int height, Color clearColor)
 			: this(new Texture(_fill(width, height, clearColor))) { }
 
-
-		public static Framebuffer Current { get; private set; }
+#warning Make the default framebuffer an actual object
+        public static Framebuffer? Current { get; private set; }
 
         public static void BindDefault()
         {
             GL.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
+            Current = null;
         }
 
         public static Framebuffer CopyFromScreen()

@@ -1,73 +1,52 @@
 ﻿using System;
 using GRaff.Randomness;
-using System.Diagnostics.Contracts;
+
 
 namespace GRaff.Graphics.Particles
 {
 	public class ScaleDescriptor : IParticleTypeDescriptor 
 	{
-		private readonly IDistribution<double> _xScale, _yScale;
+        private readonly IDistribution<double> _xScale;
+        private readonly IDistribution<double>? _yScale;
 
-		public ScaleDescriptor(double scale)
-		{
-			_xScale = new ConstantDistribution<double>(scale);
-			_yScale = null;
-		}
+        public ScaleDescriptor(IDistribution<double> scaleDistribution)
+        {
+            _xScale = scaleDistribution;
+            _yScale = null;
+        }
 
-		public ScaleDescriptor(double xScale, double yScale)
-		{
-			_xScale = new ConstantDistribution<double>(xScale);
-			_yScale = new ConstantDistribution<double>(yScale);
-		}
-
-		public ScaleDescriptor(IDistribution<double> scaleDistribution)
-		{
-			Contract.Requires<ArgumentNullException>(scaleDistribution != null);
-			_xScale = scaleDistribution;
-			_yScale = null;
-		}
-		
 		public ScaleDescriptor(IDistribution<double> xScaleDistribution, IDistribution<double> yScaleDistribution)
 		{
-			Contract.Requires<ArgumentNullException>(xScaleDistribution != null);
-			Contract.Requires<ArgumentNullException>(yScaleDistribution != null);
 			_xScale = xScaleDistribution;
 			_yScale = yScaleDistribution;
 		}
 
-        public IDistribution<double> InitialXScaleDistribution { get; set; }
-        public IDistribution<double> InitialYScaleDistribution { get; set; }
-        public IDistribution<double> XScaleFactorDistribution { get; set; }
-        public IDistribution<double> YScaleFactorDistribution { get; set; }
+        public static ScaleDescriptor Constant(double scale)
+            => new ScaleDescriptor(ConstantDistribution.Create(scale));
+
+        public static ScaleDescriptor Uniform(double scaleMin, double scaleMax)
+            => new ScaleDescriptor(new DoubleDistribution(scaleMin, scaleMax));
 
         class ScaleBehavior : IParticleBehavior
         {
-            private double _initialXScale, _initialYScale;
-            private Matrix _scaler;
+            private readonly Matrix _transform;
 
-            public ScaleBehavior(double initialXScale, double initialYScale, double xScaleFactor, double yScaleFactor)
+            public ScaleBehavior(double xScale, double yScale)
             {
-                this._initialXScale = initialXScale;
-                this._initialYScale = initialYScale;
-                _scaler = (xScaleFactor == 1 && yScaleFactor == 1) ? null : Matrix.Scaling(xScaleFactor, yScaleFactor);
+                _transform = Matrix.Scaling(xScale, yScale);
             }
 
             public void Initialize(Particle particle)
-            {
-                particle.TransformationMatrix = particle.TransformationMatrix.Scale(_initialXScale, _initialYScale);
-            }
+                => particle.TransformationMatrix = _transform * particle.TransformationMatrix;
 
-            public void Update(Particle particle)
-            {
-                if (_scaler != null)
-                    particle.TransformationMatrix = _scaler * particle.TransformationMatrix;
-            }
+            public void Update(Particle particle) { }
         }
 
         public IParticleBehavior MakeBehavior()
         {
-            return new ScaleBehavior(InitialXScaleDistribution.Generate(), InitialYScaleDistribution.Generate(),
-                XScaleFactorDistribution.Generate(), YScaleFactorDistribution.Generate());
+            double xScale = _xScale.Generate();
+            double yScale = _yScale?.Generate() ?? xScale;
+            return new ScaleBehavior(xScale, yScale);
         }
 	}
 }

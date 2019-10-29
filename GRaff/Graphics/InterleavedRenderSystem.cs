@@ -32,8 +32,7 @@ namespace GRaff.Graphics
         public void SetPrimitive(params GraphicsVertex[] primitive)
         {
             Contract.Requires<ObjectDisposedException>(!IsDisposed);
-            Contract.Requires<ArgumentNullException>(primitive != null);
-            
+           
             GL.BindBuffer(BufferTarget.ArrayBuffer, _arrayBuffer);
             GL.BufferData(BufferTarget.ArrayBuffer, new IntPtr(GraphicsVertex.Size * primitive.Length), primitive, BufferUsageHint.StreamDraw);
             _vertexCount = primitive.Length;

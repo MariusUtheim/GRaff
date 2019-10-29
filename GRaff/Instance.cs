@@ -57,7 +57,7 @@ namespace GRaff
 		}
 
         public static IEnumerable<GameElement> Where(Func<GameElement, bool> predicate) => All.Where(predicate);
-		public static IEnumerable<T> OfType<T>() where T : GameElement => All.OfType<T>();
+		public static IEnumerable<T> OfType<T>() => All.OfType<T>();
 		public static T One<T>() where T : GameElement => All.OfType<T>().FirstOrDefault();
     }
 
@@ -68,9 +68,9 @@ namespace GRaff
 	public static class Instance<T> where T : GameElement
 	{
 		private static bool _isAbstract;
-		private static Func<T> _parameterlessConstructor;
-		private static Func<Point, T> _locationConstructor;
-		private static Func<double, double, T> _xyConstructor;
+		private static Func<T>? _parameterlessConstructor;
+		private static Func<Point, T>? _locationConstructor;
+		private static Func<double, double, T>? _xyConstructor;
 
 		static Instance()
 		{
@@ -85,34 +85,39 @@ namespace GRaff
 			var locationMatch = constructors.FirstOrDefault(c => c.GetParameters().Select(p => p.ParameterType).SequenceEqual(new[] { typeof(Point) }));
 			var xyMatch = constructors.FirstOrDefault(c => c.GetParameters().Select(p => p.ParameterType).SequenceEqual(new[] { typeof(double), typeof(double) }));
 
-			if (locationMatch == null && xyMatch == null)
-			{
-				if (parameterlessMatch == null)
-					return;
-				_parameterlessConstructor = () => (T)parameterlessMatch.Invoke(new object[0]);
-				_locationConstructor = location => { var obj = (GameObject)parameterlessMatch.Invoke(new object[0]); obj.Location = location; return (T)(object)obj; };
-				_xyConstructor = (x, y) => { var obj = (GameObject)parameterlessMatch.Invoke(new object[0]); obj.X = x; obj.Y = y; return (T)(object)obj; };
-			}
-			else
-			{
-				if (locationMatch != null)
-					_locationConstructor = location => (T)locationMatch.Invoke(new object[] { location });
+            // If no suitable constructors are defined, everything is set to null
+            if (parameterlessMatch == null && locationMatch == null && xyMatch == null)
+                return;
 
-				if (xyMatch != null)
-					_xyConstructor = (x, y) => (T)xyMatch.Invoke(new object[] { x, y });
+            if (parameterlessMatch != null)
+                _parameterlessConstructor = () => (T)parameterlessMatch.Invoke(new object[0]);
+            else if (locationMatch != null)
+                _parameterlessConstructor = () => (T)locationMatch.Invoke(new object[] { Point.Zero });
+            else if (xyMatch != null)
+                _parameterlessConstructor = () => (T)xyMatch.Invoke(new object[] { 0, 0 });
 
-				if (locationMatch == null)
-					_locationConstructor = location => _xyConstructor(location.X, location.Y);
-				if (xyMatch == null)
-					_xyConstructor = (x, y) => _locationConstructor(new Point(x, y));
+            if (locationMatch != null)
+                _locationConstructor = location => (T)locationMatch.Invoke(new object[] { location });
+            else if (xyMatch != null)
+                _locationConstructor = location => (T)xyMatch.Invoke(new object[] { location.X, location.Y });
+            else if (parameterlessMatch != null && typeof(GameObject).IsAssignableFrom(typeof(T)))
+                _locationConstructor = location => {
+                    var obj = (GameObject)parameterlessMatch.Invoke(new object[0]);
+                    obj.Location = location;
+                    return (obj as T)!;
+                };
 
-				if (parameterlessMatch != null)
-					_parameterlessConstructor = () => (T)parameterlessMatch.Invoke(new object[0]);
-				else if (locationMatch != null)
-					_parameterlessConstructor = () => _xyConstructor(0, 0);
-				else
-					_parameterlessConstructor = () => _locationConstructor(Point.Zero);
-			}
+            if (xyMatch != null)
+                _xyConstructor = (x, y) => (T)xyMatch.Invoke(new object[] { x, y });
+            else if (locationMatch != null)
+                _xyConstructor = (x, y) => (T)locationMatch.Invoke(new object[] { new Point(x, y) });
+            else if (parameterlessMatch != null && typeof(GameObject).IsAssignableFrom(typeof(T)))
+                _xyConstructor = (x, y) => {
+                    var obj = (GameObject)parameterlessMatch.Invoke(new object[0]);
+                    obj.Location = (x, y);
+                    return (obj as T)!;
+                };
+
 		}
 
 		/// <summary>
@@ -137,8 +142,10 @@ namespace GRaff
 			}
 			catch (TargetInvocationException ex)
 			{
-				ExceptionDispatchInfo.Capture(ex.InnerException).Throw();
-				throw new Exception("Unreachable code reached"); // Unreachable
+                if (ex.InnerException != null)
+    				ExceptionDispatchInfo.Capture(ex.InnerException).Throw();
+                
+                throw;
 			}
 		}
 
@@ -157,7 +164,7 @@ namespace GRaff
 		{
 			if (_isAbstract)
                 throw new InvalidOperationException($"Unable to create instances of the abstract type {nameof(T)}");
-			if (_parameterlessConstructor == null)
+			if (_locationConstructor == null)
 				throw new InvalidOperationException($"Unable to create instances through {nameof(Instance<T>)}: Type {nameof(T)} must specify a parameterless constructor, a constructor taking a GRaff.Point structure or a constructor taking two System.Double structures.");
 
 			try 
@@ -166,10 +173,12 @@ namespace GRaff
 			}
             catch (TargetInvocationException ex)
             {
-                ExceptionDispatchInfo.Capture(ex.InnerException).Throw();
-                throw new Exception("Unreachable code reached"); // Unreachable
+                if (ex.InnerException != null)
+                    ExceptionDispatchInfo.Capture(ex.InnerException).Throw();
+
+                throw;
             }
-		}
+        }
 
 		/// <summary>
 		/// Creates a new instance of TGameObject, using the specified x- and y-coordinates as the arguments.
@@ -187,7 +196,7 @@ namespace GRaff
 		{
 			if (_isAbstract)
                 throw new InvalidOperationException($"Unable to create instances of the abstract type {nameof(T)}");
-			if (_parameterlessConstructor == null)
+			if (_xyConstructor == null)
 				throw new InvalidOperationException(string.Format("Unable to create instances through {0}: Type {1} must specify a parameterless constructor, a constructor taking a GRaff.Point structure or a constructor taking two System.Double structures.", typeof(Instance<T>).Name, typeof(T).Name));
 
 			try
@@ -196,10 +205,12 @@ namespace GRaff
             }
             catch (TargetInvocationException ex)
             {
-                ExceptionDispatchInfo.Capture(ex.InnerException).Throw();
-                throw new Exception("Unreachable code reached"); // Unreachable
+                if (ex.InnerException != null)
+                    ExceptionDispatchInfo.Capture(ex.InnerException).Throw();
+
+                throw;
             }
-		}
+        }
 
 		public static T _ => Enumerate().FirstOrDefault();
 

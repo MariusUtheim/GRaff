@@ -149,9 +149,11 @@ namespace GRaff
 		/// Converts this GRaff.Color to a human-readable string, showing the value of each channel.
 		/// </summary>
 		/// <returns>A string that represents this GRaff.Color</returns>
-		public override string ToString() => $"{nameof(Color)}=0x{Rgba:X}";
+		public override string ToString() 
+            => $"{nameof(Color)}=0x{Rgba:X}";
 
-		public bool Equals(Color other) => A == other.A && R == other.R && G == other.G && B == other.B;
+		public bool Equals(Color other)
+            => A == other.A && R == other.R && G == other.G && B == other.B;
 
 
 		/// <summary>
@@ -159,13 +161,15 @@ namespace GRaff
 		/// </summary>
 		/// <param name="obj">The System.Object to compare to.</param>
 		/// <returns>true if obj is a GRaff.Color and has the same ARGB value as this GRaff.Color.</returns>
-		public override bool Equals(object obj) => (obj is Color) ? Equals((Color)obj) : base.Equals(obj);
+		public override bool Equals(object? obj)
+            => (obj is Color c) ? Equals(c) : false;
 
 		/// <summary>
 		/// Returns a hash code of this GRaff.Color. The hash code is equal to the ARGB value.
 		/// </summary>
 		/// <returns>An integer value that specifies a hash value for this GRaff.Color.</returns>
-		public override int GetHashCode() => (int)Rgba;
+		public override int GetHashCode()
+            => (int)Rgba;
 
 		/// <summary>
 		/// Compares two GRaff.Color objects. The results specifies whether their ARGB values are equal.
@@ -173,7 +177,8 @@ namespace GRaff
 		/// <param name="left">The first GRaff.Color to compare.</param>
 		/// <param name="right">The second GRaff.Color to compare.</param>
 		/// <returns>true if the ARGB values of the two GRaff.Color structures are equal.</returns>
-		public static bool operator ==(Color left, Color right) => left.Equals(right);
+		public static bool operator ==(Color left, Color right) 
+            => left.Equals(right);
 
 		/// <summary>
 		/// Compares two GRaff.Color objects. The results specifies whether their ARGB values are unequal.
@@ -181,9 +186,10 @@ namespace GRaff
 		/// <param name="left">The first GRaff.Color to compare.</param>
 		/// <param name="right">The second GRaff.Color to compare.</param>
 		/// <returns>true if the ARGB values of the two colors are unequal.</returns>
-		public static bool operator !=(Color left, Color right) => !left.Equals(right);
+		public static bool operator !=(Color left, Color right)
+            => !left.Equals(right);
 
-		///// <summary>
+		//@TODO/// <summary>
 		/// Converts the specified unsigned integer in an RGB format to a GRaff.Color.
 		/// </summary>
 		/// <param name="rgb">The System.Int32 to be converted.</param>
@@ -195,6 +201,7 @@ namespace GRaff
 		/// </summary>
 		/// <param name="argb">The System.Uint32 to be converted.</param>
 		/// <returns>The GRaff.Color resulting from the conversion.</returns>
-		public static implicit operator Color(uint rgba) => Color.FromRgba(rgba);
+		public static implicit operator Color(uint rgba) 
+            => Color.FromRgba(rgba);
 	}
 }

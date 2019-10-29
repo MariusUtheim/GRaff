@@ -13,7 +13,6 @@ namespace GRaff.Graphics.Shaders
 
 		public ShaderProgram(VertexShader vertexShader, FragmentShader fragmentShader)
 		{
-			Contract.Requires<ArgumentNullException>(vertexShader != null && fragmentShader != null);
 			Id = GL.CreateProgram();
             
 			GL.AttachShader(Id, vertexShader.Id);

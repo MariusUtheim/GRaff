@@ -8,18 +8,18 @@ namespace GRaff
 {
 	public static class GlobalEvent
 	{
-		public static event Action Step;
-		public static event Action BeginStep;
-		public static event Action EndStep;
-		public static event Action DrawBackground;
-		public static event Action DrawForeground;
-		public static event Action<Key> Key;
-		public static event Action<Key> KeyPressed;
-		public static event Action<Key> KeyReleased;
-		public static event Action<MouseButton> Mouse;
-		public static event Action<MouseButton> MousePressed;
-		public static event Action<MouseButton> MouseReleased;
-        public static event Action<double> MouseWheel;
+		public static event Action? Step;
+		public static event Action? BeginStep;
+		public static event Action? EndStep;
+		public static event Action? DrawBackground;
+		public static event Action? DrawForeground;
+		public static event Action<Key>? Key;
+		public static event Action<Key>? KeyPressed;
+		public static event Action<Key>? KeyReleased;
+		public static event Action<MouseButton>? Mouse;
+		public static event Action<MouseButton>? MousePressed;
+		public static event Action<MouseButton>? MouseReleased;
+        public static event Action<double>? MouseWheel;
 
 		internal static void OnBeginStep() => BeginStep?.Invoke();
 

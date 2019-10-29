@@ -52,7 +52,7 @@ namespace GRaff
 		/// <summary>
 		/// Gets or sets the sprite for this GRaff.Background.
 		/// </summary>
-		public Texture Texture { get; set; }
+		public Texture? Texture { get; set; }
 
 		/// <summary>
 		/// Gets or sets whether this GRaff.Background should draw its sprite repeated.

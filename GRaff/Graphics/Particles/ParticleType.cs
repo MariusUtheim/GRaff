@@ -61,7 +61,7 @@ namespace GRaff.Graphics.Particles
 
 		public IDistribution<int> Lifetime { get; private set; }
 
-		public BlendMode BlendMode { get; set; }
+		public BlendMode? BlendMode { get; set; }
 
 		internal void Render(IEnumerable<Particle> particles)
 		{

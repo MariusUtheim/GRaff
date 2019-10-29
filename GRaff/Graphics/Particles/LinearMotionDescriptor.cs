@@ -11,7 +11,6 @@ namespace GRaff.Graphics.Particles
 
 		public LinearMotionDescriptor(IDistribution<Vector> distribution)
 		{
-			Contract.Requires<ArgumentNullException>(distribution != null);
 			this.VelocityDistribution = distribution;
 		}
 

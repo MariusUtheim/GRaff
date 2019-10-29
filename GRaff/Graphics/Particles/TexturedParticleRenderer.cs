@@ -16,7 +16,6 @@ namespace GRaff.Graphics.Particles
 
 		public TexturedParticleRenderer(Sprite sprite, double animationSpeed)
 		{
-			Contract.Requires<ArgumentNullException>(sprite != null);
 			this.Sprite = sprite;
 			this._animationSpeed = animationSpeed;
 		}

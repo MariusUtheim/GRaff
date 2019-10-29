@@ -22,13 +22,10 @@ namespace GRaff.Randomness
 
 		public NormalDistribution(Random rnd)
 			: this(rnd, 0, 1)
-		{
-			Contract.Requires<ArgumentNullException>(rnd != null);
-		}
+		{ }
 
 		public NormalDistribution(Random rnd, double mean, double standardDeviation)
 		{
-			Contract.Requires<ArgumentNullException>(rnd != null);
 			Contract.Requires<ArgumentOutOfRangeException>(standardDeviation >= 0);
 			_rnd = rnd;
 			_mean = mean;

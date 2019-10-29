@@ -14,7 +14,6 @@ namespace GRaff.Graphics
 
 		public AnimationStrip(IEnumerable<SubTexture> frames)
 		{
-			Contract.Requires<ArgumentNullException>(frames != null);
 			Contract.Requires<ArgumentException>(frames.Count() > 0);
 			Contract.Requires<ArgumentException>(Contract.ForAll(frames, frame => frame != null));
 
@@ -26,14 +25,12 @@ namespace GRaff.Graphics
 		public AnimationStrip(params SubTexture[] frames)
 			: this(frames.AsEnumerable())
 		{
-			Contract.Requires<ArgumentNullException>(frames != null);
 			Contract.Requires<ArgumentException>(frames.AsEnumerable().Count() > 0);
 			Contract.Requires<ArgumentException>(Contract.ForAll(frames, frame => frame != null));
 		}
 
 		public AnimationStrip(IEnumerable<SubTexture> frames, IEnumerable<(int index, double duration)> frameDurations)
 		{
-			Contract.Requires<ArgumentNullException>(frames != null && frameDurations != null);
 			Contract.Requires<ArgumentException>(frames.Count() > 0 && frameDurations.Count() > 0);
 			Contract.Requires<ArgumentOutOfRangeException>(Contract.ForAll(frameDurations, f => f.Item1 >= 0 && f.Item1 < frames.Count() && f.Item2 > 0));
 			_frames = frames.ToArray();
@@ -90,21 +87,6 @@ namespace GRaff.Graphics
 			_durations = frameDurations.Select(f => f.duration).ToArray();
 		}
 
-		[ContractInvariantMethod]
-		private void invariants()
-		{
-			Contract.Invariant(_frames != null);
-			Contract.Invariant(_frames.Length > 0);
-			Contract.Invariant(_indices != null);
-			Contract.Invariant(_indices.Length > 0);
-			Contract.Invariant(Contract.ForAll(_indices, i => i >= 0 && i < _frames.Length));
-			Contract.Invariant(_durations != null);
-			Contract.Invariant(_durations.Length > 0);
-			Contract.Invariant(Contract.ForAll(_durations, d => d > 0));
-			Contract.Invariant(_indices.Length == _durations.Length);
-			Contract.Invariant(ImageCount >= 1);
-			Contract.Invariant(Duration > 0);
-		}
 
 		public AnimationStrip InOut()
 		{

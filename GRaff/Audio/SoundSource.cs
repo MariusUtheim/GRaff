@@ -6,9 +6,10 @@ using System.Collections.Generic;
 
 namespace GRaff.Audio
 {
+#warning Needs testing
     public class SoundSource : IDisposable
     {
-        private Queue<SoundBuffer> _queuedBuffers;
+        private Queue<SoundBuffer>? _queuedBuffers;
 
         public SoundSource()
         {
@@ -203,8 +204,7 @@ namespace GRaff.Audio
         public void QueueBuffers(params SoundBuffer[] buffers)
         {
             Contract.Requires<ObjectDisposedException>(!IsDisposed);
-            Contract.Requires<ArgumentNullException>(buffers != null);
-
+            
             if (_queuedBuffers == null)
                 _queuedBuffers = new Queue<SoundBuffer>();
 
@@ -214,6 +214,7 @@ namespace GRaff.Audio
             foreach (var buffer in buffers)
                 _queuedBuffers.Enqueue(buffer);
 
+#warning What's going on here?
             if (!IsStreaming)
             { }
         }
@@ -221,10 +222,14 @@ namespace GRaff.Audio
         public IEnumerable<SoundBuffer> UnqueueBuffers()
         {
             Contract.Requires<ObjectDisposedException>(!IsDisposed);
+            if (_queuedBuffers == null)
+                return Enumerable.Empty<SoundBuffer>();
+
             AL.GetSource(Id, ALGetSourcei.BuffersProcessed, out int buffersProcessed);
             if (buffersProcessed == 0)
                 return Enumerable.Empty<SoundBuffer>();
 
+#warning Understand this
             var unqueuedBuffers = AL.SourceUnqueueBuffers(Id, buffersProcessed);
             _Audio.ErrorCheck();
 
@@ -235,8 +240,8 @@ namespace GRaff.Audio
             return buffers;
         }
 
-        private SoundBuffer _buffer;
-        public SoundBuffer Buffer
+        private SoundBuffer? _buffer;
+        public SoundBuffer? Buffer
         {
             get => _buffer;
             set

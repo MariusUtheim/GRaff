@@ -16,7 +16,6 @@ namespace GRaff.Randomness
 
 		public DoubleDistribution(Random rnd, double firstValueInclusive, double secondValueExclusive)
 		{
-			Contract.Requires<ArgumentNullException>(rnd != null);
 			_rnd = rnd;
 			_firstValueInclusive = firstValueInclusive;
 			_secondValueExclusive = secondValueExclusive;

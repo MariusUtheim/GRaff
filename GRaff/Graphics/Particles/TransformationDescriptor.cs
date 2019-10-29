@@ -82,18 +82,21 @@ namespace GRaff.Graphics.Particles
             return this;
         }
 
-        public IDistribution<Vector> ScalingDistribution { get; set; }
+        public IDistribution<Vector>? ScalingDistribution { get; set; }
 
-        public IDistribution<Angle> RotationDistribution { get; set; }
+        public IDistribution<Angle>? RotationDistribution { get; set; }
 
 
         class TransformationBehavior : IParticleBehavior
         {
-            public Matrix Transform;
-
+            private Matrix _transform;
+            public TransformationBehavior(Matrix transform)
+            {
+                this._transform = transform;
+            }
             public void Initialize(Particle particle) { }
 
-            public void Update(Particle particle) => particle.TransformationMatrix = Transform * particle.TransformationMatrix;
+            public void Update(Particle particle) => particle.TransformationMatrix = _transform * particle.TransformationMatrix;
         }
 
         public IParticleBehavior MakeBehavior()
@@ -104,7 +107,7 @@ namespace GRaff.Graphics.Particles
             if (RotationDistribution != null)
                 transform.Rotation = RotationDistribution.Generate();
 
-            return new TransformationBehavior { Transform = transform.GetMatrix() };
+            return new TransformationBehavior(transform.GetMatrix());
         }
     }
 }

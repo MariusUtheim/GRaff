@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Xml.Serialization;
 
 namespace GRaff
@@ -8,7 +9,7 @@ namespace GRaff
     public class FontInfo
     {
         [XmlAttribute("face")]
-        public string Face { get; set; }
+        public string? Face { get; set; }
 
         [XmlAttribute("size")]
         public int Size { get; set; }
@@ -20,7 +21,7 @@ namespace GRaff
         public int Italic { get; set; }
 
         [XmlAttribute("charset")]
-        public string CharSet { get; set; }
+        public string? CharSet { get; set; }
 
         [XmlAttribute("unicode")]
         public int Unicode { get; set; }
@@ -38,7 +39,7 @@ namespace GRaff
         private IntRectangle _Padding;
 
         [XmlAttribute("padding")]
-        public string Padding
+        public string? Padding
         {
             get
             {
@@ -46,9 +47,16 @@ namespace GRaff
             }
             set
             {
-                Contract.Assume(value != null);
-                var padding = value.Split(',');
-                _Padding = new IntRectangle(Convert.ToInt32(padding[0]), Convert.ToInt32(padding[1]), Convert.ToInt32(padding[2]), Convert.ToInt32(padding[3]));
+                if (value == null)
+                    _Padding = IntRectangle.Zero;
+                else
+                {
+                    var paddingStr = value.Split(',');
+                    if (paddingStr.Length != 4)
+                        throw new ArgumentException("Padding must be a string on the format \"l,t,w,h\".");
+                    var padding = paddingStr.Select(s => Int32.TryParse(s, out int result) ? result : throw new ArgumentException("Padding must be a string on the format \"l,t,w,h\".")).ToArray();
+                    _Padding = new IntRectangle(padding[0], padding[1], padding[2], padding[3]);
+                }
             }
         }
 
@@ -56,7 +64,7 @@ namespace GRaff
         private IntVector _Spacing;
 
         [XmlAttribute("spacing")]
-        public string Spacing
+        public string? Spacing
         {
             get
             {
@@ -64,9 +72,16 @@ namespace GRaff
             }
             set
             {
-                Contract.Assume(value != null);
-                var spacing = value.Split(',');
-                _Spacing = new IntVector(Convert.ToInt32(spacing[0]), Convert.ToInt32(spacing[1]));
+                if (value == null)
+                    _Spacing = IntVector.Zero;
+                else
+                {
+                    var spacingStr = value.Split(',');
+                    if (spacingStr.Length != 4)
+                        throw new ArgumentException("Spacing must be a string on the format \"w,h\".");
+                    var spacing = spacingStr.Select(s => Int32.TryParse(s, out int result) ? result : throw new ArgumentException("Spacing must be a string on the format \"w,h\".")).ToArray();
+                    _Spacing = new IntVector(spacing[0], spacing[1]);
+                }
             }
         }
 

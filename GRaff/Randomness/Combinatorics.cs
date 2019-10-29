@@ -315,7 +315,6 @@ namespace GRaff.Randomness
 
 		private static void swap<T>(ref T[] src, int i, int j)
 		{
-			Contract.Requires<ArgumentNullException>(src != null);
 			Contract.Requires<ArgumentException>(src.Length > 0);
 			Contract.Assume(i >= 0 && j >= 0 && i < src.Length && j < src.Length);
 

@@ -20,17 +20,21 @@ namespace GRaff.Graphics.Particles
         class PointAttractionBehavior : IParticleBehavior
 
         {
-            public PointAttractionDescriptor Descriptor;
+            public PointAttractionDescriptor _descriptor;
 
+            public PointAttractionBehavior(PointAttractionDescriptor descriptor)
+            {
+                this._descriptor = descriptor;
+            }
             public void Initialize(Particle particle) { }
 
             public void Update(Particle particle)
             {
-                Vector r = Descriptor.Location - particle.Location;
-                particle.Velocity += Descriptor.Strength * r / GMath.Pow(r.Magnitude, 1);
+                Vector r = _descriptor.Location - particle.Location;
+                particle.Velocity += _descriptor.Strength * r / GMath.Pow(r.Magnitude, 1);
             }
         }
 
-        public IParticleBehavior  MakeBehavior() => new PointAttractionBehavior { Descriptor = this };
+        public IParticleBehavior MakeBehavior() => new PointAttractionBehavior(this);
 	}
 }

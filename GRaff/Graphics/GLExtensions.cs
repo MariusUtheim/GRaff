@@ -26,7 +26,6 @@ namespace GRaff.Graphics
 
         public static GraphicsPoint[] Tesselate(this Polygon polygon)
 		{
-			Contract.Requires<ArgumentNullException>(polygon != null);
 			var result = new GraphicsPoint[polygon.Length];
 			for (int i = 0, sign = 1; i < polygon.Length; i++, sign = -sign)
 				result[i] = (GraphicsPoint)polygon.Vertex(i * sign);
@@ -38,7 +37,7 @@ namespace GRaff.Graphics
 
 		public static void Bind(this Texture texture)
 		{
-			Contract.Requires<ArgumentNullException>(texture != null);
+            Contract.Requires<ObjectDisposedException>(!texture.IsDisposed);
 			GL.BindTexture(TextureTarget.Texture2D, texture.Id);
 		}
 

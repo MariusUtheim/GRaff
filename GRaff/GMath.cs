@@ -168,7 +168,6 @@ namespace GRaff
 		public static double Sqr(double x) => x * x;
 		public static decimal Sqr(decimal x) => x * x;
 
-        public static int KroneckerDelta<T>(T i, T j) => i.Equals(j) ? 1 : 0;
 	}
 }
 

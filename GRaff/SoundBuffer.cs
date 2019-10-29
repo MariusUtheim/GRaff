@@ -20,8 +20,7 @@ namespace GRaff
             Contract.Requires<ArgumentOutOfRangeException>(bitrate == 8 || bitrate == 16);
             Contract.Requires<ArgumentOutOfRangeException>(channels == 1 || channels == 2);
             Contract.Requires<ArgumentOutOfRangeException>(frequency > 0);
-            Contract.Requires<ArgumentNullException>(buffer != null);
-			Contract.Requires<ArgumentException>(buffer.Length > 0);
+            Contract.Requires<ArgumentException>(buffer.Length > 0);
 
             Id = AL.GenBuffer();
             this.Buffer = buffer;

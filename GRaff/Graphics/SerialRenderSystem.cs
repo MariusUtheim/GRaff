@@ -44,7 +44,6 @@ namespace GRaff.Graphics
 		public void SetVertices(UsageHint usage, params GraphicsPoint[] vertices)
 		{
 			Contract.Requires<ObjectDisposedException>(!IsDisposed);
-			Contract.Requires<ArgumentNullException>(vertices != null);
 			GL.BindBuffer(BufferTarget.ArrayBuffer, _vertexBuffer);
 			GL.BufferData(BufferTarget.ArrayBuffer, new IntPtr(GraphicsPoint.Size * vertices.Length), vertices, (BufferUsageHint)usage);
             _vertexCount = vertices.Length;
@@ -55,7 +54,6 @@ namespace GRaff.Graphics
 		public void SetVertices(UsageHint usage, params coord[] vertices)
 		{
 			Contract.Requires<ObjectDisposedException>(!IsDisposed);
-			Contract.Requires<ArgumentNullException>(vertices != null);
             Contract.Requires<ArgumentException>(vertices.Length % 2 == 0);
 			GL.BindBuffer(BufferTarget.ArrayBuffer, _vertexBuffer);
 			GL.BufferData(BufferTarget.ArrayBuffer, new IntPtr(sizeof(coord) * vertices.Length), vertices, (BufferUsageHint)usage);
@@ -67,9 +65,8 @@ namespace GRaff.Graphics
         public void SetColors(Color[] colors) => SetColors(UsageHint.StreamDraw, colors);
 		public void SetColors(UsageHint usage, Color[] colors)
 		{
-            //TODO// Select colors for each primitive? (e.g. when drawing PrimitiveType.Triangles, allow colors.Length == vertices.Length / 3)
+            // @TODO Select colors for each primitive? (e.g. when drawing PrimitiveType.Triangles, allow colors.Length == vertices.Length / 3)
 			Contract.Requires<ObjectDisposedException>(!IsDisposed);
-			Contract.Requires<ArgumentNullException>(colors != null);
 			GL.BindBuffer(BufferTarget.ArrayBuffer, _colorBuffer);
             GL.EnableVertexAttribArray(1);
 			GL.BufferData(BufferTarget.ArrayBuffer, new IntPtr(4 * colors.Length), colors, (BufferUsageHint)usage);
@@ -89,7 +86,6 @@ namespace GRaff.Graphics
 		public void SetTexCoords(UsageHint usage, params GraphicsPoint[] texCoords)
 		{
 			Contract.Requires<ObjectDisposedException>(!IsDisposed);
-			Contract.Requires<ArgumentNullException>(texCoords != null);
   			GL.BindBuffer(BufferTarget.ArrayBuffer, _texCoordBuffer);
 			GL.BufferData(BufferTarget.ArrayBuffer, new IntPtr(2 * sizeof(coord) * texCoords.Length), texCoords, (BufferUsageHint)usage);
             _Graphics.ErrorCheck();
@@ -98,7 +94,6 @@ namespace GRaff.Graphics
 		public void SetTexCoords(UsageHint usage, coord[] texCoords)
 		{
 			Contract.Requires<ObjectDisposedException>(!IsDisposed);
-			Contract.Requires<ArgumentNullException>(texCoords != null);
 			GL.BindBuffer(BufferTarget.ArrayBuffer, _texCoordBuffer);
 			GL.BufferData(BufferTarget.ArrayBuffer, new IntPtr(sizeof(coord) * texCoords.Length), texCoords, (BufferUsageHint)usage);
             _Graphics.ErrorCheck();
