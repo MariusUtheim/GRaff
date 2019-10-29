@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using GRaff.Synchronization;
@@ -15,7 +16,7 @@ namespace GRaff
         /// <summary>
         /// The OpenTK.GameWindow instance.
         /// </summary>
-        internal static GameWindow Window { get; set; }
+        internal static GameWindow? Window { get; private set; }
         public static bool IsRunning { get; private set; }
 
         public static void Run()
@@ -34,7 +35,7 @@ namespace GRaff
         /// <param name="initialRoom">The initial room that is entered when the game begins.</param>
         /// <param name="fps">The framerate at which the game runs. The default value is 60.</param>
         /// <param name="gameStart">An action that is performed when the game begins. If omitted or set to null, no action is performed.</param>
-        public static void Run(int windowWidth, int windowHeight, double fps, Action gameStart)
+        public static void Run(int windowWidth, int windowHeight, double fps, Action? gameStart)
         {
             Time.StartTime = Time.MachineTime;
             Window = new GameWindow(windowWidth, windowHeight, GraphicsMode.Default, "Giraffe", GameWindowFlags.FixedWindow, DisplayDevice.Default, 4, 2, GraphicsContextFlags.ForwardCompatible);
@@ -79,6 +80,8 @@ namespace GRaff
         /// </summary>
         public static void Quit()
         {
+            if (Window == null)
+                throw new InvalidOperationException("The game window does not exist.");
             Window.Exit();
         }
 
@@ -140,18 +143,17 @@ namespace GRaff
 
         private static void _do<T>(Action<T> action) where T : class
         {
-            //TODO// The ToList is used becuase instances might get destroyed, and then it seems the order is messed up. Is it possible to avoid ToList, using only lazy evaluation?
-            //TODO// Cancellation on input events
-            foreach (var instance in Instance.Where(i => i is T).ToList())
+#warning Handle this more efficiently
+            foreach (dynamic instance in Instance.OfType<T>().ToList())
                 if (instance.Exists)
-                    action(instance as T);
+                    action(instance);
         }
 
         private static void _doMouseClick<T>(Action<T> action) where T : class
         {
             foreach (var instance in Instance.OfType<GameObject>().Where(obj => obj is T && obj.ContainsPoint(Mouse.ViewLocation)).ToList())
-                if (instance.Exists)
-                    action(instance as T);
+                if (instance.Exists && instance is T t)
+                    action(t);
         }
 
         private static void _handleInput()
