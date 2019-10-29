@@ -4,37 +4,37 @@ namespace GRaff.Synchronization
 {
 	internal class InvokerOperator : IAsyncOperator
 	{
-		private Func<object, IAsyncOperation> action;
-		private IAsyncOperation operation;
+		private Func<object?, IAsyncOperation> _action;
+		private IAsyncOperation? _operation;
 
-		public InvokerOperator(Func<object, IAsyncOperation> action)
+		public InvokerOperator(Func<object?, IAsyncOperation> action)
 		{
-			this.action = action;
+			this._action = action;
 		}
 
 		public void Cancel()
 		{
-			if (operation == null)
+			if (_operation == null)
 				return;
-			operation.Abort();
+			_operation.Abort();
 		}
 
-		public void Dispatch(object arg, Action<AsyncOperationResult> callback)
+		public void Dispatch(object? arg, Action<AsyncOperationResult> callback)
 		{
-			if (operation == null)
-				operation = action(arg);
-			operation.Catch<Exception>(ex => callback(AsyncOperationResult.Failure(ex)));
-			operation.ThenWait(() => callback(AsyncOperationResult.Success()));//operation.ThenWait(() => callback(null));
+			if (_operation == null)
+				_operation = _action(arg);
+			_operation.Catch<Exception>(ex => callback(AsyncOperationResult.Failure(ex)));
+			_operation.ThenWait(() => callback(AsyncOperationResult.Success()));//operation.ThenWait(() => callback(null));
 		}
 
-		public AsyncOperationResult DispatchSynchronously(object arg)
+		public AsyncOperationResult DispatchSynchronously(object? arg)
 		{
-			if (operation == null)
-				operation = action(arg);
-			operation.Dispatch(arg);
+			if (_operation == null)
+				_operation = _action(arg);
+			_operation.Dispatch(arg);
 			try
 			{
-				operation.Wait();
+				_operation.Wait();
 				return AsyncOperationResult.Success();
 			}
 			catch (Exception ex)
@@ -44,41 +44,41 @@ namespace GRaff.Synchronization
 		}
 	}
 
-	internal class InvokerOperator<TPass> : IAsyncOperator
+	internal class InvokerOperator<TPass> : IAsyncOperator 
 	{
-		private Func<object, IAsyncOperation<TPass>> action;
-		private IAsyncOperation<TPass> operation;
+		private Func<object?, IAsyncOperation<TPass>> _action;
+		private IAsyncOperation<TPass>? _operation;
 
-		public InvokerOperator(Func<object, IAsyncOperation<TPass>> action)
+		public InvokerOperator(Func<object?, IAsyncOperation<TPass>> action)
 		{
-			this.action = action;
+			this._action = action;
 		}
 
 		public void Cancel()
 		{
-			if (operation == null)
+			if (_operation == null)
 				return;
-			operation.Abort();
+			_operation.Abort();
 		}
 
-		public void Dispatch(object arg, Action<AsyncOperationResult> callback)
+		public void Dispatch(object? arg, Action<AsyncOperationResult> callback)
 		{
-			if (operation == null)
-				operation = action(arg);
-			operation.Catch<Exception>(ex => { callback(AsyncOperationResult.Failure(ex)); return default(TPass); });
-			operation.ThenWait(result => callback(AsyncOperationResult.Success(result)));
-			operation.Dispatch(arg);
+			if (_operation == null)
+				_operation = _action(arg);
+			_operation.Catch<Exception>(ex => { callback(AsyncOperationResult.Failure(ex)); });
+			_operation.ThenWait(result => callback(AsyncOperationResult.Success(result)));
+			_operation.Dispatch(arg);
 		}
 
-		public AsyncOperationResult DispatchSynchronously(object arg)
+		public AsyncOperationResult DispatchSynchronously(object? arg)
 		{
-			if (operation == null)
-				operation = action(arg);
-			operation.Dispatch(arg);
+			if (_operation == null)
+				_operation = _action(arg);
+			_operation.Dispatch(arg);
 
 			try
 			{
-				return AsyncOperationResult.Success(operation.Wait());
+				return AsyncOperationResult.Success(_operation.Wait());
 			}
 			catch (Exception ex)
 			{

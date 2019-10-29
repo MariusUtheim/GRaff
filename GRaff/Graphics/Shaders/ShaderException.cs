@@ -9,9 +9,8 @@ namespace GRaff.Graphics.Shaders
 	{
 
         public ShaderException(string message)
-            : base(message)
-        {
-        }
+            : this(message, "")
+        { }
 
 		public ShaderException(string message, string sourceCode) : base(message)
 		{

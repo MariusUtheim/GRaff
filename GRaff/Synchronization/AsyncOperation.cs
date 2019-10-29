@@ -10,9 +10,9 @@ namespace GRaff.Synchronization
 	{
 		private CatchContext _catchHandlers = new CatchContext();
 		private ConcurrentQueue<AsyncOperation> _continuations = new ConcurrentQueue<AsyncOperation>();
-		private AsyncOperation _preceedingOperation;
+		private AsyncOperation? _preceedingOperation;
 		private bool _hasPassedException = false;
-		private Deferred<Exception> _otherwiseClause = null;
+		private Deferred<Exception>? _otherwiseClause = null;
 
 		internal AsyncOperation()
 			: this(false)
@@ -33,7 +33,6 @@ namespace GRaff.Synchronization
 
 		internal AsyncOperation(AsyncOperationResult result)
 		{
-			Contract.Requires<ArgumentNullException>(result != null);
 			Result = result;
 			State = result.IsSuccessful ? AsyncOperationState.Completed : AsyncOperationState.Failed;
 		}
@@ -42,22 +41,22 @@ namespace GRaff.Synchronization
 			: this(null, op)
 		{ }
 
-		internal AsyncOperation(AsyncOperation preceeding, IAsyncOperator op)
+		internal AsyncOperation(AsyncOperation? preceeding, IAsyncOperator op)
 		{
+			Operator = op;
 			State = AsyncOperationState.Initial;
 			_preceedingOperation = preceeding;
-			Operator = op;
 		}
 
 		~AsyncOperation()
 		{
 			if (!_hasPassedException && Result != null && !Result.IsSuccessful && _otherwiseClause == null && Game.IsRunning)
-				Async.Throw(new ObjectDisposedIncorrectlyException("An asynchronous operation threw an exception that was finalized before it was handled. See the inner exception for more details.", Result.Error));
+				Async.Throw(new ObjectDisposedIncorrectlyException("An asynchronous operation threw an exception that was finalized before it was handled. See the inner exception for more details.", Result.Error!));
 		}
 
-		protected IAsyncOperator Operator { get; private set; }
+		protected IAsyncOperator? Operator { get; private set; }
 
-		protected AsyncOperationResult Result { get; set; }
+		protected AsyncOperationResult? Result { get; set; }
 
 		public AsyncOperationState State { get; protected set; }
 
@@ -74,16 +73,16 @@ namespace GRaff.Synchronization
 			if (result.IsSuccessful)
 				Accept(result.Value);
 			else
-				Reject(result.Error);
+				Reject(result.Error!);
 		}
 
 
-		public void Dispatch(object arg)
+		public void Dispatch(object? arg)
 		{
 			if (State == AsyncOperationState.Initial)
 			{
 				State = AsyncOperationState.Dispatched;
-				Operator.Dispatch(arg, _complete);
+				Operator!.Dispatch(arg, _complete);
 			}
 		}
 
@@ -95,13 +94,12 @@ namespace GRaff.Synchronization
 				return AsyncOperationResult.Failure(exception);
 		}
 
-		internal void Accept(object result)
+		internal void Accept(object? result)
 		{
 			State = AsyncOperationState.Completed;
 			Result = AsyncOperationResult.Success(result);
-			AsyncOperation continuation;
-			while (_continuations.TryDequeue(out continuation))
-				continuation.Dispatch(Result?.Value);
+			while (_continuations.TryDequeue(out var continuation))
+				continuation.Dispatch(Result.Value);
 		}
 
 		internal void Reject(Exception reason)
@@ -113,7 +111,7 @@ namespace GRaff.Synchronization
 			{
 				State = AsyncOperationState.Failed;
 
-                while (_continuations.TryDequeue(out AsyncOperation continuation))
+                while (_continuations.TryDequeue(out var continuation))
                     continuation._complete(Result);
                 if (IsDone)
 					Async.Throw(reason);
@@ -135,27 +133,27 @@ namespace GRaff.Synchronization
 					return AsyncOperationResult.Failure(new InvalidOperationException("Cannot wait for an operation that has been aborted."));
 
 				case AsyncOperationState.Failed:
-					return AsyncOperationResult.Failure(new AsyncException(Result.Error));
+					return AsyncOperationResult.Failure(new AsyncException(Result!.Error!));
 
 				case AsyncOperationState.Initial:
 					if (_preceedingOperation == null)
-						return Operator.DispatchSynchronously(null);
+						return Operator!.DispatchSynchronously(null);
 					var pass = _preceedingOperation._Wait();
 					if (!pass.IsSuccessful)
-						pass = Handle(pass.Error);
+						pass = Handle(pass.Error!);
 					if (pass.IsSuccessful)
-						return Operator.DispatchSynchronously(pass.Value);
+						return Operator!.DispatchSynchronously(pass.Value);
 					else
 						return pass;
 
 				case AsyncOperationState.Dispatched:
 					if (_preceedingOperation != null)
-						return Operator.DispatchSynchronously(_preceedingOperation.Result);
+						return Operator!.DispatchSynchronously(_preceedingOperation.Result);
 					else
-						return Operator.DispatchSynchronously(null);
+						return Operator!.DispatchSynchronously(null);
 
 				case AsyncOperationState.Completed:
-					return Result;
+					return Result!;
 
 				default:
 					throw new NotSupportedException("Unsupported AsyncOperationState '" + Enum.GetName(typeof(AsyncOperationState), State) + "'");
@@ -171,18 +169,17 @@ namespace GRaff.Synchronization
 			var result = _Wait();
 
 			if (!result.IsSuccessful)
-				result = Handle(result.Error);
+				result = Handle(result.Error!);
 
 			if (result.IsSuccessful)
 				Accept(result.Value);
 			else
 			{
-				result = Handle(result.Error);
+				result = Handle(result.Error!);
 				State = AsyncOperationState.Failed;
-				AsyncOperation continuation;
-				while (_continuations.TryDequeue(out continuation))
-					continuation._complete(Result);
-				throw new AsyncException(result.Error);
+				while (_continuations.TryDequeue(out var continuation))
+					continuation._complete(result);
+				throw new AsyncException(result.Error!);
 			}
 		}
 
@@ -192,7 +189,7 @@ namespace GRaff.Synchronization
 				return;
 
 			if (State == AsyncOperationState.Dispatched)
-				Operator.Cancel();
+				Operator!.Cancel();
 
 			State = AsyncOperationState.Aborted;
 
@@ -212,7 +209,7 @@ namespace GRaff.Synchronization
 		public void Done()
 		{
 			if (Result != null && !Result.IsSuccessful)
-				throw new AsyncException(Result.Error);
+				throw new AsyncException(Result.Error!);
 			IsDone = true;
 			_hasPassedException = true;
 		}
@@ -277,7 +274,7 @@ namespace GRaff.Synchronization
 		// When the operation is done, start the specified Task
 		public IAsyncOperation ThenAsync(Func<Task> action)
 		{
-			var continuation = new AsyncOperation(this, new TaskOperator(async obj => { await action(); return default(object); }));
+			var continuation = new AsyncOperation(this, new TaskOperator(async obj => { await action(); return null; }));
 			Then(continuation);
 			return continuation;
 		}
@@ -319,7 +316,7 @@ namespace GRaff.Synchronization
 				{
 					_otherwiseClause = new Deferred<Exception>();
 					if (State == AsyncOperationState.Failed)
-						_otherwiseClause.Accept(Result.Error);
+						_otherwiseClause.Accept(Result!.Error!);
 				}
 			}
 

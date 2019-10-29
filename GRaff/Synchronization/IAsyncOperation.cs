@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 
 namespace GRaff.Synchronization
 {
-	[ContractClass(typeof(AsyncOperationContract))]
 	/// <summary>
 	/// Represents an asynchronous operation that will not return a value.
 	/// </summary>
@@ -60,12 +59,12 @@ namespace GRaff.Synchronization
 		// That operation will resolve after the other continuations have been rejected.
 		IAsyncOperation<Exception> Otherwise();
 
-		void Dispatch(object value);
+		void Dispatch(object? value);
 	}
 
 	/// <summary>
- /// Represents an asynchronous operation that will return the specified type.
- /// </summary>
+    /// Represents an asynchronous operation that will return the specified type.
+    /// </summary>
 	public interface IAsyncOperation<TPass> : IAsyncOperation
 	{
 		IAsyncOperation ThenRun(Func<TPass, IAsyncOperation> action);
@@ -82,104 +81,4 @@ namespace GRaff.Synchronization
 		new TPass Wait();
 	}
 
-	[ContractClassFor(typeof(IAsyncOperation))]
-	abstract class AsyncOperationContract : IAsyncOperation
-	{
-		public bool IsDone => default(bool);
-
-		public AsyncOperationState State => default(AsyncOperationState);
-
-		public void Abort() {}
-
-		public IAsyncOperation Catch<TException>(Action<TException> handler) where TException : Exception
-		{
-			Contract.Requires<ArgumentNullException>(handler != null);
-			Contract.Ensures(Contract.Result<IAsyncOperation>() != null);
-			return default(IAsyncOperation);
-		}
-
-		public void Dispatch(object value) { }
-
-		public void Done() { }
-
-		public IAsyncOperation<Exception> Otherwise()
-		{
-			Contract.Ensures(Contract.Result<IAsyncOperation<Exception>>() != null);
-			return default(IAsyncOperation<Exception>);
-		}
-
-		public IAsyncOperation ThenQueue(Action action)
-		{
-			Contract.Requires<ArgumentNullException>(action != null);
-			Contract.Ensures(Contract.Result<IAsyncOperation>() != null);
-			return default(IAsyncOperation);
-		}
-
-		public IAsyncOperation<TNext> ThenQueue<TNext>(Func<TNext> action)
-		{
-			Contract.Requires<ArgumentNullException>(action != null);
-			Contract.Ensures(Contract.Result<IAsyncOperation<TNext>>() != null);
-			return default(IAsyncOperation<TNext>);
-		}
-
-		public IAsyncOperation ThenAsync(Func<Task> action)
-		{
-			Contract.Requires<ArgumentNullException>(action != null);
-			Contract.Ensures(Contract.Result<IAsyncOperation>() != null);
-			return default(IAsyncOperation);
-		}
-
-		public IAsyncOperation<TNext> ThenAsync<TNext>(Func<Task<TNext>> action)
-		{
-			Contract.Requires<ArgumentNullException>(action != null);
-			Contract.Ensures(Contract.Result<IAsyncOperation<TNext>>() != null);
-			return default(IAsyncOperation<TNext>);
-		}
-
-		public IAsyncOperation ThenRun(Func<IAsyncOperation> action)
-		{
-			Contract.Requires<ArgumentNullException>(action != null);
-			Contract.Ensures(Contract.Result<IAsyncOperation>() != null);
-			return default(IAsyncOperation);
-		}
-
-		public IAsyncOperation<TNext> ThenRun<TNext>(Func<IAsyncOperation<TNext>> action)
-		{
-			Contract.Requires<ArgumentNullException>(action != null);
-			Contract.Ensures(Contract.Result<IAsyncOperation<TNext>>() != null);
-			return default(IAsyncOperation<TNext>);
-		}
-
-		public IAsyncOperation ThenWait(Action action)
-		{
-			Contract.Requires<ArgumentNullException>(action != null);
-			Contract.Ensures(Contract.Result<IAsyncOperation>() != null);
-			return default(IAsyncOperation);
-		}
-
-		public IAsyncOperation<TNext> ThenWait<TNext>(Func<TNext> action)
-		{
-			Contract.Requires<ArgumentNullException>(action != null);
-			Contract.Ensures(Contract.Result<IAsyncOperation<TNext>>() != null);
-			return default(IAsyncOperation<TNext>);
-		}
-
-		public void Wait()
-		{
-		}
-
-		public IAsyncOperation ThenParallel(Action action)
-		{
-			Contract.Requires<ArgumentNullException>(action != null);
-			Contract.Ensures(Contract.Result<IAsyncOperation>() != null);
-			return default(IAsyncOperation);
-		}
-
-		public IAsyncOperation<TNext> ThenParallel<TNext>(Func<TNext> action)
-		{
-			Contract.Requires<ArgumentNullException>(action != null);
-			Contract.Ensures(Contract.Result<IAsyncOperation<TNext>>() != null);
-			return default(IAsyncOperation<TNext>);
-		}
-	}
 }

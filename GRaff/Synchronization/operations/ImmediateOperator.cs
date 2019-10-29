@@ -4,9 +4,9 @@ namespace GRaff.Synchronization
 {
 	internal class ImmediateOperator : IAsyncOperator
 	{
-		private Func<object, object> _action;
+		private Func<object?, object?> _action;
 
-		public ImmediateOperator(Func<object, object> action)
+		public ImmediateOperator(Func<object?, object?> action)
 		{
 			this._action = action;
 		}
@@ -16,7 +16,7 @@ namespace GRaff.Synchronization
 			return;
 		}
 
-		public void Dispatch(object arg, Action<AsyncOperationResult> callback)
+		public void Dispatch(object? arg, Action<AsyncOperationResult> callback)
 		{
 			try
 			{
@@ -28,7 +28,7 @@ namespace GRaff.Synchronization
 			}
 		}
 
-		public AsyncOperationResult DispatchSynchronously(object arg)
+		public AsyncOperationResult DispatchSynchronously(object? arg)
 		{
 			try
 			{

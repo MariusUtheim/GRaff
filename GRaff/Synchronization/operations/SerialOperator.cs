@@ -6,16 +6,16 @@ namespace GRaff.Synchronization
 	internal class SerialOperator : IAsyncOperator
 	{
 		private AsyncEventArgs _actionHandle;
-		private readonly Func<object, object> _action;
-		private AsyncOperationResult _result;
+		private readonly Func<object?, object?> _action;
+		private AsyncOperationResult? _result;
 
-		internal SerialOperator(Func<object, object> action)
+		internal SerialOperator(Func<object?, object?> action)
 		{
 			_action = action;
 			_actionHandle = new AsyncEventArgs(() => { });
 		}
 
-		public AsyncOperationResult DispatchSynchronously(object arg)
+		public AsyncOperationResult DispatchSynchronously(object? arg)
 		{
 			if (_actionHandle.Resolve())
 			{
@@ -29,10 +29,10 @@ namespace GRaff.Synchronization
 				}
 			}
 			else
-				return _result;
+				return _result!;
 		}
 
-		public void Dispatch(object arg, Action<AsyncOperationResult> callback)
+		public void Dispatch(object? arg, Action<AsyncOperationResult> callback)
 		{
 			_actionHandle = new AsyncEventArgs(() => 
 			{

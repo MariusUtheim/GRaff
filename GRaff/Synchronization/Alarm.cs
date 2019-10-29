@@ -41,6 +41,11 @@ namespace GRaff.Synchronization
 	{
 		public event EventHandler<AlarmEventArgs> Callback;
 
+        private Alarm(EventHandler<AlarmEventArgs> action)
+        {
+            Callback += action;
+        }
+
 		/// <summary>
 		/// Starts a new non-looping GRaff.Alarm with the specified duration and callback.
 		/// </summary>
@@ -73,8 +78,7 @@ namespace GRaff.Synchronization
 		/// <returns>The new GRaff.Alarm that was started.</returns>
 		public static Alarm Start(int count, bool isLooping, EventHandler<AlarmEventArgs> action)
 		{
-			var alarm = new Alarm();
-			alarm.Callback += action;
+			var alarm = new Alarm(action);
 			alarm.IsLooping = isLooping;
 			alarm.Restart(count);
 			Instance.Create(alarm);
@@ -127,11 +131,9 @@ namespace GRaff.Synchronization
 		/// Starts this GRaff.Alarm. If it is already started or if it has finished, this does nothing.
 		/// </summary>
 		public void Start()
-		{
+        {
 			if (Count > 0)
-			{
 				State = AlarmState.Running;
-			}
 		}
 
 		/// <summary>
@@ -171,7 +173,7 @@ namespace GRaff.Synchronization
 		/// </summary>
 		public void Trigger()
 		{
-			Callback.Invoke(this, new AlarmEventArgs(this));
+			Callback?.Invoke(this, new AlarmEventArgs(this));
 		}
 
 		/// <summary>
@@ -179,7 +181,7 @@ namespace GRaff.Synchronization
 		/// </summary>
 		public void Complete()
 		{
-			Callback.Invoke(this, new AlarmEventArgs(this));
+			Callback?.Invoke(this, new AlarmEventArgs(this));
 			if (IsLooping)
 				Count = InitialCount;
 		}

@@ -15,7 +15,6 @@ namespace GRaff.Synchronization
 
 		public Coroutine(IEnumerator<int> routine)
 		{
-			Contract.Requires<ArgumentNullException>(routine != null);
 			_count = 0;
 			_routine = routine;
 		}
@@ -27,28 +26,17 @@ namespace GRaff.Synchronization
 		}
 
 		public static Coroutine Start(IEnumerable routine)
-		{
-			Contract.Requires<ArgumentNullException>(routine != null);
-			return Instance.Create(new Coroutine(_project(routine).GetEnumerator()));
-		}
+		    => Instance.Create(new Coroutine(_project(routine).GetEnumerator()));
 
 		public static Coroutine Start(IEnumerable<int> routine)
-		{
-			Contract.Requires<ArgumentNullException>(routine != null);
-			return Instance.Create(new Coroutine(routine.GetEnumerator()));
-		}
+		    => Instance.Create(new Coroutine(routine.GetEnumerator()));
 
-		public static Coroutine Start(Func<IEnumerable> routine)
-		{
-			Contract.Requires<ArgumentNullException>(routine != null);
-			return Instance.Create(new Coroutine(_project(routine()).GetEnumerator()));
-		}
+        public static Coroutine Start(Func<IEnumerable> routine)
+            => Instance.Create(new Coroutine(_project(routine()).GetEnumerator()));
 
 		public static Coroutine Start(Func<IEnumerable<int>> routine)
-		{
-			Contract.Requires<ArgumentNullException>(routine != null);
-			return Instance.Create(new Coroutine(routine().GetEnumerator()));
-		}
+		    => Instance.Create(new Coroutine(routine().GetEnumerator()));
+		
 
 		public void Wait()
 		{

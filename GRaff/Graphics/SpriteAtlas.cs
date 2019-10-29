@@ -10,6 +10,8 @@ using System.Xml.Serialization;
 using GRaff.Graphics;
 using GRaff.Synchronization;
 
+#nullable disable
+
 namespace GRaff.Graphics
 {
 #if DEBUG

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics.Contracts;
 using System.Linq.Expressions;
+
 
 namespace GRaff.Synchronization
 {
@@ -24,16 +24,15 @@ namespace GRaff.Synchronization
 			: this(tweeningFunction, duration, stepAction, null)
 		{ }
 
-		public Tween(TweenFunction tweeningFunction, int duration, Action<double> stepAction, Action completeAction)
+		public Tween(TweenFunction tweeningFunction, int duration, Action<double> stepAction, Action? completeAction)
 		{
-			Contract.Requires<ArgumentNullException>(tweeningFunction != null);
 			Duration = duration;
 			TweeningFunction = tweeningFunction;
 			Step += (sender, e) => stepAction(e.Amount);
 			Complete += (sender, e) => completeAction?.Invoke();
 		}
 
-        public static Tween Start(TweenFunction tweeningFunction, int duration, Action<double> stepAction, Action completeAction = null)
+        public static Tween Start(TweenFunction tweeningFunction, int duration, Action<double> stepAction, Action? completeAction = null)
         {
             var tween = Instance.Create(new Tween(tweeningFunction, duration, stepAction, completeAction));
             return tween;
@@ -43,9 +42,6 @@ namespace GRaff.Synchronization
 
         private static Action<double> _setter<TValue>(Expression<Func<TValue>> property, Func<double, TValue, TValue> setter)
         {
-            Contract.Requires<ArgumentNullException>(property != null);
-            Contract.Requires<ArgumentNullException>(setter != null);
-
             var expression = (MemberExpression)property.Body;
 
             object target;
@@ -57,7 +53,7 @@ namespace GRaff.Synchronization
                 var m = fieldExpression.Member;
 
                 var classExpression = (ConstantExpression)fieldExpression.Expression;
-                dynamic val = classExpression?.Value;
+                dynamic val = classExpression.Value;
                 target = ((dynamic)m).GetValue(val);
             }
 
@@ -66,37 +62,37 @@ namespace GRaff.Synchronization
             return t => member.SetValue(target, setter(t, initialValue));
         }
 
-        public static Tween Animate(TweenFunction f, int duration, Expression<Func<int>> property, int finalValue, Action completeAction = null)
+        public static Tween Animate(TweenFunction f, int duration, Expression<Func<int>> property, int finalValue, Action? completeAction = null)
         {
             var s = _setter(property, (double t, int initialValue) => (int)(initialValue * (1 - t) + finalValue * t));
             return Start(f, duration, s, completeAction);
         }
 
-        public static Tween Animate(TweenFunction f, int duration, Expression<Func<double>> property, double finalValue, Action completeAction = null)
+        public static Tween Animate(TweenFunction f, int duration, Expression<Func<double>> property, double finalValue, Action? completeAction = null)
         {
             var s = _setter(property, (double t, double initialValue) => initialValue * (1 - t) + finalValue * t);
             return Start(f, duration, s, completeAction);
         }
 
-        public static Tween Animate(TweenFunction f, int duration, Expression<Func<Point>> property, Point finalValue, Action completeAction = null)
+        public static Tween Animate(TweenFunction f, int duration, Expression<Func<Point>> property, Point finalValue, Action? completeAction = null)
         {
             var s = _setter(property, (double t, Point initialValue) => initialValue * (1 - t) + finalValue * t);
             return Start(f, duration, s, completeAction);
         }
 
-        public static Tween Animate(TweenFunction f, int duration, Expression<Func<Color>> property, Color finalValue, Action completeAction = null)
+        public static Tween Animate(TweenFunction f, int duration, Expression<Func<Color>> property, Color finalValue, Action? completeAction = null)
         {
             var s = _setter(property, (double t, Color initialValue) => initialValue.Merge(finalValue, t));
             return Start(f, duration, s, completeAction);
         }
 
-        public static Tween Animate(TweenFunction f, int duration, Expression<Func<Vector>> property, Vector finalValue, Action completeAction = null)
+        public static Tween Animate(TweenFunction f, int duration, Expression<Func<Vector>> property, Vector finalValue, Action? completeAction = null)
         {
             var s = _setter(property, (double t, Vector initialValue) => initialValue * (1 - t) + finalValue * t);
             return Start(f, duration, s, completeAction);
         }
 
-        public static Tween Animate(TweenFunction f, int duration, Expression<Func<Angle>> property, Angle finalValue, Action completeAction = null)
+        public static Tween Animate(TweenFunction f, int duration, Expression<Func<Angle>> property, Angle finalValue, Action? completeAction = null)
         {
             var s = _setter(property, (double t, Angle initialValue) => initialValue + t * Angle.Acute(initialValue, finalValue));
             return Start(f, duration, s, completeAction);
@@ -128,7 +124,7 @@ namespace GRaff.Synchronization
 		public sealed override void OnStep()
 		{
 			Progress++;
-			if (Progress == Duration)
+			if (Progress >= Duration)
                 Step?.Invoke(this, new TweenEventArgs(TweeningFunction(1)));
 			else
                 Step?.Invoke(this, new TweenEventArgs(TweeningFunction((double)Progress / Duration)));
@@ -137,9 +133,9 @@ namespace GRaff.Synchronization
 				foreach (var sentinel in sentinels)
 					sentinel.Invoke();
 			
-			if (Progress == Duration)
+			if (Progress >= Duration)
 			{
-				Complete?.Invoke(null, null);
+				Complete?.Invoke(this, new EventArgs());
 				Destroy();
 			}
 		}

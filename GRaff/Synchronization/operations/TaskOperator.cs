@@ -9,12 +9,12 @@ namespace GRaff.Synchronization
 {
 	internal class TaskOperator : IAsyncOperator
 	{
-		private Task<AsyncOperationResult> _task;
-		private readonly Func<object, Task<object>> _action;
+		private Task<AsyncOperationResult>? _task;
+		private readonly Func<object?, Task<object?>> _action;
 		private readonly CancellationTokenSource _cancellation = new CancellationTokenSource();
 		private int _awaitsResolution = 1;
 
-		public TaskOperator(Func<object, Task<object>> action)
+		public TaskOperator(Func<object?, Task<object?>> action)
 		{
 			_action = action;
 		}
@@ -24,7 +24,7 @@ namespace GRaff.Synchronization
 			_cancellation.Cancel();
 		}
 
-		public void Dispatch(object arg, Action<AsyncOperationResult> callback)
+		public void Dispatch(object? arg, Action<AsyncOperationResult> callback)
 		{
 			_task = Task.Run(async () => {
 				try
@@ -43,7 +43,7 @@ namespace GRaff.Synchronization
 			});
         }
 
-		public AsyncOperationResult DispatchSynchronously(object arg)
+		public AsyncOperationResult DispatchSynchronously(object? arg)
 		{
 			if (Interlocked.Exchange(ref _awaitsResolution, 0) == 1)
 			{

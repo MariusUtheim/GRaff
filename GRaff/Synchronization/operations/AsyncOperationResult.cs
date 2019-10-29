@@ -7,9 +7,7 @@ namespace GRaff.Synchronization
 	{
 		public static AsyncOperationResult Success() { return new AsyncOperationResult { IsSuccessful = true }; }
 
-		public static AsyncOperationResult Null = new AsyncOperationResult { IsSuccessful = true };
-
-		public static AsyncOperationResult Success(object result)
+		public static AsyncOperationResult Success(object? result)
 		{
 			return new AsyncOperationResult { IsSuccessful = true, Value = result };
 		}
@@ -20,8 +18,8 @@ namespace GRaff.Synchronization
 		}
 
 		public bool IsSuccessful;
-		public object Value;
-		public Exception Error;
+		public object? Value;
+		public Exception? Error;
 
 	}
 }

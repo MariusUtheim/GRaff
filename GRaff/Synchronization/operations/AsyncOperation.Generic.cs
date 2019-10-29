@@ -3,6 +3,8 @@ using System.Collections.Concurrent;
 using System.Diagnostics;
 using System.Threading.Tasks;
 
+#nullable disable
+
 namespace GRaff.Synchronization
 {
 	internal class AsyncOperation<TPass> : AsyncOperation, IAsyncOperation<TPass>
